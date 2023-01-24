@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>266</x>
+      <y>567</y>
+      <w>112</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+pre switch operation</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>266</x>
+      <y>497</y>
+      <w>112</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>start
+power mode switch
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>308</x>
+      <y>819</y>
+      <w>28</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>840</y>
+      <w>154</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m2=[task delay power mode bit is 1]</panel_attributes>
+    <additional_attributes>10.0;100.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>532</y>
+      <w>21</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>602</y>
+      <w>21</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>252</x>
+      <y>910</y>
+      <w>133</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+wait 50ms</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>826</y>
+      <w>182</w>
+      <h>175</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+</panel_attributes>
+    <additional_attributes>30.0;10.0;240.0;10.0;240.0;230.0;10.0;230.0;10.0;180.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>140</x>
+      <y>826</y>
+      <w>182</w>
+      <h>245</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m2=[task delay power mode bit is 0]</panel_attributes>
+    <additional_attributes>160.0;330.0;10.0;330.0;10.0;10.0;240.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>252</x>
+      <y>1029</y>
+      <w>133</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+AMTDoEnterPowerMode</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>266</x>
+      <y>1211</y>
+      <w>112</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+post switch operation</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>1064</y>
+      <w>21</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>266</x>
+      <y>1288</y>
+      <w>112</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>end
+power mode switch
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>1246</y>
+      <w>21</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>546</x>
+      <y>42</y>
+      <w>77</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>*RUN*
+(MCU in RUN)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>518</x>
+      <y>0</y>
+      <w>14</w>
+      <h>14</h>
+    </coordinates>
+    <panel_attributes>type=final</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>518</x>
+      <y>0</y>
+      <w>56</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>609</x>
+      <y>238</y>
+      <w>147</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>halign=left
+State change triggered by:
+(1) - SW Enter LP
+(2) - SW Exit LP
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>553</x>
+      <y>350</y>
+      <w>119</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>*RUN*
+--
+MCU:  Active
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>672</x>
+      <y>350</y>
+      <w>140</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>*SLEEP 1*
+--
+MCU:  Stop
+group=1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>728</x>
+      <y>147</y>
+      <w>84</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>*SLEEP 1*
+(MCU in STOP)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>581</x>
+      <y>77</y>
+      <w>161</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+ (2)</panel_attributes>
+    <additional_attributes>210.0;130.0;10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLFrame</id>
+    <coordinates>
+      <x>105</x>
+      <y>630</y>
+      <w>476</w>
+      <h>560</h>
+    </coordinates>
+    <panel_attributes>lt=.
+fg=light_gray
+for each task
+layer=-1</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>308</x>
+      <y>735</y>
+      <w>28</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>329</x>
+      <y>742</y>
+      <w>224</w>
+      <h>504</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m2=[task power mode switch done bit is 1]</panel_attributes>
+    <additional_attributes>70.0;700.0;300.0;700.0;300.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>756</y>
+      <w>189</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+[task power mode switch done bit is 0]</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>231</x>
+      <y>1120</y>
+      <w>175</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+reset task power mode switch done bit
+reset task power mode pending bit
+resume task</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>1155</y>
+      <w>21</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>966</x>
+      <y>504</y>
+      <w>112</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>start
+task control loop step
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLSpecialState</id>
+    <coordinates>
+      <x>1008</x>
+      <y>588</y>
+      <w>28</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>type=decision</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1015</x>
+      <y>539</y>
+      <w>21</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1015</x>
+      <y>609</y>
+      <w>168</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m2=[task power mode pending bit is 0]</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>931</x>
+      <y>665</y>
+      <w>175</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+set task power mode delay bit</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>931</x>
+      <y>756</y>
+      <w>175</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+execute a step
+in the active power mode</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1015</x>
+      <y>700</y>
+      <w>21</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>931</x>
+      <y>847</y>
+      <w>175</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+reset task power mode delay bit
+and suspend task</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1015</x>
+      <y>791</y>
+      <w>21</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLState</id>
+    <coordinates>
+      <x>966</x>
+      <y>938</y>
+      <w>112</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>end
+task control loop step
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1015</x>
+      <y>882</y>
+      <w>21</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>812</x>
+      <y>595</y>
+      <w>210</w>
+      <h>287</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m2=[task power mode pending bit is 1]</panel_attributes>
+    <additional_attributes>170.0;390.0;10.0;390.0;10.0;10.0;280.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1071</x>
+      <y>518</y>
+      <w>147</w>
+      <h>455</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+fg=light_gray</panel_attributes>
+    <additional_attributes>10.0;10.0;190.0;10.0;190.0;630.0;10.0;630.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>245</x>
+      <y>658</y>
+      <w>161</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>valign=center
+halign=center
+set task power mode pending bit</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>315</x>
+      <y>693</y>
+      <w>21</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>616</x>
+      <y>49</y>
+      <w>168</w>
+      <h>112</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+ (1)</panel_attributes>
+    <additional_attributes>10.0;20.0;220.0;20.0;220.0;140.0</additional_attributes>
+  </element>
+</diagram>

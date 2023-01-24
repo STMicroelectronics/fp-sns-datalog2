@@ -1,0 +1,195 @@
+<diagram program="umletino" version="14.4.0-SNAPSHOT"><zoom_level>10</zoom_level><help_text>&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;254&lt;/x&gt;&lt;y&gt;170&lt;/y&gt;&lt;w&gt;190&lt;/w&gt;&lt;h&gt;30&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;..&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;10;170;10&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;254&lt;/x&gt;&lt;y&gt;130&lt;/y&gt;&lt;w&gt;190&lt;/w&gt;&lt;h&gt;30&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;&amp;lt;.&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;10;170;10&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;1310&lt;/x&gt;&lt;y&gt;530&lt;/y&gt;&lt;w&gt;70&lt;/w&gt;&lt;h&gt;430&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;.
+&amp;lt;&amp;lt;uses&amp;gt;&amp;gt;&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;10;10;410&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;224&lt;/x&gt;&lt;y&gt;810&lt;/y&gt;&lt;w&gt;70&lt;/w&gt;&lt;h&gt;160&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;.
+&amp;lt;&amp;lt;uses&amp;gt;&amp;gt;&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;140;10;10&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;UMLPackage&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;104&lt;/x&gt;&lt;y&gt;950&lt;/y&gt;&lt;w&gt;270&lt;/w&gt;&lt;h&gt;130&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;SensorManager Component
+--
++ SensorManager
++ xxxSensorTask1
+...
++ xxxSensorTaskN
++ services/SQuery
+&lt;/panel_attributes&gt;&lt;additional_attributes&gt;&lt;/additional_attributes&gt;&lt;/element&gt;&lt;element&gt;&lt;id&gt;UMLPackage&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;470&lt;/x&gt;&lt;y&gt;950&lt;/y&gt;&lt;w&gt;270&lt;/w&gt;&lt;h&gt;130&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;NonSoComeChiamarloManager Component
+--
++ deviceInfoClass
++ fwInfoClass
++ tagInfoClass
++ LogControllerClass
++ ..
+&lt;/panel_attributes&gt;&lt;additional_attributes&gt;&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;UMLPackage&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;500&lt;/x&gt;&lt;y&gt;930&lt;/y&gt;&lt;w&gt;270&lt;/w&gt;&lt;h&gt;130&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;NonSoComeChiamarloManager Component
+--
++ deviceInfoClass
++ fwInfoClass
++ tagInfoClass
++ LogControllerClass
++ ..
+&lt;/panel_attributes&gt;&lt;additional_attributes&gt;&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;294&lt;/x&gt;&lt;y&gt;590&lt;/y&gt;&lt;w&gt;320&lt;/w&gt;&lt;h&gt;160&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;.
+&amp;lt;&amp;lt;uses&amp;gt;&amp;gt;&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;140;300;10&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;84&lt;/x&gt;&lt;y&gt;400&lt;/y&gt;&lt;w&gt;80&lt;/w&gt;&lt;h&gt;80&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;.
+&amp;lt;&amp;lt;include&amp;gt;&amp;gt;&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;10;10;60&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;1620&lt;/x&gt;&lt;y&gt;1170&lt;/y&gt;&lt;w&gt;100&lt;/w&gt;&lt;h&gt;100&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;-
+
+group=1&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;80;80;10&lt;/additional_attributes&gt;&lt;/element&gt;&lt;element&gt;&lt;id&gt;UMLClass&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;1700&lt;/x&gt;&lt;y&gt;1040&lt;/y&gt;&lt;w&gt;250&lt;/w&gt;&lt;h&gt;90&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;SensorDescriptor
+--
++Name: char*
++n_SubSensors: uint8_t
+
+group=1&lt;/panel_attributes&gt;&lt;additional_attributes&gt;&lt;/additional_attributes&gt;&lt;/element&gt;&lt;element&gt;&lt;id&gt;UMLClass&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;1700&lt;/x&gt;&lt;y&gt;1140&lt;/y&gt;&lt;w&gt;200&lt;/w&gt;&lt;h&gt;90&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;SensorStatus 
+--
+
+group=1&lt;/panel_attributes&gt;&lt;additional_attributes&gt;&lt;/additional_attributes&gt;&lt;/element&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;1940&lt;/x&gt;&lt;y&gt;1010&lt;/y&gt;&lt;w&gt;150&lt;/w&gt;&lt;h&gt;130&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;-
+m2=1..n
+group=1&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;110;130;10&lt;/additional_attributes&gt;&lt;/element&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;1890&lt;/x&gt;&lt;y&gt;1170&lt;/y&gt;&lt;w&gt;200&lt;/w&gt;&lt;h&gt;40&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;-
+m2=1..n
+group=1&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;10;180;10&lt;/additional_attributes&gt;&lt;/element&gt;&lt;element&gt;&lt;id&gt;UMLClass&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;2070&lt;/x&gt;&lt;y&gt;950&lt;/y&gt;&lt;w&gt;270&lt;/w&gt;&lt;h&gt;180&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;SubSensorDescriptor
+--
++idSub: uint8_t
++sensorType: uint8_t
++ODR: float*
++FS: float*
++dataType: uint8_t
++dimensions: uint16_t*
++dimensionsLabel char*
++unit: char*
++samplesPerTimestamp: uint16_t*
+
+group=1&lt;/panel_attributes&gt;&lt;additional_attributes&gt;&lt;/additional_attributes&gt;&lt;/element&gt;&lt;element&gt;&lt;id&gt;UMLClass&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;2070&lt;/x&gt;&lt;y&gt;1140&lt;/y&gt;&lt;w&gt;270&lt;/w&gt;&lt;h&gt;150&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;SubSensorStatus
+--
++FS: float
++Sensitivity: float
++IsActive: boolean_t
++ODR: float
++MeasuredODR: float
++InitialOffset:float
++SamplesPerTimeStamp: uint16_t
+
+
+
+
+group=1&lt;/panel_attributes&gt;&lt;additional_attributes&gt;&lt;/additional_attributes&gt;&lt;/element&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;1620&lt;/x&gt;&lt;y&gt;1090&lt;/y&gt;&lt;w&gt;100&lt;/w&gt;&lt;h&gt;70&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=&amp;lt;&amp;lt;&amp;lt;&amp;lt;&amp;lt;-
+
+group=1&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;50;80;10&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;UMLClass&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;1720&lt;/x&gt;&lt;y&gt;370&lt;/y&gt;&lt;w&gt;580&lt;/w&gt;&lt;h&gt;360&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;SensorManager
+--
+ISensor : vector
+n_sensors : uint16_t
+--
++GetSensorSource(id): ISensorObserver
++AddSensor(ISensor *s): uint16_t
++GetSensorRegisterIF(): SensorRegister*
++GetNsensor(): uint16_t
++RemoveSensor(uint16_t id) : uint8_t
+****+GetEventSrcIF(uint16_t id, IEventSrc  **EventSrcIF): uint8_t
++SensorStart(uint16_t id): uint8_t
++SensorStop(uint16_t id): uint8_t
++SensorSetODR(uint16_t id): uint8_t
++SensorSetFS(uint16_t id): uint8_t
++GetDeviceDescriptions(): const DeviceDescriptor
++GetSensorDescription(uint16_t id):  const SensorDescriptor
+--
+Responsibilities
+--Store the information about the sensors in the device(through ISensor interface).
+--Give an abstract layer to interact with sensors (by the "id")
+--Give the descriptions of the device
+--Perform part of configuration (i.e BUS registration)
+--Note: The sensor registers itself to the SensorManager&lt;/panel_attributes&gt;&lt;additional_attributes&gt;&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;Relation&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;1530&lt;/x&gt;&lt;y&gt;790&lt;/y&gt;&lt;w&gt;30&lt;/w&gt;&lt;h&gt;320&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;lt=-&lt;/panel_attributes&gt;&lt;additional_attributes&gt;10;10;10;300&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;UMLClass&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;1230&lt;/x&gt;&lt;y&gt;1090&lt;/y&gt;&lt;w&gt;400&lt;/w&gt;&lt;h&gt;400&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;&amp;lt;&amp;lt;Sensor&amp;gt;&amp;gt;
+xxx_Task
+--
+-SensorDataBuff: uint8_t*
+-TimeStampTick: uint32_t
+-OldTimeStampTick: uint32_t
+-TimeStamp: uint64_t
+-ISensor
+-SensorDescriptor
+-SensorStatus
+--
++Alloc(): AmanagetTaskEx*
++GetSPI_IF(): SPIBusIF*
++GetEventSrcIF(): IEventSrc*
+--
+-Run(pParams:void*)
+-ExecuteStepRun(): sys_erro_code_t
+-ExecuteStepDatalog(): sys_erro_code_t
+-SensorInit(): sys_error_code_t
+-SensorReadData(): sys_error_code_t
+-PostReportToFront(pxReport:HIDReport*): sys_error_code_t
+
+--
+Responsibilities
+--Read data from the sensor
+--Store the sensor Description and Status
+--Handle the sensor features (i.e ucf loaded)&lt;/panel_attributes&gt;&lt;additional_attributes&gt;&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;&lt;diagram program="umletino" version="14.4.0-SNAPSHOT"&gt;&lt;zoom_level&gt;10&lt;/zoom_level&gt;&lt;element&gt;&lt;id&gt;UMLClass&lt;/id&gt;&lt;coordinates&gt;&lt;x&gt;220&lt;/x&gt;&lt;y&gt;190&lt;/y&gt;&lt;w&gt;680&lt;/w&gt;&lt;h&gt;160&lt;/h&gt;&lt;/coordinates&gt;&lt;panel_attributes&gt;&amp;lt;&amp;lt;Interface&amp;gt;&amp;gt;
+/IPnPLComponent/
+--
+/+ Init(): sys_error_code_t/ ///TODO
+/+ IPnPLComponentGetKey(_this:IPnPLComponent):char*/
+/+ IPnPLComponentGetNCommands(_this:IPnPLComponent):uint8_t/
+/+ IPnPLComponentGetCommandKey(_this:IPnPLComponent, id:uint8_t): char*/
+/+ IPnPLComponentGetStatus(_this:IPnPLComponent, serializadJSON:char**, size:uint32*,  pretty:uint8_t): sys_error_code_t/
+/+ IPnPLComponentSetProperty(_this:IPnPLComponent, serializadJSON:char*): sys_error_code_t/ 
+/+ IPnPLCommandExecuteFunction(_this:IPnPLComponent, serializadJSON:char*): /sys_error_code_t/&lt;/panel_attributes&gt;&lt;additional_attributes&gt;&lt;/additional_attributes&gt;&lt;/element&gt;&lt;/diagram&gt;Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>22</x><y>230</y><w>690</w><h>140</h></coordinates><panel_attributes>&lt;&lt;Interface&gt;&gt;
+/IPnPLComponent/
+--
+/+ IPnPLComponentGetKey(_this:IPnPLComponent):char*/
+/+ IPnPLComponentGetNCommands(_this:IPnPLComponent):uint8_t/
+/+ IPnPLComponentGetCommandKey(_this:IPnPLComponent, id:uint8_t): char*/
+/+ IPnPLComponentGetStatus(_this:IPnPLComponent, serializadJSON:char**, size:uint32*,  pretty:uint8_t): sys_error_code_t/
+/+ IPnPLComponentSetProperty(_this:IPnPLComponent, serializadJSON:char*): sys_error_code_t/
+/+ IPnPLCommandExecuteFunction(_this:IPnPLComponent, serializadJSON:char*): /sys_error_code_t/</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>162</x><y>480</y><w>400</w><h>310</h></coordinates><panel_attributes>&lt;&lt;PnPLComponent&gt;&gt;
+xxxPnPL
+--
+- component_if:IPnPLComponent 
+- component_id:uint8_t
+--
++ xxxPnPLAlloc(): IPnPLComponent_t*
++ xxxPnPLInit(_this:IPnPLComponent_t*): sys_error_code_t*
+--
+- xxxPnPL_vtblGetKey(_this:IPnPLComponent):char*
+- xxxPnPL_vtblGettNCommands(_this:IPnPLComponent):uint8_t
+- xxxPnPL_vtblGetCommandKey(_this:IPnPLComponent, id:uint8_t): char*
+- xxxPnPL_vtblGetStatus(_this:IPnPLComponent, serializadJSON:char**, size:uint32*,  pretty:uint8_t): sys_error_code_t
+- xxxPnPL_vtblSetProperty(_this:IPnPLComponent, serializadJSON:char*): sys_error_code_t
+- xxxPnPL_vtblExecuteFunction(_this:IPnPLComponent, serializadJSON:char*): /sys_error_code_t
+--
+Responsibilities
+-- Parse PnP-like Commands received
+-- Serialize PnP-like Responses
+-- Update real-word properties using the right FW Component
+-- Get real-word properties status using the right FW Component
+-- Trigger the right function in response of certain commands</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>351</x><y>360</y><w>30</w><h>140</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;10;120</additional_attributes></element><element><id>UMLClass</id><coordinates><x>816</x><y>230</y><w>700</w><h>280</h></coordinates><panel_attributes>PnPLCompManager
+--
+Components : IPnPLComponent[COM_MAX_PNPL_COMPONENTS]
+n_components: uint16_t
+--
++ PnPLGetNComponents(void): uint16_t
++ PnPLAddComponent(IPnPLComponent* pComponent): uint8_t
++ PnPLRemoveComponent(id:uint8_t): sys_error_code //TODO search by key???
++ PnPLGetPresentationJSON(SerializedJSON:char**, size:uint32_t*): sys_error_code_t
++ PnPLGetDeviceStatusJSON(SerializedJSON:char**, size:uint32_t*, pretty: uint8_t) : sys_error_code_t
++ PnPLUpdateDeviceStatusFromJSON(SerializedJSON:char*) : sys_error_code_t
++ PnPLParseCommand(commandString:char*, command:PnPLCommand_t*) : sys_error_code_t
++ PnPLSerializeResponse(command:PnPLCommand_t*, SerializedJSON:char**, size:uint32_t*, pretty: uint8_t) : sys_error_code_t
+
+Responsibilities
+-- Give an abstract layer to interact with sensors PnPL Components
+-- Manage PnP-like commands
+-- Give the current Status of the device
+-- Update the current Status of the device</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>812</x><y>570</y><w>280</w><h>70</h></coordinates><panel_attributes>PnPLCommand
+--
++ comm_type: unt8_t
++ comp_name: char[COMP_KEY_MAX_LENGTH]
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>702</x><y>300</y><w>130</w><h>40</h></coordinates><panel_attributes>lt=-
+m1=   0..n</panel_attributes><additional_attributes>110;10;10;10</additional_attributes></element><element><id>UMLPackage</id><coordinates><x>82</x><y>920</y><w>270</w><h>130</h></coordinates><panel_attributes>SensorManager Component
+--
++ SensorManager
++ xxxSensorTask1
+...
++ xxxSensorTaskN
++ services/SQuery
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>202</x><y>780</y><w>70</w><h>160</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;uses&gt;&gt;</panel_attributes><additional_attributes>10;140;10;10</additional_attributes></element><element><id>UMLPackage</id><coordinates><x>448</x><y>920</y><w>270</w><h>130</h></coordinates><panel_attributes>NonSoComeChiamarloManager Component
+--
++ deviceInfoClass
++ fwInfoClass
++ tagInfoClass
++ LogControllerClass
++ ..
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>508</x><y>780</y><w>70</w><h>160</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;uses&gt;&gt;</panel_attributes><additional_attributes>10;140;10;10</additional_attributes></element><element><id>UMLPackage</id><coordinates><x>8</x><y>0</y><w>1530</w><h>810</h></coordinates><panel_attributes>PnPLCompManager Component</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>1248</x><y>910</y><w>130</w><h>70</h></coordinates><panel_attributes>BLE Component</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLPackage</id><coordinates><x>1384</x><y>910</y><w>130</w><h>70</h></coordinates><panel_attributes>USB Component</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1288</x><y>500</y><w>70</w><h>430</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;uses&gt;&gt;</panel_attributes><additional_attributes>10;10;10;410</additional_attributes></element><element><id>Relation</id><coordinates><x>1428</x><y>500</y><w>70</w><h>430</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;uses&gt;&gt;</panel_attributes><additional_attributes>10;10;10;410</additional_attributes></element><element><id>Relation</id><coordinates><x>928</x><y>500</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element></diagram>

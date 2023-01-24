@@ -1,0 +1,37 @@
+{
+    "Name": "BLEApp",
+    "Description": "Setup sensors via ST BLESensor app",
+    "UUIDAcquisition": "31d0f597-286f-4c8c-ac44-ed141a6fe83c",
+    "Tags": [
+        {
+            "t": 2.683873317,
+            "Label": "SW_TAG_0",
+            "Enable": true
+        },
+        {
+            "t": 5.848938192,
+            "Label": "SW_TAG_0",
+            "Enable": false
+        },
+        {
+            "t": 6.523933767,
+            "Label": "SW_TAG_1",
+            "Enable": true
+        },
+        {
+            "t": 8.278956608,
+            "Label": "SW_TAG_2",
+            "Enable": true
+        },
+        {
+            "t": 11.48911904,
+            "Label": "SW_TAG_2",
+            "Enable": false
+        },
+        {
+            "t": 13.46937943,
+            "Label": "SW_TAG_1",
+            "Enable": false
+        }
+    ]
+}

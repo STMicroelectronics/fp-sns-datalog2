@@ -1,0 +1,21 @@
+{
+	"info": {
+		"version": "1",
+		"auto_mode": true,
+		"phases_iteration": 0,
+		"start_delay_ms": 1000,
+		"execution_plan": [
+			"datalog",
+			"idle"
+		],
+
+		"datalog": {
+			"timer_ms": 15000
+		},
+		"idle": {
+			"timer_ms": 10000
+		}
+	}
+}
+
+

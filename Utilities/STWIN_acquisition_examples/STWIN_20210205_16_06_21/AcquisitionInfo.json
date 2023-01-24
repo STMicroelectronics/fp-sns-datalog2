@@ -1,0 +1,59 @@
+{
+    "UUIDAcquisition": "14ca7c3b-0940-4534-876c-8340041b1733",
+    "Name": "STWIN_Acq",
+    "Description": "",
+    "StartTime": "0",
+    "Tags": [
+        {
+            "t": 1.294539525,
+            "Label": "SW_TAG_0",
+            "Enable": true
+        },
+        {
+            "t": 3.406409233,
+            "Label": "SW_TAG_0",
+            "Enable": false
+        },
+        {
+            "t": 4.710924358,
+            "Label": "SW_TAG_2",
+            "Enable": true
+        },
+        {
+            "t": 6.542605775,
+            "Label": "SW_TAG_2",
+            "Enable": false
+        },
+        {
+            "t": 8.311311508,
+            "Label": "SW_TAG_0",
+            "Enable": true
+        },
+        {
+            "t": 10.25349632,
+            "Label": "SW_TAG_0",
+            "Enable": false
+        },
+        {
+            "t": 11.29500975,
+            "Label": "SW_TAG_2",
+            "Enable": true
+        },
+        {
+            "t": 12.93361395,
+            "Label": "SW_TAG_2",
+            "Enable": false
+        },
+        {
+            "t": 14.01341553,
+            "Label": "SW_TAG_4",
+            "Enable": true
+        },
+        {
+            "t": 16.51936753,
+            "Label": "SW_TAG_2",
+            "Enable": true
+        }
+    ],
+    "EndTime": "0"
+}

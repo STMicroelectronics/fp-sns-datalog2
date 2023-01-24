@@ -1,0 +1,38 @@
+{
+	"c_type": 2,
+	"data_ext": ".dat",
+	"description": "",
+	"end_time": "2022-10-17T13:04:59.449Z",
+	"interface": 1,
+	"name": "STWIN.Box_acquisition",
+	"schema_version": "2.0.0",
+	"start_time": "2022-10-17T13:04:39.000Z",
+	"tags": [
+		{
+			"e": true,
+			"l": "SW_TAG_0",
+			"ta": "2022-10-17T13:04:44.649Z"
+		},
+		{
+			"e": true,
+			"l": "SW_TAG_1",
+			"ta": "2022-10-17T13:04:48.039Z"
+		},
+		{
+			"e": false,
+			"l": "SW_TAG_1",
+			"ta": "2022-10-17T13:04:50.336Z"
+		},
+		{
+			"e": true,
+			"l": "SW_TAG_2",
+			"ta": "2022-10-17T13:04:51.446Z"
+		},
+		{
+			"e": false,
+			"l": "SW_TAG_0",
+			"ta": "2022-10-17T13:04:54.801Z"
+		}
+	],
+	"uuid": "3b696085-0cc4-4b32-b2b9-4bec7770a505"
+}

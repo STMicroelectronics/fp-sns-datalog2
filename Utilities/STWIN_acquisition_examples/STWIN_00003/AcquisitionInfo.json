@@ -1,0 +1,52 @@
+{
+    "Name": "",
+    "Description": "",
+    "UUIDAcquisition": "35464305-0501-4b56-8291-09ff1ce53067",
+    "Tags": [
+        {
+            "t": 1.828908867,
+            "Label": "SW_TAG_0",
+            "Enable": true
+        },
+        {
+            "t": 4.843978833,
+            "Label": "SW_TAG_0",
+            "Enable": false
+        },
+        {
+            "t": 6.088972242,
+            "Label": "SW_TAG_1",
+            "Enable": true
+        },
+        {
+            "t": 9.254044942,
+            "Label": "SW_TAG_1",
+            "Enable": false
+        },
+        {
+            "t": 11.90906979,
+            "Label": "SW_TAG_2",
+            "Enable": true
+        },
+        {
+            "t": 14.87913977,
+            "Label": "SW_TAG_2",
+            "Enable": false
+        },
+        {
+            "t": 16.70914181,
+            "Label": "SW_TAG_1",
+            "Enable": true
+        },
+        {
+            "t": 19.45418131,
+            "Label": "SW_TAG_2",
+            "Enable": true
+        },
+        {
+            "t": 22.73925702,
+            "Label": "SW_TAG_2",
+            "Enable": false
+        }
+    ]
+}

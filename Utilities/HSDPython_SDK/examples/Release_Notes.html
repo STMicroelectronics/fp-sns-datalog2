@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Release Notes for HSDatalog Python SDK</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
+</head>
+<body>
+<div class="row">
+<div class="col-sm-12 col-lg-4">
+<center>
+<h1 id="release-notes-for-hsdatalog-python-sdk">Release Notes for <mark>HSDatalog Python SDK</mark></h1>
+<p>Copyright © 2022 STMicroelectronics</p>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+</center>
+<h1 id="purpose">Purpose</h1>
+<p>The High-Speed DataLog firmware provides an easy way to save data from any combination of sensors and microphones configured at their maximum sampling rate. Sensor data can be either stored on a micro SD Card, SDHC (Secure Digital High Capacity) formatted with the FAT32 file system, or streamed to a PC via USB (WinUSB class).</p>
+<p>This folder contains different Python scripts and classes that can be used to handle the datasets obtained by the HSDatalog firmware.</p>
+</div>
+<div class="col-sm-12 col-lg-8">
+<h1 id="update-history">Update History</h1>
+<div class="collapse">
+<input type="checkbox" id="collapse-section8" checked aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">v2.0.0 / 30-Sep-22</label>
+<div>
+<h2 id="main-changes">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
+<ul>
+<li>Added support for both DATALOG1 and DATALOG2</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true">v1.4.0 / 8-Jul-2022</label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
+<ul>
+<li>Added support to SensorTile.box and LSM6DSOX</li>
+<li>Bug fixed in plot function:
+<ul>
+<li>Fix bug when SamplesPerTS=0</li>
+<li>Solved issue when plotting labelled data</li>
+</ul></li>
+<li>Fixed acquisition stop/restart in cli example</li>
+<li>Renamed reference to cartesiam - use NanoEdge term instead of Cartesiam</li>
+<li>Reviewed Error/Log management</li>
+<li>Updated dll (for Windows, Linux and Raspberry pi 3B)</li>
+<li>Updated license schema</li>
+</ul>
+<h2 id="dependencies">Dependencies</h2>
+<ul>
+<li>All the python modules required by the SDK are shown in <strong>requirements.txt</strong> file.
+<ul>
+<li>If you are on a Linux or Raspberry machine:
+<ul>
+<li>Install manually the following libraries through the <strong>sudo apt-get install</strong> command:
+<ul>
+<li>libjpeg-dev</li>
+<li>libbz2-dev</li>
+<li>libatlas-base-dev</li>
+<li>python3-tk</li>
+</ul></li>
+<li>Then launch the <strong>sudo pip install -r requirements.txt</strong> command<br />
+</li>
+</ul></li>
+<li>On a Windows machine, just launch the <strong>pip install -r requirements.txt</strong> command</li>
+</ul></li>
+<li>In Linux or Raspberry environment, launch the scripts as root through <strong>sudo</strong> command</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true">v1.3.0 / 5-Nov-2021</label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<h3 id="maintenance-release">Maintenance release</h3>
+<ul>
+<li><strong>Updated requirements.txt for Linux and Raspberry pi 3B compatibility</strong></li>
+<li><strong>Bug fixed in plot function: avoid time shifting for sensors whose samples_per_ts is 1</strong></li>
+<li>Reviewed Error/Log management</li>
+<li>Automatically setup wav file channels number in hsdatalog_to_wav.py according to the n dimensions of the considered subsensor</li>
+<li>AcquisitionInfo Model Updated (start/end acquisition json keys updated)</li>
+<li>Updated dll (for Windows, Linux and Raspberry pi 3B)</li>
+</ul>
+<h2 id="dependencies-1">Dependencies</h2>
+<ul>
+<li>All the python modules required by the SDK are shown in <strong>requirements.txt</strong> file.
+<ul>
+<li>If you are on a Linux or Raspberry machine:
+<ul>
+<li>Install manually the following libraries through the <strong>sudo apt-get install</strong> command:
+<ul>
+<li>libjpeg-dev</li>
+<li>libbz2-dev</li>
+<li>libatlas-base-dev</li>
+<li>python3-tk</li>
+</ul></li>
+<li>Then launch the <strong>sudo pip install -r requirements.txt</strong> command<br />
+</li>
+</ul></li>
+<li>On a Windows machine, just launch the <strong>pip install -r requirements.txt</strong> command</li>
+</ul></li>
+<li>In Linux or Raspberry environment, launch the scripts as root through <strong>sudo</strong> command</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true">v1.2.0 / 25-Jun-2021</label>
+<div>
+<h2 id="main-changes-3">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
+<ul>
+<li><strong>Updated requirements.txt - import missing</strong></li>
+<li><strong>Hotfix in nb_hsdatalog_communication notebook</strong></li>
+<li><strong>Removed MIC sensor_type constraints in hsdatalog_to_wav.py (conversion to .wav is available for all sensors)</strong></li>
+<li><strong>Redesigned HSDLink com_manager definition and code cleaning</strong></li>
+<li>Added missing commands in HSDLink and fixed missing import</li>
+<li>Fixed wrong condition for warning message in cartesiam converter function in HSD_utils</li>
+<li>Updated file_manager and DeviceConfig model in HSD</li>
+<li>Bug fixed in HSD plot function</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true">v1.1.0 / 29-Jan-2021</label>
+<div>
+<h2 id="main-changes-4">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
+<ul>
+<li><strong>Updated core module and code cleaning</strong></li>
+<li>Add BSD 3 Clause license disclaimer</li>
+<li>Fixed update device function in command manager (add tagConfig params)</li>
+<li>Issue solved in set label HSDCmd</li>
+<li><strong>Added new wav and to_unico converters</strong></li>
+<li><strong>Updated hsdatalog_check_fake_data.py and hsdatalog_cli.py</strong></li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">v1.0.0 / 13-Nov-2020</label>
+<div>
+<h2 id="main-changes-5">Main Changes</h2>
+<h3 id="first-official-release">First official release</h3>
+</div>
+</div>
+</div>
+</div>
+<footer class="sticky">
+<div class="columns">
+<div class="column" style="width:95%;">
+<p>For complete documentation on <strong>FP-SNS-DATALOG1</strong> , visit: <a href="https://www.st.com/en/embedded-software/fp-sns-datalog1.html">www.st.com</a></p>
+</div><div class="column" style="width:5%;">
+<p><abbr title="Based on template cx566953 version 2.0">Info</abbr></p>
+</div>
+</div>
+</footer>
+</body>
+</html>

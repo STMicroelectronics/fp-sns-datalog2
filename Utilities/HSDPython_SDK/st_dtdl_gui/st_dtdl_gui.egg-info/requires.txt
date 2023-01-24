@@ -1,0 +1,4 @@
+st_pnpl
+numpy
+pyqtgraph
+PySide6
