@@ -29,9 +29,9 @@ for the STWIN.box platform (STEVAL-STWINBX1).
 
 Here is the list of references to user documents:
 
-- [DB4865](https://www.st.com/resource/en/data_brief/fp-sns-datalog2.pdf) : STM32Cube function pack for STEVAL-STWINBX1 evaluation kit 
+- [DB4865](https://www.st.com/en/embedded-software/fp-sns-datalog2.html#documentation) : STM32Cube function pack for STEVAL-STWINBX1 evaluation kit 
 for high speed datalogging and ultrasound processing
-- [UM3106](https://www.st.com/resource/en/user_manual/fp-sns-datalog2.pdf) : Getting started with the STM32Cube function pack for the 
+- [UM3106](https://www.st.com/en/embedded-software/fp-sns-datalog2.html#documentation) : Getting started with the STM32Cube function pack for the 
 STEVAL-STWINBX1 evaluation kit for high speed datalogging and ultrasound processing
 - [STM32Cube](https://www.st.com/stm32cube) : STM32Cube
 
