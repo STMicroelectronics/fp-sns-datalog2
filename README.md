@@ -1,26 +1,38 @@
-# FP-AUD-AEC1 Firmware Package
+# FP-SNS-DATALOG2 Firmware Package
 
-![latest tag](https://img.shields.io/github/v/tag/STMicroelectronics/fp-aud-aec1.svg?color=brightgreen)
+![latest tag](https://img.shields.io/github/v/tag/STMicroelectronics/fp-sns-datalog2.svg?color=brightgreen)
 
-**FP-AUD-AEC1** STM32Cube Function Pack for Acoustic Echo Cancellation is a specific
-example fully focused on Acoustic Echo Cancellation and provides an implementation 
-of a USB smart speaker use case with microphone
+The **FP-SNS-DATALOG2** function pack for STEVAL-STWINBX1 represents an evolution of FP-SNS-DATALOG1 and provides a comprehensive solution for saving
+data from any combination of sensors and microphones configured up to the maximum sampling rate.
 
-The package includes the **STM32 AcousticEC library**,that provides an implementation for a real-time echo 
-cancellation routine based on the well-known SPEEX implementation of the MDF 
-algorithm. 
+FP-SNS-DATALOG2 is based on application-level modules ((**Sensor Manager**, **EMData**, …) that a final user can reuse and extend easily
+to build up its custom application. These application modules adopt state-of-the-art design patterns, and they support natively low-power modes.
+To enable this solution, the function pack has been built on top of **eLooM**, an embedded Light object oriented fraMework for STM32 applications properly designed
+for embedded low power applications powered by STM32. 
 
-The firmware provides implementation example for **NUCLEO-F446RE** board or **NUCLEO-F746ZG** equipped with:
+The FP-SNS-DATALOG2 application allows to store sensor data onto a microSD™ card (secure digital High capacity - SDHC) formatted with the FAT32 file
+system, or stream to a PC via USB (WinUSB class) using the companion host software (cli_example) provided for Windows and Linux. It can also configure an
+ISM330DHCX Machine Learning Core unit and the ISM330IS Intelligent Sensor Processing Unit, so to read the output of the selected algorithm.
 
-- **X-NUCLEO-CCA01M1**, an expansion board based on the **STA350BW** Sound Terminal® 2.1-channel high-efficiency digital audio output system.
-- **X-NUCLEO-CCA02M2**, an evaluation board based on digital MEMS microphones, designed around STMicroelectronics MP34DT06J digital microphones.
+This application allows downloading the selected configuration from a JSON file to the board as well as starting and controlling data acquisition. The same set
+of commands can be operated from a host via Command Line Interface or via Bluetooth using the STBLESensor app which lets you manage the board and sensor configurations,
+start/stop data acquisition on SD card and control data labeling. To read and process sensor data acquired using FP-SNS-DATALOG2, a few easy-to-use
+scripts in Python are provided within the software package. The scripts have been successfully tested with Python 3.10.
 
-![](_htmresc/FP-AUD-AEC1.png)
+The package also includes an example of ultrasound condition monitoring (**UltrasoundFFT**) that calculates the FFT of the IMP23ABSU analog microphone signal and streams
+the result to a PC GUI via USB. The microphone sampling rate is set by default to 192 kHz whereas the microphone bandwidth is up to 80 kHz.
+
+This firmware package includes Components Device Drivers, Board Support Package and example applications 
+for the STWIN.box platform (STEVAL-STWINBX1).
+
+![](_htmresc/FP-SNS-DATALOG2_Software_Architecture.jpg)
 
 Here is the list of references to user documents:
 
-- [DB4393](https://www.st.com/resource/en/data_brief/fp-aud-aec1.pdf) : STM32Cube Function Pack for Acoustic Echo Cancellation
-- [UM2824](https://www.st.com/resource/en/user_manual/um2824-getting-started-with-the-stm32cube-function-pack-for-acoustic-echo-cancellation-stmicroelectronics.pdf) : Getting started with STM32Cube Function Pack for Acoustic Echo Cancellation
+- [DB4865](https://www.st.com/resource/en/data_brief/fp-sns-datalog2.pdf) : STM32Cube function pack for STEVAL-STWINBX1 evaluation kit 
+for high speed datalogging and ultrasound processing
+- [UM3106](https://www.st.com/resource/en/user_manual/fp-sns-datalog2.pdf) : Getting started with the STM32Cube function pack for the 
+STEVAL-STWINBX1 evaluation kit for high speed datalogging and ultrasound processing
 - [STM32Cube](https://www.st.com/stm32cube) : STM32Cube
 
 ## Known Limitations
@@ -30,22 +42,16 @@ Here is the list of references to user documents:
 ## Development Toolchains and Compilers
 
 -   IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1
--   RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37.0
--   STM32CubeIDE Version 1.10.1
+-   RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37
+-   STM32CubeIDE v1.10.1
 
 ## Supported Devices and Boards
 
-- STM32F446RE and STM32F746ZG devices
-- [NUCLEO-F446RE](https://www.st.com/en/evaluation-tools/nucleo-f446re.html) Rev C
-- [NUCLEO-F746ZG](https://www.st.com/en/evaluation-tools/nucleo-f746zg.html) Rev B
-- [X-NUCLEO-CCA01M1](https://www.st.com/en/ecosystems/x-nucleo-cca01m1.html)
-- [X-NUCLEO-CCA02M2](https://www.st.com/en/ecosystems/x-nucleo-cca02m2.html)
+- [STEVAL-STWINBX1](https://www.st.com/stwinbox)
 
 ## Backward Compatibility
 
-- To optimize memory footprint and MCU time consumption, v1.1.0 has been redesigned to acquire the audio signal 
-from only 1 microphone.
-To do so, a different HW configuration for X-NUCLEO-CCA02M2 is needed, as described in UM2824 (v1.1 and above).
+- None
 
 ## Dependencies
 

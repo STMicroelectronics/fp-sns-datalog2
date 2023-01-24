@@ -8,7 +8,7 @@ This guide mainly focuses on steps to be followed to submit an issue.
 ### 1. Before opening an issue
 
 To report a bug/request please file an issue in the right repository
-(example for [fp-aud-aec1](https://github.com/STMicroelectronics/fp-sns-datalog2/issues/new/choose)).
+(example for [fp-sns-datalog2](https://github.com/STMicroelectronics/fp-sns-datalog2/issues/new/choose)).
 
 
 Please check the following boxes before posting an issue:
