@@ -123,6 +123,7 @@ void Error_Handler(void);
 #define SD_DETECT_GPIO_Port GPIOG
 #define INT_EX_Pin GPIO_PIN_6
 #define INT_EX_GPIO_Port GPIOG
+#define INT_EX_EXTI_IRQn EXTI6_IRQn
 #define TIM3_PWM_Pin GPIO_PIN_6
 #define TIM3_PWM_GPIO_Port GPIOC
 #define uC_ADC_BATT_Pin GPIO_PIN_2
@@ -167,8 +168,9 @@ void Error_Handler(void);
 #define NFC_INT_Pin GPIO_PIN_13
 #define NFC_INT_GPIO_Port GPIOB
 #define NFC_INT_EXTI_IRQn EXTI13_IRQn
+
 /* USER CODE BEGIN Private defines */
-#define INT_EX_EXTI_IRQn EXTI6_IRQn
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

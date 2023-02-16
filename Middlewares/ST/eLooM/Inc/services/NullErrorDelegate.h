@@ -59,7 +59,7 @@ struct _NuLLErrorDelegate {
 IApplicationErrorDelegate *NullAEDAlloc(void);
 
 static inline
-void NullAEDResetCounter(IApplicationErrorDelegate *this);
+void NullAEDResetCounter(IApplicationErrorDelegate *_this);
 
 static inline
 uint8_t NullAEDGetMaxFirstResponderPriority(const IApplicationErrorDelegate *_this);

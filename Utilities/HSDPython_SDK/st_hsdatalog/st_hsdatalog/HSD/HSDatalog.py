@@ -448,7 +448,7 @@ class HSDatalog:
                 log.info("--> {} Nanoedge conversion completed successfully".format(comp_name))
                 break
             
-            df = hsd.get_dataframe(comp_name, comp_type, time_offset, time_offset+chunk_time_size, raw_data)
+            df = hsd.get_dataframe(comp_name, comp_type, time_offset, time_offset+chunk_time_size, False, raw_data)
             if df is not None:
                 try:
                     if comp_type is None:

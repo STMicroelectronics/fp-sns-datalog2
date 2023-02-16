@@ -29,10 +29,10 @@ extern "C" {
 
 
 // IEventSrc virtual functions
-sys_error_code_t AEventSrv_vtblInit(IEventSrc *this); ///< @sa IEventSrcInit
-sys_error_code_t AEventSrv_vtblAddEventListener(IEventSrc *this, IEventListener *pListener); ///< @sa IEventSrcAddEventListener
-sys_error_code_t AEventSrv_vtblRemoveEventListener(IEventSrc *this, IEventListener *pListener); ///< @sa IEventSrcRemoveEventListener
-uint32_t AEventSrv_vtblGetMaxListenerCount(const IEventSrc *this); ///< @sa IEventSrcGetMaxListenerCount
+sys_error_code_t AEventSrv_vtblInit(IEventSrc *_this); ///< @sa IEventSrcInit
+sys_error_code_t AEventSrv_vtblAddEventListener(IEventSrc *_this, IEventListener *pListener); ///< @sa IEventSrcAddEventListener
+sys_error_code_t AEventSrv_vtblRemoveEventListener(IEventSrc *_this, IEventListener *pListener); ///< @sa IEventSrcRemoveEventListener
+uint32_t AEventSrv_vtblGetMaxListenerCount(const IEventSrc *_this); ///< @sa IEventSrcGetMaxListenerCount
 
 
 #ifdef __cplusplus

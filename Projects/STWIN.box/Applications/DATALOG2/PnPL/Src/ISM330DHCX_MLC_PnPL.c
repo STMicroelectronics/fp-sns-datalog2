@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:ism330dhcx_mlc;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ism330dhcx_mlc;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -66,12 +65,10 @@ struct _Ism330dhcx_Mlc_PnPL
   IIsm330dhcx_Mlc_t *cmdIF;
 };
 
-/* Objects instance */
-/********************/
+/* Objects instance ----------------------------------------------------------*/
 static Ism330dhcx_Mlc_PnPL sIsm330dhcx_Mlc_PnPL;
 
-// Public API definition
-// *********************
+/* Public API definition -----------------------------------------------------*/
 IPnPLComponent_t *Ism330dhcx_Mlc_PnPLAlloc()
 {
   IPnPLComponent_t *pxObj = (IPnPLComponent_t *) &sIsm330dhcx_Mlc_PnPL;
@@ -93,8 +90,7 @@ uint8_t Ism330dhcx_Mlc_PnPLInit(IPnPLComponent_t *_this,  IIsm330dhcx_Mlc_t *inf
 }
 
 
-// IPnPLComponent virtual functions definition
-// *******************************************
+/* IPnPLComponent virtual functions definition -------------------------------*/
 char *Ism330dhcx_Mlc_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 {
   return ism330dhcx_mlc_get_key();
@@ -148,7 +144,8 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_number(JSON_Status, "ism330dhcx_mlc.usb_dps", temp_i);
   ism330dhcx_mlc_get_sd_dps(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330dhcx_mlc.sd_dps", temp_i);
-  //Next fields are not in DTDL model but Added looking @the component schema field (this is :sensors) ONLY for Sensors and Algorithms
+  /* Next fields are not in DTDL model but added looking @ the component schema
+  field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "ism330dhcx_mlc.c_type", COMP_TYPE_SENSOR);
   int8_t temp_int8 = 0;
   ism330dhcx_mlc_get_stream_id(&temp_int8);
@@ -167,7 +164,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
     *size = json_serialization_size(tempJSON);
   }
 
-  //no need to free temp_j as it is part of tempJSON
+  /* No need to free temp_j as it is part of tempJSON */
   json_value_free(tempJSON);
 
   return 0;

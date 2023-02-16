@@ -62,12 +62,12 @@ uint8_t firmware_info_get_alias(char **value)
 }
 uint8_t firmware_info_get_fw_name(char **value)
 {
-  *value = "UltrasoundFFT";
+  *value = "FP-SNS-DATALOG2_UltrasoundFFT";
    return 0;
 }
 uint8_t firmware_info_get_fw_version(char **value)
 {
-  *value = "1.0.0";
+  *value = "1.0.1";
    return 0;
 }
 uint8_t firmware_info_get_serial_number(char **value)
@@ -77,12 +77,12 @@ uint8_t firmware_info_get_serial_number(char **value)
 }
 uint8_t firmware_info_get_device_url(char **value)
 {
-  *value = "www.st.com/stwinbox";
+  *value = "https://www.st.com/stwinbox";
    return 0;
 }
 uint8_t firmware_info_get_fw_url(char **value)
 {
-  *value = "www.st.com"; //TODO fix this value
+  *value = "https://github.com/STMicroelectronics/fp-sns-datalog2";
    return 0;
 }
 uint8_t firmware_info_set_alias(const char *value)
@@ -238,9 +238,23 @@ uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
    HAL_RTC_GetDate(&hrtc, &sdate, RTC_FORMAT_BIN);
 
    _tm t =
-       { .tm_year = sdate.Year + 2000, .tm_mon = sdate.Month, .tm_mday = sdate.Date, .tm_hour = stime.Hours, .tm_min = stime.Minutes, .tm_sec = stime.Seconds };
+        { .tm_year = sdate.Year + 2000, .tm_mon = sdate.Month - 1, .tm_mday = sdate.Date, .tm_hour = stime.Hours, .tm_min = stime.Minutes, .tm_sec = stime.Seconds };
+
+  // WHY THIS -1 (in months) ???
+  //  struct tm {
+  //     int tm_sec;         /* seconds,  range 0 to 59          */
+  //     int tm_min;         /* minutes, range 0 to 59           */
+  //     int tm_hour;        /* hours, range 0 to 23             */
+  //     int tm_mday;        /* day of the month, range 1 to 31  */
+  //     int tm_mon;         /* month, range 0 to 11             */ <------ (-1) months here (0..11), months from RTC (1..12)
+  //     int tm_year;        /* The number of years since 1900   */
+  //     int tm_wday;        /* day of the week, range 0 to 6    */
+  //     int tm_yday;        /* day in the year, range 0 to 365  */
+  //     int tm_isdst;       /* daylight saving time             */
+  //  };
+
    TMSetStartTime(t);
-   sprintf(app_model.acquisition_info_model.start_time, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+   sprintf(app_model.acquisition_info_model.start_time, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
 
    /* last part not done in sprintf to avoid a warning  */
    app_model.acquisition_info_model.start_time[19] = '.';
@@ -530,7 +544,7 @@ uint8_t acquisition_info_get_interface(char **value)
 }
 uint8_t acquisition_info_get_schema_version(char **value)
 {
-   /* USER Code */
+  *value = "2.0.0";
    return 0;
 }
 uint8_t acquisition_info_set_name(const char *value)
@@ -571,7 +585,7 @@ uint8_t DeviceInformation_get_model(char **value)
 }
 uint8_t DeviceInformation_get_swVersion(char **value)
 {
-   *value = "2.0.0";
+   *value = "1.0.1";
    return 0;
 }
 uint8_t DeviceInformation_get_osName(char **value)

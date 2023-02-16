@@ -22,10 +22,9 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:azure:DeviceManagement:DeviceInformation;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -62,12 +61,10 @@ struct _Deviceinformation_PnPL
 
 };
 
-/* Objects instance */
-/********************/
+/* Objects instance ----------------------------------------------------------*/
 static Deviceinformation_PnPL sDeviceinformation_PnPL;
 
-// Public API definition
-// *********************
+/* Public API definition -----------------------------------------------------*/
 IPnPLComponent_t *Deviceinformation_PnPLAlloc()
 {
   IPnPLComponent_t *pxObj = (IPnPLComponent_t *) &sDeviceinformation_PnPL;
@@ -87,8 +84,7 @@ uint8_t Deviceinformation_PnPLInit(IPnPLComponent_t *_this)
 }
 
 
-// IPnPLComponent virtual functions definition
-// *******************************************
+/* IPnPLComponent virtual functions definition -------------------------------*/
 char *Deviceinformation_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 {
   return DeviceInformation_get_key();
@@ -142,7 +138,7 @@ uint8_t Deviceinformation_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **ser
     *size = json_serialization_size(tempJSON);
   }
 
-  //no need to free temp_j as it is part of tempJSON
+  /* No need to free temp_j as it is part of tempJSON */
   json_value_free(tempJSON);
 
   return 0;

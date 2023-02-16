@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:ism330dhcx_acc;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ism330dhcx_acc;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -33,20 +32,20 @@
 #ifndef _PNPL_ISM330DHCX_ACC_H_
 #define _PNPL_ISM330DHCX_ACC_H_
 
-#define hz12_5 12.5
-#define hz26 26
-#define hz52 52
-#define hz104 104
-#define hz208 208
-#define hz416 416
-#define hz833 833
-#define hz1666 1666
-#define hz3332 3332
-#define hz6667 6667
-#define g2 2
-#define g4 4
-#define g8 8
-#define g16 16
+#define ism330dhcx_acc_odr_hz12_5 12.5
+#define ism330dhcx_acc_odr_hz26 26
+#define ism330dhcx_acc_odr_hz52 52
+#define ism330dhcx_acc_odr_hz104 104
+#define ism330dhcx_acc_odr_hz208 208
+#define ism330dhcx_acc_odr_hz416 416
+#define ism330dhcx_acc_odr_hz833 833
+#define ism330dhcx_acc_odr_hz1666 1666
+#define ism330dhcx_acc_odr_hz3332 3332
+#define ism330dhcx_acc_odr_hz6667 6667
+#define ism330dhcx_acc_fs_g2 2
+#define ism330dhcx_acc_fs_g4 4
+#define ism330dhcx_acc_fs_g8 8
+#define ism330dhcx_acc_fs_g16 16
 
 
 #ifdef __cplusplus
@@ -63,8 +62,7 @@ extern "C" {
  */
 typedef struct _Ism330dhcx_Acc_PnPL Ism330dhcx_Acc_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Ism330dhcx_Acc_PnPLAlloc(void);
 

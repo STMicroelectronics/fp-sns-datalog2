@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -33,16 +32,16 @@
 #ifndef _PNPL_ILPS22QS_PRESS_H_
 #define _PNPL_ILPS22QS_PRESS_H_
 
-#define hz1 1
-#define hz4 4
-#define hz10 10
-#define hz25 25
-#define hz50 50
-#define hz75 75
-#define hz100 100
-#define hz200 200
-#define hpa1260 1260
-#define hpa4060 4060
+#define ilps22qs_press_odr_hz1 1
+#define ilps22qs_press_odr_hz4 4
+#define ilps22qs_press_odr_hz10 10
+#define ilps22qs_press_odr_hz25 25
+#define ilps22qs_press_odr_hz50 50
+#define ilps22qs_press_odr_hz75 75
+#define ilps22qs_press_odr_hz100 100
+#define ilps22qs_press_odr_hz200 200
+#define ilps22qs_press_fs_hpa1260 1260
+#define ilps22qs_press_fs_hpa4060 4060
 
 
 #ifdef __cplusplus
@@ -59,8 +58,7 @@ extern "C" {
  */
 typedef struct _Ilps22qs_Press_PnPL Ilps22qs_Press_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Ilps22qs_Press_PnPLAlloc(void);
 

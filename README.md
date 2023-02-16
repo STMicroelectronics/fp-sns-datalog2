@@ -43,7 +43,7 @@ STEVAL-STWINBX1 evaluation kit for high speed datalogging and ultrasound process
 
 -   IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1
 -   RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37
--   STM32CubeIDE v1.10.1
+-   STM32CubeIDE v1.11.0
 
 ## Supported Devices and Boards
 

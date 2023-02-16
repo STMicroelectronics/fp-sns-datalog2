@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -62,12 +61,10 @@ struct _Imp34dt05_Mic_PnPL
 
 };
 
-/* Objects instance */
-/********************/
+/* Objects instance ----------------------------------------------------------*/
 static Imp34dt05_Mic_PnPL sImp34dt05_Mic_PnPL;
 
-// Public API definition
-// *********************
+/* Public API definition -----------------------------------------------------*/
 IPnPLComponent_t *Imp34dt05_Mic_PnPLAlloc()
 {
   IPnPLComponent_t *pxObj = (IPnPLComponent_t *) &sImp34dt05_Mic_PnPL;
@@ -87,8 +84,7 @@ uint8_t Imp34dt05_Mic_PnPLInit(IPnPLComponent_t *_this)
 }
 
 
-// IPnPLComponent virtual functions definition
-// *******************************************
+/* IPnPLComponent virtual functions definition -------------------------------*/
 char *Imp34dt05_Mic_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 {
   return imp34dt05_mic_get_key();
@@ -115,22 +111,22 @@ uint8_t Imp34dt05_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   float temp_f = 0;
   imp34dt05_mic_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == hz16000)
+  if(temp_f == imp34dt05_mic_odr_hz16000)
   {
     enum_id = 0;
   }
-  else if(temp_f == hz32000)
+  else if(temp_f == imp34dt05_mic_odr_hz32000)
   {
     enum_id = 1;
   }
-  else if(temp_f == hz48000)
+  else if(temp_f == imp34dt05_mic_odr_hz48000)
   {
     enum_id = 2;
   }
   json_object_dotset_number(JSON_Status, "imp34dt05_mic.odr", enum_id);
   imp34dt05_mic_get_aop(&temp_f);
   enum_id = 0;
-  if(temp_f == dbspl130)
+  if(temp_f == imp34dt05_mic_aop_dbspl130)
   {
     enum_id = 0;
   }
@@ -160,7 +156,8 @@ uint8_t Imp34dt05_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   char *temp_s = "";
   imp34dt05_mic_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "imp34dt05_mic.data_type", temp_s);
-  //Next fields are not in DTDL model but Added looking @the component schema field (this is :sensors) ONLY for Sensors and Algorithms
+  /* Next fields are not in DTDL model but added looking @ the component schema
+  field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "imp34dt05_mic.c_type", COMP_TYPE_SENSOR);
   int8_t temp_int8 = 0;
   imp34dt05_mic_get_stream_id(&temp_int8);
@@ -179,7 +176,7 @@ uint8_t Imp34dt05_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
     *size = json_serialization_size(tempJSON);
   }
 
-  //no need to free temp_j as it is part of tempJSON
+  /* No need to free temp_j as it is part of tempJSON */
   json_value_free(tempJSON);
 
   return 0;
@@ -197,13 +194,13 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
     switch(odr)
     {
     case 0:
-      imp34dt05_mic_set_odr(hz16000);
+      imp34dt05_mic_set_odr(imp34dt05_mic_odr_hz16000);
       break;
     case 1:
-      imp34dt05_mic_set_odr(hz32000);
+      imp34dt05_mic_set_odr(imp34dt05_mic_odr_hz32000);
       break;
     case 2:
-      imp34dt05_mic_set_odr(hz48000);
+      imp34dt05_mic_set_odr(imp34dt05_mic_odr_hz48000);
       break;
     }
   }

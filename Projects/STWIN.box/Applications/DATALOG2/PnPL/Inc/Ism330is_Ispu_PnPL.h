@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -49,8 +48,7 @@ extern "C" {
  */
 typedef struct _Ism330is_Ispu_PnPL Ism330is_Ispu_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Ism330is_Ispu_PnPLAlloc(void);
 

@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -62,12 +61,10 @@ struct _Ilps22qs_Press_PnPL
 
 };
 
-/* Objects instance */
-/********************/
+/* Objects instance ----------------------------------------------------------*/
 static Ilps22qs_Press_PnPL sIlps22qs_Press_PnPL;
 
-// Public API definition
-// *********************
+/* Public API definition -----------------------------------------------------*/
 IPnPLComponent_t *Ilps22qs_Press_PnPLAlloc()
 {
   IPnPLComponent_t *pxObj = (IPnPLComponent_t *) &sIlps22qs_Press_PnPL;
@@ -87,8 +84,7 @@ uint8_t Ilps22qs_Press_PnPLInit(IPnPLComponent_t *_this)
 }
 
 
-// IPnPLComponent virtual functions definition
-// *******************************************
+/* IPnPLComponent virtual functions definition -------------------------------*/
 char *Ilps22qs_Press_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 {
   return ilps22qs_press_get_key();
@@ -115,46 +111,46 @@ uint8_t Ilps22qs_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   float temp_f = 0;
   ilps22qs_press_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == hz1)
+  if(temp_f == ilps22qs_press_odr_hz1)
   {
     enum_id = 0;
   }
-  else if(temp_f == hz4)
+  else if(temp_f == ilps22qs_press_odr_hz4)
   {
     enum_id = 1;
   }
-  else if(temp_f == hz10)
+  else if(temp_f == ilps22qs_press_odr_hz10)
   {
     enum_id = 2;
   }
-  else if(temp_f == hz25)
+  else if(temp_f == ilps22qs_press_odr_hz25)
   {
     enum_id = 3;
   }
-  else if(temp_f == hz50)
+  else if(temp_f == ilps22qs_press_odr_hz50)
   {
     enum_id = 4;
   }
-  else if(temp_f == hz75)
+  else if(temp_f == ilps22qs_press_odr_hz75)
   {
     enum_id = 5;
   }
-  else if(temp_f == hz100)
+  else if(temp_f == ilps22qs_press_odr_hz100)
   {
     enum_id = 6;
   }
-  else if(temp_f == hz200)
+  else if(temp_f == ilps22qs_press_odr_hz200)
   {
     enum_id = 7;
   }
   json_object_dotset_number(JSON_Status, "ilps22qs_press.odr", enum_id);
   ilps22qs_press_get_fs(&temp_f);
   enum_id = 0;
-  if(temp_f == hpa1260)
+  if(temp_f == ilps22qs_press_fs_hpa1260)
   {
     enum_id = 0;
   }
-  else if(temp_f == hpa4060)
+  else if(temp_f == ilps22qs_press_fs_hpa4060)
   {
     enum_id = 1;
   }
@@ -184,7 +180,8 @@ uint8_t Ilps22qs_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   char *temp_s = "";
   ilps22qs_press_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "ilps22qs_press.data_type", temp_s);
-  //Next fields are not in DTDL model but Added looking @the component schema field (this is :sensors) ONLY for Sensors and Algorithms
+  /* Next fields are not in DTDL model but added looking @ the component schema
+  field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "ilps22qs_press.c_type", COMP_TYPE_SENSOR);
   int8_t temp_int8 = 0;
   ilps22qs_press_get_stream_id(&temp_int8);
@@ -203,7 +200,7 @@ uint8_t Ilps22qs_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
     *size = json_serialization_size(tempJSON);
   }
 
-  //no need to free temp_j as it is part of tempJSON
+  /* No need to free temp_j as it is part of tempJSON */
   json_value_free(tempJSON);
 
   return 0;
@@ -221,28 +218,28 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
     switch(odr)
     {
     case 0:
-      ilps22qs_press_set_odr(hz1);
+      ilps22qs_press_set_odr(ilps22qs_press_odr_hz1);
       break;
     case 1:
-      ilps22qs_press_set_odr(hz4);
+      ilps22qs_press_set_odr(ilps22qs_press_odr_hz4);
       break;
     case 2:
-      ilps22qs_press_set_odr(hz10);
+      ilps22qs_press_set_odr(ilps22qs_press_odr_hz10);
       break;
     case 3:
-      ilps22qs_press_set_odr(hz25);
+      ilps22qs_press_set_odr(ilps22qs_press_odr_hz25);
       break;
     case 4:
-      ilps22qs_press_set_odr(hz50);
+      ilps22qs_press_set_odr(ilps22qs_press_odr_hz50);
       break;
     case 5:
-      ilps22qs_press_set_odr(hz75);
+      ilps22qs_press_set_odr(ilps22qs_press_odr_hz75);
       break;
     case 6:
-      ilps22qs_press_set_odr(hz100);
+      ilps22qs_press_set_odr(ilps22qs_press_odr_hz100);
       break;
     case 7:
-      ilps22qs_press_set_odr(hz200);
+      ilps22qs_press_set_odr(ilps22qs_press_odr_hz200);
       break;
     }
   }
@@ -252,10 +249,10 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
     switch(fs)
     {
     case 0:
-      ilps22qs_press_set_fs(hpa1260);
+      ilps22qs_press_set_fs(ilps22qs_press_fs_hpa1260);
       break;
     case 1:
-      ilps22qs_press_set_fs(hpa4060);
+      ilps22qs_press_set_fs(ilps22qs_press_fs_hpa4060);
       break;
     }
   }

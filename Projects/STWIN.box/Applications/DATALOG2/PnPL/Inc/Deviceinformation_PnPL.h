@@ -22,10 +22,9 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:azure:DeviceManagement:DeviceInformation;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -49,8 +48,7 @@ extern "C" {
  */
 typedef struct _Deviceinformation_PnPL Deviceinformation_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Deviceinformation_PnPLAlloc(void);
 

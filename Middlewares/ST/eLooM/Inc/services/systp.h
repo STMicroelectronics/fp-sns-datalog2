@@ -104,4 +104,14 @@
 #endif
 #endif
 
+/* X-CUBE-AI specific define */
+/*****************************/
+
+#ifdef SYS_USE_X_CUBE_AI
+/* MISRA messages linked to X-CUBE-AI include are ignored */
+/*cstat -MISRAC2012-* */
+#include "ai_platform.h"
+/*cstat +MISRAC2012-* */
+#endif
+
 #endif /* SYSTARGETPLATFORM_H_ */

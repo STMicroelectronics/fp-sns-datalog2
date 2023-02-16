@@ -23,6 +23,7 @@
 #include "services/sysdebug.h"
 #include "services/sysmem.h"
 #include "app_model.h"
+#include "spi.h"
 
 /* TODO: change XXX with a short id for the task */
 
@@ -372,6 +373,41 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
   {
     return res;
   }
+  
+  
+/*****/
+  /* Workaround - disable and enable power supply for external add-on */
+  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("External add-on 3.3V off\r\n"));
+  
+  /* Switch off the power supply driven from Battery Charger */
+  BCPSendCmd(&p_obj->bc_protocol, E_SW1_OA_OFF);
+  BCPSendCmd(&p_obj->bc_protocol, E_SW1_OB_OFF);
+  
+  /* Avoid spurious high signals on the SPI pins */
+  /* Disable SPI pins */
+  HAL_SPI_MspDeInit(&hspi2);
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  GPIO_InitStruct.Pin = GPIO_PIN_3;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+  /* Force low signal on SPI pins */
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOI, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_3, GPIO_PIN_RESET);
+  HAL_Delay(100);
+  /* Re-initialize SPI pins */
+  HAL_SPI_MspInit(&hspi2);
+  
+  /* Switch on the power supply newly */
+  BCPSendCmd(&p_obj->bc_protocol, E_SW1_OA_ON);
+  BCPSendCmd(&p_obj->bc_protocol, E_SW1_OB_ON);
+  HAL_Delay(100);
+  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("External add-on 3.3V on\r\n"));
+  /* Now the external add-on is ready to be used */
+/*****/
+  
+  
   /* set the (PM_STATE, ExecuteStepFunc) map from the class object.  */
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
   p_obj->BattVolt = 0;

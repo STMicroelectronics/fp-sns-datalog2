@@ -17,6 +17,17 @@
   ******************************************************************************
   */
 
+/**
+  ******************************************************************************
+  * This file has been auto generated from the following DTDL Component:
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1
+  *
+  * Created by: DTDL2PnPL_cGen version 1.0.0
+  *
+  * WARNING! All changes made to this file will be lost if this is regenerated
+  ******************************************************************************
+  */
+
 #ifndef INCLUDE_ILOG_CONTROLLER_VTBL_H_
 #define INCLUDE_ILOG_CONTROLLER_VTBL_H_
 
@@ -45,8 +56,7 @@ struct _ILog_Controller_t
   const ILog_Controller_vtbl *vptr;
 };
 
-// Inline functions definition
-// ***************************
+/* Inline functions definition -----------------------------------------------*/
 inline uint8_t ILog_Controller_save_config(ILog_Controller_t *_this)
 {
   return _this->vptr->log_controller_save_config(_this);

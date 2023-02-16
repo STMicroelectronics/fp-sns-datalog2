@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_BinaryContent.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.6.0
-  * @date    15-September-2022
+  * @version 1.8.0
+  * @date    02-December-2022
   * @brief   Add BinaryContent info services using vendor specific profile.
   ******************************************************************************
   * @attention

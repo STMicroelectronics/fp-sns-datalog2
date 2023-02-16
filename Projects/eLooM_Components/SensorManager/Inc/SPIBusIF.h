@@ -74,7 +74,7 @@ struct _SPIBusIF
   * @param nWhoAmI [IN] specifies the sensor ID. It can be zero.
   * @param pxSSPinPort [IN] specifies the port PIN of the Slave Select line.
   * @param nSSPin [IN] specifies the pin number of the Slave Select line.
-  * @param nAutoInc [IN] specifies the SPI address auto-increment to allow multiple data read/write.
+  * @param nAutoInc [IN] specifies the SPI address auto-increment to allow multiple data read/write (see sensor datasheet: if needed set 0x40, else 0)
   * @return SYS_NO_EROR_CODE if success, an error code otherwise.
   */
 ABusIF *SPIBusIFAlloc(uint8_t who_am_i, GPIO_TypeDef *p_port, uint16_t pin, uint8_t auto_inc);

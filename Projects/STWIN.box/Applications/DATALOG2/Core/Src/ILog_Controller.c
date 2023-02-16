@@ -17,12 +17,25 @@
   ******************************************************************************
   */
 
+/**
+  ******************************************************************************
+  * This file has been auto generated from the following DTDL Component:
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1
+  *
+  * Created by: DTDL2PnPL_cGen version 1.0.0
+  *
+  * WARNING! All changes made to this file will be lost if this is regenerated
+  ******************************************************************************
+  */
+
 #include "ILog_Controller.h"
 #include "ILog_Controller_vtbl.h"
 
-// GCC requires one function forward declaration in only one .c source
-// in order to manage the inline.
-// See also http://stackoverflow.com/questions/26503235/c-inline-function-and-gcc
+/**
+ * GCC requires one function forward declaration in only one .c source
+ * in order to manage the inline.
+ * See also http://stackoverflow.com/questions/26503235/c-inline-function-and-gcc
+ */
 #if defined (__GNUC__) || defined(__ICCARM__)
 extern uint8_t ILog_Controller_save_config(ILog_Controller_t *_this);
 extern uint8_t ILog_Controller_start_log(ILog_Controller_t *_this, uint32_t interface);

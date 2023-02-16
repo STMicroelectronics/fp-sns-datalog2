@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -33,11 +32,11 @@
 #ifndef _PNPL_IIS2MDC_MAG_H_
 #define _PNPL_IIS2MDC_MAG_H_
 
-#define hz10 10
-#define hz20 20
-#define hz50 50
-#define hz100 100
-#define g50 50
+#define iis2mdc_mag_odr_hz10 10
+#define iis2mdc_mag_odr_hz20 20
+#define iis2mdc_mag_odr_hz50 50
+#define iis2mdc_mag_odr_hz100 100
+#define iis2mdc_mag_fs_g50 50
 
 
 #ifdef __cplusplus
@@ -54,8 +53,7 @@ extern "C" {
  */
 typedef struct _Iis2mdc_Mag_PnPL Iis2mdc_Mag_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Iis2mdc_Mag_PnPLAlloc(void);
 

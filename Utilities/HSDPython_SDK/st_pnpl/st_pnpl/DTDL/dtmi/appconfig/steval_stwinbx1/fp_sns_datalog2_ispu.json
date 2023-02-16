@@ -1,145 +1,154 @@
 [
   {
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu;1",
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:iis2mdc_mag;1",
-        "@type": "Component",
-        "displayName": {
-          "en": "IIS2MDC_MAG"
-        },
-        "name": "iis2mdc_mag",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag;1"
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:imp23absu_mic;1",
-        "@type": "Component",
-        "displayName": {
-          "en": "IMP23ABSU_MIC"
-        },
-        "name": "imp23absu_mic",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic;1"
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:iis2dlpc_acc;1",
-        "@type": "Component",
-        "displayName": {
-          "en": "IIS2DLPC_ACC"
-        },
-        "name": "iis2dlpc_acc",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc;1"
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:stts22h_temp;1",
-        "@type": "Component",
-        "displayName": {
-          "en": "STTS22H_TEMP"
-        },
-        "name": "stts22h_temp",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp;1"
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:ilps22qs_press;1",
-        "@type": "Component",
-        "displayName": {
-          "en": "ILPS22QS_PRESS"
-        },
-        "name": "ilps22qs_press",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press;1"
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:imp34dt05_mic;1",
-        "@type": "Component",
-        "displayName": {
-          "en": "IMP34DT05_MIC"
-        },
-        "name": "imp34dt05_mic",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic;1"
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:iis2iclx_acc;1",
-        "@type": "Component",
-        "displayName": {
-          "en": "IIS2ICLX_ACC"
-        },
-        "name": "iis2iclx_acc",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc;1"
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:ism330is_acc;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:ism330is_acc;1",
         "@type": "Component",
         "displayName": {
           "en": "ISM330IS_ACC"
         },
         "name": "ism330is_acc",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc;1"
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc;1"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:ism330is_gyro;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:ism330is_gyro;1",
         "@type": "Component",
         "displayName": {
           "en": "ISM330IS_GYRO"
         },
         "name": "ism330is_gyro",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro;1"
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro;1"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:ism330is_ispu;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:ism330is_ispu;1",
         "@type": "Component",
         "displayName": {
           "en": "ISM330IS_ISPU"
         },
         "name": "ism330is_ispu",
-        "schema": "dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu;1"
+        "schema": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu;1"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:automode;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:iis3dwb_acc;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "IIS3DWB_ACC"
+        },
+        "name": "iis3dwb_acc",
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc;1"
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:iis2mdc_mag;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "IIS2MDC_MAG"
+        },
+        "name": "iis2mdc_mag",
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag;1"
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:imp23absu_mic;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "IMP23ABSU_MIC"
+        },
+        "name": "imp23absu_mic",
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic;1"
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:iis2dlpc_acc;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "IIS2DLPC_ACC"
+        },
+        "name": "iis2dlpc_acc",
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc;1"
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:stts22h_temp;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "STTS22H_TEMP"
+        },
+        "name": "stts22h_temp",
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp;1"
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:ilps22qs_press;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "ILPS22QS_PRESS"
+        },
+        "name": "ilps22qs_press",
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press;1"
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:imp34dt05_mic;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "IMP34DT05_MIC"
+        },
+        "name": "imp34dt05_mic",
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic;1"
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:iis2iclx_acc;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "IIS2ICLX_ACC"
+        },
+        "name": "iis2iclx_acc",
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc;1"
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:automode;1",
         "@type": "Component",
         "displayName": {
           "en": "AutoMode"
         },
         "name": "automode",
-        "schema": "dtmi:vespucci:other:automode;1"
+        "schema": "dtmi:appconfig:other:automode;1"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:log_controller;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:log_controller;1",
         "@type": "Component",
         "displayName": {
           "en": "Log Controller"
         },
         "name": "log_controller",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:log_controller;1"
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:tags_info;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:tags_info;1",
         "@type": "Component",
         "displayName": {
           "en": "Tags Information"
         },
         "name": "tags_info",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info;1"
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info;1"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:acquisition_info;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:acquisition_info;1",
         "@type": "Component",
         "displayName": {
           "en": "Acquisition Information"
         },
         "name": "acquisition_info",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info;1"
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info;1"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:firmware_info;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:firmware_info;1",
         "@type": "Component",
         "displayName": {
           "en": "Firmware Information"
         },
         "name": "firmware_info",
-        "schema": "dtmi:vespucci:other:firmware_info;1"
+        "schema": "dtmi:appconfig:other:firmware_info;1"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:DeviceInformation;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:DeviceInformation;1",
         "@type": "Component",
         "displayName": {
           "en": "Device Information"
@@ -148,13 +157,13 @@
         "schema": "dtmi:azure:DeviceManagement:DeviceInformation;1"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:applications_stblesensor;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:applications_stblesensor;1",
         "@type": "Component",
         "displayName": {
           "en": "Applications ST BLE Sensor"
         },
         "name": "applications_stblesensor",
-        "schema": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor;1"
+        "schema": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor;1"
       }
     ],
     "displayName": {
@@ -170,1577 +179,25 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag;1",
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:odr;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr;1",
         "@type": "Property",
         "displayName": {
           "en": "ODR"
         },
         "name": "odr",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:odr:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema;1",
           "@type": "Enum",
           "displayName": {
             "en": "Enum"
           },
           "enumValues": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:odr:schema:hz10;1",
-              "displayName": {
-                "en": "10"
-              },
-              "enumValue": 0,
-              "name": "hz10"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:odr:schema:hz20;1",
-              "displayName": {
-                "en": "20"
-              },
-              "enumValue": 1,
-              "name": "hz20"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:odr:schema:hz50;1",
-              "displayName": {
-                "en": "50"
-              },
-              "enumValue": 2,
-              "name": "hz50"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:odr:schema:hz100;1",
-              "displayName": {
-                "en": "100"
-              },
-              "enumValue": 3,
-              "name": "hz100"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "unit": "hertz",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:fs;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "FS"
-        },
-        "name": "fs",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:fs:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:fs:schema:g50;1",
-              "displayName": {
-                "en": "50"
-              },
-              "enumValue": 0,
-              "name": "g50"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "writable": false,
-        "displayUnit": {
-          "en": "gauss"
-        }
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:enable;1",
-        "@type": [
-          "Property",
-          "BooleanValue"
-        ],
-        "displayName": {
-          "en": "Enabled"
-        },
-        "name": "enable",
-        "schema": "boolean",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:samples_per_ts;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "Samples per Timestamp"
-        },
-        "name": "samples_per_ts",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:samples_per_ts:schema;1",
-          "@type": "Object",
-          "displayName": {
-            "en": "Object"
-          },
-          "fields": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:samples_per_ts:schema:val;1",
-              "displayName": {
-                "en": "Value"
-              },
-              "name": "val",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:samples_per_ts:schema:min;1",
-              "displayName": {
-                "en": "Min"
-              },
-              "name": "min",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:samples_per_ts:schema:max;1",
-              "displayName": {
-                "en": "Max"
-              },
-              "name": "max",
-              "schema": "integer"
-            }
-          ],
-          "writable": true
-        },
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:dim;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Dimensions"
-        },
-        "name": "dim",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:ioffset;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Initial Offset"
-        },
-        "name": "ioffset",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:measodr;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Measured ODR"
-        },
-        "name": "measodr",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:usb_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "USB Data Packet Size"
-        },
-        "name": "usb_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:sd_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "SD Data Packet Size"
-        },
-        "name": "sd_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:sensitivity;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Sensitivity"
-        },
-        "name": "sensitivity",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2mdc_mag:data_type;1",
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
-        "displayName": {
-          "en": "Data Type"
-        },
-        "name": "data_type",
-        "schema": "string",
-        "writable": false
-      }
-    ],
-    "displayName": {
-      "en": "IIS2MDC_MAG"
-    }
-  },
-  {
-    "@context": [
-      "dtmi:iotcentral:context;2",
-      "dtmi:dtdl:context;2"
-    ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic;1",
-    "@type": "Interface",
-    "contents": [
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:odr;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "ODR"
-        },
-        "name": "odr",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:odr:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:odr:schema:hz16000;1",
-              "displayName": {
-                "en": "16000"
-              },
-              "enumValue": 0,
-              "name": "hz16000"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:odr:schema:hz32000;1",
-              "displayName": {
-                "en": "32000"
-              },
-              "enumValue": 1,
-              "name": "hz32000"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:odr:schema:hz48000;1",
-              "displayName": {
-                "en": "48000"
-              },
-              "enumValue": 2,
-              "name": "hz48000"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:odr:schema:hz96000;1",
-              "displayName": {
-                "en": "96000"
-              },
-              "enumValue": 3,
-              "name": "hz96000"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:odr:schema:hz192000;1",
-              "displayName": {
-                "en": "192000"
-              },
-              "enumValue": 4,
-              "name": "hz192000"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "unit": "hertz",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:aop;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "AOP"
-        },
-        "name": "aop",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:aop:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:aop:schema:dbspl130;1",
-              "displayName": {
-                "en": "130"
-              },
-              "enumValue": 0,
-              "name": "dbspl130"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "writable": false,
-        "displayUnit": {
-          "en": "Waveform"
-        }
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:enable;1",
-        "@type": [
-          "Property",
-          "BooleanValue"
-        ],
-        "displayName": {
-          "en": "Enabled"
-        },
-        "name": "enable",
-        "schema": "boolean",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:samples_per_ts;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "Samples per Timestamp"
-        },
-        "name": "samples_per_ts",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:samples_per_ts:schema;1",
-          "@type": "Object",
-          "displayName": {
-            "en": "Object"
-          },
-          "fields": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:samples_per_ts:schema:val;1",
-              "displayName": {
-                "en": "Value"
-              },
-              "name": "val",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:samples_per_ts:schema:min;1",
-              "displayName": {
-                "en": "Min"
-              },
-              "name": "min",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:samples_per_ts:schema:max;1",
-              "displayName": {
-                "en": "Max"
-              },
-              "name": "max",
-              "schema": "integer"
-            }
-          ],
-          "writable": true
-        },
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:dim;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Dimensions"
-        },
-        "name": "dim",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:ioffset;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Initial Offset"
-        },
-        "name": "ioffset",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:measodr;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Measured ODR"
-        },
-        "name": "measodr",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:usb_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "USB Data Packet Size"
-        },
-        "name": "usb_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:sd_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "SD Data Packet Size"
-        },
-        "name": "sd_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:sensitivity;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Sensitivity"
-        },
-        "name": "sensitivity",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp23absu_mic:data_type;1",
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
-        "displayName": {
-          "en": "Data Type"
-        },
-        "name": "data_type",
-        "schema": "string",
-        "writable": false
-      }
-    ],
-    "displayName": {
-      "en": "IMP23ABSU_MIC"
-    }
-  },
-  {
-    "@context": [
-      "dtmi:iotcentral:context;2",
-      "dtmi:dtdl:context;2"
-    ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc;1",
-    "@type": "Interface",
-    "contents": [
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:odr;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "ODR"
-        },
-        "name": "odr",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:odr:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:odr:schema:hz12_5;1",
-              "displayName": {
-                "en": "12,5"
-              },
-              "enumValue": 0,
-              "name": "hz12_5"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:odr:schema:hz25;1",
-              "displayName": {
-                "en": "25"
-              },
-              "enumValue": 1,
-              "name": "hz25"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:odr:schema:hz50;1",
-              "displayName": {
-                "en": "50"
-              },
-              "enumValue": 2,
-              "name": "hz50"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:odr:schema:hz100;1",
-              "displayName": {
-                "en": "100"
-              },
-              "enumValue": 3,
-              "name": "hz100"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:odr:schema:hz200;1",
-              "displayName": {
-                "en": "200"
-              },
-              "enumValue": 4,
-              "name": "hz200"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:odr:schema:hz400;1",
-              "displayName": {
-                "en": "400"
-              },
-              "enumValue": 5,
-              "name": "hz400"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:odr:schema:hz800;1",
-              "displayName": {
-                "en": "800"
-              },
-              "enumValue": 6,
-              "name": "hz800"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:odr:schema:hz1600;1",
-              "displayName": {
-                "en": "1600"
-              },
-              "enumValue": 7,
-              "name": "hz1600"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "unit": "hertz",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:fs;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "FS"
-        },
-        "name": "fs",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:fs:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:fs:schema:g2;1",
-              "displayName": {
-                "en": "2"
-              },
-              "enumValue": 0,
-              "name": "g2"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:fs:schema:g4;1",
-              "displayName": {
-                "en": "4"
-              },
-              "enumValue": 1,
-              "name": "g4"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:fs:schema:g8;1",
-              "displayName": {
-                "en": "8"
-              },
-              "enumValue": 2,
-              "name": "g8"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:fs:schema:g16;1",
-              "displayName": {
-                "en": "16"
-              },
-              "enumValue": 3,
-              "name": "g16"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "unit": "gForce",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:enable;1",
-        "@type": [
-          "Property",
-          "BooleanValue"
-        ],
-        "displayName": {
-          "en": "Enabled"
-        },
-        "name": "enable",
-        "schema": "boolean",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:samples_per_ts;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "Samples per Timestamp"
-        },
-        "name": "samples_per_ts",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:samples_per_ts:schema;1",
-          "@type": "Object",
-          "displayName": {
-            "en": "Object"
-          },
-          "fields": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:samples_per_ts:schema:val;1",
-              "displayName": {
-                "en": "Value"
-              },
-              "name": "val",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:samples_per_ts:schema:min;1",
-              "displayName": {
-                "en": "Min"
-              },
-              "name": "min",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:samples_per_ts:schema:max;1",
-              "displayName": {
-                "en": "Max"
-              },
-              "name": "max",
-              "schema": "integer"
-            }
-          ],
-          "writable": true
-        },
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:dim;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Dimensions"
-        },
-        "name": "dim",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:ioffset;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Initial Offset"
-        },
-        "name": "ioffset",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:measodr;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Measured ODR"
-        },
-        "name": "measodr",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:usb_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "USB Data Packet Size"
-        },
-        "name": "usb_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:sd_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "SD Data Packet Size"
-        },
-        "name": "sd_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:sensitivity;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Sensitivity"
-        },
-        "name": "sensitivity",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2dlpc_acc:data_type;1",
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
-        "displayName": {
-          "en": "Data Type"
-        },
-        "name": "data_type",
-        "schema": "string",
-        "writable": false
-      }
-    ],
-    "displayName": {
-      "en": "IIS2DLPC_ACC"
-    }
-  },
-  {
-    "@context": [
-      "dtmi:iotcentral:context;2",
-      "dtmi:dtdl:context;2"
-    ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp;1",
-    "@type": "Interface",
-    "contents": [
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:odr;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "ODR"
-        },
-        "name": "odr",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:odr:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:odr:schema:hz1;1",
-              "displayName": {
-                "en": "1"
-              },
-              "enumValue": 0,
-              "name": "hz1"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:odr:schema:hz25;1",
-              "displayName": {
-                "en": "25"
-              },
-              "enumValue": 1,
-              "name": "hz25"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:odr:schema:hz50;1",
-              "displayName": {
-                "en": "50"
-              },
-              "enumValue": 2,
-              "name": "hz50"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:odr:schema:hz100;1",
-              "displayName": {
-                "en": "100"
-              },
-              "enumValue": 3,
-              "name": "hz100"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:odr:schema:hz200;1",
-              "displayName": {
-                "en": "200"
-              },
-              "enumValue": 4,
-              "name": "hz200"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "unit": "hertz",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:fs;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "FS"
-        },
-        "name": "fs",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:fs:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:fs:schema:cdeg100;1",
-              "displayName": {
-                "en": "100"
-              },
-              "enumValue": 0,
-              "name": "cdeg100"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "unit": "degreeCelsius",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:enable;1",
-        "@type": [
-          "Property",
-          "BooleanValue"
-        ],
-        "displayName": {
-          "en": "Enabled"
-        },
-        "name": "enable",
-        "schema": "boolean",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:samples_per_ts;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "Samples per Timestamp"
-        },
-        "name": "samples_per_ts",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:samples_per_ts:schema;1",
-          "@type": "Object",
-          "displayName": {
-            "en": "Object"
-          },
-          "fields": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:samples_per_ts:schema:val;1",
-              "displayName": {
-                "en": "Value"
-              },
-              "name": "val",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:samples_per_ts:schema:min;1",
-              "displayName": {
-                "en": "Min"
-              },
-              "name": "min",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:samples_per_ts:schema:max;1",
-              "displayName": {
-                "en": "Max"
-              },
-              "name": "max",
-              "schema": "integer"
-            }
-          ],
-          "writable": true
-        },
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:dim;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Dimensions"
-        },
-        "name": "dim",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:ioffset;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Initial Offset"
-        },
-        "name": "ioffset",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:measodr;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Measured ODR"
-        },
-        "name": "measodr",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:usb_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "USB Data Packet Size"
-        },
-        "name": "usb_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:sd_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "SD Data Packet Size"
-        },
-        "name": "sd_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:sensitivity;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Sensitivity"
-        },
-        "name": "sensitivity",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:stts22h_temp:data_type;1",
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
-        "displayName": {
-          "en": "Data Type"
-        },
-        "name": "data_type",
-        "schema": "string",
-        "writable": false
-      }
-    ],
-    "displayName": {
-      "en": "STTS22H_TEMP"
-    }
-  },
-  {
-    "@context": [
-      "dtmi:iotcentral:context;2",
-      "dtmi:dtdl:context;2"
-    ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press;1",
-    "@type": "Interface",
-    "contents": [
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:odr;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "ODR"
-        },
-        "name": "odr",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:odr:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:odr:schema:hz1;1",
-              "displayName": {
-                "en": "1"
-              },
-              "enumValue": 0,
-              "name": "hz1"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:odr:schema:hz4;1",
-              "displayName": {
-                "en": "4"
-              },
-              "enumValue": 1,
-              "name": "hz4"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:odr:schema:hz10;1",
-              "displayName": {
-                "en": "10"
-              },
-              "enumValue": 2,
-              "name": "hz10"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:odr:schema:hz25;1",
-              "displayName": {
-                "en": "25"
-              },
-              "enumValue": 3,
-              "name": "hz25"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:odr:schema:hz50;1",
-              "displayName": {
-                "en": "50"
-              },
-              "enumValue": 4,
-              "name": "hz50"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:odr:schema:hz75;1",
-              "displayName": {
-                "en": "75"
-              },
-              "enumValue": 5,
-              "name": "hz75"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:odr:schema:hz100;1",
-              "displayName": {
-                "en": "100"
-              },
-              "enumValue": 6,
-              "name": "hz100"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:odr:schema:hz200;1",
-              "displayName": {
-                "en": "200"
-              },
-              "enumValue": 7,
-              "name": "hz200"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "unit": "hertz",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:fs;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "FS"
-        },
-        "name": "fs",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:fs:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:fs:schema:hpa1260;1",
-              "displayName": {
-                "en": "1260"
-              },
-              "enumValue": 0,
-              "name": "hpa1260"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:fs:schema:hpa4060;1",
-              "displayName": {
-                "en": "4060"
-              },
-              "enumValue": 1,
-              "name": "hpa4060"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "writable": true,
-        "displayUnit": {
-          "en": "hPa"
-        }
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:enable;1",
-        "@type": [
-          "Property",
-          "BooleanValue"
-        ],
-        "displayName": {
-          "en": "Enabled"
-        },
-        "name": "enable",
-        "schema": "boolean",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:samples_per_ts;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "Samples per Timestamp"
-        },
-        "name": "samples_per_ts",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:samples_per_ts:schema;1",
-          "@type": "Object",
-          "displayName": {
-            "en": "Object"
-          },
-          "fields": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:samples_per_ts:schema:val;1",
-              "displayName": {
-                "en": "Value"
-              },
-              "name": "val",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:samples_per_ts:schema:min;1",
-              "displayName": {
-                "en": "Min"
-              },
-              "name": "min",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:samples_per_ts:schema:max;1",
-              "displayName": {
-                "en": "Max"
-              },
-              "name": "max",
-              "schema": "integer"
-            }
-          ],
-          "writable": true
-        },
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:dim;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Dimensions"
-        },
-        "name": "dim",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:ioffset;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Initial Offset"
-        },
-        "name": "ioffset",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:measodr;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Measured ODR"
-        },
-        "name": "measodr",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:usb_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "USB Data Packet Size"
-        },
-        "name": "usb_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:sd_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "SD Data Packet Size"
-        },
-        "name": "sd_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:sensitivity;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Sensitivity"
-        },
-        "name": "sensitivity",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ilps22qs_press:data_type;1",
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
-        "displayName": {
-          "en": "Data Type"
-        },
-        "name": "data_type",
-        "schema": "string",
-        "writable": false
-      }
-    ],
-    "displayName": {
-      "en": "ILPS22QS_PRESS"
-    }
-  },
-  {
-    "@context": [
-      "dtmi:iotcentral:context;2",
-      "dtmi:dtdl:context;2"
-    ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic;1",
-    "@type": "Interface",
-    "contents": [
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:odr;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "ODR"
-        },
-        "name": "odr",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:odr:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:odr:schema:hz16000;1",
-              "displayName": {
-                "en": "16000"
-              },
-              "enumValue": 0,
-              "name": "hz16000"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:odr:schema:hz32000;1",
-              "displayName": {
-                "en": "32000"
-              },
-              "enumValue": 1,
-              "name": "hz32000"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:odr:schema:hz48000;1",
-              "displayName": {
-                "en": "48000"
-              },
-              "enumValue": 2,
-              "name": "hz48000"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "unit": "hertz",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:aop;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "AOP"
-        },
-        "name": "aop",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:aop:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:aop:schema:dbspl130;1",
-              "displayName": {
-                "en": "130"
-              },
-              "enumValue": 0,
-              "name": "dbspl130"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "writable": false,
-        "displayUnit": {
-          "en": "Waveform"
-        }
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:enable;1",
-        "@type": [
-          "Property",
-          "BooleanValue"
-        ],
-        "displayName": {
-          "en": "Enabled"
-        },
-        "name": "enable",
-        "schema": "boolean",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:samples_per_ts;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "Samples per Timestamp"
-        },
-        "name": "samples_per_ts",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:samples_per_ts:schema;1",
-          "@type": "Object",
-          "displayName": {
-            "en": "Object"
-          },
-          "fields": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:samples_per_ts:schema:val;1",
-              "displayName": {
-                "en": "Value"
-              },
-              "name": "val",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:samples_per_ts:schema:min;1",
-              "displayName": {
-                "en": "Min"
-              },
-              "name": "min",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:samples_per_ts:schema:max;1",
-              "displayName": {
-                "en": "Max"
-              },
-              "name": "max",
-              "schema": "integer"
-            }
-          ],
-          "writable": true
-        },
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:dim;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Dimensions"
-        },
-        "name": "dim",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:ioffset;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Initial Offset"
-        },
-        "name": "ioffset",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:measodr;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Measured ODR"
-        },
-        "name": "measodr",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:usb_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "USB Data Packet Size"
-        },
-        "name": "usb_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:sd_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "SD Data Packet Size"
-        },
-        "name": "sd_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:sensitivity;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Sensitivity"
-        },
-        "name": "sensitivity",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:imp34dt05_mic:data_type;1",
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
-        "displayName": {
-          "en": "Data Type"
-        },
-        "name": "data_type",
-        "schema": "string",
-        "writable": false
-      }
-    ],
-    "displayName": {
-      "en": "IMP34DT05_MIC"
-    }
-  },
-  {
-    "@context": [
-      "dtmi:iotcentral:context;2",
-      "dtmi:dtdl:context;2"
-    ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc;1",
-    "@type": "Interface",
-    "contents": [
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:odr;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "ODR"
-        },
-        "name": "odr",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:odr:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:odr:schema:hz12_5;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz12_5;1",
               "displayName": {
                 "en": "12.5"
               },
@@ -1748,7 +205,7 @@
               "name": "hz12_5"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:odr:schema:hz26;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz26;1",
               "displayName": {
                 "en": "26"
               },
@@ -1756,7 +213,7 @@
               "name": "hz26"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:odr:schema:hz52;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz52;1",
               "displayName": {
                 "en": "52"
               },
@@ -1764,7 +221,7 @@
               "name": "hz52"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:odr:schema:hz104;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz104;1",
               "displayName": {
                 "en": "104"
               },
@@ -1772,7 +229,7 @@
               "name": "hz104"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:odr:schema:hz208;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz208;1",
               "displayName": {
                 "en": "208"
               },
@@ -1780,7 +237,7 @@
               "name": "hz208"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:odr:schema:hz416;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz416;1",
               "displayName": {
                 "en": "416"
               },
@@ -1788,295 +245,7 @@
               "name": "hz416"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:odr:schema:hz833;1",
-              "displayName": {
-                "en": "833"
-              },
-              "enumValue": 6,
-              "name": "hz833"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "unit": "hertz",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:fs;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "FS"
-        },
-        "name": "fs",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:fs:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:fs:schema:g0_5;1",
-              "displayName": {
-                "en": "0.5"
-              },
-              "enumValue": 0,
-              "name": "g0_5"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:fs:schema:g1;1",
-              "displayName": {
-                "en": "1"
-              },
-              "enumValue": 1,
-              "name": "g1"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:fs:schema:g2;1",
-              "displayName": {
-                "en": "2"
-              },
-              "enumValue": 2,
-              "name": "g2"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:fs:schema:g3;1",
-              "displayName": {
-                "en": "3"
-              },
-              "enumValue": 3,
-              "name": "g3"
-            }
-          ],
-          "valueSchema": "integer"
-        },
-        "unit": "gForce",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:enable;1",
-        "@type": [
-          "Property",
-          "BooleanValue"
-        ],
-        "displayName": {
-          "en": "Enabled"
-        },
-        "name": "enable",
-        "schema": "boolean",
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:samples_per_ts;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "Samples per Timestamp"
-        },
-        "name": "samples_per_ts",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:samples_per_ts:schema;1",
-          "@type": "Object",
-          "displayName": {
-            "en": "Object"
-          },
-          "fields": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:samples_per_ts:schema:val;1",
-              "displayName": {
-                "en": "Value"
-              },
-              "name": "val",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:samples_per_ts:schema:min;1",
-              "displayName": {
-                "en": "Min"
-              },
-              "name": "min",
-              "schema": "integer"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:samples_per_ts:schema:max;1",
-              "displayName": {
-                "en": "Max"
-              },
-              "name": "max",
-              "schema": "integer"
-            }
-          ],
-          "writable": true
-        },
-        "writable": true
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:dim;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Dimensions"
-        },
-        "name": "dim",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:ioffset;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Initial Offset"
-        },
-        "name": "ioffset",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:measodr;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Measured ODR"
-        },
-        "name": "measodr",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:usb_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "USB Data Packet Size"
-        },
-        "name": "usb_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:sd_dps;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "SD Data Packet Size"
-        },
-        "name": "sd_dps",
-        "schema": "integer",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:sensitivity;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Sensitivity"
-        },
-        "name": "sensitivity",
-        "schema": "double",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:iis2iclx_acc:data_type;1",
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
-        "displayName": {
-          "en": "Data Type"
-        },
-        "name": "data_type",
-        "schema": "string",
-        "writable": false
-      }
-    ],
-    "displayName": {
-      "en": "IIS2ICLX_ACC"
-    }
-  },
-  {
-    "@context": [
-      "dtmi:iotcentral:context;2",
-      "dtmi:dtdl:context;2"
-    ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc;1",
-    "@type": "Interface",
-    "contents": [
-      {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "ODR"
-        },
-        "name": "odr",
-        "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz12_5;1",
-              "displayName": {
-                "en": "12.5"
-              },
-              "enumValue": 0,
-              "name": "hz12_5"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz26;1",
-              "displayName": {
-                "en": "26"
-              },
-              "enumValue": 1,
-              "name": "hz26"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz52;1",
-              "displayName": {
-                "en": "52"
-              },
-              "enumValue": 2,
-              "name": "hz52"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz104;1",
-              "displayName": {
-                "en": "104"
-              },
-              "enumValue": 3,
-              "name": "hz104"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz208;1",
-              "displayName": {
-                "en": "208"
-              },
-              "enumValue": 4,
-              "name": "hz208"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz416;1",
-              "displayName": {
-                "en": "416"
-              },
-              "enumValue": 5,
-              "name": "hz416"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz833;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz833;1",
               "displayName": {
                 "en": "833"
               },
@@ -2084,7 +253,7 @@
               "name": "hz833"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz1667;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz1667;1",
               "displayName": {
                 "en": "1667"
               },
@@ -2092,7 +261,7 @@
               "name": "hz1667"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz3333;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz3333;1",
               "displayName": {
                 "en": "3333"
               },
@@ -2100,7 +269,7 @@
               "name": "hz3333"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz6667;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:odr:schema:hz6667;1",
               "displayName": {
                 "en": "6667"
               },
@@ -2114,21 +283,21 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs;1",
         "@type": "Property",
         "displayName": {
           "en": "FS"
         },
         "name": "fs",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs:schema;1",
           "@type": "Enum",
           "displayName": {
             "en": "Enum"
           },
           "enumValues": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs:schema:g2;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs:schema:g2;1",
               "displayName": {
                 "en": "2"
               },
@@ -2136,7 +305,7 @@
               "name": "g2"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs:schema:g4;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs:schema:g4;1",
               "displayName": {
                 "en": "4"
               },
@@ -2144,7 +313,7 @@
               "name": "g4"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs:schema:g8;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs:schema:g8;1",
               "displayName": {
                 "en": "8"
               },
@@ -2152,7 +321,7 @@
               "name": "g8"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs:schema:g16;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:fs:schema:g16;1",
               "displayName": {
                 "en": "16"
               },
@@ -2166,7 +335,7 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:enable;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:enable;1",
         "@type": [
           "Property",
           "BooleanValue"
@@ -2179,21 +348,21 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:samples_per_ts;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:samples_per_ts;1",
         "@type": "Property",
         "displayName": {
           "en": "Samples per Timestamp"
         },
         "name": "samples_per_ts",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:samples_per_ts:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:samples_per_ts:schema;1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:samples_per_ts:schema:val;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:samples_per_ts:schema:val;1",
               "displayName": {
                 "en": "Value"
               },
@@ -2201,7 +370,7 @@
               "schema": "integer"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:samples_per_ts:schema:min;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:samples_per_ts:schema:min;1",
               "displayName": {
                 "en": "Min"
               },
@@ -2209,7 +378,7 @@
               "schema": "integer"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:samples_per_ts:schema:max;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:samples_per_ts:schema:max;1",
               "displayName": {
                 "en": "Max"
               },
@@ -2222,7 +391,7 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:dim;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:dim;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2235,7 +404,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:ioffset;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:ioffset;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2248,7 +417,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:measodr;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:measodr;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2261,7 +430,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:usb_dps;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:usb_dps;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2274,7 +443,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:sd_dps;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:sd_dps;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2287,7 +456,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:sensitivity;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:sensitivity;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2300,7 +469,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:data_type;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_acc:data_type;1",
         "@type": [
           "Property",
           "StringValue"
@@ -2322,25 +491,25 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro;1",
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr;1",
         "@type": "Property",
         "displayName": {
           "en": "ODR"
         },
         "name": "odr",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema;1",
           "@type": "Enum",
           "displayName": {
             "en": "Enum"
           },
           "enumValues": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz12_5;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz12_5;1",
               "displayName": {
                 "en": "12.5"
               },
@@ -2348,7 +517,7 @@
               "name": "hz12_5"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz26;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz26;1",
               "displayName": {
                 "en": "26"
               },
@@ -2356,7 +525,7 @@
               "name": "hz26"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz52;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz52;1",
               "displayName": {
                 "en": "52"
               },
@@ -2364,7 +533,7 @@
               "name": "hz52"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz104;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz104;1",
               "displayName": {
                 "en": "104"
               },
@@ -2372,7 +541,7 @@
               "name": "hz104"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz208;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz208;1",
               "displayName": {
                 "en": "208"
               },
@@ -2380,7 +549,7 @@
               "name": "hz208"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz416;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz416;1",
               "displayName": {
                 "en": "416"
               },
@@ -2388,7 +557,7 @@
               "name": "hz416"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz833;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz833;1",
               "displayName": {
                 "en": "833"
               },
@@ -2396,7 +565,7 @@
               "name": "hz833"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz1667;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz1667;1",
               "displayName": {
                 "en": "1667"
               },
@@ -2404,7 +573,7 @@
               "name": "hz1667"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz3333;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz3333;1",
               "displayName": {
                 "en": "3333"
               },
@@ -2412,7 +581,7 @@
               "name": "hz3333"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz6667;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:odr:schema:hz6667;1",
               "displayName": {
                 "en": "6667"
               },
@@ -2426,21 +595,21 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs;1",
         "@type": "Property",
         "displayName": {
           "en": "FS"
         },
         "name": "fs",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema;1",
           "@type": "Enum",
           "displayName": {
             "en": "Enum"
           },
           "enumValues": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema:dps125;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema:dps125;1",
               "displayName": {
                 "en": "125"
               },
@@ -2448,7 +617,7 @@
               "name": "dps125"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema:dps250;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema:dps250;1",
               "displayName": {
                 "en": "250"
               },
@@ -2456,7 +625,7 @@
               "name": "dps250"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema:dps500;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema:dps500;1",
               "displayName": {
                 "en": "500"
               },
@@ -2464,7 +633,7 @@
               "name": "dps500"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema:dps1000;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema:dps1000;1",
               "displayName": {
                 "en": "1000"
               },
@@ -2472,7 +641,7 @@
               "name": "dps1000"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema:dps2000;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:fs:schema:dps2000;1",
               "displayName": {
                 "en": "2000"
               },
@@ -2488,7 +657,7 @@
         }
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:enable;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:enable;1",
         "@type": [
           "Property",
           "BooleanValue"
@@ -2501,21 +670,21 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:samples_per_ts;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:samples_per_ts;1",
         "@type": "Property",
         "displayName": {
           "en": "Samples per Timestamp"
         },
         "name": "samples_per_ts",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:samples_per_ts:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:samples_per_ts:schema;1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:samples_per_ts:schema:val;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:samples_per_ts:schema:val;1",
               "displayName": {
                 "en": "Value"
               },
@@ -2523,7 +692,7 @@
               "schema": "integer"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:samples_per_ts:schema:min;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:samples_per_ts:schema:min;1",
               "displayName": {
                 "en": "Min"
               },
@@ -2531,7 +700,7 @@
               "schema": "integer"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:samples_per_ts:schema:max;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:samples_per_ts:schema:max;1",
               "displayName": {
                 "en": "Max"
               },
@@ -2544,7 +713,7 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:dim;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:dim;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2557,7 +726,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:ioffset;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:ioffset;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2570,7 +739,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:measodr;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:measodr;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2583,7 +752,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:usb_dps;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:usb_dps;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2596,7 +765,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:sd_dps;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:sd_dps;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2609,7 +778,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:sensitivity;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:sensitivity;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2622,7 +791,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:data_type;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro:data_type;1",
         "@type": [
           "Property",
           "StringValue"
@@ -2644,11 +813,11 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu;1",
+    "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:enable;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:enable;1",
         "@type": [
           "Property",
           "BooleanValue"
@@ -2661,21 +830,21 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu:samples_per_ts;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu:samples_per_ts;1",
         "@type": "Property",
         "displayName": {
           "en": "Samples per Timestamp"
         },
         "name": "samples_per_ts",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu:samples_per_ts:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu:samples_per_ts:schema;1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu:samples_per_ts:schema:val;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu:samples_per_ts:schema:val;1",
               "displayName": {
                 "en": "Value"
               },
@@ -2683,7 +852,7 @@
               "schema": "integer"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu:samples_per_ts:schema:min;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu:samples_per_ts:schema:min;1",
               "displayName": {
                 "en": "Min"
               },
@@ -2691,7 +860,7 @@
               "schema": "integer"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu:samples_per_ts:schema:max;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu:samples_per_ts:schema:max;1",
               "displayName": {
                 "en": "Max"
               },
@@ -2704,7 +873,7 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:load_file;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:load_file;1",
         "@type": "Command",
         "commandType": "synchronous",
         "displayName": {
@@ -2756,7 +925,7 @@
         }
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:ucf_status;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:ucf_status;1",
         "@type": [
           "Property",
           "BooleanValue"
@@ -2769,7 +938,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:usb_dps;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:usb_dps;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2782,7 +951,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:sd_dps;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:sd_dps;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2795,7 +964,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:data_type;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:data_type;1",
         "@type": [
           "Property",
           "StringValue"
@@ -2808,7 +977,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:dim;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:dim;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2821,7 +990,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:ioffset;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:sensors:ism330is_ispu:ioffset;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2843,11 +1012,2091 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:other:automode;1",
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:other:automode:enabled;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:odr:schema:hz26667;1",
+              "displayName": {
+                "en": "26667"
+              },
+              "enumValue": 0,
+              "name": "hz26667"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs:schema:g2;1",
+              "displayName": {
+                "en": "2"
+              },
+              "enumValue": 0,
+              "name": "g2"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs:schema:g4;1",
+              "displayName": {
+                "en": "4"
+              },
+              "enumValue": 1,
+              "name": "g4"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs:schema:g8;1",
+              "displayName": {
+                "en": "8"
+              },
+              "enumValue": 2,
+              "name": "g8"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs:schema:g16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 3,
+              "name": "g16"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "gForce",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IIS3DWB_ACC"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:odr:schema:hz10;1",
+              "displayName": {
+                "en": "10"
+              },
+              "enumValue": 0,
+              "name": "hz10"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:odr:schema:hz20;1",
+              "displayName": {
+                "en": "20"
+              },
+              "enumValue": 1,
+              "name": "hz20"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:odr:schema:hz50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 2,
+              "name": "hz50"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:odr:schema:hz100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 3,
+              "name": "hz100"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:fs;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:fs:schema:g50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 0,
+              "name": "g50"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": false,
+        "displayUnit": {
+          "en": "gauss"
+        }
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IIS2MDC_MAG"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema:hz16000;1",
+              "displayName": {
+                "en": "16000"
+              },
+              "enumValue": 0,
+              "name": "hz16000"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema:hz32000;1",
+              "displayName": {
+                "en": "32000"
+              },
+              "enumValue": 1,
+              "name": "hz32000"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema:hz48000;1",
+              "displayName": {
+                "en": "48000"
+              },
+              "enumValue": 2,
+              "name": "hz48000"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema:hz96000;1",
+              "displayName": {
+                "en": "96000"
+              },
+              "enumValue": 3,
+              "name": "hz96000"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema:hz192000;1",
+              "displayName": {
+                "en": "192000"
+              },
+              "enumValue": 4,
+              "name": "hz192000"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:aop;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "AOP"
+        },
+        "name": "aop",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:aop:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:aop:schema:dbspl130;1",
+              "displayName": {
+                "en": "130"
+              },
+              "enumValue": 0,
+              "name": "dbspl130"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": false,
+        "displayUnit": {
+          "en": "Waveform"
+        }
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IMP23ABSU_MIC"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:odr:schema:hz12_5;1",
+              "displayName": {
+                "en": "12,5"
+              },
+              "enumValue": 0,
+              "name": "hz12_5"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:odr:schema:hz25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 1,
+              "name": "hz25"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:odr:schema:hz50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 2,
+              "name": "hz50"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:odr:schema:hz100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 3,
+              "name": "hz100"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:odr:schema:hz200;1",
+              "displayName": {
+                "en": "200"
+              },
+              "enumValue": 4,
+              "name": "hz200"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:odr:schema:hz400;1",
+              "displayName": {
+                "en": "400"
+              },
+              "enumValue": 5,
+              "name": "hz400"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:odr:schema:hz800;1",
+              "displayName": {
+                "en": "800"
+              },
+              "enumValue": 6,
+              "name": "hz800"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:odr:schema:hz1600;1",
+              "displayName": {
+                "en": "1600"
+              },
+              "enumValue": 7,
+              "name": "hz1600"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:fs;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:fs:schema:g2;1",
+              "displayName": {
+                "en": "2"
+              },
+              "enumValue": 0,
+              "name": "g2"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:fs:schema:g4;1",
+              "displayName": {
+                "en": "4"
+              },
+              "enumValue": 1,
+              "name": "g4"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:fs:schema:g8;1",
+              "displayName": {
+                "en": "8"
+              },
+              "enumValue": 2,
+              "name": "g8"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:fs:schema:g16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 3,
+              "name": "g16"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "gForce",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IIS2DLPC_ACC"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema:hz1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 0,
+              "name": "hz1"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema:hz25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 1,
+              "name": "hz25"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema:hz50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 2,
+              "name": "hz50"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema:hz100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 3,
+              "name": "hz100"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema:hz200;1",
+              "displayName": {
+                "en": "200"
+              },
+              "enumValue": 4,
+              "name": "hz200"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:fs;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:fs:schema:cdeg100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 0,
+              "name": "cdeg100"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "degreeCelsius",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "STTS22H_TEMP"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:odr:schema:hz1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 0,
+              "name": "hz1"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:odr:schema:hz4;1",
+              "displayName": {
+                "en": "4"
+              },
+              "enumValue": 1,
+              "name": "hz4"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:odr:schema:hz10;1",
+              "displayName": {
+                "en": "10"
+              },
+              "enumValue": 2,
+              "name": "hz10"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:odr:schema:hz25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 3,
+              "name": "hz25"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:odr:schema:hz50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 4,
+              "name": "hz50"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:odr:schema:hz75;1",
+              "displayName": {
+                "en": "75"
+              },
+              "enumValue": 5,
+              "name": "hz75"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:odr:schema:hz100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 6,
+              "name": "hz100"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:odr:schema:hz200;1",
+              "displayName": {
+                "en": "200"
+              },
+              "enumValue": 7,
+              "name": "hz200"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:fs;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:fs:schema:hpa1260;1",
+              "displayName": {
+                "en": "1260"
+              },
+              "enumValue": 0,
+              "name": "hpa1260"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:fs:schema:hpa4060;1",
+              "displayName": {
+                "en": "4060"
+              },
+              "enumValue": 1,
+              "name": "hpa4060"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "displayUnit": {
+          "en": "hPa"
+        }
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "ILPS22QS_PRESS"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:odr:schema:hz16000;1",
+              "displayName": {
+                "en": "16000"
+              },
+              "enumValue": 0,
+              "name": "hz16000"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:odr:schema:hz32000;1",
+              "displayName": {
+                "en": "32000"
+              },
+              "enumValue": 1,
+              "name": "hz32000"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:odr:schema:hz48000;1",
+              "displayName": {
+                "en": "48000"
+              },
+              "enumValue": 2,
+              "name": "hz48000"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:aop;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "AOP"
+        },
+        "name": "aop",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:aop:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:aop:schema:dbspl130;1",
+              "displayName": {
+                "en": "130"
+              },
+              "enumValue": 0,
+              "name": "dbspl130"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": false,
+        "displayUnit": {
+          "en": "Waveform"
+        }
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp34dt05_mic:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IMP34DT05_MIC"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:odr:schema:hz12_5;1",
+              "displayName": {
+                "en": "12.5"
+              },
+              "enumValue": 0,
+              "name": "hz12_5"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:odr:schema:hz26;1",
+              "displayName": {
+                "en": "26"
+              },
+              "enumValue": 1,
+              "name": "hz26"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:odr:schema:hz52;1",
+              "displayName": {
+                "en": "52"
+              },
+              "enumValue": 2,
+              "name": "hz52"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:odr:schema:hz104;1",
+              "displayName": {
+                "en": "104"
+              },
+              "enumValue": 3,
+              "name": "hz104"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:odr:schema:hz208;1",
+              "displayName": {
+                "en": "208"
+              },
+              "enumValue": 4,
+              "name": "hz208"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:odr:schema:hz416;1",
+              "displayName": {
+                "en": "416"
+              },
+              "enumValue": 5,
+              "name": "hz416"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:odr:schema:hz833;1",
+              "displayName": {
+                "en": "833"
+              },
+              "enumValue": 6,
+              "name": "hz833"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:fs;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:fs:schema:g0_5;1",
+              "displayName": {
+                "en": "0.5"
+              },
+              "enumValue": 0,
+              "name": "g0_5"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:fs:schema:g1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 1,
+              "name": "g1"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:fs:schema:g2;1",
+              "displayName": {
+                "en": "2"
+              },
+              "enumValue": 2,
+              "name": "g2"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:fs:schema:g3;1",
+              "displayName": {
+                "en": "3"
+              },
+              "enumValue": 3,
+              "name": "g3"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "gForce",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2iclx_acc:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IIS2ICLX_ACC"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:appconfig:other:automode;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:appconfig:other:automode:enabled;1",
         "@type": [
           "Property",
           "BooleanValue"
@@ -2860,7 +3109,7 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:other:automode:nof_acquisitions;1",
+        "@id": "dtmi:appconfig:other:automode:nof_acquisitions;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2873,7 +3122,7 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:other:automode:start_delay_ms;1",
+        "@id": "dtmi:appconfig:other:automode:start_delay_ms;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2890,7 +3139,7 @@
         }
       },
       {
-        "@id": "dtmi:vespucci:other:automode:datalog_time_length;1",
+        "@id": "dtmi:appconfig:other:automode:datalog_time_length;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2907,7 +3156,7 @@
         }
       },
       {
-        "@id": "dtmi:vespucci:other:automode:idle_time_length;1",
+        "@id": "dtmi:appconfig:other:automode:idle_time_length;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -2933,11 +3182,11 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:log_controller;1",
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:log_controller:save_config;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller:save_config;1",
         "@type": "Command",
         "commandType": "synchronous",
         "displayName": {
@@ -2946,7 +3195,7 @@
         "name": "save_config"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:log_controller:log_status;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller:log_status;1",
         "@type": [
           "Property",
           "BooleanValue"
@@ -2959,7 +3208,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:log_controller:sd_mounted;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller:sd_mounted;1",
         "@type": [
           "Property",
           "BooleanValue"
@@ -2972,7 +3221,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:log_controller:start_log;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller:start_log;1",
         "@type": "Command",
         "commandType": "synchronous",
         "displayName": {
@@ -3011,7 +3260,7 @@
         }
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:log_controller:stop_log;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller:stop_log;1",
         "@type": "Command",
         "commandType": "synchronous",
         "displayName": {
@@ -3020,7 +3269,7 @@
         "name": "stop_log"
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:log_controller:set_time;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller:set_time;1",
         "@type": "Command",
         "commandType": "synchronous",
         "displayName": {
@@ -3040,7 +3289,7 @@
         }
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:log_controller:controller_type;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller:controller_type;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -3062,11 +3311,11 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info;1",
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:max_tags_num;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:max_tags_num;1",
         "@type": [
           "Property",
           "NumberValue"
@@ -3079,21 +3328,21 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag0;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag0;1",
         "@type": "Property",
         "displayName": {
           "en": "SW Tag Class 0"
         },
         "name": "sw_tag0",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag0:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag0:schema;1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag0:schema:label;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag0:schema:label;1",
               "displayName": {
                 "en": "Label"
               },
@@ -3101,7 +3350,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag0:schema:enabled;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag0:schema:enabled;1",
               "displayName": {
                 "en": "Enabled"
               },
@@ -3109,7 +3358,7 @@
               "schema": "boolean"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag0:schema:status;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag0:schema:status;1",
               "displayName": {
                 "en": "Status"
               },
@@ -3121,21 +3370,21 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag1;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag1;1",
         "@type": "Property",
         "displayName": {
           "en": "SW Tag Class 1"
         },
         "name": "sw_tag1",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag1:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag1:schema;1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag1:schema:label;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag1:schema:label;1",
               "displayName": {
                 "en": "Label"
               },
@@ -3143,7 +3392,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag1:schema:enabled;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag1:schema:enabled;1",
               "displayName": {
                 "en": "Enabled"
               },
@@ -3151,7 +3400,7 @@
               "schema": "boolean"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag1:schema:status;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag1:schema:status;1",
               "displayName": {
                 "en": "Status"
               },
@@ -3163,21 +3412,21 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag2;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag2;1",
         "@type": "Property",
         "displayName": {
           "en": "SW Tag Class 2"
         },
         "name": "sw_tag2",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag2:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag2:schema;1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag2:schema:label;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag2:schema:label;1",
               "displayName": {
                 "en": "Label"
               },
@@ -3185,7 +3434,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag2:schema:enabled;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag2:schema:enabled;1",
               "displayName": {
                 "en": "Enabled"
               },
@@ -3193,7 +3442,7 @@
               "schema": "boolean"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag2:schema:status;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag2:schema:status;1",
               "displayName": {
                 "en": "Status"
               },
@@ -3205,21 +3454,21 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag3;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag3;1",
         "@type": "Property",
         "displayName": {
           "en": "SW Tag Class 3"
         },
         "name": "sw_tag3",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag3:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag3:schema;1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag3:schema:label;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag3:schema:label;1",
               "displayName": {
                 "en": "Label"
               },
@@ -3227,7 +3476,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag3:schema:enabled;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag3:schema:enabled;1",
               "displayName": {
                 "en": "Enabled"
               },
@@ -3235,7 +3484,7 @@
               "schema": "boolean"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag3:schema:status;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag3:schema:status;1",
               "displayName": {
                 "en": "Status"
               },
@@ -3247,21 +3496,21 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag4;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag4;1",
         "@type": "Property",
         "displayName": {
           "en": "SW Tag Class 4"
         },
         "name": "sw_tag4",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag4:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag4:schema;1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag4:schema:label;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag4:schema:label;1",
               "displayName": {
                 "en": "Label"
               },
@@ -3269,7 +3518,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag4:schema:enabled;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag4:schema:enabled;1",
               "displayName": {
                 "en": "Enabled"
               },
@@ -3277,7 +3526,7 @@
               "schema": "boolean"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:tags_info:sw_tag4:schema:status;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag4:schema:status;1",
               "displayName": {
                 "en": "Status"
               },
@@ -3298,11 +3547,11 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info;1",
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:name;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:name;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3315,7 +3564,7 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:description;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:description;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3328,7 +3577,7 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:uuid;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:uuid;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3341,7 +3590,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:start_time;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:start_time;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3354,7 +3603,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:end_time;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:end_time;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3367,7 +3616,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:data_ext;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:data_ext;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3380,7 +3629,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:data_fmt;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:data_fmt;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3393,7 +3642,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:tags;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:tags;1",
         "@type": "Property",
         "comment": "JSON Value",
         "displayName": {
@@ -3404,21 +3653,21 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:interface;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:interface;1",
         "@type": "Property",
         "displayName": {
           "en": "Acquisition Interface"
         },
         "name": "interface",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:interface:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:interface:schema;1",
           "@type": "Enum",
           "displayName": {
             "en": "Enum"
           },
           "enumValues": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:interface:schema:sd;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:interface:schema:sd;1",
               "displayName": {
                 "en": "SD Card"
               },
@@ -3426,7 +3675,7 @@
               "name": "sd"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:interface:schema:usb;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:interface:schema:usb;1",
               "displayName": {
                 "en": "USB"
               },
@@ -3439,7 +3688,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:acquisition_info:schema_version;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:schema_version;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3461,11 +3710,11 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:other:firmware_info;1",
+    "@id": "dtmi:appconfig:other:firmware_info;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:other:firmware_info:alias;1",
+        "@id": "dtmi:appconfig:other:firmware_info:alias;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3478,7 +3727,7 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:other:firmware_info:fw_name;1",
+        "@id": "dtmi:appconfig:other:firmware_info:fw_name;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3491,7 +3740,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:other:firmware_info:fw_version;1",
+        "@id": "dtmi:appconfig:other:firmware_info:fw_version;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3504,7 +3753,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:other:firmware_info:serial_number;1",
+        "@id": "dtmi:appconfig:other:firmware_info:serial_number;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3517,7 +3766,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:other:firmware_info:device_url;1",
+        "@id": "dtmi:appconfig:other:firmware_info:device_url;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3530,7 +3779,7 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:other:firmware_info:fw_url;1",
+        "@id": "dtmi:appconfig:other:firmware_info:fw_url;1",
         "@type": [
           "Property",
           "StringValue"
@@ -3685,25 +3934,33 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor;1",
+    "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2;1",
+        "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2;1",
         "@type": "Property",
         "displayName": {
           "en": "HS Datalog 2"
         },
         "name": "hsdatalog2",
         "schema": {
-          "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema;1",
+          "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema;1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:iis2mdc_mag;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:iis3dwb_acc;1",
+              "displayName": {
+                "en": "IIS3DWB_ACC"
+              },
+              "name": "iis3dwb_acc",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:iis2mdc_mag;1",
               "displayName": {
                 "en": "IIS2MDC_MAG"
               },
@@ -3711,7 +3968,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:imp23absu_mic;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:imp23absu_mic;1",
               "displayName": {
                 "en": "IMP23ABSU_MIC"
               },
@@ -3719,7 +3976,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:iis2dlpc_acc;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:iis2dlpc_acc;1",
               "displayName": {
                 "en": "IIS2DLPC_ACC"
               },
@@ -3727,7 +3984,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:stts22h_temp;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:stts22h_temp;1",
               "displayName": {
                 "en": "STTS22H_TEMP"
               },
@@ -3735,7 +3992,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:ilps22qs_press;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:ilps22qs_press;1",
               "displayName": {
                 "en": "ILPS22QS_PRESS"
               },
@@ -3743,7 +4000,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:imp34dt05_mic;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:imp34dt05_mic;1",
               "displayName": {
                 "en": "IMP34DT05_MIC"
               },
@@ -3751,7 +4008,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:iis2iclx_acc;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:iis2iclx_acc;1",
               "displayName": {
                 "en": "IIS2ICLX_ACC"
               },
@@ -3759,7 +4016,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:ism330is_acc;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:ism330is_acc;1",
               "displayName": {
                 "en": "ISM330IS_ACC"
               },
@@ -3767,7 +4024,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:ism330is_gyro;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:ism330is_gyro;1",
               "displayName": {
                 "en": "ISM330IS_GYRO"
               },
@@ -3775,7 +4032,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:log_controller;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:log_controller;1",
               "displayName": {
                 "en": "Log Controller"
               },
@@ -3783,7 +4040,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:deviceinfo;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:deviceinfo;1",
               "displayName": {
                 "en": "Device Information"
               },
@@ -3791,7 +4048,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:tags_info;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:tags_info;1",
               "displayName": {
                 "en": "Tags Information"
               },
@@ -3799,7 +4056,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:acquisition_info;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:acquisition_info;1",
               "displayName": {
                 "en": "Acquisition Information"
               },
@@ -3807,7 +4064,7 @@
               "schema": "string"
             },
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:firmware_info;1",
+              "@id": "dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:other:applications_stblesensor:hsdatalog2:schema:firmware_info;1",
               "displayName": {
                 "en": "Firmware Information"
               },

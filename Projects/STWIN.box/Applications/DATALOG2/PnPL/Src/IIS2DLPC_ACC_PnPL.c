@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -62,12 +61,10 @@ struct _Iis2dlpc_Acc_PnPL
 
 };
 
-/* Objects instance */
-/********************/
+/* Objects instance ----------------------------------------------------------*/
 static Iis2dlpc_Acc_PnPL sIis2dlpc_Acc_PnPL;
 
-// Public API definition
-// *********************
+/* Public API definition -----------------------------------------------------*/
 IPnPLComponent_t *Iis2dlpc_Acc_PnPLAlloc()
 {
   IPnPLComponent_t *pxObj = (IPnPLComponent_t *) &sIis2dlpc_Acc_PnPL;
@@ -87,8 +84,7 @@ uint8_t Iis2dlpc_Acc_PnPLInit(IPnPLComponent_t *_this)
 }
 
 
-// IPnPLComponent virtual functions definition
-// *******************************************
+/* IPnPLComponent virtual functions definition -------------------------------*/
 char *Iis2dlpc_Acc_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 {
   return iis2dlpc_acc_get_key();
@@ -115,54 +111,54 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   float temp_f = 0;
   iis2dlpc_acc_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == hz12_5)
+  if(temp_f == iis2dlpc_acc_odr_hz12_5)
   {
     enum_id = 0;
   }
-  else if(temp_f == hz25)
+  else if(temp_f == iis2dlpc_acc_odr_hz25)
   {
     enum_id = 1;
   }
-  else if(temp_f == hz50)
+  else if(temp_f == iis2dlpc_acc_odr_hz50)
   {
     enum_id = 2;
   }
-  else if(temp_f == hz100)
+  else if(temp_f == iis2dlpc_acc_odr_hz100)
   {
     enum_id = 3;
   }
-  else if(temp_f == hz200)
+  else if(temp_f == iis2dlpc_acc_odr_hz200)
   {
     enum_id = 4;
   }
-  else if(temp_f == hz400)
+  else if(temp_f == iis2dlpc_acc_odr_hz400)
   {
     enum_id = 5;
   }
-  else if(temp_f == hz800)
+  else if(temp_f == iis2dlpc_acc_odr_hz800)
   {
     enum_id = 6;
   }
-  else if(temp_f == hz1600)
+  else if(temp_f == iis2dlpc_acc_odr_hz1600)
   {
     enum_id = 7;
   }
   json_object_dotset_number(JSON_Status, "iis2dlpc_acc.odr", enum_id);
   iis2dlpc_acc_get_fs(&temp_f);
   enum_id = 0;
-  if(temp_f == g2)
+  if(temp_f == iis2dlpc_acc_fs_g2)
   {
     enum_id = 0;
   }
-  else if(temp_f == g4)
+  else if(temp_f == iis2dlpc_acc_fs_g4)
   {
     enum_id = 1;
   }
-  else if(temp_f == g8)
+  else if(temp_f == iis2dlpc_acc_fs_g8)
   {
     enum_id = 2;
   }
-  else if(temp_f == g16)
+  else if(temp_f == iis2dlpc_acc_fs_g16)
   {
     enum_id = 3;
   }
@@ -192,7 +188,8 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   char *temp_s = "";
   iis2dlpc_acc_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "iis2dlpc_acc.data_type", temp_s);
-  //Next fields are not in DTDL model but Added looking @the component schema field (this is :sensors) ONLY for Sensors and Algorithms
+  /* Next fields are not in DTDL model but added looking @ the component schema
+  field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "iis2dlpc_acc.c_type", COMP_TYPE_SENSOR);
   int8_t temp_int8 = 0;
   iis2dlpc_acc_get_stream_id(&temp_int8);
@@ -211,7 +208,7 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
     *size = json_serialization_size(tempJSON);
   }
 
-  //no need to free temp_j as it is part of tempJSON
+  /* No need to free temp_j as it is part of tempJSON */
   json_value_free(tempJSON);
 
   return 0;
@@ -229,28 +226,28 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
     switch(odr)
     {
     case 0:
-      iis2dlpc_acc_set_odr(hz12_5);
+      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz12_5);
       break;
     case 1:
-      iis2dlpc_acc_set_odr(hz25);
+      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz25);
       break;
     case 2:
-      iis2dlpc_acc_set_odr(hz50);
+      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz50);
       break;
     case 3:
-      iis2dlpc_acc_set_odr(hz100);
+      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz100);
       break;
     case 4:
-      iis2dlpc_acc_set_odr(hz200);
+      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz200);
       break;
     case 5:
-      iis2dlpc_acc_set_odr(hz400);
+      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz400);
       break;
     case 6:
-      iis2dlpc_acc_set_odr(hz800);
+      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz800);
       break;
     case 7:
-      iis2dlpc_acc_set_odr(hz1600);
+      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz1600);
       break;
     }
   }
@@ -260,16 +257,16 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
     switch(fs)
     {
     case 0:
-      iis2dlpc_acc_set_fs(g2);
+      iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g2);
       break;
     case 1:
-      iis2dlpc_acc_set_fs(g4);
+      iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g4);
       break;
     case 2:
-      iis2dlpc_acc_set_fs(g8);
+      iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g8);
       break;
     case 3:
-      iis2dlpc_acc_set_fs(g16);
+      iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g16);
       break;
     }
   }

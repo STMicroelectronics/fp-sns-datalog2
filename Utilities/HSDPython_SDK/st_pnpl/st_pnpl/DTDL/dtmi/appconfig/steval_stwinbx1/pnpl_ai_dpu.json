@@ -1,56 +1,47 @@
 [
   {
-    "@id": "dtmi:vespucci:pnpl_ai_demo;1",
+    "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:ism330dhcx_acc;1",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:ism330dhcx_acc;1",
         "@type": "Component",
         "displayName": {
           "en": "ISM330DHCX_ACC"
         },
         "name": "ism330dhcx_acc",
-        "schema": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc;1"
+        "schema": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc;1"
       },
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:fwinfo;1",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:firmware_info;1",
         "@type": "Component",
         "displayName": {
           "en": "Firmware Information"
         },
-        "name": "fwinfo",
-        "schema": "dtmi:vespucci:other:fwinfo;1"
+        "name": "firmware_info",
+        "schema": "dtmi:vespucci:other:firmware_info;1"
       },
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:DeviceInformation;1",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:deviceinfo;1",
         "@type": "Component",
         "displayName": {
           "en": "Device Information"
         },
-        "name": "DeviceInformation",
+        "name": "deviceinfo",
         "schema": "dtmi:azure:DeviceManagement:DeviceInformation;1"
       },
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:ai_application;1",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:ai_application;1",
         "@type": "Component",
         "displayName": {
           "en": "AI Application"
         },
         "name": "ai_application",
-        "schema": "dtmi:vespucci:pnpl_ai_demo:other:ai_application;1"
-      },
-      {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:demos;1",
-        "@type": "Component",
-        "displayName": {
-          "en": "Demos"
-        },
-        "name": "demos",
-        "schema": "dtmi:vespucci:pnpl_ai_demo:other:demos;1"
+        "schema": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application;1"
       }
     ],
     "displayName": {
-      "en": "PnPL_AI_Demo"
+      "en": "PnPL_AI_DPU"
     },
     "@context": [
       "dtmi:iotcentral:context;2",
@@ -62,25 +53,25 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc;1",
+    "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr;1",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr;1",
         "@type": "Property",
         "displayName": {
           "en": "ODR"
         },
         "name": "odr",
         "schema": {
-          "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema;1",
+          "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema;1",
           "@type": "Enum",
           "displayName": {
             "en": "Enum"
           },
           "enumValues": [
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema:hz12_5;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema:hz12_5;1",
               "displayName": {
                 "en": "12.5"
               },
@@ -88,7 +79,7 @@
               "name": "hz12_5"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema:hz26;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema:hz26;1",
               "displayName": {
                 "en": "26"
               },
@@ -96,7 +87,7 @@
               "name": "hz26"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema:hz52;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema:hz52;1",
               "displayName": {
                 "en": "52"
               },
@@ -104,7 +95,7 @@
               "name": "hz52"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema:hz104;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema:hz104;1",
               "displayName": {
                 "en": "104"
               },
@@ -112,7 +103,7 @@
               "name": "hz104"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema:hz208;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema:hz208;1",
               "displayName": {
                 "en": "208"
               },
@@ -120,7 +111,7 @@
               "name": "hz208"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema:hz417;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema:hz417;1",
               "displayName": {
                 "en": "417"
               },
@@ -128,7 +119,7 @@
               "name": "hz417"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema:hz833;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema:hz833;1",
               "displayName": {
                 "en": "833"
               },
@@ -136,7 +127,7 @@
               "name": "hz833"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema:hz1667;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema:hz1667;1",
               "displayName": {
                 "en": "1667"
               },
@@ -144,7 +135,7 @@
               "name": "hz1667"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema:hz3333;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema:hz3333;1",
               "displayName": {
                 "en": "3333"
               },
@@ -152,7 +143,7 @@
               "name": "hz3333"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:odr:schema:hz6667;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:odr:schema:hz6667;1",
               "displayName": {
                 "en": "6667"
               },
@@ -166,21 +157,21 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:fs;1",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:fs;1",
         "@type": "Property",
         "displayName": {
           "en": "FS"
         },
         "name": "fs",
         "schema": {
-          "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:fs:schema;1",
+          "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:fs:schema;1",
           "@type": "Enum",
           "displayName": {
             "en": "Enum"
           },
           "enumValues": [
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:fs:schema:g2;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:fs:schema:g2;1",
               "displayName": {
                 "en": "2"
               },
@@ -188,7 +179,7 @@
               "name": "g2"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:fs:schema:g4;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:fs:schema:g4;1",
               "displayName": {
                 "en": "4"
               },
@@ -196,7 +187,7 @@
               "name": "g4"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:fs:schema:g8;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:fs:schema:g8;1",
               "displayName": {
                 "en": "8"
               },
@@ -204,7 +195,7 @@
               "name": "g8"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:sensors:ism330dhcx_acc:fs:schema:g16;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:sensors:ism330dhcx_acc:fs:schema:g16;1",
               "displayName": {
                 "en": "16"
               },
@@ -227,12 +218,15 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:other:fwinfo;1",
+    "@id": "dtmi:vespucci:other:firmware_info;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:other:fwinfo:alias;1",
-        "@type": "Property",
+        "@id": "dtmi:vespucci:other:firmware_info:alias;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "displayName": {
           "en": "Alias"
         },
@@ -241,8 +235,11 @@
         "writable": true
       },
       {
-        "@id": "dtmi:vespucci:other:fwinfo:fw_name;1",
-        "@type": "Property",
+        "@id": "dtmi:vespucci:other:firmware_info:fw_name;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "displayName": {
           "en": "Firmware Name"
         },
@@ -251,8 +248,11 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:other:fwinfo:fw_version;1",
-        "@type": "Property",
+        "@id": "dtmi:vespucci:other:firmware_info:fw_version;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "displayName": {
           "en": "Firmware Version"
         },
@@ -261,8 +261,11 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:other:fwinfo:serial_number;1",
-        "@type": "Property",
+        "@id": "dtmi:vespucci:other:firmware_info:serial_number;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "displayName": {
           "en": "Serial Number"
         },
@@ -271,8 +274,11 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:other:fwinfo:device_url;1",
-        "@type": "Property",
+        "@id": "dtmi:vespucci:other:firmware_info:device_url;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "displayName": {
           "en": "Device URL"
         },
@@ -281,8 +287,11 @@
         "writable": false
       },
       {
-        "@id": "dtmi:vespucci:other:fwinfo:fw_url;1",
-        "@type": "Property",
+        "@id": "dtmi:vespucci:other:firmware_info:fw_url;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "displayName": {
           "en": "Firmware URL"
         },
@@ -304,7 +313,10 @@
     "@type": "Interface",
     "contents": [
       {
-        "@type": "Property",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "description": {
           "en": "Company name of the device manufacturer. This could be the same as the name of the original equipment manufacturer (OEM). Ex. Contoso."
         },
@@ -316,7 +328,10 @@
         "writable": false
       },
       {
-        "@type": "Property",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "description": {
           "en": "Device model name or ID. Ex. Surface Book 2."
         },
@@ -328,7 +343,10 @@
         "writable": false
       },
       {
-        "@type": "Property",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "description": {
           "en": "Version of the software on your device. This could be the version of your firmware. Ex. 1.3.45"
         },
@@ -340,7 +358,10 @@
         "writable": false
       },
       {
-        "@type": "Property",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "description": {
           "en": "Name of the operating system on the device. Ex. Windows 10 IoT Core."
         },
@@ -352,7 +373,10 @@
         "writable": false
       },
       {
-        "@type": "Property",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "description": {
           "en": "Architecture of the processor on the device. Ex. x64 or ARM."
         },
@@ -364,7 +388,10 @@
         "writable": false
       },
       {
-        "@type": "Property",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
         "description": {
           "en": "Name of the manufacturer of the processor on the device. Ex. Intel."
         },
@@ -376,7 +403,10 @@
         "writable": false
       },
       {
-        "@type": "Property",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
         "description": {
           "en": "Total available storage on the device in kilobytes. Ex. 2048000 kilobytes."
         },
@@ -388,7 +418,10 @@
         "writable": false
       },
       {
-        "@type": "Property",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
         "description": {
           "en": "Total available memory on the device in kilobytes. Ex. 256000 kilobytes."
         },
@@ -409,11 +442,11 @@
       "dtmi:iotcentral:context;2",
       "dtmi:dtdl:context;2"
     ],
-    "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application;1",
+    "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application;1",
     "@type": "Interface",
     "contents": [
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application:start;1",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application:start;1",
         "@type": "Command",
         "commandType": "synchronous",
         "displayName": {
@@ -422,7 +455,7 @@
         "name": "start"
       },
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application:stop;1",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application:stop;1",
         "@type": "Command",
         "commandType": "synchronous",
         "displayName": {
@@ -431,7 +464,7 @@
         "name": "stop"
       },
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application:switch_bank;1",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application:switch_bank;1",
         "@type": "Command",
         "commandType": "synchronous",
         "displayName": {
@@ -440,21 +473,24 @@
         "name": "switch_bank"
       },
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application:label_id;1",
-        "@type": "Telemetry",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application:label_id;1",
+        "@type": [
+          "Telemetry",
+          "State"
+        ],
         "displayName": {
           "en": "Label ID"
         },
         "name": "label_id",
         "schema": {
-          "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application:label_id:schema;1",
+          "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application:label_id:schema;1",
           "@type": "Enum",
           "displayName": {
             "en": "Enum"
           },
           "enumValues": [
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application:label_id:schema:slow;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application:label_id:schema:slow;1",
               "displayName": {
                 "en": "Slow"
               },
@@ -462,7 +498,7 @@
               "name": "slow"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application:label_id:schema:fast;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application:label_id:schema:fast;1",
               "displayName": {
                 "en": "Fast"
               },
@@ -470,7 +506,7 @@
               "name": "fast"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application:label_id:schema:slow_with_disturbance;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application:label_id:schema:slow_with_disturbance;1",
               "displayName": {
                 "en": "Slow with disturbance"
               },
@@ -478,7 +514,7 @@
               "name": "slow_with_disturbance"
             },
             {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application:label_id:schema:fast_with_disturbance;1",
+              "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application:label_id:schema:fast_with_disturbance;1",
               "displayName": {
                 "en": "Fast with disturbance"
               },
@@ -490,56 +526,21 @@
         }
       },
       {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:other:ai_application:accuracy;1",
-        "@type": "Telemetry",
+        "@id": "dtmi:vespucci:steval_stwinbx1:pnpl_ai_dpu:other:ai_application:accuracy;1",
+        "@type": [
+          "Telemetry",
+          "NumberValue"
+        ],
         "displayName": {
           "en": "Accuracy"
         },
         "name": "accuracy",
-        "schema": "double"
+        "schema": "double",
+        "unit": "percent"
       }
     ],
     "displayName": {
       "en": "AI Application"
-    }
-  },
-  {
-    "@context": [
-      "dtmi:iotcentral:context;2",
-      "dtmi:dtdl:context;2"
-    ],
-    "@id": "dtmi:vespucci:pnpl_ai_demo:other:demos;1",
-    "@type": "Interface",
-    "contents": [
-      {
-        "@id": "dtmi:vespucci:pnpl_ai_demo:other:demos:cubeai_classification;1",
-        "@type": "Property",
-        "displayName": {
-          "en": "Cube.AI Classification"
-        },
-        "name": "cubeai_classification",
-        "schema": {
-          "@id": "dtmi:vespucci:pnpl_ai_demo:other:demos:cubeai_classification:schema;1",
-          "@type": "Object",
-          "displayName": {
-            "en": "Object"
-          },
-          "fields": [
-            {
-              "@id": "dtmi:vespucci:pnpl_ai_demo:other:demos:cubeai_classification:schema:ai_application;1",
-              "displayName": {
-                "en": "Component_1"
-              },
-              "name": "ai_application",
-              "schema": "string"
-            }
-          ]
-        },
-        "writable": false
-      }
-    ],
-    "displayName": {
-      "en": "demos"
     }
   }
 ]

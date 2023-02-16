@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_gyro;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -33,21 +32,21 @@
 #ifndef _PNPL_ISM330IS_GYRO_H_
 #define _PNPL_ISM330IS_GYRO_H_
 
-#define hz12_5 12.5
-#define hz26 26
-#define hz52 52
-#define hz104 104
-#define hz208 208
-#define hz416 416
-#define hz833 833
-#define hz1667 1667
-#define hz3333 3333
-#define hz6667 6667
-#define dps125 125
-#define dps250 250
-#define dps500 500
-#define dps1000 1000
-#define dps2000 2000
+#define ism330is_gyro_odr_hz12_5 12.5
+#define ism330is_gyro_odr_hz26 26
+#define ism330is_gyro_odr_hz52 52
+#define ism330is_gyro_odr_hz104 104
+#define ism330is_gyro_odr_hz208 208
+#define ism330is_gyro_odr_hz416 416
+#define ism330is_gyro_odr_hz833 833
+#define ism330is_gyro_odr_hz1667 1667
+#define ism330is_gyro_odr_hz3333 3333
+#define ism330is_gyro_odr_hz6667 6667
+#define ism330is_gyro_fs_dps125 125
+#define ism330is_gyro_fs_dps250 250
+#define ism330is_gyro_fs_dps500 500
+#define ism330is_gyro_fs_dps1000 1000
+#define ism330is_gyro_fs_dps2000 2000
 
 
 #ifdef __cplusplus
@@ -64,8 +63,7 @@ extern "C" {
  */
 typedef struct _Ism330is_Gyro_PnPL Ism330is_Gyro_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Ism330is_Gyro_PnPLAlloc(void);
 

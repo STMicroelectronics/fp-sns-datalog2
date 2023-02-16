@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -33,18 +32,18 @@
 #ifndef _PNPL_IIS2DLPC_ACC_H_
 #define _PNPL_IIS2DLPC_ACC_H_
 
-#define hz12_5 12.5
-#define hz25 25
-#define hz50 50
-#define hz100 100
-#define hz200 200
-#define hz400 400
-#define hz800 800
-#define hz1600 1600
-#define g2 2
-#define g4 4
-#define g8 8
-#define g16 16
+#define iis2dlpc_acc_odr_hz12_5 12.5
+#define iis2dlpc_acc_odr_hz25 25
+#define iis2dlpc_acc_odr_hz50 50
+#define iis2dlpc_acc_odr_hz100 100
+#define iis2dlpc_acc_odr_hz400 400
+#define iis2dlpc_acc_odr_hz200 200
+#define iis2dlpc_acc_odr_hz800 800
+#define iis2dlpc_acc_odr_hz1600 1600
+#define iis2dlpc_acc_fs_g2 2
+#define iis2dlpc_acc_fs_g4 4
+#define iis2dlpc_acc_fs_g8 8
+#define iis2dlpc_acc_fs_g16 16
 
 
 #ifdef __cplusplus
@@ -61,8 +60,7 @@ extern "C" {
  */
 typedef struct _Iis2dlpc_Acc_PnPL Iis2dlpc_Acc_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Iis2dlpc_Acc_PnPLAlloc(void);
 

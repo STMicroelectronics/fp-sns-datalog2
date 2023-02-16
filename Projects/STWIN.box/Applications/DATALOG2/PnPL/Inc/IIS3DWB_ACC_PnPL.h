@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -33,11 +32,11 @@
 #ifndef _PNPL_IIS3DWB_ACC_H_
 #define _PNPL_IIS3DWB_ACC_H_
 
-#define hz26667 26667
-#define g2 2
-#define g4 4
-#define g8 8
-#define g16 16
+#define iis3dwb_acc_odr_hz26667 26667
+#define iis3dwb_acc_fs_g2 2
+#define iis3dwb_acc_fs_g4 4
+#define iis3dwb_acc_fs_g8 8
+#define iis3dwb_acc_fs_g16 16
 
 
 #ifdef __cplusplus
@@ -54,8 +53,7 @@ extern "C" {
  */
 typedef struct _Iis3dwb_Acc_PnPL Iis3dwb_Acc_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Iis3dwb_Acc_PnPLAlloc(void);
 

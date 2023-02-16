@@ -28,12 +28,24 @@
  * - Communication: managed tasks and interfaces that implements the bus peripheral communication. The supported peripherals are:
  *   + I2C 
  *   + SPI
+ *   + MDF
  * - Sensors: managed tasks and interfaces that implements the single sensor threads. The supported sensors are:
- *   + HTS221
+ *   + IIS2DLPC
+ *   + IIS2ICLX
+ *   + IIS2MDC
  *   + IIS3DWB
+ *   + ILPS22QS
  *   + IMP23ABSU
+ *   + IMP34DT05
  *   + ISM330DHCX
+ *   + ISM330IS
+ *   + LIS2DU12
+ *   + LIS2MDL
+ *   + LPS22DF
  *   + LPS22HH
+ *   + LSM6DSV16X
+ *   + MP23DB01HP
+ *   + STTS22H
  * - Utilities: SensorManager and eLooM macros, services and utilities 
  *
  * \anchor fig1 \image html SensorManager_folder.jpg "Fig.1 - SensorManager files" width=300px

@@ -69,7 +69,7 @@ struct _I2CBusIF
   * @param _this [IN] specifies a sensor object.
   * @param nWhoAmI [IN] specifies the sensor ID. It can be zero.
   * @param nAddress [IN] specifies the I2C address of the device.
-  * @param nAutoInc [IN] specifies the I2C address auto-increment to allow multiple data read/write.
+  * @param nAutoInc [IN] specifies the I2C address auto-increment to allow multiple data read/write (see sensor datasheet: if needed set 0x80, else 0)
   * @return SYS_NO_EROR_CODE if success, an error code otherwise.
   */
 ABusIF *I2CBusIFAlloc(uint8_t who_am_i, uint8_t address, uint8_t auto_inc);

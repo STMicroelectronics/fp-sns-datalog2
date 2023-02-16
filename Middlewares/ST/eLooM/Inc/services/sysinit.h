@@ -52,9 +52,28 @@
 #define INIT_TASK_CGF_BOOT_PARAM               true
 #endif
 
-#define ELOOM_MAGIC_NUMBER  (12974U)
+#define ELOOM_MAGIC_NUMBER                     (12974U)
+#define ELOOM_API_VERSION_MAJOR                (0x03U)
+#define ELOOM_API_VERSION_MINOR                (0x02U)
+#define ELOOM_API_VERSION_PATCH                (0x00U)
+#define ELOOM_API_VERSION                      (0x00FFFFFF & ((ELOOM_API_VERSION_MAJOR<<16) | (ELOOM_API_VERSION_MINOR<<8) | (ELOOM_API_VERSION_PATCH)))
 
-#define SYS_MS_TO_TICKS( xTimeInMs ) ( (uint32_t) (((uint32_t )(xTimeInMs) * (uint32_t)TX_TIMER_TICKS_PER_SECOND) / (uint32_t)1000))
+#define SYS_MS_TO_TICKS( xTimeInMs )           ( (uint32_t) (((uint32_t )(xTimeInMs) * (uint32_t)TX_TIMER_TICKS_PER_SECOND) / (uint32_t)1000))
+
+/**
+ * Create a type name for struct _APIVersion
+ */
+typedef struct _APIVersion APIVersion;
+
+/**
+ * API version number.
+ */
+struct _APIVersion {
+  uint8_t m_nPatch: 8;   /**< Patch release number. */
+  uint8_t m_nMinor: 8;   /**< Minor release number. */
+  uint8_t m_nMajor: 8;   /**< Major release number. */
+  uint8_t m_nPadding :8; /**< Reserved. */
+};
 
 /**
  * It initialize the minimum set of resources, hardware and software, in order to start the scheduler,
@@ -147,6 +166,12 @@ IBoot *SysGetBootIF(void);
  * @return a pointer to an IAppPowerModeHelper object.
  */
 IAppPowerModeHelper *SysGetPowerModeHelper(void);
+
+/**
+ * Get the API version of the framework.
+ * @return the API version of eLooM framework.
+ */
+APIVersion SysGetAPIVersion();
 
 
 #ifdef __cplusplus

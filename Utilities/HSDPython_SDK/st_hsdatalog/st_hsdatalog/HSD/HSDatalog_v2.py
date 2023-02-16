@@ -448,7 +448,7 @@ class HSDatalog_v2:
     def __process_datalog(self, sensor_name, ss_stat, raw_data, dataframe_size, timestamp_size, raw_flag = False):
 
         #####################################################################
-        def extract_data_and_timestamps():
+        def extract_data_and_timestamps(samples_per_ts):
         
             """ gets data from a file .dat
                 np array with one column for each axis of each active subSensor
@@ -462,7 +462,7 @@ class HSDatalog_v2:
                     samples_per_ts = 1
                 else:
                     checkTimeStamps = self.__checkTimestamps
-                    samples_per_ts = ss_stat["samples_per_ts"]["val"]
+                    # samples_per_ts = ss_stat["samples_per_ts"]["val"]
                     frame_period = samples_per_ts / ss_stat['odr']
             elif "c_type" in ss_stat and ss_stat["c_type"] == 1:
                 checkTimeStamps = False
@@ -572,7 +572,7 @@ class HSDatalog_v2:
         if samples_per_ts == 0:
             samples_per_ts = int(data1D_per_frame / ss_stat['dim'])
 
-        return extract_data_and_timestamps()
+        return extract_data_and_timestamps(samples_per_ts)
     
     def get_sensor(self, sensor_name):
         ss_stat = self.get_component(sensor_name)

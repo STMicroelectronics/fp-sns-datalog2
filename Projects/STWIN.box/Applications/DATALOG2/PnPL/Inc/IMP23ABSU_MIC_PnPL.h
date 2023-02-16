@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -33,12 +32,12 @@
 #ifndef _PNPL_IMP23ABSU_MIC_H_
 #define _PNPL_IMP23ABSU_MIC_H_
 
-#define hz16000 16000
-#define hz32000 32000
-#define hz48000 48000
-#define hz96000 96000
-#define hz192000 192000
-#define dbspl130 130
+#define imp23absu_mic_odr_hz16000 16000
+#define imp23absu_mic_odr_hz32000 32000
+#define imp23absu_mic_odr_hz48000 48000
+#define imp23absu_mic_odr_hz96000 96000
+#define imp23absu_mic_odr_hz192000 192000
+#define imp23absu_mic_aop_dbspl130 130
 
 
 #ifdef __cplusplus
@@ -55,8 +54,7 @@ extern "C" {
  */
 typedef struct _Imp23absu_Mic_PnPL Imp23absu_Mic_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Imp23absu_Mic_PnPLAlloc(void);
 

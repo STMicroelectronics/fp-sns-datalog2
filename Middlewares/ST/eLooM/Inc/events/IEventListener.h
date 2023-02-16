@@ -46,17 +46,17 @@ typedef struct _IEventListener IEventListener;
 /**
  * Set the owner of the listener.
  *
- * @param this [IN] specifies a pointer to an ::IEventListener object.
+ * @param _this [IN] specifies a pointer to an ::IEventListener object.
  * @param pxOwner [IN] specifies a pointer to an application specific object that become the owner of the listenr.
  */
-static inline void IEventListenerSetOwner(IEventListener *this, void *pxOwner);
+static inline void IEventListenerSetOwner(IEventListener *_this, void *pxOwner);
 
 /**
  * Get the pointer to the listener's owner.
  *
- * @param this [IN] specifies a pointer to an ::IEventListener object.
+ * @param _this [IN] specifies a pointer to an ::IEventListener object.
  */
-static inline void *IEventListenerGetOwner(IEventListener *this);
+static inline void *IEventListenerGetOwner(IEventListener *_this);
 
 
 // Inline functions definition

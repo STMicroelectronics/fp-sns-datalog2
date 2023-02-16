@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:ism330dhcx_mlc;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ism330dhcx_mlc;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -54,8 +53,7 @@ struct _IIsm330dhcx_Mlc_t
   const IIsm330dhcx_Mlc_vtbl *vptr;
 };
 
-// Inline functions definition
-// ***************************
+/* Inline functions definition -----------------------------------------------*/
 inline uint8_t IIsm330dhcx_Mlc_load_file(IIsm330dhcx_Mlc_t *_this, const char *data, uint32_t size)
 {
   return _this->vptr->ism330dhcx_mlc_load_file(_this, data, size);

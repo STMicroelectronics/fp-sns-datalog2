@@ -52,7 +52,7 @@
 #define SYS_DEBUGF(level, message)      SYS_DEBUGF3(SYS_DBG_IIS2MDC, level, message)
 
 #if defined(DEBUG) || defined (SYS_DEBUG)
-#define sTaskObj                                  sIIS2MDTaskObj
+#define sTaskObj                                  sIIS2MDCTaskObj
 #endif
 
 #ifndef HSD_USE_DUMMY_DATA

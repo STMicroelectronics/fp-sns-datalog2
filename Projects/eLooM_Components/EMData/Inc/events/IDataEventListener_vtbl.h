@@ -60,10 +60,9 @@ struct _IDataEventListener {
 /* Inline functions definition */
 /*******************************/
 
-SYS_DEFINE_STATIC_INLINE
-sys_error_code_t IDataEventListenerOnNewDataReady(IEventListener *_this, const DataEvent_t *p_evt) {
-  assert_param(_this != NULL);
-
+static inline
+sys_error_code_t IDataEventListenerOnNewDataReady(IEventListener *_this, const DataEvent_t *p_evt)
+{
   return ((IDataEventListener_t*)_this)->vptr->OnNewDataReady(_this, p_evt);
 }
 

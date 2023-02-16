@@ -61,18 +61,18 @@ struct _IEvent {
 /**
  * Initialize an event. An is initialized when it is linked with the ::IEventSrc that has generated the event.
  *
- * @param this [IN] specifies an ::IEvent object
+ * @param _this [IN] specifies an ::IEvent object
  * @param pSource [IN] specifies the ::IEventSrc object that has generated teh event.
  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
  */
-static inline sys_error_code_t IEventInit(IEvent *this, const IEventSrc *pSource);
+static inline sys_error_code_t IEventInit(IEvent *_this, const IEventSrc *pSource);
 
 // Inline functions definition
 // ***************************
 
 SYS_DEFINE_STATIC_INLINE
-sys_error_code_t IEventInit(IEvent *this, const IEventSrc *pSource) {
-	this->pSource = pSource;
+sys_error_code_t IEventInit(IEvent *_this, const IEventSrc *pSource) {
+	_this->pSource = pSource;
 
 	return SYS_NO_ERROR_CODE;
 }

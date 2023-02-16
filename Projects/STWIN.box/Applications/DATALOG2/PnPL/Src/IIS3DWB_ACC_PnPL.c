@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -62,12 +61,10 @@ struct _Iis3dwb_Acc_PnPL
 
 };
 
-/* Objects instance */
-/********************/
+/* Objects instance ----------------------------------------------------------*/
 static Iis3dwb_Acc_PnPL sIis3dwb_Acc_PnPL;
 
-// Public API definition
-// *********************
+/* Public API definition -----------------------------------------------------*/
 IPnPLComponent_t *Iis3dwb_Acc_PnPLAlloc()
 {
   IPnPLComponent_t *pxObj = (IPnPLComponent_t *) &sIis3dwb_Acc_PnPL;
@@ -87,8 +84,7 @@ uint8_t Iis3dwb_Acc_PnPLInit(IPnPLComponent_t *_this)
 }
 
 
-// IPnPLComponent virtual functions definition
-// *******************************************
+/* IPnPLComponent virtual functions definition -------------------------------*/
 char *Iis3dwb_Acc_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 {
   return iis3dwb_acc_get_key();
@@ -115,26 +111,26 @@ uint8_t Iis3dwb_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   float temp_f = 0;
   iis3dwb_acc_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == hz26667)
+  if(temp_f == iis3dwb_acc_odr_hz26667)
   {
     enum_id = 0;
   }
   json_object_dotset_number(JSON_Status, "iis3dwb_acc.odr", enum_id);
   iis3dwb_acc_get_fs(&temp_f);
   enum_id = 0;
-  if(temp_f == g2)
+  if(temp_f == iis3dwb_acc_fs_g2)
   {
     enum_id = 0;
   }
-  else if(temp_f == g4)
+  else if(temp_f == iis3dwb_acc_fs_g4)
   {
     enum_id = 1;
   }
-  else if(temp_f == g8)
+  else if(temp_f == iis3dwb_acc_fs_g8)
   {
     enum_id = 2;
   }
-  else if(temp_f == g16)
+  else if(temp_f == iis3dwb_acc_fs_g16)
   {
     enum_id = 3;
   }
@@ -164,7 +160,8 @@ uint8_t Iis3dwb_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   char *temp_s = "";
   iis3dwb_acc_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "iis3dwb_acc.data_type", temp_s);
-  //Next fields are not in DTDL model but Added looking @the component schema field (this is :sensors) ONLY for Sensors and Algorithms
+  /* Next fields are not in DTDL model but added looking @ the component schema
+  field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "iis3dwb_acc.c_type", COMP_TYPE_SENSOR);
   int8_t temp_int8 = 0;
   iis3dwb_acc_get_stream_id(&temp_int8);
@@ -183,7 +180,7 @@ uint8_t Iis3dwb_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
     *size = json_serialization_size(tempJSON);
   }
 
-  //no need to free temp_j as it is part of tempJSON
+  /* No need to free temp_j as it is part of tempJSON */
   json_value_free(tempJSON);
 
   return 0;
@@ -201,16 +198,16 @@ uint8_t Iis3dwb_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
     switch(fs)
     {
     case 0:
-      iis3dwb_acc_set_fs(g2);
+      iis3dwb_acc_set_fs(iis3dwb_acc_fs_g2);
       break;
     case 1:
-      iis3dwb_acc_set_fs(g4);
+      iis3dwb_acc_set_fs(iis3dwb_acc_fs_g4);
       break;
     case 2:
-      iis3dwb_acc_set_fs(g8);
+      iis3dwb_acc_set_fs(iis3dwb_acc_fs_g8);
       break;
     case 3:
-      iis3dwb_acc_set_fs(g16);
+      iis3dwb_acc_set_fs(iis3dwb_acc_fs_g16);
       break;
     }
   }

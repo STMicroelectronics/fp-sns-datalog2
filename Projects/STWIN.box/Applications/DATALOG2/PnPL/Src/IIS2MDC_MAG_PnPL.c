@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2mdc_mag;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -62,12 +61,10 @@ struct _Iis2mdc_Mag_PnPL
 
 };
 
-/* Objects instance */
-/********************/
+/* Objects instance ----------------------------------------------------------*/
 static Iis2mdc_Mag_PnPL sIis2mdc_Mag_PnPL;
 
-// Public API definition
-// *********************
+/* Public API definition -----------------------------------------------------*/
 IPnPLComponent_t *Iis2mdc_Mag_PnPLAlloc()
 {
   IPnPLComponent_t *pxObj = (IPnPLComponent_t *) &sIis2mdc_Mag_PnPL;
@@ -87,8 +84,7 @@ uint8_t Iis2mdc_Mag_PnPLInit(IPnPLComponent_t *_this)
 }
 
 
-// IPnPLComponent virtual functions definition
-// *******************************************
+/* IPnPLComponent virtual functions definition -------------------------------*/
 char *Iis2mdc_Mag_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 {
   return iis2mdc_mag_get_key();
@@ -115,26 +111,26 @@ uint8_t Iis2mdc_Mag_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   float temp_f = 0;
   iis2mdc_mag_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == hz10)
+  if(temp_f == iis2mdc_mag_odr_hz10)
   {
     enum_id = 0;
   }
-  else if(temp_f == hz20)
+  else if(temp_f == iis2mdc_mag_odr_hz20)
   {
     enum_id = 1;
   }
-  else if(temp_f == hz50)
+  else if(temp_f == iis2mdc_mag_odr_hz50)
   {
     enum_id = 2;
   }
-  else if(temp_f == hz100)
+  else if(temp_f == iis2mdc_mag_odr_hz100)
   {
     enum_id = 3;
   }
   json_object_dotset_number(JSON_Status, "iis2mdc_mag.odr", enum_id);
   iis2mdc_mag_get_fs(&temp_f);
   enum_id = 0;
-  if(temp_f == g50)
+  if(temp_f == iis2mdc_mag_fs_g50)
   {
     enum_id = 0;
   }
@@ -164,7 +160,8 @@ uint8_t Iis2mdc_Mag_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   char *temp_s = "";
   iis2mdc_mag_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "iis2mdc_mag.data_type", temp_s);
-  //Next fields are not in DTDL model but Added looking @the component schema field (this is :sensors) ONLY for Sensors and Algorithms
+  /* Next fields are not in DTDL model but added looking @ the component schema
+  field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "iis2mdc_mag.c_type", COMP_TYPE_SENSOR);
   int8_t temp_int8 = 0;
   iis2mdc_mag_get_stream_id(&temp_int8);
@@ -183,7 +180,7 @@ uint8_t Iis2mdc_Mag_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
     *size = json_serialization_size(tempJSON);
   }
 
-  //no need to free temp_j as it is part of tempJSON
+  /* No need to free temp_j as it is part of tempJSON */
   json_value_free(tempJSON);
 
   return 0;
@@ -201,16 +198,16 @@ uint8_t Iis2mdc_Mag_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
     switch(odr)
     {
     case 0:
-      iis2mdc_mag_set_odr(hz10);
+      iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz10);
       break;
     case 1:
-      iis2mdc_mag_set_odr(hz20);
+      iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz20);
       break;
     case 2:
-      iis2mdc_mag_set_odr(hz50);
+      iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz50);
       break;
     case 3:
-      iis2mdc_mag_set_odr(hz100);
+      iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz100);
       break;
     }
   }

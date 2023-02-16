@@ -1593,54 +1593,54 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Firmware_Info_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/IIS2DLPC_ACC_PnPL.c</name>
+			<name>User/PnPL/Src/Iis2dlpc_Acc_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/IIS2DLPC_ACC_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Iis2dlpc_Acc_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/IIS2ICLX_ACC_PnPL.c</name>
+			<name>User/PnPL/Src/Iis2iclx_Acc_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/IIS2ICLX_ACC_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Iis2iclx_Acc_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/IIS2MDC_MAG_PnPL.c</name>
+			<name>User/PnPL/Src/Iis2mdc_Mag_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/IIS2MDC_MAG_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Iis2mdc_Mag_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/IIS3DWB_ACC_PnPL.c</name>
+			<name>User/PnPL/Src/Iis3dwb_Acc_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/IIS3DWB_ACC_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Iis3dwb_Acc_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/ILPS22QS_PRESS_PnPL.c</name>
+			<name>User/PnPL/Src/Ilps22qs_Press_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/ILPS22QS_PRESS_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Ilps22qs_Press_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/IMP23ABSU_MIC_PnPL.c</name>
+			<name>User/PnPL/Src/Imp23absu_Mic_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/IMP23ABSU_MIC_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Imp23absu_Mic_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/IMP34DT05_MIC_PnPL.c</name>
+			<name>User/PnPL/Src/Imp34dt05_Mic_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/IMP34DT05_MIC_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Imp34dt05_Mic_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/ISM330DHCX_ACC_PnPL.c</name>
+			<name>User/PnPL/Src/Ism330dhcx_Acc_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/ISM330DHCX_ACC_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Ism330dhcx_Acc_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/ISM330DHCX_GYRO_PnPL.c</name>
+			<name>User/PnPL/Src/Ism330dhcx_Gyro_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/ISM330DHCX_GYRO_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Ism330dhcx_Gyro_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/ISM330DHCX_MLC_PnPL.c</name>
+			<name>User/PnPL/Src/Ism330dhcx_Mlc_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/ISM330DHCX_MLC_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Ism330dhcx_Mlc_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Src/Ism330is_Acc_PnPL.c</name>
@@ -1663,9 +1663,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Log_Controller_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/STTS22H_TEMP_PnPL.c</name>
+			<name>User/PnPL/Src/Stts22h_Temp_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/STTS22H_TEMP_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Stts22h_Temp_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Src/Tags_Info_PnPL.c</name>

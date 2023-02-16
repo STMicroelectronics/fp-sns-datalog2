@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -33,8 +32,8 @@
 #ifndef _PNPL_ACQUISITION_INFO_H_
 #define _PNPL_ACQUISITION_INFO_H_
 
-#define sd "SD Card"
-#define usb "USB"
+#define acquisition_info_interface_sd "SD Card"
+#define acquisition_info_interface_usb "USB"
 
 
 #ifdef __cplusplus
@@ -51,8 +50,7 @@ extern "C" {
  */
 typedef struct _Acquisition_Info_PnPL Acquisition_Info_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Acquisition_Info_PnPLAlloc(void);
 

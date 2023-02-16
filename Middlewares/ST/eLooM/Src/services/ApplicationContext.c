@@ -33,24 +33,24 @@
 // Public API definition
 // *********************
 
-sys_error_code_t ACInit(ApplicationContext *this) {
-	assert_param(this != NULL);
+sys_error_code_t ACInit(ApplicationContext *_this) {
+	assert_param(_this != NULL);
 
-	this->m_nListSize = 0;
-	this->m_pHead = NULL;
+	_this->m_nListSize = 0;
+	_this->m_pHead = NULL;
 
 	return SYS_NO_ERROR_CODE;
 }
 
-sys_error_code_t ACAddTask(ApplicationContext *this, AManagedTask *pTask) {
-	assert_param(this != NULL);
+sys_error_code_t ACAddTask(ApplicationContext *_this, AManagedTask *pTask) {
+	assert_param(_this != NULL);
 	sys_error_code_t xRes = SYS_NO_ERROR_CODE;
 
 	if (pTask != NULL) {
 		// check if pTask is already in the list
-		const AManagedTask *pTaskTemp = ACGetFirstTask(this);
+		const AManagedTask *pTaskTemp = ACGetFirstTask(_this);
 		while ((pTaskTemp != NULL) && (pTaskTemp != pTask)) {
-			pTaskTemp = ACGetNextTask(this, pTaskTemp);
+			pTaskTemp = ACGetNextTask(_this, pTaskTemp);
 		}
 
 		if ((pTaskTemp == pTask)) {
@@ -60,17 +60,17 @@ sys_error_code_t ACAddTask(ApplicationContext *this, AManagedTask *pTask) {
 		}
 		else {
 			// add the task in the context.
-			pTask->m_pNext = this->m_pHead;
-			this->m_pHead = pTask;
-			this->m_nListSize++;
+			pTask->m_pNext = _this->m_pHead;
+			_this->m_pHead = pTask;
+			_this->m_nListSize++;
 		}
 	}
 
 	return xRes;
 }
 
-sys_error_code_t ACRemoveTask(ApplicationContext *this, AManagedTask *pTask) {
-	assert_param(this != NULL);
+sys_error_code_t ACRemoveTask(ApplicationContext *_this, AManagedTask *pTask) {
+	assert_param(_this != NULL);
 	sys_error_code_t xRes = SYS_NO_ERROR_CODE;
 	UNUSED(pTask);
 

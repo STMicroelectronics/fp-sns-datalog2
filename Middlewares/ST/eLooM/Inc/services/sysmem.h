@@ -28,6 +28,10 @@
 #include "services/systp.h"
 #include "services/systypes.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /**
  * Allocate a block of memory of a specific size.
@@ -43,5 +47,10 @@ void *SysAlloc(size_t nSize);
  * @param pvData [IN] specifies the start of teh block of memory to release.
  */
 void SysFree(void *pvData);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* INCLUDE_SERVICES_SYSMEM_H_ */

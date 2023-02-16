@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_Normalization.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-   * @version 1.4.0
-  * @date    31-May-2022
+  * @version 1.8.0
+  * @date    02-December-2022
   * @brief   Add Event Counter service using vendor specific profiles.
   ******************************************************************************
   * @attention

@@ -17,6 +17,17 @@
   ******************************************************************************
   */
 
+/**
+  ******************************************************************************
+  * This file has been auto generated from the following DTDL Component:
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1
+  *
+  * Created by: DTDL2PnPL_cGen version 1.0.0
+  *
+  * WARNING! All changes made to this file will be lost if this is regenerated
+  ******************************************************************************
+  */
+
 #ifndef INCLUDE_ILOG_CONTROLLER_H_
 #define INCLUDE_ILOG_CONTROLLER_H_
 
@@ -31,9 +42,9 @@ extern "C" {
   */
 typedef struct _ILog_Controller_t ILog_Controller_t;
 
-// Public API declaration
-//***********************
-/** Public interface **/
+/* Public API declarations ---------------------------------------------------*/
+
+/* Public interface */
 inline uint8_t ILog_Controller_save_config(ILog_Controller_t *_this);
 inline uint8_t ILog_Controller_start_log(ILog_Controller_t *_this, uint32_t interface);
 inline uint8_t ILog_Controller_stop_log(ILog_Controller_t *_this);

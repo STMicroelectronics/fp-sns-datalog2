@@ -37,11 +37,11 @@ typedef struct _IEventSrc_vtbl IEventSrc_vtbl;
  * that a subclass must overload.
  */
 struct _IEventSrc_vtbl {
-	sys_error_code_t (*Init)(IEventSrc *this);                                                      ///< @sa IEventSrcInit
-	sys_error_code_t (*AddEventListener)(IEventSrc *this, IEventListener *pListener);               ///< @sa IEventSrcAddEventListener
-	sys_error_code_t (*RemoveEventListener)(IEventSrc *this, IEventListener *pListener);            ///< @sa IEventSrcRemoveEventListener
-	uint32_t (*GetMaxListenerCount)(const IEventSrc *this);                                         ///< @sa IEventSrcGetMaxListenerCount
-	sys_error_code_t (*SendEvent)(const IEventSrc *this, const IEvent *pxEvent, void *pvParams);    ///< @sa IEventSrcSendEvent
+	sys_error_code_t (*Init)(IEventSrc *_this);                                                      ///< @sa IEventSrcInit
+	sys_error_code_t (*AddEventListener)(IEventSrc *_this, IEventListener *pListener);               ///< @sa IEventSrcAddEventListener
+	sys_error_code_t (*RemoveEventListener)(IEventSrc *_this, IEventListener *pListener);            ///< @sa IEventSrcRemoveEventListener
+	uint32_t (*GetMaxListenerCount)(const IEventSrc *_this);                                         ///< @sa IEventSrcGetMaxListenerCount
+	sys_error_code_t (*SendEvent)(const IEventSrc *_this, const IEvent *pxEvent, void *pvParams);    ///< @sa IEventSrcSendEvent
 };
 
 /**
@@ -63,28 +63,28 @@ struct _IEventSrc {
 // ***************************
 
 SYS_DEFINE_STATIC_INLINE
-sys_error_code_t IEventSrcInit(IEventSrc *this) {
-	return this->vptr->Init(this);
+sys_error_code_t IEventSrcInit(IEventSrc *_this) {
+	return _this->vptr->Init(_this);
 }
 
 SYS_DEFINE_STATIC_INLINE
-sys_error_code_t IEventSrcAddEventListener(IEventSrc *this, IEventListener *pListener) {
-	return this->vptr->AddEventListener(this, pListener);
+sys_error_code_t IEventSrcAddEventListener(IEventSrc *_this, IEventListener *pListener) {
+	return _this->vptr->AddEventListener(_this, pListener);
 }
 
 SYS_DEFINE_STATIC_INLINE
-sys_error_code_t IEventSrcRemoveEventListener(IEventSrc *this, IEventListener *pListener) {
-	return this->vptr->RemoveEventListener(this, pListener);
+sys_error_code_t IEventSrcRemoveEventListener(IEventSrc *_this, IEventListener *pListener) {
+	return _this->vptr->RemoveEventListener(_this, pListener);
 }
 
 SYS_DEFINE_STATIC_INLINE
-uint32_t IEventSrcGetMaxListenerCount(const IEventSrc *this) {
-	return this->vptr->GetMaxListenerCount(this);
+uint32_t IEventSrcGetMaxListenerCount(const IEventSrc *_this) {
+	return _this->vptr->GetMaxListenerCount(_this);
 }
 
 SYS_DEFINE_STATIC_INLINE
-sys_error_code_t IEventSrcSendEvent(const IEventSrc *this, const IEvent *pxEvent, void *pvParams) {
-	return this->vptr->SendEvent(this, pxEvent, pvParams);
+sys_error_code_t IEventSrcSendEvent(const IEventSrc *_this, const IEvent *pxEvent, void *pvParams) {
+	return _this->vptr->SendEvent(_this, pxEvent, pvParams);
 }
 
 #ifdef __cplusplus

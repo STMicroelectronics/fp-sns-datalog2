@@ -1243,14 +1243,14 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Firmware_Info_PnPL_vtbl.h</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Inc/IMP23ABSU_MIC_PnPL.h</name>
+			<name>User/PnPL/Inc/Imp23absu_Mic_PnPL.h</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/IMP23ABSU_MIC_PnPL.h</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Imp23absu_Mic_PnPL.h</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Inc/IMP23ABSU_MIC_PnPL_vtbl.h</name>
+			<name>User/PnPL/Inc/Imp23absu_Mic_PnPL_vtbl.h</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/IMP23ABSU_MIC_PnPL_vtbl.h</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Imp23absu_Mic_PnPL_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Inc/Log_Controller_PnPL.h</name>
@@ -1283,9 +1283,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Firmware_Info_PnPL.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/IMP23ABSU_MIC_PnPL.c</name>
+			<name>User/PnPL/Src/Imp23absu_Mic_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/IMP23ABSU_MIC_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Imp23absu_Mic_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Src/Log_Controller_PnPL.c</name>

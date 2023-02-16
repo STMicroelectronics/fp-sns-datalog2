@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_AccEvent.h 
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.6.0
-  * @date    15-September-2022
+  * @version 1.8.0
+  * @date    02-December-2022
   * @brief   Acceleromenter HW Event service APIs.
   ******************************************************************************
   * @attention

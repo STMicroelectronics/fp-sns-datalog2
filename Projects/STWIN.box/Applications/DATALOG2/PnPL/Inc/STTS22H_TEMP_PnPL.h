@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -33,12 +32,12 @@
 #ifndef _PNPL_STTS22H_TEMP_H_
 #define _PNPL_STTS22H_TEMP_H_
 
-#define hz1 1
-#define hz25 25
-#define hz50 50
-#define hz100 100
-#define hz200 200
-#define cdeg100 100
+#define stts22h_temp_odr_hz1 1
+#define stts22h_temp_odr_hz25 25
+#define stts22h_temp_odr_hz50 50
+#define stts22h_temp_odr_hz100 100
+#define stts22h_temp_odr_hz200 200
+#define stts22h_temp_fs_cdeg100 100
 
 
 #ifdef __cplusplus
@@ -55,8 +54,7 @@ extern "C" {
  */
 typedef struct _Stts22h_Temp_PnPL Stts22h_Temp_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Stts22h_Temp_PnPLAlloc(void);
 

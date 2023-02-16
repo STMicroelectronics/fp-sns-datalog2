@@ -1,12 +1,5 @@
 [
     {
-        "board_id": "0xd",
-        "fw_id": "0xff",
-        "az_cloud_dtmi": "",
-        "st_cloud_dtmi": "",
-        "local_dtmi": "dtmi\\appconfig\\steval_stbox_pro\\fp_sns_datalog2.json"
-    },
-    {
         "board_id": "0xe",
         "fw_id": "0x7",
         "az_cloud_dtmi": "",
@@ -22,6 +15,25 @@
     {
         "board_id": "0xe",
         "fw_id": "0x9",
+        "st_cloud_dtmi": "",
+        "local_dtmi": "dtmi\\appconfig\\steval_stwinbx1\\fft_ultrasound_dpu.json"
+    },
+    {
+        "board_id": "0xe",
+        "fw_id": "0xa",
+        "az_cloud_dtmi": "",
+        "st_cloud_dtmi": "",
+        "local_dtmi": "dtmi\\appconfig\\steval_stwinbx1\\fp_sns_datalog2.json"
+    },
+    {
+        "board_id": "0xe",
+        "fw_id": "0xb",
+        "st_cloud_dtmi": "",
+        "local_dtmi": "dtmi\\appconfig\\steval_stwinbx1\\fp_sns_datalog2_ispu.json"
+    },
+    {
+        "board_id": "0xe",
+        "fw_id": "0xc",
         "st_cloud_dtmi": "",
         "local_dtmi": "dtmi\\appconfig\\steval_stwinbx1\\fft_ultrasound_dpu.json"
     },

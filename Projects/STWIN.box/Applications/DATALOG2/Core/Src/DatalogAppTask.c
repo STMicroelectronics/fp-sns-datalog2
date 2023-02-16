@@ -198,13 +198,6 @@ static VOID DatalogAppTaskAdvOBTimerCallbackFunction(ULONG timer);
  */
 void INT2_ISM330IS_EXTI_Callback(uint16_t nPin);
 
-/**
- * IRQ callback: handles HW IRQ dependency between IIS3DWB IRQ PIN and ISM330IS IRQ PIN
- */
-void PIN15_EXTI_Callback(uint16_t nPin);
-void IIS3DWBTask_EXTI_Callback(uint16_t nPin);
-void ISM330ISTask_EXTI_Callback(uint16_t nPin);
-
 #if defined (__GNUC__)
 // Inline function defined inline in the header file DatalogAppTask.h must be declared here as extern function.
 #endif
@@ -1336,14 +1329,3 @@ void Util_USR_EXTI_Callback(uint16_t pin)
   t_start = HAL_GetTick();
 }
 
-void PIN15_EXTI_Callback(uint16_t nPin)
-{
-  if (sTaskObj.iis3dwb_pin == 1)
-  {
-    IIS3DWBTask_EXTI_Callback(nPin);
-  }
-  else
-  {
-    ISM330ISTask_EXTI_Callback(nPin);
-  }
-}

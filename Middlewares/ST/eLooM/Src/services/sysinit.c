@@ -135,9 +135,10 @@ static System s_xTheSystem;
 extern void SystemClock_Config(void);
 
 /**
- * Configure the unused PIN in analog to minimize the power consumption, and enable the ultra low power mode.
+ * Application defined function used to Used to configure the MCU for the low power mode.
+ * E.g. configure the unused PIN in analog to minimize the power consumption, and enable the ultra low power mode.
  */
-extern void SysPowerConfig(void);
+__weak void SystemPower_Config(void);
 
 /**
  * Initialize the system timestamp service. This function, even if it is not static, is not declared in the header file
@@ -202,7 +203,7 @@ sys_error_code_t SysInit(boolean_t bEnableBootIF) {
 
   /* Configure the system clock.*/
   SystemClock_Config();
-  SysPowerConfig();
+  SystemPower_Config();
 
 #if( configAPPLICATION_ALLOCATED_HEAP == 1 )
   // initialize the FreeRTOS heap.
@@ -357,11 +358,26 @@ __weak IAppPowerModeHelper *SysGetPowerModeHelper(void) {
   return SysDefPowerModeHelperAlloc();
 }
 
+__weak void SystemPower_Config(void) {
+  /* not implemented */
+}
+
 #if (SYS_TS_CFG_ENABLE_SERVICE == 1)
 SysTimestamp_t *SysGetTimestampSrv(void) {
   return &s_xTheSystem.m_xTimestampSrv;
 }
 #endif
+
+APIVersion SysGetAPIVersion() {
+  union {
+    APIVersion xVersion;
+    uint32_t nVersion;
+  } xRes;
+
+  xRes.nVersion = ELOOM_API_VERSION;
+
+  return xRes.xVersion;
+}
 
 /* Private functions definition */
 /********************************/
@@ -526,8 +542,10 @@ static void InitTaskRun(ULONG thread_input) {
 
 #if defined(DEBUG) || defined(SYS_DEBUG)
   if (SYS_DBG_LEVEL_SL >= g_sys_dbg_min_level) {
+    APIVersion xVersion = SysGetAPIVersion();
     ULONG nFreeHeapSize = 0;
     tx_byte_pool_info_get(&s_xTheSystem.m_xSysMemPool, TX_NULL, &nFreeHeapSize, TX_NULL, TX_NULL, TX_NULL, TX_NULL);
+    SYS_DEBUGF(SYS_DBG_LEVEL_SL, ("INIT: eLooM version v%i.%i.%i\r\n", xVersion.m_nMajor, xVersion.m_nMinor, xVersion.m_nPatch));
     SYS_DEBUGF(SYS_DBG_LEVEL_SL, ("INIT: free heap = %i.\r\n", nFreeHeapSize));
     SYS_DEBUGF(SYS_DBG_LEVEL_SL, ("INIT: SystemCoreClock = %iHz.\r\n", SystemCoreClock));
   }

@@ -80,19 +80,19 @@ IAppPowerModeHelper *SysDefPowerModeHelperAlloc() {
 /* Private function definition */
 /*******************************/
 
-sys_error_code_t SysDefPowerModeHelper_vtblInit(IAppPowerModeHelper *this) {
-  assert_param(this);
+sys_error_code_t SysDefPowerModeHelper_vtblInit(IAppPowerModeHelper *_this) {
+  assert_param(_this);
   sys_error_code_t xRes = SYS_NO_ERROR_CODE;
-  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)this;
+  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)_this;
 
   pObj->m_xStatus.m_eActivePowerMode = E_POWER_MODE_STATE1;
 
   return xRes;
 }
 
-EPowerMode SysDefPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *this, const SysEvent xEvent) {
-  assert_param(this);
-  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)this;
+EPowerMode SysDefPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *_this, const SysEvent xEvent) {
+  assert_param(_this);
+  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)_this;
 
   EPowerMode ePowerMode = pObj->m_xStatus.m_eActivePowerMode;
 
@@ -115,8 +115,8 @@ EPowerMode SysDefPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *th
   return ePowerMode;
 }
 
-boolean_t SysDefPowerModeHelper_vtblCheckPowerModeTransaction(IAppPowerModeHelper *this, const EPowerMode eActivePowerMode, const EPowerMode eNewPowerMode) {
-  UNUSED(this);
+boolean_t SysDefPowerModeHelper_vtblCheckPowerModeTransaction(IAppPowerModeHelper *_this, const EPowerMode eActivePowerMode, const EPowerMode eNewPowerMode) {
+  UNUSED(_this);
   boolean_t xRes = FALSE;
 
   switch (eActivePowerMode) {
@@ -146,10 +146,10 @@ boolean_t SysDefPowerModeHelper_vtblCheckPowerModeTransaction(IAppPowerModeHelpe
 #if (SYS_CFG_DEF_PM_HELPER_STANDBY != 1)
 
 //Put the system in STOP1
-sys_error_code_t SysDefPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *this, EPowerMode ePowerMode) {
-  assert_param(this);
+sys_error_code_t SysDefPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_this, EPowerMode ePowerMode) {
+  assert_param(_this);
   sys_error_code_t xRes = SYS_NO_ERROR_CODE;
-  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)this;
+  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)_this;
 
   pObj->m_xStatus.m_eActivePowerMode = ePowerMode;
 
@@ -212,12 +212,10 @@ sys_error_code_t SysDefPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper
 
 /* Put the system in STANDBY*/
 
-extern void SysPowerConfig();
-
-sys_error_code_t SysDefPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *this, EPowerMode ePowerMode) {
-  assert_param(this);
+sys_error_code_t SysDefPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_this, EPowerMode ePowerMode) {
+  assert_param(_this);
   sys_error_code_t xRes = SYS_NO_ERROR_CODE;
-  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)this;
+  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)_this;
 
   pObj->m_xStatus.m_eActivePowerMode = ePowerMode;
 
@@ -275,22 +273,22 @@ sys_error_code_t SysDefPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper
 }
 #endif
 
-EPowerMode SysDefPowerModeHelper_vtblGetActivePowerMode(IAppPowerModeHelper *this) {
-  assert_param(this);
-  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)this;
+EPowerMode SysDefPowerModeHelper_vtblGetActivePowerMode(IAppPowerModeHelper *_this) {
+  assert_param(_this);
+  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)_this;
 
   return pObj->m_xStatus.m_eActivePowerMode;
 }
 
-SysPowerStatus SysDefPowerModeHelper_vtblGetPowerStatus(IAppPowerModeHelper *this) {
-  assert_param(this);
-  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)this;
+SysPowerStatus SysDefPowerModeHelper_vtblGetPowerStatus(IAppPowerModeHelper *_this) {
+  assert_param(_this);
+  SysDefPowerModeHelper *pObj = (SysDefPowerModeHelper*)_this;
 
   return pObj->m_xStatus;
 }
 
-boolean_t SysDefPowerModeHelper_vtblIsLowPowerMode(IAppPowerModeHelper *this, const EPowerMode ePowerMode) {
-  UNUSED(this);
+boolean_t SysDefPowerModeHelper_vtblIsLowPowerMode(IAppPowerModeHelper *_this, const EPowerMode ePowerMode) {
+  UNUSED(_this);
 
   return ePowerMode == E_POWER_MODE_SLEEP_1;
 }

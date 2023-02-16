@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    BLE_Manager_Conf.h
+  * @file    BLE_Manager_Conf_Template.h
   * @author  System Research & Applications Team - Catania Lab.
   * @brief   BLE Manager configuration template file.
   *          This file should be copied to the application folder and renamed

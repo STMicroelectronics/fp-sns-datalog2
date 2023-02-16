@@ -40,7 +40,7 @@ typedef struct _IListener IListener;
 //***********************
 
 
-static inline sys_error_code_t IListenerOnStatusChange(IListener *this);
+static inline sys_error_code_t IListenerOnStatusChange(IListener *_this);
 
 
 // Inline functions definition

@@ -22,6 +22,10 @@
 #ifndef EMDATA_INC_EVENTS_IDATAEVENTLISTENER_H_
 #define EMDATA_INC_EVENTS_IDATAEVENTLISTENER_H_
 
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
 #include "events/IEventListener.h"
 #include "events/IEventListener_vtbl.h"
 #include "events/DataEvent.h"
@@ -35,16 +39,6 @@ typedef struct _IDataEventListener IDataEventListener_t;
 
 /* Public API declaration */
 /**************************/
-
-/**
- * Called by the a sensor ::IEventSrc when new data are ready.
- *
- * @param _this [IN] specifies a pointer to the object.
- * @param p_evt [IN] specifies a pointer to the event.
- * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
- */
-static inline
-sys_error_code_t IDataEventListenerOnNewDataReady(IEventListener *_this, const DataEvent_t *p_evt);
 
 
 /* Inline functions definition */

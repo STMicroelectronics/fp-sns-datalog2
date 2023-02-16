@@ -72,7 +72,7 @@ typedef sys_error_code_t (*pExecuteStepFunc_t)(AManagedTask *_this);
  * Task specific function called by the framework to initialize
  * task related hardware resources. This function is called by the INIT task.
  *
- * @param this [IN] specifies a task object pointer.
+ * @param _this [IN] specifies a task object pointer.
  * @param pParams [IN] specifies a pointer to task specific hardware initialization parameters.
  * @return \a SYS_NO_ERROR_CODE if success, one of the following error codes otherwise:
  *         - SYS_OUT_OF_MEMORY_ERROR_CODE if is not possible to instantiate the driver object.

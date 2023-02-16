@@ -532,7 +532,7 @@ uint8_t *EMD_1dDataAt(EMData_t *p_data, uint16_t d1_idx)
 }
 
 #ifdef __cplusplus
-extern }
+}
 #endif
 
 #endif /* INC_SERVICES_EM_DATA_EM_DATA_FORTMAT_H_ */

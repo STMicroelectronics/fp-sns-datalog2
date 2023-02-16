@@ -195,7 +195,7 @@ void SystemClock_Restore(void)
   }
 }
 
-void SysPowerConfig()
+void SystemPower_Config()
 {
 //  GPIO_InitTypeDef GPIO_InitStruct = {0};
 

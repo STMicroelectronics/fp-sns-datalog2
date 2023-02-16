@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_NeaiNClassClassification.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.0.0
-  * @date    30-September-2022
+  * @version 1.8.0
+  * @date    02-December-2022
   * @brief   NEAI Classification info services APIs.
   ******************************************************************************
   * @attention

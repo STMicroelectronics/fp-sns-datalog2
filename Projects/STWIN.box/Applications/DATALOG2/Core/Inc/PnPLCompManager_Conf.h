@@ -3,8 +3,6 @@
   * @file    PnPLCompManager_Conf.h
   * @author  SRA
   * @brief   PnPL Components Manager configuration template file.
-  *          This file should be copied to the application folder and renamed
-  *          to PnPLCompManager_Conf.h.
   ******************************************************************************
   * @attention
   *
@@ -18,6 +16,17 @@
   ******************************************************************************
   */
 
+/**
+  ******************************************************************************
+  * This file has been auto generated from the following Device Template Model:
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu;1
+  *
+  * Created by: DTDL2PnPL_cGen version 1.0.0
+  *
+  * WARNING! All changes made to this file will be lost if this is regenerated
+  ******************************************************************************
+  */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __PNPL_COMP_MANAGER_CONF_H__
 #define __PNPL_COMP_MANAGER_CONF_H__
@@ -28,5 +37,8 @@ extern "C" {
 
 #include "stm32u5xx_hal.h"
 
-#endif /* __PNPL_COMP_MANAGER_CONF_H__*/
+#ifdef __cplusplus
+}
+#endif
 
+#endif /* __PNPL_COMP_MANAGER_CONF_H__*/

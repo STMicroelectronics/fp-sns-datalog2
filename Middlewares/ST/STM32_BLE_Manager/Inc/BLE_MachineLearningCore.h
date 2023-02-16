@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_MachineLearningCore.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.6.0
-  * @date    15-September-2022
+  * @version 1.8.0
+  * @date    02-December-2022
   * @brief   Machine Learning Core info services APIs.
   ******************************************************************************
   * @attention

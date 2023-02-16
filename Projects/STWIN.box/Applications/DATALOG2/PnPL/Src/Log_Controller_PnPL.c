@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -66,12 +65,10 @@ struct _Log_Controller_PnPL
   ILog_Controller_t *cmdIF;
 };
 
-/* Objects instance */
-/********************/
+/* Objects instance ----------------------------------------------------------*/
 static Log_Controller_PnPL sLog_Controller_PnPL;
 
-// Public API definition
-// *********************
+/* Public API definition -----------------------------------------------------*/
 IPnPLComponent_t *Log_Controller_PnPLAlloc()
 {
   IPnPLComponent_t *pxObj = (IPnPLComponent_t *) &sLog_Controller_PnPL;
@@ -93,8 +90,7 @@ uint8_t Log_Controller_PnPLInit(IPnPLComponent_t *_this,  ILog_Controller_t *inf
 }
 
 
-// IPnPLComponent virtual functions definition
-// *******************************************
+/* IPnPLComponent virtual functions definition -------------------------------*/
 char *Log_Controller_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 {
   return log_controller_get_key();
@@ -154,7 +150,7 @@ uint8_t Log_Controller_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
     *size = json_serialization_size(tempJSON);
   }
 
-  //no need to free temp_j as it is part of tempJSON
+  /* No need to free temp_j as it is part of tempJSON */
   json_value_free(tempJSON);
 
   return 0;

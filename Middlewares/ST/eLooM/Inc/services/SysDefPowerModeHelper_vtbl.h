@@ -28,13 +28,13 @@ extern "C" {
 #endif
 
 
-sys_error_code_t SysDefPowerModeHelper_vtblInit(IAppPowerModeHelper *this); ///< @sa IapmhInit
-EPowerMode SysDefPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *this, const SysEvent xEvent); ///< @sa IapmhComputeNewPowerMode
-boolean_t SysDefPowerModeHelper_vtblCheckPowerModeTransaction(IAppPowerModeHelper *this, const EPowerMode eActivePowerMode, const EPowerMode eNewPowerMode); ///< @sa IapmhCheckPowerModeTransaction
-sys_error_code_t SysDefPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *this, EPowerMode ePowerMode); ///< @sa IapmhDidEnterPowerMode
-EPowerMode SysDefPowerModeHelper_vtblGetActivePowerMode(IAppPowerModeHelper *this); ///< @sa IapmhGetActivePowerMode
-SysPowerStatus SysDefPowerModeHelper_vtblGetPowerStatus(IAppPowerModeHelper *this); ///< @sa IapmhGetPowerStatus
-boolean_t SysDefPowerModeHelper_vtblIsLowPowerMode(IAppPowerModeHelper *this, const EPowerMode ePowerMode); ///< @sa IapmhIsLowPowerMode
+sys_error_code_t SysDefPowerModeHelper_vtblInit(IAppPowerModeHelper *_this); ///< @sa IapmhInit
+EPowerMode SysDefPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *_this, const SysEvent xEvent); ///< @sa IapmhComputeNewPowerMode
+boolean_t SysDefPowerModeHelper_vtblCheckPowerModeTransaction(IAppPowerModeHelper *_this, const EPowerMode eActivePowerMode, const EPowerMode eNewPowerMode); ///< @sa IapmhCheckPowerModeTransaction
+sys_error_code_t SysDefPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_this, EPowerMode ePowerMode); ///< @sa IapmhDidEnterPowerMode
+EPowerMode SysDefPowerModeHelper_vtblGetActivePowerMode(IAppPowerModeHelper *_this); ///< @sa IapmhGetActivePowerMode
+SysPowerStatus SysDefPowerModeHelper_vtblGetPowerStatus(IAppPowerModeHelper *_this); ///< @sa IapmhGetPowerStatus
+boolean_t SysDefPowerModeHelper_vtblIsLowPowerMode(IAppPowerModeHelper *_this, const EPowerMode ePowerMode); ///< @sa IapmhIsLowPowerMode
 
 
 #ifdef __cplusplus

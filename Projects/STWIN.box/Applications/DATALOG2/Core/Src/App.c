@@ -189,14 +189,15 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   if(sExtIis3dwb)
   {
     /* Use the external IIS3DWB and onboard ISM330DHCX  */
-    sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_EXTERNAL_DWBInitParams, &MX_GPIO_CS_EXTERNAL_DWBInitParams);
+    sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_EXTERNAL_DWBInitParams, &MX_GPIO_CS_EXTERNALInitParams);
     sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams, &MX_GPIO_CS_DHCXInitParams);
   }
   else if (sExtIis330is)
   {
 	  FW_ID = FW_ID_DATALOG2_ISPU;
-    /* Use the external ISM330IS. Onboard IIS3DWB can't be used for HW limitation (same INT pin) */
-    sISM330ISObj = ISM330ISTaskAlloc(&MX_GPIO_INT2_EXInitParams, &MX_GPIO_INT1_EXTERNAL_DWBInitParams, &MX_GPIO_CS_EXTERNAL_DWBInitParams);
+    /* Use the onboard IIS3DWB and the external ISM330IS */
+//    sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_DWBInitParams, &MX_GPIO_CS_DWBInitParams);
+    sISM330ISObj = ISM330ISTaskAlloc(&MX_GPIO_INT2_EXInitParams, &MX_GPIO_INT1_EXTERNAL_ISPUInitParams, &MX_GPIO_CS_EXTERNALInitParams);
   }
   else
   {

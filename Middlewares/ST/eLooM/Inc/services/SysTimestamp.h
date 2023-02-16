@@ -87,6 +87,10 @@
 #include "drivers/SwTSDriver.h"
 #include "drivers/SwTSDriver_vtbl.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef SYS_TS_CFG_ENABLE_SERVICE
 #define SYS_TS_CFG_ENABLE_SERVICE    0
 #endif
@@ -165,5 +169,8 @@ uint64_t SysTsGetTimestampN(SysTimestamp_t *_this);
  */
 SysTimestamp_t *SysGetTimestampSrv(void);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* ELOOM_INC_SERVICES_SYSTIMESTAMP_H_ */

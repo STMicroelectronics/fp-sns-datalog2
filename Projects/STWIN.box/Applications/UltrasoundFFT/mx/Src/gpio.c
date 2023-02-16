@@ -70,10 +70,16 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(CS_DWB_GPIO_Port, CS_DWB_Pin, GPIO_PIN_SET);
 
+  /*Configure GPIO pins : PI6 PIPin PI4 PIPin */
+  GPIO_InitStruct.Pin = GPIO_PIN_6|DCDC_2_EN_Pin|GPIO_PIN_4|SPI2_MISO_p2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
+
   /*Configure GPIO pins : PGPin PG10 PG12 PGPin
-                           PGPin PG0 PGPin */
+                           PG0 PGPin */
   GPIO_InitStruct.Pin = WIFI_FLOW_Pin|GPIO_PIN_10|GPIO_PIN_12|SD_DETECT_Pin
-                          |INT_EX_Pin|GPIO_PIN_0|INT_EXG5_Pin;
+                          |GPIO_PIN_0|INT_EXG5_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
@@ -92,12 +98,6 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PIPin PI4 PIPin */
-  GPIO_InitStruct.Pin = DCDC_2_EN_Pin|GPIO_PIN_4|SPI2_MISO_p2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PDPin PD7 PD1 PD14
                            PDPin PDPin PD8 PDPin */
@@ -166,6 +166,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = INT_EX_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(INT_EX_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PB0 PB10 PB2 PB11
                            PB12 PBPin PB14 PBPin */

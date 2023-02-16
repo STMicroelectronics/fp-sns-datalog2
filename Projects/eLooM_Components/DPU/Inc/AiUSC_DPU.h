@@ -28,6 +28,7 @@ extern "C" {
 
 #include "ADPU2.h"
 #include "ADPU2_vtbl.h"
+#include "usc_network.h"
 #include "aiApp.h"
 
 

@@ -38,9 +38,9 @@ typedef struct _IEventListener_vtbl IEventListener_vtbl;
  * that a subclass must overload.
  */
 struct _IEventListener_vtbl {
-	sys_error_code_t (*OnStatusChange)(IListener *this);    ///< @sa IListenerOnStatusChange
-	void (*SetOwner)(IEventListener *this, void *pxOwner);  ///< @sa IEventListenerSetOwner
-	void *(*GetOwner)(IEventListener *this);                ///< @sa IEventListenerGetOwner
+	sys_error_code_t (*OnStatusChange)(IListener *_this);    ///< @sa IListenerOnStatusChange
+	void (*SetOwner)(IEventListener *_this, void *pxOwner);  ///< @sa IEventListenerSetOwner
+	void *(*GetOwner)(IEventListener *_this);                ///< @sa IEventListenerGetOwner
 };
 
 /**
@@ -62,13 +62,13 @@ struct _IEventListener {
 /*******************************/
 
 SYS_DEFINE_STATIC_INLINE
-void IEventListenerSetOwner(IEventListener *this, void *pxOwner) {
-	this->vptr->SetOwner(this, pxOwner);
+void IEventListenerSetOwner(IEventListener *_this, void *pxOwner) {
+	_this->vptr->SetOwner(_this, pxOwner);
 }
 
 SYS_DEFINE_STATIC_INLINE
-void *IEventListenerGetOwner(IEventListener *this) {
-	return this->vptr->GetOwner(this);
+void *IEventListenerGetOwner(IEventListener *_this) {
+	return _this->vptr->GetOwner(_this);
 }
 
 #ifdef __cplusplus

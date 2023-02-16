@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    BLE_Implementation.h
+  * @file    BLE_Implementation_Template.h
   * @author  System Research & Applications Team - Catania Lab.
   * @brief   BLE Implementation header template file.
   *          This file should be copied to the application folder and renamed

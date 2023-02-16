@@ -33,7 +33,7 @@
 #include "FDM_ACOTask.h"
 
 #include "PnPLCompManager.h"
-#include "DeviceInformation_PnPL.h"
+#include "Deviceinformation_PnPL.h"
 #include "Firmware_Info_PnPL.h"
 #include "Acquisition_Information_PnPL.h"
 #include "Log_Controller_PnPL.h"
@@ -42,7 +42,7 @@
 #include "Imp23absu_Mic_PnPL.h"
 #include "parson.h"
 
-static uint8_t FW_ID = 0x09;
+static uint8_t FW_ID = 0x0C;
 
 static IPnPLComponent_t *pLogControllerPnPLObj = NULL;
 static IPnPLComponent_t *pIMP23ABSU_MIC_PnPLObj = NULL;

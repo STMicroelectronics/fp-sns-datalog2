@@ -387,7 +387,6 @@ sys_error_code_t usbx_dctrl_vtblStream_deinit(IStream_t *_this)
   _ux_utility_memory_free(obj->memory_pointer);
 
   return res;
-
 }
 
 sys_error_code_t usbx_dctrl_vtblStream_start(IStream_t *_this, void *param)

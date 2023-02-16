@@ -37,17 +37,27 @@
 <p>Here is the list of references to user documents:</p>
 <ul>
 <li><a href="https://www.st.com/resource/en/data_brief/fp-sns-datalog2.pdf">DB4865</a> : STM32Cube function pack for STEVAL-STWINBX1 evaluation kit for high speed datalogging and ultrasound processing</li>
-<li><a href="https://www.st.com/resource/en/user_manual/fp-sns-datalog2.pdf">UM3106</a> : Getting started with the STM32Cube function pack for the STEVAL-STWINBX1 evaluation kit for high speed datalogging and ultrasound processing</li>
+<li><a href="https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf">UM3106</a> : Getting started with the STM32Cube function pack for the STEVAL-STWINBX1 evaluation kit for high speed datalogging and ultrasound processing</li>
 <li><a href="https://www.st.com/stm32cube">STM32Cube</a> : STM32Cube</li>
 </ul>
 </div>
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" checked aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">v1.0.0 / 2-Dec-2022</label>
+<input type="checkbox" id="collapse-section2" checked aria-hidden="true"> <label for="collapse-section2" aria-hidden="true">v1.0.1 / 14-Feb-23</label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
-<h3 id="first-official-release">First official release</h3>
+<h3 id="patch-release">Patch release</h3>
+<ul>
+<li>Fixed compilation error in Linux environment and g++</li>
+<li>Fixed external ISPU misconfiguration in DATALOG2 + external add-on use case</li>
+<li>Regenerated PnPL files</li>
+<li>Optimized usbx memory usage</li>
+<li>Fixed auto-increment handling in SPIBusTask</li>
+<li>Updated eLooM middleware: changed the name of the API function SysPowerConfig() to SystemPower_Config() to align with CubeMX</li>
+<li>Fixed toNanoedge converter and offline plot data for dummy data in Python SDK and updated device models</li>
+<li>Fixed typos in the code and links</li>
+</ul>
 <h2 id="contents">Contents</h2>
 <p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
 <p>Documentation</p>
@@ -62,7 +72,7 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Doxygen documentation</td>
-<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.0.1 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Documentation\FP-SNS-DATALOG2_Package.chm">CHM</a></td>
 </tr>
 </tbody>
@@ -79,12 +89,12 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">STWIN.box/DATALOG2</td>
-<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.0.1 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects/STWIN.box/Applications/DATALOG2/readme.html">Read me</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">STWIN.box/UltrasoundFFT</td>
-<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.0.1 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects/STWIN.box/Applications/UltrasoundFFT/readme.html">Read me</a></td>
 </tr>
 </tbody>
@@ -101,27 +111,27 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">DPU</td>
-<td style="text-align: left;">2.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">2.0.1 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects\eLooM_Components\DPU\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">EMData</td>
-<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.0.1 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects\eLooM_Components\EMData\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">PnPLCompManager</td>
-<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.0.0</td>
 <td style="text-align: left;"><a href="Projects\eLooM_Components\PnPLCompManager\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">SensorManager_threadx</td>
-<td style="text-align: left;">2.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">2.0.1 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects\eLooM_Components\SensorManager\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">TagManager</td>
-<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.0.0</td>
 <td style="text-align: left;"><a href="Projects\eLooM_Components\TagManager\Release_Notes.html">Release Note</a></td>
 </tr>
 </tbody>
@@ -138,52 +148,52 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">ST/BlueNRG-2</td>
-<td style="text-align: left;">3.3.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">3.3.0</td>
 <td style="text-align: left;"><a href="Middlewares\ST\BlueNRG-2\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">ST/eLooM_threadx</td>
-<td style="text-align: left;">3.1.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">3.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Middlewares\ST\eLooM\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ST/SensorStreaming_USBX</td>
-<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.0.0</td>
 <td style="text-align: left;"><a href="Middlewares\ST\SensorStreaming_USBX\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">ST/STM32_BLE_Manager</td>
-<td style="text-align: left;">1.8.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.8.0</td>
 <td style="text-align: left;"><a href="Middlewares\ST\STM32_BLE_Manager\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ST/STM32_GenericFFT_Library</td>
-<td style="text-align: left;">1.1.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.1.0</td>
 <td style="text-align: left;"><a href="Middlewares\ST\STM32_GenericFFT_Library\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">ST/filex</td>
-<td style="text-align: left;">6.1.7.210621 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">6.1.7.210621</td>
 <td style="text-align: left;"><a href="Middlewares\ST\filex\README.md">Read me</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ST/levelx</td>
-<td style="text-align: left;">6.1.7.210621 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">6.1.7.210621</td>
 <td style="text-align: left;"><a href="Middlewares\ST\levelx\README.md">Read me</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">ST/threadx</td>
-<td style="text-align: left;">6.1.7.210621 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">6.1.7.210621</td>
 <td style="text-align: left;"><a href="Middlewares\ST\threadx\README.md">Read me</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ST/usbx</td>
-<td style="text-align: left;">6.1.7.210621 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">6.1.7.210621</td>
 <td style="text-align: left;"><a href="Middlewares\ST\usbx\README.md">Read me</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Third_Party/parson</td>
-<td style="text-align: left;">1.3.1 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.3.1</td>
 <td style="text-align: left;"><a href="Middlewares\Third_Party\parson\Release_Notes.html">Release Note</a></td>
 </tr>
 </tbody>
@@ -200,17 +210,17 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">STM32U5xx CMSIS</td>
-<td style="text-align: left;">1.1.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.1.0</td>
 <td style="text-align: left;"><a href="Drivers\CMSIS\Device\ST\STM32U5xx\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">STM32U5xx HAL</td>
-<td style="text-align: left;">1.1.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.1.0</td>
 <td style="text-align: left;"><a href="Drivers\STM32U5xx_HAL_Driver\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">BSP STWIN.box</td>
-<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.0.1 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Drivers\BSP\STWIN.box\Release_Notes.html">Release notes</a></td>
 </tr>
 </tbody>
@@ -227,52 +237,52 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Common</td>
-<td style="text-align: left;">7.2.1 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">7.2.1</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\Common\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">iis2dlpc</td>
-<td style="text-align: left;">1.3.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.3.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\iis2dlpc\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">iis2iclx</td>
-<td style="text-align: left;">1.3.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.3.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\iis2iclx\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">iis2mdc</td>
-<td style="text-align: left;">1.3.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.3.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\iis2mdc\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">iis3dwb</td>
-<td style="text-align: left;">1.2.1 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.2.1</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\iis3dwb\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">ilps22qs</td>
-<td style="text-align: left;">1.1.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.1.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\ilps22qs\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ism330dhcx</td>
-<td style="text-align: left;">1.3.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.3.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\ism330dhcx\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">ism330is</td>
-<td style="text-align: left;">1.1.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.1.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\ism330is\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">lps22hh</td>
-<td style="text-align: left;">1.4.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.4.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\lps22hh\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">stts22h</td>
-<td style="text-align: left;">1.4.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.4.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\stts22h\Release_Notes.html">Release notes</a></td>
 </tr>
 </tbody>
@@ -289,22 +299,22 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">HSD2 Utilities</td>
-<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">1.0.0</td>
 <td style="text-align: left;"><a href="Utilities\readme.txt">Read me</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">cli_example</td>
-<td style="text-align: left;">3.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">3.0.0</td>
 <td style="text-align: left;"><a href="Utilities\cli_example\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">nlohmann/json library</td>
-<td style="text-align: left;">3.7.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">3.7.0</td>
 <td style="text-align: left;"><a href="https://github.com/nlohmann/json">Read me</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">HSDPython_SDK</td>
-<td style="text-align: left;">2.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;">2.0.1 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Utilities\HSDPython_SDK\examples\Release_Notes.html">Release notes</a></td>
 </tr>
 </tbody>
@@ -317,7 +327,7 @@
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
-<li>STM32CubeIDE v1.10.1</li>
+<li>STM32CubeIDE v1.11.0</li>
 </ul>
 <h2 id="supported-devices-and-boards">Supported Devices and Boards</h2>
 <ul>
@@ -328,6 +338,254 @@
 <li>None</li>
 </ul>
 <h2 id="dependencies">Dependencies</h2>
+<ul>
+<li>None</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" checked aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">v1.0.0 / 2-Dec-22</label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<h3 id="first-official-release">First official release</h3>
+<h2 id="contents-1">Contents</h2>
+<p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
+<p>Documentation</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Doxygen documentation</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+</tr>
+</tbody>
+</table>
+<p>Projects</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">STWIN.box/DATALOG2</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">STWIN.box/UltrasoundFFT</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+</tr>
+</tbody>
+</table>
+<p>eLooM FW modules</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">DPU</td>
+<td style="text-align: left;">2.0.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EMData</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PnPLCompManager</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">SensorManager_threadx</td>
+<td style="text-align: left;">2.0.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TagManager</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+</tr>
+</tbody>
+</table>
+<p>Middlewares</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ST/BlueNRG-2</td>
+<td style="text-align: left;">3.3.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ST/eLooM_threadx</td>
+<td style="text-align: left;">3.1.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ST/SensorStreaming_USBX</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ST/STM32_BLE_Manager</td>
+<td style="text-align: left;">1.8.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ST/STM32_GenericFFT_Library</td>
+<td style="text-align: left;">1.1.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ST/filex</td>
+<td style="text-align: left;">6.1.7.210621 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ST/levelx</td>
+<td style="text-align: left;">6.1.7.210621 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ST/threadx</td>
+<td style="text-align: left;">6.1.7.210621 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ST/usbx</td>
+<td style="text-align: left;">6.1.7.210621 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Third_Party/parson</td>
+<td style="text-align: left;">1.3.1 <span class="icon-st-add"></span></td>
+</tr>
+</tbody>
+</table>
+<p>Drivers</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">STM32U5xx CMSIS</td>
+<td style="text-align: left;">1.1.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">STM32U5xx HAL</td>
+<td style="text-align: left;">1.1.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BSP STWIN.box</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+</tr>
+</tbody>
+</table>
+<p>Components</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Common</td>
+<td style="text-align: left;">7.2.1 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">iis2dlpc</td>
+<td style="text-align: left;">1.3.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">iis2iclx</td>
+<td style="text-align: left;">1.3.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">iis2mdc</td>
+<td style="text-align: left;">1.3.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">iis3dwb</td>
+<td style="text-align: left;">1.2.1 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ilps22qs</td>
+<td style="text-align: left;">1.1.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ism330dhcx</td>
+<td style="text-align: left;">1.3.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ism330is</td>
+<td style="text-align: left;">1.1.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lps22hh</td>
+<td style="text-align: left;">1.4.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">stts22h</td>
+<td style="text-align: left;">1.4.0 <span class="icon-st-add"></span></td>
+</tr>
+</tbody>
+</table>
+<p>Utilities</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">HSD2 Utilities</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">cli_example</td>
+<td style="text-align: left;">3.0.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">nlohmann/json library</td>
+<td style="text-align: left;">3.7.0 <span class="icon-st-add"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HSDPython_SDK</td>
+<td style="text-align: left;">2.0.0 <span class="icon-st-add"></span></td>
+</tr>
+</tbody>
+</table>
+<h2 id="known-limitations-1">Known Limitations</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
+<li>STM32CubeIDE v1.10.1</li>
+</ul>
+<h2 id="supported-devices-and-boards-1">Supported Devices and Boards</h2>
+<ul>
+<li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
+</ul>
+<h2 id="backward-compatibility-1">Backward Compatibility</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="dependencies-1">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>

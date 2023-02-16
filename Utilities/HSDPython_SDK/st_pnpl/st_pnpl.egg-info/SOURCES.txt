@@ -12,7 +12,6 @@ st_pnpl/DTDL/__init__.py
 st_pnpl/DTDL/device_template_manager.py
 st_pnpl/DTDL/device_template_model.py
 st_pnpl/DTDL/usb_device_catalog.json
-st_pnpl/DTDL/dtmi/appconfig/steval_stbox_pro/fp_sns_datalog2.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/fft_ultrasound_dpu.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/fp_sns_datalog2.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/fp_sns_datalog2_ispu.json

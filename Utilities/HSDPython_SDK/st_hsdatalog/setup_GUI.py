@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="st_hsdatalog",
-    version="2.0.0",
+    version="2.0.1",
     author="Matteo Ronchi",
     author_email="matteo.ronchi@st.com",
     description="STMicroelectronics High Speed Datalog python package",

@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:ispu_ces_demo:algorithms:ism330is_ispu;1
+  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu:sensors:ism330is_ispu;1
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.0.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -43,9 +42,9 @@ extern "C" {
   */
 typedef struct _IIsm330is_Ispu_t IIsm330is_Ispu_t;
 
-// Public API declaration
-//***********************
-/** Public interface **/
+/* Public API declarations ---------------------------------------------------*/
+
+/* Public interface */
 inline uint8_t IIsm330is_Ispu_load_file(IIsm330is_Ispu_t *_this, const char *ucf_data, uint32_t ucf_size, const char *output_data, uint32_t output_size);
 
 #ifdef __cplusplus

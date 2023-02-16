@@ -525,8 +525,8 @@ static int32_t SPIBusTaskRead(void *p_sensor, uint8_t reg, uint8_t *p_data, uint
   assert_param(p_sensor);
   SPIBusIF *p_spi_sensor = (SPIBusIF *) p_sensor;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
+  uint8_t auto_inc = p_spi_sensor->auto_inc;
 
-  uint8_t auto_inc = 0x00;
   struct spiIOMessage_t msg =
   {
     .messageId = SM_MESSAGE_ID_SPI_BUS_READ,

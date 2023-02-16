@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="st_pnpl",
-    version="1.0.0",
+    version="1.0.1",
     author="Matteo Ronchi",
     author_email="matteo.ronchi@st.com",
     description="STMicroelectronics PnP-Like and DTDL Device Template Models management python package",
@@ -17,7 +17,7 @@ setuptools.setup(
     package_dir={'st_pnpl': 'st_pnpl'},
     data_files=[
         (os.path.join("Lib","site-packages","st_pnpl","DTDL"),[os.path.join("st_pnpl","DTDL","usb_device_catalog.json")]),
-        (os.path.join("Lib","site-packages","st_pnpl","DTDL","dtmi","appconfig","steval_stbox_pro"),[os.path.join("st_pnpl","DTDL","dtmi","appconfig","steval_stbox_pro","fp_sns_datalog2.json")]),
+        # (os.path.join("Lib","site-packages","st_pnpl","DTDL","dtmi","appconfig","steval_stbox_pro"),[os.path.join("st_pnpl","DTDL","dtmi","appconfig","steval_stbox_pro","fp_sns_datalog2.json")]),
         (os.path.join("Lib","site-packages","st_pnpl","DTDL","dtmi","appconfig","steval_stwinbx1"),[os.path.join("st_pnpl","DTDL","dtmi","appconfig","steval_stwinbx1","fp_sns_datalog2.json")]),
         (os.path.join("Lib","site-packages","st_pnpl","DTDL","dtmi","appconfig","steval_stwinbx1"),[os.path.join("st_pnpl","DTDL","dtmi","appconfig","steval_stwinbx1","fp_sns_datalog2_ispu.json")]),
         (os.path.join("Lib","site-packages","st_pnpl","DTDL","dtmi","appconfig","steval_stwinbx1"),[os.path.join("st_pnpl","DTDL","dtmi","appconfig","steval_stwinbx1","fft_ultrasound_dpu.json")]),
