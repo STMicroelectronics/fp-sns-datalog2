@@ -22,7 +22,7 @@
 #include "app_messages_parser.h"
 #include "services/sysdebug.h"
 #include "services/sysmem.h"
-#include "app_model.h"
+#include "App_model.h"
 #include "spi.h"
 
 /* TODO: change XXX with a short id for the task */
