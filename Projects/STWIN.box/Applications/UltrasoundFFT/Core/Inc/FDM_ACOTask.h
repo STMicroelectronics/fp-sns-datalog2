@@ -1,21 +1,21 @@
 /**
  ******************************************************************************
  * @file    FDM_ACOTask.h
-  * @author  SRA
-  * @brief
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
-  *
-  ******************************************************************************
-  */
+ * @author  SRA
+ * @brief
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ *
+ ******************************************************************************
+ */
 
 #ifndef FDM_ACOTask_H_
 #define FDM_ACOTask_H_
@@ -32,8 +32,6 @@ extern "C" {
 #include "DefDataBuilder.h"
 #include "DefDataBuilder_vtbl.h"
 
-
-
 /* Command ID. These are all commands supported by a sensor task. */
 #define ACO_CMD_ID_SET_MODE                ((uint16_t)0x0001)
 #define ACO_CMD_ID_SET_DRY                 ((uint16_t)0x0002)
@@ -44,11 +42,10 @@ extern "C" {
 #define ACO_CMD_ID_STOP                    ((uint16_t)0x0009)
 #define ACO_CMD_ID_INIT                    ((uint16_t)0x000A)
 
-
-  /**
-   * Create  type name for _FDM_ACOTask.
-   */
-  typedef struct _FDM_ACOTask FDM_ACOTask;
+/**
+ * Create  type name for _FDM_ACOTask.
+ */
+typedef struct _FDM_ACOTask FDM_ACOTask;
 
 /* Public API declaration */
 /**************************/
@@ -59,10 +56,9 @@ extern "C" {
  * @return a pointer to the generic obejct ::AManagedTaskEx if success,
  * or NULL if out of memory error occurs.
  */
-AManagedTaskEx *FDM_ACOTaskAlloc(void);
+AManagedTaskEx* FDM_ACOTaskAlloc(void);
 
-
-void FDM_ACOTaskAddDPUListener (FDM_ACOTask * _this, IDataEventListener_t *  p_listener);
+void FDM_ACOTaskAddDPUListener(FDM_ACOTask *_this, IDataEventListener_t *p_listener);
 
 /**
  * Set the source for the FDM_AcoTask.
@@ -71,7 +67,6 @@ void FDM_ACOTaskAddDPUListener (FDM_ACOTask * _this, IDataEventListener_t *  p_l
  * @param dpu [IN] specifies a pointer to the data source to be used.
  */
 void FDM_ACOTaskSetSourceIF(FDM_ACOTask *_this, ISourceObservable *source);
-
 
 // Inline functions definition
 // ***************************

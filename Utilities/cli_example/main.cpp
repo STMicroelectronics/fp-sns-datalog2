@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -357,7 +357,7 @@ int main(int argc, char *argv[])
 
     if(!input.cmdOptionExists("-y"))
     {
-        cout << "Press any key to start logging\n";
+        cout << "Press Enter key to start logging\n";
         getchar();
     }
 

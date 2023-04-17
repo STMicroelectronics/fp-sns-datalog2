@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
- ******************************************************************************
- * @file    ux_device_descriptors.h
- * @author  MCD Application Team
- * @brief   USBX Device descriptor header file
- ******************************************************************************
- * @attention
- *
+  ******************************************************************************
+  * @file    ux_device_descriptors.h
+  * @author  MCD Application Team
+  * @brief   USBX Device descriptor header file
+  ******************************************************************************
+  * @attention
+  *
   * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 /* USER CODE END Header */
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __UX_DEVICE_DESCRIPTORS_H__
@@ -26,16 +26,13 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+
 #include "ux_api.h"
 #include "ux_stm32_config.h"
 #include "ux_device_class_sensor_streaming.h"
 
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+/* Defines -------------------------------------------------------------------*/
 
-/* USER CODE END Includes */
-
-/* Private defines -----------------------------------------------------------*/
 #define USBD_MAX_NUM_CONFIGURATION                     1U
 #define USBD_MAX_SUPPORTED_CLASS                       3U
 #define USBD_MAX_CLASS_ENDPOINTS                       9U
@@ -44,10 +41,76 @@ extern "C" {
 #define USBD_CONFIG_MAXPOWER                           25U
 #define USBD_COMPOSITE_USE_IAD                         0U
 #define USBD_DEVICE_FRAMEWORK_BUILDER_ENABLED          1U
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
 
-/* USER CODE END ET */
+#define USB_SIZ_STRING_SERIAL                          0x06U
+
+#define USB_DESC_TYPE_INTERFACE                        0x04U
+#define USB_DESC_TYPE_ENDPOINT                         0x05U
+#define USB_DESC_TYPE_CONFIGURATION                    0x02U
+#define USB_DESC_TYPE_IAD                              0x0BU
+#define USB_DESC_TYPE_STRING                           0x03U
+
+#define USBD_EP_TYPE_CTRL                              0x00U
+#define USBD_EP_TYPE_ISOC                              0x01U
+#define USBD_EP_TYPE_BULK                              0x02U
+#define USBD_EP_TYPE_INTR                              0x03U
+
+#define USBD_FULL_SPEED                                0x00U
+#define USBD_HIGH_SPEED                                0x01U
+
+#define USB_BCDUSB                                     0x0200U
+#define LANGUAGE_ID_MAX_LENGTH                         2U
+
+#define USBD_IDX_MFC_STR                               0x01U
+#define USBD_IDX_PRODUCT_STR                           0x02U
+#define USBD_IDX_SERIAL_STR                            0x03U
+#define USBD_IDX_MSFOS_STR                             0xEEU
+
+#ifndef USBD_MAX_EP0_SIZE
+#define USBD_MAX_EP0_SIZE                              64U
+#endif
+
+#ifndef USBD_STRING_FRAMEWORK_MAX_LENGTH
+#define USBD_STRING_FRAMEWORK_MAX_LENGTH               512U
+#endif
+
+/* Vendor ID */
+#ifndef USBD_VID
+#define USBD_VID                                       0x0483U
+#endif
+
+/* Product ID */
+#ifndef USBD_PID
+#define USBD_PID                                       0x5744U
+#endif
+
+#ifndef USBD_LANGID_STRING
+#define USBD_LANGID_STRING                             1033U
+#endif
+
+#ifndef USBD_MANUFACTURER_STRING
+#define USBD_MANUFACTURER_STRING                       "STMicroelectronics"
+#endif
+
+#ifndef USBD_PRODUCT_STRING
+#define USBD_PRODUCT_STRING                            "Multi_Sensor_Streaming"
+#endif
+
+/* This is the maximum supported configuration descriptor size
+ User may redefine this value in order to optimize */
+#ifndef USBD_FRAMEWORK_MAX_DESC_SZ
+#define USBD_FRAMEWORK_MAX_DESC_SZ                     200U
+#endif /* USBD_FRAMEWORK_MAX_DESC_SZ */
+
+#ifndef USBD_CONFIG_STR_DESC_IDX
+#define USBD_CONFIG_STR_DESC_IDX                       0U
+#endif /* USBD_CONFIG_STR_DESC_IDX */
+
+#ifndef USBD_CONFIG_BMATTRIBUTES
+#define USBD_CONFIG_BMATTRIBUTES                       0xC0U
+#endif /* USBD_CONFIG_BMATTRIBUTES */
+
+/* Exported types ------------------------------------------------------------*/
 
 /* Enum Class Type */
 typedef enum
@@ -167,82 +230,12 @@ typedef struct
 } __PACKED USBD_DevQualiDescTypedef;
 
 /* Private defines -----------------------------------------------------------*/
-/* USER CODE BEGIN Private_defines */
-
-/* USER CODE END Private_defines */
 
 /* Exported functions prototypes ---------------------------------------------*/
-/* USER CODE BEGIN EFP */
 
-/* USER CODE END EFP */
-
-uint8_t* USBD_Get_Device_FS_Descriptor(ULONG *Length);
-uint8_t* USBD_Get_StringDescription_Descriptor(ULONG *Length);
-uint8_t* USBD_Get_Language_Id_Descriptor(ULONG *Length);
-
-/* Private defines -----------------------------------------------------------*/
-/* USER CODE BEGIN Private_defines */
-
-/* USER CODE END Private_defines */
-
-#define USBD_VID                                       1155
-#define USBD_PID                                       22339
-#define USBD_LANGID_STRING                             1033
-#define USBD_MANUFACTURER_STRING                       "STMicroelectronics"
-#define USBD_PRODUCT_STRING                            "Multi_Sensor_Streaming"
-
-#define         DEVICE_ID1          (0x0BFA0700)//(0x1FFF7590)
-#define         DEVICE_ID2          (0x0BFA0704)//(0x1FFF7594)
-#define         DEVICE_ID3          (0x0BFA0708)//(0x1FFF7598)
-
-#define  USB_SIZ_STRING_SERIAL      0x6// 0x09//0x1A
-
-#define USB_DESC_TYPE_INTERFACE                        0x04U
-#define USB_DESC_TYPE_ENDPOINT                         0x05U
-#define USB_DESC_TYPE_CONFIGURATION                    0x02U
-#define USB_DESC_TYPE_IAD                              0x0BU
-#define USB_DESC_TYPE_STRING                           0x03U
-
-#define USBD_EP_TYPE_CTRL                              0x00U
-#define USBD_EP_TYPE_ISOC                              0x01U
-#define USBD_EP_TYPE_BULK                              0x02U
-#define USBD_EP_TYPE_INTR                              0x03U
-
-#define USBD_FULL_SPEED                                0x00U
-#define USBD_HIGH_SPEED                                0x01U
-
-#define USB_BCDUSB                                     0x0200U
-#define LANGUAGE_ID_MAX_LENGTH                         2U
-
-#define USBD_IDX_MFC_STR                               0x01U
-#define USBD_IDX_PRODUCT_STR                           0x02U
-#define USBD_IDX_SERIAL_STR                            0x03U
-#define USBD_IDX_MSFOS_STR                             0xEEU
-#define USBD_MAX_EP0_SIZE                              64U
-
-#define USBD_STRING_FRAMEWORK_MAX_LENGTH               512U
-
-#define  USB_DESC_TYPE_OS_FEATURE_EXT_PROPERTIES      4
-#define  USB_DESC_TYPE_OS_FEATURE_EXT_COMPAT_ID       5
-
-/* This is the maximum supported configuration descriptor size
- User may redefine this value in order to optima */
-#ifndef USBD_FRAMEWORK_MAX_DESC_SZ
-#define USBD_FRAMEWORK_MAX_DESC_SZ                    200U
-#endif /* USBD_FRAMEWORK_MAX_DESC_SZ */
-
-#ifndef USBD_CONFIG_STR_DESC_IDX
-#define USBD_CONFIG_STR_DESC_IDX                      0U
-#endif /* USBD_CONFIG_STR_DESC_IDX */
-
-#ifndef USBD_CONFIG_BMATTRIBUTES
-#define USBD_CONFIG_BMATTRIBUTES                      0xC0U
-#endif /* USBD_CONFIG_BMATTRIBUTES */
-
-/* Private macro -----------------------------------------------------------*/
-/* USER CODE BEGIN Private_macro */
-
-/* USER CODE END Private_macro */
+uint8_t *USBD_Get_Device_Framework_Speed(ULONG *length);
+uint8_t *USBD_Get_StringDescription_Framework(ULONG *length);
+uint8_t *USBD_Get_Language_Id_Framework(ULONG *length);
 
 #ifdef __cplusplus
 }

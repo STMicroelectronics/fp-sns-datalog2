@@ -49,6 +49,7 @@ inline uint8_t ILog_Controller_save_config(ILog_Controller_t *_this);
 inline uint8_t ILog_Controller_start_log(ILog_Controller_t *_this, uint32_t interface);
 inline uint8_t ILog_Controller_stop_log(ILog_Controller_t *_this);
 inline uint8_t ILog_Controller_set_time(ILog_Controller_t *_this, const char *datetime);
+inline uint8_t ILog_Controller_switch_bank(ILog_Controller_t *_this);
 
 #ifdef __cplusplus
 }

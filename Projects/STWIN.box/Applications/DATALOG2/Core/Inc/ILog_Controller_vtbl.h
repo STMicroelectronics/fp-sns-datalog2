@@ -46,6 +46,7 @@ struct _ILog_Controller_vtbl
   uint8_t (*log_controller_start_log)(ILog_Controller_t * _this, uint32_t interface);
   uint8_t (*log_controller_stop_log)(ILog_Controller_t * _this);
   uint8_t (*log_controller_set_time)(ILog_Controller_t * _this, const char *datetime);
+  uint8_t (*log_controller_switch_bank)(ILog_Controller_t * _this);
 };
 
 struct _ILog_Controller_t
@@ -72,6 +73,10 @@ inline uint8_t ILog_Controller_stop_log(ILog_Controller_t *_this)
 inline uint8_t ILog_Controller_set_time(ILog_Controller_t *_this, const char *datetime)
 {
   return _this->vptr->log_controller_set_time(_this, datetime);
+}
+inline uint8_t ILog_Controller_switch_bank(ILog_Controller_t *_this)
+{
+  return _this->vptr->log_controller_switch_bank(_this);
 }
 
 #ifdef __cplusplus

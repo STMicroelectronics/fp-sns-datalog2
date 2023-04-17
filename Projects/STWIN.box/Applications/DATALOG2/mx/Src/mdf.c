@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics..
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -80,7 +80,7 @@ void MX_ADF1_Init(void)
   AdfFilterConfig0.Delay = 0;
   AdfFilterConfig0.CicMode = MDF_ONE_FILTER_SINC5;
   AdfFilterConfig0.DecimationRatio = 16;
-  AdfFilterConfig0.Gain = 1;
+  AdfFilterConfig0.Gain = 7;
   AdfFilterConfig0.ReshapeFilter.Activation = ENABLE;
   AdfFilterConfig0.ReshapeFilter.DecimationRatio = MDF_RSF_DECIMATION_RATIO_4;
   AdfFilterConfig0.HighPassFilter.Activation = ENABLE;
@@ -88,7 +88,7 @@ void MX_ADF1_Init(void)
   AdfFilterConfig0.SoundActivity.Activation = DISABLE;
   AdfFilterConfig0.AcquisitionMode = MDF_MODE_SYNC_CONT;
   AdfFilterConfig0.FifoThreshold = MDF_FIFO_THRESHOLD_NOT_EMPTY;
-  AdfFilterConfig0.DiscardSamples = 0;
+  AdfFilterConfig0.DiscardSamples = 255;
   AdfFilterConfig0.SnapshotFormat = MDF_SNAPSHOT_23BITS;
   AdfFilterConfig0.Trigger.Source = MDF_FILTER_TRIG_TRGO;
   AdfFilterConfig0.Trigger.Edge = MDF_FILTER_TRIG_RISING_EDGE;

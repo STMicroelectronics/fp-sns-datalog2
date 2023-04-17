@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press;1
+  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press;1
   *
   * Created by: DTDL2PnPL_cGen version 1.0.0
   *
@@ -37,7 +37,6 @@
 
 #include "Ilps22qs_Press_PnPL.h"
 #include "Ilps22qs_Press_PnPL_vtbl.h"
-
 
 static const IPnPLComponent_vtbl sIlps22qs_Press_PnPL_CompIF_vtbl =
 {
@@ -180,6 +179,8 @@ uint8_t Ilps22qs_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   char *temp_s = "";
   ilps22qs_press_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "ilps22qs_press.data_type", temp_s);
+  ilps22qs_press_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "ilps22qs_press.sensor_annotation", temp_s);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "ilps22qs_press.c_type", COMP_TYPE_SENSOR);
@@ -268,6 +269,11 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
       int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "ilps22qs_press.samples_per_ts.val");
       ilps22qs_press_set_samples_per_ts__val(samples_per_ts);
     }
+  }
+  if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.sensor_annotation"))
+  {
+    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ilps22qs_press.sensor_annotation");
+    ilps22qs_press_set_sensor_annotation(sensor_annotation);
   }
   json_value_free(tempJSON);
   return ret;

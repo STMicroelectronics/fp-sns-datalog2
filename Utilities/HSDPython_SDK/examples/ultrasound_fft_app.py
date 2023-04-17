@@ -23,18 +23,19 @@ import sys
 from PySide6.QtWidgets import QApplication
 from PySide6 import QtCore
 
-from st_hsdatalog.HSD_GUI.MainWindow import MainWindow
+from st_hsdatalog.HSD_GUI.HSD_MainWindow import HSD_MainWindow
 
 
 def main():
     QApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     
-    mainWindow = MainWindow(app)
+    mainWindow = HSD_MainWindow(app)
     mainWindow.setAppTitle("Ultrasound FFT Application")
     mainWindow.setAppCredits("Ultrasound FFT Application")
     mainWindow.setWindowTitle("Ultrasound FFT")
     mainWindow.setAppVersion("v1.0.0")
+    mainWindow.setComponentsConfigWidth(500)
     mainWindow.show()
     app.setAttribute(QtCore.Qt.AA_Use96Dpi)
     app.exec()

@@ -37,8 +37,6 @@
 
 #include "Log_Controller_PnPL.h"
 #include "Log_Controller_PnPL_vtbl.h"
-#include "ILog_Controller.h"
-#include "ILog_Controller_vtbl.h"
 
 static const IPnPLComponent_vtbl sLog_Controller_PnPL_CompIF_vtbl =
 {
@@ -98,7 +96,7 @@ char *Log_Controller_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 
 uint8_t Log_Controller_PnPL_vtblGetNCommands(IPnPLComponent_t *_this)
 {
-  return 4;
+  return 5;
 }
 
 char *Log_Controller_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
@@ -116,6 +114,9 @@ char *Log_Controller_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
     break;
   case 3:
     return "log_controller*set_time";
+    break;
+  case 4:
+    return "log_controller*switch_bank";
     break;
   }
   return 0;
@@ -183,6 +184,10 @@ uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *s
   {
     const char *datetime = json_object_dotget_string(tempJSONObject, "log_controller*set_time.datetime");
     log_controller_set_time(p_if_owner->cmdIF, datetime);
+  }
+  if (json_object_dothas_value(tempJSONObject, "log_controller*switch_bank"))
+  {
+    log_controller_switch_bank(p_if_owner->cmdIF);
   }
   json_value_free(tempJSON);
   return 0;

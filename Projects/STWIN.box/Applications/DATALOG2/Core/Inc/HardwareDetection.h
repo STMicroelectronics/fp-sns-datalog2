@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file    app_model.h
+  * @file    HardwareDetection.h
   * @author  SRA
-  * @brief   App Application Model and PnPL Components APIs
+  * @brief   
   ******************************************************************************
   * @attention
   *

@@ -125,7 +125,8 @@ static UtilTask_t sTaskObj;
 /**
  * The class object.
  */
-static const UtilTaskClass_t sTheClass = {
+static const UtilTaskClass_t sTheClass =
+{
     /* Class virtual table */
     {
         UtilTask_vtblHardwareInit,
@@ -134,17 +135,14 @@ static const UtilTaskClass_t sTheClass = {
         UtilTask_vtblHandleError,
         UtilTask_vtblOnEnterTaskControlLoop,
         UtilTask_vtblForceExecuteStep,
-        UtilTask_vtblOnEnterPowerMode
-    },
+        UtilTask_vtblOnEnterPowerMode },
 
     /* class (PM_STATE, ExecuteStepFunc) map */
     {
         UtilTaskExecuteStepState1,
         NULL,
         UtilTaskExecuteStepSensorsActive,
-        UtilTaskExecuteStepStarting,
-    }
-};
+        UtilTaskExecuteStepStarting, } };
 
 /* Public API definition */
 /*************************/
@@ -163,7 +161,6 @@ AManagedTaskEx* UtilTaskAlloc(const void *p_mx_drv_cfg)
 
   return (AManagedTaskEx*) &sTaskObj;
 }
-
 
 /* AManagedTask virtual functions definition */
 /*********************************************/
@@ -235,7 +232,7 @@ VOID **pvStackStart,
   /* create the software timer*/
   if(TX_SUCCESS
       != tx_timer_create(&p_obj->auto_low_power_timer, "UTIL_T", UtilTaskSwTimerCallbackFunction, 0, AMT_MS_TO_TICKS(UTIL_TASK_CFG_LP_TIMER_PERIOD_MS), 0,
-                         TX_NO_ACTIVATE))
+      TX_NO_ACTIVATE))
   {
     res = SYS_UTIL_TASK_INIT_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
@@ -269,7 +266,10 @@ sys_error_code_t UtilTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPower
     /* turn on the USER LED */
     HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_SET);
 
-    struct utilMessage_t msg = { .msgId = APP_MESSAGE_ID_UTIL, .nCmdID = UTIL_CMD_ID_START_LP_TIMER };
+    struct utilMessage_t msg =
+    {
+        .msgId = APP_MESSAGE_ID_UTIL,
+        .nCmdID = UTIL_CMD_ID_START_LP_TIMER };
 
     if(TX_SUCCESS != tx_queue_front_send(&p_obj->in_queue, &msg, AMT_MS_TO_TICKS(150)))
     {
@@ -331,7 +331,9 @@ sys_error_code_t UtilTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowerMode
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   UtilTask_t *p_obj = (UtilTask_t*) _this;
 
-  struct utilMessage_t msg = { .msgId = APP_REPORT_ID_FORCE_STEP };
+  struct utilMessage_t msg =
+  {
+      .msgId = APP_REPORT_ID_FORCE_STEP };
 
   if(active_power_mode == E_POWER_MODE_STATE1)
   {
@@ -370,7 +372,9 @@ static sys_error_code_t UtilTaskExecuteStepState1(AManagedTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   UtilTask_t *p_obj = (UtilTask_t*) _this;
 
-  struct utilMessage_t msg = { 0 };
+  struct utilMessage_t msg =
+  {
+      0 };
 
   AMTExSetInactiveState((AManagedTaskEx*) _this, TRUE);
   if(TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &msg, TX_WAIT_FOREVER))
@@ -472,7 +476,9 @@ void Util_USR_EXTI_Callback(uint16_t pin)
     if(pin == USR_BUTTON_Pin)
     {
       /* generate the system event.*/
-      SysEvent evt = { .nRawEvent = SYS_PM_MAKE_EVENT(SYS_PM_EVT_SRC_PB, SYS_PM_EVT_PARAM_SHORT_PRESS) };
+      SysEvent evt =
+      {
+          .nRawEvent = SYS_PM_MAKE_EVENT(SYS_PM_EVT_SRC_PB, SYS_PM_EVT_PARAM_SHORT_PRESS) };
       SysPostPowerModeEvent(evt);
       /* don't check the error code. For the moment we assume that we can loose a USER BUTTON PRessed event.*/
     }

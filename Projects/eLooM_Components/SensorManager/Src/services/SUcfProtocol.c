@@ -1,28 +1,27 @@
 /**
-  ******************************************************************************
-  * @file    SUcfProtocol.c
-  * @author  SRA - MCD
-  * @brief
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    SUcfProtocol.c
+ * @author  SRA - MCD
+ * @brief
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ *
+ ******************************************************************************
+ */
 
 #include "services/SUcfProtocol.h"
 #include "tx_api.h"
 #include <stdio.h>
 
 #define COMPRESSED_UCF_LINE_WIDTH  4U
-
 
 sys_error_code_t UCFP_Init(SUcfProtocol_t *_this, ISensorLL_t *sensor_ll)
 {
@@ -52,7 +51,7 @@ sys_error_code_t UCFP_LoadCompressedUcf(SUcfProtocol_t *_this, const char *p_ucf
   ucf_data[2] = '\0';
   ucf_data[3] = '\0';
 
-  for (i = 0; i < ucf_lines; i++)
+  for(i = 0; i < ucf_lines; i++)
   {
     if(*p_ucf == 'W' || *p_ucf == 'w')
     {
@@ -62,7 +61,7 @@ sys_error_code_t UCFP_LoadCompressedUcf(SUcfProtocol_t *_this, const char *p_ucf
       ucf_data[1] = *(p_ucf++);
       ucf_data[2] = *(p_ucf++);
 
-      uint16_t ms = (uint16_t)strtol(ucf_data, NULL, 16);
+      uint16_t ms = (uint16_t) strtol(ucf_data, NULL, 16);
 
       tx_thread_sleep(ms);
 
@@ -73,11 +72,11 @@ sys_error_code_t UCFP_LoadCompressedUcf(SUcfProtocol_t *_this, const char *p_ucf
       /* Write command */
       ucf_reg[0] = *(p_ucf++);
       ucf_reg[1] = *(p_ucf++);
-      reg = (uint8_t)strtol(ucf_reg, NULL, 16);
+      reg = (uint8_t) strtol(ucf_reg, NULL, 16);
 
       ucf_data[0] = *(p_ucf++);
       ucf_data[1] = *(p_ucf++);
-      data = (uint8_t)strtol(ucf_data, NULL, 16);
+      data = (uint8_t) strtol(ucf_data, NULL, 16);
 
       res = ISensorWriteReg(_this->sensor_ll, reg, &data, 1);
       if(SYS_IS_ERROR_CODE(res))
@@ -106,35 +105,38 @@ sys_error_code_t UCFP_LoadUcf(SUcfProtocol_t *_this, const char *p_ucf, uint32_t
   return res;
 }
 
-
-sys_error_code_t UCFP_LoadUcfHeader(SUcfProtocol_t *_this, const ucf_line_ispu_t *p_ucf, uint32_t size)
+sys_error_code_t UCFP_LoadUcfHeader(SUcfProtocol_t *_this, const ucf_line_ext_t *p_ucf, uint32_t size)
 {
   assert_param(_this != NULL);
   assert_param(p_ucf != NULL);
   assert_param(size > 0U);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  uint32_t ucf_lines = size / sizeof(ucf_line_ispu_t);
+  uint32_t ucf_lines = size / sizeof(ucf_line_ext_t);
   uint32_t i;
 
   for(i = 0; i < ucf_lines; i++)
   {
-    if(p_ucf[i].op == MEMS_UCF_OP_WRITE)
+    switch(p_ucf[i].op)
     {
-      res = ISensorWriteReg(_this->sensor_ll, p_ucf[i].address, &p_ucf[i].data, 1);
-      if(SYS_IS_ERROR_CODE(res))
-      {
+      case MEMS_UCF_OP_WRITE:
+        res = ISensorWriteReg(_this->sensor_ll, p_ucf[i].address, &p_ucf[i].data, 1);
+        if(SYS_IS_ERROR_CODE(res))
+        {
+          break;
+        }
         break;
-      }
-    }
-    else if(p_ucf[i].op == MEMS_UCF_OP_DELAY)
-    {
-      tx_thread_sleep(p_ucf[i].data);
-    }
-    else
-    {
-      res = SYS_INVALID_PARAMETER_ERROR_CODE;
-      break;
+      case MEMS_UCF_OP_DELAY:
+        tx_thread_sleep(p_ucf[i].data);
+        break;
+      case MEMS_UCF_OP_READ:
+      case MEMS_UCF_OP_POLL_SET:
+      case MEMS_UCF_OP_POLL_RESET:
+        res = SYS_NOT_IMPLEMENTED_ERROR_CODE;
+        break;
+      default:
+        res = SYS_INVALID_PARAMETER_ERROR_CODE;
+        break;
     }
   }
 
@@ -147,15 +149,15 @@ sys_error_code_t UCFP_LoadUcfHeader(SUcfProtocol_t *_this, const ucf_line_ispu_t
   return res;
 }
 
-
-sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, char *p_compressed_ucf, uint32_t compressed_ucf_size, uint32_t *compressed_ucf_size_actual)
+sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, char *p_compressed_ucf, uint32_t compressed_ucf_size,
+                                       uint32_t *compressed_ucf_size_actual)
 {
   char *p_ch = NULL;
   p_compressed_ucf[0] = 0;
   uint32_t i = 0;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  p_ch = strtok((char*)p_ucf, " -,_\r\n");
+  p_ch = strtok((char*) p_ucf, " -,_\r\n");
   while(p_ch != NULL)
   {
     if(i >= compressed_ucf_size)
@@ -177,7 +179,7 @@ sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, cha
       p_ch = strtok(NULL, " -,_\r\n");
       uint16_t number = atol(p_ch);
       char tmp[10];
-      sprintf(tmp, "W%03d", number);  /* Example --> W005 */
+      sprintf(tmp, "W%03d", number); /* Example --> W005 */
       p_compressed_ucf[i++] = tmp[0];
       p_compressed_ucf[i++] = tmp[1];
       p_compressed_ucf[i++] = tmp[2];
@@ -190,7 +192,6 @@ sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, cha
 
   return res;
 }
-
 
 sys_error_code_t UCFP_GetUcf(const char *p_compressed_ucf, uint32_t compressed_ucf_size, char *p_ucf, uint32_t ucf_size, uint32_t *ucf_size_actual)
 {

@@ -37,7 +37,9 @@
 #include "services/sysdebug.h"
 #include "STWIN.box_sd.h"
 #include "fx_stm32_sd_driver.h"
+#include "ux_user.h"
 #include "rtc.h"
+#include "HardwareDetection.h"
 
 /* USER defines --------------------------------------------------------------*/
 #define SYS_DEBUGF(level, message)                SYS_DEBUGF3(SYS_DBG_DT, level, message)
@@ -70,6 +72,8 @@ uint8_t ism330is_acc_comp_init(void)
   ism330is_acc_model.sensorStatus = SMSensorGetStatus(id);
   ism330is_acc_model.streamParams.stream_id = -1;
   ism330is_acc_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "[EXTERN]\0";
+  ism330is_acc_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   ism330is_acc_set_samples_per_ts__val(0);
@@ -169,6 +173,13 @@ uint8_t ism330is_acc_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
+uint8_t ism330is_acc_get_sensor_annotation(char **value)
+{
+  uint16_t id = ism330is_acc_model.id;
+  ism330is_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = ism330is_acc_model.annotation;
+  return 0;
+}
 uint8_t ism330is_acc_get_stream_id(int8_t *value)
 {
   *value = ism330is_acc_model.streamParams.stream_id;
@@ -234,6 +245,11 @@ uint8_t ism330is_acc_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t ism330is_acc_set_sensor_annotation(const char *value)
+{
+  strcpy(ism330is_acc_model.annotation, value);
+  return 0;
+}
 
 /* ISM330IS_GYRO PnPL Component ----------------------------------------------*/
 static SensorModel_t ism330is_gyro_model;
@@ -249,6 +265,8 @@ uint8_t ism330is_gyro_comp_init(void)
   ism330is_gyro_model.sensorStatus = SMSensorGetStatus(id);
   ism330is_gyro_model.streamParams.stream_id = -1;
   ism330is_gyro_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "[EXTERN]\0";
+  ism330is_gyro_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   ism330is_gyro_set_samples_per_ts__val(0);
@@ -359,7 +377,13 @@ uint8_t ism330is_gyro_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
-
+uint8_t ism330is_gyro_get_sensor_annotation(char **value)
+{
+  uint16_t id = ism330is_gyro_model.id;
+  ism330is_gyro_model.sensorStatus = SMSensorGetStatus(id);
+  *value = ism330is_gyro_model.annotation;
+  return 0;
+}
 uint8_t ism330is_gyro_get_stream_id(int8_t *value)
 {
   *value = ism330is_gyro_model.streamParams.stream_id;
@@ -429,6 +453,11 @@ uint8_t ism330is_gyro_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t ism330is_gyro_set_sensor_annotation(const char *value)
+{
+  strcpy(ism330is_gyro_model.annotation, value);
+  return 0;
+}
 
 /* ISM330IS_ISPU PnPL Component ----------------------------------------------*/
 static SensorModel_t ism330is_ispu_model;
@@ -444,6 +473,8 @@ uint8_t ism330is_ispu_comp_init(void)
   ism330is_ispu_model.sensorStatus = SMSensorGetStatus(id);
   ism330is_ispu_model.streamParams.stream_id = -1;
   ism330is_ispu_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "[EXTERN]\0";
+  ism330is_ispu_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   ism330is_ispu_set_samples_per_ts__val(0);
@@ -516,6 +547,13 @@ uint8_t ism330is_ispu_get_ioffset(float *value)
   *value = ism330is_ispu_model.streamParams.ioffset;
   return 0;
 }
+uint8_t ism330is_ispu_get_sensor_annotation(char **value)
+{
+  uint16_t id = ism330is_ispu_model.id;
+  ism330is_ispu_model.sensorStatus = SMSensorGetStatus(id);
+  *value = ism330is_ispu_model.annotation;
+  return 0;
+}
 uint8_t ism330is_ispu_get_stream_id(int8_t *value)
 {
   *value = ism330is_ispu_model.streamParams.stream_id;
@@ -556,7 +594,11 @@ uint8_t ism330is_ispu_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
-
+uint8_t ism330is_ispu_set_sensor_annotation(const char *value)
+{
+  strcpy(ism330is_ispu_model.annotation, value);
+  return 0;
+}
 uint8_t ism330is_ispu_load_file(IIsm330is_Ispu_t *ifn, const char *ucf_data, int32_t ucf_size, const char *output_data, int32_t output_size)
 {
     /* USER Code */
@@ -581,6 +623,8 @@ uint8_t iis3dwb_acc_comp_init(void)
   iis3dwb_acc_model.sensorStatus = SMSensorGetStatus(id);
   iis3dwb_acc_model.streamParams.stream_id = -1;
   iis3dwb_acc_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  iis3dwb_acc_set_sensor_annotation(default_notes);
 #if (HSD_USE_DUMMY_DATA == 1)
   iis3dwb_acc_set_samples_per_ts__val(0);
 #else
@@ -679,6 +723,13 @@ uint8_t iis3dwb_acc_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
+uint8_t iis3dwb_acc_get_sensor_annotation(char **value)
+{
+  uint16_t id = iis3dwb_acc_model.id;
+  iis3dwb_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = iis3dwb_acc_model.annotation;
+  return 0;
+}
 uint8_t iis3dwb_acc_get_stream_id(int8_t *value)
 {
   *value = iis3dwb_acc_model.streamParams.stream_id;
@@ -728,6 +779,11 @@ uint8_t iis3dwb_acc_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t iis3dwb_acc_set_sensor_annotation(const char *value)
+{
+  strcpy(iis3dwb_acc_model.annotation, value);
+  return 0;
+}
 
 /* IIS2MDC_MAG PnPL Component ------------------------------------------------*/
 static SensorModel_t iis2mdc_mag_model;
@@ -743,6 +799,8 @@ uint8_t iis2mdc_mag_comp_init(void)
   iis2mdc_mag_model.sensorStatus = SMSensorGetStatus(id);
   iis2mdc_mag_model.streamParams.stream_id = -1;
   iis2mdc_mag_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  iis2mdc_mag_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   iis2mdc_mag_set_samples_per_ts__val(0);
@@ -842,6 +900,13 @@ uint8_t iis2mdc_mag_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
+uint8_t iis2mdc_mag_get_sensor_annotation(char **value)
+{
+  uint16_t id = iis2mdc_mag_model.id;
+  iis2mdc_mag_model.sensorStatus = SMSensorGetStatus(id);
+  *value = iis2mdc_mag_model.annotation;
+  return 0;
+}
 uint8_t iis2mdc_mag_get_stream_id(int8_t *value)
 {
   *value = iis2mdc_mag_model.streamParams.stream_id;
@@ -892,6 +957,11 @@ uint8_t iis2mdc_mag_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t iis2mdc_mag_set_sensor_annotation(const char *value)
+{
+  strcpy(iis2mdc_mag_model.annotation, value);
+  return 0;
+}
 
 /* IMP23ABSU_MIC PnPL Component ----------------------------------------------*/
 static SensorModel_t imp23absu_mic_model;
@@ -907,6 +977,8 @@ uint8_t imp23absu_mic_comp_init(void)
   imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
   imp23absu_mic_model.streamParams.stream_id = -1;
   imp23absu_mic_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  imp23absu_mic_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   imp23absu_mic_set_samples_per_ts__val(0);
@@ -1006,6 +1078,13 @@ uint8_t imp23absu_mic_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
+uint8_t imp23absu_mic_get_sensor_annotation(char **value)
+{
+  uint16_t id = imp23absu_mic_model.id;
+  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
+  *value = imp23absu_mic_model.annotation;
+  return 0;
+}
 uint8_t imp23absu_mic_get_stream_id(int8_t *value)
 {
   *value = imp23absu_mic_model.streamParams.stream_id;
@@ -1056,6 +1135,11 @@ uint8_t imp23absu_mic_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t imp23absu_mic_set_sensor_annotation(const char *value)
+{
+  strcpy(imp23absu_mic_model.annotation, value);
+  return 0;
+}
 
 // ISM330DHCX_ACC PnPL Component ==============================================
 static SensorModel_t ism330dhcx_acc_model;
@@ -1071,6 +1155,8 @@ uint8_t ism330dhcx_acc_comp_init(void)
   ism330dhcx_acc_model.sensorStatus = SMSensorGetStatus(id);
   ism330dhcx_acc_model.streamParams.stream_id = -1;
   ism330dhcx_acc_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  ism330dhcx_acc_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   ism330dhcx_acc_set_samples_per_ts__val(0);
@@ -1168,6 +1254,13 @@ uint8_t ism330dhcx_acc_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
+uint8_t ism330dhcx_acc_get_sensor_annotation(char **value)
+{
+  uint16_t id = ism330dhcx_acc_model.id;
+  ism330dhcx_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = ism330dhcx_acc_model.annotation;
+  return 0;
+}
 uint8_t ism330dhcx_acc_get_stream_id(int8_t *value)
 {
   *value = ism330dhcx_acc_model.streamParams.stream_id;
@@ -1240,6 +1333,11 @@ uint8_t ism330dhcx_acc_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t ism330dhcx_acc_set_sensor_annotation(const char *value)
+{
+  strcpy(ism330dhcx_acc_model.annotation, value);
+  return 0;
+}
 
 // ISM330DHCX_GYRO PnPL Component ==============================================
 static SensorModel_t ism330dhcx_gyro_model;
@@ -1255,6 +1353,8 @@ uint8_t ism330dhcx_gyro_comp_init(void)
   ism330dhcx_gyro_model.sensorStatus = SMSensorGetStatus(id);
   ism330dhcx_gyro_model.streamParams.stream_id = -1;
   ism330dhcx_gyro_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  ism330dhcx_gyro_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   ism330dhcx_gyro_set_samples_per_ts__val(0);
@@ -1352,6 +1452,13 @@ uint8_t ism330dhcx_gyro_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
+uint8_t ism330dhcx_gyro_get_sensor_annotation(char **value)
+{
+  uint16_t id = ism330dhcx_gyro_model.id;
+  ism330dhcx_gyro_model.sensorStatus = SMSensorGetStatus(id);
+  *value = ism330dhcx_gyro_model.annotation;
+  return 0;
+}
 uint8_t ism330dhcx_gyro_get_stream_id(int8_t *value)
 {
   *value = ism330dhcx_gyro_model.streamParams.stream_id;
@@ -1423,6 +1530,11 @@ uint8_t ism330dhcx_gyro_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t ism330dhcx_gyro_set_sensor_annotation(const char *value)
+{
+  strcpy(ism330dhcx_gyro_model.annotation, value);
+  return 0;
+}
 
 // ISM330DHCX_MLC PnPL Component ==============================================
 static SensorModel_t ism330dhcx_mlc_model;
@@ -1438,6 +1550,8 @@ uint8_t ism330dhcx_mlc_comp_init(void)
   ism330dhcx_mlc_model.sensorStatus = SMSensorGetStatus(id);
   ism330dhcx_mlc_model.streamParams.stream_id = -1;
   ism330dhcx_mlc_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  ism330dhcx_mlc_set_sensor_annotation(default_notes);
   /* USER Code */
   ism330dhcx_mlc_set_samples_per_ts__val(1);
   app_model.s_models[id] = &ism330dhcx_mlc_model;
@@ -1508,6 +1622,13 @@ uint8_t ism330dhcx_mlc_get_sd_dps(int32_t *value)
   *value = ism330dhcx_mlc_model.streamParams.sd_dps;
   return 0;
 }
+uint8_t ism330dhcx_mlc_get_sensor_annotation(char **value)
+{
+  uint16_t id = ism330dhcx_mlc_model.id;
+  ism330dhcx_mlc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = ism330dhcx_mlc_model.annotation;
+  return 0;
+}
 uint8_t ism330dhcx_mlc_get_stream_id(int8_t *value)
 {
   *value = ism330dhcx_mlc_model.streamParams.stream_id;
@@ -1548,6 +1669,11 @@ uint8_t ism330dhcx_mlc_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t ism330dhcx_mlc_set_sensor_annotation(const char *value)
+{
+  strcpy(ism330dhcx_mlc_model.annotation, value);
+  return 0;
+}
 uint8_t ism330dhcx_mlc_load_file(IIsm330dhcx_Mlc_t *ifn, const char *ucf_data, int32_t ucf_size)
 {
   IIsm330dhcx_Mlc_load_file(ifn, ucf_data, ucf_size);
@@ -1571,6 +1697,8 @@ uint8_t iis2dlpc_acc_comp_init(void)
   iis2dlpc_acc_model.sensorStatus = SMSensorGetStatus(id);
   iis2dlpc_acc_model.streamParams.stream_id = -1;
   iis2dlpc_acc_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  iis2dlpc_acc_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   iis2dlpc_acc_set_samples_per_ts__val(0);
@@ -1670,6 +1798,13 @@ uint8_t iis2dlpc_acc_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
+uint8_t iis2dlpc_acc_get_sensor_annotation(char **value)
+{
+  uint16_t id = iis2dlpc_acc_model.id;
+  iis2dlpc_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = iis2dlpc_acc_model.annotation;
+  return 0;
+}
 uint8_t iis2dlpc_acc_get_stream_id(int8_t *value)
 {
   *value = iis2dlpc_acc_model.streamParams.stream_id;
@@ -1729,6 +1864,11 @@ uint8_t iis2dlpc_acc_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t iis2dlpc_acc_set_sensor_annotation(const char *value)
+{
+  strcpy(iis2dlpc_acc_model.annotation, value);
+  return 0;
+}
 
 /* STTS22H_TEMP PnPL Component -----------------------------------------------*/
 static SensorModel_t stts22h_temp_model;
@@ -1744,6 +1884,8 @@ uint8_t stts22h_temp_comp_init(void)
   stts22h_temp_model.sensorStatus = SMSensorGetStatus(id);
   stts22h_temp_model.streamParams.stream_id = -1;
   stts22h_temp_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  stts22h_temp_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   stts22h_temp_set_samples_per_ts__val(0);
@@ -1843,6 +1985,13 @@ uint8_t stts22h_temp_get_data_type(char **value)
   *value = "float";
   return 0;
 }
+uint8_t stts22h_temp_get_sensor_annotation(char **value)
+{
+  uint16_t id = stts22h_temp_model.id;
+  stts22h_temp_model.sensorStatus = SMSensorGetStatus(id);
+  *value = stts22h_temp_model.annotation;
+  return 0;
+}
 uint8_t stts22h_temp_get_stream_id(int8_t *value)
 {
   *value = stts22h_temp_model.streamParams.stream_id;
@@ -1893,6 +2042,11 @@ uint8_t stts22h_temp_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t stts22h_temp_set_sensor_annotation(const char *value)
+{
+  strcpy(stts22h_temp_model.annotation, value);
+  return 0;
+}
 
 /* ILPS22QS_PRESS PnPL Component ---------------------------------------------*/
 static SensorModel_t ilps22qs_press_model;
@@ -1908,6 +2062,8 @@ uint8_t ilps22qs_press_comp_init(void)
   ilps22qs_press_model.sensorStatus = SMSensorGetStatus(id);
   ilps22qs_press_model.streamParams.stream_id = -1;
   ilps22qs_press_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  ilps22qs_press_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   ilps22qs_press_set_samples_per_ts__val(0);
@@ -2005,6 +2161,13 @@ uint8_t ilps22qs_press_get_data_type(char **value)
   *value = "float";
   return 0;
 }
+uint8_t ilps22qs_press_get_sensor_annotation(char **value)
+{
+  uint16_t id = ilps22qs_press_model.id;
+  ilps22qs_press_model.sensorStatus = SMSensorGetStatus(id);
+  *value = ilps22qs_press_model.annotation;
+  return 0;
+}
 uint8_t ilps22qs_press_get_stream_id(int8_t *value)
 {
   *value = ilps22qs_press_model.streamParams.stream_id;
@@ -2064,6 +2227,11 @@ uint8_t ilps22qs_press_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t ilps22qs_press_set_sensor_annotation(const char *value)
+{
+  strcpy(ilps22qs_press_model.annotation, value);
+  return 0;
+}
 
 /* IMP34DT05_MIC PnPL Component ----------------------------------------------*/
 static SensorModel_t imp34dt05_mic_model;
@@ -2079,6 +2247,8 @@ uint8_t imp34dt05_mic_comp_init(void)
   imp34dt05_mic_model.sensorStatus = SMSensorGetStatus(id);
   imp34dt05_mic_model.streamParams.stream_id = -1;
   imp34dt05_mic_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  imp34dt05_mic_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   imp34dt05_mic_set_samples_per_ts__val(0);
@@ -2176,6 +2346,13 @@ uint8_t imp34dt05_mic_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
+uint8_t imp34dt05_mic_get_sensor_annotation(char **value)
+{
+  uint16_t id = imp34dt05_mic_model.id;
+  imp34dt05_mic_model.sensorStatus = SMSensorGetStatus(id);
+  *value = imp34dt05_mic_model.annotation;
+  return 0;
+}
 uint8_t imp34dt05_mic_get_stream_id(int8_t *value)
 {
   *value = imp34dt05_mic_model.streamParams.stream_id;
@@ -2226,6 +2403,11 @@ uint8_t imp34dt05_mic_set_samples_per_ts__val(int32_t value)
   }
   return 0;
 }
+uint8_t imp34dt05_mic_set_sensor_annotation(const char *value)
+{
+  strcpy(imp34dt05_mic_model.annotation, value);
+  return 0;
+}
 
 /* IIS2ICLX_ACC PnPL Component -----------------------------------------------*/
 static SensorModel_t iis2iclx_acc_model;
@@ -2241,6 +2423,8 @@ uint8_t iis2iclx_acc_comp_init(void)
   iis2iclx_acc_model.sensorStatus = SMSensorGetStatus(id);
   iis2iclx_acc_model.streamParams.stream_id = -1;
   iis2iclx_acc_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  iis2iclx_acc_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
   iis2iclx_acc_set_samples_per_ts__val(0);
@@ -2338,6 +2522,13 @@ uint8_t iis2iclx_acc_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
+uint8_t iis2iclx_acc_get_sensor_annotation(char **value)
+{
+  uint16_t id = iis2iclx_acc_model.id;
+  iis2iclx_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = iis2iclx_acc_model.annotation;
+  return 0;
+}
 uint8_t iis2iclx_acc_get_stream_id(int8_t *value)
 {
   *value = iis2iclx_acc_model.streamParams.stream_id;
@@ -2395,6 +2586,11 @@ uint8_t iis2iclx_acc_set_samples_per_ts__val(int32_t value)
   {
     iis2iclx_acc_model.streamParams.spts = value;
   }
+  return 0;
+}
+uint8_t iis2iclx_acc_set_sensor_annotation(const char *value)
+{
+  strcpy(iis2iclx_acc_model.annotation, value);
   return 0;
 }
 
@@ -2564,64 +2760,12 @@ uint8_t log_controller_stop_log(ILog_Controller_t *ifn)
 }
 uint8_t log_controller_set_time(ILog_Controller_t *ifn, const char *datetime)
 {
-  char datetimeStr[3];
-
-  //internal input format: yyyyMMdd_hh_mm_ss
-
-  RTC_DateTypeDef sdate;
-  RTC_TimeTypeDef stime;
-
-  /** extract year string (only the last two digit). It will be necessary to add 2000*/
-  datetimeStr[0] = datetime[2];
-  datetimeStr[1] = datetime[3];
-  datetimeStr[2] = '\0';
-  sdate.Year = atoi(datetimeStr);
-
-  /** extract month string */
-  datetimeStr[0] = datetime[4];
-  datetimeStr[1] = datetime[5];
-  sdate.Month = atoi(datetimeStr);
-
-  /** extract day string */
-  datetimeStr[0] = datetime[6];
-  datetimeStr[1] = datetime[7];
-  sdate.Date = atoi(datetimeStr);
-
-  /** Week day initialization (not used)*/
-  sdate.WeekDay = RTC_WEEKDAY_MONDAY; //Not used
-
-  /** extract hour string */
-  datetimeStr[0] = datetime[9];
-  datetimeStr[1] = datetime[10];
-  stime.Hours = atoi(datetimeStr);
-
-  /** extract minute string */
-  datetimeStr[0] = datetime[12];
-  datetimeStr[1] = datetime[13];
-  stime.Minutes = atoi(datetimeStr);
-
-  /** extract second string */
-  datetimeStr[0] = datetime[15];
-  datetimeStr[1] = datetime[16];
-  stime.Seconds = atoi(datetimeStr);
-
-  /** not used */
-  //stime.TimeFormat = RTC_HOURFORMAT12_AM;
-  stime.SecondFraction = 0;
-  stime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-  stime.StoreOperation = RTC_STOREOPERATION_RESET;
-
-  if(HAL_RTC_SetTime(&hrtc, &stime, RTC_FORMAT_BIN) != HAL_OK)
-  {
-    while(1)
-      ;
-  }
-  if(HAL_RTC_SetDate(&hrtc, &sdate, RTC_FORMAT_BIN) != HAL_OK)
-  {
-    while(1)
-      ;
-  }
-
+  ILog_Controller_set_time(ifn, datetime);
+  return 0;
+}
+uint8_t log_controller_switch_bank(ILog_Controller_t *ifn)
+{
+  ILog_Controller_switch_bank(ifn);
   return 0;
 }
 
@@ -2987,6 +3131,9 @@ uint8_t firmware_info_comp_init(void)
 
   char default_alias[DEVICE_ALIAS_LENGTH] = "STWIN_BOX_001";
   firmware_info_set_alias(default_alias);
+
+  char default_mac_address[MAC_ADDRESS_LENGTH] = "00:00:00:00:00:00";
+  firmware_info_set_mac_address(default_mac_address);
   return 0;
 }
 
@@ -3007,7 +3154,7 @@ uint8_t firmware_info_get_fw_name(char **value)
 }
 uint8_t firmware_info_get_fw_version(char **value)
 {
-  *value = "1.0.1";
+  *value = "1.1.0";
   return 0;
 }
 uint8_t firmware_info_get_serial_number(char **value)
@@ -3025,9 +3172,20 @@ uint8_t firmware_info_get_fw_url(char **value)
   *value = "https://github.com/STMicroelectronics/fp-sns-datalog2";
    return 0;
 }
+uint8_t firmware_info_get_mac_address(char **value)
+{
+  *value = app_model.firmware_info_model.mac_address;
+  return 0;
+}
 uint8_t firmware_info_set_alias(const char *value)
 {
   strcpy(app_model.firmware_info_model.alias, value);
+  return 0;
+}
+
+uint8_t firmware_info_set_mac_address(const char *value)
+{
+  strcpy(app_model.firmware_info_model.mac_address, value);
   return 0;
 }
 
@@ -3054,7 +3212,7 @@ uint8_t DeviceInformation_get_model(char **value)
 }
 uint8_t DeviceInformation_get_swVersion(char **value)
 {
-  *value = "1.0.1";
+  *value = "1.1.0";
   return 0;
 }
 uint8_t DeviceInformation_get_osName(char **value)
@@ -3207,24 +3365,16 @@ int8_t i;
       if(app_model.s_models[i] != NULL)
       {
         int8_t stream = app_model.s_models[i]->streamParams.stream_id;
-        if(stream < N_MAX_EP - 1)
+        if(stream < (int8_t)(SS_N_IN_ENDPOINTS - 1))
         {
           app_model.s_models[i]->streamParams.usb_ep = stream;
         }
         else
         {
-          app_model.s_models[i]->streamParams.usb_ep = N_MAX_EP - 1;
+          app_model.s_models[i]->streamParams.usb_ep = SS_N_IN_ENDPOINTS - 1;
         }
       }
     }
-//    for(i = 0; i < ALGORITHM_NUMBER; i++)     /* Generated only when algorithms are available */
-//    {
-//      //TODO
-//      if(app_model.a_models[i] != NULL)
-//      {
-//        app_model.a_models[i]->streamParams.stream_id = i + SENSOR_NUMBER;
-//      }
-//    }
   }
   else
   {
@@ -3237,13 +3387,6 @@ int8_t i;
         app_model.s_models[i]->streamParams.bandwidth = 0;
       }
     }
-//    for(i = 0; i < ALGORITHM_NUMBER; i++)     /* Generated only when algorithms are available */
-//    {
-//
-//      app_model.a_models[i]->streamParams.stream_id = -1;
-//      app_model.a_models[i]->streamParams.usb_ep = -1;
-//      app_model.a_models[i]->streamParams.bandwidth = 0;
-//    }
   }
   return 0;
 }

@@ -252,9 +252,6 @@ static inline sys_error_code_t IMP34DT05TaskPostReportToFront(IMP34DT05Task *_th
  */
 static inline sys_error_code_t IMP34DT05TaskPostReportToBack(IMP34DT05Task *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file IMP34DT05Task.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -289,7 +286,7 @@ static const IMP34DT05TaskClass_t sTheClass =
         IMP34DT05Task_vtblMicGetSensitivity,
         IMP34DT05Task_vtblSensorSetODR,
         IMP34DT05Task_vtblSensorSetFS,
-        NULL,
+        IMP34DT05Task_vtblSensorSetFifoWM,
         IMP34DT05Task_vtblSensorEnable,
         IMP34DT05Task_vtblSensorDisable,
         IMP34DT05Task_vtblSensorIsEnabled,
@@ -710,6 +707,15 @@ sys_error_code_t IMP34DT05Task_vtblSensorSetFS(ISensor_t *_this, float FS)
   return res;
 }
 
+sys_error_code_t IMP34DT05Task_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+{
+  assert_param(_this != NULL);
+  /* Does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IMP34DT05: warning - SetFifoWM() not supported.\r\n"));
+  return SYS_INVALID_FUNC_CALL_ERROR_CODE;
+}
+
 sys_error_code_t IMP34DT05Task_vtblSensorEnable(ISensor_t *_this)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -887,7 +893,7 @@ static sys_error_code_t IMP34DT05TaskExecuteStepDatalog(AManagedTask *_this)
         }
       case SM_MESSAGE_ID_DATA_READY:
         {
-//          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IMP34DT05: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("IMP34DT05: new data.\r\n"));
 
           p_obj->half = report.sensorDataReadyMessage.half;
 
@@ -903,6 +909,9 @@ static sys_error_code_t IMP34DT05TaskExecuteStepDatalog(AManagedTask *_this)
           p_obj->sensor_status.MeasuredODR = (float) ((p_obj->sensor_status.ODR / 1000.0f)) / (float) delta_timestamp;
           uint16_t samples = (uint16_t) (p_obj->sensor_status.ODR / 1000u);
 
+          /* Workaround: IMP34DT05 data are unstable for the first samples -> avoid sending data */
+          if (timestamp > 0.3f)
+          {
           EMD_1dInit(&p_obj->data, (uint8_t*) &p_obj->p_sensor_data_buff[(p_obj->half - 1) * samples], E_EM_INT16, samples);
 
           DataEvent_t evt;
@@ -910,7 +919,8 @@ static sys_error_code_t IMP34DT05TaskExecuteStepDatalog(AManagedTask *_this)
           DataEventInit((IEvent*) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
           IEventSrcSendEvent(p_obj->p_event_src, (IEvent*) &evt, NULL);
 
-          /*SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IMP34DT05: ts = %f\r\n", (float)timestamp));*/
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP34DT05: ts = %f\r\n", (float)timestamp));
+          }
           break;
         }
       case SM_MESSAGE_ID_SENSOR_CMD:

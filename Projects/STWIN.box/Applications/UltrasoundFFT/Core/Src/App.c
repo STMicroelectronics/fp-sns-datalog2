@@ -1,24 +1,24 @@
 /**
  ******************************************************************************
  * @file    App.c
-  * @author  SRA
+ * @author  SRA
  * @brief   Define the Application main entry points
  *
  * The framework `weak` function are redefined in this file and they link
  * the application specific code with the framework.
  *
-  ******************************************************************************
+ ******************************************************************************
  * @attention
  *
-  * Copyright (c) 2022 STMicroelectronics.
+ * Copyright (c) 2022 STMicroelectronics.
  * All rights reserved.
  *
  * This software is licensed under terms that can be found in the LICENSE file in
  * the root directory of this software component.
  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
-  *
-  ******************************************************************************
+ *
+ *
+ ******************************************************************************
  */
 
 #include "services/sysdebug.h"
@@ -42,7 +42,7 @@
 #include "Imp23absu_Mic_PnPL.h"
 #include "parson.h"
 
-static uint8_t FW_ID = 0x0C;
+static uint8_t FW_ID = 0x14;
 
 static IPnPLComponent_t *pLogControllerPnPLObj = NULL;
 static IPnPLComponent_t *pIMP23ABSU_MIC_PnPLObj = NULL;
@@ -66,7 +66,6 @@ static AManagedTaskEx *sIMP23ABSUObj = NULL;
  */
 static AManagedTaskEx *sFFTAudioObj = NULL;
 
-
 /**
  * DatalogApp task object.
  */
@@ -82,7 +81,6 @@ static EPowerMode spAppPMState2SMPMStateMap[] =
     E_POWER_MODE_SENSORS_ACTIVE,
     E_POWER_MODE_STATE1,
     E_POWER_MODE_RESERVED };
-
 
 /* Private functions declaration */
 /*********************************/
@@ -110,23 +108,23 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   sys_error_code_t xRes = SYS_NO_ERROR_CODE;
 
   /* Allocate the task objects */
-  sUtilObj = UtilTaskAlloc(&MX_TIM5InitParams);
-  sDatalogAppObj = DatalogAppTaskAlloc();
-  sIMP23ABSUObj = IMP23ABSUTaskAlloc(&MX_MDF1InitParams, &MX_ADC1InitParams);
   sFFTAudioObj = FDM_ACOTaskAlloc();
+  sDatalogAppObj = DatalogAppTaskAlloc();
+  sUtilObj = UtilTaskAlloc(&MX_TIM5InitParams);
+  sIMP23ABSUObj = IMP23ABSUTaskAlloc(&MX_MDF1InitParams, &MX_ADC1InitParams);
 
   /* Add the task object to the context. */
-  xRes = ACAddTask(pAppContext, (AManagedTask*) sUtilObj);
-  xRes = ACAddTask(pAppContext, (AManagedTask*) sDatalogAppObj);
-  xRes = ACAddTask(pAppContext, (AManagedTask*) sIMP23ABSUObj);
   xRes = ACAddTask(pAppContext, (AManagedTask*) sFFTAudioObj);
+  xRes = ACAddTask(pAppContext, (AManagedTask*) sDatalogAppObj);
+  xRes = ACAddTask(pAppContext, (AManagedTask*) sUtilObj);
+  xRes = ACAddTask(pAppContext, (AManagedTask*) sIMP23ABSUObj);
 
   pIMP23ABSU_MIC_PnPLObj = Imp23absu_Mic_PnPLAlloc();
   pLogControllerPnPLObj = Log_Controller_PnPLAlloc();
   pAcquisition_Information_PnPLObj = Acquisition_Information_PnPLAlloc();
   pDeviceinformation_PnPLObj = Deviceinformation_PnPLAlloc();
   Firmware_Info_PnPLObj = Firmware_Info_PnPLAlloc();
-  Fft_Dpu_PnPLObj =Fft_Dpu_PnPLAlloc();
+  Fft_Dpu_PnPLObj = Fft_Dpu_PnPLAlloc();
 
   PnPLSetFWID(FW_ID);
 
@@ -151,11 +149,11 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   /* Get DatalogApp IDataEventListener_t interface:  DatalogAppListener*/
   IDataEventListener_t *DatalogAppListener = DatalogAppTask_GetEventListenerIF((DatalogAppTask*) sDatalogAppObj);
 
-  IEventListener *MicrophoneSensorListener  = (IEventListener *)DatalogAppTask_GetSensorEventListenerIF((DatalogAppTask*) sDatalogAppObj);
-  IEventSrcAddEventListener(IMP23ABSUTaskGetEventSrcIF((IMP23ABSUTask *) sIMP23ABSUObj), MicrophoneSensorListener);
+  IEventListener *MicrophoneSensorListener = (IEventListener*) DatalogAppTask_GetSensorEventListenerIF((DatalogAppTask*) sDatalogAppObj);
+  IEventSrcAddEventListener(IMP23ABSUTaskGetEventSrcIF((IMP23ABSUTask*) sIMP23ABSUObj), MicrophoneSensorListener);
 
   /* Connect DatalogAppListener as DPU listener */
-  FDM_ACOTaskAddDPUListener ((FDM_ACOTask*)sFFTAudioObj , DatalogAppListener);
+  FDM_ACOTaskAddDPUListener((FDM_ACOTask*) sFFTAudioObj, DatalogAppListener);
 
   /* Sensor PnPL Components */
   Imp23absu_Mic_PnPLInit(pIMP23ABSU_MIC_PnPLObj);

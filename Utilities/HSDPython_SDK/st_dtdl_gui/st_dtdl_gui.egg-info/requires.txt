@@ -1,4 +1,5 @@
 st_pnpl
 numpy
 pyqtgraph
-PySide6
+PySide6==6.4.3
+pyaudio

@@ -1,23 +1,23 @@
 /**
  ******************************************************************************
  * @file    AppPowerModeHelper.c
-  * @author  SRA
+ * @author  SRA
  * @brief   Define the Power Mode State Machine for this application.
  *
  * Implement the interface ::IAppPowerModeHelper.
  *
-  ******************************************************************************
+ ******************************************************************************
  * @attention
  *
-  * Copyright (c) 2022 STMicroelectronics.
+ * Copyright (c) 2022 STMicroelectronics.
  * All rights reserved.
  *
  * This software is licensed under terms that can be found in the LICENSE file in
  * the root directory of this software component.
  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
-  *
-  ******************************************************************************
+ *
+ *
+ ******************************************************************************
  */
 
 #include "AppPowerModeHelper.h"
@@ -31,7 +31,8 @@
 /**
  * Application Power Mode Helper virtual table.
  */
-static const IAppPowerModeHelper_vtbl s_xAppPowerModeHelper_vtbl = {
+static const IAppPowerModeHelper_vtbl s_xAppPowerModeHelper_vtbl =
+{
     AppPowerModeHelper_vtblInit,
     AppPowerModeHelper_vtblComputeNewPowerMode,
     AppPowerModeHelper_vtblCheckPowerModeTransaction,
@@ -118,11 +119,11 @@ EPowerMode AppPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *_this
       {
         power_mode = E_POWER_MODE_STATE1;
       }
-      else if(power_mode == E_POWER_MODE_STATE1 )
+      else if(power_mode == E_POWER_MODE_STATE1)
       {
         power_mode = E_POWER_MODE_SENSORS_ACTIVE;
       }
-      else if(power_mode == E_POWER_MODE_STARTING )
+      else if(power_mode == E_POWER_MODE_STARTING)
       {
         power_mode = E_POWER_MODE_SENSORS_ACTIVE;
       }

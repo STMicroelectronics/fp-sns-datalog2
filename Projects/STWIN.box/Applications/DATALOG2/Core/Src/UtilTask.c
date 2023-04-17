@@ -120,9 +120,6 @@ static void RND_Init(void);
 /* Inline function forward declaration */
 /***************************************/
 
-#if defined (__GNUC__) || defined (__ICCARM__)
-/* Inline function defined inline in the header file UtilTask.h must be declared here as extern function. */
-#endif
 
 /**
  * The only instance of the task object.
@@ -758,3 +755,54 @@ void Util_PWR_EXTI_Callback(uint16_t nPin)
   t_start = HAL_GetTick();
 }
 
+/**
+ * @brief  Enable Disable the jump to second flash bank and reboot board
+ * @param  None
+ * @retval None
+ */
+void SwitchBank(void)
+{
+    FLASH_OBProgramInitTypeDef    OBInit;
+    /* Set BFB2 bit to enable boot from Flash Bank2 */
+    /* Allow Access to Flash control registers and user Flash */
+    HAL_FLASH_Unlock();
+
+    /* Allow Access to option bytes sector */
+    HAL_FLASH_OB_Unlock();
+
+    /* Get the Dual boot configuration status */
+    HAL_FLASHEx_OBGetConfig(&OBInit);
+
+    /* Enable/Disable dual boot feature */
+    OBInit.OptionType = OPTIONBYTE_USER;
+    OBInit.USERType   = OB_USER_SWAP_BANK;
+
+    if (((OBInit.USERConfig) & (FLASH_OPTR_SWAP_BANK)) == FLASH_OPTR_SWAP_BANK) {
+      OBInit.USERConfig &= ~FLASH_OPTR_SWAP_BANK;
+      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("->Disable DualBoot\r\n"));
+    } else {
+      OBInit.USERConfig = FLASH_OPTR_SWAP_BANK;
+      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("->Enable DualBoot\r\n"));
+    }
+
+    if(HAL_FLASHEx_OBProgram (&OBInit) != HAL_OK) {
+      /*
+      Error occurred while setting option bytes configuration.
+      User can add here some code to deal with this error.
+      To know the code error, user can call function 'HAL_FLASH_GetError()'
+      */
+  //    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
+    }
+
+    /* Start the Option Bytes programming process */
+    if (HAL_FLASH_OB_Launch() != HAL_OK) {
+      /*
+      Error occurred while reloading option bytes configuration.
+      User can add here some code to deal with this error.
+      To know the code error, user can call function 'HAL_FLASH_GetError()'
+      */
+  //    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
+    }
+    HAL_FLASH_OB_Lock();
+    HAL_FLASH_Lock();
+}

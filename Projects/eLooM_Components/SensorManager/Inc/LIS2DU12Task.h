@@ -42,8 +42,10 @@ extern "C" {
 #define LIS2DU12_MAX_DRDY_PERIOD           (1.0)    /* seconds */
 
 #ifndef LIS2DU12_MAX_WTM_LEVEL
-#define LIS2DU12_MAX_WTM_LEVEL             (16)    /* samples */
+#define LIS2DU12_MAX_WTM_LEVEL             (92)    /* samples */
 #endif
+#define LIS2DU12_MIN_WTM_LEVEL             (16)
+#define LIS2DU12_MAX_SAMPLES_PER_IT        (LIS2DU12_MAX_WTM_LEVEL)
 
 #define LIS2DU12_CFG_MAX_LISTENERS         2
 

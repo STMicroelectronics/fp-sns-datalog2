@@ -75,7 +75,7 @@ UINT _ux_device_class_sensor_streaming_initialize(UX_SLAVE_CLASS_COMMAND *comman
 
   UX_THREAD_EXTENSION_PTR_SET(&(slave_class -> ux_slave_class_thread), slave_class)
 
-  for(UINT ii = 0; ii < N_IN_ENDPOINTS; ii++)
+  for(UINT ii = 0; ii < SS_N_IN_ENDPOINTS; ii++)
   {
     status = _ux_utility_semaphore_create(&sensor_streaming->ux_slave_class_sensor_streaming_bulkin[ii].ep_param.semaphore, "semaphore 0", 0);
     if(status != UX_SUCCESS)

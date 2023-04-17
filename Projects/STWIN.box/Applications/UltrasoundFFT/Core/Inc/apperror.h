@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
  * @file    apperror.h
-  * @author  SRA
+ * @author  SRA
  * @brief Application specific error code
  *
  * Application defines its own error code in this file starting form the
@@ -13,12 +13,12 @@
  ******************************************************************************
  * @attention
  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
  *
  *
  ******************************************************************************
@@ -39,7 +39,6 @@ extern "C" {
 /* MDF driver error code */
 /*************************/
 #define SYS_BASE_MDF_DRV_ERROR_CODE                     SYS_BASE_LL_ERROR_CODE + SYS_GROUP_ERROR_COUNT
-
 
 /* SPI Master error code */
 /*************************/
@@ -90,8 +89,6 @@ extern "C" {
 /*************************/
 #define SYS_BASE_FFT_DPU_ERROR_CODE                     SYS_SENSOR_TASK_BASE_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 #define SYS_FFT_DPU_INPUT_NOT_READY_RET_VAL             SYS_BASE_FFT_DPU_ERROR_CODE + 1
-
-
 
 #ifdef __cplusplus
 }

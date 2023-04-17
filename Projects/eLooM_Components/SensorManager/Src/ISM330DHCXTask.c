@@ -491,9 +491,6 @@ static inline sys_error_code_t ISM330DHCXTaskPostReportToFront(ISM330DHCXTask *_
  */
 static inline sys_error_code_t ISM330DHCXTaskPostReportToBack(ISM330DHCXTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-/* Inline function defined inline in the header file ISM330DHCXTask.h must be declared here as extern function. */
-#endif
 
 /* Objects instance */
 /********************/
@@ -1540,50 +1537,6 @@ sys_error_code_t ISM330DHCXTask_vtblSensorSyncModel(ISensorLL_t *_this)
   return res;
 }
 
-//sys_error_code_t ISM330DHCXTask_vtblSensorMlcLoadUcf(ISensorMlc_t *_this, uint32_t size, const char *ucf)
-//{
-//  assert_param(_this != NULL);
-//  sys_error_code_t res = SYS_NO_ERROR_CODE;
-//  ISM330DHCXTask *p_if_owner = ISM330DHCXTaskGetOwnerFromISensorMlcIF(_this);
-//  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &p_if_owner->p_sensor_bus_if->m_xConnector;
-//
-//  uint32_t i;
-//  char ucf_reg[3];
-//  char ucf_data[3];
-//  long reg;
-//  long data;
-//
-//  for(i = 0; i < size / 4u; i++)
-//  {
-//    ucf_reg[0] = ucf[4u * i];
-//    ucf_reg[1] = ucf[4u * i + 1u];
-//    ucf_reg[2] = '\0';
-//    ucf_data[0] = ucf[4u * i + 2u];
-//    ucf_data[1] = ucf[4u * i + 3u];
-//    ucf_data[2] = '\0';
-//
-//    reg = strtol(ucf_reg, NULL, 16);
-//    data = strtol(ucf_data, NULL, 16);
-//
-//    res = ism330dhcx_write_reg(p_sensor_drv, (uint8_t) reg, (uint8_t*) &data, 1u);
-//    if(res != SYS_NO_ERROR_CODE)
-//    {
-//      break;
-//    }
-//  }
-//
-//  if(!SYS_IS_ERROR_CODE(res))
-//  {
-//    p_if_owner->mlc_enable = TRUE;
-//    p_if_owner->mlc_sensor_status.IsActive = TRUE;
-//
-//    ISM330DHCX_XL_ODR_From_UCF(p_if_owner);
-//    ISM330DHCX_XL_FS_From_UCF(p_if_owner);
-//    ISM330DHCX_GY_ODR_From_UCF(p_if_owner);
-//    ISM330DHCX_GY_FS_From_UCF(p_if_owner);
-//  }
-//  return res;
-//}
 
 /* Private function definition */
 // ***************************
@@ -1814,6 +1767,7 @@ static sys_error_code_t ISM330DHCXTaskExecuteStepDatalog(AManagedTask *_this)
 #if ISM330DHCX_FIFO_ENABLED
             }
 #endif
+          }
             if(p_obj->pIRQConfig == NULL)
             {
               if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
@@ -1822,7 +1776,6 @@ static sys_error_code_t ISM330DHCXTaskExecuteStepDatalog(AManagedTask *_this)
               }
             }
 
-          }
           break;
         }
 
@@ -1857,6 +1810,7 @@ static sys_error_code_t ISM330DHCXTaskExecuteStepDatalog(AManagedTask *_this)
               res = SYS_INVALID_PARAMETER_ERROR_CODE;
             }
 
+          }
             if(p_obj->pMLCConfig == NULL)
             {
               if(TX_SUCCESS != tx_timer_activate(&p_obj->mlc_timer))
@@ -1865,7 +1819,6 @@ static sys_error_code_t ISM330DHCXTaskExecuteStepDatalog(AManagedTask *_this)
               }
             }
 
-          }
           break;
         }
 
@@ -2467,12 +2420,24 @@ static sys_error_code_t ISM330DHCXTaskSensorReadData(ISM330DHCXTask *_this)
     if(val.xlda == 1U)
     {
       ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_A, _this->p_acc_sample, 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+      int16_t *p16 = (int16_t*) (_this->p_acc_sample);
+      *p16++ = dummyDataCounter_acc++;
+      *p16++ = dummyDataCounter_acc++;
+      *p16++ = dummyDataCounter_acc++;
+#endif
       _this->acc_samples_count = 1U;
       _this->acc_drdy = 1;
     }
     if(val.gda == 1U)
     {
       ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_G, _this->p_gyro_sample, 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+      int16_t *p16 = (int16_t*) (_this->p_gyro_sample);
+      *p16++ = dummyDataCounter_gyro++;
+      *p16++ = dummyDataCounter_gyro++;
+      *p16++ = dummyDataCounter_gyro++;
+#endif
       _this->gyro_samples_count = 1U;
       _this->gyro_drdy = 1;
     }
@@ -2480,12 +2445,28 @@ static sys_error_code_t ISM330DHCXTaskSensorReadData(ISM330DHCXTask *_this)
   else if(_this->acc_sensor_status.IsActive)
   {
     ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_A, _this->p_acc_sample, _this->samples_per_it * 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+    uint16_t i = 0;
+    int16_t *p16 = (int16_t*) (_this->p_acc_sample);
+    for(i = 0; i < _this->samples_per_it * 3; i++)
+    {
+      *p16++ = dummyDataCounter_acc++;
+    }
+#endif
     _this->acc_samples_count = 1U;
     _this->acc_drdy = 1;
   }
   else if(_this->gyro_sensor_status.IsActive)
   {
     ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_G, _this->p_acc_sample, _this->samples_per_it * 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+    uint16_t i = 0;
+    int16_t *p16 = (int16_t*) (_this->p_gyro_sample);
+    for(i = 0; i < _this->samples_per_it * 3; i++)
+    {
+      *p16++ = dummyDataCounter_gyro++;
+    }
+#endif
     _this->gyro_samples_count = 1U;
     _this->gyro_drdy = 1;
   }
@@ -2503,17 +2484,13 @@ static sys_error_code_t ISM330DHCXTaskSensorReadMLC(ISM330DHCXTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &_this->p_sensor_bus_if->m_xConnector;
-  uint8_t ii;
 
   if(_this->mlc_enable)
   {
-    for(ii = 0; ii < 8; ii++)
-    {
-      ism330dhcx_mem_bank_set(p_sensor_drv, ISM330DHCX_EMBEDDED_FUNC_BANK);
-      ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_MLC0_SRC + ii, (uint8_t*) (&_this->p_mlc_sensor_data_buff[ii]), 1);
-      ism330dhcx_mem_bank_set(p_sensor_drv, ISM330DHCX_USER_BANK);
-    }
     ism330dhcx_mlc_status_get(p_sensor_drv, (ism330dhcx_mlc_status_mainpage_t*) &_this->p_mlc_sensor_data_buff[8]);
+    ism330dhcx_mem_bank_set(p_sensor_drv, ISM330DHCX_EMBEDDED_FUNC_BANK);
+    ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_MLC0_SRC, (uint8_t*) (&_this->p_mlc_sensor_data_buff[0]), 8);
+    ism330dhcx_mem_bank_set(p_sensor_drv, ISM330DHCX_USER_BANK);
   }
 
   return res;
@@ -2717,6 +2694,8 @@ static sys_error_code_t ISM330DHCXTaskSensorSetODR(ISM330DHCXTask *_this, SMMess
   {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
   }
+
+  /* when ODR changes the samples_per_it must be recalculated */
   _this->samples_per_it = 0;
 
   return res;
@@ -3262,6 +3241,7 @@ static sys_error_code_t ISM330DHCX_FS_Sync(ISM330DHCXTask *_this)
         break;
     }
     _this->acc_sensor_status.FS = fs;
+    _this->acc_sensor_status.Sensitivity = 0.0000305f * _this->acc_sensor_status.FS;
   }
   else
   {
@@ -3296,6 +3276,7 @@ static sys_error_code_t ISM330DHCX_FS_Sync(ISM330DHCXTask *_this)
         break;
     }
     _this->gyro_sensor_status.FS = fs;
+    _this->gyro_sensor_status.Sensitivity = 0.035f * _this->gyro_sensor_status.FS;
   }
   else
   {

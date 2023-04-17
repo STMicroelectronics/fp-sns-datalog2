@@ -32,8 +32,8 @@
 // *********************
 
 #define BOARD_ID              0x0E
-#define FW_ID_DATALOG2        0x0A
-#define FW_ID_DATALOG2_ISPU   0x0B
+#define FW_ID_DATALOG2        0x12
+#define FW_ID_DATALOG2_ISPU   0x13
 
 // Drivers configuration
 // *********************

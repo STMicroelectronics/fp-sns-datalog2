@@ -53,7 +53,6 @@ extern "C" {
 #include "parson.h"
 #include "IPnPLComponent.h"
 #include "IPnPLComponent_vtbl.h"
-
 /**
   * Create a type name for _Iis2iclx_Acc_PnPL.
  */

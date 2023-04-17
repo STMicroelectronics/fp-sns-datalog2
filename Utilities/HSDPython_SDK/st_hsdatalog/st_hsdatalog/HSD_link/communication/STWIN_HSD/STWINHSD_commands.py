@@ -447,6 +447,27 @@ class SamplePerTSParam(STWINHSDSubSensorStatusParam):
         result["id"] = from_int(self.sensor_id)
         result["samplesPerTs"] = from_int(self.samplesPerTs)
         return result
+    
+@dataclass
+class UsbDataPacketSizeParam(STWINHSDSubSensorStatusParam):
+    usbDataPacketSize: int
+
+    def __init__(self, ss_id, usbDataPacketSize: int):
+        self.sensor_id = ss_id
+        self.usbDataPacketSize = usbDataPacketSize
+
+    def from_dict(self, obj: Any) -> 'UsbDataPacketSizeParam':
+        assert isinstance(obj, dict)
+        ss_id = from_int(obj.get("id"))
+        usbDataPacketSize = from_int(obj.get("usbDataPacketSize"))
+        return UsbDataPacketSizeParam(ss_id, usbDataPacketSize)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        result.update(super(UsbDataPacketSizeParam, self).to_dict())
+        result["id"] = from_int(self.sensor_id)
+        result["usbDataPacketSize"] = from_int(self.usbDataPacketSize)
+        return result
 
 @dataclass
 class MLCParam(STWINHSDSubSensorStatusParam):

@@ -1,0 +1,4 @@
+include st_dtdl_gui/UI/*
+include st_dtdl_gui/UI/icons/*
+include st_dtdl_gui/UI/images/*
+include st_dtdl_gui/LICENSE.*

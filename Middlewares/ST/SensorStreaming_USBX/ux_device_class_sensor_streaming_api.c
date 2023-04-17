@@ -50,11 +50,11 @@ UINT ux_device_class_sensor_streaming_SetTransmissionEP(UX_SLAVE_CLASS_SENSOR_ST
   }
   else
   {
-    if(id > N_CHANNELS_MAX)
+    if(id > SS_N_CHANNELS_MAX)
     {
       ret = UX_ERROR;
     }
-    if(ep > (N_IN_ENDPOINTS - 1U))
+    if(ep > (SS_N_IN_ENDPOINTS - 1U))
     {
       ret = UX_ERROR;
     }
@@ -258,7 +258,7 @@ UINT ux_device_class_sensor_streaming_StartStreaming(UX_SLAVE_CLASS_SENSOR_STREA
   STREAMING_HandleTypeDef *hwcid = (STREAMING_HandleTypeDef*) sensor_streaming->hwcid;
   uint8_t *status = &(hwcid->streaming_status);
 
-  for(uint8_t i = 0; i < (N_IN_ENDPOINTS); i++)
+  for(uint8_t i = 0; i < (SS_N_IN_ENDPOINTS); i++)
   {
     sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].ep_param.last_packet_sent = 1;
     (void) _ux_utility_thread_resume(&sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].thread);

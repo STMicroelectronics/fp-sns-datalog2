@@ -16,10 +16,11 @@
 import os
 
 class FileManager:
-
+    
     @staticmethod
     def decode_file_name(file_name):
-        [sensor_name, sensor_type] = file_name.split(".")[0].split("_")
+        sn = file_name.split(".")[0].split("_")
+        [sensor_name, sensor_type] = ["_".join(sn[:-1]),sn[-1]]
         return sensor_name, sensor_type
 
     @staticmethod

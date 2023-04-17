@@ -297,9 +297,6 @@ static inline sys_error_code_t ILPS22QSTaskPostReportToFront(ILPS22QSTask *_this
  */
 static inline sys_error_code_t ILPS22QSTaskPostReportToBack(ILPS22QSTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file ILPS22QSTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -1061,6 +1058,7 @@ static sys_error_code_t ILPS22QSTaskExecuteStepDatalog(AManagedTask *_this)
 #if ILPS22QS_FIFO_ENABLED
             }
 #endif
+          }
             if(p_obj->pIRQConfig == NULL)
             {
               if(TX_SUCCESS != tx_timer_activate(&p_obj->read_fifo_timer))
@@ -1068,7 +1066,6 @@ static sys_error_code_t ILPS22QSTaskExecuteStepDatalog(AManagedTask *_this)
                 res = SYS_UNDEFINED_ERROR_CODE;
               }
             }
-          }
           break;
         }
       case SM_MESSAGE_ID_SENSOR_CMD:

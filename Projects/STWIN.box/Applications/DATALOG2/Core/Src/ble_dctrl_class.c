@@ -483,7 +483,7 @@ static void ble_send_thread_entry(ULONG thread_input)
             }
             else
             {
-              tot_len = BLE_Command_TP_Encapsulate(buffer_out, (uint8_t *) obj->serialized_cmd, obj->serialized_cmd_size);
+              tot_len = BLE_Command_TP_Encapsulate(buffer_out, (uint8_t *) obj->serialized_cmd, obj->serialized_cmd_size, 20);
 
               j = 0;
 

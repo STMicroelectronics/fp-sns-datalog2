@@ -1,21 +1,21 @@
 /**
-  ******************************************************************************
-  * @file    ILog_Controller_vtbl.h
-  * @author  SRA
-  * @brief
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    ILog_Controller_vtbl.h
+ * @author  SRA
+ * @brief
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ *
+ ******************************************************************************
+ */
 
 #ifndef INCLUDE_ILOG_CONTROLLER_VTBL_H_
 #define INCLUDE_ILOG_CONTROLLER_VTBL_H_
@@ -25,21 +25,21 @@ extern "C" {
 #endif
 
 /**
-  * Create a type name for ILog_Controller_vtbl.
-  */
+ * Create a type name for ILog_Controller_vtbl.
+ */
 typedef struct _ILog_Controller_vtbl ILog_Controller_vtbl;
 
 struct _ILog_Controller_vtbl
 {
-  uint8_t (*log_controller_start_log)(ILog_Controller_t * _this, uint32_t interface);
-  uint8_t (*log_controller_stop_log)(ILog_Controller_t * _this);
+  uint8_t (*log_controller_start_log)(ILog_Controller_t *_this, uint32_t interface);
+  uint8_t (*log_controller_stop_log)(ILog_Controller_t *_this);
 };
 
 struct _ILog_Controller_t
 {
   /**
-    * Pointer to the virtual table for the class.
-    */
+   * Pointer to the virtual table for the class.
+   */
   const ILog_Controller_vtbl *vptr;
 };
 

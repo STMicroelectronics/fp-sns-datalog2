@@ -100,8 +100,6 @@ static sys_error_code_t I2CBusTaskCtrl(ABusIF *_this, EBusCtrlCmd ctrl_cmd, uint
 /* Inline function forward declaration */
 // ***********************************
 
-#if defined (__GNUC__)
-#endif
 
 /**
   * The class object.

@@ -49,6 +49,7 @@ EMData_t STTS22HTask_vtblTempGetDataInfo(ISourceObservable *_this);
 
 sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
 sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensor_t *_this, float FS);
+sys_error_code_t STTS22HTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t STTS22HTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t STTS22HTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t STTS22HTask_vtblSensorIsEnabled(ISensor_t *_this);

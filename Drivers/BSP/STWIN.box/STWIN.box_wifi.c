@@ -52,6 +52,7 @@ void WIFI_SPI_TxRxCpltCallback(SPI_HandleTypeDef* hspi);
 #if (USE_HAL_LPTIM_REGISTER_CALLBACKS == 1)
 void WIFI_LPTIM_MspInit(LPTIM_HandleTypeDef* lptimHandle);
 void WIFI_LPTIM_MspDeInit(LPTIM_HandleTypeDef* lptimHandle);
+void WIFI_LPTIM_IC_CaptureCallback(LPTIM_HandleTypeDef *hlptim);
 #endif
 
 void HAL_SPI_TransferCallback(SPI_HandleTypeDef *hspi);
@@ -192,6 +193,10 @@ static int32_t WIFI_MX_LPTIM1_Init(void)
   {
     return BSP_ERROR_NO_INIT;
   }
+
+#if (USE_HAL_LPTIM_REGISTER_CALLBACKS == 1)
+  HAL_LPTIM_RegisterCallback(&hlptim1, HAL_LPTIM_IC_CAPTURE_CB_ID, WIFI_LPTIM_IC_CaptureCallback);
+#endif
 
   return BSP_ERROR_NONE;
 }
@@ -509,6 +514,24 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
   }
 }
 
+
+/**
+* @brief  Input Capture callback in non-blocking mode
+* @param  hlptim LPTIM handle
+* @retval None
+*/
+#if (USE_HAL_LPTIM_REGISTER_CALLBACKS == 1)
+void WIFI_LPTIM_IC_CaptureCallback(LPTIM_HandleTypeDef *hlptim)
+#else
+void HAL_LPTIM_IC_CaptureCallback(LPTIM_HandleTypeDef *hlptim)
+#endif
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(hlptim);
+
+  mxchip_WIFI_ISR(MXCHIP_FLOW_Pin);
+  nx_driver_emw3080_interrupt();
+}
 
 /**
   * @}

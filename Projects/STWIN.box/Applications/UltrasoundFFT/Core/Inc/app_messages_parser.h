@@ -6,12 +6,12 @@
  ******************************************************************************
  * @attention
  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
  *
  *
  ******************************************************************************
@@ -44,17 +44,17 @@ typedef union _APPReport
 
   struct utilMessage_t
   {
-    uint8_t msgId;    /* Meport ID = 0x0B (11) */
+    uint8_t msgId; /* Meport ID = 0x0B (11) */
     uint8_t nPadding; /* padding byte */
-    uint16_t nCmdID;  /* UitilityTask command ID */
-    uint32_t nParam;  /* optional command parameter. */
+    uint16_t nCmdID; /* UitilityTask command ID */
+    uint32_t nParam; /* optional command parameter. */
   } utilMessage;
 
-    struct acousticDomainReport_t
-    {
-      uint8_t  msgId;  /**< Report ID = 0x01 (1) */
-      uint16_t  nCmdID;
-    } acousticDomainReport;
+  struct acousticDomainReport_t
+  {
+    uint8_t msgId; /**< Report ID = 0x01 (1) */
+    uint16_t nCmdID;
+  } acousticDomainReport;
 
   //--------------------------------------------------------------------------------
   //  internalReport (MCU)

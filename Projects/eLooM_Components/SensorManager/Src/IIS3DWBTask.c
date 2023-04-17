@@ -271,9 +271,6 @@ static inline sys_error_code_t IIS3DWBTaskPostReportToFront(IIS3DWBTask *_this, 
  */
 static inline sys_error_code_t IIS3DWBTaskPostReportToBack(IIS3DWBTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file IIS3DWBTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -989,7 +986,7 @@ static sys_error_code_t IIS3DWBTaskExecuteStepDatalog(AManagedTask *_this)
         }
       case SM_MESSAGE_ID_DATA_READY:
         {
-//        SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS3DWB: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("IIS3DWB: new data.\r\n"));
           if(p_obj->pIRQConfig == NULL)
           {
             if(TX_SUCCESS
@@ -1023,7 +1020,8 @@ static sys_error_code_t IIS3DWBTaskExecuteStepDatalog(AManagedTask *_this)
             DataEventInit((IEvent*) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
             IEventSrcSendEvent(p_obj->p_event_src, (IEvent*) &evt, NULL);
 
-//          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS3DWB: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS3DWB: ts = %f\r\n", (float)timestamp));
+          }
             if(p_obj->pIRQConfig == NULL)
             {
               if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
@@ -1031,7 +1029,6 @@ static sys_error_code_t IIS3DWBTaskExecuteStepDatalog(AManagedTask *_this)
                 res = SYS_UNDEFINED_ERROR_CODE;
               }
             }
-          }
           break;
         }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -1325,6 +1322,15 @@ static sys_error_code_t IIS3DWBTaskSensorReadData(IIS3DWBTask *_this)
 #else
   iis3dwb_read_reg(p_sensor_drv, IIS3DWB_OUTX_L_A, (uint8_t *) _this->p_sensor_data_buff, _this->samples_per_it * 6);
 #endif /* IIS3DWB_FIFO_ENABLED */
+
+#if (HSD_USE_DUMMY_DATA == 1)
+  uint16_t ii = 0;
+  int16_t * p16 = (int16_t *)_this->p_sensor_data_buff;
+  for (ii = 0; ii < _this->samples_per_it*3 ; ii++)
+  {
+    *p16++ = dummyDataCounter++;
+  }
+#endif
 
   return res;
 }

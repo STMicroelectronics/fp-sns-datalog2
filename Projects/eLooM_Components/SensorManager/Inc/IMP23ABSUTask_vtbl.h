@@ -50,6 +50,7 @@ EMData_t IMP23ABSUTask_vtblMicGetDataInfo(ISourceObservable *_this);
 
 sys_error_code_t IMP23ABSUTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
 sys_error_code_t IMP23ABSUTask_vtblSensorSetFS(ISensor_t *_this, float FS);
+sys_error_code_t IMP23ABSUTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t IMP23ABSUTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t IMP23ABSUTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t IMP23ABSUTask_vtblSensorIsEnabled(ISensor_t *_this);

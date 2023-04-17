@@ -80,9 +80,6 @@ static sys_error_code_t SPIBusTaskCtrl(ABusIF *_this, EBusCtrlCmd eCtrlCmd, uint
 
 /* Inline function forward declaration */
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file SPIBusTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 

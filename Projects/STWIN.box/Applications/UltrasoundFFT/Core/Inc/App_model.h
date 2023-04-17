@@ -1,21 +1,21 @@
 /**
-  ******************************************************************************
-  * @file    app_model.h
-  * @author  SRA
-  * @brief   App Application Model and PnPL Components APIs
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    app_model.h
+ * @author  SRA
+ * @brief   App Application Model and PnPL Components APIs
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ *
+ ******************************************************************************
+ */
 
 //- Component APIs ============================================================================
 //- Component init function
@@ -34,7 +34,6 @@
 //- Component TELEMETRY Send Functions
 //    uint8_t <comp_name>_create_telemetry(tel1_type tel1_name, tel2_type tel2_name, ..., telN_type telN_name, char **telemetry, uint32_t *size)
 //=============================================================================================
-
 #ifndef APP_MODEL_H_
 #define APP_MODEL_H_
 
@@ -83,49 +82,49 @@ extern "C" {
 
 typedef struct _StreamParams_t
 {
-   int8_t stream_id;
-   int8_t usb_ep;
-   uint16_t spts;
-   uint32_t usb_dps;
-   uint32_t sd_dps;
-   float ioffset;
-   float bandwidth;
+  int8_t stream_id;
+  int8_t usb_ep;
+  uint16_t spts;
+  uint32_t usb_dps;
+  uint32_t sd_dps;
+  float ioffset;
+  float bandwidth;
 } StreamParams_t;
 
 typedef struct _SensorModel_t
 { /* E.g. IIS3DWB Component is a sensor (look @ schema field) so, its model has the following structure */
-   uint8_t id;
-   char *comp_name;
-   StreamParams_t streamParams;
-   SensorStatus_t sensorStatus;
-   /**
-    * User code
-    */
-   bool gui_plot_graph_enable;
+  uint8_t id;
+  char *comp_name;
+  StreamParams_t streamParams;
+  SensorStatus_t sensorStatus;
+  /**
+   * User code
+   */
+  bool gui_plot_graph_enable;
 } SensorModel_t;
 
 typedef struct _AlgorithmModel_t
 { /* E.g. FFT_Algo Component is an algorithm (look @ schema field) so, its model has the following structure */
-   uint8_t id;
-   char *comp_name;
-   StreamParams_t streamParams;
-   bool enable;
-   /**
-    * User code
-    */
-   uint16_t packet_size;
-   uint16_t dim;
-   uint16_t fft_len;
-   uint32_t fft_sample_freq;
+  uint8_t id;
+  char *comp_name;
+  StreamParams_t streamParams;
+  bool enable;
+  /**
+   * User code
+   */
+  uint16_t packet_size;
+  uint16_t dim;
+  uint16_t fft_len;
+  uint32_t fft_sample_freq;
 } AlgorithmModel_t;
 
 typedef struct _LogControllerModel_t
 {
-   char *comp_name;
-   /* insert here your LogController model code */
-   bool status;
-   bool sd_mounted;
-   int8_t interface;
+  char *comp_name;
+  /* insert here your LogController model code */
+  bool status;
+  bool sd_mounted;
+  int8_t interface;
 } LogControllerModel_t;
 
 typedef struct _AcquisitionInfoModel_t
@@ -135,9 +134,9 @@ typedef struct _AcquisitionInfoModel_t
   char name[HSD_ACQ_NAME_LENGTH];
   char description[HSD_ACQ_DESC_LENGTH];
   int8_t interface;
-  char uuid[37];                             /* UUID: 8-4-4-4-12 = 36char + \0 */
+  char uuid[37]; /* UUID: 8-4-4-4-12 = 36char + \0 */
   char start_time[HSD_ACQ_TIMESTAMP_LENGTH]; /* "YYYY-MM-DDTHH:MM:SS.mmmZ" */
-  char end_time[HSD_ACQ_TIMESTAMP_LENGTH];   /* "YYYY-MM-DDTHH:MM:SS.mmmZ" */
+  char end_time[HSD_ACQ_TIMESTAMP_LENGTH]; /* "YYYY-MM-DDTHH:MM:SS.mmmZ" */
 } AcquisitionInfoModel_t;
 
 typedef struct _FirmwareInfoModel_t
@@ -154,10 +153,10 @@ typedef struct _AppModel_t
   LogControllerModel_t log_controller_model;
   AcquisitionInfoModel_t acquisition_info_model;
   FirmwareInfoModel_t firmware_info_model;
-  /* Insert here your custom App Model code */
+/* Insert here your custom App Model code */
 } AppModel_t;
 
-AppModel_t *getAppModel(void);
+AppModel_t* getAppModel(void);
 
 /* Device Components APIs =========================================================== */
 

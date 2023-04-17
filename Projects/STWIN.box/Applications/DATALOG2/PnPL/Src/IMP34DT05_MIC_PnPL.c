@@ -38,7 +38,6 @@
 #include "Imp34dt05_Mic_PnPL.h"
 #include "Imp34dt05_Mic_PnPL_vtbl.h"
 
-
 static const IPnPLComponent_vtbl sImp34dt05_Mic_PnPL_CompIF_vtbl =
 {
   Imp34dt05_Mic_PnPL_vtblGetKey,
@@ -156,6 +155,8 @@ uint8_t Imp34dt05_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   char *temp_s = "";
   imp34dt05_mic_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "imp34dt05_mic.data_type", temp_s);
+  imp34dt05_mic_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "imp34dt05_mic.sensor_annotation", temp_s);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "imp34dt05_mic.c_type", COMP_TYPE_SENSOR);
@@ -216,6 +217,11 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
       int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "imp34dt05_mic.samples_per_ts.val");
       imp34dt05_mic_set_samples_per_ts__val(samples_per_ts);
     }
+  }
+  if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.sensor_annotation"))
+  {
+    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "imp34dt05_mic.sensor_annotation");
+    imp34dt05_mic_set_sensor_annotation(sensor_annotation);
   }
   json_value_free(tempJSON);
   return ret;

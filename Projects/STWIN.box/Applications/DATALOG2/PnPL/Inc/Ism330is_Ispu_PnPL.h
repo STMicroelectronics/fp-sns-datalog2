@@ -42,6 +42,8 @@ extern "C" {
 #include "parson.h"
 #include "IPnPLComponent.h"
 #include "IPnPLComponent_vtbl.h"
+#include "IIsm330is_Ispu.h"
+#include "IIsm330is_Ispu_vtbl.h"
 
 /**
   * Create a type name for _Ism330is_Ispu_PnPL.

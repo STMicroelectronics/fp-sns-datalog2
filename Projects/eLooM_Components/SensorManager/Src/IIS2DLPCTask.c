@@ -284,9 +284,6 @@ static inline sys_error_code_t IIS2DLPCTaskPostReportToFront(IIS2DLPCTask *_this
  */
 static inline sys_error_code_t IIS2DLPCTaskPostReportToBack(IIS2DLPCTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file IIS2DLPCTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -1010,7 +1007,7 @@ static sys_error_code_t IIS2DLPCTaskExecuteStepDatalog(AManagedTask *_this)
         }
       case SM_MESSAGE_ID_DATA_READY:
         {
-          //SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2DLPC: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2DLPC: new data.\r\n"));
           if(p_obj->pIRQConfig == NULL)
           {
             //if(TX_SUCCESS != tx_timer_change(&p_obj->read_timer, AMT_MS_TO_TICKS(IIS2DLPC_TASK_CFG_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(IIS2DLPC_TASK_CFG_TIMER_PERIOD_MS)))
@@ -1049,10 +1046,11 @@ static sys_error_code_t IIS2DLPCTaskExecuteStepDatalog(AManagedTask *_this)
 
               DataEventInit((IEvent*) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
               IEventSrcSendEvent(p_obj->p_event_src, (IEvent*) &evt, NULL);
-//          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2DLPC: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2DLPC: ts = %f\r\n", (float)timestamp));
 #if IIS2DLPC_FIFO_ENABLED
             }
 #endif
+          }
             if(p_obj->pIRQConfig == NULL)
             {
               if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
@@ -1060,7 +1058,6 @@ static sys_error_code_t IIS2DLPCTaskExecuteStepDatalog(AManagedTask *_this)
                 res = SYS_UNDEFINED_ERROR_CODE;
               }
             }
-          }
           break;
         }
       case SM_MESSAGE_ID_SENSOR_CMD:

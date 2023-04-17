@@ -1,21 +1,21 @@
 /**
-  ******************************************************************************
-  * @file    IStream.h
-  * @author  SRA
-  * @brief
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    IStream.h
+ * @author  SRA
+ * @brief
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ *
+ ******************************************************************************
+ */
 
 #ifndef INCLUDE_ISTREAM_H_
 #define INCLUDE_ISTREAM_H_
@@ -32,12 +32,13 @@ extern "C" {
 
 typedef enum _IStreamMode_t
 {
-  RECEIVE = 0, TRANSMIT
+  RECEIVE = 0,
+  TRANSMIT
 } IStreamMode_t;
 
 /**
-  * Create  type name for IStream.
-  */
+ * Create  type name for IStream.
+ */
 typedef struct _IStream_t IStream_t;
 
 // Public API declaration

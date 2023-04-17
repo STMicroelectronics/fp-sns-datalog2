@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
  * @file    applowpower.h
-  * @author  SRA
+ * @author  SRA
  * @brief   Declare the Power Mode State Machine events, state, and status.
  *
  * This file declares:
@@ -22,20 +22,20 @@
  * \anchor fig41 \image html 41_fp_ai_monitor1_app_power_management.png
  * "Fig.41 - App Power Mode State Machine" width=900px
  *
-  ******************************************************************************
+ ******************************************************************************
  * @attention
  *
-  * Copyright (c) 2022 STMicroelectronics.
+ * Copyright (c) 2022 STMicroelectronics.
  * All rights reserved.
  *
  * This software is licensed under terms that can be found in the LICENSE file in
  * the root directory of this software component.
  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  *
-  ******************************************************************************
+ *
+ *
+ ******************************************************************************
  */
-  
+
 #ifndef APPLOWPOWER_H_
 #define APPLOWPOWER_H_
 

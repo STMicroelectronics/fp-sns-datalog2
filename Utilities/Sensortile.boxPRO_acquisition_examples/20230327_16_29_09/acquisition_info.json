@@ -1,0 +1,39 @@
+{
+    "tags": [
+        {
+            "l": "SW_TAG_0",
+            "e": true,
+            "ta": "2023-03-27T16:28:57.108Z"
+        },
+        {
+            "l": "SW_TAG_1",
+            "e": true,
+            "ta": "2023-03-27T16:28:59.295Z"
+        },
+        {
+            "l": "SW_TAG_0",
+            "e": false,
+            "ta": "2023-03-27T16:28:59.990Z"
+        },
+        {
+            "l": "SW_TAG_2",
+            "e": true,
+            "ta": "2023-03-27T16:29:01.016Z"
+        },
+        {
+            "l": "SW_TAG_2",
+            "e": false,
+            "ta": "2023-03-27T16:29:03.115Z"
+        }
+    ],
+    "name": "STWIN.Box_acquisition",
+    "description": "",
+    "uuid": "3f6ebc15-0b96-41ea-a6f3-810f0c5960a5",
+    "start_time": "2023-03-27T16:28:56.000Z",
+    "end_time": "2023-03-27T16:29:06.473Z",
+    "data_ext": ".dat",
+    "interface": 1,
+    "schema_version": "2.0.0",
+    "data_fmt": "HSD_2.0.0",
+    "c_type": 2
+}

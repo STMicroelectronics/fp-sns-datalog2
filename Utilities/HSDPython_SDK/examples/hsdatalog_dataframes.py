@@ -72,8 +72,9 @@ def hsd_dataframe(acq_folder, sensor_name, start_time, end_time, raw_data, label
             for component in component_list:
                 try:
                     df = HSDatalog.get_dataframe(hsd, component, start_time, end_time, labeled, raw_data)
-                    if not (df is None or df.empty):
-                        log.info("\nDataFrame - Start time: {}, End time: {}\n{}".format(start_time, df.values[-1][0] ,df))
+                    if not (df is None or len(df) == 0):
+                        for d in df:
+                            log.info("\nDataFrame - Start time: {}, End time: {}\n{}".format(start_time, d.values[-1][0] ,d))
                 except Exception as err:
                     log.exception(err)
             df_flag = False

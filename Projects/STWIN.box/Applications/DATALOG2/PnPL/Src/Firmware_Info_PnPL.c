@@ -38,7 +38,6 @@
 #include "Firmware_Info_PnPL.h"
 #include "Firmware_Info_PnPL_vtbl.h"
 
-
 static const IPnPLComponent_vtbl sFirmware_Info_PnPL_CompIF_vtbl =
 {
   Firmware_Info_PnPL_vtblGetKey,
@@ -121,6 +120,8 @@ uint8_t Firmware_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   json_object_dotset_string(JSON_Status, "firmware_info.device_url", temp_s);
   firmware_info_get_fw_url(&temp_s);
   json_object_dotset_string(JSON_Status, "firmware_info.fw_url", temp_s);
+  firmware_info_get_mac_address(&temp_s);
+  json_object_dotset_string(JSON_Status, "firmware_info.mac_address", temp_s);
   json_object_dotset_number(JSON_Status, "firmware_info.c_type", COMP_TYPE_OTHER);
 
   if (pretty == 1)

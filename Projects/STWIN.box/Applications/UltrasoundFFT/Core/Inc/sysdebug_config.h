@@ -1,7 +1,7 @@
 /**
  ******************************************************************************
  * @file    sysdebug_config.h
-  * @author  SRA
+ * @author  SRA
  * @brief   Configure the debug log functionality
  *
  * Each logic module of the application should define a DEBUG control byte
@@ -10,12 +10,12 @@
  ******************************************************************************
  * @attention
  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
  *
  *
  ******************************************************************************
@@ -33,7 +33,6 @@ extern "C" {
 /* Example */
 /*#define SYS_DBG_MODULE1     SYS_DBG_ON|GTS_DBG_HALT  ///< Module 1 debug control byte */
 /*#define SYS_DBG_MODULE2     SYS_DBG_ON               ///< Module 2 debug control byte */
-
 
 #define SYS_DBG_INIT                       SYS_DBG_ON                 /* Init task debug control byte */
 #define SYS_DBG_DRIVERS                    SYS_DBG_ON                 /* Drivers debug control byte */
@@ -60,7 +59,6 @@ extern "C" {
 #define SYS_DBG_SYSTS                      SYS_DBG_OFF                /* TimeStamp service debug control byte */
 #define SYS_DBG_DPU                        SYS_DBG_OFF                /* DPU debug control byte */
 
-
 /* ODeV - hardware configuration for the debug services provided by the framework */
 /**********************************************************************************/
 
@@ -74,7 +72,6 @@ void MX_USART2_UART_Init(void);
 #define SYS_DBG_UART_INIT                  MX_USART2_UART_Init
 #define SYS_DBG_UART_TIMEOUT_MS            5000
 #endif /* SYS_DEBUG */
-
 
 #ifdef __cplusplus
 }

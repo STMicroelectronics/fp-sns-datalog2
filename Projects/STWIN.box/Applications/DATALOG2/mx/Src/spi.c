@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics..
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -385,28 +385,6 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef* spiHandle)
     GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
     HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN SPI3_MspInit 1 */
-
-    /** BLE CS and RESET pin configuration
-    PE1     ------> BLE CS
-    PD13    ------> BLE_RST
-      */
-    __HAL_RCC_GPIOE_CLK_ENABLE();
-    __HAL_RCC_GPIOD_CLK_ENABLE();
-
-    GPIO_InitStruct.Pin = BLE_SPI_CS_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(BLE_SPI_CS_GPIO_Port, &GPIO_InitStruct);
-
-    GPIO_InitStruct.Pin = BLE_RST_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(BLE_RST_GPIO_Port, &GPIO_InitStruct);
-
-  /* USER CODE END SPI3_MspInit 1 */
   }
 }
 

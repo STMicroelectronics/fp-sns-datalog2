@@ -11,9 +11,14 @@ class PnPLCMDManager:
     def __init__(self):
         pass
 
-    @staticmethod
+    # @staticmethod #OLD till HSDatalog2 v1.0.1
+    # def create_get_presentation_string_cmd():
+    #     message = {"system_info":""}
+    #     return json.dumps(message)
+    
+    @staticmethod #NEW from HSDatalog2  v1.1.0
     def create_get_presentation_string_cmd():
-        message = {"system_info":""}
+        message = {"get_presentation":""}
         return json.dumps(message)
 
     @staticmethod

@@ -1,10 +1,9 @@
 ## __DATALOG2_STWIN.box Application__
 
-The **FP-SNS-DATALOG2** function pack including **High Speed Datalog** application for
-**STEVAL-STWINBX1** provides a comprehensive solution to save data from any combination of sensors and
+The **FP-SNS-DATALOG2** function pack provides a comprehensive solution to save data from any combination of sensors and
 microphones configured up to the maximum sampling rate.
  
-The application also allows configuring ISM330DHCX  **Machine Learning Core** unit and reading the output of the 
+The application also allows configuring ISM330DHCX  **Machine Learning Core** unit and ISM330IS **Intelligent Sensor Processing Unit** and reading the output of the 
 selected algorithm.
 
 Sensor data can be stored onto a micro SD card (Secure Digital High Capacity - SDHC) formatted with the FAT32
@@ -16,16 +15,13 @@ which lets you manage the board and sensor configurations, start/stop data acqui
 data labelling.
 
 To read sensor data acquired using FP-SNS-DATALOG2, a few easy-to-use scripts in Python are provided
-within the software package. The scripts have been successfully tested with Python 3.7.
+within the software package. The scripts have been successfully tested with Python 3.10.
 
 FP-SNS-DATALOG2 firmware is based on application-level modules (**Sensor Manager**, **EMData**, …) that 
 customer can reuse and extend easily to build up its custom application.
 These application modules adopt state-of-the-art design patterns, and they support natively low-power modes.
 To enable this solution, the function pack has been built on top of **eLooM**, an Embedded Light Object Oriented fraMework 
 for STM32 applications properly designed for embedded low power applications powered by STM32.
-
-This firmware package includes Components Device Drivers, Board Support Package and example applications 
-for the STWIN.box platform (STEVAL-STWINBX1).  
 
 
 ### __Keywords__

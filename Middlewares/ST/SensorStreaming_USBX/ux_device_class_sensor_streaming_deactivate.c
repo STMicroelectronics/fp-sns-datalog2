@@ -64,7 +64,7 @@ UINT _ux_device_class_sensor_streaming_deactivate(UX_SLAVE_CLASS_COMMAND *comman
       /* Look at type.  */
       if((endpoint->ux_slave_endpoint_descriptor.bmAttributes & UX_MASK_ENDPOINT_TYPE) == UX_BULK_ENDPOINT)
 
-        if(ep_index < N_IN_ENDPOINTS)
+        if(ep_index < SS_N_IN_ENDPOINTS)
         {
           (void) _ux_device_stack_transfer_all_request_abort(endpoint, UX_TRANSFER_BUS_RESET);
           ep_index++;

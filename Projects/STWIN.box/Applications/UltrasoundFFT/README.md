@@ -10,9 +10,6 @@ These application modules adopt state-of-the-art design patterns, and they suppo
 To enable this solution, the function pack has been built on top of **eLooM**, an Embedded Light Object Oriented fraMework 
 for STM32 applications properly designed for embedded low power applications powered by STM32.
 
-This firmware package includes Components Device Drivers, Board Support Package and example applications 
-for the STWIN.box platform (STEVAL-STWINBX1).  
-
 
 ### __Keywords__
 

@@ -38,7 +38,6 @@
 #include "Stts22h_Temp_PnPL.h"
 #include "Stts22h_Temp_PnPL_vtbl.h"
 
-
 static const IPnPLComponent_vtbl sStts22h_Temp_PnPL_CompIF_vtbl =
 {
   Stts22h_Temp_PnPL_vtblGetKey,
@@ -164,6 +163,8 @@ uint8_t Stts22h_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   char *temp_s = "";
   stts22h_temp_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "stts22h_temp.data_type", temp_s);
+  stts22h_temp_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "stts22h_temp.sensor_annotation", temp_s);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "stts22h_temp.c_type", COMP_TYPE_SENSOR);
@@ -230,6 +231,11 @@ uint8_t Stts22h_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
       int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "stts22h_temp.samples_per_ts.val");
       stts22h_temp_set_samples_per_ts__val(samples_per_ts);
     }
+  }
+  if (json_object_dothas_value(tempJSONObject, "stts22h_temp.sensor_annotation"))
+  {
+    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "stts22h_temp.sensor_annotation");
+    stts22h_temp_set_sensor_annotation(sensor_annotation);
   }
   json_value_free(tempJSON);
   return ret;

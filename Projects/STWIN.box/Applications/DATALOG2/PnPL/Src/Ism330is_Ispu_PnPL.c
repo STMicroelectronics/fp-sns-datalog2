@@ -37,8 +37,6 @@
 
 #include "Ism330is_Ispu_PnPL.h"
 #include "Ism330is_Ispu_PnPL_vtbl.h"
-#include "IIsm330is_Ispu.h"
-#include "IIsm330is_Ispu_vtbl.h"
 
 static const IPnPLComponent_vtbl sIsm330is_Ispu_PnPL_CompIF_vtbl =
 {
@@ -144,6 +142,8 @@ uint8_t Ism330is_Ispu_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   json_object_dotset_number(JSON_Status, "ism330is_ispu.dim", temp_i);
   ism330is_ispu_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "ism330is_ispu.ioffset", temp_f);
+  ism330is_ispu_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "ism330is_ispu.sensor_annotation", temp_s);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "ism330is_ispu.c_type", COMP_TYPE_SENSOR);
@@ -188,6 +188,11 @@ uint8_t Ism330is_Ispu_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
       int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "ism330is_ispu.samples_per_ts.val");
       ism330is_ispu_set_samples_per_ts__val(samples_per_ts);
     }
+  }
+  if (json_object_dothas_value(tempJSONObject, "ism330is_ispu.sensor_annotation"))
+  {
+    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ism330is_ispu.sensor_annotation");
+    ism330is_ispu_set_sensor_annotation(sensor_annotation);
   }
   json_value_free(tempJSON);
   return ret;

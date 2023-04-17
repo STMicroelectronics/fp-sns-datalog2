@@ -42,6 +42,8 @@ extern "C" {
 #include "parson.h"
 #include "IPnPLComponent.h"
 #include "IPnPLComponent_vtbl.h"
+#include "ILog_Controller.h"
+#include "ILog_Controller_vtbl.h"
 
 /**
   * Create a type name for _Log_Controller_PnPL.

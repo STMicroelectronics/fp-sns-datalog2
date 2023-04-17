@@ -38,7 +38,6 @@
 #include "Tags_Info_PnPL.h"
 #include "Tags_Info_PnPL_vtbl.h"
 
-
 static const IPnPLComponent_vtbl sTags_Info_PnPL_CompIF_vtbl =
 {
   Tags_Info_PnPL_vtblGetKey,

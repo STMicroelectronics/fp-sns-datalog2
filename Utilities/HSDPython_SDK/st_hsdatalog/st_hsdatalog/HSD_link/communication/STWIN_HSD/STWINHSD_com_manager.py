@@ -21,7 +21,7 @@ from st_hsdatalog.HSD_utils.exceptions import CommunicationEngineOpenError, Comm
 from st_hsdatalog.HSD_link.communication.STWIN_HSD.STWINHSD_commands import MLCParam, STWINHSDGetDeviceInfoCmd, \
     STWINHSDGetDeviceCmd, STWINHSDGetLogStatusCmd, STWINHSDSetAcquisitionInfoCmd, STWINHSDSetMLCSensorCmd, STWINHSDSetSWTagCmd, STWINHSDGetTagConfigCmd, \
     STWINHSDStartLoggingCmd, STWINHSDStopLoggingCmd, IsActiveParam, ODRParam, FSParam, \
-    SamplePerTSParam, STWINHSDSetSensorCmd, STWINHSDSetHWTagCmd, STWINHSDSetHWTagLabelCmd, STWINHSDSetSWTagLabelCmd, \
+    SamplePerTSParam, UsbDataPacketSizeParam, STWINHSDSetSensorCmd, STWINHSDSetHWTagCmd, STWINHSDSetHWTagLabelCmd, STWINHSDSetSWTagLabelCmd, \
     STWINHSDSetDeviceAliasCmd, STWINHSDGetSubSensorStatusCmd
 from st_hsdatalog.HSD_link.communication.STWIN_HSD.hsd_dll import HSD_Dll
 from st_hsdatalog.HSD.model.DeviceConfig import Device, DeviceInfo, SensorDescriptor, SubSensorDescriptor, \
@@ -97,6 +97,9 @@ class STWINHSD_Cmd():
 
     def sample_per_ts_param_cmd(self, ss_id, sample_per_ts):
         return SamplePerTSParam(ss_id, sample_per_ts)
+    
+    def usb_data_packet_size(self, ss_id, usb_data_packet_size):
+        return UsbDataPacketSizeParam(ss_id, usb_data_packet_size)
 
     def mlc_config_param_cmd(self, ss_id, ucf_file_path):
         with open(ucf_file_path, "r") as f:
@@ -489,6 +492,8 @@ class STWINHSD_CommandManager:
                     params.append(self.cmd_set.fs_param_cmd(i, sss.fs))
                 if sss.samples_per_ts is not None:
                     params.append(self.cmd_set.sample_per_ts_param_cmd(i, sss.samples_per_ts))
+                if sss.usb_data_packet_size is not None:
+                    params.append(self.cmd_set.usb_data_packet_size(i, sss.usb_data_packet_size))
                 message = json.dumps(self.cmd_set.set_sensor_cmd(sensor.id,params).to_dict())
                 res = self.__send_message(d_id,message)
                 if res is None:

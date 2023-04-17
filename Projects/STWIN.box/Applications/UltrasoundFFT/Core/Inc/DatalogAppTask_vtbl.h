@@ -1,17 +1,17 @@
 /**
  ******************************************************************************
  * @file    DatalogAppTask_vtbl.h
-  * @author  SRA
+ * @author  SRA
  * @brief
  ******************************************************************************
  * @attention
  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
  *
  *
  ******************************************************************************
@@ -44,7 +44,7 @@ void algorithmEvtListener_ProcessSetOwner_vtbl(IEventListener *_this, void *pxOw
 sys_error_code_t algorithmEvtListener_ProcessOnNewDataReady_vtbl(IEventListener *_this, const DataEvent_t *p_evt);
 
 // ICommandParse_t virtual functions
-sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_this, char *commandString);
+sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_this, char *commandString, uint8_t mode);
 sys_error_code_t DatalogAppTask_vtblICommandParse_t_serialize_response(ICommandParse_t *_this, char **response_name, char **buff, uint32_t *size,
                                                                        uint8_t pretty);
 

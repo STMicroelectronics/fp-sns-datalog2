@@ -526,7 +526,14 @@ static uint8_t extract_PnPL_cmd_data(char *commandString, uint8_t *commandType, 
       json_value_free(tempJSON);
       return PNPL_CMD_NO_ERROR_CODE;
     }
-    else if (strcmp(componentName, "system_info") == 0)
+    else if (strcmp(componentName, "system_info") == 0)//NOTE Used for OLD get_presentation command
+    {
+      *commandType = PNPL_CMD_SYSTEM_INFO;
+      strcpy(componentName, "");
+      json_value_free(tempJSON);
+      return PNPL_CMD_NO_ERROR_CODE;
+    }
+    else if (strcmp(componentName, "get_presentation") == 0)//NOTE New get_presentation command
     {
       *commandType = PNPL_CMD_SYSTEM_INFO;
       strcpy(componentName, "");
@@ -602,7 +609,7 @@ uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uin
 {
   uint8_t ret = PNPL_CMD_NO_ERROR_CODE;
 
-  if (command->comm_type == PNPL_CMD_SYSTEM_INFO)
+  if(command->comm_type == PNPL_CMD_SYSTEM_INFO)
   {
    (void)PnPLGetPresentationJSON(SerializedJSON, size);
   }

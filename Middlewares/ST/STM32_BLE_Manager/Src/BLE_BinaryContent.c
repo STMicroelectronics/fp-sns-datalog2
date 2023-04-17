@@ -29,10 +29,15 @@
 /* Exported Variables ------------------------------------------------------- */
 /* Identifies the notification Events */
 CustomNotifyEventBinaryContent_t CustomNotifyEventBinaryContent = NULL;
+CustomWriteRequestBinaryContent_t CustomWriteRequestBinaryContent=NULL;
 
 /* Private variables ---------------------------------------------------------*/
 /* Data structure pointer for BinaryContent info service */
 static BleCharTypeDef BleCharBinaryContent;
+/* Buffer used to save the complete command received via BLE*/
+static uint8_t *ble_command_buffer;
+
+static int32_t BinaryContentMaxCharLength = DEFAULT_MAX_BINARY_CONTENT_CHAR_LEN;
 
 /* Private functions ---------------------------------------------------------*/
 static void AttrMod_Request_BinaryContent(void *BleCharPointer,uint16_t attr_handle, uint16_t Offset, uint8_t data_length, uint8_t *att_data);
@@ -51,18 +56,39 @@ BleCharTypeDef* BLE_InitBinaryContentService(void)
   BleCharPointer = &BleCharBinaryContent;
   memset(BleCharPointer,0,sizeof(BleCharTypeDef));
   BleCharPointer->AttrMod_Request_CB = AttrMod_Request_BinaryContent;
+  BleCharPointer->Write_Request_CB = Write_Request_BinaryContent;
   COPY_BINARYCONTENT_CHAR_UUID((BleCharPointer->uuid));
   BleCharPointer->Char_UUID_Type = UUID_TYPE_128;
-  BleCharPointer->Char_Value_Length=20;
-  BleCharPointer->Char_Properties = ((uint8_t)CHAR_PROP_NOTIFY);
+  BleCharPointer->Char_Value_Length=BinaryContentMaxCharLength;
+  BleCharPointer->Char_Properties = ((uint8_t)CHAR_PROP_NOTIFY) | ((uint8_t)CHAR_PROP_WRITE_WITHOUT_RESP);
   BleCharPointer->Security_Permissions = ATTR_PERMISSION_NONE;
-  BleCharPointer->GATT_Evt_Mask = GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP;
+  BleCharPointer->GATT_Evt_Mask = GATT_NOTIFY_ATTRIBUTE_WRITE;
   BleCharPointer->Enc_Key_Size = 16;
   BleCharPointer->Is_Variable = 1;
 
   BLE_MANAGER_PRINTF("BLE BinaryContent features ok\r\n");
 
   return BleCharPointer;
+}
+
+/**
+ * @brief  BinaryContent Set Max Char Length
+ * @param  int32_t MaxCharLength
+ * @retval none
+ */
+void BLE_BinaryContentSetMaxCharLength(int32_t MaxCharLength)
+{
+  BinaryContentMaxCharLength = MaxBleCharStdOutLen;
+}
+
+/**
+ * @brief  BinaryContent Get Max Char Length
+ * @param  None
+ * @retval int32_t MaxCharLength
+ */
+int32_t BLE_BinaryContentGetMaxCharLength(void)
+{
+  return BinaryContentMaxCharLength;
 }
 
 /**
@@ -115,4 +141,29 @@ static void AttrMod_Request_BinaryContent(void *VoidCharPointer, uint16_t attr_h
    BLE_MANAGER_PRINTF("--->BinaryContent=%s", (att_data[0] == BLE_NOTIFY_SUB) ? " ON\r\n" : " OFF\r\n");
  }
 #endif
+}
+
+/**
+ * @brief  This event is given when a read request is received by the server from the client.
+ * @param  void *VoidCharPointer
+ * @param  uint16_t handle Handle of the attribute
+ * @retval None
+ */
+__weak void Write_Request_BinaryContent(void *BleCharPointer,uint16_t handle, uint16_t Offset, uint8_t data_length, uint8_t *att_data)
+{
+  uint32_t CommandBufLen=0;
+  
+  if(CustomWriteRequestBinaryContent != NULL)
+  {
+     CommandBufLen = BLE_Command_TP_Parse(&ble_command_buffer, att_data, data_length);
+
+     if(CommandBufLen>0U)
+     {
+       CustomWriteRequestBinaryContent(ble_command_buffer, CommandBufLen);
+     }
+  }
+  else
+  {
+    BLE_MANAGER_PRINTF("\r\n\nWrite request BinaryContent function not defined\r\n\n");
+  }
 }

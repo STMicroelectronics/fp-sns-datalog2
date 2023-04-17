@@ -48,14 +48,13 @@ class HSD_Dll_Wrapper:
         dll_name = ""
         if platform.system() == 'Linux':
             if platform.machine() == 'armv7l':
-                dll_name = "./HSD_link/communication/libhs_datalog/raspberryPi/libhs_datalog_v2.so"
+                dll_name = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0] + "/libhs_datalog/raspberryPi/libhs_datalog_v2.so"
             else:
-                dll_name = "./HSD_link/communication/libhs_datalog/linux/libhs_datalog_v2.so"
+                dll_name = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0] + "/libhs_datalog/linux/libhs_datalog_v2.so"
             self._hsd_dll = cdll.LoadLibrary(dll_name)
         elif platform.system() == 'Windows':
             dll_subfolder = platform.architecture()[0]
             dll_name = "libhs_datalog_v2"
-
             dllabspath = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0] + os.path.sep + os.path.join("libhs_datalog", dll_subfolder)
             os.environ['PATH'] = dllabspath + os.pathsep + os.environ['PATH']
             self._hsd_dll = cdll.LoadLibrary(util.find_library(dll_name))

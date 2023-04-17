@@ -57,6 +57,7 @@ EMData_t IIS2MDCTask_vtblMagGetDataInfo(ISourceObservable *_this);
 
 sys_error_code_t IIS2MDCTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
 sys_error_code_t IIS2MDCTask_vtblSensorSetFS(ISensor_t *_this, float FS);
+sys_error_code_t IIS2MDCTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t IIS2MDCTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t IIS2MDCTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t IIS2MDCTask_vtblSensorIsEnabled(ISensor_t *_this);

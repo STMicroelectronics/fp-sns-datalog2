@@ -286,9 +286,6 @@ static inline sys_error_code_t IIS2ICLXTaskPostReportToFront(IIS2ICLXTask *_this
  */
 static inline sys_error_code_t IIS2ICLXTaskPostReportToBack(IIS2ICLXTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file IIS2ICLXTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -1014,7 +1011,7 @@ static sys_error_code_t IIS2ICLXTaskExecuteStepDatalog(AManagedTask *_this)
         }
       case SM_MESSAGE_ID_DATA_READY:
         {
-//        SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2ICLX: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("IIS2ICLX: new data.\r\n"));
           if(p_obj->pIRQConfig == NULL)
           {
             if(TX_SUCCESS
@@ -1053,10 +1050,11 @@ static sys_error_code_t IIS2ICLXTaskExecuteStepDatalog(AManagedTask *_this)
 
               DataEventInit((IEvent*) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
               IEventSrcSendEvent(p_obj->p_event_src, (IEvent*) &evt, NULL);
-//          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2ICLX: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2ICLX: ts = %f\r\n", (float)timestamp));
 #if IIS2ICLX_FIFO_ENABLED
             }
 #endif
+          }
             if(p_obj->pIRQConfig == NULL)
             {
               if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
@@ -1064,7 +1062,6 @@ static sys_error_code_t IIS2ICLXTaskExecuteStepDatalog(AManagedTask *_this)
                 res = SYS_UNDEFINED_ERROR_CODE;
               }
             }
-          }
           break;
         }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -1398,6 +1395,19 @@ static sys_error_code_t IIS2ICLXTaskSensorReadData(IIS2ICLXTask *_this)
   iis2iclx_read_reg(p_sensor_drv, IIS2ICLX_OUTX_L_A, (uint8_t *) _this->p_sensor_data_buff, _this->samples_per_it * 4);
   _this->fifo_level = 1;
 #endif /* IIS2ICLX_FIFO_ENABLED */
+
+#if (HSD_USE_DUMMY_DATA == 1)
+  uint16_t i = 0;
+  int16_t * p16 = (int16_t *)_this->p_sensor_data_buff;
+
+  if(_this->fifo_level >= _this->samples_per_it)
+  {
+  for (i = 0; i < _this->samples_per_it*3 ; i++)
+  {
+    *p16++ = dummyDataCounter++;
+  }
+  }
+#endif
 
   return res;
 }

@@ -42,16 +42,19 @@
  here by commenting or un-commenting the conditional compilation defined OR supply the defines
  though the compiler's equivalent of the -D option.  */
 
-//#define USBX_MEMORY_SIZE          (145 * 1024)
-//#define UX_DEVICE_APP_MEM_POOL_SIZE               USBX_MEMORY_SIZE + 1024
+/* Define for SensorStreaming Class */
 
 #define SS_CLASS_THREAD_PRIO 1
 #define SS_CLASS_THREAD_STACK_SIZE (3 * 1024)
 
-#define SS_BULKIN_THREAD_PRIO 3
-#define SS_BULKIN_THREAD_STACK_SIZE (1 * 1024)
+#define SS_BULKIN_THREAD_PRIO            USB_EP_BULKIN_CFG_PRIORITY
+#define SS_BULKIN_THREAD_STACK_SIZE      USB_EP_BULKIN_CFG_STACK_DEPTH
 
-#define N_CHANNELS_MAX COM_MAX_SENSORS
+#define SS_N_CHANNELS_MAX                SM_MAX_SENSORS
+
+/* Number of IN Endpoints available on the platform */
+#define SS_N_IN_ENDPOINTS                5U
+#define SS_N_OUT_ENDPOINTS               1U
 
 /* Override various options with default values already assigned in ux_api.h or ux_port.h. Please
  also refer to ux_port.h for descriptions on each of these options.  */

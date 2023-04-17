@@ -26,13 +26,22 @@
  extern "C" {
 #endif
    
+/* Exported Defines ----------------------------------------------------------*/
+#ifndef DEFAULT_MAX_BINARY_CONTENT_CHAR_LEN
+  #define DEFAULT_MAX_BINARY_CONTENT_CHAR_LEN  20
+#endif /* DEFAULT_MAX_BINARY_CONTENT_CHAR_LEN */
+   
 /* Exported typedef --------------------------------------------------------- */
+typedef void (*CustomWriteRequestBinaryContent_t)(uint8_t* received_msg, uint32_t msg_length);
 typedef void (*CustomNotifyEventBinaryContent_t)(BLE_NotifyEvent_t Event);
 
 /* Exported Variables ------------------------------------------------------- */
+extern CustomWriteRequestBinaryContent_t CustomWriteRequestBinaryContent;
 extern CustomNotifyEventBinaryContent_t CustomNotifyEventBinaryContent;
 
 /* Exported functions ------------------------------------------------------- */
+
+__weak void Write_Request_BinaryContent(void *BleCharPointer,uint16_t handle, uint16_t Offset, uint8_t data_length, uint8_t *att_data);
 
 /**
  * @brief  Init BinaryContent info service
@@ -48,6 +57,20 @@ extern BleCharTypeDef* BLE_InitBinaryContentService(void);
  * @retval tBleStatus Status
  */
 extern tBleStatus BLE_BinaryContentUpdate(uint8_t* buffer, uint8_t len);
+
+/**
+ * @brief  BinaryContent Set Max Char Length
+ * @param  int32_t MaxCharLength
+ * @retval none
+ */
+extern void BLE_BinaryContentSetMaxCharLength(int32_t MaxCharLength);
+
+/**
+ * @brief  BinaryContent Get Max Char Length
+ * @param  None
+ * @retval int32_t MaxCharLength
+ */
+extern int32_t BLE_BinaryContentGetMaxCharLength(void);
 
 #ifdef __cplusplus
 }

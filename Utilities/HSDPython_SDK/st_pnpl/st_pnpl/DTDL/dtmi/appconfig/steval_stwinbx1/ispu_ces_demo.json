@@ -436,7 +436,7 @@
           "en": "USB Data Packet Size"
         },
         "name": "usb_dps",
-        "schema": "double",
+        "schema": "integer",
         "writable": false
       },
       {
@@ -449,7 +449,7 @@
           "en": "SD Data Packet Size"
         },
         "name": "sd_dps",
-        "schema": "double",
+        "schema": "integer",
         "writable": false
       },
       {
@@ -463,19 +463,6 @@
         },
         "name": "data_type",
         "schema": "string",
-        "writable": false
-      },
-      {
-        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ism330is_ispu:packet_size;1",
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
-        "displayName": {
-          "en": "Packet Size"
-        },
-        "name": "packet_size",
-        "schema": "integer",
         "writable": false
       },
       {
@@ -1156,6 +1143,19 @@
           "en": "Stop Detect"
         },
         "name": "stop_log"
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:other:log_controller:controller_type;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Controller Type"
+        },
+        "name": "controller_type",
+        "schema": "integer",
+        "writable": false
       }
     ],
     "displayName": {

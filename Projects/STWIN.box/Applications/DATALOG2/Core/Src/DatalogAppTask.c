@@ -32,14 +32,13 @@
 #include "UtilTask.h"
 #include "ISM330DHCXTask.h"
 #include "ISM330ISTask.h"
-#include "ISensorMlc.h"
 #include "services/SQuery.h"
 #include "services/SUcfProtocol.h"
 
 #include "STWIN.box_debug_pins.h"
 
 #include "automode.h"
-
+#include "rtc.h"
 
 #ifndef DT_TASK_CFG_STACK_DEPTH
 #define DT_TASK_CFG_STACK_DEPTH                   (TX_MINIMUM_STACK*2)
@@ -79,7 +78,6 @@ struct _DatalogAppTask
     */
   AManagedTaskEx super;
   TX_QUEUE in_queue;
-  ULONG message;
 
   /** Software timer used to send periodical ble advertise messages **/
   TX_TIMER ble_advertise_timer;
@@ -115,8 +113,6 @@ struct _DatalogAppTask
 
   /** SensorLL interface for ISPU **/
   ISensorLL_t *ispu_sensor_ll;
-
-  uint8_t iis3dwb_pin;
 
   AppModel_t *datalog_model;
 
@@ -198,12 +194,11 @@ static VOID DatalogAppTaskAdvOBTimerCallbackFunction(ULONG timer);
  */
 void INT2_ISM330IS_EXTI_Callback(uint16_t nPin);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file DatalogAppTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
+
+ULONG message;
 
 /**
   * The only instance of the task object.
@@ -237,7 +232,8 @@ static const DatalogAppTaskClass_t sTheClass =
         DatalogAppTask_save_config_vtbl,
         DatalogAppTask_start_vtbl,
         DatalogAppTask_stop_vtbl,
-        NULL },
+        DatalogAppTask_set_time_vtbl,
+        DatalogAppTask_switch_bank_vtbl },
     {
         DatalogAppTask_load_ism330dhcx_ucf_vtbl },
     {
@@ -446,19 +442,6 @@ sys_error_code_t DatalogAppTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
   IStream_set_parse_IF((IStream_t *) p_obj->ble_device, DatalogAppTask_GetICommandParseIF(p_obj));
   p_obj->ble_device->adv_id = SM_MAX_SENSORS+1;
 
-
-  SQuery_t querySM;
-  SQInit(&querySM, SMGetSensorManager());
-  uint16_t id = SQNextByNameAndType(&querySM, "iis3dwb", COM_TYPE_ACC);
-  if (id != SI_NULL_SENSOR_ID)
-  {
-    p_obj->iis3dwb_pin = 1;
-  }
-  else
-  {
-    p_obj->iis3dwb_pin = 0;
-  }
-
   return res;
 }
 
@@ -567,13 +550,13 @@ sys_error_code_t DatalogAppTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPow
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   DatalogAppTask *p_obj = (DatalogAppTask *) _this;
 
-  p_obj->message = DT_FORCE_STEP;
+  message = DT_FORCE_STEP;
 
   if ((ActivePowerMode == E_POWER_MODE_STATE1) || (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE))
   {
     if (AMTExIsTaskInactive(_this))
     {
-      if (tx_queue_front_send(&p_obj->in_queue, &p_obj->message, AMT_MS_TO_TICKS(100)) != TX_SUCCESS)
+      if (tx_queue_front_send(&p_obj->in_queue, &message, AMT_MS_TO_TICKS(100)) != TX_SUCCESS)
       {
         res = SYS_APP_TASK_MSG_LOST_ERROR_CODE;
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_APP_TASK_MSG_LOST_ERROR_CODE);
@@ -1005,6 +988,79 @@ uint8_t DatalogAppTask_save_config_vtbl(ILog_Controller_t *_this)
   return 0;
 }
 
+uint8_t DatalogAppTask_set_time_vtbl(ILog_Controller_t *_this, const char *datetime)
+{
+  assert_param(_this != NULL);
+
+  char datetimeStr[3];
+
+  //internal input format: yyyyMMdd_hh_mm_ss
+
+  RTC_DateTypeDef sdate;
+  RTC_TimeTypeDef stime;
+
+  /** extract year string (only the last two digit). It will be necessary to add 2000*/
+  datetimeStr[0] = datetime[2];
+  datetimeStr[1] = datetime[3];
+  datetimeStr[2] = '\0';
+  sdate.Year = atoi(datetimeStr);
+
+  /** extract month string */
+  datetimeStr[0] = datetime[4];
+  datetimeStr[1] = datetime[5];
+  sdate.Month = atoi(datetimeStr);
+
+  /** extract day string */
+  datetimeStr[0] = datetime[6];
+  datetimeStr[1] = datetime[7];
+  sdate.Date = atoi(datetimeStr);
+
+  /** Week day initialization (not used)*/
+  sdate.WeekDay = RTC_WEEKDAY_MONDAY; //Not used
+
+  /** extract hour string */
+  datetimeStr[0] = datetime[9];
+  datetimeStr[1] = datetime[10];
+  stime.Hours = atoi(datetimeStr);
+
+  /** extract minute string */
+  datetimeStr[0] = datetime[12];
+  datetimeStr[1] = datetime[13];
+  stime.Minutes = atoi(datetimeStr);
+
+  /** extract second string */
+  datetimeStr[0] = datetime[15];
+  datetimeStr[1] = datetime[16];
+  stime.Seconds = atoi(datetimeStr);
+
+  /** not used */
+  //stime.TimeFormat = RTC_HOURFORMAT12_AM;
+  stime.SecondFraction = 0;
+  stime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+  stime.StoreOperation = RTC_STOREOPERATION_RESET;
+
+  if(HAL_RTC_SetTime(&hrtc, &stime, RTC_FORMAT_BIN) != HAL_OK)
+  {
+    while(1)
+      ;
+  }
+  if(HAL_RTC_SetDate(&hrtc, &sdate, RTC_FORMAT_BIN) != HAL_OK)
+  {
+    while(1)
+      ;
+  }
+
+  return 0;
+}
+
+uint8_t DatalogAppTask_switch_bank_vtbl(ILog_Controller_t *_this)
+{
+  assert_param(_this != NULL);
+  SwitchBank();
+  HAL_NVIC_SystemReset();
+  return 0;
+}
+
 // IMLCController_t virtual functions
 uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(IIsm330dhcx_Mlc_t *_this, const char *ucf_data, uint32_t ucf_size)
 {
@@ -1176,17 +1232,17 @@ static sys_error_code_t DatalogAppTaskExecuteStepState1(AManagedTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   DatalogAppTask *p_obj = (DatalogAppTask *) _this;
   AMTExSetInactiveState((AManagedTaskEx *) _this, TRUE);
-  if (TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &p_obj->message, TX_WAIT_FOREVER))
+  if (TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &message, TX_WAIT_FOREVER))
   {
     AMTExSetInactiveState((AManagedTaskEx *) _this, FALSE);
 
-    if (p_obj->message == DT_USER_BUTTON)
+    if (message == DT_USER_BUTTON)
     {
       res = SYS_NO_ERROR_CODE;
 
       log_controller_start_log(&p_obj->pnplLogCtrl, LOG_CTRL_MODE_SD);
     }
-    else if (p_obj->message == DT_FORCE_STEP)
+    else if (message == DT_FORCE_STEP)
     {
       __NOP();
     }
@@ -1202,11 +1258,11 @@ static sys_error_code_t DatalogAppTaskExecuteStepDatalog(AManagedTask *_this)
   DatalogAppTask *p_obj = (DatalogAppTask *) _this;
 
   AMTExSetInactiveState((AManagedTaskEx *) _this, TRUE);
-  if (TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &p_obj->message, TX_WAIT_FOREVER))
+  if (TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &message, TX_WAIT_FOREVER))
   {
     AMTExSetInactiveState((AManagedTaskEx *) _this, FALSE);
 
-    if (p_obj->message == DT_USER_BUTTON)
+    if (message == DT_USER_BUTTON)
     {
       if (IStream_is_enabled((IStream_t *) p_obj->filex_device))
       {
@@ -1217,13 +1273,13 @@ static sys_error_code_t DatalogAppTaskExecuteStepDatalog(AManagedTask *_this)
         log_controller_stop_log(&p_obj->pnplLogCtrl);
       }
     }
-    else if (p_obj->message == DT_FORCE_STEP)
+    else if (message == DT_FORCE_STEP)
     {
       __NOP();
     }
     else   /* ??? is it correct to forward all messages to SDCard?*/
     {
-      filex_dctrl_msg(p_obj->filex_device, &p_obj->message);
+      filex_dctrl_msg(p_obj->filex_device, &message);
     }
   }
 

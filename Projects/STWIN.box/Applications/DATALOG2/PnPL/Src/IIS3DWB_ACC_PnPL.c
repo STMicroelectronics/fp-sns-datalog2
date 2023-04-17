@@ -38,7 +38,6 @@
 #include "Iis3dwb_Acc_PnPL.h"
 #include "Iis3dwb_Acc_PnPL_vtbl.h"
 
-
 static const IPnPLComponent_vtbl sIis3dwb_Acc_PnPL_CompIF_vtbl =
 {
   Iis3dwb_Acc_PnPL_vtblGetKey,
@@ -160,6 +159,8 @@ uint8_t Iis3dwb_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   char *temp_s = "";
   iis3dwb_acc_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "iis3dwb_acc.data_type", temp_s);
+  iis3dwb_acc_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "iis3dwb_acc.sensor_annotation", temp_s);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors and Algorithms */
   json_object_dotset_number(JSON_Status, "iis3dwb_acc.c_type", COMP_TYPE_SENSOR);
@@ -223,6 +224,11 @@ uint8_t Iis3dwb_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
       int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "iis3dwb_acc.samples_per_ts.val");
       iis3dwb_acc_set_samples_per_ts__val(samples_per_ts);
     }
+  }
+  if (json_object_dothas_value(tempJSONObject, "iis3dwb_acc.sensor_annotation"))
+  {
+    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "iis3dwb_acc.sensor_annotation");
+    iis3dwb_acc_set_sensor_annotation(sensor_annotation);
   }
   json_value_free(tempJSON);
   return ret;

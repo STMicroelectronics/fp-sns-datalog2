@@ -23,14 +23,13 @@ import sys
 from PySide6.QtWidgets import QApplication
 from PySide6 import QtCore
 
-from st_hsdatalog.HSD_GUI.MainWindow import MainWindow
-
+from st_hsdatalog.HSD_GUI.HSD_MainWindow import HSD_MainWindow
 
 def main():
     QApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     
-    mainWindow = MainWindow(app)
+    mainWindow = HSD_MainWindow(app)
     mainWindow.setAppTitle("High Speed Datalog Control SW")
     mainWindow.setAppCredits("High Speed Datalog Control SW")
     mainWindow.setWindowTitle("High Speed Datalog Control SW")

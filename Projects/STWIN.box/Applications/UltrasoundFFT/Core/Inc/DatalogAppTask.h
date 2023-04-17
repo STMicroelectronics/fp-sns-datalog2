@@ -1,17 +1,17 @@
 /**
  ******************************************************************************
  * @file    DatalogAppTask.h
-  * @author  SRA
+ * @author  SRA
  * @brief
  ******************************************************************************
  * @attention
  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
  *
  *
  ******************************************************************************
@@ -42,7 +42,6 @@ extern "C" {
 #define DT_USER_BUTTON                            (0x0010)
 #define DT_FORCE_STEP                             (0x00F0)
 
-
 typedef struct
 {
   double old_time_stamp;
@@ -67,7 +66,7 @@ AManagedTaskEx* DatalogAppTaskAlloc(void);
 
 IDataEventListener_t* DatalogAppTask_GetEventListenerIF(DatalogAppTask *_this);
 
-IDataEventListener_t *DatalogAppTask_GetSensorEventListenerIF(DatalogAppTask *_this);
+IDataEventListener_t* DatalogAppTask_GetSensorEventListenerIF(DatalogAppTask *_this);
 
 ICommandParse_t* DatalogAppTask_GetICommandParseIF(DatalogAppTask *_this);
 

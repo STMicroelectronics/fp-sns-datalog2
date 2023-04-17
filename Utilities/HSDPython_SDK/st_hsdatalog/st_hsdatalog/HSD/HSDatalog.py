@@ -313,7 +313,6 @@ class HSDatalog:
             sensor_file_name = HSDatalog.get_ssensor_file_name(hsd, comp_name, comp_type, output_folder)
             
             df = hsd.get_dataframe(comp_name, comp_type, time_offset, time_offset+chunk_time_size, labeled, raw_data)
-            # df = HSDatalog.get_dataframe(hsd, comp_name, comp_type, start_time = time_offset, end_time = time_offset+chunk_time_size, labeled = labeled, raw_data = raw_data)
             if df is not None:
                 if file_format == 'CSV':
                     HSDatalogConverter.to_csv(df, sensor_file_name, mode = 'w' if time_offset == 0 else 'a')
@@ -496,7 +495,7 @@ class HSDatalog:
                 if use_datalog_tags == True and len(data_tags) == 0:
                     log.error("--> No tags detected in your acquisition. Try to relaunch the script without -t flag")
                     return
-                use_datalog_tags = False #TODO CHECK THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                use_datalog_tags = False
             if not (df is None or df.empty):
                 hsd_dfs.append(df)
         HSDatalogConverter.to_unico(output_folder, sensor_name.split('_')[0], hsd_dfs, data_tags, out_format, mode = 'w')
@@ -506,15 +505,18 @@ class HSDatalog:
     def convert_dat_to_unico(hsd, sensor, start_time, end_time, use_datalog_tags, output_folder, out_format):
         hsd_dfs = []
         if isinstance(hsd, HSDatalog_v2):
-            c_name = list(sensor[0].keys())[0]
-            is_active = sensor[0][c_name]["enable"]
-            HSDatalog.__convert_to_unico_format(hsd, c_name, None, is_active, start_time, end_time, use_datalog_tags, output_folder, out_format, hsd_dfs)
+            for s in sensor:
+                c_name = list(s.keys())[0]
+                if not "_mlc" in c_name:
+                    is_active = s[c_name]["enable"]
+                    HSDatalog.__convert_to_unico_format(hsd, c_name, None, is_active, start_time, end_time, use_datalog_tags, output_folder, out_format, hsd_dfs)
         else:
             s_name = sensor.name
             for ss_id, ss_desc in enumerate(sensor.sensor_descriptor.sub_sensor_descriptor):
                 ss_type = ss_desc.sensor_type
-                is_active = sensor.sensor_status.sub_sensor_status[ss_id].is_active
-                HSDatalog.__convert_to_unico_format(hsd, s_name, ss_type, is_active, start_time, end_time, use_datalog_tags, output_folder, out_format, hsd_dfs)
+                if ss_type != "MLC":
+                    is_active = sensor.sensor_status.sub_sensor_status[ss_id].is_active
+                    HSDatalog.__convert_to_unico_format(hsd, s_name, ss_type, is_active, start_time, end_time, use_datalog_tags, output_folder, out_format, hsd_dfs)
     
     @staticmethod
     def __convert_to_wav(hsd, comp_name, comp_type, odr, n_channels, start_time, end_time, output_folder):

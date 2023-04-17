@@ -757,7 +757,7 @@ class HSDatalog_v2:
             algo_contents = self.components_dtdl[sensor_name].contents 
             for ac in algo_contents:
                 if ac.name == "algorithm_type":
-                    algo_type =  ac.schema.enum_values[s_stat["algorithm_type"]].name ##TODO make Algo Type as a list of supported algos!
+                    algo_type =  ac.schema.enum_values[s_stat["algorithm_type"]].name
             
             if algo_type == "fft":
                 log.info("FFT Algorithm!")

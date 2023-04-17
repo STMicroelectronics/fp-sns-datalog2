@@ -63,7 +63,7 @@ class HSDatalogConverter:
             os.makedirs(output_folder)
         
         # arrange data for cartesaim
-        filtered_df = df.drop(columns='Time')
+        filtered_df = df.drop('Time', axis=1)
         dataset = filtered_df.to_numpy()
         
         timestamps_per_file = np.shape(dataset)[0]/n_files
@@ -155,7 +155,7 @@ class HSDatalogConverter:
             out_format  = 'txt'
         for df in hsd_dfs:
             if not with_times:
-                df = df.drop(columns='Time')
+                df = df.drop('Time', axis=1)
             res_df = pd.concat([res_df, df], axis=1, sort=False)
         #removes duplicates (~: bitwise negation operator)
         res_df = res_df.loc[:,~res_df.columns.duplicated()]
@@ -167,7 +167,7 @@ class HSDatalogConverter:
                 log.info(tag_class_label)
                 for y, (k, tag_df) in enumerate(res_df[res_df[tag_class_label] == 1].groupby((res_df[tag_class_label] != 1).cumsum())):
                     log.debug("[group {}]".format(y))
-                    tag_df = tag_df.drop(columns=[tag['Label'] for tag in data_tags])
+                    tag_df = tag_df.drop([tag['Label'] for tag in data_tags], axis=1)
                     labelFileName = "{}_{}_dataLog_{}".format(tag_class_label, sensor_name, y)
                     tag_sub_folder = os.path.join(output_folder, tag_class_label)
                     if not os.path.exists(tag_sub_folder):

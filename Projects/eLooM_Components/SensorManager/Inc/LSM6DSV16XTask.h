@@ -32,14 +32,14 @@ extern "C" {
 #include "events/DataEventSrc_vtbl.h"
 #include "ISensor.h"
 #include "ISensor_vtbl.h"
-#include "ISensorMlc.h"
-#include "ISensorMlc_vtbl.h"
+#include "ISensorLL.h"
+#include "ISensorLL_vtbl.h"
 
 //TODO: STF.Begin - where should these be defined ?
 #define LSM6DSV16X_MAX_DRDY_PERIOD           (1.0)    /* seconds */
 
 #ifndef LSM6DSV16X_MAX_WTM_LEVEL
-#define LSM6DSV16X_MAX_WTM_LEVEL             (256)    /* samples */
+#define LSM6DSV16X_MAX_WTM_LEVEL             (192)    /* samples */
 #endif
 
 #define LSM6DSV16X_MIN_WTM_LEVEL             (16)     /* samples */
@@ -81,12 +81,11 @@ ISourceObservable* LSM6DSV16XTaskGetGyroSensorIF(LSM6DSV16XTask *_this);
 ISourceObservable *LSM6DSV16XTaskGetMlcSensorIF(LSM6DSV16XTask *_this);
 
 /**
-  * Get the ISensorMlc interface.
-  * @param _this [IN] specifies a pointer to a task object.
-  * @return a pointer to the generic object ::ISensorMlc if success,
-  * or NULL if out of memory error occurs.
-  */
-ISensorMlc_t *LSM6DSV16XTaskGetSensorMlcIF(LSM6DSV16XTask *_this);
+ * Get the ::ISensorLL_t interface the sensor.
+ * @param _this [IN] specifies a pointer to a task object.
+ * @return a pointer to the generic object ::ISensorLL_t
+ */
+ISensorLL_t* LSM6DSV16XTaskGetSensorLLIF(LSM6DSV16XTask *_this);
 
 /**
  * Allocate an instance of LSM6DSV16XTask.

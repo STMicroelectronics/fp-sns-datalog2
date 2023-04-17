@@ -69,7 +69,7 @@ UINT _ux_device_class_sensor_streaming_activate(UX_SLAVE_CLASS_COMMAND *command)
       /* Look at type.  */
       if((endpoint->ux_slave_endpoint_descriptor.bmAttributes & UX_MASK_ENDPOINT_TYPE) == UX_BULK_ENDPOINT)
       {
-        if(ep_index < N_IN_ENDPOINTS)
+        if(ep_index < SS_N_IN_ENDPOINTS)
         {
           /* We have found the bulk in endpoint, save it.  */
           sensor_streaming->ux_slave_class_sensor_streaming_bulkin[ep_index].ep_param.endpoint = endpoint;
@@ -100,12 +100,12 @@ UINT _ux_device_class_sensor_streaming_activate(UX_SLAVE_CLASS_COMMAND *command)
   }
 
   UINT i;
-  for(i = 0U; i < N_IN_ENDPOINTS; i++)
+  for(i = 0U; i < SS_N_IN_ENDPOINTS; i++)
   {
     sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].ep_param.tx_state = 0U;
   }
 
-  for(i = 0U; i < N_CHANNELS_MAX; i++)
+  for(i = 0U; i < SS_N_CHANNELS_MAX; i++)
   {
     sensor_streaming->hwcid->tx_buff_status[i] = 0U;
   }

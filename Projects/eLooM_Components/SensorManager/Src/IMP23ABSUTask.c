@@ -251,9 +251,6 @@ static inline sys_error_code_t IMP23ABSUTaskPostReportToFront(IMP23ABSUTask *_th
  */
 static inline sys_error_code_t IMP23ABSUTaskPostReportToBack(IMP23ABSUTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file IMP23ABSUTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -288,7 +285,7 @@ static const IMP23ABSUTaskClass_t sTheClass =
         IMP23ABSUTask_vtblMicGetSensitivity,
         IMP23ABSUTask_vtblSensorSetODR,
         IMP23ABSUTask_vtblSensorSetFS,
-        NULL,
+        IMP23ABSUTask_vtblSensorSetFifoWM,
         IMP23ABSUTask_vtblSensorEnable,
         IMP23ABSUTask_vtblSensorDisable,
         IMP23ABSUTask_vtblSensorIsEnabled,
@@ -711,6 +708,15 @@ sys_error_code_t IMP23ABSUTask_vtblSensorSetFS(ISensor_t *_this, float FS)
   return res;
 }
 
+sys_error_code_t IMP23ABSUTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+{
+  assert_param(_this != NULL);
+  /* Does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IMP23ABSU: warning - SetFifoWM() not supported.\r\n"));
+  return SYS_INVALID_FUNC_CALL_ERROR_CODE;
+}
+
 sys_error_code_t IMP23ABSUTask_vtblSensorEnable(ISensor_t *_this)
 {
   assert_param(_this != NULL);
@@ -887,7 +893,7 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
         }
       case SM_MESSAGE_ID_DATA_READY:
         {
-          /*SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IMP23ABSU: new data.\r\n"));*/
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("IMP23ABSU: new data.\r\n"));
 
           p_obj->half = report.sensorDataReadyMessage.half;
 
@@ -910,7 +916,7 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
           DataEventInit((IEvent*) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
           IEventSrcSendEvent(p_obj->p_event_src, (IEvent*) &evt, NULL);
 
-          /*SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IMP23ABSU: ts = %f\r\n", (float)timestamp));*/
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP23ABSU: ts = %f\r\n", (float)timestamp));
           break;
         }
       case SM_MESSAGE_ID_SENSOR_CMD:

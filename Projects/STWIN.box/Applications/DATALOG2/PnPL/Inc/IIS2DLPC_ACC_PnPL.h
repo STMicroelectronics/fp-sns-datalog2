@@ -36,8 +36,8 @@
 #define iis2dlpc_acc_odr_hz25 25
 #define iis2dlpc_acc_odr_hz50 50
 #define iis2dlpc_acc_odr_hz100 100
-#define iis2dlpc_acc_odr_hz400 400
 #define iis2dlpc_acc_odr_hz200 200
+#define iis2dlpc_acc_odr_hz400 400
 #define iis2dlpc_acc_odr_hz800 800
 #define iis2dlpc_acc_odr_hz1600 1600
 #define iis2dlpc_acc_fs_g2 2

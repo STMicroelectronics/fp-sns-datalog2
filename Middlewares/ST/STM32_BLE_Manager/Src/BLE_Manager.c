@@ -129,6 +129,7 @@ uint8_t manuf_data[BLE_MANAGER_ADVERTISE_DATA_LENGHT];
 
 /**************** Bluetooth Comunication *************************/
 CustomPairingCompleted_t                CustomPairingCompleted;
+CustomMTUExchangeRespEvent_t CustomMTUExchangeRespEvent;
 CustomSetConnectable_t                  CustomSetConnectable;
 CustomConnectionCompleted_t             CustomConnectionCompleted;
 CustomDisconnectionCompleted_t          CustomDisconnectionCompleted;
@@ -2069,7 +2070,7 @@ tBleStatus BLE_ExtConfiguration_Update(uint8_t *data,uint32_t length)
     BLE_MANAGER_PRINTF("Error: Mem calloc error [%lu]: %d@%s\r\n",length,__LINE__,__FILE__);
     return BLE_STATUS_ERROR;
   } else {
-    tot_len = BLE_Command_TP_Encapsulate(JSON_string_command_wTP, data, length);
+    tot_len = BLE_Command_TP_Encapsulate(JSON_string_command_wTP, data, length,20);
     
     /* Data are sent as notifications*/
     j = 0;
@@ -2585,6 +2586,7 @@ static void ResetBleManagerCallbackFunctionPointer(void)
 {
   /**************** Bluetooth Comunication *************************/
   CustomPairingCompleted=NULL;
+  CustomMTUExchangeRespEvent = NULL;
   CustomSetConnectable=NULL;
   CustomConnectionCompleted=NULL;
   CustomDisconnectionCompleted=NULL;
@@ -3494,11 +3496,12 @@ uint32_t BLE_Command_TP_Parse(uint8_t** buffer_out, uint8_t* buffer_in, uint32_t
       message_length = message_length << 8;
       message_length |= buffer_in[2];
       
+      
       *buffer_out = (uint8_t*)BLE_MallocFunction((message_length) * sizeof(uint8_t));
       
       if(*buffer_out == NULL) {
         BLE_MANAGER_PRINTF("Error: Mem alloc error [%d]: %d@%s\r\n", message_length, __LINE__, __FILE__);
-      }      
+      }
       
       memcpy(*buffer_out + tot_len, (uint8_t*) &buffer_in[3], (len - 3U));
       
@@ -3514,7 +3517,7 @@ uint32_t BLE_Command_TP_Parse(uint8_t** buffer_out, uint8_t* buffer_in, uint32_t
       uint16_t message_length = buffer_in[1];
       message_length = message_length << 8;
       message_length |= buffer_in[2];
-      
+            
       *buffer_out = (uint8_t*)BLE_MallocFunction((message_length) * sizeof(uint8_t));        
       if(*buffer_out == NULL) {
         BLE_MANAGER_PRINTF("Error: Mem alloc error [%d]: %d@%s\r\n", message_length, __LINE__, __FILE__);
@@ -3542,6 +3545,7 @@ uint32_t BLE_Command_TP_Parse(uint8_t** buffer_out, uint8_t* buffer_in, uint32_t
     {
       /*Central part of an BLE Command packet*/
       /*packet is enqueued*/
+            
       memcpy(*buffer_out + tot_len, (uint8_t*) &buffer_in[1], (len - 1U));
       
       tot_len += len - 1U;
@@ -3553,7 +3557,7 @@ uint32_t BLE_Command_TP_Parse(uint8_t** buffer_out, uint8_t* buffer_in, uint32_t
       /*Final part of an BLE Command packet*/
       /*packet is enqueued*/
       memcpy(*buffer_out + tot_len, (uint8_t*) &buffer_in[1], (len - 1U));
-      
+            
       tot_len += len - 1U;
       /*number of bytes of the output packet*/
       buff_out_len = tot_len;
@@ -3568,7 +3572,7 @@ uint32_t BLE_Command_TP_Parse(uint8_t** buffer_out, uint8_t* buffer_in, uint32_t
       status = BLE_COMM_TP_WAIT_START;
       /*total length set to zero*/
       tot_len = 0;
-      
+            
       buff_out_len = 0; /* error */
     }
     break;
@@ -3577,24 +3581,26 @@ uint32_t BLE_Command_TP_Parse(uint8_t** buffer_out, uint8_t* buffer_in, uint32_t
 }
 
 /**
-* @brief  This function is called to prepare a BLE_COMM_TP packet.
-* @param  buffer_out: pointer to the buffer used to save BLE_COMM_TP packet.
-* @param  buffer_in: pointer to the input data.
-* @param  len: buffer in length
-* @retval Buffer out length.
-*/
-uint32_t BLE_Command_TP_Encapsulate(uint8_t* buffer_out, uint8_t* buffer_in, uint32_t len) 
+  * @brief  This function is called to prepare a BLE_COMM_TP packet.
+  * @param  buffer_out: pointer to the buffer used to save BLE_COMM_TP packet.
+  * @param  buffer_in: pointer to the input data.
+  * @param  len: buffer in length
+  * @param  BytePacketSize: Packet Size in Bytes
+  * @retval Buffer out length.
+  */
+uint32_t BLE_Command_TP_Encapsulate(uint8_t* buffer_out, uint8_t* buffer_in, uint32_t len,int32_t BytePacketSize)
 {
   uint32_t size = 0, tot_size = 0;
   uint32_t counter = 0;
   BLE_COMM_TP_Packet_Typedef packet_type = BLE_COMM_TP_START_PACKET;
+  int32_t BytePacketSizeMinus1= BytePacketSize-1;
   
   /* One byte header is added to each BLE packet */
   while (counter < len) 
   {
-    size = MIN(19U, (len - counter));
+    size = MIN(BytePacketSizeMinus1, (len - counter));
     
-    if ((len - counter) <= 19U) 
+    if ((len - counter) <= BytePacketSizeMinus1) 
     {    
       if (counter == 0U) 
       {
@@ -3931,6 +3937,10 @@ void aci_att_exchange_mtu_resp_event(uint16_t Connection_Handle,
 #if (BLE_DEBUG_LEVEL>2)
   BLE_MANAGER_PRINTF("aci_att_exchange_mtu_resp_event Server_RX_MTU=%d\r\n",Server_RX_MTU);
 #endif
+  
+ if(CustomMTUExchangeRespEvent!=NULL){
+    CustomMTUExchangeRespEvent(Server_RX_MTU-3U);
+  }
 }
 
 void aci_gap_pass_key_req_event(uint16_t Connection_Handle)

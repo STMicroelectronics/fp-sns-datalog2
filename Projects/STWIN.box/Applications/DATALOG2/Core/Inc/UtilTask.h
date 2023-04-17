@@ -191,6 +191,14 @@ AManagedTaskEx* UtilTaskAlloc(const void *p_mx_bc_tim_drv_cfg, const void *p_mx_
  */
 sys_error_code_t UtilTask_GetBatteryStatus(uint8_t *batt_percentage, uint8_t *status);
 
+/**
+ * Switch memory bank
+ *
+ *
+ * @return error value.
+ */
+void SwitchBank(void);
+
 /* Inline functions definition */
 /*******************************/
 

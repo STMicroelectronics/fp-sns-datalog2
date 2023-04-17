@@ -67,6 +67,7 @@ EMData_t LSM6DSV16XTask_vtblGyroGetDataInfo(ISourceObservable *_this);
 
 sys_error_code_t LSM6DSV16XTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
 sys_error_code_t LSM6DSV16XTask_vtblSensorSetFS(ISensor_t *_this, float FS);
+sys_error_code_t LSM6DSV16XTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t LSM6DSV16XTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t LSM6DSV16XTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t LSM6DSV16XTask_vtblSensorIsEnabled(ISensor_t *_this);
@@ -75,12 +76,15 @@ SensorDescriptor_t LSM6DSV16XTask_vtblGyroGetDescription(ISensor_t *_this);
 SensorStatus_t LSM6DSV16XTask_vtblAccGetStatus(ISensor_t *_this);
 SensorStatus_t LSM6DSV16XTask_vtblGyroGetStatus(ISensor_t *_this);
 
-boolean_t LSM6DSV16XTask_vtblSensorMlcIsEnabled(ISensorMlc_t *_this);
-sys_error_code_t LSM6DSV16XTask_vtblSensorMlcLoadUcf(ISensorMlc_t *_this, uint32_t size, const char *ucf);
+sys_error_code_t LSM6DSV16XTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len);
+sys_error_code_t LSM6DSV16XTask_vtblSensorWriteReg(ISensorLL_t *_this, uint16_t reg, const uint8_t *data, uint16_t len);
+sys_error_code_t LSM6DSV16XTask_vtblSensorSyncModel(ISensorLL_t *_this);
 
 uint8_t LSM6DSV16XTask_vtblMlcGetId(ISourceObservable *_this);
 IEventSrc *LSM6DSV16XTask_vtblMlcGetEventSourceIF(ISourceObservable *_this);
 sys_error_code_t LSM6DSV16XTask_vtblMlcGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
+float LSM6DSV16XTask_vtblMlcGetFS(ISourceObservable *_this);
+float LSM6DSV16XTask_vtblMlcGetSensitivity(ISourceObservable *_this);
 EMData_t LSM6DSV16XTask_vtblMlcGetDataInfo(ISourceObservable *_this);
 SensorDescriptor_t LSM6DSV16XTask_vtblMlcGetDescription(ISensor_t *_this);
 SensorStatus_t LSM6DSV16XTask_vtblMlcGetStatus(ISensor_t *_this);

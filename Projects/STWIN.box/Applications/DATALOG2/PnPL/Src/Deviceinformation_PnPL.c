@@ -38,7 +38,6 @@
 #include "Deviceinformation_PnPL.h"
 #include "Deviceinformation_PnPL_vtbl.h"
 
-
 static const IPnPLComponent_vtbl sDeviceinformation_PnPL_CompIF_vtbl =
 {
   Deviceinformation_PnPL_vtblGetKey,

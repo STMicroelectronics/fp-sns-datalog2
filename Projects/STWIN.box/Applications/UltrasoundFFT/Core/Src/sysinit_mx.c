@@ -1,21 +1,21 @@
 /**
-  ******************************************************************************
-  * @file    sysinit_mx.c
-  * @author  SRA
-  * @brief
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    sysinit_mx.c
+ * @author  SRA
+ * @brief
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ *
+ ******************************************************************************
+ */
 
 #include "services/systp.h"
 #include "services/syserror.h"
@@ -29,9 +29,9 @@
 #define Error_Handler sys_error_handler
 
 /**
-  * This type group together the components of the clock three to be modified during
-  * a power mode change.
-  */
+ * This type group together the components of the clock three to be modified during
+ * a power mode change.
+ */
 typedef struct _system_clock_t
 {
   uint32_t latency;
@@ -41,8 +41,8 @@ typedef struct _system_clock_t
 } system_clock_t;
 
 /**
-  * It is used to save and restore the system clock during the power mode switch.
-  */
+ * It is used to save and restore the system clock during the power mode switch.
+ */
 static system_clock_t system_clock;
 
 // Private member function declaration
@@ -53,25 +53,28 @@ static void PeriphCommonClock_Config(void);
 // *********************
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+  RCC_OscInitTypeDef RCC_OscInitStruct =
+  {
+      0 };
+  RCC_ClkInitTypeDef RCC_ClkInitStruct =
+  {
+      0 };
 
   /** Configure the main internal regulator output voltage
-  */
-  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
+   */
+  if(HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
   {
     Error_Handler();
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSI
-                              |RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
+   */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48 | RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSI | RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
@@ -88,23 +91,21 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLR = 1;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLLVCIRANGE_1;
   RCC_OscInitStruct.PLL.PLLFRACN = 0;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
 
   /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2
-                              |RCC_CLOCKTYPE_PCLK3;
+   */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2 | RCC_CLOCKTYPE_PCLK3;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
   RCC_ClkInitStruct.APB3CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+  if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
   {
     Error_Handler();
   }
@@ -113,17 +114,18 @@ void SystemClock_Config(void)
 }
 
 /**
-  * @brief Peripherals Common Clock Configuration
-  * @retval None
-  */
+ * @brief Peripherals Common Clock Configuration
+ * @retval None
+ */
 static void PeriphCommonClock_Config(void)
 {
-  RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+  RCC_PeriphCLKInitTypeDef PeriphClkInit =
+  {
+      0 };
 
   /** Initializes the common periph clock
-  */
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_MDF1|RCC_PERIPHCLK_ADF1
-                              |RCC_PERIPHCLK_ADCDAC;
+   */
+  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_MDF1 | RCC_PERIPHCLK_ADF1 | RCC_PERIPHCLK_ADCDAC;
   PeriphClkInit.Mdf1ClockSelection = RCC_MDF1CLKSOURCE_PLL3;
   PeriphClkInit.Adf1ClockSelection = RCC_ADF1CLKSOURCE_PLL3;
   PeriphClkInit.AdcDacClockSelection = RCC_ADCDACCLKSOURCE_PLL2;
@@ -145,7 +147,7 @@ static void PeriphCommonClock_Config(void)
   PeriphClkInit.PLL2.PLL2RGE = RCC_PLLVCIRANGE_1;
   PeriphClkInit.PLL2.PLL2FRACN = 0;
   PeriphClkInit.PLL2.PLL2ClockOut = RCC_PLL2_DIVR;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+  if(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
   }
@@ -159,10 +161,10 @@ void SystemClock_Backup(void)
 }
 
 /**
-  * @brief  Restore original clock parameters
-  * @retval Process result
-  *         @arg SMPS_OK or SMPS_KO
-  */
+ * @brief  Restore original clock parameters
+ * @retval Process result
+ *         @arg SMPS_OK or SMPS_KO
+ */
 void SystemClock_Restore(void)
 {
   /* SEQUENCE:
@@ -175,21 +177,21 @@ void SystemClock_Restore(void)
    */
 
 //  if(HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1_BOOST) != HAL_OK)
-  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
+  if(HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
   {
     sys_error_handler();
   }
 
 //  if (__HAL_RCC_GET_SYSCLK_SOURCE() != RCC_CFGR_SWS_PLL) {
-  if (__HAL_RCC_GET_SYSCLK_SOURCE() != RCC_SYSCLKSOURCE_STATUS_PLLCLK)
+  if(__HAL_RCC_GET_SYSCLK_SOURCE() != RCC_SYSCLKSOURCE_STATUS_PLLCLK)
   {
-    if (HAL_RCC_OscConfig(&(system_clock.osc)) != HAL_OK)
+    if(HAL_RCC_OscConfig(&(system_clock.osc)) != HAL_OK)
     {
       sys_error_handler();
     }
   }
 
-  if (HAL_RCC_ClockConfig(&(system_clock.clock), system_clock.latency) != HAL_OK)
+  if(HAL_RCC_ClockConfig(&(system_clock.clock), system_clock.latency) != HAL_OK)
   {
     sys_error_handler();
   }
@@ -199,7 +201,7 @@ void SystemPower_Config()
 {
 //  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
-  // Enable Power Clock
+// Enable Power Clock
   __HAL_RCC_PWR_CLK_ENABLE();
 
   // Select MSI as system clock source after Wake Up from Stop mode
@@ -213,9 +215,9 @@ void SystemPower_Config()
   // All the PINs used by the application are reconfigured later by the application tasks.
 
   HAL_PWREx_EnableIO2VM();
-  while (!(PWR->SVMCR & PWR_SVMCR_IO2VMEN));
+  while(!(PWR->SVMCR & PWR_SVMCR_IO2VMEN));
   HAL_PWREx_EnableVddIO2();
-  while (!(PWR->SVMSR & PWR_SVMSR_VDDIO2RDY));
+  while(!(PWR->SVMSR & PWR_SVMSR_VDDIO2RDY));
 
   MX_GPIO_Init();
 
@@ -232,8 +234,8 @@ void SystemPower_Config()
 }
 
 /**
-  * Initializes the Global MSP.
-  */
+ * Initializes the Global MSP.
+ */
 void HAL_MspInit(void)
 {
   __HAL_RCC_SYSCFG_CLK_ENABLE();

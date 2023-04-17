@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics..
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -102,7 +102,7 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pins : PDPin PD7 PD1 PD14
                            PDPin PDPin PD8 PDPin */
   GPIO_InitStruct.Pin = C_EN_Pin|GPIO_PIN_7|GPIO_PIN_1|GPIO_PIN_14
-                          |INT_EXD15_Pin|BLE_RST_Pin|GPIO_PIN_8|WIFI_BOOT_Pin;
+                          |INT_EXD15_Pin|GPIO_PIN_8|WIFI_BOOT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
@@ -123,13 +123,6 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = BLE_SPI_CS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(BLE_SPI_CS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PEPin PEPin */
   GPIO_InitStruct.Pin = USR_BUTTON_Pin|WIFI_NOTIFY_Pin;
@@ -161,7 +154,7 @@ void MX_GPIO_Init(void)
                            PFPin PFPin PFPin PFPin
                            PFPin */
   GPIO_InitStruct.Pin = INT1_DLPC_Pin|INT2_DLPC_Pin|INT_MAG_Pin|INT_STT_Pin
-                          |INT1_ICLX_Pin|INT2_DHCX_Pin|BLE_INT_Pin|INT2_ICLX_Pin
+                          |INT1_ICLX_Pin|INT2_DHCX_Pin|INT2_ICLX_Pin
                           |INT1_DWB_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;

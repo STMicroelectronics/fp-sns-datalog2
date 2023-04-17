@@ -80,9 +80,6 @@ sys_error_code_t ISM330DHCXTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t r
 sys_error_code_t ISM330DHCXTask_vtblSensorWriteReg(ISensorLL_t *_this, uint16_t reg, const uint8_t *data, uint16_t len);
 sys_error_code_t ISM330DHCXTask_vtblSensorSyncModel(ISensorLL_t *_this);
 
-boolean_t ISM330DHCXTask_vtblSensorMlcIsEnabled(ISensorMlc_t *_this);
-sys_error_code_t ISM330DHCXTask_vtblSensorMlcLoadUcf(ISensorMlc_t *_this, uint32_t size, const char *ucf);
-
 uint8_t ISM330DHCXTask_vtblMlcGetId(ISourceObservable *_this);
 IEventSrc *ISM330DHCXTask_vtblMlcGetEventSourceIF(ISourceObservable *_this);
 sys_error_code_t ISM330DHCXTask_vtblMlcGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);

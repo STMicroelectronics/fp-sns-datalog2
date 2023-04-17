@@ -1,23 +1,23 @@
 /**
  ******************************************************************************
  * @file    sysconfig.h
-  * @author  SRA
+ * @author  SRA
  * @brief   Global System configuration file
  *
  * This file include some configuration parameters grouped here for user
  * convenience. This file override the default configuration value, and it is
-  * used in the "Preinclude file" section of the "compiler > preprocessor"
+ * used in the "Preinclude file" section of the "compiler > preprocessor"
  * options.
  *
  ******************************************************************************
  * @attention
  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
  *
  *
  ******************************************************************************
@@ -25,10 +25,6 @@
 
 #ifndef SYSCONFIG_H_
 #define SYSCONFIG_H_
-
-/* Include */
-/***********/
-#include "SMPinConfig.h"
 
 /**
  *
@@ -69,14 +65,14 @@
 /* #define SYS_TS_CFG_TSDRIVER_PARAMS &MX_TIM3InitParams */
 #define SYS_TS_CFG_TSDRIVER_PARAMS SYS_TS_USE_SW_TSDRIVER
 
-#define COM_MAX_SENSORS                           16
-
-
 /* Tasks configuration */
 /***********************/
 #ifdef ENABLE_THREADX_DBG_PIN
 #include "STWIN.box_debug_pins.h"
 #endif
+
+/* SensorManager configuration */
+#define SM_MAX_SENSORS                            3U
 
 /* file IManagedTask.h */
 /***********************/
@@ -108,5 +104,9 @@
 #define ACO_TASK_CFG_STACK_DEPTH                  (TX_MINIMUM_STACK*8)
 #define ACO_TASK_CFG_PRIORITY                     (12)
 
+// USBX Tasks
+#define USB_EP_BULKIN_CFG_STACK_DEPTH             (1 * 1024)
+#define USB_EP_BULKIN_CFG_PRIORITY                (3)
+#define USB_EP_BULKIN_CFG_PREEMPTION_THRESHOLD    USB_EP_BULKIN_CFG_PRIORITY
 
 #endif /* SYSCONFIG_H_ */

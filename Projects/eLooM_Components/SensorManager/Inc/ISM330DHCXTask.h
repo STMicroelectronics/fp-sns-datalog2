@@ -32,8 +32,6 @@ extern "C" {
 #include "events/DataEventSrc_vtbl.h"
 #include "ISensor.h"
 #include "ISensor_vtbl.h"
-#include "ISensorMlc.h"
-#include "ISensorMlc_vtbl.h"
 #include "ISensorLL.h"
 #include "ISensorLL_vtbl.h"
 
@@ -81,14 +79,6 @@ ISourceObservable *ISM330DHCXTaskGetGyroSensorIF(ISM330DHCXTask *_this);
   * or NULL if out of memory error occurs.
   */
 ISourceObservable *ISM330DHCXTaskGetMlcSensorIF(ISM330DHCXTask *_this);
-
-/**
-  * Get the ISensorMlc_t interface.
-  * @param _this [IN] specifies a pointer to a task object.
-  * @return a pointer to the generic object ::ISensorMlc_t if success,
-  * or NULL if out of memory error occurs.
-  */
-ISensorMlc_t *ISM330DHCXTaskGetSensorMlcIF(ISM330DHCXTask *_this);
 
 /**
  * Get the ::ISensorLL_t interface the sensor.

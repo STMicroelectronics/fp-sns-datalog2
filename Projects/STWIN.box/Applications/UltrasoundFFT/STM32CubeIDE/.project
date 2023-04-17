@@ -1018,19 +1018,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/PnPLCompManager_Conf.h</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Inc/SMPinConfig.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/SMPinConfig.h</locationURI>
-		</link>
-		<link>
 			<name>User/Core/Inc/STWIN.box_conf.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/STWIN.box_conf.h</locationURI>
-		</link>
-		<link>
-			<name>User/Core/Inc/SensorDefConfig.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/SensorDefConfig.h</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Inc/SensorManager_conf.h</name>
@@ -1333,14 +1323,14 @@
 			<locationURI>PARENT-1-PROJECT_LOC/USBX/App/ux_device_descriptors.h</locationURI>
 		</link>
 		<link>
-			<name>User/USBX/App/ux_user.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/USBX/App/ux_user.h</locationURI>
-		</link>
-		<link>
 			<name>User/USBX/Target/ux_stm32_config.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/USBX/Target/ux_stm32_config.h</locationURI>
+		</link>
+		<link>
+			<name>User/USBX/Target/ux_user.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/USBX/Target/ux_user.h</locationURI>
 		</link>
 		<link>
 			<name>User/mx/Inc/adc.h</name>

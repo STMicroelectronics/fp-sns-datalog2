@@ -2533,9 +2533,6 @@
                         <name>$PROJ_DIR$\..\Core\Inc\PnPLCompManager_Conf.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\SensorDefConfig.h</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\SensorManager_conf.h</name>
                     </file>
                     <file>
@@ -2752,10 +2749,10 @@
                         <name>$PROJ_DIR$\..\PnPL\Inc\Firmware_Info_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IMP23ABSU_MIC_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Imp23absu_Mic_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IMP23ABSU_MIC_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Imp23absu_Mic_PnPL_vtbl.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\PnPL\Inc\Log_Controller_PnPL.h</name>
@@ -2779,7 +2776,7 @@
                         <name>$PROJ_DIR$\..\PnPL\Src\Firmware_Info_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\IMP23ABSU_MIC_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Imp23absu_Mic_PnPL.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\PnPL\Src\Log_Controller_PnPL.c</name>

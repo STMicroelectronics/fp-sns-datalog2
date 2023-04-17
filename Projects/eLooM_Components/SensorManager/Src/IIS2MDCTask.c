@@ -270,9 +270,6 @@ static inline sys_error_code_t IIS2MDCTaskPostReportToFront(IIS2MDCTask *_this, 
  */
 static inline sys_error_code_t IIS2MDCTaskPostReportToBack(IIS2MDCTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file IIS2MDCTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -307,7 +304,7 @@ static const IIS2MDCTaskClass_t sTheClass =
         IIS2MDCTask_vtblMagGetSensitivity,
         IIS2MDCTask_vtblSensorSetODR,
         IIS2MDCTask_vtblSensorSetFS,
-        NULL,
+        IIS2MDCTask_vtblSensorSetFifoWM,
         IIS2MDCTask_vtblSensorEnable,
         IIS2MDCTask_vtblSensorDisable,
         IIS2MDCTask_vtblSensorIsEnabled,
@@ -784,6 +781,15 @@ sys_error_code_t IIS2MDCTask_vtblSensorSetFS(ISensor_t *_this, float FS)
 
 }
 
+sys_error_code_t IIS2MDCTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+{
+  assert_param(_this != NULL);
+  /* Does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS2MDC: warning - SetFifoWM() not supported.\r\n"));
+  return SYS_INVALID_FUNC_CALL_ERROR_CODE;
+}
+
 sys_error_code_t IIS2MDCTask_vtblSensorEnable(ISensor_t *_this)
 {
   assert_param(_this != NULL);
@@ -958,7 +964,7 @@ static sys_error_code_t IIS2MDCTaskExecuteStepDatalog(AManagedTask *_this)
         }
       case SM_MESSAGE_ID_DATA_READY:
         {
-          //       SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2MDC: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2MDC: new data.\r\n"));
           if(p_obj->pIRQConfig == NULL)
           {
             if(TX_SUCCESS
@@ -993,7 +999,8 @@ static sys_error_code_t IIS2MDCTaskExecuteStepDatalog(AManagedTask *_this)
             DataEventInit((IEvent*) &evt, p_obj->p_mag_event_src, &p_obj->data, timestamp, p_obj->mag_id);
             IEventSrcSendEvent(p_obj->p_mag_event_src, (IEvent*) &evt, NULL);
 
-//          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2MDC: ts = %f\r\n", (float)timestamp));
+            SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2MDC: ts = %f\r\n", (float)timestamp));
+          }
             if(p_obj->pIRQConfig == NULL)
             {
               if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
@@ -1001,7 +1008,6 @@ static sys_error_code_t IIS2MDCTaskExecuteStepDatalog(AManagedTask *_this)
                 res = SYS_UNDEFINED_ERROR_CODE;
               }
             }
-          }
           break;
         }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -1203,7 +1209,6 @@ static sys_error_code_t IIS2MDCTaskSensorReadData(IIS2MDCTask *_this)
   iis2mdc_magnetic_raw_get(p_sensor_drv, (int16_t*) &_this->p_sensor_data_buff);
 
 #if (HSD_USE_DUMMY_DATA == 1)
-  uint16_t i;
   int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
 
   *p16++ = dummyDataCounter++;

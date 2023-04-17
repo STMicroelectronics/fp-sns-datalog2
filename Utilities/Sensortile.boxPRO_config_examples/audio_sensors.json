@@ -1,0 +1,274 @@
+{
+    "schema_version": "2.0.0",
+    "uuid": "",
+    "devices": [
+        {
+            "board_id": 13,
+            "fw_id": 6,
+            "sn": "002A00524841500520363230",
+            "components": [
+                {
+                    "lis2du12_acc": {
+                        "odr": 7,
+                        "fs": 3,
+                        "enable": false,
+                        "samples_per_ts": {
+                            "val": 1000,
+                            "min": 0,
+                            "max": 1000
+                        },
+                        "dim": 3,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 0,
+                        "sd_dps": 2048,
+                        "sensitivity": 0.00048799999058246623,
+                        "data_type": "int16",
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "lis2mdl_mag": {
+                        "odr": 3,
+                        "fs": 0,
+                        "enable": false,
+                        "samples_per_ts": {
+                            "val": 100,
+                            "min": 0,
+                            "max": 100
+                        },
+                        "dim": 3,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 0,
+                        "sd_dps": 512,
+                        "sensitivity": 0.001500000013038516,
+                        "data_type": "int16",
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "lps22df_press": {
+                        "odr": 7,
+                        "fs": 0,
+                        "enable": false,
+                        "samples_per_ts": {
+                            "val": 200,
+                            "min": 0,
+                            "max": 200
+                        },
+                        "dim": 1,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 0,
+                        "sd_dps": 512,
+                        "sensitivity": 1,
+                        "data_type": "float",
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "mp23db01hp_mic": {
+                        "odr": 2,
+                        "aop": 0,
+                        "enable": true,
+                        "samples_per_ts": {
+                            "val": 1000,
+                            "min": 0,
+                            "max": 1000
+                        },
+                        "dim": 1,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 0,
+                        "sd_dps": 31744,
+                        "sensitivity": 1,
+                        "data_type": "int16",
+                        "c_type": 0,
+                        "stream_id": 0,
+                        "ep_id": 0
+                    }
+                },
+                {
+                    "lsm6dsv16x_acc": {
+                        "odr": 10,
+                        "fs": 3,
+                        "enable": false,
+                        "samples_per_ts": {
+                            "val": 1000,
+                            "min": 0,
+                            "max": 1000
+                        },
+                        "dim": 3,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 0,
+                        "sd_dps": 15360,
+                        "sensitivity": 0.00048799999058246623,
+                        "data_type": "int16",
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "lsm6dsv16x_gyro": {
+                        "odr": 10,
+                        "fs": 5,
+                        "enable": false,
+                        "samples_per_ts": {
+                            "val": 1000,
+                            "min": 0,
+                            "max": 1000
+                        },
+                        "dim": 3,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 0,
+                        "sd_dps": 15360,
+                        "sensitivity": 140,
+                        "data_type": "int16",
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "lsm6dsv16x_mlc": {
+                        "enable": false,
+                        "samples_per_ts": {
+                            "val": 1,
+                            "min": 1,
+                            "max": 1
+                        },
+                        "ucf_status": false,
+                        "dim": 5,
+                        "ioffset": 0,
+                        "data_type": "int8",
+                        "usb_dps": 0,
+                        "sd_dps": 0,
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "stts22h_temp": {
+                        "odr": 4,
+                        "fs": 0,
+                        "enable": false,
+                        "samples_per_ts": {
+                            "val": 200,
+                            "min": 0,
+                            "max": 200
+                        },
+                        "dim": 1,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 0,
+                        "sd_dps": 512,
+                        "sensitivity": 1,
+                        "data_type": "float",
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "DeviceInformation": {
+                        "manufacturer": "STMicroelectronics",
+                        "model": "STEVAL-MKBOXPRO",
+                        "swVersion": "1.1.0",
+                        "osName": "AzureRTOS",
+                        "processorArchitecture": "ARM Cortex-M33",
+                        "processorManufacturer": "STMicroelectronics",
+                        "totalStorage": 0,
+                        "totalMemory": 0
+                    }
+                },
+                {
+                    "firmware_info": {
+                        "alias": "STBOX_PRO_001",
+                        "fw_name": "FP-SNS-DATALOG2_Datalog2",
+                        "fw_version": "1.1.0",
+                        "serial_number": "STEVAL-MKBOXPRO",
+                        "device_url": "www.st.com/sensortileboxpro",
+                        "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
+                        "mac_address": "c0:2f:61:e6:e0:ac",
+                        "c_type": 2
+                    }
+                },
+                {
+                    "acquisition_info": {
+                        "tags": [],
+                        "name": "STWIN.Box_acquisition",
+                        "description": "",
+                        "uuid": "",
+                        "start_time": "",
+                        "end_time": "",
+                        "data_ext": ".dat",
+                        "interface": 0,
+                        "schema_version": "2.0.0",
+                        "data_fmt": "HSD_2.0.0",
+                        "c_type": 2
+                    }
+                },
+                {
+                    "tags_info": {
+                        "max_tags_num": 100,
+                        "sw_tag0": {
+                            "label": "SW_TAG_0",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag1": {
+                            "label": "SW_TAG_1",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag2": {
+                            "label": "SW_TAG_2",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag3": {
+                            "label": "SW_TAG_3",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag4": {
+                            "label": "SW_TAG_4",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "c_type": 2
+                    }
+                },
+                {
+                    "log_controller": {
+                        "log_status": false,
+                        "sd_mounted": true,
+                        "controller_type": 0,
+                        "c_type": 2
+                    }
+                },
+                {
+                    "automode": {
+                        "enabled": false,
+                        "nof_acquisitions": 0,
+                        "start_delay_ms": 0,
+                        "datalog_time_length": 0,
+                        "idle_time_length": 0,
+                        "c_type": 2
+                    }
+                }
+            ]
+        }
+    ]
+}

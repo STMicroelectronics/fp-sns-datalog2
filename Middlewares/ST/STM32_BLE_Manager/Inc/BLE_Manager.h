@@ -426,6 +426,10 @@ extern BLE_ExtCustomCommand_t *ExtConfigLastCustomCommand;
 typedef void (*CustomPairingCompleted_t)(uint8_t PairingStatus);
 extern CustomPairingCompleted_t CustomPairingCompleted;
 
+typedef void (*CustomMTUExchangeRespEvent_t)(int32_t MaxCharLength);
+extern CustomMTUExchangeRespEvent_t CustomMTUExchangeRespEvent;
+
+
 typedef void (*CustomSetConnectable_t)(uint8_t *ManufData);
 extern CustomSetConnectable_t CustomSetConnectable;
 #if (BLUE_CORE == BLUENRG_MS)
@@ -641,9 +645,10 @@ extern uint32_t BLE_Command_TP_Parse(uint8_t** buffer_out, uint8_t* buffer_in, u
   * @param  buffer_out: pointer to the buffer used to save BLE_COMM_TP packet.
   * @param  buffer_in: pointer to the input data.
   * @param  len: buffer in length
+  * @param  BytePacketSize: Packet Size in Bytes
   * @retval Buffer out length.
   */
-extern uint32_t BLE_Command_TP_Encapsulate(uint8_t* buffer_out, uint8_t* buffer_in, uint32_t len);
+extern uint32_t BLE_Command_TP_Encapsulate(uint8_t* buffer_out, uint8_t* buffer_in, uint32_t len,int32_t BytePacketSize);
 
 extern tBleStatus BLE_ExtConfiguration_Update(uint8_t *data,uint32_t length);
     

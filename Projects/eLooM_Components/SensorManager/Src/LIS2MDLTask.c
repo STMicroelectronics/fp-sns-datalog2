@@ -26,7 +26,7 @@
 #include "events/IDataEventListener.h"
 #include "events/IDataEventListener_vtbl.h"
 #include "services/SysTimestamp.h"
-#include "LIS2MDL_reg.h"
+#include "lis2mdl_reg.h"
 #include <string.h>
 #include "services/sysdebug.h"
 #include "mx.h"
@@ -275,9 +275,6 @@ static inline sys_error_code_t LIS2MDLTaskPostReportToFront(LIS2MDLTask *_this, 
  */
 static inline sys_error_code_t LIS2MDLTaskPostReportToBack(LIS2MDLTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file LIS2MDLTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -312,7 +309,7 @@ static const LIS2MDLTaskClass_t sTheClass =
         LIS2MDLTask_vtblMagGetSensitivity,
         LIS2MDLTask_vtblSensorSetODR,
         LIS2MDLTask_vtblSensorSetFS,
-        NULL,
+        LIS2MDLTask_vtblSensorSetFifoWM,
         LIS2MDLTask_vtblSensorEnable,
         LIS2MDLTask_vtblSensorDisable,
         LIS2MDLTask_vtblSensorIsEnabled,
@@ -542,7 +539,7 @@ sys_error_code_t LIS2MDLTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
     if(ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
     {
       /* SM_SENSOR_STATE_SUSPENDED */
-      lis2mdl_power_mode_set(p_sensor_drv, PROPERTY_DISABLE); //TODO: SO: Disable the low power
+      lis2mdl_power_mode_set(p_sensor_drv, LIS2MDL_HIGH_RESOLUTION); //TODO: SO: Disable the low power
       tx_queue_flush(&p_obj->in_queue);
       if(p_obj->pIRQConfig == NULL)
       {
@@ -782,6 +779,15 @@ sys_error_code_t LIS2MDLTask_vtblSensorSetFS(ISensor_t *_this, float FS)
 
 }
 
+sys_error_code_t LIS2MDLTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+{
+  assert_param(_this != NULL);
+  /* Does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("LIS2MDL: warning - SetFifoWM() not supported.\r\n"));
+  return SYS_INVALID_FUNC_CALL_ERROR_CODE;
+}
+
 sys_error_code_t LIS2MDLTask_vtblSensorEnable(ISensor_t *_this)
 {
   assert_param(_this != NULL);
@@ -956,7 +962,7 @@ static sys_error_code_t LIS2MDLTaskExecuteStepDatalog(AManagedTask *_this)
         }
       case SM_MESSAGE_ID_DATA_READY:
         {
-          //       SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("LIS2MDL: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("LIS2MDL: new data.\r\n"));
           if(p_obj->pIRQConfig == NULL)
           {
             if(TX_SUCCESS
@@ -991,7 +997,8 @@ static sys_error_code_t LIS2MDLTaskExecuteStepDatalog(AManagedTask *_this)
             DataEventInit((IEvent*) &evt, p_obj->p_mag_event_src, &p_obj->data, timestamp, p_obj->mag_id);
             IEventSrcSendEvent(p_obj->p_mag_event_src, (IEvent*) &evt, NULL);
 
-//          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("LIS2MDL: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("LIS2MDL: ts = %f\r\n", (float)timestamp));
+          }
             if(p_obj->pIRQConfig == NULL)
             {
               if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
@@ -999,7 +1006,6 @@ static sys_error_code_t LIS2MDLTaskExecuteStepDatalog(AManagedTask *_this)
                 res = SYS_UNDEFINED_ERROR_CODE;
               }
             }
-          }
           break;
         }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -1186,7 +1192,7 @@ static sys_error_code_t LIS2MDLTaskSensorInit(LIS2MDLTask *_this)
   }
   else
   {
-    lis2mdl_power_mode_set(p_sensor_drv, PROPERTY_DISABLE);
+    lis2mdl_power_mode_set(p_sensor_drv, LIS2MDL_HIGH_RESOLUTION);
     lis2mdl_operating_mode_set(p_sensor_drv, LIS2MDL_POWER_DOWN);
     _this->sensor_status.IsActive = false;
   }
@@ -1259,7 +1265,7 @@ static sys_error_code_t LIS2MDLTaskSensorSetODR(LIS2MDLTask *_this, SMMessage re
   {
     if(ODR < 1.0f)
     {
-      lis2mdl_power_mode_set(p_sensor_drv, PROPERTY_DISABLE);
+      lis2mdl_power_mode_set(p_sensor_drv, LIS2MDL_HIGH_RESOLUTION);
       lis2mdl_operating_mode_set(p_sensor_drv, LIS2MDL_POWER_DOWN);
       /* Do not update the model in case of ODR = 0 */
       ODR = _this->sensor_status.ODR;
@@ -1355,7 +1361,7 @@ static sys_error_code_t LIS2MDLTaskSensorDisable(LIS2MDLTask *_this, SMMessage r
   if(id == _this->mag_id)
   {
     _this->sensor_status.IsActive = FALSE;
-    lis2mdl_power_mode_set(p_sensor_drv, PROPERTY_DISABLE);
+    lis2mdl_power_mode_set(p_sensor_drv, LIS2MDL_HIGH_RESOLUTION);
     lis2mdl_operating_mode_set(p_sensor_drv, LIS2MDL_POWER_DOWN);
   }
   else

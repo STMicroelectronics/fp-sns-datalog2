@@ -91,6 +91,11 @@ class HSDLink:
         
         try:
             hsd_link = HSDLink_v1(self.dev_com_type, self.acquisition_folder)
+            if hsd_link.nof_connected_devices == 0:
+                log.warning("No HSDatalog_v1 devices connected!")
+                self.is_datalog2 = True
+            else:
+                print("Commmunication Opened correctly")
         except CommunicationEngineOpenError:
             log.error("Error opening communication using libhs_datalog_v1...")
             self.is_datalog2 = True
@@ -103,7 +108,12 @@ class HSDLink:
                 self.dev_com_type = "pnpl"
             try:
                 hsd_link = HSDLink_v2(self.dev_com_type, self.acquisition_folder)
-                print("Commmunication Opened correctly")
+                if hsd_link.nof_connected_devices == 0:
+                    log.warning("No HSDatalog_v2 devices connected!")
+                    self.is_datalog2 = False
+                    return None
+                else:
+                    print("Commmunication Opened correctly")
             except CommunicationEngineOpenError:
                 log.error("Error opening communication using libhs_datalog_v2...")
                 self.is_datalog2 = False
@@ -128,7 +138,10 @@ class HSDLink:
     
     @staticmethod
     def get_devices(hsd_link):
-        return hsd_link.get_devices()
+        if hsd_link is not None:
+            return hsd_link.get_devices()
+        else:
+            return []
     
     @staticmethod
     def get_device(hsd_link, d_id):
@@ -149,6 +162,13 @@ class HSDLink:
     @staticmethod
     def get_acquisition_folder(hsd_link):
         return hsd_link.get_acquisition_folder()
+
+    @staticmethod
+    def update_base_acquisition_folder(hsd_link, base_acquisition_path):
+        if isinstance(hsd_link, HSDLink_v2):
+            return hsd_link.update_base_acquisition_folder(base_acquisition_path)
+        else:
+            return None
         
     @staticmethod
     def set_device_template(hsd_link, dev_template_json):
@@ -357,8 +377,11 @@ class HSDLink:
         hsd_link.stop_log(device_id)
         
     @staticmethod
-    def start_log(hsd_link, device_id):
-        return hsd_link.start_log(device_id)
+    def start_log(hsd_link, device_id, sub_folder = True):
+        if isinstance(hsd_link, HSDLink_v1):
+            return hsd_link.start_log(device_id)
+        else:
+            return hsd_link.start_log(device_id, sub_folder=sub_folder)
    
     @staticmethod
     def set_sw_tag_on(hsd_link, device_id, tag_id):

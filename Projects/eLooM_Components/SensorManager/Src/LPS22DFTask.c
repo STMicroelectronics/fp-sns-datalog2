@@ -244,6 +244,7 @@ static sys_error_code_t LPS22DFTaskSensorInitTaskParams(LPS22DFTask *_this);
  */
 static sys_error_code_t LPS22DFTaskSensorSetODR(LPS22DFTask *_this, SMMessage message);
 static sys_error_code_t LPS22DFTaskSensorSetFS(LPS22DFTask *_this, SMMessage message);
+static sys_error_code_t LPS22DFTaskSensorSetFifoWM(LPS22DFTask *_this, SMMessage report);
 static sys_error_code_t LPS22DFTaskSensorEnable(LPS22DFTask *_this, SMMessage message);
 static sys_error_code_t LPS22DFTaskSensorDisable(LPS22DFTask *_this, SMMessage message);
 
@@ -300,9 +301,6 @@ static inline sys_error_code_t LPS22DFTaskPostMessageToFront(LPS22DFTask *_this,
  */
 static inline sys_error_code_t LPS22DFTaskPostMessageToBack(LPS22DFTask *_this, SMMessage *pMessage);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file LPS22DFTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -337,7 +335,7 @@ static const LPS22DFTaskClass_t sTheClass =
         LPS22DFTask_vtblPressGetSensitivity,
         LPS22DFTask_vtblSensorSetODR,
         LPS22DFTask_vtblSensorSetFS,
-        NULL,
+        LPS22DFTask_vtblSensorSetFifoWM,
         LPS22DFTask_vtblSensorEnable,
         LPS22DFTask_vtblSensorDisable,
         LPS22DFTask_vtblSensorIsEnabled,
@@ -575,6 +573,13 @@ sys_error_code_t LPS22DFTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
       lps22df_md_t val;
       lps22df_mode_get(p_sensor_drv, &val);
       val.odr = LPS22DF_ONE_SHOT;
+
+      lps22df_fifo_md_t fifo_md;
+      fifo_md.watermark = 1;
+      fifo_md.operation = LPS22DF_BYPASS;
+
+      lps22df_fifo_mode_set(p_sensor_drv, &fifo_md);
+
       /* SM_SENSOR_STATE_SUSPENDING */
       lps22df_mode_set(p_sensor_drv, &val);
       tx_queue_flush(&p_obj->in_queue);
@@ -818,7 +823,36 @@ sys_error_code_t LPS22DFTask_vtblSensorSetFS(ISensor_t *_this, float FS)
   }
 
   return res;
+}
 
+sys_error_code_t LPS22DFTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+#if LPS22DF_FIFO_ENABLED
+  LPS22DFTask *p_if_owner = (LPS22DFTask*) ((uint32_t) _this - offsetof(LPS22DFTask, sensor_if));
+  EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask*) p_if_owner);
+  uint8_t sensor_id = ISourceGetId((ISourceObservable*) _this);
+
+  if((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  {
+    res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
+  }
+  else
+  {
+    /* Set a new command message in the queue */
+    SMMessage report =
+    {
+        .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
+        .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FIFO_WM,
+        .sensorMessage.nSensorId = sensor_id,
+        .sensorMessage.nParam = (uint16_t) fifoWM };
+    res = LPS22DFTaskPostMessageToBack(p_if_owner, (SMMessage*) &report);
+  }
+#endif
+
+  return res;
 }
 
 sys_error_code_t LPS22DFTask_vtblSensorEnable(ISensor_t *_this)
@@ -937,6 +971,9 @@ static sys_error_code_t LPS22DFTaskExecuteStepState1(AManagedTask *_this)
             case SENSOR_CMD_ID_SET_FS:
               res = LPS22DFTaskSensorSetFS(p_obj, message);
               break;
+            case SENSOR_CMD_ID_SET_FIFO_WM:
+              res = LPS22DFTaskSensorSetFifoWM(p_obj, message);
+              break;
             case SENSOR_CMD_ID_ENABLE:
               res = LPS22DFTaskSensorEnable(p_obj, message);
               break;
@@ -993,7 +1030,7 @@ static sys_error_code_t LPS22DFTaskExecuteStepDatalog(AManagedTask *_this)
         }
       case SM_MESSAGE_ID_DATA_READY:
         {
-//          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("LPS22DF: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("LPS22DF: new data.\r\n"));
           if(p_obj->pIRQConfig == NULL)
           {
             if(TX_SUCCESS != tx_timer_change(&p_obj->read_fifo_timer, AMT_MS_TO_TICKS(p_obj->task_delay), AMT_MS_TO_TICKS(p_obj->task_delay)))
@@ -1026,6 +1063,7 @@ static sys_error_code_t LPS22DFTaskExecuteStepDatalog(AManagedTask *_this)
 #if LPS22DF_FIFO_ENABLED
             }
 #endif
+          }
             if(p_obj->pIRQConfig == NULL)
             {
               if(TX_SUCCESS != tx_timer_activate(&p_obj->read_fifo_timer))
@@ -1033,7 +1071,6 @@ static sys_error_code_t LPS22DFTaskExecuteStepDatalog(AManagedTask *_this)
                 res = SYS_UNDEFINED_ERROR_CODE;
               }
             }
-          }
           break;
         }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -1065,6 +1102,9 @@ static sys_error_code_t LPS22DFTaskExecuteStepDatalog(AManagedTask *_this)
               break;
             case SENSOR_CMD_ID_SET_FS:
               res = LPS22DFTaskSensorSetFS(p_obj, message);
+              break;
+            case SENSOR_CMD_ID_SET_FIFO_WM:
+              res = LPS22DFTaskSensorSetFifoWM(p_obj, message);
               break;
             case SENSOR_CMD_ID_ENABLE:
               res = LPS22DFTaskSensorEnable(p_obj, message);
@@ -1193,10 +1233,30 @@ static sys_error_code_t LPS22DFTaskSensorInit(LPS22DFTask *_this)
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("LPS22DF: sensor - I am 0x%x.\r\n", reg0.whoami));
 
 #if LPS22DF_FIFO_ENABLED
-  /* Set fifo mode */
-  lps22df_fifo_md_t fifo_md;
-  fifo_md.operation = LPS22DF_STREAM;
-  lps22df_fifo_mode_set(p_sensor_drv, &fifo_md);
+
+  if(_this->samples_per_it == 0)
+   {
+     /* Set fifo mode */
+     uint16_t lps22df_wtm_level = 0;
+
+     /* Calculation of watermark and samples per int*/
+     lps22df_wtm_level = ((uint16_t) _this->sensor_status.ODR * (uint16_t) LPS22DF_MAX_DRDY_PERIOD);
+     if(lps22df_wtm_level > LPS22DF_MAX_WTM_LEVEL)
+     {
+       lps22df_wtm_level = LPS22DF_MAX_WTM_LEVEL;
+     }
+     else if(lps22df_wtm_level < LPS22DF_MIN_WTM_LEVEL)
+     {
+       lps22df_wtm_level = LPS22DF_MIN_WTM_LEVEL;
+     }
+
+     _this->samples_per_it = lps22df_wtm_level;
+   }
+
+   lps22df_fifo_md_t fifo_md;
+   fifo_md.watermark = _this->samples_per_it;
+   fifo_md.operation = LPS22DF_STREAM;
+   lps22df_fifo_mode_set(p_sensor_drv, &fifo_md);;
   /* Configure Interrupt */
   if(_this->pIRQConfig != NULL)
   {
@@ -1265,9 +1325,9 @@ static sys_error_code_t LPS22DFTaskSensorInit(LPS22DFTask *_this)
   lps22df_mode_set(p_sensor_drv, &md);
 
 #if LPS22DF_FIFO_ENABLED
-  lps22df_fifo_level_get(p_sensor_drv, (uint8_t*) &_this->samples_per_it);
+  lps22df_fifo_level_get(p_sensor_drv, (uint8_t*) &_this->fifo_level);
 
-  if(_this->samples_per_it != 0)
+  if(_this->fifo_level >= _this->samples_per_it)
   {
     lps22df_read_reg(p_sensor_drv, LPS22DF_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_fifo_data_buff, _this->samples_per_it * 3);
   }
@@ -1292,18 +1352,18 @@ static sys_error_code_t LPS22DFTaskSensorReadData(LPS22DFTask *_this)
 
 #if LPS22DF_FIFO_ENABLED
   /* Check FIFO_WTM_IA and fifo level */
-  lps22df_fifo_level_get(p_sensor_drv, (uint8_t*) &_this->fifo_level);
+  lps22df_fifo_level_get(p_sensor_drv, &_this->fifo_level);
 
   if(_this->fifo_level >= _this->samples_per_it)
   {
-  lps22df_read_reg(p_sensor_drv, LPS22DF_FIFO_DATA_OUT_PRESS_XL, (uint8_t*) _this->p_fifo_data_buff, _this->samples_per_it * 3);
+    lps22df_read_reg(p_sensor_drv, LPS22DF_FIFO_DATA_OUT_PRESS_XL, (uint8_t*) _this->p_fifo_data_buff, _this->samples_per_it * 3);
   }
   else
   {
     _this->fifo_level = 0;
   }
 #else
-  lps22df_read_reg(p_sensor_drv, LPS22DF_PRESS_OUT_XL, (uint8_t*) _this->p_fifo_data_buff, _this->samples_per_it * 3);
+  lps22df_read_reg(p_sensor_drv, LPS22DF_PRESS_OUT_XL, (uint8_t *) _this->p_fifo_data_buff, _this->samples_per_it * 3);
   _this->fifo_level = 1;
 #endif /* LPS22DF_FIFO_ENABLED */
 
@@ -1449,6 +1509,29 @@ static sys_error_code_t LPS22DFTaskSensorSetFS(LPS22DFTask *_this, SMMessage mes
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NOT_IMPLEMENTED_ERROR_CODE;
+
+  return res;
+}
+
+static sys_error_code_t LPS22DFTaskSensorSetFifoWM(LPS22DFTask *_this, SMMessage report)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  lps22df_fifo_md_t fifo_md;
+
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &_this->p_sensor_bus_if->m_xConnector;
+  uint16_t lps22df_wtm_level = report.sensorMessage.nParam;
+
+  if(lps22df_wtm_level > LPS22DF_MAX_WTM_LEVEL)
+  {
+    lps22df_wtm_level = LPS22DF_MAX_WTM_LEVEL;
+  }
+  _this->samples_per_it = lps22df_wtm_level;
+
+  fifo_md.watermark = _this->samples_per_it;
+  fifo_md.operation = LPS22DF_STREAM;
+
+  lps22df_fifo_mode_set(p_sensor_drv, &fifo_md);
 
   return res;
 }

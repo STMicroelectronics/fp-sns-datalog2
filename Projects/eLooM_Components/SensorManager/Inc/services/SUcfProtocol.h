@@ -1,20 +1,20 @@
 /**
-  ******************************************************************************
-  * @file    SUcfProtocol.h
-  * @author  SRA - MCD
-  * @brief
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file    SUcfProtocol.h
+ * @author  SRA - MCD
+ * @brief
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 #ifndef SENSORMANAGER_INC_SERVICES_SUCFPROTOCOL_H_
 #define SENSORMANAGER_INC_SERVICES_SUCFPROTOCOL_H_
 
@@ -22,10 +22,8 @@
 extern "C" {
 #endif
 
-
 #include "ISensorLL.h"
 #include "ISensorLL_vtbl.h"
-
 
 /*
  * This comes from sensors PID (to avoid including one specific PID file)
@@ -41,38 +39,54 @@ typedef struct
 
 #endif /* MEMS_UCF_SHARED_TYPES */
 
+#ifndef MEMS_UCF_EXT_SHARED_TYPES
+#define MEMS_UCF_EXT_SHARED_TYPES
+
 /*
- * This is for compatibility with ispu
- **/
-#ifndef MEMS_UCF_ISPU_SHARED_TYPES
-#define MEMS_UCF_ISPU_SHARED_TYPES
+ * UCF extended format supports the following commands:
+ * - MEMS_UCF_OP_READ: read the register at the location specified by the
+ *   "address" field ("data" field is ignored
+ * - MEMS_UCF_OP_WRITE: write the value specified by the "data" field at the
+ *   location specified by the "address" field
+ * - MEMS_UCF_OP_DELAY: wait the number of milliseconds specified by the "data"
+ *   field ("address" field is ignored)
+ * - MEMS_UCF_OP_POLL_SET: poll the register at the location specified by the
+ *   "address" field until all the bits identified by the mask specified by the
+ *   "data" field are set to 1
+ * - MEMS_UCF_OP_POLL_RESET: poll the register at the location specified by the
+ *   "address" field until all the bits identified by the mask specified by the
+ *   "data" field are reset to 0
+ */
 
-#define MEMS_UCF_OP_WRITE 0
-#define MEMS_UCF_OP_DELAY 1
+#define MEMS_UCF_OP_READ       0
+#define MEMS_UCF_OP_WRITE      1
+#define MEMS_UCF_OP_DELAY      2
+#define MEMS_UCF_OP_POLL_SET   3
+#define MEMS_UCF_OP_POLL_RESET 4
 
-typedef struct {
+typedef struct
+{
   uint8_t op;
   uint8_t address;
   uint8_t data;
-} ucf_line_ispu_t;
+} ucf_line_ext_t;
 
-#endif /* MEMS_UCF_ISPU_SHARED_TYPES */
-
+#endif /* MEMS_UCF_EXT_SHARED_TYPES */
 
 /**
-  * Create a type name for ::_SUcfProtocol_t
-  */
+ * Create a type name for ::_SUcfProtocol_t
+ */
 typedef struct _SUcfProtocol_t SUcfProtocol_t;
 
 /**
-  * Sensor Query internal state.
-  */
+ * Sensor Query internal state.
+ */
 struct _SUcfProtocol_t
 {
   /**
-    * Specifies the sensor Low-Level interface.
-    */
-  ISensorLL_t *sensor_ll; 
+   * Specifies the sensor Low-Level interface.
+   */
+  ISensorLL_t *sensor_ll;
 };
 
 /**
@@ -132,10 +146,10 @@ sys_error_code_t UCFP_LoadUcf(SUcfProtocol_t *_this, const char *p_ucf, uint32_t
 
 /**
  * Load the UCF using the SensorLL interface configured in the object.
- * This function expects an ucf_line_ispu_t array
+ * This function expects an ucf_line_ext_t array
  *
  * \code
- * const ucf_line_t ispu_conf[] = {
+ * const ucf_line_ext_t ispu_conf[] = {
  *    { .op = MEMS_UCF_OP_WRITE, .address = 0x01, .data = 0x00 },
  *    { .op = MEMS_UCF_OP_DELAY, .address = 0, .data = 5 },
  *    { .op = MEMS_UCF_OP_WRITE, .address = 0x10, .data = 0x76 },
@@ -149,7 +163,7 @@ sys_error_code_t UCFP_LoadUcf(SUcfProtocol_t *_this, const char *p_ucf, uint32_t
  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
  *
  */
-sys_error_code_t UCFP_LoadUcfHeader(SUcfProtocol_t *_this, const ucf_line_ispu_t *p_ucf, uint32_t size);
+sys_error_code_t UCFP_LoadUcfHeader(SUcfProtocol_t *_this, const ucf_line_ext_t *p_ucf, uint32_t size);
 
 /**
  * Get a string with the compressed UCF converted from a full one
@@ -163,7 +177,8 @@ sys_error_code_t UCFP_LoadUcfHeader(SUcfProtocol_t *_this, const ucf_line_ispu_t
  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
  *
  */
-sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, char *p_compressed_ucf, uint32_t compressed_ucf_size, uint32_t *compressed_ucf_size_actual);
+sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, char *p_compressed_ucf, uint32_t compressed_ucf_size,
+                                       uint32_t *compressed_ucf_size_actual);
 
 /**
  * Get a string with the compressed UCF converted from a full one
@@ -198,7 +213,6 @@ uint32_t UCFP_UcfSize(uint32_t compressed_ucf_size);
  *
  */
 uint32_t UCFP_CompressedUcfSize(uint32_t ucf_size);
-
 
 #ifdef __cplusplus
 }

@@ -254,9 +254,6 @@ static inline sys_error_code_t MP23DB01HPTaskPostReportToFront(MP23DB01HPTask *_
   */
 static inline sys_error_code_t MP23DB01HPTaskPostReportToBack(MP23DB01HPTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file MP23DB01HPTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -292,7 +289,7 @@ static const MP23DB01HPTaskClass_t sTheClass =
     MP23DB01HPTask_vtblMicGetSensitivity,
     MP23DB01HPTask_vtblSensorSetODR,
     MP23DB01HPTask_vtblSensorSetFS,
-    NULL,
+    MP23DB01HPTask_vtblSensorSetFifoWM,
     MP23DB01HPTask_vtblSensorEnable,
     MP23DB01HPTask_vtblSensorDisable,
     MP23DB01HPTask_vtblSensorIsEnabled,
@@ -697,7 +694,7 @@ sys_error_code_t MP23DB01HPTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
       .sensorMessage.nSensorId = sensor_id,
       .sensorMessage.nParam = (uint32_t) ODR
     };
-    res = MP23DB01HPTaskPostReportToFront(p_if_owner, (SMMessage *) &report);
+    res = MP23DB01HPTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
 
   return res;
@@ -726,10 +723,19 @@ sys_error_code_t MP23DB01HPTask_vtblSensorSetFS(ISensor_t *_this, float FS)
       .sensorMessage.nSensorId = sensor_id,
       .sensorMessage.nParam = (uint32_t) FS
     };
-    res = MP23DB01HPTaskPostReportToFront(p_if_owner, (SMMessage *) &report);
+    res = MP23DB01HPTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
 
   return res;
+}
+
+sys_error_code_t MP23DB01HPTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+{
+  assert_param(_this != NULL);
+  /* Does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("MP23DB01HP: warning - SetFifoWM() not supported.\r\n"));
+  return SYS_INVALID_FUNC_CALL_ERROR_CODE;
 }
 
 sys_error_code_t MP23DB01HPTask_vtblSensorEnable(ISensor_t *_this)
@@ -753,7 +759,7 @@ sys_error_code_t MP23DB01HPTask_vtblSensorEnable(ISensor_t *_this)
       .sensorMessage.nCmdID = SENSOR_CMD_ID_ENABLE,
       .sensorMessage.nSensorId = sensor_id
     };
-    res = MP23DB01HPTaskPostReportToFront(p_if_owner, (SMMessage *) &report);
+    res = MP23DB01HPTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
 
   return res;
@@ -780,7 +786,7 @@ sys_error_code_t MP23DB01HPTask_vtblSensorDisable(ISensor_t *_this)
       .sensorMessage.nCmdID = SENSOR_CMD_ID_DISABLE,
       .sensorMessage.nSensorId = sensor_id
     };
-    res = MP23DB01HPTaskPostReportToFront(p_if_owner, (SMMessage *) &report);
+    res = MP23DB01HPTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
 
   return res;
@@ -914,7 +920,7 @@ static sys_error_code_t MP23DB01HPTaskExecuteStepDatalog(AManagedTask *_this)
       }
       case SM_MESSAGE_ID_DATA_READY:
       {
-//          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("MP23DB01HP: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("MP23DB01HP: new data.\r\n"));
 
         p_obj->half = report.sensorDataReadyMessage.half;
 
@@ -937,7 +943,7 @@ static sys_error_code_t MP23DB01HPTaskExecuteStepDatalog(AManagedTask *_this)
         DataEventInit((IEvent *)&evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
         IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-        /*SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("MP23DB01HP: ts = %f\r\n", (float)timestamp));*/
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("MP23DB01HP: ts = %f\r\n", (float)timestamp));
         break;
       }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -945,7 +951,7 @@ static sys_error_code_t MP23DB01HPTaskExecuteStepDatalog(AManagedTask *_this)
         switch (report.sensorMessage.nCmdID)
         {
           case SENSOR_CMD_ID_INIT:
-              res = MDFDrvSetDataBuffer((MDFDriver_t*) p_obj->p_driver, p_obj->p_sensor_data_buff, (p_obj->sensor_status.ODR / 1000) * 2);
+              res = MDFDrvSetDataBuffer((MDFDriver_t*) p_obj->p_driver, p_obj->p_sensor_data_buff, ((uint32_t)p_obj->sensor_status.ODR / 1000) * 2);
               if(!SYS_IS_ERROR_CODE(res))
               {
                 if(p_obj->sensor_status.IsActive == true)

@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
+  *                             
   *
   ******************************************************************************
   */
@@ -22,7 +22,6 @@
 
 #include "PCDDriver.h"
 #include "ux_api.h"
-#include "ux_dcd_stm32.h"
 #include "ux_device_descriptors.h"
 #include "services/sysdebug.h"
 #include "services/sysmem.h"
@@ -40,7 +39,7 @@
 #define USBD_WCID_WAITING_FOR_SIZE               (uint8_t)(0x00)
 #define USBD_WCID_WAITING_FOR_SIZE_REQUEST       (uint8_t)(0x01)
 #define USBD_WCID_WAITING_FOR_DATA_REQUEST       (uint8_t)(0x02)
-#define USB_WCID_WAITING_FOR_DATA                (uint8_t)(0x05)
+#define USBD_WCID_WAITING_FOR_DATA               (uint8_t)(0x05)
 
 #if defined(DEBUG) || defined (SYS_DEBUG)
 #define sObj                                  sUsbXObj
@@ -110,10 +109,6 @@ int8_t usbx_dctrl_class_set_ep(usbx_dctrl_class_t *_this, uint8_t id_stream, uin
 int8_t datalog_class_control(void *_this, uint8_t isHostToDevice, uint8_t cmd, uint16_t wValue, uint16_t wIndex,
                              uint8_t *pbuf, uint16_t length)
 {
-  /** Unused Param */
-  (void) wValue;
-  (void) wIndex;
-
   assert_param(_this != NULL);
 
   static uint32_t USB_packet_size = 0;
@@ -126,67 +121,41 @@ int8_t datalog_class_control(void *_this, uint8_t isHostToDevice, uint8_t cmd, u
   {
     switch (obj->state)
     {
-      /** Waiting for command size */
       case USBD_WCID_WAITING_FOR_SIZE :
-      {
-    	  if (cmd != CMD_SIZE_SET) /* discard if it isn't a size set command */
-		  {
-			return -1;
-		  }
 
-    	  /** Check if the serialize command buffer was allocated before
-    	   *  In that case clear the memory
-    	   **/
-		  if(serialized_cmd)
-		  {
-			SysFree(serialized_cmd);
-		  }
+        if (cmd != CMD_SIZE_SET) /* discard if it isn't a size set command */
+        {
+          return -1;
+        }
 
-		  /** Check length discriminate usb packet size
-		   */
-		  if (length == 2)
-		  {
-			USB_packet_size = *(uint16_t *) pbuf;
-		  }
-		  else
-		  {
-			USB_packet_size = *(uint32_t *) pbuf;
-		  }
+        SysFree(serialized_cmd);
 
-		  /**
-		   * Allocate the buffer to receive next command
-		   */
-		  serialized_cmd = SysAlloc(USB_packet_size);
+        if (length == 2)
+        {
+          USB_packet_size = *(uint16_t *) pbuf;
+        }
+        else
+        {
+          USB_packet_size = *(uint32_t *) pbuf;
+        }
+        serialized_cmd = SysAlloc(USB_packet_size); /* Allocate the buffer to receive next command */
+        if (serialized_cmd == NULL)
+        {
+          /*Mem alloc error*/
+          SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE);
+          return -1;
+        }
+        else
+        {
+          /*Mem alloc ok*/
+        }
 
-		  /**
-		   * Check memory allocation goes right
-		   */
-		  if (serialized_cmd == NULL)
-		  {
-			SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE);
-			return -1;
-		  }
-		  else
-		  {
-			/*Mem alloc ok*/
-		  }
+        p = serialized_cmd;
+        obj->state = USBD_WCID_WAITING_FOR_DATA;
+        counter = USB_packet_size;
 
-		  /**
-		   * Save pointer to buffer serialized command and packet size
-		   */
-		  p = serialized_cmd;
-		  counter = USB_packet_size;
-
-		  /**
-		   * Set next state
-		   */
-		  obj->state = USB_WCID_WAITING_FOR_DATA;
-
-
-      }
-      break;
-
-      case USB_WCID_WAITING_FOR_DATA :
+        break;
+      case USBD_WCID_WAITING_FOR_DATA :
       {
         uint32_t i = 0;
 
@@ -203,14 +172,12 @@ int8_t datalog_class_control(void *_this, uint8_t isHostToDevice, uint8_t cmd, u
 
         if (counter == 0) /* The complete message has been received */
         {
-          IParseCommand(obj->cmd_parser, serialized_cmd);
-          //obj->state = USBD_WCID_WAITING_FOR_SIZE;
+          IParseCommand(obj->cmd_parser, serialized_cmd, 1);
         }
+        break;
       }
-      break;
     }
   }
-
   else /* Device to host */
   {
     switch (obj->state)
@@ -222,11 +189,7 @@ int8_t datalog_class_control(void *_this, uint8_t isHostToDevice, uint8_t cmd, u
           return -1;  /* error*/
         }
 
-        if(serialized_cmd)
-        {
-        	SysFree(serialized_cmd);
-        }
-
+        SysFree(serialized_cmd);
         /** not used here, but could be the file name **/
         char *response_name;
 
@@ -256,12 +219,8 @@ int8_t datalog_class_control(void *_this, uint8_t isHostToDevice, uint8_t cmd, u
 
         if (counter == 0) /* The complete message has been received */
         {
-        	if(serialized_cmd)
-        	{
-        		SysFree(serialized_cmd);
-        		serialized_cmd = NULL;
-        	}
-
+          SysFree(serialized_cmd);
+          serialized_cmd = NULL;
           obj->state = USBD_WCID_WAITING_FOR_SIZE;
         }
         break;
@@ -285,7 +244,7 @@ sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, void *param)
   /* Device String framework length*/
   ULONG string_framework_length;
   /* Device language id framework length*/
-  ULONG languge_id_framework_length;
+  ULONG language_id_framework_length;
   /* Device Framework Full Speed */
   UCHAR *device_framework_full_speed;
   /* String Framework*/
@@ -296,7 +255,7 @@ sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, void *param)
   UINT tx_status = UX_SUCCESS;
 
   UCHAR *pointer = obj->memory_pointer;
-  obj->isClassInitiaizedByTheHost = false;
+  obj->is_class_initialized_by_the_host = false;
 
   if (tx_byte_pool_create(&obj->ux_device_app_byte_pool, "Ux App memory pool", obj->ux_device_byte_pool_buffer,
                           UX_DEVICE_APP_MEM_POOL_SIZE) != TX_SUCCESS)
@@ -321,10 +280,10 @@ sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, void *param)
   ux_system_initialize(pointer, USBX_MEMORY_SIZE, UX_NULL, 0);
 
   /* Get_Device_Framework_Full_Speed and get the length */
-  device_framework_full_speed = USBD_Get_Device_FS_Descriptor(&device_framework_fs_length);
+  device_framework_full_speed = USBD_Get_Device_Framework_Speed(&device_framework_fs_length);
 
   /* Get_String_Framework and get the length */
-  string_framework = USBD_Get_StringDescription_Descriptor(&string_framework_length);
+  string_framework = USBD_Get_StringDescription_Framework(&string_framework_length);
 
   if (string_framework == NULL)
   {
@@ -334,12 +293,12 @@ sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, void *param)
   }
 
   /* Get_Language_Id_Framework and get the length */
-  language_id_framework = USBD_Get_Language_Id_Descriptor(&languge_id_framework_length);
+  language_id_framework = USBD_Get_Language_Id_Framework(&language_id_framework_length);
 
   /* The code below is required for installing the device portion of USBX.
    In this application */
   tx_status = ux_device_stack_initialize(NULL, 0, device_framework_full_speed, device_framework_fs_length, string_framework, string_framework_length,
-                                         language_id_framework, languge_id_framework_length, UX_NULL);
+                                         language_id_framework, language_id_framework_length, UX_NULL);
 
   /* Check the device stack class status */
   if (tx_status != UX_SUCCESS)
@@ -350,7 +309,7 @@ sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, void *param)
   }
 
   IDrvInit(obj->m_pxDriver, (void *) obj->mx_drv_cfg);
-  PCDDrvSetFIFO((PCDDriver_t *) obj->m_pxDriver, 320, N_IN_ENDPOINTS, 1, 64);
+  PCDDrvSetFIFO((PCDDriver_t *) obj->m_pxDriver, PCD_FIFO_SIZE, PCD_FIFO_RX_EP, PCD_FIFO_CTRL_EP, SS_N_IN_ENDPOINTS);
   PCDDrvSetExtDCD((PCDDriver_t *) obj->m_pxDriver, _ux_dcd_stm32_initialize);
 
   UX_SLAVE_CLASS_SENSOR_STREAMING_PARAMETER *ss_class_parameter = _ux_utility_memory_allocate(UX_NO_ALIGN, UX_REGULAR_MEMORY,
@@ -424,10 +383,11 @@ sys_error_code_t usbx_dctrl_vtblStream_deinit(IStream_t *_this)
 
   ux_device_stack_uninitialize();
   ux_system_uninitialize();
+
+  // ToDo: should this be "tx_byte_release()" ??? --> allocation is done with "tx_byte_allocate()"
   _ux_utility_memory_free(obj->memory_pointer);
 
   return res;
-
 }
 
 sys_error_code_t usbx_dctrl_vtblStream_start(IStream_t *_this, void *param)
@@ -553,7 +513,7 @@ void datalog_class_active(void *_this, void *class)
 
   /* Save the SENSOR_STREAMING instance.  */
   obj->sensor_streaming_device = (UX_SLAVE_CLASS_SENSOR_STREAMING *) class;
-  obj->isClassInitiaizedByTheHost = true;
+  obj->is_class_initialized_by_the_host = true;
 }
 
 void datalog_class_deactive(void *_this, void *class)
@@ -563,6 +523,6 @@ void datalog_class_deactive(void *_this, void *class)
 
   /* Reset the SENSOR_STREAMING instance.  */
   obj->sensor_streaming_device = UX_NULL;
-  obj->isClassInitiaizedByTheHost = false;
+  obj->is_class_initialized_by_the_host = false;
 }
 

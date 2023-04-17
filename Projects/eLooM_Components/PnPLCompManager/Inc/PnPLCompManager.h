@@ -48,7 +48,7 @@ struct _PnPLCompManager_t
   IPnPLComponent_t *Components[COM_MAX_PNPL_COMPONENTS];
 
   /**
-    * Indicates the number of PnP components available.
+    * Indicates the number of PnPL components available.
     */
   uint16_t n_components;
 };

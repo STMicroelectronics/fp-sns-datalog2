@@ -27,30 +27,33 @@
 
 extern UCHAR _ux_system_slave_class_sensor_streaming_name[24];
 #ifndef SS_CLASS_THREAD_PRIO
-#define SS_CLASS_THREAD_PRIO 1
+#define SS_CLASS_THREAD_PRIO                          1U
 #endif
 
 #ifndef SS_CLASS_THREAD_STACK_SIZE
-#define SS_CLASS_THREAD_STACK_SIZE 4096
+#define SS_CLASS_THREAD_STACK_SIZE                    4096U
 #endif
 
 #ifndef SS_BULKIN_THREAD_PRIO
-#define SS_BULKIN_THREAD_PRIO 3
+#define SS_BULKIN_THREAD_PRIO                         3U
 #endif
 
 #ifndef SS_BULKIN_THREAD_STACK_SIZE
-#define SS_BULKIN_THREAD_STACK_SIZE 4096
+#define SS_BULKIN_THREAD_STACK_SIZE                   4096U
 #endif
 
-#ifndef N_CHANNELS_MAX
-#define N_CHANNELS_MAX                                13U
+#ifndef SS_N_CHANNELS_MAX
+#define SS_N_CHANNELS_MAX                             13U
 #endif
 
 /* Define Storage Class USB Class constants.  */
+#ifndef SS_N_IN_ENDPOINTS
+#define SS_N_IN_ENDPOINTS                             5U
+#endif
 
-#define N_IN_ENDPOINTS                                5U
-#define N_OUT_ENDPOINTS                               1U
-
+#ifndef SS_N_OUT_ENDPOINTS
+#define SS_N_OUT_ENDPOINTS                            1U
+#endif
 
 #define DATA_IN_EP1                                   0x81  /* EP1 for data IN */
 #define DATA_IN_EP2                                   0x82  /* EP2 for data IN */
@@ -63,10 +66,6 @@ extern UCHAR _ux_system_slave_class_sensor_streaming_name[24];
 #define SS_WCID_DATA_FS_MAX_PACKET_SIZE               64U  /* Endpoint IN & OUT Packet size */
 
 #define UX_SLAVE_CLASS_SENSOR_STREAMING_CLASS         0U
-#define UX_SLAVE_CLASS_SENSOR_STREAMING_SUBCLASS      0U
-#define UX_SLAVE_CLASS_SENSOR_STREAMING_PROTOCOL      0U
-
-#define UX_DEVICE_CLASS_SENSOR_STREAMING_PACKET_SIZE  64U
 
 #define STREAMING_STATUS_IDLE                         0x00U
 #define STREAMING_STATUS_STARTED                      0x01U
@@ -77,7 +76,7 @@ extern UCHAR _ux_system_slave_class_sensor_streaming_name[24];
 #ifdef TX_ENABLE_EVENT_TRACE
 #define UX_TRACE_DEVICE_CLASS_SENSOR_STREAMING_ACTIVATE			(UX_TRACE_HOST_CLASS_EVENTS_BASE + 201)  /* I1 = class instance */
 #define UX_TRACE_DEVICE_CLASS_SENSOR_STREAMING_DEACTIVATE		(UX_TRACE_HOST_CLASS_EVENTS_BASE + 202)	 /* I1 = class instance */
-#define UX_TRACE_DEVICE_CLASS_SENSOR_STREAMING_READ             (UX_TRACE_HOST_CLASS_EVENTS_BASE + 204)  /* I1 = class instance, I2 = data pointer, I3 = requested length */
+#define UX_TRACE_DEVICE_CLASS_SENSOR_STREAMING_READ         (UX_TRACE_HOST_CLASS_EVENTS_BASE + 204)  /* I1 = class instance, I2 = data pointer, I3 = requested length */
 #endif
 
 /* Define Slave SENSOR_STREAMING Class Calling Parameter structure */
@@ -97,13 +96,13 @@ typedef struct
 	uint8_t           *rx_buffer;
 	uint32_t          rx_length;
 	volatile uint32_t rx_state;
-	uint8_t           *tx_buffer[N_CHANNELS_MAX];
-	uint32_t          tx_buff_idx[N_CHANNELS_MAX];
-	volatile uint8_t  tx_buff_status[N_CHANNELS_MAX];
-	volatile uint8_t  tx_buff_reset[N_CHANNELS_MAX];
-	uint32_t          tx_byte_counter[N_CHANNELS_MAX];
-	uint16_t          ch_data_size[N_CHANNELS_MAX];
-	uint8_t           ep_map[N_CHANNELS_MAX];
+	uint8_t           *tx_buffer[SS_N_CHANNELS_MAX];
+	uint32_t          tx_buff_idx[SS_N_CHANNELS_MAX];
+	volatile uint8_t  tx_buff_status[SS_N_CHANNELS_MAX];
+	volatile uint8_t  tx_buff_reset[SS_N_CHANNELS_MAX];
+	uint32_t          tx_byte_counter[SS_N_CHANNELS_MAX];
+	uint16_t          ch_data_size[SS_N_CHANNELS_MAX];
+	uint8_t           ep_map[SS_N_CHANNELS_MAX];
 	uint8_t           streaming_status;
 }STREAMING_HandleTypeDef;
 
@@ -129,7 +128,7 @@ typedef struct UX_SLAVE_CLASS_SENSOR_STREAMING_STRUCT
 {
 	UX_SLAVE_INTERFACE                              *ux_slave_class_sensor_streaming_interface;
 	UX_SLAVE_CLASS_SENSOR_STREAMING_PARAMETER       *ux_slave_class_sensor_streaming_parameter;
-	UX_SLAVE_CLASS_SENSOR_STREAMING_BULKIN           ux_slave_class_sensor_streaming_bulkin[N_IN_ENDPOINTS];
+	UX_SLAVE_CLASS_SENSOR_STREAMING_BULKIN           ux_slave_class_sensor_streaming_bulkin[SS_N_IN_ENDPOINTS];
 	UX_SLAVE_ENDPOINT                               *ux_slave_class_sensor_streaming_bulkout_endpoint;
 	ULONG                                            ux_slave_class_sensor_streaming_alternate_setting;
 	UX_EVENT_FLAGS_GROUP                             ux_slave_class_sensor_streaming_event_flags_group;

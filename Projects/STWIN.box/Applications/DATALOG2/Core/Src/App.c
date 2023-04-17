@@ -45,6 +45,7 @@
 #include "IIS2ICLXTask.h"
 
 #include "DatalogAppTask.h"
+#include "App_model.h"
 
 #include "PnPLCompManager.h"
 #include "Deviceinformation_PnPL.h"
@@ -375,6 +376,23 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   Log_Controller_PnPLInit(pLogControllerPnPLObj, DatalogAppTask_GetILogControllerIF((DatalogAppTask *) sDatalogAppObj));
   Automode_PnPLInit(pAutomodePnPLObj);
 
+  if(sExtIis3dwb)
+  {
+    iis3dwb_acc_set_sensor_annotation("[EXTERN]\0");
+  }
+  else
+  {
+    iis3dwb_acc_set_sensor_annotation("\0");
+  }
+
+  if(sExtStts22h)
+  {
+    stts22h_temp_set_sensor_annotation("[EXTERN]\0");
+  }
+  else
+  {
+    stts22h_temp_set_sensor_annotation("\0");
+  }
 
   return SYS_NO_ERROR_CODE;
 }

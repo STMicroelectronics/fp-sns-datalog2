@@ -417,7 +417,6 @@ static void ISM330ISTaskISPUTimerCallbackFunction(ULONG timer);
 
 static inline ISM330ISTask* ISM330ISTaskGetOwnerFromISensorIF(ISensor_t *p_if);
 static inline ISM330ISTask* ISM330ISTaskGetOwnerFromISensorLLIF(ISensorLL_t *p_if);
-//static inline ISM330ISTask* ISM330ISTaskGetOwnerFromISensorMlcIF(ISensorMlc_t *p_if);
 
 /**
  * Interrupt callback
@@ -452,9 +451,6 @@ static inline sys_error_code_t ISM330ISTaskPostReportToFront(ISM330ISTask *_this
  */
 static inline sys_error_code_t ISM330ISTaskPostReportToBack(ISM330ISTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-/* Inline function defined inline in the header file ISM330ISTask.h must be declared here as extern function. */
-#endif
 
 /* Objects instance */
 /********************/
@@ -489,7 +485,7 @@ static const ISM330ISTaskClass_t sTheClass =
         ISM330ISTask_vtblAccGetSensitivity,
         ISM330ISTask_vtblSensorSetODR,
         ISM330ISTask_vtblSensorSetFS,
-        NULL,
+        ISM330ISTask_vtblSensorSetFifoWM,
         ISM330ISTask_vtblSensorEnable,
         ISM330ISTask_vtblSensorDisable,
         ISM330ISTask_vtblSensorIsEnabled,
@@ -506,7 +502,7 @@ static const ISM330ISTaskClass_t sTheClass =
         ISM330ISTask_vtblGyroGetSensitivity,
         ISM330ISTask_vtblSensorSetODR,
         ISM330ISTask_vtblSensorSetFS,
-        NULL,
+        ISM330ISTask_vtblSensorSetFifoWM,
         ISM330ISTask_vtblSensorEnable,
         ISM330ISTask_vtblSensorDisable,
         ISM330ISTask_vtblSensorIsEnabled,
@@ -519,11 +515,11 @@ static const ISM330ISTaskClass_t sTheClass =
         ISM330ISTask_vtblIspuGetEventSourceIF,
         ISM330ISTask_vtblIspuGetDataInfo,
         ISM330ISTask_vtblIspuGetODR,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
+        ISM330ISTask_vtblIspuGetFS,
+        ISM330ISTask_vtblIspuGetSensitivity,
+        ISM330ISTask_vtblSensorSetODR,
+        ISM330ISTask_vtblSensorSetFS,
+        ISM330ISTask_vtblSensorSetFifoWM,
         ISM330ISTask_vtblSensorEnable,
         ISM330ISTask_vtblSensorDisable,
         ISM330ISTask_vtblSensorIsEnabled,
@@ -1198,6 +1194,23 @@ sys_error_code_t ISM330ISTask_vtblIspuGetODR(ISourceObservable *_this, float *p_
   return res;
 }
 
+float ISM330ISTask_vtblIspuGetFS(ISourceObservable *_this)
+{
+  assert_param(_this != NULL);
+  /* Does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("ISM330IS: warning - ISPU GetFS() not supported.\r\n"));
+  return -1.0f;
+}
+
+float ISM330ISTask_vtblIspuGetSensitivity(ISourceObservable *_this)
+{
+  assert_param(_this != NULL);
+  /* Does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("ISM330IS: warning - ISPU GetSensitivity() not supported.\r\n"));
+  return -1.0f;
+}
 
 EMData_t ISM330ISTask_vtblIspuGetDataInfo(ISourceObservable *_this)
 {
@@ -1265,6 +1278,15 @@ sys_error_code_t ISM330ISTask_vtblSensorSetFS(ISensor_t *_this, float FS)
 
   return res;
 
+}
+
+sys_error_code_t ISM330ISTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+{
+  assert_param(_this != NULL);
+  /* Does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("ISM330IS: warning - SetFifoWM() not supported.\r\n"));
+  return SYS_INVALID_FUNC_CALL_ERROR_CODE;
 }
 
 sys_error_code_t ISM330ISTask_vtblSensorEnable(ISensor_t *_this)
@@ -1386,14 +1408,6 @@ SensorStatus_t ISM330ISTask_vtblIspuGetStatus(ISensor_t *_this)
   ISM330ISTask *p_if_owner = ISM330ISTaskGetOwnerFromISensorIF(_this);
   return p_if_owner->ispu_sensor_status;
 }
-
-//boolean_t ISM330ISTask_vtblSensorIspuIsEnabled(ISensorMlc_t *_this)
-//{
-//  assert_param(_this != NULL);
-//  ISM330ISTask *p_if_owner = ISM330ISTaskGetOwnerFromISensorMlcIF(_this);
-//  return p_if_owner->ispu_enable;
-//}
-
 
 sys_error_code_t ISM330ISTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len)
 {
@@ -1555,7 +1569,7 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
 
       case SM_MESSAGE_ID_DATA_READY:
         {
-//        SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("ISM330IS: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("ISM330IS: new data.\r\n"));
           if(p_obj->p_irq_config == NULL)
           {
             if(TX_SUCCESS != tx_timer_change(&p_obj->read_timer, AMT_MS_TO_TICKS(p_obj->ism330is_task_cfg_timer_period_ms), AMT_MS_TO_TICKS(p_obj->ism330is_task_cfg_timer_period_ms)))
@@ -1600,7 +1614,8 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
               IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent*) &evt_gyro, NULL);
             }
 
-//          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("ISM330IS: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("ISM330IS: ts = %f\r\n", (float)timestamp));
+          }
             if(p_obj->p_irq_config == NULL)
             {
               if (TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
@@ -1609,7 +1624,6 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
               }
             }
 
-          }
           break;
         }
 
@@ -1642,6 +1656,7 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
             {
               res = SYS_INVALID_PARAMETER_ERROR_CODE;
             }
+          }
 
             if(p_obj->p_ispu_config == NULL)
             {
@@ -1651,7 +1666,6 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
               }
             }
 
-          }
           break;
         }
 
@@ -2014,6 +2028,12 @@ static sys_error_code_t ISM330ISTaskSensorReadData(ISM330ISTask *_this)
       if(val.xlda == 1U)
       {
         ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_A, _this->p_acc_sample, 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+      int16_t *p16 = (int16_t*) (_this->p_acc_sample);
+      *p16++ = dummyDataCounter_acc++;
+      *p16++ = dummyDataCounter_acc++;
+      *p16++ = dummyDataCounter_acc++;
+#endif
         _this->acc_samples_count = 1U;
 
         /* Read newly INT status: while reading acc a new gyro data could be available */
@@ -2022,6 +2042,12 @@ static sys_error_code_t ISM330ISTaskSensorReadData(ISM330ISTask *_this)
       if(val.gda == 1U)
       {
         ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_G, _this->p_gyro_sample, 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+      int16_t *p16 = (int16_t*) (_this->p_gyro_sample);
+      *p16++ = dummyDataCounter_gyro++;
+      *p16++ = dummyDataCounter_gyro++;
+      *p16++ = dummyDataCounter_gyro++;
+#endif
         _this->gyro_samples_count = 1U;
       }
     }
@@ -2030,22 +2056,48 @@ static sys_error_code_t ISM330ISTaskSensorReadData(ISM330ISTask *_this)
       uint8_t p_samples[12];
 
       ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_G, p_samples, 12);
+#if (HSD_USE_DUMMY_DATA == 1)
+      int16_t *p16 = (int16_t*) (_this->p_acc_sample);
+      *p16++ = dummyDataCounter_acc++;
+      *p16++ = dummyDataCounter_acc++;
+      *p16++ = dummyDataCounter_acc++;
 
+      p16 = (int16_t*) (_this->p_gyro_sample);
+      *p16++ = dummyDataCounter_gyro++;
+      *p16++ = dummyDataCounter_gyro++;
+      *p16++ = dummyDataCounter_gyro++;
+#else
       memcpy(_this->p_gyro_sample, p_samples, 6);
       memcpy(_this->p_acc_sample, &p_samples[6], 6);
-
+#endif
       _this->acc_samples_count = 1U;
       _this->gyro_samples_count = 1U;
     }
   }
   else if(_this->acc_sensor_status.IsActive)
   {
-    ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_A, _this->p_acc_sample,  6);
+    ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_A, _this->p_acc_sample, 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+    uint16_t i = 0;
+    int16_t *p16 = (int16_t*) (_this->p_acc_sample);
+    for(i = 0; i < _this->samples_per_it * 3; i++)
+    {
+      *p16++ = dummyDataCounter_acc++;
+    }
+#endif
     _this->acc_samples_count = 1U;
   }
   else if(_this->gyro_sensor_status.IsActive)
   {
     ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_G, _this->p_gyro_sample, 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+    uint16_t i = 0;
+    int16_t *p16 = (int16_t*) (_this->p_gyro_sample);
+    for(i = 0; i < _this->samples_per_it * 3; i++)
+    {
+      *p16++ = dummyDataCounter_gyro++;
+    }
+#endif
     _this->gyro_samples_count = 1U;
   }
   else
@@ -2738,6 +2790,7 @@ static sys_error_code_t ISM330IS_FS_Sync(ISM330ISTask *_this)
         break;
     }
     _this->acc_sensor_status.FS = full_scale;
+    _this->acc_sensor_status.Sensitivity = 0.0000305f * _this->acc_sensor_status.FS;
   }
   else
   {
@@ -2769,6 +2822,7 @@ static sys_error_code_t ISM330IS_FS_Sync(ISM330ISTask *_this)
         break;
     }
     _this->gyro_sensor_status.FS = full_scale;
+    _this->gyro_sensor_status.Sensitivity = 0.035f * _this->gyro_sensor_status.FS;
   }
   else
   {

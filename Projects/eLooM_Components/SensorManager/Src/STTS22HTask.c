@@ -282,9 +282,6 @@ static inline sys_error_code_t STTS22HTaskPostReportToFront(STTS22HTask *_this, 
   */
 static inline sys_error_code_t STTS22HTaskPostReportToBack(STTS22HTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-// Inline function defined inline in the header file STTS22HTask.h must be declared here as extern function.
-#endif
 
 /* Objects instance */
 /********************/
@@ -320,7 +317,7 @@ static const STTS22HTaskClass_t sTheClass =
     STTS22HTask_vtblTempGetSensitivity,
     STTS22HTask_vtblSensorSetODR,
     STTS22HTask_vtblSensorSetFS,
-    NULL,
+    STTS22HTask_vtblSensorSetFifoWM,
     STTS22HTask_vtblSensorEnable,
     STTS22HTask_vtblSensorDisable,
     STTS22HTask_vtblSensorIsEnabled,
@@ -824,6 +821,15 @@ sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensor_t *_this, float FS)
 
 }
 
+sys_error_code_t STTS22HTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+{
+  assert_param(_this != NULL);
+  /* Does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("STTS22H: warning - SetFifoWM() not supported.\r\n"));
+  return SYS_INVALID_FUNC_CALL_ERROR_CODE;
+}
+
 sys_error_code_t STTS22HTask_vtblSensorEnable(ISensor_t *_this)
 {
   assert_param(_this != NULL);
@@ -1004,7 +1010,7 @@ static sys_error_code_t STTS22HTaskExecuteStepDatalog(AManagedTask *_this)
 
       case SM_MESSAGE_ID_DATA_READY:
       {
-        //   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("STTS22H: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("STTS22H: new data.\r\n"));
         if (p_obj->pIRQConfig == NULL)
         {
           if (TX_SUCCESS != tx_timer_change(&p_obj->read_fifo_timer, AMT_MS_TO_TICKS(p_obj->task_delay),
@@ -1032,7 +1038,8 @@ static sys_error_code_t STTS22HTaskExecuteStepDatalog(AManagedTask *_this)
           DataEventInit((IEvent *)&evt, p_obj->p_temp_event_src, &p_obj->data, timestamp, p_obj->temp_id);
           IEventSrcSendEvent(p_obj->p_temp_event_src, (IEvent *) &evt, NULL);
 
-          //    SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("STTS22H: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("STTS22H: ts = %f\r\n", (float)timestamp));
+        }
           if (p_obj->pIRQConfig == NULL)
           {
             if (TX_SUCCESS != tx_timer_activate(&p_obj->read_fifo_timer))
@@ -1040,7 +1047,6 @@ static sys_error_code_t STTS22HTaskExecuteStepDatalog(AManagedTask *_this)
               res = SYS_UNDEFINED_ERROR_CODE;
             }
           }
-        }
         break;
       }
 

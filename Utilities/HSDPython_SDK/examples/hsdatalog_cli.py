@@ -36,8 +36,9 @@ class HSDInfo():
 
     class CLIFlags():
         
-        def __init__(self, output_folder, acq_name, acq_desc, file_config, ucf_file, time_sec, interactive_mode):
+        def __init__(self, output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, time_sec, interactive_mode):
             self.output_folder = output_folder
+            self.sub_datetime_folder = sub_datetime_folder
             self.acq_name = acq_name
             self.acq_desc = acq_desc
             self.file_config = file_config
@@ -68,10 +69,13 @@ class HSDInfo():
 
         #Initialize the HSD_PythonSDK HSD_link module
         self.hsd_link_factory = HSDLink()
-        self.hsd_link = self.hsd_link_factory.create_hsd_link()
+        self.hsd_link = self.hsd_link_factory.create_hsd_link(acquisition_folder = cli_flags.output_folder)
         
         #Get the connected device list
         self.device_list = HSDLink.get_devices(self.hsd_link)
+
+        if len(self.device_list) == 0:
+            quit()
 
         #Updates the output folder field
         if self.cli_flags.output_folder is None:
@@ -161,13 +165,13 @@ class HSDInfo():
         HSDLink.set_sw_tag_on_off(self.hsd_link, self.selected_device_id, t_id, self.tag_status_list[t_id])
 
     def start_log(self):
-        # self.is_log_started = self.hsd_link.start_log(self.selected_device_id)
-        self.is_log_started = HSDLink.start_log(self.hsd_link, self.selected_device_id)
+        self.is_log_started = HSDLink.start_log(self.hsd_link, self.selected_device_id, self.cli_flags.sub_datetime_folder)
         self.threads_stop_flags = []
         self.sensor_data_files = []
 
         for s in self.sensor_list:
             HSDLink.start_sensor_acquisition_thread(self.hsd_link, self.selected_device_id, s, self.threads_stop_flags, self.sensor_data_files)
+        self.output_acquisition_path = HSDLink.get_acquisition_folder(self.hsd_link)
 
     def stop_log(self):
         for sf in self.threads_stop_flags:
@@ -199,6 +203,7 @@ def validate_duration(ctx, param, value):
 
 @click.command()
 @click.option('-o', '--output_folder', help="Output folder (this will be created if it doesn't exist)")
+@click.option('-s', '--sub_datetime_folder', help="Put automatic datetime sub-folder in Output folder [HighSpeedDatalogv2 Only] (this will be created if it doesn't exist)", type=bool, default=True)
 @click.option('-an','--acq_name', help="Acquisition name", type=str)
 @click.option('-ad','--acq_desc', help="Acquisition description", type=str)
 @click.option('-f', '--file_config', help="Device configuration file (JSON)", default='')
@@ -207,10 +212,10 @@ def validate_duration(ctx, param, value):
 @click.option('-i', '--interactive_mode', help="Interactive mode. It allows to select a connected device, get info and start the acquisition process",  is_flag=True, default=False)
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
-def hsd_CLI(output_folder, acq_name, acq_desc, file_config, ucf_file, time_sec, interactive_mode):
+def hsd_CLI(output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, time_sec, interactive_mode):
     last_scene = None
 
-    cli_flags = HSDInfo.CLIFlags(output_folder, acq_name, acq_desc, file_config, ucf_file, time_sec, interactive_mode)
+    cli_flags = HSDInfo.CLIFlags(output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, time_sec, interactive_mode)
     hsd_info = HSDInfo(cli_flags)
 
     while True:

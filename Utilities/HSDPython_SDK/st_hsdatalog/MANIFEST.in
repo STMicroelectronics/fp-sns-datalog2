@@ -1,0 +1,9 @@
+include st_hsdatalog/HSD/LICENSE.*
+include st_hsdatalog/HSD_GUI/LICENSE.*
+include st_hsdatalog/HSD_link/LICENSE.*
+include st_hsdatalog/HSD_utils/LICENSE.*
+include st_hsdatalog/HSD_link/communication/libhs_datalog/32bit/*
+include st_hsdatalog/HSD_link/communication/libhs_datalog/64bit/*
+include st_hsdatalog/HSD_link/communication/libhs_datalog/linux/*
+include st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi/*
+include st_hsdatalog/HSD_GUI/UI/*

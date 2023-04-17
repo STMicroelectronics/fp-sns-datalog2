@@ -57,6 +57,7 @@ EMData_t LIS2DU12Task_vtblAccGetDataInfo(ISourceObservable *_this);
 
 sys_error_code_t LIS2DU12Task_vtblSensorSetODR(ISensor_t *_this, float ODR);
 sys_error_code_t LIS2DU12Task_vtblSensorSetFS(ISensor_t *_this, float FS);
+sys_error_code_t LIS2DU12Task_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t LIS2DU12Task_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t LIS2DU12Task_vtblSensorDisable(ISensor_t *_this);
 boolean_t LIS2DU12Task_vtblSensorIsEnabled(ISensor_t *_this);

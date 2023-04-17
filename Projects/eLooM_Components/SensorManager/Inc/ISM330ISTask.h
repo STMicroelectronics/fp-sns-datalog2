@@ -87,7 +87,6 @@ ISourceObservable* ISM330ISTaskGetIspuSensorIF(ISM330ISTask *_this);
  * @return a pointer to the generic object ::ISourceObservable if success,
  * or NULL if out of memory error occurs.
  */
-//ISensorMlc_t* ISM330ISTaskGetMlcSensorIF(ISM330ISTask *_this);
 ISensorLL_t* ISM330ISTaskGetSensorLLIF(ISM330ISTask *_this);
 
 /**

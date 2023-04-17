@@ -1,21 +1,21 @@
 /**
-******************************************************************************
-* @file    STWIN.box_conf.h
-* @author  SRA
-* @brief   This file contains definitions for the components bus interfaces
-******************************************************************************
-* @attention
-*
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-*
-*
-******************************************************************************
-*/
+ ******************************************************************************
+ * @file    STWIN.box_conf.h
+ * @author  SRA
+ * @brief   This file contains definitions for the components bus interfaces
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file in
+ * the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ *
+ ******************************************************************************
+ */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef STWIN_BOX_CONF_H__
@@ -29,15 +29,13 @@ extern "C" {
 #include "stm32u5xx_hal.h"
 #include "STWIN.box_errno.h"
 
-
 /* SD card interrupt priority */
 #define BSP_SD_IT_PRIORITY            14U  /* Default is lowest priority level */
 #define BSP_SD_RX_IT_PRIORITY         14U  /* Default is lowest priority level */
 #define BSP_SD_TX_IT_PRIORITY         15U  /* Default is lowest priority level */
 
-
 /* Define 1 to use already implemented callback; 0 to implement callback
-   into an application file */
+ into an application file */
 
 #define USE_BC_TIM_IRQ_CALLBACK         0U
 #define USE_BC_GPIO_IRQ_HANDLER         1U
@@ -52,7 +50,6 @@ extern "C" {
 #define USE_ENV_SENSOR_HTS221_0         0U
 #define USE_ENV_SENSOR_ILPS22QS_0       0U
 #define USE_ENV_SENSOR_STTS22H_0        0U
-
 
 /* IIS2DLP */
 #define BSP_IIS2DLPC_CS_GPIO_CLK_ENABLE()       __GPIOH_CLK_ENABLE()
@@ -75,7 +72,6 @@ extern "C" {
 #define BSP_IIS2DLPC_INT2_EXTI_IRQ_SP           0
 #define BSP_IIS2DLPC_INT2_EXTI_IRQHandler       EXTI2_IRQHandler
 
-
 /* IIS3DWB */
 #define BSP_IIS3DWB_CS_GPIO_CLK_ENABLE()        __GPIOF_CLK_ENABLE()
 #define BSP_IIS3DWB_CS_PORT                     GPIOF
@@ -88,7 +84,6 @@ extern "C" {
 #define BSP_IIS3DWB_INT1_EXTI_IRQ_PP            1
 #define BSP_IIS3DWB_INT1_EXTI_IRQ_SP            0
 #define BSP_IIS3DWB_INT1_EXTI_IRQHandler        EXTI15_IRQHandler
-
 
 /* ISM330DHCX */
 #define BSP_ISM330DHCX_CS_GPIO_CLK_ENABLE() 	__GPIOH_CLK_ENABLE()
@@ -111,7 +106,6 @@ extern "C" {
 #define BSP_ISM330DHCX_INT2_EXTI_IRQ_SP         0
 #define BSP_ISM330DHCX_INT2_EXTI_IRQHandler     EXTI4_IRQHandler
 
-
 /* IIS2ICLX */
 #define BSP_IIS2ICLX_CS_GPIO_CLK_ENABLE()       __GPIOI_CLK_ENABLE()
 #define BSP_IIS2ICLX_CS_PORT                    GPIOI
@@ -132,7 +126,6 @@ extern "C" {
 #define BSP_IIS2ICLX_INT2_EXTI_IRQ_PP           1
 #define BSP_IIS2ICLX_INT2_EXTI_IRQ_SP           0
 #define BSP_IIS2ICLX_INT2_EXTI_IRQHandler       EXTI11_IRQHandler
-
 
 /* HTS221 */
 #define BSP_HTS221_INT_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOI_CLK_ENABLE()
@@ -161,12 +154,9 @@ extern "C" {
 #define BSP_STTS22H_INT_EXTI_IRQ_SP             0
 #define BSP_STTS22H_INT_EXTI_IRQHandler         EXTI5_IRQHandler
 
-  
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* STWIN_BOX_CONF_H__*/
-
-
 

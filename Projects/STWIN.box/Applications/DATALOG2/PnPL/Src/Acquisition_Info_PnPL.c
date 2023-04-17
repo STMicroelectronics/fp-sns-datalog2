@@ -37,8 +37,6 @@
 
 #include "Acquisition_Info_PnPL.h"
 #include "Acquisition_Info_PnPL_vtbl.h"
-
-
 static const IPnPLComponent_vtbl sAcquisition_Info_PnPL_CompIF_vtbl =
 {
   Acquisition_Info_PnPL_vtblGetKey,

@@ -61,7 +61,7 @@ void HAL_PCD_SOFCallback(PCD_HandleTypeDef *hpcd)
 
       if(*status == STREAMING_STATUS_STARTED)
       {
-        for(i = 0; i < N_CHANNELS_MAX; i++)
+        for(i = 0; i < SS_N_CHANNELS_MAX; i++)
         {
           ep = sensor_streaming->hwcid->ep_map[i]; //TODO check if ep is -1
           ep_bulk = &sensor_streaming->ux_slave_class_sensor_streaming_bulkin[ep].ep_param;

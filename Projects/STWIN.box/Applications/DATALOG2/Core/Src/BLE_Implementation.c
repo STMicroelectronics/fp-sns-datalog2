@@ -2,9 +2,7 @@
  ******************************************************************************
  * @file    BLE_Implementation.c
  * @author  SRA
- * @brief   BLE Implementation template file.
- *          This file should be copied to the application folder and renamed
- *          to BLE_Implementation.c.
+ * @brief   BLE Implementation
  ******************************************************************************
  * @attention
  *
@@ -24,6 +22,7 @@
 #include "OTA.h"
 #include "App_model.h"
 #include "ble_dctrl_class.h"
+#include "UtilTask.h"
 
 /* Exported Variables --------------------------------------------------------*/
 volatile uint8_t paired = FALSE;
@@ -46,8 +45,6 @@ static uint32_t DebugConsoleCommandParsing(uint8_t *att_data, uint8_t data_lengt
 
 
 /* Private defines -----------------------------------------------------------*/
-///* STM32 Unique ID */
-//#define STM32_UUID ((uint32_t *)0x1FFF7590)
 
 /* STM32 Unique ID */
 #define STM32_UUID ((uint32_t *)UID_BASE)
@@ -155,6 +152,10 @@ void BluetoothInit(void)
   //Update the Current Fw ID saved in flash if it's neceessary
   UpdateCurrFlashBankFwIdBoardName(PnPLGetFWID(), NULL);
 
+  char mac_string[18];
+  sprintf(mac_string, "%x:%x:%x:%x:%x:%x", BLE_StackValue.BleMacAddress[5], BLE_StackValue.BleMacAddress[4], BLE_StackValue.BleMacAddress[3],
+          BLE_StackValue.BleMacAddress[2], BLE_StackValue.BleMacAddress[1], BLE_StackValue.BleMacAddress[0]);
+  firmware_info_set_mac_address(mac_string);
 }
 
 /**
@@ -245,7 +246,7 @@ static uint32_t DebugConsoleParsing(uint8_t * att_data, uint8_t data_length)
         NeedToSwapBanks=1;
 
         /* Swap the Flash Banks */
-        EnableDisableDualBoot();
+        SwitchBank();
       }
     }
     SendBackData=0;
@@ -256,7 +257,6 @@ static uint32_t DebugConsoleParsing(uint8_t * att_data, uint8_t data_length)
 
   return SendBackData;
 }
-
 
 /**
  * @brief  This function makes the parsing of the Debug Console Commands
@@ -425,7 +425,7 @@ static void DisconnectionCompletedFunction(void)
   if(NeedToSwapBanks)
   {
     NeedToSwapBanks = 0;
-    EnableDisableDualBoot();
+    SwitchBank();
   }
 
   HAL_Delay(100);
@@ -461,58 +461,6 @@ static void PairingCompletedFunction(uint8_t PairingStatus)
   {
     paired = FALSE;
   }
-}
-
-/**
- * @brief  Enable Disable the jump to second flash bank and reboot board
- * @param  None
- * @retval None
- */
-void EnableDisableDualBoot(void)
-{
-  FLASH_OBProgramInitTypeDef    OBInit;
-  /* Set BFB2 bit to enable boot from Flash Bank2 */
-  /* Allow Access to Flash control registers and user Flash */
-  HAL_FLASH_Unlock();
-
-  /* Allow Access to option bytes sector */
-  HAL_FLASH_OB_Unlock();
-
-  /* Get the Dual boot configuration status */
-  HAL_FLASHEx_OBGetConfig(&OBInit);
-
-  /* Enable/Disable dual boot feature */
-  OBInit.OptionType = OPTIONBYTE_USER;
-  OBInit.USERType   = OB_USER_SWAP_BANK;
-
-  if (((OBInit.USERConfig) & (FLASH_OPTR_SWAP_BANK)) == FLASH_OPTR_SWAP_BANK) {
-    OBInit.USERConfig &= ~FLASH_OPTR_SWAP_BANK;
-    PRINT_DBG("->Disable DualBoot\r\n");
-  } else {
-    OBInit.USERConfig = FLASH_OPTR_SWAP_BANK;
-    PRINT_DBG("->Enable DualBoot\r\n");
-  }
-
-  if(HAL_FLASHEx_OBProgram (&OBInit) != HAL_OK) {
-    /*
-    Error occurred while setting option bytes configuration.
-    User can add here some code to deal with this error.
-    To know the code error, user can call function 'HAL_FLASH_GetError()'
-    */
-//    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
-  }
-
-  /* Start the Option Bytes programming process */
-  if (HAL_FLASH_OB_Launch() != HAL_OK) {
-    /*
-    Error occurred while reloading option bytes configuration.
-    User can add here some code to deal with this error.
-    To know the code error, user can call function 'HAL_FLASH_GetError()'
-    */
-//    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
-  }
-  HAL_FLASH_OB_Lock();
-  HAL_FLASH_Lock();
 }
 
 /***********************************************************************************

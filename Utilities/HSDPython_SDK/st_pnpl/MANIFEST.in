@@ -1,0 +1,4 @@
+include st_pnpl/DTDL/*
+include st_pnpl/DTDL/dtmi/appconfig/steval_mkboxpro/*
+include st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/fpSnsDatalog2*
+include st_pnpl/LICENSE.*

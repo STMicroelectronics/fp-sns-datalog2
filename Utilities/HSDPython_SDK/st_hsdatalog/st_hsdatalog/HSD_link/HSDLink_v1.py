@@ -38,11 +38,12 @@ class HSDLink_v1:
         self.__create_com_manager(dev_com_type)
         
         self.sensor_data_counts = {}
+        self.nof_connected_devices = 0
         
         #check that there is at least one connected device
-        if self.get_nof_devices() <= 0:
-            log.error("No device connected. Connect a device and retry.")
-            raise NoDeviceConnectedError
+        self.nof_connected_devices = self.get_nof_devices()
+        if self.nof_connected_devices <= 0:
+            return
 
         #acquisition folder creation
         if acquisition_folder is not None:

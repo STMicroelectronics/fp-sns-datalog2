@@ -22,34 +22,34 @@
 <div class="col-sm-12 col-lg-4">
 <center>
 <h1 id="release-notes-for-fp-sns-datalog2-projects">Release Notes for <mark>FP-SNS-DATALOG2 projects</mark></h1>
-<p>Copyright © 2022 STMicroelectronics<br />
+<p>Copyright © 2023 STMicroelectronics<br />
 </p>
 <a href="https://www.st.com" class="logo"><img src="../_htmresc/st_logo_2020.png" alt="ST logo" /></a>
 </center>
 <h1 id="purpose">Purpose</h1>
 <p><strong>DATALOG2</strong> example works with all sensors configured at their maximum sampling rate. Sensor data can be stored on micro SD Card or can be streamed via USB to a PC host.</p>
-<p>The FP-SNS-DATALOG2 function pack also includes an example of ultrasound condition monitoring (<strong>UltrasoundFFT</strong>) that calculates the FFT of the IMP23ABSU analog microphone signal and streams the result to a PC GUI via USB.</p>
+<p>The FP-SNS-DATALOG2 function pack also includes an example of ultrasound condition monitoring (<strong>UltrasoundFFT</strong>) for STEVAL-STWINBX1 that calculates the FFT of the IMP23ABSU analog microphone signal and streams the result to a PC GUI via USB.</p>
 <p>FP-SNS-DATALOG2 contains also application-level modules (<strong>Sensor Manager</strong>, <strong>EMData</strong>, …) that customer can reuse and extend easily to build up its custom application. Those modules are located into <strong>eLooM_Components</strong> folder. They adopt state-of-the-art design patterns, and they support natively low-power modes. To enable this solution, the function pack has been built on top of <strong>eLooM</strong>, an Embedded Light Object Oriented fraMework for STM32 applications properly designed for embedded low power applications powered by STM32.</p>
 <p>Here is the list of references to user documents:</p>
 <ul>
-<li><a href="https://www.st.com/resource/en/data_brief/fp-sns-datalog2.pdf">DB4865</a> : STM32Cube function pack for STEVAL-STWINBX1 evaluation kit for high speed datalogging and ultrasound processing</li>
-<li><a href="https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf">UM3106</a> : Getting started with the STM32Cube function pack for the STEVAL-STWINBX1 evaluation kit for high speed datalogging and ultrasound processing</li>
+<li><a href="https://www.st.com/resource/en/data_brief/fp-sns-datalog2.pdf">DB4865</a> : STM32Cube function pack for high speed datalogging and ultrasound processing</li>
+<li><a href="https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf">UM3106</a> : Getting started with the STM32Cube function pack for high speed datalogging and ultrasound processing</li>
 <li><a href="https://www.st.com/stm32cube">STM32Cube</a> : STM32Cube</li>
 </ul>
 </div>
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section2" checked aria-hidden="true"> <label for="collapse-section2" aria-hidden="true">v1.0.1 / 14-Feb-23</label>
+<input type="checkbox" id="collapse-section3" checked aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">v1.1.0 / 24-Mar-23</label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
-<h3 id="patch-release">Patch release</h3>
+<h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
 <ul>
-<li>Fixed compilation error in Linux environment</li>
-<li>Fixed external ISPU misconfiguration in DATALOG2 + external add-on use case</li>
-<li>Regenerated PnPL files</li>
-<li>Optimized usbx memory usage</li>
-<li>Fixed typos in the code and URL broken links</li>
+<li><strong>Added support for Sensortile.box PRO (STEVAL-MKBOXPRO)</strong></li>
+<li>Updated USBX folder: updated defines names, descriptor format, productID, optimized USB FIFO size</li>
+<li>Regenerated PnPL folder and app_model</li>
+<li>Redesigned set/get MAC address, set RTC time and switch flash bank functionalities</li>
+<li>Code cleaning: removed not used files, macros and interfaces</li>
 </ul>
 <h2 id="known-limitations">Known Limitations</h2>
 <ul>
@@ -59,10 +59,11 @@
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
-<li>STM32CubeIDE v1.11.0</li>
+<li>STM32CubeIDE v1.12.0</li>
 </ul>
 <h2 id="supported-devices-and-boards">Supported Devices and Boards</h2>
 <ul>
+<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
 </ul>
 <h2 id="backward-compatibility">Backward Compatibility</h2>
@@ -76,12 +77,16 @@
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" checked aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">v1.0.0 / 2-Dec-22</label>
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true">v1.0.1 / 14-Feb-23</label>
 <div>
 <h2 id="main-changes-1">Main Changes</h2>
-<h3 id="first-official-release">First official release</h3>
+<h3 id="patch-release">Patch release</h3>
 <ul>
-<li>First official release</li>
+<li>Fixed compilation error in Linux environment</li>
+<li>Fixed external ISPU misconfiguration in DATALOG2 + external add-on use case</li>
+<li>Regenerated PnPL files</li>
+<li>Optimized usbx memory usage</li>
+<li>Fixed typos in the code and URL broken links</li>
 </ul>
 <h2 id="known-limitations-1">Known Limitations</h2>
 <ul>
@@ -91,7 +96,7 @@
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
-<li>STM32CubeIDE v1.10.1</li>
+<li>STM32CubeIDE v1.11.0</li>
 </ul>
 <h2 id="supported-devices-and-boards-1">Supported Devices and Boards</h2>
 <ul>
@@ -102,6 +107,38 @@
 <li>None</li>
 </ul>
 <h2 id="dependencies-1">Dependencies</h2>
+<ul>
+<li>None</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">v1.0.0 / 2-Dec-22</label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<h3 id="first-official-release">First official release</h3>
+<ul>
+<li>First official release</li>
+</ul>
+<h2 id="known-limitations-2">Known Limitations</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-2">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
+<li>STM32CubeIDE v1.10.1</li>
+</ul>
+<h2 id="supported-devices-and-boards-2">Supported Devices and Boards</h2>
+<ul>
+<li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
+</ul>
+<h2 id="backward-compatibility-2">Backward Compatibility</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="dependencies-2">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>

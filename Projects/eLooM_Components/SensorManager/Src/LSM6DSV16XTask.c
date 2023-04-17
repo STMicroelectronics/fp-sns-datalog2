@@ -51,7 +51,7 @@
 #define LSM6DSV16X_TASK_CFG_TIMER_PERIOD_MS          1000
 #endif
 #ifndef LSM6DSV16X_TASK_CFG_MLCT_IMER_PERIOD_MS
-#define LSM6DSV16X_TASK_CFG_MLC_TIMER_PERIOD_MS      500
+#define LSM6DSV16X_TASK_CFG_MLC_TIMER_PERIOD_MS      200
 #endif
 
 #define LSM6DSV16X_TAG_ACC                           (0x02)
@@ -119,9 +119,9 @@ struct _LSM6DSV16XTask
   ISensor_t mlc_sensor_if;
 
   /**
-    * Implements the ISensorMlc interface.
+   * Implements the ISensorLL interface - Sensor Low-level.
    */
-  ISensorMlc_t sensor_mlc_if;
+  ISensorLL_t sensor_ll_if;
 
   /**
    * Specifies accelerometer sensor capabilities.
@@ -181,7 +181,7 @@ struct _LSM6DSV16XTask
    */
   TX_QUEUE in_queue;
 
-#ifdef LSM6DSV16X_FIFO_ENABLED
+#if LSM6DSV16X_FIFO_ENABLED
   /**
    * Buffer to store the data read from the sensor FIFO.
    * It is reused also to save data from the faster subsensor
@@ -218,13 +218,13 @@ struct _LSM6DSV16XTask
   /**
    * Buffer to store the data from mlc
    */
-  uint8_t p_mlc_sensor_data_buff[9];
+  uint8_t p_mlc_sensor_data_buff[5];
 
   /**
    * Specifies the FIFO level
    */
   uint16_t fifo_level;
-  
+
   /**
    * Specifies the FIFO watermark level (it depends from ODR)
    */
@@ -274,6 +274,11 @@ struct _LSM6DSV16XTask
    * Used to update the instantaneous ODR.
    */
   double prev_timestamp;
+
+  /**
+   * Internal model (FW) is in sync with the component (HW registers)
+   */
+  bool sync;
 };
 
 /**
@@ -302,9 +307,9 @@ typedef struct _LSM6DSV16XTaskClass
   ISensor_vtbl mlc_sensor_if_vtbl;
 
   /**
-    * SensorMlc IF virtual table.
+   * SensorLL IF virtual table.
    */
-  ISensorMlc_vtbl sensor_mlc_if_vtbl;
+  ISensorLL_vtbl sensor_ll_if_vtbl;
 
   /**
    * Specifies accelerometer sensor capabilities.
@@ -391,6 +396,7 @@ static sys_error_code_t LSM6DSV16XTaskSensorInitTaskParams(LSM6DSV16XTask *_this
 
 static sys_error_code_t LSM6DSV16XTaskSensorSetODR(LSM6DSV16XTask *_this, SMMessage report);
 static sys_error_code_t LSM6DSV16XTaskSensorSetFS(LSM6DSV16XTask *_this, SMMessage report);
+static sys_error_code_t LSM6DSV16XTaskSensorSetFifoWM(LSM6DSV16XTask *_this, SMMessage report);
 static sys_error_code_t LSM6DSV16XTaskSensorEnable(LSM6DSV16XTask *_this, SMMessage report);
 static sys_error_code_t LSM6DSV16XTaskSensorDisable(LSM6DSV16XTask *_this, SMMessage report);
 
@@ -429,12 +435,12 @@ static void LSM6DSV16XTaskMLCTimerCallbackFunction(ULONG timer);
 static inline LSM6DSV16XTask* LSM6DSV16XTaskGetOwnerFromISensorIF(ISensor_t *p_if);
 
 /**
-  * Given a interface pointer it return the instance of the object that implement the interface.
-  *
-  * @param p_if [IN] specifies a sensorMlc interface implemented by the task object.
-  * @return the instance of the task object that implements the given interface.
-  */
-static inline LSM6DSV16XTask* LSM6DSV16XTaskGetOwnerFromISensorMlcIF(ISensorMlc_t *p_if);
+ * Given a interface pointer it return the instance of the object that implement the interface.
+ *
+ * @param p_if [IN] specifies a ISensorLL interface implemented by the task object.
+ * @return the instance of the task object that implements the given interface.
+ */
+static inline LSM6DSV16XTask* LSM6DSV16XTaskGetOwnerFromISensorLLIF(ISensorLL_t *p_if);
 
 /**
  * Interrupt callback
@@ -443,12 +449,14 @@ void LSM6DSV16XTask_EXTI_Callback(uint16_t Pin);
 void INT2_DSV16X_EXTI_Callback(uint16_t Pin);
 
 /**
- * Internal function used to update LSM6DSV16X properties from ucf
+ * Read the ODR value from the sensor and update the internal model
  */
-static sys_error_code_t LSM6DSV16X_XL_ODR_From_UCF(LSM6DSV16XTask *_this);
-static sys_error_code_t LSM6DSV16X_XL_FS_From_UCF(LSM6DSV16XTask *_this);
-static sys_error_code_t LSM6DSV16X_GY_ODR_From_UCF(LSM6DSV16XTask *_this);
-static sys_error_code_t LSM6DSV16X_GY_FS_From_UCF(LSM6DSV16XTask *_this);
+static sys_error_code_t LSM6DSV16X_ODR_Sync(LSM6DSV16XTask *_this);
+
+/**
+ * Read the ODR value from the sensor and update the internal model
+ */
+static sys_error_code_t LSM6DSV16X_FS_Sync(LSM6DSV16XTask *_this);
 
 /* Inline function forward declaration */
 
@@ -471,10 +479,6 @@ static inline sys_error_code_t LSM6DSV16XTaskPostReportToFront(LSM6DSV16XTask *_
  */
 static inline sys_error_code_t LSM6DSV16XTaskPostReportToBack(LSM6DSV16XTask *_this, SMMessage *pReport);
 
-#if defined (__GNUC__)
-/* Inline function defined inline in the header file LSM6DSV16XTask.h must be declared here as extern function. */
-#endif
-
 /* Objects instance */
 /********************/
 
@@ -496,75 +500,70 @@ static const LSM6DSV16XTaskClass_t sTheClass =
         LSM6DSV16XTask_vtblHandleError,
         LSM6DSV16XTask_vtblOnEnterTaskControlLoop,
         LSM6DSV16XTask_vtblForceExecuteStep,
-    LSM6DSV16XTask_vtblOnEnterPowerMode
-  },
+        LSM6DSV16XTask_vtblOnEnterPowerMode },
 
-  /* class::acc_sensor_if_vtbl virtual table */
-  {
-      LSM6DSV16XTask_vtblAccGetId,
-      LSM6DSV16XTask_vtblAccGetEventSourceIF,
-      LSM6DSV16XTask_vtblAccGetDataInfo,
-      LSM6DSV16XTask_vtblAccGetODR,
-      LSM6DSV16XTask_vtblAccGetFS,
-      LSM6DSV16XTask_vtblAccGetSensitivity,
-      LSM6DSV16XTask_vtblSensorSetODR,
-      LSM6DSV16XTask_vtblSensorSetFS,
-      NULL,
-      LSM6DSV16XTask_vtblSensorEnable,
-      LSM6DSV16XTask_vtblSensorDisable,
-      LSM6DSV16XTask_vtblSensorIsEnabled,
-      LSM6DSV16XTask_vtblAccGetDescription,
-      LSM6DSV16XTask_vtblAccGetStatus
-  },
+    /* class::acc_sensor_if_vtbl virtual table */
+    {
+        LSM6DSV16XTask_vtblAccGetId,
+        LSM6DSV16XTask_vtblAccGetEventSourceIF,
+        LSM6DSV16XTask_vtblAccGetDataInfo,
+        LSM6DSV16XTask_vtblAccGetODR,
+        LSM6DSV16XTask_vtblAccGetFS,
+        LSM6DSV16XTask_vtblAccGetSensitivity,
+        LSM6DSV16XTask_vtblSensorSetODR,
+        LSM6DSV16XTask_vtblSensorSetFS,
+        LSM6DSV16XTask_vtblSensorSetFifoWM,
+        LSM6DSV16XTask_vtblSensorEnable,
+        LSM6DSV16XTask_vtblSensorDisable,
+        LSM6DSV16XTask_vtblSensorIsEnabled,
+        LSM6DSV16XTask_vtblAccGetDescription,
+        LSM6DSV16XTask_vtblAccGetStatus },
 
-  /* class::gyro_sensor_if_vtbl virtual table */
-  {
-      LSM6DSV16XTask_vtblGyroGetId,
-      LSM6DSV16XTask_vtblGyroGetEventSourceIF,
-      LSM6DSV16XTask_vtblGyroGetDataInfo,
-      LSM6DSV16XTask_vtblGyroGetODR,
-      LSM6DSV16XTask_vtblGyroGetFS,
-      LSM6DSV16XTask_vtblGyroGetSensitivity,
-      LSM6DSV16XTask_vtblSensorSetODR,
-      LSM6DSV16XTask_vtblSensorSetFS,
-      NULL,
-      LSM6DSV16XTask_vtblSensorEnable,
-      LSM6DSV16XTask_vtblSensorDisable,
-      LSM6DSV16XTask_vtblSensorIsEnabled,
-      LSM6DSV16XTask_vtblGyroGetDescription,
-      LSM6DSV16XTask_vtblGyroGetStatus
-  },
+    /* class::gyro_sensor_if_vtbl virtual table */
+    {
+        LSM6DSV16XTask_vtblGyroGetId,
+        LSM6DSV16XTask_vtblGyroGetEventSourceIF,
+        LSM6DSV16XTask_vtblGyroGetDataInfo,
+        LSM6DSV16XTask_vtblGyroGetODR,
+        LSM6DSV16XTask_vtblGyroGetFS,
+        LSM6DSV16XTask_vtblGyroGetSensitivity,
+        LSM6DSV16XTask_vtblSensorSetODR,
+        LSM6DSV16XTask_vtblSensorSetFS,
+        LSM6DSV16XTask_vtblSensorSetFifoWM,
+        LSM6DSV16XTask_vtblSensorEnable,
+        LSM6DSV16XTask_vtblSensorDisable,
+        LSM6DSV16XTask_vtblSensorIsEnabled,
+        LSM6DSV16XTask_vtblGyroGetDescription,
+        LSM6DSV16XTask_vtblGyroGetStatus },
 
-    /* class::mlc_fakesensor_if_vtbl virtual table */
+    /* class::mlc_sensor_if_vtbl virtual table */
     {
         LSM6DSV16XTask_vtblMlcGetId,
         LSM6DSV16XTask_vtblMlcGetEventSourceIF,
-    LSM6DSV16XTask_vtblMlcGetDataInfo,
+        LSM6DSV16XTask_vtblMlcGetDataInfo,
         LSM6DSV16XTask_vtblMlcGetODR,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
+        LSM6DSV16XTask_vtblMlcGetFS,
+        LSM6DSV16XTask_vtblMlcGetSensitivity,
+        LSM6DSV16XTask_vtblSensorSetODR,
+        LSM6DSV16XTask_vtblSensorSetFS,
+        LSM6DSV16XTask_vtblSensorSetFifoWM,
         LSM6DSV16XTask_vtblSensorEnable,
         LSM6DSV16XTask_vtblSensorDisable,
         LSM6DSV16XTask_vtblSensorIsEnabled,
         LSM6DSV16XTask_vtblMlcGetDescription,
-    LSM6DSV16XTask_vtblMlcGetStatus
-  },
+        LSM6DSV16XTask_vtblMlcGetStatus },
 
-    /* class::mlc_sensor_if_vtbl virtual table */
+    /* class::sensor_ll_if_vtbl virtual table */
     {
-        LSM6DSV16XTask_vtblSensorMlcLoadUcf,
-    LSM6DSV16XTask_vtblSensorMlcIsEnabled
-  },
+        LSM6DSV16XTask_vtblSensorReadReg,
+        LSM6DSV16XTask_vtblSensorWriteReg,
+        LSM6DSV16XTask_vtblSensorSyncModel },
 
     /* ACCELEROMETER DESCRIPTOR */
     {
         "lsm6dsv16x",
         COM_TYPE_ACC,
         {
-            1.8755,
             7.5,
             15,
             30,
@@ -576,24 +575,19 @@ static const LSM6DSV16XTaskClass_t sTheClass =
             1920,
             3840,
             7680,
-      COM_END_OF_LIST_FLOAT,
-    },
+            COM_END_OF_LIST_FLOAT, },
         {
             2,
             4,
             8,
             16,
-      COM_END_OF_LIST_FLOAT,
-    },
+            COM_END_OF_LIST_FLOAT, },
         {
-      "acc",
-    },
+            "acc", },
         "g",
         {
             0,
-      1000,
-    }
-  },
+            1000, } },
 
     /* GYROSCOPE DESCRIPTOR */
     {
@@ -610,9 +604,8 @@ static const LSM6DSV16XTaskClass_t sTheClass =
             960,
             1920,
             3840,
-      7680
-      COM_END_OF_LIST_FLOAT,
-    },
+            7680,
+            COM_END_OF_LIST_FLOAT, },
         {
             125,
             250,
@@ -620,17 +613,13 @@ static const LSM6DSV16XTaskClass_t sTheClass =
             1000,
             2000,
             4000,
-      COM_END_OF_LIST_FLOAT,
-    },
+            COM_END_OF_LIST_FLOAT, },
         {
-      "gyro",
-    },
+            "gyro", },
         "mdps",
         {
             0,
-      1000,
-    }
-  },
+            1000, } },
 
     /* MLC DESCRIPTOR */
     {
@@ -638,32 +627,24 @@ static const LSM6DSV16XTaskClass_t sTheClass =
         COM_TYPE_MLC,
         {
             1,
-      COM_END_OF_LIST_FLOAT,
-    },
+            COM_END_OF_LIST_FLOAT, },
         {
             1,
-      COM_END_OF_LIST_FLOAT,
-    },
+            COM_END_OF_LIST_FLOAT, },
         {
-      "mlc",
-    },
+            "mlc", },
         "out",
         {
             0,
-      1,
-    }
-  },
+            1, } },
 
     /* class (PM_STATE, ExecuteStepFunc) map */
     {
         LSM6DSV16XTaskExecuteStepState1,
         NULL,
-    LSM6DSV16XTaskExecuteStepDatalog,
-  }
-};
+        LSM6DSV16XTaskExecuteStepDatalog, } };
 
 /* Public API definition */
-
 
 ISourceObservable* LSM6DSV16XTaskGetAccSensorIF(LSM6DSV16XTask *_this)
 {
@@ -677,12 +658,12 @@ ISourceObservable* LSM6DSV16XTaskGetGyroSensorIF(LSM6DSV16XTask *_this)
 
 ISourceObservable* LSM6DSV16XTaskGetMlcSensorIF(LSM6DSV16XTask *_this)
 {
-  return (ISourceObservable *) & (_this->mlc_sensor_if);
+  return (ISourceObservable*) &(_this->mlc_sensor_if);
 }
 
-ISensorMlc_t *LSM6DSV16XTaskGetSensorMlcIF(LSM6DSV16XTask *_this)
+ISensorLL_t* LSM6DSV16XTaskGetSensorLLIF(LSM6DSV16XTask *_this)
 {
-  return (ISensorMlc_t *) & (_this->sensor_mlc_if);
+  return (ISensorLL_t*) &(_this->sensor_ll_if);
 }
 
 AManagedTaskEx* LSM6DSV16XTaskAlloc(const void *pIRQConfig, const void *pMLCConfig, const void *pCSConfig)
@@ -696,7 +677,7 @@ AManagedTaskEx* LSM6DSV16XTaskAlloc(const void *pIRQConfig, const void *pMLCConf
   sTaskObj.acc_sensor_if.vptr = &sTheClass.acc_sensor_if_vtbl;
   sTaskObj.gyro_sensor_if.vptr = &sTheClass.gyro_sensor_if_vtbl;
   sTaskObj.mlc_sensor_if.vptr = &sTheClass.mlc_sensor_if_vtbl;
-  sTaskObj.sensor_mlc_if.vptr = &sTheClass.sensor_mlc_if_vtbl;
+  sTaskObj.sensor_ll_if.vptr = &sTheClass.sensor_ll_if_vtbl;
   sTaskObj.acc_sensor_descriptor = &sTheClass.acc_class_descriptor;
   sTaskObj.gyro_sensor_descriptor = &sTheClass.gyro_class_descriptor;
   sTaskObj.mlc_sensor_descriptor = &sTheClass.mlc_class_descriptor;
@@ -753,20 +734,15 @@ sys_error_code_t LSM6DSV16XTask_vtblHardwareInit(AManagedTask *_this, void *pPar
   return res;
 }
 
-sys_error_code_t LSM6DSV16XTask_vtblOnCreateTask(
-  AManagedTask *_this,
-  tx_entry_function_t *pTaskCode,
-  CHAR **pName,
-  VOID **pvStackStart, ULONG *pStackDepth,
-  UINT *pPriority,
-  UINT *pPreemptThreshold,
-  ULONG *pTimeSlice,
-  ULONG *pAutoStart,
+sys_error_code_t LSM6DSV16XTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName,
+VOID **pvStackStart,
+                                                 ULONG *pStackDepth, UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart,
                                                  ULONG *pParams)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   LSM6DSV16XTask *p_obj = (LSM6DSV16XTask*) _this;
+  p_obj->sync = true;
 
   /* Create task specific sw resources. */
 
@@ -777,8 +753,7 @@ sys_error_code_t LSM6DSV16XTask_vtblOnCreateTask(
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
   }
-  else if (TX_SUCCESS != tx_queue_create(&p_obj->in_queue, "LSM6DSV16X_Q", item_size / 4u, p_queue_items_buff,
-                                    LSM6DSV16X_TASK_CFG_IN_QUEUE_LENGTH * item_size))
+  else if(TX_SUCCESS != tx_queue_create(&p_obj->in_queue, "LSM6DSV16X_Q", item_size / 4u, p_queue_items_buff, LSM6DSV16X_TASK_CFG_IN_QUEUE_LENGTH * item_size))
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
@@ -849,7 +824,7 @@ sys_error_code_t LSM6DSV16XTask_vtblOnCreateTask(
         {
           IEventSrcInit(p_obj->p_mlc_event_src);
 
-#ifdef LSM6DSV16X_FIFO_ENABLED
+#if LSM6DSV16X_FIFO_ENABLED
           memset(p_obj->p_fast_sensor_data_buff, 0, sizeof(p_obj->p_fast_sensor_data_buff));
           memset(p_obj->p_slow_sensor_data_buff, 0, sizeof(p_obj->p_slow_sensor_data_buff));
 #else
@@ -901,8 +876,7 @@ sys_error_code_t LSM6DSV16XTask_vtblOnCreateTask(
   return res;
 }
 
-sys_error_code_t LSM6DSV16XTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPowerMode ActivePowerMode,
-                                                     const EPowerMode NewPowerMode)
+sys_error_code_t LSM6DSV16XTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPowerMode ActivePowerMode, const EPowerMode NewPowerMode)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -916,8 +890,7 @@ sys_error_code_t LSM6DSV16XTask_vtblDoEnterPowerMode(AManagedTask *_this, const 
       SMMessage report =
       {
           .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
-          .sensorMessage.nCmdID = SENSOR_CMD_ID_INIT
-      };
+          .sensorMessage.nCmdID = SENSOR_CMD_ID_INIT };
 
       if(tx_queue_send(&p_obj->in_queue, &report, AMT_MS_TO_TICKS(100)) != TX_SUCCESS)
       {
@@ -936,11 +909,12 @@ sys_error_code_t LSM6DSV16XTask_vtblDoEnterPowerMode(AManagedTask *_this, const 
     if(ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
     {
       /* Deactivate the sensor */
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv,LSM6DSV16X_XL_ODR_OFF);
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv,LSM6DSV16X_GY_ODR_OFF);
+      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_OFF);
+      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_OFF);
       lsm6dsv16x_fifo_gy_batch_set(p_sensor_drv, LSM6DSV16X_GY_NOT_BATCHED);
       lsm6dsv16x_fifo_xl_batch_set(p_sensor_drv, LSM6DSV16X_XL_NOT_BATCHED);
       lsm6dsv16x_fifo_mode_set(p_sensor_drv, LSM6DSV16X_BYPASS_MODE);
+      p_obj->samples_per_it = 0;
 
       /* Empty the task queue and disable INT or timer */
       tx_queue_flush(&p_obj->in_queue);
@@ -1035,8 +1009,7 @@ sys_error_code_t LSM6DSV16XTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPow
   SMMessage report =
   {
       .internalMessageFE.messageId = SM_MESSAGE_ID_FORCE_STEP,
-      .internalMessageFE.nData = 0
-  };
+      .internalMessageFE.nData = 0 };
 
   if((ActivePowerMode == E_POWER_MODE_STATE1) || (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE))
   {
@@ -1054,7 +1027,8 @@ sys_error_code_t LSM6DSV16XTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPow
   {
     UINT state;
     if(TX_SUCCESS == tx_thread_info_get(&_this->m_xTaskHandle, TX_NULL, &state, TX_NULL, TX_NULL, TX_NULL, TX_NULL,
-                                         TX_NULL, TX_NULL))
+    TX_NULL,
+                                        TX_NULL))
     {
       if(state == TX_SUSPENDED)
       {
@@ -1066,8 +1040,7 @@ sys_error_code_t LSM6DSV16XTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPow
   return res;
 }
 
-sys_error_code_t LSM6DSV16XTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPowerMode ActivePowerMode,
-                                                     const EPowerMode NewPowerMode)
+sys_error_code_t LSM6DSV16XTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPowerMode ActivePowerMode, const EPowerMode NewPowerMode)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1248,10 +1221,34 @@ sys_error_code_t LSM6DSV16XTask_vtblMlcGetODR(ISourceObservable *_this, float *p
   return res;
 }
 
+float LSM6DSV16XTask_vtblMlcGetFS(ISourceObservable *_this)
+{
+  assert_param(_this != NULL);
+
+  /* MLC does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_INVALID_CALL_ERROR_CODE);
+
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("LSM6DSV16X: warning - MLC GetFS() not supported.\r\n"));
+
+  return -1.0f;
+}
+
+float LSM6DSV16XTask_vtblMlcGetSensitivity(ISourceObservable *_this)
+{
+  assert_param(_this != NULL);
+
+  /* MLC does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_INVALID_CALL_ERROR_CODE);
+
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("LSM6DSV16X: warning - MLC GetSensitivity() not supported.\r\n"));
+
+  return -1.0f;
+}
+
 EMData_t LSM6DSV16XTask_vtblMlcGetDataInfo(ISourceObservable *_this)
 {
   assert_param(_this != NULL);
-  LSM6DSV16XTask *p_if_owner = (LSM6DSV16XTask *)((uint32_t)_this - offsetof(LSM6DSV16XTask, mlc_sensor_if));
+  LSM6DSV16XTask *p_if_owner = (LSM6DSV16XTask*) ((uint32_t) _this - offsetof(LSM6DSV16XTask, mlc_sensor_if));
   EMData_t res = p_if_owner->data;
 
   return res;
@@ -1278,8 +1275,7 @@ sys_error_code_t LSM6DSV16XTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
         .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
         .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
         .sensorMessage.nSensorId = sensor_id,
-        .sensorMessage.nParam = (uint32_t) ODR
-    };
+        .sensorMessage.nParam = (uint32_t) ODR };
     res = LSM6DSV16XTaskPostReportToBack(p_if_owner, (SMMessage*) &report);
   }
 
@@ -1307,13 +1303,40 @@ sys_error_code_t LSM6DSV16XTask_vtblSensorSetFS(ISensor_t *_this, float FS)
         .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
         .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
         .sensorMessage.nSensorId = sensor_id,
-        .sensorMessage.nParam = (uint32_t) FS
-    };
+        .sensorMessage.nParam = (uint32_t) FS };
     res = LSM6DSV16XTaskPostReportToBack(p_if_owner, (SMMessage*) &report);
   }
 
   return res;
 
+}
+
+sys_error_code_t LSM6DSV16XTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  LSM6DSV16XTask *p_if_owner = LSM6DSV16XTaskGetOwnerFromISensorIF(_this);
+
+  EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask*) p_if_owner);
+  uint8_t sensor_id = ISourceGetId((ISourceObservable*) _this);
+
+  if((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  {
+    res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
+  }
+  else
+  {
+    /* Set a new command message in the queue */
+    SMMessage report =
+    {
+        .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
+        .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FIFO_WM,
+        .sensorMessage.nSensorId = sensor_id,
+        .sensorMessage.nParam = (uint16_t) fifoWM };
+    res = LSM6DSV16XTaskPostReportToBack(p_if_owner, (SMMessage*) &report);
+  }
+
+  return res;
 }
 
 sys_error_code_t LSM6DSV16XTask_vtblSensorEnable(ISensor_t *_this)
@@ -1336,8 +1359,7 @@ sys_error_code_t LSM6DSV16XTask_vtblSensorEnable(ISensor_t *_this)
     {
         .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
         .sensorMessage.nCmdID = SENSOR_CMD_ID_ENABLE,
-        .sensorMessage.nSensorId = sensor_id
-    };
+        .sensorMessage.nSensorId = sensor_id };
     res = LSM6DSV16XTaskPostReportToBack(p_if_owner, (SMMessage*) &report);
   }
 
@@ -1364,8 +1386,7 @@ sys_error_code_t LSM6DSV16XTask_vtblSensorDisable(ISensor_t *_this)
     {
         .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
         .sensorMessage.nCmdID = SENSOR_CMD_ID_DISABLE,
-        .sensorMessage.nSensorId = sensor_id
-    };
+        .sensorMessage.nSensorId = sensor_id };
     res = LSM6DSV16XTaskPostReportToBack(p_if_owner, (SMMessage*) &report);
   }
 
@@ -1436,61 +1457,74 @@ SensorStatus_t LSM6DSV16XTask_vtblMlcGetStatus(ISensor_t *_this)
   return p_if_owner->mlc_sensor_status;
 }
 
-boolean_t LSM6DSV16XTask_vtblSensorMlcIsEnabled(ISensorMlc_t *_this)
+sys_error_code_t LSM6DSV16XTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len)
 {
   assert_param(_this != NULL);
-  LSM6DSV16XTask *p_if_owner = LSM6DSV16XTaskGetOwnerFromISensorMlcIF(_this);
-  return p_if_owner->mlc_enable;
+  assert_param(reg <= 0xFFU);
+  assert_param(data != NULL);
+  assert_param(len != 0U);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  LSM6DSV16XTask *p_if_owner = LSM6DSV16XTaskGetOwnerFromISensorLLIF(_this);
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &p_if_owner->p_sensor_bus_if->m_xConnector;
+  uint8_t reg8 = (uint8_t) (reg & 0x00FF);
+
+  if(lsm6dsv16x_read_reg(p_sensor_drv, reg8, data, len) != 0)
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
+
+  return res;
 }
 
-sys_error_code_t LSM6DSV16XTask_vtblSensorMlcLoadUcf(ISensorMlc_t *_this, uint32_t size, const char *ucf)
+sys_error_code_t LSM6DSV16XTask_vtblSensorWriteReg(ISensorLL_t *_this, uint16_t reg, const uint8_t *data, uint16_t len)
+{
+  assert_param(_this != NULL);
+  assert_param(reg <= 0xFFU);
+  assert_param(data != NULL);
+  assert_param(len != 0U);
+
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  LSM6DSV16XTask *p_if_owner = LSM6DSV16XTaskGetOwnerFromISensorLLIF(_this);
+  uint8_t reg8 = (uint8_t) (reg & 0x00FF);
+
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &p_if_owner->p_sensor_bus_if->m_xConnector;
+
+  /* This generic register write operation could mean that the model is out of sync with the HW */
+  p_if_owner->sync = false;
+
+  if(lsm6dsv16x_write_reg(p_sensor_drv, reg8, (uint8_t*) data, len) != 0)
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
+
+  return res;
+}
+
+sys_error_code_t LSM6DSV16XTask_vtblSensorSyncModel(ISensorLL_t *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  LSM6DSV16XTask *p_if_owner = LSM6DSV16XTaskGetOwnerFromISensorMlcIF(_this);
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &p_if_owner->p_sensor_bus_if->m_xConnector;
+  LSM6DSV16XTask *p_if_owner = LSM6DSV16XTaskGetOwnerFromISensorLLIF(_this);
 
-  uint32_t i;
-  char ucf_reg[3];
-  char ucf_data[3];
-  long reg;
-  long data;
-
-  for(i = 0; i < size / 4u; i++)
+  if(LSM6DSV16X_ODR_Sync(p_if_owner) != SYS_NO_ERROR_CODE)
   {
-    ucf_reg[0] = ucf[4u * i];
-    ucf_reg[1] = ucf[4u * i + 1u];
-    ucf_reg[2] = '\0';
-    ucf_data[0] = ucf[4u * i + 2u];
-    ucf_data[1] = ucf[4u * i + 3u];
-    ucf_data[2] = '\0';
-
-    reg = strtol(ucf_reg, NULL, 16);
-    data = strtol(ucf_data, NULL, 16);
-
-    res = lsm6dsv16x_write_reg(p_sensor_drv, (uint8_t) reg, (uint8_t*) &data, 1u);
-    if(res != SYS_NO_ERROR_CODE)
-    {
-      break;
-    }
+    res = SYS_BASE_ERROR_CODE;
+  }
+  if(LSM6DSV16X_FS_Sync(p_if_owner) != SYS_NO_ERROR_CODE)
+  {
+    res = SYS_BASE_ERROR_CODE;
   }
 
   if(!SYS_IS_ERROR_CODE(res))
   {
-    p_if_owner->mlc_enable = TRUE;
-    p_if_owner->mlc_sensor_status.IsActive = TRUE;
-
-    LSM6DSV16X_XL_ODR_From_UCF(p_if_owner);
-    LSM6DSV16X_XL_FS_From_UCF(p_if_owner);
-    LSM6DSV16X_GY_ODR_From_UCF(p_if_owner);
-    LSM6DSV16X_GY_FS_From_UCF(p_if_owner);
+    p_if_owner->sync = true;
   }
+
   return res;
 }
 
 /* Private function definition */
 // ***************************
-
 static sys_error_code_t LSM6DSV16XTaskExecuteStepState1(AManagedTask *_this)
 {
   assert_param(_this != NULL);
@@ -1498,8 +1532,7 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepState1(AManagedTask *_this)
   LSM6DSV16XTask *p_obj = (LSM6DSV16XTask*) _this;
   SMMessage report =
   {
-      0
-  };
+      0 };
 
   AMTExSetInactiveState((AManagedTaskEx*) _this, TRUE);
   if(TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &report, TX_WAIT_FOREVER))
@@ -1524,6 +1557,9 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepState1(AManagedTask *_this)
             case SENSOR_CMD_ID_SET_FS:
               res = LSM6DSV16XTaskSensorSetFS(p_obj, report);
               break;
+            case SENSOR_CMD_ID_SET_FIFO_WM:
+              res = LSM6DSV16XTaskSensorSetFifoWM(p_obj, report);
+              break;
             case SENSOR_CMD_ID_ENABLE:
               res = LSM6DSV16XTaskSensorEnable(p_obj, report);
               break;
@@ -1533,7 +1569,8 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepState1(AManagedTask *_this)
             default:
               /* unwanted report */
               res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
-              SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
+              SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
+              ;
 
               SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("LSM6DSV16X: unexpected report in Run: %i\r\n", report.messageID));
               break;
@@ -1562,8 +1599,7 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepDatalog(AManagedTask *_this)
   LSM6DSV16XTask *p_obj = (LSM6DSV16XTask*) _this;
   SMMessage report =
   {
-      0
-  };
+      0 };
 
   AMTExSetInactiveState((AManagedTaskEx*) _this, TRUE);
   if(TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &report, TX_WAIT_FOREVER))
@@ -1581,10 +1617,12 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepDatalog(AManagedTask *_this)
 
       case SM_MESSAGE_ID_DATA_READY:
         {
-//        SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("LSM6DSV16X: new data.\r\n"));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("LSM6DSV16X: new data.\r\n"));
           if(p_obj->pIRQConfig == NULL)
           {
-            if(TX_SUCCESS != tx_timer_change(&p_obj->read_timer, AMT_MS_TO_TICKS(p_obj->lsm6dsv16x_task_cfg_timer_period_ms), AMT_MS_TO_TICKS(p_obj->lsm6dsv16x_task_cfg_timer_period_ms)))
+            if(TX_SUCCESS
+                != tx_timer_change(&p_obj->read_timer, AMT_MS_TO_TICKS(p_obj->lsm6dsv16x_task_cfg_timer_period_ms),
+                                   AMT_MS_TO_TICKS(p_obj->lsm6dsv16x_task_cfg_timer_period_ms)))
             {
               return SYS_UNDEFINED_ERROR_CODE;
             }
@@ -1597,95 +1635,95 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepDatalog(AManagedTask *_this)
             if(p_obj->fifo_level != 0)
             {
 #endif
-            // notify the listeners...
-            double timestamp = report.sensorDataReadyMessage.fTimestamp;
-            double delta_timestamp = timestamp - p_obj->prev_timestamp;
-            p_obj->prev_timestamp = timestamp;
-            DataEvent_t evt_acc, evt_gyro;
+              // notify the listeners...
+              double timestamp = report.sensorDataReadyMessage.fTimestamp;
+              double delta_timestamp = timestamp - p_obj->prev_timestamp;
+              p_obj->prev_timestamp = timestamp;
+              DataEvent_t evt_acc, evt_gyro;
 
-#ifdef LSM6DSV16X_FIFO_ENABLED
+#if LSM6DSV16X_FIFO_ENABLED
 
-            if((p_obj->acc_sensor_status.IsActive) && (p_obj->gyro_sensor_status.IsActive)) /* Read both ACC and GYRO */
-            {
-            /* update measuredODR */
-            p_obj->acc_sensor_status.MeasuredODR = (float)p_obj->acc_samples_count / (float)delta_timestamp;
-            p_obj->gyro_sensor_status.MeasuredODR = (float)p_obj->gyro_samples_count / (float)delta_timestamp;
-
-              if(p_obj->acc_sensor_status.ODR > p_obj->gyro_sensor_status.ODR) /* Acc is faster than Gyro */
+              if((p_obj->acc_sensor_status.IsActive) && (p_obj->gyro_sensor_status.IsActive)) /* Read both ACC and GYRO */
               {
-                /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue:
-                 * [X0, Y0, Z0]
-                 * [X1, Y1, Z1]
-                 * ...
-                 * [Xm-1, Ym-1, Zm-1]
-                 */
-              EMD_Init(&p_obj->data_acc, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->acc_samples_count, 3);
-              DataEventInit((IEvent *)&evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp,  p_obj->acc_id);
+                /* update measuredODR */
+                p_obj->acc_sensor_status.MeasuredODR = (float) p_obj->acc_samples_count / (float) delta_timestamp;
+                p_obj->gyro_sensor_status.MeasuredODR = (float) p_obj->gyro_samples_count / (float) delta_timestamp;
 
-              EMD_Init(&p_obj->data_gyro, p_obj->p_slow_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->gyro_samples_count, 3);
-              DataEventInit((IEvent *)&evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp,  p_obj->gyro_id);
+                if(p_obj->acc_sensor_status.ODR > p_obj->gyro_sensor_status.ODR) /* Acc is faster than Gyro */
+                {
+                  /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue:
+                   * [X0, Y0, Z0]
+                   * [X1, Y1, Z1]
+                   * ...
+                   * [Xm-1, Ym-1, Zm-1]
+                   */
+                  EMD_Init(&p_obj->data_acc, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->acc_samples_count, 3);
+                  DataEventInit((IEvent*) &evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp, p_obj->acc_id);
 
-                IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent*) &evt_acc, NULL);
-                IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent*) &evt_gyro, NULL);
+                  EMD_Init(&p_obj->data_gyro, p_obj->p_slow_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->gyro_samples_count, 3);
+                  DataEventInit((IEvent*) &evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp, p_obj->gyro_id);
+
+                  IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent*) &evt_acc, NULL);
+                  IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent*) &evt_gyro, NULL);
+                }
+                else
+                {
+                  /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue:
+                   * [X0, Y0, Z0]
+                   * [X1, Y1, Z1]
+                   * ...
+                   * [Xm-1, Ym-1, Zm-1]
+                   */
+                  EMD_Init(&p_obj->data_acc, p_obj->p_slow_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->acc_samples_count, 3);
+                  DataEventInit((IEvent*) &evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp, p_obj->acc_id);
+
+                  EMD_Init(&p_obj->data_gyro, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->gyro_samples_count, 3);
+                  DataEventInit((IEvent*) &evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp, p_obj->gyro_id);
+
+                  IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent*) &evt_acc, NULL);
+                  IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent*) &evt_gyro, NULL);
+                }
+
               }
-              else
+              else /* Only 1 out of 2 is active */
               {
-                /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue:
-                 * [X0, Y0, Z0]
-                 * [X1, Y1, Z1]
-                 * ...
-                 * [Xm-1, Ym-1, Zm-1]
-                 */
-              EMD_Init(&p_obj->data_acc, p_obj->p_slow_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->acc_samples_count, 3);
-              DataEventInit((IEvent *)&evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp,  p_obj->acc_id);
+                if(p_obj->acc_sensor_status.IsActive)
+                {
+                  /* update measuredODR */
+                  p_obj->acc_sensor_status.MeasuredODR = (float) p_obj->acc_samples_count / (float) delta_timestamp;
 
-              EMD_Init(&p_obj->data_gyro, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->gyro_samples_count, 3);
-              DataEventInit((IEvent *)&evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp,  p_obj->gyro_id);
+                  /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue:
+                   * [X0, Y0, Z0]
+                   * [X1, Y1, Z1]
+                   * ...
+                   * [Xm-1, Ym-1, Zm-1]
+                   */
+                  EMD_Init(&p_obj->data_acc, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->acc_samples_count, 3);
+                  DataEventInit((IEvent*) &evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp, p_obj->acc_id);
 
-                IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent*) &evt_acc, NULL);
-                IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent*) &evt_gyro, NULL);
+                  IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent*) &evt_acc, NULL);
+                }
+                else if(p_obj->gyro_sensor_status.IsActive)
+                {
+                  /* update measuredODR */
+                  p_obj->gyro_sensor_status.MeasuredODR = (float) p_obj->gyro_samples_count / (float) delta_timestamp;
+
+                  /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue:
+                   * [X0, Y0, Z0]
+                   * [X1, Y1, Z1]
+                   * ...
+                   * [Xm-1, Ym-1, Zm-1]
+                   */
+                  EMD_Init(&p_obj->data_gyro, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->gyro_samples_count, 3);
+                  DataEventInit((IEvent*) &evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp, p_obj->gyro_id);
+
+                  IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent*) &evt_gyro, NULL);
+                }
+                else
+                {
+                  res = SYS_INVALID_PARAMETER_ERROR_CODE;
+                }
               }
-
-            }
-            else /* Only 1 out of 2 is active */
-            {
-              if(p_obj->acc_sensor_status.IsActive)
-              {
-              /* update measuredODR */
-              p_obj->acc_sensor_status.MeasuredODR = (float)p_obj->acc_samples_count / (float)delta_timestamp;
-
-                /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue:
-                 * [X0, Y0, Z0]
-                 * [X1, Y1, Z1]
-                 * ...
-                 * [Xm-1, Ym-1, Zm-1]
-                 */
-              EMD_Init(&p_obj->data_acc, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->acc_samples_count, 3);
-              DataEventInit((IEvent *)&evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp,  p_obj->acc_id);
-
-                IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent*) &evt_acc, NULL);
-              }
-              else if(p_obj->gyro_sensor_status.IsActive)
-              {
-              /* update measuredODR */
-              p_obj->gyro_sensor_status.MeasuredODR = (float)p_obj->gyro_samples_count / (float)delta_timestamp;
-
-                /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue:
-                 * [X0, Y0, Z0]
-                 * [X1, Y1, Z1]
-                 * ...
-                 * [Xm-1, Ym-1, Zm-1]
-                 */
-              EMD_Init(&p_obj->data_gyro, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->gyro_samples_count, 3);
-              DataEventInit((IEvent *)&evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp,  p_obj->gyro_id);
-
-                IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent*) &evt_gyro, NULL);
-              }
-              else
-              {
-                res = SYS_INVALID_PARAMETER_ERROR_CODE;
-              }
-          }
 #else
           if(p_obj->acc_sensor_status.IsActive && p_obj->acc_drdy)
           {
@@ -1711,10 +1749,11 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepDatalog(AManagedTask *_this)
             }
 #endif
 
-//          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("LSM6DSV16X: ts = %f\r\n", (float)timestamp));
+              SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("LSM6DSV16X: ts = %f\r\n", (float)timestamp));
 #if LSM6DSV16X_FIFO_ENABLED
             }
 #endif
+          }
             if(p_obj->pIRQConfig == NULL)
             {
               if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
@@ -1723,7 +1762,6 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepDatalog(AManagedTask *_this)
               }
             }
 
-          }
           break;
         }
 
@@ -1731,7 +1769,8 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepDatalog(AManagedTask *_this)
         {
           if(p_obj->pMLCConfig == NULL)
           {
-            if (TX_SUCCESS != tx_timer_change(&p_obj->mlc_timer, AMT_MS_TO_TICKS(LSM6DSV16X_TASK_CFG_MLC_TIMER_PERIOD_MS),
+            if(TX_SUCCESS
+                != tx_timer_change(&p_obj->mlc_timer, AMT_MS_TO_TICKS(LSM6DSV16X_TASK_CFG_MLC_TIMER_PERIOD_MS),
                                    AMT_MS_TO_TICKS(LSM6DSV16X_TASK_CFG_MLC_TIMER_PERIOD_MS)))
             {
               return SYS_UNDEFINED_ERROR_CODE;
@@ -1745,17 +1784,18 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepDatalog(AManagedTask *_this)
 
             if(p_obj->mlc_enable)
             {
-              EMD_Init(&p_obj->data, p_obj->p_mlc_sensor_data_buff, E_EM_UINT8, E_EM_MODE_INTERLEAVED, 2, 1, 9);
+              EMD_Init(&p_obj->data, p_obj->p_mlc_sensor_data_buff, E_EM_UINT8, E_EM_MODE_INTERLEAVED, 2, 1, 5);
 
               DataEvent_t evt;
 
-              DataEventInit((IEvent*)&evt, p_obj->p_mlc_event_src, &p_obj->data, timestamp, p_obj->mlc_id);
+              DataEventInit((IEvent*) &evt, p_obj->p_mlc_event_src, &p_obj->data, timestamp, p_obj->mlc_id);
               IEventSrcSendEvent(p_obj->p_mlc_event_src, (IEvent*) &evt, NULL);
             }
             else
             {
               res = SYS_INVALID_PARAMETER_ERROR_CODE;
             }
+          }
 
             if(p_obj->pMLCConfig == NULL)
             {
@@ -1765,7 +1805,6 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepDatalog(AManagedTask *_this)
               }
             }
 
-          }
           break;
         }
 
@@ -1779,35 +1818,35 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepDatalog(AManagedTask *_this)
               {
                 if(p_obj->acc_sensor_status.IsActive == true || p_obj->gyro_sensor_status.IsActive == true)
                 {
-                if(p_obj->pIRQConfig == NULL)
-                {
-                  if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
+                  if(p_obj->pIRQConfig == NULL)
                   {
-                    res = SYS_UNDEFINED_ERROR_CODE;
+                    if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
+                    {
+                      res = SYS_UNDEFINED_ERROR_CODE;
+                    }
+                  }
+                  else
+                  {
+                    LSM6DSV16XTaskConfigureIrqPin(p_obj, FALSE);
                   }
                 }
-                else
-                {
-                  LSM6DSV16XTaskConfigureIrqPin(p_obj, FALSE);
-                }
-              }
               }
               if(!SYS_IS_ERROR_CODE(res))
               {
                 if(p_obj->mlc_sensor_status.IsActive == true)
                 {
-                if(p_obj->pMLCConfig == NULL)
-                {
-                  if(TX_SUCCESS != tx_timer_activate(&p_obj->mlc_timer))
+                  if(p_obj->pMLCConfig == NULL)
                   {
-                    res = SYS_UNDEFINED_ERROR_CODE;
+                    if(TX_SUCCESS != tx_timer_activate(&p_obj->mlc_timer))
+                    {
+                      res = SYS_UNDEFINED_ERROR_CODE;
+                    }
+                  }
+                  else
+                  {
+                    LSM6DSV16XTaskConfigureMLCPin(p_obj, FALSE);
                   }
                 }
-                else
-                {
-                  LSM6DSV16XTaskConfigureMLCPin(p_obj, FALSE);
-                }
-              }
               }
               break;
             case SENSOR_CMD_ID_SET_ODR:
@@ -1815,6 +1854,9 @@ static sys_error_code_t LSM6DSV16XTaskExecuteStepDatalog(AManagedTask *_this)
               break;
             case SENSOR_CMD_ID_SET_FS:
               res = LSM6DSV16XTaskSensorSetFS(p_obj, report);
+              break;
+            case SENSOR_CMD_ID_SET_FIFO_WM:
+              res = LSM6DSV16XTaskSensorSetFifoWM(p_obj, report);
               break;
             case SENSOR_CMD_ID_ENABLE:
               res = LSM6DSV16XTaskSensorEnable(p_obj, report);
@@ -1902,6 +1944,12 @@ static inline sys_error_code_t LSM6DSV16XTaskPostReportToBack(LSM6DSV16XTask *_t
   return res;
 }
 
+uint8_t mlc_int1;
+uint8_t mlc_int2;
+uint8_t emb_func_fifo_en_a;
+uint8_t emb_func_en_b;
+lsm6dsv16x_pin_int_route_t int1_route;
+
 static sys_error_code_t LSM6DSV16XTaskSensorInit(LSM6DSV16XTask *_this)
 {
   assert_param(_this != NULL);
@@ -1916,21 +1964,15 @@ static sys_error_code_t LSM6DSV16XTaskSensorInit(LSM6DSV16XTask *_this)
   lsm6dsv16x_fifo_gy_batch_t lsm6dsv16x_fifo_gy_batch = LSM6DSV16X_GY_NOT_BATCHED;
   int32_t ret_val = 0;
 
-  /* set the software timer period */
-  ULONG acc_timer, gyro_timer;
-
   lsm6dsv16x_reset_t rst;
-  lsm6dsv16x_pin_int_route_t int1_route =
-  {
-    0
-  };
 
   /* Restore default configuration */
   ret_val = lsm6dsv16x_reset_set(p_sensor_drv, LSM6DSV16X_RESTORE_CTRL_REGS);
   do
   {
     lsm6dsv16x_reset_get(p_sensor_drv, &rst);
-  } while (rst != LSM6DSV16X_READY);
+  }
+  while(rst != LSM6DSV16X_READY);
 
   /* Enable Block Data Update */
   ret_val = lsm6dsv16x_block_data_update_set(p_sensor_drv, PROPERTY_ENABLE);
@@ -1982,12 +2024,7 @@ static sys_error_code_t LSM6DSV16XTaskSensorInit(LSM6DSV16XTask *_this)
   else
     lsm6dsv16x_gy_full_scale_set(p_sensor_drv, LSM6DSV16X_4000dps);
 
-  if(_this->acc_sensor_status.ODR < 2.0f)
-  {
-    lsm6dsv16x_xl_data_rate = LSM6DSV16X_XL_ODR_AT_1Hz875;
-    lsm6dsv16x_fifo_xl_batch = LSM6DSV16X_XL_BATCHED_AT_1Hz875;
-  }
-  else if(_this->acc_sensor_status.ODR < 8.0f)
+  if(_this->acc_sensor_status.ODR < 8.0f)
   {
     lsm6dsv16x_xl_data_rate = LSM6DSV16X_XL_ODR_AT_7Hz5;
     lsm6dsv16x_fifo_xl_batch = LSM6DSV16X_XL_BATCHED_AT_7Hz5;
@@ -2108,6 +2145,7 @@ static sys_error_code_t LSM6DSV16XTaskSensorInit(LSM6DSV16XTask *_this)
   {
     lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_OFF);
     lsm6dsv16x_fifo_xl_batch_set(p_sensor_drv, LSM6DSV16X_XL_NOT_BATCHED);
+    _this->acc_sensor_status.IsActive = false;
   }
 
   if(_this->gyro_sensor_status.IsActive)
@@ -2119,6 +2157,7 @@ static sys_error_code_t LSM6DSV16XTaskSensorInit(LSM6DSV16XTask *_this)
   {
     lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_OFF);
     lsm6dsv16x_fifo_gy_batch_set(p_sensor_drv, LSM6DSV16X_GY_NOT_BATCHED);
+    _this->gyro_sensor_status.IsActive = false;
   }
 
 #if LSM6DSV16X_FIFO_ENABLED
@@ -2126,45 +2165,48 @@ static sys_error_code_t LSM6DSV16XTaskSensorInit(LSM6DSV16XTask *_this)
   uint16_t lsm6dsv16x_wtm_level_acc;
   uint16_t lsm6dsv16x_wtm_level_gyro;
 
-  /* Calculation of watermark and samples per int*/
-  lsm6dsv16x_wtm_level_acc = ((uint16_t) _this->acc_sensor_status.ODR * (uint16_t) LSM6DSV16X_MAX_DRDY_PERIOD);
-  lsm6dsv16x_wtm_level_gyro = ((uint16_t) _this->gyro_sensor_status.ODR * (uint16_t) LSM6DSV16X_MAX_DRDY_PERIOD);
+  if(_this->samples_per_it == 0)
+  {
+    /* Calculation of watermark and samples per int*/
+    lsm6dsv16x_wtm_level_acc = ((uint16_t) _this->acc_sensor_status.ODR * (uint16_t) LSM6DSV16X_MAX_DRDY_PERIOD);
+    lsm6dsv16x_wtm_level_gyro = ((uint16_t) _this->gyro_sensor_status.ODR * (uint16_t) LSM6DSV16X_MAX_DRDY_PERIOD);
 
-  if(_this->acc_sensor_status.IsActive && _this->gyro_sensor_status.IsActive) /* Both subSensor is active */
-  {
-    if(lsm6dsv16x_wtm_level_acc > lsm6dsv16x_wtm_level_gyro)
+    if(_this->acc_sensor_status.IsActive && _this->gyro_sensor_status.IsActive) /* Both subSensor is active */
     {
-      lsm6dsv16x_wtm_level = lsm6dsv16x_wtm_level_acc;
+      if(lsm6dsv16x_wtm_level_acc > lsm6dsv16x_wtm_level_gyro)
+      {
+        lsm6dsv16x_wtm_level = lsm6dsv16x_wtm_level_acc;
+      }
+      else
+      {
+        lsm6dsv16x_wtm_level = lsm6dsv16x_wtm_level_gyro;
+      }
     }
-    else
+    else /* Only one subSensor is active */
     {
-      lsm6dsv16x_wtm_level = lsm6dsv16x_wtm_level_gyro;
+      if(_this->acc_sensor_status.IsActive)
+      {
+        lsm6dsv16x_wtm_level = lsm6dsv16x_wtm_level_acc;
+      }
+      else
+      {
+        lsm6dsv16x_wtm_level = lsm6dsv16x_wtm_level_gyro;
+      }
     }
-  }
-  else /* Only one subSensor is active */
-  {
-    if(_this->acc_sensor_status.IsActive)
-    {
-      lsm6dsv16x_wtm_level = lsm6dsv16x_wtm_level_acc;
-    }
-    else
-    {
-      lsm6dsv16x_wtm_level = lsm6dsv16x_wtm_level_gyro;
-    }
-  }
 
-  if(lsm6dsv16x_wtm_level > LSM6DSV16X_MAX_WTM_LEVEL)
-  {
-    lsm6dsv16x_wtm_level = LSM6DSV16X_MAX_WTM_LEVEL;
+    if(lsm6dsv16x_wtm_level > LSM6DSV16X_MAX_WTM_LEVEL)
+    {
+      lsm6dsv16x_wtm_level = LSM6DSV16X_MAX_WTM_LEVEL;
+    }
+    else if(lsm6dsv16x_wtm_level < LSM6DSV16X_MIN_WTM_LEVEL)
+    {
+      lsm6dsv16x_wtm_level = LSM6DSV16X_MIN_WTM_LEVEL;
+    }
+    _this->samples_per_it = lsm6dsv16x_wtm_level;
   }
-  else if(lsm6dsv16x_wtm_level < LSM6DSV16X_MIN_WTM_LEVEL)
-  {
-    lsm6dsv16x_wtm_level = LSM6DSV16X_MIN_WTM_LEVEL;
-  }
-  _this->samples_per_it = lsm6dsv16x_wtm_level;
 
   /* Setup wtm for FIFO */
-  lsm6dsv16x_fifo_watermark_set(p_sensor_drv, lsm6dsv16x_wtm_level);
+  lsm6dsv16x_fifo_watermark_set(p_sensor_drv, _this->samples_per_it);
 
   if(_this->pIRQConfig != NULL)
   {
@@ -2174,7 +2216,11 @@ static sys_error_code_t LSM6DSV16XTaskSensorInit(LSM6DSV16XTask *_this)
   {
     int1_route.fifo_th = PROPERTY_DISABLE;
   }
+
+  lsm6dsv16x_pin_int1_route_set(p_sensor_drv, &int1_route);
+
   lsm6dsv16x_fifo_mode_set(p_sensor_drv, LSM6DSV16X_STREAM_MODE);
+
 #else
 
   uint8_t buff[6];
@@ -2203,19 +2249,42 @@ static sys_error_code_t LSM6DSV16XTaskSensorInit(LSM6DSV16XTask *_this)
     int1_route.drdy_xl = PROPERTY_DISABLE;
     int1_route.drdy_g = PROPERTY_DISABLE;
   }
-#endif /* LSM6DSV16X_FIFO_ENABLED */
   lsm6dsv16x_pin_int1_route_set(p_sensor_drv, &int1_route);
 
-  /* Setup mlc */
-  if(_this->mlc_enable)
-  {
-    /* TBI */
-  }
+#endif /* LSM6DSV16X_FIFO_ENABLED */
 
-  _this->lsm6dsv16x_task_cfg_timer_period_ms =
-      _this->acc_sensor_status.ODR < _this->gyro_sensor_status.ODR ? _this->acc_sensor_status.ODR : _this->gyro_sensor_status.ODR;
+  /* Check configuration from UCF */
+  lsm6dsv16x_mem_bank_set(p_sensor_drv, LSM6DSV16X_EMBED_FUNC_MEM_BANK);
+  lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_MLC_INT1, &mlc_int1, 1);
+  lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_MLC_INT2, &mlc_int2, 1);
+
+  /* MLC must be handled in polling due to HW limitations: disable MLC INT */
+  mlc_int1 = 0;
+  mlc_int2 = 0;
+  lsm6dsv16x_write_reg(p_sensor_drv, LSM6DSV16X_MLC_INT1, &mlc_int1, 1);
+  lsm6dsv16x_write_reg(p_sensor_drv, LSM6DSV16X_MLC_INT2, &mlc_int2, 1);
+  lsm6dsv16x_mem_bank_set(p_sensor_drv, LSM6DSV16X_MAIN_MEM_BANK);
+
+  if(_this->mlc_enable == false)
+  {
+    lsm6dsv16x_mlc_mode_set(p_sensor_drv, LSM6DSV16X_DISABLE);
+  }
 #if LSM6DSV16X_FIFO_ENABLED
-  _this->lsm6dsv16x_task_cfg_timer_period_ms = (uint16_t)((1000.0f/_this->lsm6dsv16x_task_cfg_timer_period_ms)*(((float)(_this->samples_per_it))/2.0f));
+  uint8_t reg[2];
+  /* Check FIFO_WTM_IA and fifo level. We do not use PID in order to avoid reading one register twice */
+  lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_FIFO_STATUS1, reg, 2);
+
+  _this->fifo_level = ((reg[1] & 0x03) << 8) + reg[0];
+
+  if(_this->fifo_level >= _this->samples_per_it)
+  {
+    lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_FIFO_DATA_OUT_TAG, _this->p_fast_sensor_data_buff, _this->samples_per_it * 7);
+  }
+#endif
+
+  _this->lsm6dsv16x_task_cfg_timer_period_ms = (uint16_t) (_this->acc_sensor_status.ODR < _this->gyro_sensor_status.ODR ? _this->acc_sensor_status.ODR : _this->gyro_sensor_status.ODR);
+#if LSM6DSV16X_FIFO_ENABLED
+  _this->lsm6dsv16x_task_cfg_timer_period_ms = (uint16_t) ((1000.0f / _this->lsm6dsv16x_task_cfg_timer_period_ms) * (((float) (_this->samples_per_it)) / 2.0f));
 #else
   _this->lsm6dsv16x_task_cfg_timer_period_ms = (uint16_t) (1000.0f / _this->lsm6dsv16x_task_cfg_timer_period_ms);
 #endif
@@ -2236,9 +2305,9 @@ static sys_error_code_t LSM6DSV16XTaskSensorReadData(LSM6DSV16XTask *_this)
   /* Check FIFO_WTM_IA and fifo level. We do not use PID in order to avoid reading one register twice */
   lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_FIFO_STATUS1, reg, 2);
 
-  _this->fifo_level = ((reg[1] & 0x03) << 8) + reg[0];
+  _this->fifo_level = ((reg[1] & 0x01) << 8) + reg[0];
 
-  if((reg[1]) & 0x80 && (_this->fifo_level >= _this->samples_per_it))
+  if(((reg[1]) & 0x80) && (_this->fifo_level >= _this->samples_per_it))
   {
     lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_FIFO_DATA_OUT_TAG, _this->p_fast_sensor_data_buff, _this->samples_per_it * 7);
 
@@ -2346,24 +2415,36 @@ static sys_error_code_t LSM6DSV16XTaskSensorReadData(LSM6DSV16XTask *_this)
     if(odr_acc != odr_gyro)
     {
       /* Need to read which sensor generated the INT in case of different ODR; */
-      lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_STATUS_REG, (uint8_t *)&val, 1);
+      lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_STATUS_REG, (uint8_t*) &val, 1);
     }
     else
     {
       /* Manually set the variable to read both sensors (avoid to loose time with a read) */
       val.xlda = 1U;
-      val.gda  = 1U;
+      val.gda = 1U;
     }
 
     if(val.xlda == 1U)
     {
       lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_OUTX_L_A, _this->p_acc_sample, 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+      int16_t *p16 = (int16_t*) (_this->p_acc_sample);
+      *p16++ = dummyDataCounter_acc++;
+      *p16++ = dummyDataCounter_acc++;
+      *p16++ = dummyDataCounter_acc++;
+#endif
       _this->acc_samples_count = 1U;
       _this->acc_drdy = 1;
-  }
+    }
     if(val.gda == 1U)
     {
       lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_OUTX_L_G, _this->p_gyro_sample, 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+      int16_t *p16 = (int16_t*) (_this->p_gyro_sample);
+      *p16++ = dummyDataCounter_gyro++;
+      *p16++ = dummyDataCounter_gyro++;
+      *p16++ = dummyDataCounter_gyro++;
+#endif
       _this->gyro_samples_count = 1U;
       _this->gyro_drdy = 1;
     }
@@ -2371,12 +2452,28 @@ static sys_error_code_t LSM6DSV16XTaskSensorReadData(LSM6DSV16XTask *_this)
   else if(_this->acc_sensor_status.IsActive)
   {
     lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_OUTX_L_A, _this->p_acc_sample, _this->samples_per_it * 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+    uint16_t i = 0;
+    int16_t *p16 = (int16_t*) (_this->p_acc_sample);
+    for(i = 0; i < _this->samples_per_it * 3; i++)
+    {
+      *p16++ = dummyDataCounter_acc++;
+    }
+#endif
     _this->acc_samples_count = 1U;
     _this->acc_drdy = 1;
   }
   else if(_this->gyro_sensor_status.IsActive)
   {
     lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_OUTX_L_G, _this->p_acc_sample, _this->samples_per_it * 6);
+#if (HSD_USE_DUMMY_DATA == 1)
+    uint16_t i = 0;
+    int16_t *p16 = (int16_t*) (_this->p_gyro_sample);
+    for(i = 0; i < _this->samples_per_it * 3; i++)
+    {
+      *p16++ = dummyDataCounter_gyro++;
+    }
+#endif
     _this->gyro_samples_count = 1U;
     _this->gyro_drdy = 1;
   }
@@ -2392,13 +2489,28 @@ static sys_error_code_t LSM6DSV16XTaskSensorReadData(LSM6DSV16XTask *_this)
 static sys_error_code_t LSM6DSV16XTaskSensorReadMLC(LSM6DSV16XTask *_this)
 {
   assert_param(_this != NULL);
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  sys_error_code_t res = SYS_BASE_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &_this->p_sensor_bus_if->m_xConnector;
-  uint8_t ii;
+  lsm6dsv16x_mlc_status_t mlc_status;
+  uint8_t mlc_output[4];
 
   if(_this->mlc_enable)
   {
-    /* TBI */
+    lsm6dsv16x_mem_bank_set(p_sensor_drv, LSM6DSV16X_EMBED_FUNC_MEM_BANK);
+    lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_MLC_STATUS, (uint8_t*) (&mlc_status), 1);
+    _this->p_mlc_sensor_data_buff[4] = (mlc_status.is_mlc1) | (mlc_status.is_mlc2 << 1) | (mlc_status.is_mlc3 << 2) | (mlc_status.is_mlc4 << 3);
+
+    lsm6dsv16x_read_reg(p_sensor_drv, LSM6DSV16X_MLC1_SRC, (uint8_t*) (&mlc_output[0]), 4);
+    if(memcmp(&_this->p_mlc_sensor_data_buff[0], &mlc_output[0], 4) != 0)
+    {
+      memcpy(&_this->p_mlc_sensor_data_buff[0], &mlc_output[0], 4);
+      res = SYS_NO_ERROR_CODE;
+    }
+    else
+    {
+      res = SYS_SENSOR_TASK_NO_DRDY_ERROR_CODE;
+    }
+    lsm6dsv16x_mem_bank_set(p_sensor_drv, LSM6DSV16X_MAIN_MEM_BANK);
   }
 
   return res;
@@ -2431,7 +2543,7 @@ static sys_error_code_t LSM6DSV16XTaskSensorInitTaskParams(LSM6DSV16XTask *_this
   _this->acc_sensor_status.Sensitivity = 0.0000305f * _this->acc_sensor_status.FS;
   _this->acc_sensor_status.ODR = 7680.0f;
   _this->acc_sensor_status.MeasuredODR = 0.0f;
-#ifdef LSM6DSV16X_FIFO_ENABLED
+#if LSM6DSV16X_FIFO_ENABLED
   EMD_Init(&_this->data_acc, _this->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 3);
 #else
   EMD_Init(&_this->data_acc, _this->p_acc_sample, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 3);
@@ -2440,10 +2552,10 @@ static sys_error_code_t LSM6DSV16XTaskSensorInitTaskParams(LSM6DSV16XTask *_this
   /* GYROSCOPE STATUS */
   _this->gyro_sensor_status.IsActive = TRUE;
   _this->gyro_sensor_status.FS = 4000.0f;
-  _this->gyro_sensor_status.Sensitivity = 0.000035f * _this->gyro_sensor_status.FS;
   _this->gyro_sensor_status.ODR = 7680.0f;
+  _this->gyro_sensor_status.Sensitivity = 0.035f * _this->gyro_sensor_status.FS;
   _this->gyro_sensor_status.MeasuredODR = 0.0f;
-#ifdef LSM6DSV16X_FIFO_ENABLED
+#if LSM6DSV16X_FIFO_ENABLED
   EMD_Init(&_this->data_gyro, _this->p_slow_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 3);
 #else
   EMD_Init(&_this->data_gyro, _this->p_gyro_sample, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 3);
@@ -2455,7 +2567,7 @@ static sys_error_code_t LSM6DSV16XTaskSensorInitTaskParams(LSM6DSV16XTask *_this
   _this->mlc_sensor_status.Sensitivity = 1.0f;
   _this->mlc_sensor_status.ODR = 1.0f;
   _this->mlc_sensor_status.MeasuredODR = 0.0f;
-  EMD_Init(&_this->data, _this->p_mlc_sensor_data_buff, E_EM_UINT8, E_EM_MODE_INTERLEAVED, 2, 1, 9);
+  EMD_Init(&_this->data, _this->p_mlc_sensor_data_buff, E_EM_UINT8, E_EM_MODE_INTERLEAVED, 2, 1, 5);
 
   return res;
 }
@@ -2469,71 +2581,64 @@ static sys_error_code_t LSM6DSV16XTaskSensorSetODR(LSM6DSV16XTask *_this, SMMess
   float ODR = (float) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
-  /* Changing ODR must disable MLC sensor: MLC can work properly only when setup from UCF */
-  _this->mlc_enable = FALSE;
-  _this->mlc_sensor_status.IsActive = FALSE;
-
   if(id == _this->acc_id)
   {
-    if(ODR < 2.0f)
+    if(ODR < 1.0f)
     {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_1Hz875);
-      ODR = 1.875f;
-    }
-    else if(ODR < 8.0f)
-    {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_7Hz5);
-      ODR = 7.5f;
-    }
-    else if(ODR < 16.0f)
-    {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_15Hz);
-      ODR = 15.0f;
-    }
-    else if(ODR < 31.0f)
-    {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_30Hz);
-      ODR = 30.0f;
-    }
-    else if(ODR < 61.0f)
-    {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_60Hz);
-      ODR = 60.0f;
-    }
-    else if(ODR < 121.0f)
-    {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_120Hz);
-      ODR = 120.0f;
-    }
-    else if(ODR < 241.0f)
-    {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_240Hz);
-      ODR = 240.0f;
-    }
-    else if(ODR < 481.0f)
-    {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_480Hz);
-      ODR = 480.0f;
-    }
-    else if(ODR < 961.0f)
-    {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_960Hz);
-      ODR = 960.0f;
-    }
-    else if(ODR < 1921.0f)
-    {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_1920Hz);
-      ODR = 1920.0f;
-    }
-    else if(ODR < 3841.0f)
-    {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_3840Hz);
-      ODR = 3840.0f;
+      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_OFF);
+      /* Do not update the model in case of ODR = 0 */
+      ODR = _this->acc_sensor_status.ODR;
     }
     else
     {
-      lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_AT_7680Hz);
-      ODR = 7680;
+      /* Changing ODR must disable MLC sensor: MLC can work properly only when setup from UCF */
+      _this->mlc_enable = FALSE;
+      _this->mlc_sensor_status.IsActive = FALSE;
+
+      if(ODR < 8.0f)
+      {
+        ODR = 7.5f;
+      }
+      else if(ODR < 16.0f)
+      {
+        ODR = 15.0f;
+      }
+      else if(ODR < 31.0f)
+      {
+        ODR = 30.0f;
+      }
+      else if(ODR < 61.0f)
+      {
+        ODR = 60.0f;
+      }
+      else if(ODR < 121.0f)
+      {
+        ODR = 120.0f;
+      }
+      else if(ODR < 241.0f)
+      {
+        ODR = 240.0f;
+      }
+      else if(ODR < 481.0f)
+      {
+        ODR = 480.0f;
+      }
+      else if(ODR < 961.0f)
+      {
+        ODR = 960.0f;
+      }
+      else if(ODR < 1921.0f)
+      {
+        ODR = 1920.0f;
+      }
+      else if(ODR < 3841.0f)
+      {
+        ODR = 3840.0f;
+      }
+      else
+      {
+        ODR = 7680;
+      }
     }
 
     if(!SYS_IS_ERROR_CODE(res))
@@ -2544,60 +2649,62 @@ static sys_error_code_t LSM6DSV16XTaskSensorSetODR(LSM6DSV16XTask *_this, SMMess
   }
   else if(id == _this->gyro_id)
   {
-    if(ODR < 8.0f)
+    if(ODR < 1.0f)
     {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_7Hz5);
-      ODR = 7.5f;
-    }
-    else if(ODR < 16.0f)
-    {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_15Hz);
-      ODR = 15.0f;
-    }
-    else if(ODR < 31.0f)
-    {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_30Hz);
-      ODR = 30.0f;
-    }
-    else if(ODR < 61.0f)
-    {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_60Hz);
-      ODR = 60.0f;
-    }
-    else if(ODR < 121.0f)
-    {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_120Hz);
-      ODR = 120.0f;
-    }
-    else if(ODR < 241.0f)
-    {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_240Hz);
-      ODR = 240.0f;
-    }
-    else if(ODR < 481.0f)
-    {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_480Hz);
-      ODR = 480.0f;
-    }
-    else if(ODR < 961.0f)
-    {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_960Hz);
-      ODR = 960.0f;
-    }
-    else if(ODR < 1921.0f)
-    {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_1920Hz);
-      ODR = 1920.0f;
-    }
-    else if(ODR < 3841.0f)
-    {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_3840Hz);
-      ODR = 3840.0f;
+      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_OFF);
+      /* Do not update the model in case of ODR = 0 */
+      ODR = _this->gyro_sensor_status.ODR;
     }
     else
     {
-      lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_AT_7680Hz);
-      ODR = 7680;
+      /* Changing ODR must disable MLC sensor: MLC can work properly only when setup from UCF */
+      _this->mlc_enable = FALSE;
+      _this->mlc_sensor_status.IsActive = FALSE;
+
+      if(ODR < 8.0f)
+      {
+        ODR = 7.5f;
+      }
+      else if(ODR < 16.0f)
+      {
+        ODR = 15.0f;
+      }
+      else if(ODR < 31.0f)
+      {
+        ODR = 30.0f;
+      }
+      else if(ODR < 61.0f)
+      {
+        ODR = 60.0f;
+      }
+      else if(ODR < 121.0f)
+      {
+        ODR = 120.0f;
+      }
+      else if(ODR < 241.0f)
+      {
+        ODR = 240.0f;
+      }
+      else if(ODR < 481.0f)
+      {
+        ODR = 480.0f;
+      }
+      else if(ODR < 961.0f)
+      {
+        ODR = 960.0f;
+      }
+      else if(ODR < 1921.0f)
+      {
+        ODR = 1920.0f;
+      }
+      else if(ODR < 3841.0f)
+      {
+        ODR = 3840.0f;
+      }
+      else
+      {
+        ODR = 7680;
+      }
     }
 
     if(!SYS_IS_ERROR_CODE(res))
@@ -2606,10 +2713,20 @@ static sys_error_code_t LSM6DSV16XTaskSensorSetODR(LSM6DSV16XTask *_this, SMMess
       _this->gyro_sensor_status.MeasuredODR = 0.0f;
     }
   }
+  else if(id == _this->mlc_id)
+  {
+    res = SYS_TASK_INVALID_CALL_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_INVALID_CALL_ERROR_CODE);
+
+    SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("ISM330DHCX: warning - MLC SetODR() not supported.\r\n"));
+  }
   else
   {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
   }
+
+  /* when ODR changes the samples_per_it must be recalculated */
+  _this->samples_per_it = 0;
 
   return res;
 }
@@ -2695,10 +2812,61 @@ static sys_error_code_t LSM6DSV16XTaskSensorSetFS(LSM6DSV16XTask *_this, SMMessa
       _this->gyro_sensor_status.Sensitivity = 0.035f * _this->gyro_sensor_status.FS;
     }
   }
+  else if(id == _this->mlc_id)
+  {
+    res = SYS_TASK_INVALID_CALL_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_INVALID_CALL_ERROR_CODE);
+
+    SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("ISM330DHCX: warning - MLC SetFS() not supported.\r\n"));
+  }
   else
   {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
   }
+
+  return res;
+}
+
+static sys_error_code_t LSM6DSV16XTaskSensorSetFifoWM(LSM6DSV16XTask *_this, SMMessage report)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  if(report.sensorMessage.nSensorId == _this->mlc_id)
+  {
+    res = SYS_TASK_INVALID_CALL_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_INVALID_CALL_ERROR_CODE);
+
+    SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("LSM6DSV16X: warning - MLC SetFifoWM() not supported.\r\n"));
+  }
+
+#if LSM6DSV16X_FIFO_ENABLED
+
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &_this->p_sensor_bus_if->m_xConnector;
+  uint16_t lsm6dsv16x_wtm_level = report.sensorMessage.nParam;
+  uint8_t id = report.sensorMessage.nSensorId;
+
+  if((id == _this->acc_id) || (id == _this->gyro_id))
+  {
+    /* acc and gyro share the FIFO, so size should be increased w.r.t. previous setup */
+    lsm6dsv16x_wtm_level = lsm6dsv16x_wtm_level + _this->samples_per_it;
+
+    if(lsm6dsv16x_wtm_level > LSM6DSV16X_MAX_WTM_LEVEL)
+    {
+      lsm6dsv16x_wtm_level = LSM6DSV16X_MAX_WTM_LEVEL;
+    }
+    _this->samples_per_it = lsm6dsv16x_wtm_level;
+
+    /* Setup wtm for FIFO */
+    lsm6dsv16x_fifo_watermark_set(p_sensor_drv, _this->samples_per_it);
+
+    lsm6dsv16x_fifo_mode_set(p_sensor_drv, LSM6DSV16X_STREAM_MODE);
+  }
+  else
+  {
+    res = SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
+#endif
 
   return res;
 }
@@ -2713,10 +2881,23 @@ static sys_error_code_t LSM6DSV16XTaskSensorEnable(LSM6DSV16XTask *_this, SMMess
   if(id == _this->acc_id)
   {
     _this->acc_sensor_status.IsActive = TRUE;
+
+    /* Changing sensor configuration must disable MLC sensor: MLC can work properly only when setup from UCF */
+    _this->mlc_enable = FALSE;
+    _this->mlc_sensor_status.IsActive = FALSE;
   }
   else if(id == _this->gyro_id)
   {
     _this->gyro_sensor_status.IsActive = TRUE;
+
+    /* Changing sensor configuration must disable MLC sensor: MLC can work properly only when setup from UCF */
+    _this->mlc_enable = FALSE;
+    _this->mlc_sensor_status.IsActive = FALSE;
+  }
+  else if(id == _this->mlc_id)
+  {
+    _this->mlc_sensor_status.IsActive = TRUE;
+    _this->mlc_enable = TRUE;
   }
   else
   {
@@ -2730,7 +2911,7 @@ static sys_error_code_t LSM6DSV16XTaskSensorDisable(LSM6DSV16XTask *_this, SMMes
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &_this->p_sensor_bus_if->m_xConnector;
 
   uint8_t id = report.sensorMessage.nSensorId;
 
@@ -2738,11 +2919,24 @@ static sys_error_code_t LSM6DSV16XTaskSensorDisable(LSM6DSV16XTask *_this, SMMes
   {
     _this->acc_sensor_status.IsActive = FALSE;
     lsm6dsv16x_xl_data_rate_set(p_sensor_drv, LSM6DSV16X_XL_ODR_OFF);
+
+    /* Changing sensor configuration must disable MLC sensor: MLC can work properly only when setup from UCF */
+    _this->mlc_enable = FALSE;
+    _this->mlc_sensor_status.IsActive = FALSE;
   }
   else if(id == _this->gyro_id)
   {
     _this->gyro_sensor_status.IsActive = FALSE;
     lsm6dsv16x_gy_data_rate_set(p_sensor_drv, LSM6DSV16X_GY_ODR_OFF);
+
+    /* Changing sensor configuration must disable MLC sensor: MLC can work properly only when setup from UCF */
+    _this->mlc_enable = FALSE;
+    _this->mlc_sensor_status.IsActive = FALSE;
+  }
+  else if(id == _this->mlc_id)
+  {
+    _this->mlc_sensor_status.IsActive = FALSE;
+    _this->mlc_enable = FALSE;
   }
   else
   {
@@ -2789,7 +2983,9 @@ static sys_error_code_t LSM6DSV16XTaskConfigureIrqPin(const LSM6DSV16XTask *_thi
   }
   else
   {
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitTypeDef GPIO_InitStruct =
+    {
+        0 };
 
     // first disable the IRQ to avoid spurious interrupt to wake the MCU up.
     HAL_NVIC_DisableIRQ(_this->pIRQConfig->irq_n);
@@ -2816,7 +3012,9 @@ static sys_error_code_t LSM6DSV16XTaskConfigureMLCPin(const LSM6DSV16XTask *_thi
   }
   else
   {
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitTypeDef GPIO_InitStruct =
+    {
+        0 };
 
     // first disable the IRQ to avoid spurious interrupt to wake the MCU up.
     HAL_NVIC_DisableIRQ(_this->pMLCConfig->irq_n);
@@ -2838,8 +3036,7 @@ static inline LSM6DSV16XTask* LSM6DSV16XTaskGetOwnerFromISensorIF(ISensor_t *p_i
 
   /* check if the virtual function has been called from the mlc fake sensor IF  */
   p_if_owner = (LSM6DSV16XTask*) ((uint32_t) p_if - offsetof(LSM6DSV16XTask, mlc_sensor_if));
-  if (!(p_if_owner->gyro_sensor_if.vptr == &sTheClass.gyro_sensor_if_vtbl)
-      || !(p_if_owner->super.vptr == &sTheClass.vtbl))
+  if(!(p_if_owner->gyro_sensor_if.vptr == &sTheClass.gyro_sensor_if_vtbl) || !(p_if_owner->super.vptr == &sTheClass.vtbl))
   {
     /* then the virtual function has been called from the gyro IF  */
     p_if_owner = (LSM6DSV16XTask*) ((uint32_t) p_if - offsetof(LSM6DSV16XTask, gyro_sensor_if));
@@ -2853,11 +3050,11 @@ static inline LSM6DSV16XTask* LSM6DSV16XTaskGetOwnerFromISensorIF(ISensor_t *p_i
   return p_if_owner;
 }
 
-static inline LSM6DSV16XTask* LSM6DSV16XTaskGetOwnerFromISensorMlcIF(ISensorMlc_t *p_if)
+static inline LSM6DSV16XTask* LSM6DSV16XTaskGetOwnerFromISensorLLIF(ISensorLL_t *p_if)
 {
   assert_param(p_if != NULL);
   LSM6DSV16XTask *p_if_owner = NULL;
-  p_if_owner = (LSM6DSV16XTask*) ((uint32_t) p_if - offsetof(LSM6DSV16XTask, sensor_mlc_if));
+  p_if_owner = (LSM6DSV16XTask*) ((uint32_t) p_if - offsetof(LSM6DSV16XTask, sensor_ll_if));
 
   return p_if_owner;
 }
@@ -2894,7 +3091,6 @@ static void LSM6DSV16XTaskMLCTimerCallbackFunction(ULONG timer)
 
 /* CubeMX integration */
 // ******************
-
 /**
  * Interrupt callback
  */
@@ -2928,245 +3124,201 @@ void INT2_DSV16X_EXTI_Callback(uint16_t Pin)
 //  }
 }
 
-static sys_error_code_t LSM6DSV16X_XL_ODR_From_UCF(LSM6DSV16XTask *_this)
+static sys_error_code_t LSM6DSV16X_ODR_Sync(LSM6DSV16XTask *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &_this->p_sensor_bus_if->m_xConnector;
 
-  float Odr = 12.5f;
-  lsm6dsv16x_xl_data_rate_t lsm6dsv16x_xl_data_rate = LSM6DSV16X_XL_ODR_OFF;
-  lsm6dsv16x_xl_data_rate_get(p_sensor_drv, &lsm6dsv16x_xl_data_rate);
-
-  _this->acc_sensor_status.IsActive = TRUE;
-
-  switch(lsm6dsv16x_xl_data_rate)
+  float odr = 0.0f;
+  lsm6dsv16x_xl_data_rate_t lsm6dsv16x_odr_xl;
+  if(lsm6dsv16x_xl_data_rate_get(p_sensor_drv, &lsm6dsv16x_odr_xl) == 0)
   {
-    case LSM6DSV16X_XL_ODR_OFF:
-      _this->acc_sensor_status.IsActive = FALSE;
-      break;
+    _this->acc_sensor_status.IsActive = TRUE;
 
-    case LSM6DSV16X_XL_ODR_AT_1Hz875:
-      Odr = 1.875f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_7Hz5:
-      Odr = 7.5f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_15Hz:
-      Odr = 15.0f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_30Hz:
-      Odr = 30.0f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_60Hz:
-      Odr = 60.0f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_120Hz:
-      Odr = 120.0f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_240Hz:
-      Odr = 240.0f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_480Hz:
-      Odr = 480.0f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_960Hz:
-      Odr = 960.0f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_1920Hz:
-      Odr = 1920.0f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_3840Hz:
-      Odr = 3840.0f;
-      break;
-
-    case LSM6DSV16X_XL_ODR_AT_7680Hz:
-      Odr = 7680.0f;
-      break;
-
-    default:
-      break;
-  }
-
-  if(!SYS_IS_ERROR_CODE(res))
-  {
-    _this->acc_sensor_status.ODR = Odr;
+    /* Update only the model */
+    switch(lsm6dsv16x_odr_xl)
+    {
+      case LSM6DSV16X_XL_ODR_OFF:
+        _this->acc_sensor_status.IsActive = FALSE;
+        /* Do not update the model in case of ODR = 0 */
+        odr = _this->acc_sensor_status.ODR;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_7Hz5:
+        odr = 7.5f;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_15Hz:
+        odr = 15.0f;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_30Hz:
+        odr = 30.0f;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_60Hz:
+        odr = 60.0f;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_120Hz:
+        odr = 120.0f;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_240Hz:
+        odr = 240.0f;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_480Hz:
+        odr = 480.0f;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_960Hz:
+        odr = 960.0f;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_1920Hz:
+        odr = 1920.0f;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_3840Hz:
+        odr = 3840.0f;
+        break;
+      case LSM6DSV16X_XL_ODR_AT_7680Hz:
+        odr = 7680.0f;
+        break;
+      default:
+        break;
+    }
+    _this->acc_sensor_status.ODR = odr;
     _this->acc_sensor_status.MeasuredODR = 0.0f;
+
+  }
+  else
+  {
+    res = SYS_BASE_ERROR_CODE;
   }
 
-  return res;
-}
-
-static sys_error_code_t LSM6DSV16X_XL_FS_From_UCF(LSM6DSV16XTask *_this)
-{
-  assert_param(_this != NULL);
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &_this->p_sensor_bus_if->m_xConnector;
-
-  float FullScale = 2.0;
-  lsm6dsv16x_xl_full_scale_t xl_full_scale;
-  lsm6dsv16x_xl_full_scale_get(p_sensor_drv, &xl_full_scale);
-
-  switch(xl_full_scale)
+  odr = 0;
+  lsm6dsv16x_gy_data_rate_t lsm6dsv16x_odr_g;
+  if(lsm6dsv16x_gy_data_rate_get(p_sensor_drv, &lsm6dsv16x_odr_g) == 0)
   {
-    case LSM6DSV16X_2g:
-      FullScale = 2.0;
-      break;
+    _this->gyro_sensor_status.IsActive = TRUE;
 
-    case LSM6DSV16X_4g:
-      FullScale = 4.0;
-      break;
-
-    case LSM6DSV16X_8g:
-      FullScale = 8.0;
-      break;
-
-    case LSM6DSV16X_16g:
-      FullScale = 16.0;
-      break;
-
-    default:
-      break;
-  }
-
-  if(!SYS_IS_ERROR_CODE(res))
-  {
-    _this->acc_sensor_status.FS = FullScale;
-  }
-
-  return res;
-}
-
-static sys_error_code_t LSM6DSV16X_GY_ODR_From_UCF(LSM6DSV16XTask *_this)
-{
-  assert_param(_this != NULL);
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &_this->p_sensor_bus_if->m_xConnector;
-
-  float Odr = 12.5f;
-  lsm6dsv16x_gy_data_rate_t lsm6dsv16x_gy_data_rate = LSM6DSV16X_GY_ODR_OFF;
-  lsm6dsv16x_gy_data_rate_get(p_sensor_drv, &lsm6dsv16x_gy_data_rate);
-
-  _this->gyro_sensor_status.IsActive = TRUE;
-
-  switch(lsm6dsv16x_gy_data_rate)
-  {
-    case LSM6DSV16X_GY_ODR_OFF:
-      _this->gyro_sensor_status.IsActive = FALSE;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_7Hz5:
-      Odr = 7.5f;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_15Hz:
-      Odr = 15.0f;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_30Hz:
-      Odr = 30.0f;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_60Hz:
-      Odr = 60.0f;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_120Hz:
-      Odr = 120.0f;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_240Hz:
-      Odr = 240.0f;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_480Hz:
-      Odr = 480.0f;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_960Hz:
-      Odr = 960.0f;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_1920Hz:
-      Odr = 1920.0f;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_3840Hz:
-      Odr = 3840.0f;
-      break;
-
-    case LSM6DSV16X_GY_ODR_AT_7680Hz:
-      Odr = 7680.0f;
-      break;
-
-    default:
-      break;
-  }
-
-  if(!SYS_IS_ERROR_CODE(res))
-  {
-    _this->gyro_sensor_status.ODR = Odr;
+    /* Update only the model */
+    switch(lsm6dsv16x_odr_g)
+    {
+      case LSM6DSV16X_GY_ODR_OFF:
+        _this->gyro_sensor_status.IsActive = FALSE;
+        /* Do not update the model in case of ODR = 0 */
+        odr = _this->gyro_sensor_status.ODR;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_7Hz5:
+        odr = 7.5f;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_15Hz:
+        odr = 15.0f;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_30Hz:
+        odr = 30.0f;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_60Hz:
+        odr = 60.0f;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_120Hz:
+        odr = 120.0f;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_240Hz:
+        odr = 240.0f;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_480Hz:
+        odr = 480.0f;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_960Hz:
+        odr = 960.0f;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_1920Hz:
+        odr = 1920.0f;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_3840Hz:
+        odr = 3840.0f;
+        break;
+      case LSM6DSV16X_GY_ODR_AT_7680Hz:
+        odr = 7680.0f;
+        break;
+      default:
+        break;
+    }
+    _this->gyro_sensor_status.ODR = odr;
     _this->gyro_sensor_status.MeasuredODR = 0.0f;
   }
-
+  else
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
+  _this->samples_per_it = 0;
   return res;
 }
 
-static sys_error_code_t LSM6DSV16X_GY_FS_From_UCF(LSM6DSV16XTask *_this)
+static sys_error_code_t LSM6DSV16X_FS_Sync(LSM6DSV16XTask *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t*) &_this->p_sensor_bus_if->m_xConnector;
 
-  float FullScale = 125;
-  lsm6dsv16x_gy_full_scale_t gy_full_scale;
-  lsm6dsv16x_gy_full_scale_get(p_sensor_drv, &gy_full_scale);
-
-  switch(gy_full_scale)
+  float fs = 2.0;
+  lsm6dsv16x_xl_full_scale_t fs_xl;
+  if(lsm6dsv16x_xl_full_scale_get(p_sensor_drv, &fs_xl) == 0)
   {
-    case LSM6DSV16X_125dps:
-      FullScale = 125;
-      break;
-
-    case LSM6DSV16X_250dps:
-      FullScale = 250;
-      break;
-
-    case LSM6DSV16X_500dps:
-      FullScale = 500;
-      break;
-
-    case LSM6DSV16X_1000dps:
-      FullScale = 1000;
-      break;
-
-    case LSM6DSV16X_2000dps:
-      FullScale = 2000;
-      break;
-
-    case LSM6DSV16X_4000dps:
-      FullScale = 4000;
-      break;
-
-    default:
-      break;
+    switch(fs_xl)
+    {
+      case LSM6DSV16X_2g:
+        fs = 2.0;
+        break;
+      case LSM6DSV16X_4g:
+        fs = 4.0;
+        break;
+      case LSM6DSV16X_8g:
+        fs = 8.0;
+        break;
+      case LSM6DSV16X_16g:
+        fs = 16.0;
+        break;
+      default:
+        break;
+    }
+    _this->acc_sensor_status.FS = fs;
+    _this->acc_sensor_status.Sensitivity = 0.0000305f * _this->acc_sensor_status.FS;
+  }
+  else
+  {
+    res = SYS_BASE_ERROR_CODE;
   }
 
-  if(!SYS_IS_ERROR_CODE(res))
+  fs = 125;
+  lsm6dsv16x_gy_full_scale_t fs_g;
+  if(lsm6dsv16x_gy_full_scale_get(p_sensor_drv, &fs_g) == 0)
   {
-    _this->gyro_sensor_status.FS = FullScale;
+    switch(fs_g)
+    {
+      case LSM6DSV16X_125dps:
+        fs = 125;
+        break;
+      case LSM6DSV16X_250dps:
+        fs = 250;
+        break;
+      case LSM6DSV16X_500dps:
+        fs = 500;
+        break;
+      case LSM6DSV16X_1000dps:
+        fs = 1000;
+        break;
+      case LSM6DSV16X_2000dps:
+        fs = 2000;
+        break;
+      case LSM6DSV16X_4000dps:
+        fs = 4000;
+        break;
+      default:
+        break;
+    }
+    _this->gyro_sensor_status.FS = fs;
+    _this->gyro_sensor_status.Sensitivity = 0.035f * _this->gyro_sensor_status.FS;
   }
-
+  else
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
   return res;
 }
 

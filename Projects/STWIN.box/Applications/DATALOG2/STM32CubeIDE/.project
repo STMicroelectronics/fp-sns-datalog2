@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>DATALOG2</name>
+	<name>DATALOG2-STWIN.box</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -1713,14 +1713,14 @@
 			<locationURI>PARENT-1-PROJECT_LOC/USBX/App/ux_device_descriptors.h</locationURI>
 		</link>
 		<link>
-			<name>User/USBX/App/ux_user.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/USBX/App/ux_user.h</locationURI>
-		</link>
-		<link>
 			<name>User/USBX/Target/ux_stm32_config.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/USBX/Target/ux_stm32_config.h</locationURI>
+		</link>
+		<link>
+			<name>User/USBX/Target/ux_user.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/USBX/Target/ux_user.h</locationURI>
 		</link>
 		<link>
 			<name>User/mx/Inc/adc.h</name>
@@ -2406,16 +2406,6 @@
 			<name>User/eLooM_Components/SensorManager/Inc/ISensorLL_vtbl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ISensorLL_vtbl.h</locationURI>
-		</link>
-		<link>
-			<name>User/eLooM_Components/SensorManager/Inc/ISensorMlc.h</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ISensorMlc.h</locationURI>
-		</link>
-		<link>
-			<name>User/eLooM_Components/SensorManager/Inc/ISensorMlc_vtbl.h</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ISensorMlc_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Inc/ISensor_vtbl.h</name>

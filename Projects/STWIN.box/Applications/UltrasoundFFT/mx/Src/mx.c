@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
   * @file    mx.c
-  * @author  STMicroelectronics - AIS - MCD Team
-  * @version 3.0.1
-  * @date    21/01/2022 10:35:14
+  * @author  SRA - GPM
+  * 
+  * 
   *
   * @brief Project peripherals configuration files.
   *
@@ -15,7 +15,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file

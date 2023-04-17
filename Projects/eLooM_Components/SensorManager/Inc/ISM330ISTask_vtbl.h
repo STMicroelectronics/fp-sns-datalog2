@@ -68,6 +68,7 @@ EMData_t ISM330ISTask_vtblGyroGetDataInfo(ISourceObservable *_this);
 
 sys_error_code_t ISM330ISTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
 sys_error_code_t ISM330ISTask_vtblSensorSetFS(ISensor_t *_this, float FS);
+sys_error_code_t ISM330ISTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t ISM330ISTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t ISM330ISTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t ISM330ISTask_vtblSensorIsEnabled(ISensor_t *_this);
@@ -75,9 +76,6 @@ SensorDescriptor_t ISM330ISTask_vtblAccGetDescription(ISensor_t *_this);
 SensorDescriptor_t ISM330ISTask_vtblGyroGetDescription(ISensor_t *_this);
 SensorStatus_t ISM330ISTask_vtblAccGetStatus(ISensor_t *_this);
 SensorStatus_t ISM330ISTask_vtblGyroGetStatus(ISensor_t *_this);
-
-//boolean_t ISM330ISTask_vtblSensorIspuIsEnabled(ISensorMlc_t *_this);
-//sys_error_code_t ISM330ISTask_vtblSensorLoadUcf(ISensorMlc_t *_this, uint32_t size, const char *ucf);
 
 sys_error_code_t ISM330ISTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len);
 sys_error_code_t ISM330ISTask_vtblSensorWriteReg(ISensorLL_t *_this, uint16_t reg, const uint8_t *data, uint16_t len);
@@ -87,6 +85,8 @@ uint8_t ISM330ISTask_vtblIspuGetId(ISourceObservable *_this);
 IEventSrc *ISM330ISTask_vtblIspuGetEventSourceIF(ISourceObservable *_this);
 EMData_t ISM330ISTask_vtblIspuGetDataInfo(ISourceObservable *_this);
 sys_error_code_t ISM330ISTask_vtblIspuGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
+float ISM330ISTask_vtblIspuGetFS(ISourceObservable *_this);
+float ISM330ISTask_vtblIspuGetSensitivity(ISourceObservable *_this);
 SensorDescriptor_t ISM330ISTask_vtblIspuGetDescription(ISensor_t *_this);
 SensorStatus_t ISM330ISTask_vtblIspuGetStatus(ISensor_t *_this);
 

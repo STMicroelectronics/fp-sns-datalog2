@@ -42,6 +42,8 @@ extern "C" {
 #include "parson.h"
 #include "IPnPLComponent.h"
 #include "IPnPLComponent_vtbl.h"
+#include "IIsm330dhcx_Mlc.h"
+#include "IIsm330dhcx_Mlc_vtbl.h"
 
 /**
   * Create a type name for _Ism330dhcx_Mlc_PnPL.
