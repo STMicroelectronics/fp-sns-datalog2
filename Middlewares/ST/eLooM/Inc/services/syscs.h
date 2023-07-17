@@ -33,9 +33,9 @@ extern "C" {
 
 #include "systp.h"
 
-/*  SYS_DECLARE_CS(cs) */
-/*  SYS_ENTER_CRTITICAL(cs) */
-/*  SYS_EXIT_CRTITICAL(cs)  */
+#define SYS_DECLARE_CS(cs)        SYS_DECLARE_CS_IMP(cs)
+#define SYS_ENTER_CRITICAL(cs)    SYS_ENTER_CRITICAL_IMP(cs)
+#define SYS_EXIT_CRITICAL(cs)     SYS_EXIT_CRITICAL_IMP(cs)
 
 #if defined(SYS_TP_RTOS_FREERTOS)
 #include "syscs_freertos.h"

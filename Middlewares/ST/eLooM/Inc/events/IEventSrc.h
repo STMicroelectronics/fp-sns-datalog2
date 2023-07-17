@@ -29,8 +29,6 @@ extern "C" {
 #endif
 
 
-#include "services/systypes.h"
-#include "services/syserror.h"
 #include "events/IEvent.h"
 #include "events/IEventListener.h"
 #include "events/IEventListener_vtbl.h"
@@ -53,7 +51,7 @@ void *SysAlloc(size_t nSize);
 static inline sys_error_code_t IEventSrcInit(IEventSrc *_this);
 
 /**
- * Register a listener with this event souce.
+ * Register a listener with this event source.
  *
  * @param _this [IN] specifies a pointer to an IEventSrc object.
  * @param pListener [IN] specifies a pointer to an IEventListener object.

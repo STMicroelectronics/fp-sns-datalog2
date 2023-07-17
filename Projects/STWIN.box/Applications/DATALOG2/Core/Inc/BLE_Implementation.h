@@ -32,6 +32,7 @@ extern "C" {
 #include "BLE_PnPLike.h"
 #include "BLE_MachineLearningCore.h"
 #include "BLE_HighSpeedDataLog.h"
+#include "services/syserror.h"
 
 /* necessary for using floor on BLE_Manager.h */
 #include <math.h>
@@ -48,7 +49,11 @@ extern "C" {
 #define BLE_MANAGER_USED_PLATFORM   BOARD_ID
 
 /* Firmware Package Name */
-#define BLE_FW_PACKAGENAME          "HSD2v11"
+#define BLE_FW_PACKAGENAME          "HSD2v12"
+
+/* Max Stream ID dedicated to custom data, utility stream (like advertise option byte) could be added after this */
+#define MAX_CUSTOM_DATA_STREAM_ID          (SM_MAX_SENSORS)
+
 
 
 /* Exported Variables ------------------------------------------------------- */
@@ -59,7 +64,10 @@ extern volatile uint32_t NeedToClearSecureDB;
 /* Exported functions ------------------------------------------------------- */
 extern void BLE_InitCustomService(void);
 extern void BLE_SetCustomAdvertiseData(uint8_t *manuf_data);
-extern void BluetoothInit(void);
+extern void BLE_BluetoothInit(void);
+extern uint8_t BLE_GetFWID(void);
+
+
 /* Exported macro ------------------------------------------------------------*/
 
 #ifdef __cplusplus

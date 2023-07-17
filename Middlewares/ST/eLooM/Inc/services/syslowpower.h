@@ -31,8 +31,6 @@
 extern "C" {
 #endif
 
-#include "services/systypes.h"
-#include "services/syserror.h"
 #include "events/sysevent.h"
 
 
@@ -57,7 +55,7 @@ extern "C" {
 /**
  * Check if the current code is inside an ISR or not.
  */
-#define SYS_IS_CALLED_FROM_ISR() (((SCB->ICSR) & (SCB_ICSR_VECTACTIVE_Msk)) != 0 ? TRUE : FALSE)
+#define SYS_IS_CALLED_FROM_ISR() (((SCB->ICSR) & (SCB_ICSR_VECTACTIVE_Msk)) != 0U ? TRUE : FALSE)
 
 #ifndef SysPostEvent
 #define SysPostPowerModeEvent SysPostEvent

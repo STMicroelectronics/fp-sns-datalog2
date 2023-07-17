@@ -113,4 +113,4 @@ sys_error_code_t PCDDrvSetExtDCD(PCDDriver_t *_this, DeviceControlDriver_t fun);
 }
 #endif
 
-#endif /* HSDCORE_INC_DRIVERS_PCDDRIVER_H_ */
+#endif /* PCDDRIVER_H_ */

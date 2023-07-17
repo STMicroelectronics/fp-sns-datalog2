@@ -18,8 +18,6 @@
 
 #include "ADPU2.h"
 #include "ADPU2_vtbl.h"
-#include "services/sysmem.h"
-#include "services/syscs.h"
 #include "services/SysTimestamp.h"
 #include <string.h>
 
@@ -426,6 +424,8 @@ sys_error_code_t ADPU2_vtblOnNewDataReady(IEventListener *_this, const DataEvent
         if (p_aso_item->build_strategy != E_IDB_SKIP_DATA)
         {
           /* unable to build the IN data.*/
+          SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("DPU: error: unable to build IN data: data lost.\r\n"));
+
           sys_error_handler();
         }
         else
@@ -894,6 +894,8 @@ static sys_error_code_t ADPU2_OnNewInputDataFromDPU(ADPU2_t *_this,  DataEvent_t
         if (p_src_dpu->next_dpu.build_strategy != E_IDB_SKIP_DATA)
         {
           /* unable to build the IN data.*/
+          SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("DPU: error: unable to build IN data: data lost.\r\n"));
+
           sys_error_handler();
         }
         else

@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Fft_DpuPnPL_vtbl.h
+  * @file    Fft_Dpu_PnPL_vtbl.h
   * @author  SRA
   * @brief   Fft_Dpu PnPL Component Manager
   ******************************************************************************
@@ -14,6 +14,17 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   *
+  ******************************************************************************
+  */
+
+/**
+  ******************************************************************************
+  * This file has been auto generated from the following DTDL Component:
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_ultrasoundFft:algorithms:fft_dpu;3
+  *
+  * Created by: DTDL2PnPL_cGen version 1.1.0
+  *
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 

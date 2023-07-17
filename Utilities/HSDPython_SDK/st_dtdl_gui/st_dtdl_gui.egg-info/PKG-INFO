@@ -1,10 +1,10 @@
 Metadata-Version: 2.1
 Name: st-dtdl-gui
-Version: 1.1.0
+Version: 1.2.0
 Summary: STMicroelectronics Graphical Widgets from DTDL collection python package
 Home-page: 
 Author: SRA-ASP
-Author-email: 
+Author-email: matteo.ronchi@st.com
 License: BSD 3-clause
 Classifier: License :: BSD License (BSD-3-Clause)
 Classifier: Operating System :: Microsoft :: Windows
@@ -14,6 +14,7 @@ Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
 Classifier: Topic :: Software Development :: Embedded Systems
 Description-Content-Type: text\markdown
 License-File: LICENSE.md

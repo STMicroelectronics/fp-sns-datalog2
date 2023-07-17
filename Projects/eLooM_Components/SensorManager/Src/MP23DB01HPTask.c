@@ -117,6 +117,13 @@ struct _MP23DB01HPTask
     */
   int16_t p_sensor_data_buff[((MAX_DMIC_SAMPLING_FREQUENCY / 1000) * 2)];
 
+#if (HSD_USE_DUMMY_DATA == 1)
+  /**
+    * Buffer to store dummy data buffer
+    */
+  int16_t p_dummy_data_buff[((MAX_DMIC_SAMPLING_FREQUENCY / 1000))];
+#endif
+
   /*
    * Calibration values, used for adjusting audio gain
    */
@@ -348,6 +355,8 @@ AManagedTaskEx *MP23DB01HPTaskAlloc(const void *p_mx_mdf_cfg)
   sTaskObj.sensor_if.vptr = &sTheClass.sensor_if_vtbl;
   sTaskObj.sensor_descriptor = &sTheClass.class_descriptor;
 
+  strcpy(sTaskObj.sensor_status.Name, sTheClass.class_descriptor.Name);
+
   return (AManagedTaskEx *) &sTaskObj;
 }
 
@@ -395,9 +404,9 @@ sys_error_code_t MP23DB01HPTask_vtblHardwareInit(AManagedTask *_this, void *pPar
 }
 
 sys_error_code_t MP23DB01HPTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName,
-                                                VOID **pvStackStart,
-                                                ULONG *pStackDepth, UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart,
-                                                ULONG *pParams)
+                                                 VOID **pvStackStart,
+                                                 ULONG *pStackDepth, UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart,
+                                                 ULONG *pParams)
 {
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -467,7 +476,7 @@ sys_error_code_t MP23DB01HPTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
 }
 
 sys_error_code_t MP23DB01HPTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPowerMode ActivePowerMode,
-                                                    const EPowerMode NewPowerMode)
+                                                     const EPowerMode NewPowerMode)
 {
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -584,7 +593,7 @@ sys_error_code_t MP23DB01HPTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPow
 }
 
 sys_error_code_t MP23DB01HPTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPowerMode ActivePowerMode,
-                                                    const EPowerMode NewPowerMode)
+                                                     const EPowerMode NewPowerMode)
 {
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -734,7 +743,7 @@ sys_error_code_t MP23DB01HPTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t f
   assert_param(_this != NULL);
   /* Does not support this virtual function.*/
   SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
-  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("MP23DB01HP: warning - SetFifoWM() not supported.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("MP23DB01HP: warning - SetFifoWM() not supported.\r\n"));
   return SYS_INVALID_FUNC_CALL_ERROR_CODE;
 }
 
@@ -920,13 +929,10 @@ static sys_error_code_t MP23DB01HPTaskExecuteStepDatalog(AManagedTask *_this)
       }
       case SM_MESSAGE_ID_DATA_READY:
       {
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("MP23DB01HP: new data.\r\n"));
+        SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("MP23DB01HP: new data.\r\n"));
 
         p_obj->half = report.sensorDataReadyMessage.half;
 
-#if (HSD_USE_DUMMY_DATA == 1)
-        MP23DB01HPTaskWriteDummyData(p_obj);
-#endif
         // notify the listeners...
         double timestamp = report.sensorDataReadyMessage.fTimestamp;
         double delta_timestamp = timestamp - p_obj->prev_timestamp;
@@ -936,14 +942,18 @@ static sys_error_code_t MP23DB01HPTaskExecuteStepDatalog(AManagedTask *_this)
         p_obj->sensor_status.MeasuredODR = (float)((p_obj->sensor_status.ODR / 1000.0f)) / (float)delta_timestamp;
         uint16_t samples = (uint16_t)(p_obj->sensor_status.ODR / 1000u);
 
+#if (HSD_USE_DUMMY_DATA == 1)
+        MP23DB01HPTaskWriteDummyData(p_obj);
+        EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
+#else
         EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[(p_obj->half - 1) * samples], E_EM_INT16, samples);
-
+#endif
         DataEvent_t evt;
 
         DataEventInit((IEvent *)&evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
         IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("MP23DB01HP: ts = %f\r\n", (float)timestamp));
+        SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("MP23DB01HP: ts = %f\r\n", (float)timestamp));
         break;
       }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -951,14 +961,14 @@ static sys_error_code_t MP23DB01HPTaskExecuteStepDatalog(AManagedTask *_this)
         switch (report.sensorMessage.nCmdID)
         {
           case SENSOR_CMD_ID_INIT:
-              res = MDFDrvSetDataBuffer((MDFDriver_t*) p_obj->p_driver, p_obj->p_sensor_data_buff, ((uint32_t)p_obj->sensor_status.ODR / 1000) * 2);
-              if(!SYS_IS_ERROR_CODE(res))
+            res = MDFDrvSetDataBuffer((MDFDriver_t *) p_obj->p_driver, p_obj->p_sensor_data_buff, ((uint32_t)p_obj->sensor_status.ODR / 1000) * 2);
+            if (!SYS_IS_ERROR_CODE(res))
+            {
+              if (p_obj->sensor_status.IsActive == true)
               {
-                if(p_obj->sensor_status.IsActive == true)
-                {
-                  res = IDrvStart(p_obj->p_driver);
-                }
+                res = IDrvStart(p_obj->p_driver);
               }
+            }
             break;
           case SENSOR_CMD_ID_SET_ODR:
             res = MP23DB01HPTaskSensorSetODR(p_obj, report);
@@ -1055,10 +1065,11 @@ static inline sys_error_code_t MP23DB01HPTaskPostReportToBack(MP23DB01HPTask *_t
 static void MP23DB01HPTaskWriteDummyData(MP23DB01HPTask *_this)
 {
   assert_param(_this);
-  int16_t *p16 = &_this->p_sensor_data_buff[(_this->half - 1) * (((uint32_t)_this->sensor_status.ODR / 1000))];
+  int16_t *p16 = _this->p_dummy_data_buff;
   uint16_t idx = 0;
+  uint16_t samples = ((uint32_t)_this->sensor_status.ODR / 1000);
 
-  for (idx = 0; idx < (((uint32_t)_this->sensor_status.ODR / 1000)); idx++)
+  for (idx = 0; idx < samples; idx++)
   {
     *p16++ = dummyDataCounter++;
   }

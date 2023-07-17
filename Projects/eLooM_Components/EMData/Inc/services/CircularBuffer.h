@@ -30,9 +30,7 @@ extern "C" {
 #endif
 
 
-#include "services/systp.h"
-#include "services/sysmem.h"
-#include "services/syscs.h"
+#include "services/eloom_sysbase.h"
 
 
 #ifndef SYS_NO_ERROR_CODE
@@ -57,6 +55,76 @@ typedef struct _CircularBuffer CircularBuffer;
  */
 typedef struct _CBItem CBItem;
 
+/**
+* Specifies the status of a ::CBItem. An item can be:
+* - FREE: an item is free if it is not allocated and it cannot be used by the application.
+* - NEW: an item is new if it allocated and can be used by the application to produce its content.
+* - READY: an item is ready if the application has produced its content and it can be consumed.
+*/
+typedef struct _CBItemStatus
+{
+  /**
+  * Status bit.
+  */
+  uint8_t status :2;
+
+  /**
+  * reserved. Must be set to zero.
+  */
+  uint8_t reserved :6;
+} CBItemStatus;
+
+/**
+* ::CBItem internal state.
+*/
+struct _CBItem
+{
+  /**
+  * Specifies the user defined data managed by the circular buffer.
+  */
+  void *p_data;
+
+  /**
+  * Specifies a status flag added to each item. It is used to manage the item.
+  */
+  CBItemStatus status;
+};
+
+/**
+* ::CircularBuffer internal state.
+*/
+struct _CircularBuffer
+{
+  /**
+  * Specifies the index of the circular buffer tail.
+  */
+  uint16_t tail_idx;
+
+  /**
+  * Specifies the index of the circular buffer head.
+  */
+  uint16_t head_idx;
+
+  /**
+  * Specifies the maximum number of items that is possible to store in the buffer.
+  */
+  uint16_t item_count;
+
+  /**
+  * reserved
+  */
+  uint8_t padding[2];
+
+  /**
+  * Specifies the item size.
+  */
+  uint32_t item_size;
+
+  /**
+  * Specified the buffer of items managed as a circular buffer.
+  */
+  CBItem *p_items;
+};
 
 // Public API declaration
 // **********************
@@ -86,7 +154,7 @@ void CB_Free(CircularBuffer *_this);
  * @param item_size [IN] specifies the size in byte of an item.
  * @return SYS_NO_ERROR_CODE
  */
-uint16_t CB_Init(CircularBuffer *_this, void *p_items_buffer, uint16_t item_size);
+uint16_t CB_Init(CircularBuffer *_this, void *p_items_buffer, uint32_t item_size);
 
 /**
  * Check if the circular buffer is empty.
@@ -123,7 +191,7 @@ uint32_t CB_GetItemsCount(CircularBuffer *_this);
  * @param _this [IN] specifies a pointer to a ::CircularBuffer object.
  * @return the size of the items.
  */
-uint16_t CB_GetItemSize(CircularBuffer *_this);
+uint32_t CB_GetItemSize(CircularBuffer *_this);
 
 /**
  * Get a free item from the head of the buffer. A free item can be used by the caller to produce its content.

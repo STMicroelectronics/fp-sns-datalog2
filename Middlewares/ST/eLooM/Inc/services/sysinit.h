@@ -30,13 +30,13 @@
 #ifndef SYSINIT_H_
 #define SYSINIT_H_
 
-#include "ApplicationContext.h"
-#include "IApplicationErrorDelegate.h"
-#include "IApplicationErrorDelegateVtbl.h"
-#include "IAppPowerModeHelper.h"
-#include "IAppPowerModeHelper_vtbl.h"
-#include "IBoot.h"
-#include "IBootVtbl.h"
+#include "services/ApplicationContext.h"
+#include "services/IApplicationErrorDelegate.h"
+#include "services/IApplicationErrorDelegateVtbl.h"
+#include "services/IAppPowerModeHelper.h"
+#include "services/IAppPowerModeHelper_vtbl.h"
+#include "services/IBoot.h"
+#include "services/IBootVtbl.h"
 
 #ifdef __cplusplus
  extern "C" {

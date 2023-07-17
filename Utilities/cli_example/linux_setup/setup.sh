@@ -3,7 +3,8 @@
 # NOTE: unplug the board before running the script
 echo "NOTE: unplug the board before running the script"
 
-sudo cp ../lib/libhs_datalog/linux/libhs_datalog_v2.so /usr/lib
+sudo cp ./st_hsdatalog/HSD_link/communication/libhs_datalog/linux/libhs_datalog_v1.so /usr/lib
+sudo cp ./st_hsdatalog/HSD_link/communication/libhs_datalog/linux/libhs_datalog_v2.so /usr/lib
 
 sudo cp 30-hsdatalog.rules /etc/udev/rules.d
 

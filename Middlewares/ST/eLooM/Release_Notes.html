@@ -5,51 +5,35 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>Release Notes for eLooM_threadx</title>
-  <style>
-    code{white-space: pre-wrap;}
-    span.smallcaps{font-variant: small-caps;}
-    div.columns{display: flex; gap: min(4vw, 1.5em);}
-    div.column{flex: auto; overflow-x: auto;}
-    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-    ul.task-list{list-style: none;}
-    ul.task-list li input[type="checkbox"] {
-      width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
-      vertical-align: middle;
-    }
-    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
   </style>
   <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
-  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
 </head>
 <body>
 <div class="row">
 <div class="col-sm-12 col-lg-4">
 <center>
-<h1 id="release-notes-for-eloom_threadx">Release Notes for
-<mark>eLooM_threadx</mark></h1>
+<h1 id="release-notes-for-eloom_threadx">Release Notes for <mark>eLooM_threadx</mark></h1>
 <p>Copyright © 2023 STMicroelectronics<br />
 </p>
-<a href="https://www.st.com" class="logo"><img
-src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
 </center>
 <h1 id="purpose">Purpose</h1>
 <center>
-<span class="logo"><img src="_htmresc/eLooM_logo.png"
-alt="eLooM logo" /></span>
+<span class="logo"><img src="_htmresc/eLooM_logo.png" alt="eLooM logo" /></span>
 </center>
-<p><strong>eLooM</strong> is an <strong>e</strong>mbedded
-<strong>L</strong>ight <strong>o</strong>bject <strong>o</strong>riented
-fra<strong>M</strong>ework for STM32 application. This version has been
-developed based on <strong>threadx</strong>. It is:</p>
+<p><strong>eLooM</strong> is an <strong>e</strong>mbedded <strong>L</strong>ight <strong>o</strong>bject <strong>o</strong>riented fra<strong>M</strong>ework for STM32 application. This version has been developed based on <strong>threadx</strong>. It is:</p>
 <ul>
-<li>a well structured design pattern to model low power embedded
-application.</li>
-<li>a framework providing the infrastructure to build your embedded
-applications.</li>
+<li>a well structured design pattern to model low power embedded application.</li>
+<li>a framework providing the infrastructure to build your embedded applications.</li>
 <li>a way to make firmware modular and easy to reuse.</li>
 </ul>
 <p>The framework provides the following features:</p>
@@ -62,45 +46,57 @@ applications.</li>
 <li>Debug log</li>
 </ul>
 </div>
-<section id="update-history" class="col-sm-12 col-lg-8">
-<h1>Update History</h1>
+<div class="col-sm-12 col-lg-8">
+<h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" checked aria-hidden="true">
-<label for="collapse-section1" aria-hidden="true">v3.2.0 /
-15-Feb-23</label>
+<input type="checkbox" id="collapse-section3" checked aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">v3.3.0 / 7-Jul-23</label>
+<div>
 <h2 id="main-changes">Main Changes</h2>
-<h3 id="new-api">New API</h3>
+<h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
 <ul>
-<li>Added new <code>API SysGetAPIVersion()</code> to get the version of
-the framework. It is also available through the macro
-<code>ELOOM_API_VERSION</code></li>
-<li>Changed the name of the API function <code>SysPowerConfig()</code>
-to <code>SystemPower_Config()</code> to align with CubeMX.</li>
+<li><strong>Drop-in compatible replacement for eLooM v3.2.0</strong></li>
+<li>Initial support for STM32H7</li>
+<li>New class in Service Layer: <strong>MTMap_t</strong> (Managed Task Map) to support multi instance objects that use STM32 HAL API</li>
+<li>New class in LL API: <strong>HWDriverMap_t</strong> to support multi instance driver objects that use STM32 HAL API</li>
+<li>Review of the system base services (critical section and dynamic memory management)
+<ul>
+<li><strong>eloom_sysbase.h</strong> hsa been introduced as umbrella header to simplify the include graph</li>
+</ul></li>
+<li>Improved code documentation</li>
 </ul>
 </div>
+</div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" checked aria-hidden="true">
-<label for="collapse-section1" aria-hidden="true">v3.1.0 /
-2-Dec-22</label>
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true">v3.2.0 / 15-Feb-23</label>
+<div>
 <h2 id="main-changes-1">Main Changes</h2>
+<h3 id="new-api">New API</h3>
+<ul>
+<li>Added new <code>API SysGetAPIVersion()</code> to get the version of the framework. It is also available through the macro <code>ELOOM_API_VERSION</code></li>
+<li>Changed the name of the API function <code>SysPowerConfig()</code> to <code>SystemPower_Config()</code> to align with CubeMX.</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">v3.1.0 / 2-Dec-22</label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
 <h3 id="first-official-release">First official release</h3>
 <ul>
 <li>Aligned threadx and FreeRTOS versions</li>
-<li>Removed SourceObservable events, substituted by events available in
-EMData component</li>
+<li>Removed SourceObservable events, substituted by events available in EMData component</li>
 <li>Added SysTimestamp service and related drivers</li>
 <li>Implemented sysmem service to allow use the preferred allocator</li>
 <li>Code cleaning and typo fixed</li>
 </ul>
 </div>
-</section>
+</div>
+</div>
 </div>
 <footer class="sticky">
 <div class="columns">
 <div class="column" style="width:95%;">
-<p>For complete documentation on <strong>STM32</strong> microcontrollers
-please visit: <a
-href="https://www.st.com/en/microcontrollers-microprocessors.html">www.st.com</a></p>
+<p>For complete documentation on <strong>STM32</strong> microcontrollers please visit: <a href="https://www.st.com/en/microcontrollers-microprocessors.html">www.st.com</a></p>
 </div><div class="column" style="width:5%;">
 <p><abbr title="Based on template cx566953 version 2.0">Info</abbr></p>
 </div>

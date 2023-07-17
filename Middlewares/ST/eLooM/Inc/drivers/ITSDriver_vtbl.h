@@ -29,7 +29,7 @@
 extern "C" {
 #endif
 
-#include "IDriver_vtbl.h"
+#include "drivers/IDriver_vtbl.h"
 
 /**
  * Create  type name for _ITSDriver_vtbl.

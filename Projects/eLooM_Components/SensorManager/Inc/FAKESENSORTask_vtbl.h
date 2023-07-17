@@ -28,18 +28,18 @@ extern "C" {
 /* AManagedTask virtual functions */
 sys_error_code_t FAKESENSORTask_vtblHardwareInit(AManagedTask *_this, void *pParams); ///< @sa AMTHardwareInit
 sys_error_code_t FAKESENSORTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pvTaskCode, CHAR **pcName,
-                                                VOID **pvStackStart, ULONG *pnStackSize, UINT *pnPriority, UINT *pnPreemptThreshold, ULONG *pnTimeSlice,
-                                                ULONG *pnAutoStart, ULONG *pnParams); ///< @sa AMTOnCreateTask
+                                                 VOID **pvStackStart, ULONG *pnStackSize, UINT *pnPriority, UINT *pnPreemptThreshold, ULONG *pnTimeSlice,
+                                                 ULONG *pnAutoStart, ULONG *pnParams); ///< @sa AMTOnCreateTask
 sys_error_code_t FAKESENSORTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPowerMode ActivePowerMode,
-                                                    const EPowerMode NewPowerMode); ///< @sa AMTDoEnterPowerMode
+                                                     const EPowerMode NewPowerMode); ///< @sa AMTDoEnterPowerMode
 sys_error_code_t FAKESENSORTask_vtblHandleError(AManagedTask *_this, SysEvent Error); ///< @sa AMTHandleError
 sys_error_code_t FAKESENSORTask_vtblOnEnterTaskControlLoop(AManagedTask *this); ///< @sa AMTOnEnterTaskControlLoop
 
 /* AManagedTaskEx virtual functions */
 sys_error_code_t FAKESENSORTask_vtblForceExecuteStep(AManagedTaskEx *_this,
-                                                    EPowerMode ActivePowerMode); ///< @sa AMTExForceExecuteStep
+                                                     EPowerMode ActivePowerMode); ///< @sa AMTExForceExecuteStep
 sys_error_code_t FAKESENSORTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPowerMode ActivePowerMode,
-                                                    const EPowerMode NewPowerMode); ///< @sa AMTExOnEnterPowerMode
+                                                     const EPowerMode NewPowerMode); ///< @sa AMTExOnEnterPowerMode
 
 uint8_t FAKESENSORTask_vtblMicGetId(ISourceObservable *_this);
 IEventSrc *FAKESENSORTask_vtblGetEventSourceIF(ISourceObservable *_this);

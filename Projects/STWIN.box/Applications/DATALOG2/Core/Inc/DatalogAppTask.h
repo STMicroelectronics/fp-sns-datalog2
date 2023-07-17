@@ -83,6 +83,8 @@ IIsm330is_Ispu_t *DatalogAppTask_GetIIspuControllerIF(DatalogAppTask *_this, AMa
 
 sys_error_code_t DatalogAppTask_msg(ULONG msg);
 
+uint8_t DatalogAppTask_load_ucf(const char *ucf_data, uint32_t ucf_size, const char *output_data, int32_t output_size);
+
 // Inline functions definition
 // ***************************
 

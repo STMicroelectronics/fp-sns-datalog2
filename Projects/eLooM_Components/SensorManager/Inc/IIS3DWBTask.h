@@ -31,6 +31,7 @@ extern "C" {
 #include "events/DataEventSrc_vtbl.h"
 #include "ISensor.h"
 #include "ISensor_vtbl.h"
+#include "mx.h"
 
 //TODO: STF.Begin - where should these be defined ?
 #define IIS3DWB_MAX_DRDY_PERIOD           (1.0)
@@ -48,6 +49,89 @@ extern "C" {
   */
 typedef struct _IIS3DWBTask IIS3DWBTask;
 
+/**
+  *  IIS3DWBTask internal structure.
+  */
+struct _IIS3DWBTask
+{
+  /**
+    * Base class object.
+    */
+  AManagedTaskEx super;
+
+  // Task variables should be added here.
+
+  /**
+    * IRQ GPIO configuration parameters.
+    */
+  const MX_GPIOParams_t *pIRQConfig;
+
+  /**
+    * SPI CS GPIO configuration parameters.
+    */
+  const MX_GPIOParams_t *pCSConfig;
+
+  /**
+    * Bus IF object used to connect the sensor task to the specific bus.
+    */
+  ABusIF *p_sensor_bus_if;
+
+  /**
+    * Implements the accelerometer ISensor interface.
+    */
+  ISensor_t sensor_if;
+
+  /**
+    * Specifies accelerometer sensor capabilities.
+    */
+  const SensorDescriptor_t *sensor_descriptor;
+
+  /**
+    * Specifies accelerometer sensor configuration.
+    */
+  SensorStatus_t sensor_status;
+
+  /**
+    * Data
+    */
+  EMData_t data;
+
+  /**
+    * Specifies the sensor ID for the accelerometer subsensor.
+    */
+  uint8_t acc_id;
+
+  /**
+    * Synchronization object used to send command to the task.
+    */
+  TX_QUEUE in_queue;
+
+  /**
+    * Buffer to store the data read from the sensor
+    */
+  uint8_t p_sensor_data_buff[IIS3DWB_MAX_SAMPLES_PER_IT * 7];
+
+  /**
+    * Specifies the FIFO watermark level (it depends from ODR)
+    */
+  uint16_t samples_per_it;
+
+  /**
+    * ::IEventSrc interface implementation for this class.
+    */
+  IEventSrc *p_event_src;
+
+  /**
+    * Software timer used to generate the read command
+    */
+  TX_TIMER read_timer;
+
+  /**
+    * Used to update the instantaneous ODR.
+    */
+  double prev_timestamp;
+};
+
 
 // Public API declaration
 //***********************
@@ -61,7 +145,7 @@ typedef struct _IIS3DWBTask IIS3DWBTask;
 ISourceObservable *IIS3DWBTaskGetAccSensorIF(IIS3DWBTask *_this);
 
 /**
-  * Allocate an instance of IIS3DWBTask.
+  * Allocate an instance of IIS3DWBTask in the system heap.
   *
   * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO connected to the IIS3DWB sensor and configured in EXTI mode.
@@ -72,6 +156,62 @@ ISourceObservable *IIS3DWBTaskGetAccSensorIF(IIS3DWBTask *_this);
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *IIS3DWBTaskAlloc(const void *pIRQConfig, const void *pCSConfig);
+
+/**
+  * Call the default ::IIS3DWBTaskAlloc and then it overwrite sensor name
+  *
+  * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO connected to the IIS3DWB sensor and configured in EXTI mode.
+  *        If it is NULL then the sensor is configured in polling mode.
+  * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the SPI CS Pin.
+  * @return a pointer to the generic object ::AManagedTaskEx if success,
+  * or NULL if out of memory error occurs.
+  */
+AManagedTaskEx *IIS3DWBTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *Name);
+
+/**
+  * Allocate an instance of ::IIS3DWBTask in a memory block specified by the application.
+  * The size of the memory block must be greater or equal to `sizeof(IIS3DWBTask)`.
+  * This allocator allows the application to avoid the dynamic allocation.
+  *
+  * \code
+  * IIS3DWBTask sensor_task;
+  * IIS3DWBTaskStaticAlloc(&sensor_task);
+  * \endcode
+  *
+  * @param p_mem_block [IN] specify a memory block allocated by the application.
+  *        The size of the memory block must be greater or equal to `sizeof(IIS3DWBTask)`.
+  * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO connected to the IIS3DWB sensor and configured in EXTI mode.
+  *        If it is NULL then the sensor is configured in polling mode.
+  * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the SPI CS Pin.
+  * @return a pointer to the generic object ::AManagedTaskEx_t if success,
+  * or NULL if out of memory error occurs.
+  */
+AManagedTaskEx *IIS3DWBTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig);
+
+/**
+  * Call the default ::IIS3DWBTaskAlloc and then it overwrite sensor name
+  *
+  * \code
+  * IIS3DWBTask sensor_task;
+  * IIS3DWBTaskStaticAlloc(&sensor_task);
+  * \endcode
+  *
+  * @param p_mem_block [IN] specify a memory block allocated by the application.
+  *        The size of the memory block must be greater or equal to `sizeof(IIS3DWBTask)`.
+  * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO connected to the IIS3DWB sensor and configured in EXTI mode.
+  *        If it is NULL then the sensor is configured in polling mode.
+  * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the SPI CS Pin.
+  * @return a pointer to the generic object ::AManagedTaskEx_t if success,
+  * or NULL if out of memory error occurs.
+  */
+AManagedTaskEx *IIS3DWBTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                              const char *Name);
 
 /**
   * Get the SPI interface for the sensor task.
@@ -88,6 +228,10 @@ ABusIF *IIS3DWBTaskGetSensorIF(IIS3DWBTask *_this);
   */
 IEventSrc *IIS3DWBTaskGetEventSrcIF(IIS3DWBTask *_this);
 
+/**
+  * IRQ callback
+  */
+void IIS3DWBTask_EXTI_Callback(uint16_t nPin);
 
 // Inline functions definition
 // ***************************

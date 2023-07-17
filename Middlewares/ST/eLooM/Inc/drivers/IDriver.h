@@ -29,6 +29,7 @@
 extern "C" {
 #endif
 
+#include "services/eloom_sysbase.h"
 #include "services/syslowpower.h"
 #include <stddef.h>
 

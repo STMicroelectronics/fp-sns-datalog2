@@ -41,6 +41,7 @@ st_hsdatalog/HSD_GUI/LICENSE.txt
 st_hsdatalog/HSD_GUI/__init__.py
 st_hsdatalog/HSD_GUI/UI/__init__.py
 st_hsdatalog/HSD_GUI/UI/app_classification_control.ui
+st_hsdatalog/HSD_GUI/UI/auto_mode_widget.ui
 st_hsdatalog/HSD_GUI/UI/hw_tag.ui
 st_hsdatalog/HSD_GUI/UI/log_control_widget.ui
 st_hsdatalog/HSD_GUI/UI/save_config_dialog.ui
@@ -49,8 +50,11 @@ st_hsdatalog/HSD_GUI/UI/tags_info_widget.ui
 st_hsdatalog/HSD_GUI/UI/images/__init__.py
 st_hsdatalog/HSD_GUI/Widgets/AppClassificationControlWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDAdvLogControlWidget.py
+st_hsdatalog/HSD_GUI/Widgets/HSDAutoModeWidget.py
+st_hsdatalog/HSD_GUI/Widgets/HSDComponentWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDLogControlWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDPlotLinesWidget.py
+st_hsdatalog/HSD_GUI/Widgets/TagToggleButton.py
 st_hsdatalog/HSD_GUI/Widgets/TagsInfoWidget.py
 st_hsdatalog/HSD_GUI/Widgets/__init__.py
 st_hsdatalog/HSD_link/HSDLink.py

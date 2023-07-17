@@ -1,3 +1,18 @@
+
+# ******************************************************************************
+# * @attention
+# *
+# * Copyright (c) 2022 STMicroelectronics.
+# * All rights reserved.
+# *
+# * This software is licensed under terms that can be found in the LICENSE file
+# * in the root directory of this software component.
+# * If no LICENSE file comes with this software, it is provided AS-IS.
+# *
+# *
+# ******************************************************************************
+#
+
 # To use this code, make sure you
 #
 #     import json
@@ -38,6 +53,9 @@ def from_int(x: Any) -> int:
     assert isinstance(x, int) and not isinstance(x, bool)
     return x
 
+def from_float(x: Any) -> float:
+    assert isinstance(x, (float, int)) and not isinstance(x, bool)
+    return float(x)
 
 def to_class(c: Type[T], x: Any) -> dict:
     assert isinstance(x, c)
@@ -48,6 +66,9 @@ def to_enum(c: Type[EnumT], x: Any) -> EnumT:
     assert isinstance(x, c)
     return x.value
 
+def to_float(x: Any) -> float:
+    assert isinstance(x, float)
+    return x
 
 def from_list(f: Callable[[Any], T], x: Any) -> List[T]:
     assert isinstance(x, list)
@@ -261,10 +282,11 @@ class ContentType(Enum):
 
 @dataclass
 class Content:
+
     type: Union[List[TypeElement], ContentType, None]
     schema: Union[ContentSchema, None, str]
+    initial_value: Optional[Union[float, bool, str]] = None
     id: Optional[str] = None
-    # type: Optional[ContentType] = None
     display_name: Optional[DisplayName] = None
     name: Optional[str] = None
     unit: Optional[str] = None
@@ -273,16 +295,24 @@ class Content:
     command_type: Optional[str] = None
     request: Optional[Request] = None
     response: Optional[Response] = None
-    description: Optional[DisplayName] = None
     comment: Optional[str] = None
+    description: Optional[DisplayName] = None
+    max_value: Optional[int] = None
+    min_value: Optional[int] = None
+    decimal_places: Optional[int] = None
+    false_name: Optional[DisplayName] = None
+    true_name: Optional[DisplayName] = None
+    max_length: Optional[int] = None
+    min_length: Optional[int] = None
+    trim_whitespace: Optional[bool] = None
 
     @staticmethod
     def from_dict(obj: Any) -> 'Content':
         assert isinstance(obj, dict)
         type = from_union([lambda x: from_list(TypeElement, x), ContentType, from_none], obj.get("@type"))
         schema = from_union([ContentSchema.from_dict, from_str, from_none], obj.get("schema"))
+        initial_value = from_union([from_float, from_bool, from_str, from_none], obj.get("initialValue"))
         id = from_union([from_str, from_none], obj.get("@id"))
-        # type = from_union([ContentType, from_none], obj.get("@type"))
         display_name = from_union([DisplayName.from_dict, from_none], obj.get("displayName"))
         name = from_union([from_str, from_none], obj.get("name"))
         unit = from_union([from_str, from_none], obj.get("unit"))
@@ -291,26 +321,64 @@ class Content:
         command_type = from_union([from_str, from_none], obj.get("commandType"))
         request = from_union([Request.from_dict, from_none], obj.get("request"))
         response = from_union([Response.from_dict, from_none], obj.get("response"))
-        description = from_union([DisplayName.from_dict, from_none], obj.get("description"))
         comment = from_union([from_str, from_none], obj.get("comment"))
-        return Content(type, schema, id, display_name, name, unit, writable, display_unit, command_type, request, response, description, comment)
+        description = from_union([DisplayName.from_dict, from_none], obj.get("description"))
+        max_value = from_union([from_int, from_none], obj.get("maxValue")) # Only 4 schema = Integer and Double
+        min_value = from_union([from_int, from_none], obj.get("minValue")) # Only 4 schema = Integer and Double
+        decimal_places = from_union([from_int, from_none], obj.get("decimalPlaces")) # Only 4 schema = Double
+        false_name = from_union([DisplayName.from_dict, from_none], obj.get("falseName")) # Only 4 schema = Boolean
+        true_name = from_union([DisplayName.from_dict, from_none], obj.get("trueName")) # Only 4 schema = Boolean
+        max_length = from_union([from_int, from_none], obj.get("maxLength")) # Only 4 schema = String
+        min_length = from_union([from_int, from_none], obj.get("minLength")) # Only 4 schema = String
+        trim_whitespace = from_union([from_bool, from_none], obj.get("trimWhitespace"))  # Only 4 schema = String
+        return Content(type, schema, initial_value, id, display_name, name, unit, writable, display_unit, command_type, request, response, comment, description, max_value, min_value, decimal_places, false_name, true_name, max_length, min_length, trim_whitespace)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["@type"] = from_union([lambda x: from_list(lambda x: to_enum(TypeElement, x), x), lambda x: to_enum(ContentType, x), from_none], self.type)
-        result["schema"] = from_union([lambda x: to_class(ContentSchema, x), from_str, from_none], self.schema)
-        result["@id"] = from_union([from_str, from_none], self.id)
-        # result["@type"] = from_union([lambda x: to_enum(ContentType, x), from_none], self.type)
-        result["displayName"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.display_name)
-        result["name"] = from_union([from_str, from_none], self.name)
-        result["unit"] = from_union([from_str, from_none], self.unit)
-        result["writable"] = from_union([from_bool, from_none], self.writable)
-        result["displayUnit"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.display_unit)
-        result["commandType"] = from_union([from_str, from_none], self.command_type)
-        result["request"] = from_union([lambda x: to_class(Request, x), from_none], self.request)
-        result["response"] = from_union([lambda x: to_class(Response, x), from_none], self.response)
-        result["description"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.description)
-        result["comment"] = from_union([from_str, from_none], self.comment)
+        if self.type is not None:
+            result["@type"] = from_union([lambda x: from_list(lambda x: to_enum(TypeElement, x), x), lambda x: to_enum(ContentType, x), from_none], self.type)
+        if self.schema is not None:
+            result["schema"] = from_union([lambda x: to_class(ContentSchema, x), from_str, from_none], self.schema)
+        if self.initial_value is not None:
+            result["initialValue"] = from_union([to_float, from_bool, from_str, from_none], self.initial_value)
+        if self.id is not None:
+            result["@id"] = from_union([from_str, from_none], self.id)
+        if self.display_name is not None:
+            result["displayName"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.display_name)
+        if self.name is not None:
+            result["name"] = from_union([from_str, from_none], self.name)
+        if self.unit is not None:
+            result["unit"] = from_union([from_str, from_none], self.unit)
+        if self.writable is not None:
+            result["writable"] = from_union([from_bool, from_none], self.writable)
+        if self.display_unit is not None:
+            result["displayUnit"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.display_unit)
+        if self.command_type is not None:
+            result["commandType"] = from_union([from_str, from_none], self.command_type)
+        if self.request is not None:
+            result["request"] = from_union([lambda x: to_class(Request, x), from_none], self.request)
+        if self.response is not None:
+            result["response"] = from_union([lambda x: to_class(Response, x), from_none], self.response)
+        if self.comment is not None:
+            result["comment"] = from_union([from_str, from_none], self.comment)
+        if self.description is not None:
+            result["description"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.description)
+        if self.max_value is not None:
+            result["maxValue"] = from_union([from_int, from_none], self.max_value)
+        if self.min_value is not None:
+            result["minValue"] = from_union([from_int, from_none], self.min_value)
+        if self.decimal_places is not None:
+            result["decimalPlaces"] = from_union([from_int, from_none], self.decimal_places)
+        if self.false_name is not None:
+            result["falseName"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.false_name)
+        if self.true_name is not None:
+            result["trueName"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.true_name)
+        if self.max_length is not None:
+            result["maxLength"] = from_union([from_int, from_none], self.max_length)
+        if self.min_length is not None:
+            result["minLength"] = from_union([from_int, from_none], self.min_length)
+        if self.trim_whitespace is not None:
+            result["trimWhitespace"] = from_union([from_bool, from_none], self.trim_whitespace)
         return result
 
 

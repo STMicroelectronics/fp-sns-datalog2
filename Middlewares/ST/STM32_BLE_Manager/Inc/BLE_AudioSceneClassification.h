@@ -39,7 +39,14 @@ typedef enum
   BLE_ASC_UNDEFINED = 0xFF
 } BLE_ASC_output_t;
 
-typedef void (*CustomReadRequestAudioSceneClass_t)(BLE_ASC_output_t *ASC_Code);
+typedef enum
+{
+  BLE_ASC_ALG_SCENE_CLASS = 0x00,
+  BLE_ASC_ALG_BABY_CRYING = 0x01,
+  BLE_ASC_ALG_UNDEFINED = 0xFF
+} BLE_ASC_Algorithm_t;
+
+typedef void (*CustomReadRequestAudioSceneClass_t)(BLE_ASC_output_t *ASC_Code, BLE_ASC_Algorithm_t *ASC_AlgId);
 typedef void (*CustomNotifyEventAudioSceneClass_t)(BLE_NotifyEvent_t Event);
 
 /* Exported Variables ------------------------------------------------------- */
@@ -50,17 +57,18 @@ extern CustomNotifyEventAudioSceneClass_t CustomNotifyEventAudioSceneClass;
 
 /**
  * @brief  Init Audio Scene Classification info service
- * @param  None
+ * @param  uint8_t SendAlgorithmCode 0/1 -> Send also the Audio Scene Classificatio algorithm code
  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Activity Classification info service
  */
-extern BleCharTypeDef* BLE_InitAudioSceneClassService(void);
+extern BleCharTypeDef* BLE_InitAudioSceneClassService(uint8_t SendAlgorithmCode);
 
 /**
  * @brief  Update Audio Scene Classification characteristic
  * @param  BLE_ASC_output_t ASC_Code Audio Scene Classification Code
+ * @param BLE_ASC_Algorithm_t ASC_AlgId Algorithm Id
  * @retval tBleStatus   Status
  */
-extern tBleStatus BLE_AudioSceneClassUpdate(BLE_ASC_output_t ASC_Code);
+extern tBleStatus BLE_AudioSceneClassUpdate(BLE_ASC_output_t ASC_Code,BLE_ASC_Algorithm_t ASC_AlgId);
 
 #ifdef __cplusplus
 }

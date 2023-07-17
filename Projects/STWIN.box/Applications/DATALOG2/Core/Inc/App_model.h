@@ -20,10 +20,10 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2;1
-  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2;3
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2Ispu;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.0.0
+  * Created by: DTDL2PnPL_cGen version 1.1.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -84,7 +84,7 @@ extern "C" {
 #define LOG_CTRL_MODE_USB         0x01
 #define LOG_CTRL_MODE_BLE         0x02
 
-#define SENSOR_NUMBER             14 //TODO create a define SM_MAX_SENSORS = 11
+#define SENSOR_NUMBER             16 //TODO create a define SM_MAX_SENSORS = 11
 #define ALGORITHM_NUMBER	        0
 #define OTHER_COMP_NUMBER	        5
 
@@ -100,7 +100,7 @@ extern "C" {
 #define N_MAX_EP 5
 
 #define FW_VERSION_MAJOR  '1'
-#define FW_VERSION_MINOR  '1'
+#define FW_VERSION_MINOR  '2'
 #define FW_VERSION_PATCH  '0'
 
 typedef struct _StreamParams_t
@@ -133,9 +133,9 @@ typedef struct _AutomodeModel_t
   /* Automode Componnent Model USER code */
   bool enabled;
   int32_t nof_acquisitions;
-  int32_t start_delay_ms;
-  int32_t datalog_time_length;
-  int32_t idle_time_length;
+  int32_t start_delay_s;
+  int32_t logging_period_s;
+  int32_t idle_period_s;
 } AutomodeModel_t;
 
 typedef struct _LogControllerModel_t
@@ -196,9 +196,7 @@ char* ism330is_acc_get_key(void);
 uint8_t ism330is_acc_get_odr(float *value);
 uint8_t ism330is_acc_get_fs(float *value);
 uint8_t ism330is_acc_get_enable(bool *value);
-uint8_t ism330is_acc_get_samples_per_ts__val(int32_t *value);
-uint8_t ism330is_acc_get_samples_per_ts__min(int32_t *value);
-uint8_t ism330is_acc_get_samples_per_ts__max(int32_t *value);
+uint8_t ism330is_acc_get_samples_per_ts(int32_t *value);
 uint8_t ism330is_acc_get_dim(int32_t *value);
 uint8_t ism330is_acc_get_ioffset(float *value);
 uint8_t ism330is_acc_get_measodr(float *value);
@@ -207,12 +205,13 @@ uint8_t ism330is_acc_get_sd_dps(int32_t *value);
 uint8_t ism330is_acc_get_sensitivity(float *value);
 uint8_t ism330is_acc_get_data_type(char **value);
 uint8_t ism330is_acc_get_sensor_annotation(char **value);
+uint8_t ism330is_acc_get_sensor_category(int32_t *value);
 uint8_t ism330is_acc_get_stream_id(int8_t *value);
 uint8_t ism330is_acc_get_ep_id(int8_t *value);
 uint8_t ism330is_acc_set_odr(float value);
 uint8_t ism330is_acc_set_fs(float value);
 uint8_t ism330is_acc_set_enable(bool value);
-uint8_t ism330is_acc_set_samples_per_ts__val(int32_t value);
+uint8_t ism330is_acc_set_samples_per_ts(int32_t value);
 uint8_t ism330is_acc_set_sensor_annotation(const char *value);
 
 /* ISM330IS_GYRO PnPL Component ----------------------------------------------*/
@@ -221,9 +220,7 @@ char* ism330is_gyro_get_key(void);
 uint8_t ism330is_gyro_get_odr(float *value);
 uint8_t ism330is_gyro_get_fs(float *value);
 uint8_t ism330is_gyro_get_enable(bool *value);
-uint8_t ism330is_gyro_get_samples_per_ts__val(int32_t *value);
-uint8_t ism330is_gyro_get_samples_per_ts__min(int32_t *value);
-uint8_t ism330is_gyro_get_samples_per_ts__max(int32_t *value);
+uint8_t ism330is_gyro_get_samples_per_ts(int32_t *value);
 uint8_t ism330is_gyro_get_dim(int32_t *value);
 uint8_t ism330is_gyro_get_ioffset(float *value);
 uint8_t ism330is_gyro_get_measodr(float *value);
@@ -232,32 +229,31 @@ uint8_t ism330is_gyro_get_sd_dps(int32_t *value);
 uint8_t ism330is_gyro_get_sensitivity(float *value);
 uint8_t ism330is_gyro_get_data_type(char **value);
 uint8_t ism330is_gyro_get_sensor_annotation(char **value);
+uint8_t ism330is_gyro_get_sensor_category(int32_t *value);
 uint8_t ism330is_gyro_get_stream_id(int8_t *value);
 uint8_t ism330is_gyro_get_ep_id(int8_t *value);
 uint8_t ism330is_gyro_set_odr(float value);
 uint8_t ism330is_gyro_set_fs(float value);
 uint8_t ism330is_gyro_set_enable(bool value);
-uint8_t ism330is_gyro_set_samples_per_ts__val(int32_t value);
+uint8_t ism330is_gyro_set_samples_per_ts(int32_t value);
 uint8_t ism330is_gyro_set_sensor_annotation(const char *value);
 
 /* ISM330IS_ISPU PnPL Component ----------------------------------------------*/
 uint8_t ism330is_ispu_comp_init(void);
 char* ism330is_ispu_get_key(void);
 uint8_t ism330is_ispu_get_enable(bool *value);
-uint8_t ism330is_ispu_get_samples_per_ts__val(int32_t *value);
-uint8_t ism330is_ispu_get_samples_per_ts__min(int32_t *value);
-uint8_t ism330is_ispu_get_samples_per_ts__max(int32_t *value);
+uint8_t ism330is_ispu_get_samples_per_ts(int32_t *value);
 uint8_t ism330is_ispu_get_ucf_status(bool *value);
 uint8_t ism330is_ispu_get_usb_dps(float *value);
 uint8_t ism330is_ispu_get_sd_dps(float *value);
 uint8_t ism330is_ispu_get_data_type(char **value);
 uint8_t ism330is_ispu_get_dim(int32_t *value);
 uint8_t ism330is_ispu_get_ioffset(float *value);
+uint8_t ism330is_ispu_get_sensor_category(int32_t *value);
 uint8_t ism330is_ispu_get_sensor_annotation(char **value);
 uint8_t ism330is_ispu_get_stream_id(int8_t *value);
 uint8_t ism330is_ispu_get_ep_id(int8_t *value);
 uint8_t ism330is_ispu_set_enable(bool value);
-uint8_t ism330is_ispu_set_samples_per_ts__val(int32_t value);
 uint8_t ism330is_ispu_set_sensor_annotation(const char *value);
 uint8_t ism330is_ispu_load_file(IIsm330is_Ispu_t *ifn, const char *ucf_data, int32_t ucf_size, const char *output_data, int32_t output_size);
 
@@ -267,9 +263,7 @@ char* iis3dwb_acc_get_key(void);
 uint8_t iis3dwb_acc_get_odr(float *value);
 uint8_t iis3dwb_acc_get_fs(float *value);
 uint8_t iis3dwb_acc_get_enable(bool *value);
-uint8_t iis3dwb_acc_get_samples_per_ts__val(int32_t *value);
-uint8_t iis3dwb_acc_get_samples_per_ts__min(int32_t *value);
-uint8_t iis3dwb_acc_get_samples_per_ts__max(int32_t *value);
+uint8_t iis3dwb_acc_get_samples_per_ts(int32_t *value);
 uint8_t iis3dwb_acc_get_dim(int32_t *value);
 uint8_t iis3dwb_acc_get_ioffset(float *value);
 uint8_t iis3dwb_acc_get_measodr(float *value);
@@ -278,12 +272,36 @@ uint8_t iis3dwb_acc_get_sd_dps(int32_t *value);
 uint8_t iis3dwb_acc_get_sensitivity(float *value);
 uint8_t iis3dwb_acc_get_data_type(char **value);
 uint8_t iis3dwb_acc_get_sensor_annotation(char **value);
+uint8_t iis3dwb_acc_get_sensor_category(int32_t *value);
 uint8_t iis3dwb_acc_get_stream_id(int8_t *value);
 uint8_t iis3dwb_acc_get_ep_id(int8_t *value);
 uint8_t iis3dwb_acc_set_fs(float value);
 uint8_t iis3dwb_acc_set_enable(bool value);
-uint8_t iis3dwb_acc_set_samples_per_ts__val(int32_t value);
+uint8_t iis3dwb_acc_set_samples_per_ts(int32_t value);
 uint8_t iis3dwb_acc_set_sensor_annotation(const char *value);
+
+/* IIS3DWB_ACC_EXT PnPL Component --------------------------------------------*/
+uint8_t iis3dwb_ext_acc_comp_init(void);
+char* iis3dwb_ext_acc_get_key(void);
+uint8_t iis3dwb_ext_acc_get_odr(float *value);
+uint8_t iis3dwb_ext_acc_get_fs(float *value);
+uint8_t iis3dwb_ext_acc_get_enable(bool *value);
+uint8_t iis3dwb_ext_acc_get_samples_per_ts(int32_t *value);
+uint8_t iis3dwb_ext_acc_get_dim(int32_t *value);
+uint8_t iis3dwb_ext_acc_get_ioffset(float *value);
+uint8_t iis3dwb_ext_acc_get_measodr(float *value);
+uint8_t iis3dwb_ext_acc_get_usb_dps(int32_t *value);
+uint8_t iis3dwb_ext_acc_get_sd_dps(int32_t *value);
+uint8_t iis3dwb_ext_acc_get_sensitivity(float *value);
+uint8_t iis3dwb_ext_acc_get_data_type(char **value);
+uint8_t iis3dwb_ext_acc_get_sensor_annotation(char **value);
+uint8_t iis3dwb_ext_acc_get_sensor_category(int32_t *value);
+uint8_t iis3dwb_ext_acc_get_stream_id(int8_t *value);
+uint8_t iis3dwb_ext_acc_get_ep_id(int8_t *value);
+uint8_t iis3dwb_ext_acc_set_fs(float value);
+uint8_t iis3dwb_ext_acc_set_enable(bool value);
+uint8_t iis3dwb_ext_acc_set_samples_per_ts(int32_t value);
+uint8_t iis3dwb_ext_acc_set_sensor_annotation(const char *value);
 
 /* IIS2MDC_MAG PnPL Component ------------------------------------------------*/
 uint8_t iis2mdc_mag_comp_init(void);
@@ -291,9 +309,7 @@ char* iis2mdc_mag_get_key(void);
 uint8_t iis2mdc_mag_get_odr(float *value);
 uint8_t iis2mdc_mag_get_fs(float *value);
 uint8_t iis2mdc_mag_get_enable(bool *value);
-uint8_t iis2mdc_mag_get_samples_per_ts__val(int32_t *value);
-uint8_t iis2mdc_mag_get_samples_per_ts__min(int32_t *value);
-uint8_t iis2mdc_mag_get_samples_per_ts__max(int32_t *value);
+uint8_t iis2mdc_mag_get_samples_per_ts(int32_t *value);
 uint8_t iis2mdc_mag_get_dim(int32_t *value);
 uint8_t iis2mdc_mag_get_ioffset(float *value);
 uint8_t iis2mdc_mag_get_measodr(float *value);
@@ -302,11 +318,12 @@ uint8_t iis2mdc_mag_get_sd_dps(int32_t *value);
 uint8_t iis2mdc_mag_get_sensitivity(float *value);
 uint8_t iis2mdc_mag_get_data_type(char **value);
 uint8_t iis2mdc_mag_get_sensor_annotation(char **value);
+uint8_t iis2mdc_mag_get_sensor_category(int32_t *value);
 uint8_t iis2mdc_mag_get_stream_id(int8_t *value);
 uint8_t iis2mdc_mag_get_ep_id(int8_t *value);
 uint8_t iis2mdc_mag_set_odr(float value);
 uint8_t iis2mdc_mag_set_enable(bool value);
-uint8_t iis2mdc_mag_set_samples_per_ts__val(int32_t value);
+uint8_t iis2mdc_mag_set_samples_per_ts(int32_t value);
 uint8_t iis2mdc_mag_set_sensor_annotation(const char *value);
 
 /* IMP23ABSU_MIC PnPL Component ----------------------------------------------*/
@@ -315,9 +332,7 @@ char* imp23absu_mic_get_key(void);
 uint8_t imp23absu_mic_get_odr(float *value);
 uint8_t imp23absu_mic_get_aop(float *value);
 uint8_t imp23absu_mic_get_enable(bool *value);
-uint8_t imp23absu_mic_get_samples_per_ts__val(int32_t *value);
-uint8_t imp23absu_mic_get_samples_per_ts__min(int32_t *value);
-uint8_t imp23absu_mic_get_samples_per_ts__max(int32_t *value);
+uint8_t imp23absu_mic_get_samples_per_ts(int32_t *value);
 uint8_t imp23absu_mic_get_dim(int32_t *value);
 uint8_t imp23absu_mic_get_ioffset(float *value);
 uint8_t imp23absu_mic_get_measodr(float *value);
@@ -326,11 +341,12 @@ uint8_t imp23absu_mic_get_sd_dps(int32_t *value);
 uint8_t imp23absu_mic_get_sensitivity(float *value);
 uint8_t imp23absu_mic_get_data_type(char **value);
 uint8_t imp23absu_mic_get_sensor_annotation(char **value);
+uint8_t imp23absu_mic_get_sensor_category(int32_t *value);
 uint8_t imp23absu_mic_get_stream_id(int8_t *value);
 uint8_t imp23absu_mic_get_ep_id(int8_t *value);
 uint8_t imp23absu_mic_set_odr(float value);
 uint8_t imp23absu_mic_set_enable(bool value);
-uint8_t imp23absu_mic_set_samples_per_ts__val(int32_t value);
+uint8_t imp23absu_mic_set_samples_per_ts(int32_t value);
 uint8_t imp23absu_mic_set_sensor_annotation(const char *value);
 
 /* ISM330DHCX_ACC PnPL Component ---------------------------------------------*/
@@ -339,9 +355,7 @@ char* ism330dhcx_acc_get_key(void);
 uint8_t ism330dhcx_acc_get_odr(float *value);
 uint8_t ism330dhcx_acc_get_fs(float *value);
 uint8_t ism330dhcx_acc_get_enable(bool *value);
-uint8_t ism330dhcx_acc_get_samples_per_ts__val(int32_t *value);
-uint8_t ism330dhcx_acc_get_samples_per_ts__min(int32_t *value);
-uint8_t ism330dhcx_acc_get_samples_per_ts__max(int32_t *value);
+uint8_t ism330dhcx_acc_get_samples_per_ts(int32_t *value);
 uint8_t ism330dhcx_acc_get_dim(int32_t *value);
 uint8_t ism330dhcx_acc_get_ioffset(float *value);
 uint8_t ism330dhcx_acc_get_measodr(float *value);
@@ -350,12 +364,13 @@ uint8_t ism330dhcx_acc_get_sd_dps(int32_t *value);
 uint8_t ism330dhcx_acc_get_sensitivity(float *value);
 uint8_t ism330dhcx_acc_get_data_type(char **value);
 uint8_t ism330dhcx_acc_get_sensor_annotation(char **value);
+uint8_t ism330dhcx_acc_get_sensor_category(int32_t *value);
 uint8_t ism330dhcx_acc_get_stream_id(int8_t *value);
 uint8_t ism330dhcx_acc_get_ep_id(int8_t *value);
 uint8_t ism330dhcx_acc_set_odr(float value);
 uint8_t ism330dhcx_acc_set_fs(float value);
 uint8_t ism330dhcx_acc_set_enable(bool value);
-uint8_t ism330dhcx_acc_set_samples_per_ts__val(int32_t value);
+uint8_t ism330dhcx_acc_set_samples_per_ts(int32_t value);
 uint8_t ism330dhcx_acc_set_sensor_annotation(const char *value);
 
 /* ISM330DHCX_GYRO PnPL Component --------------------------------------------*/
@@ -364,9 +379,7 @@ char* ism330dhcx_gyro_get_key(void);
 uint8_t ism330dhcx_gyro_get_odr(float *value);
 uint8_t ism330dhcx_gyro_get_fs(float *value);
 uint8_t ism330dhcx_gyro_get_enable(bool *value);
-uint8_t ism330dhcx_gyro_get_samples_per_ts__val(int32_t *value);
-uint8_t ism330dhcx_gyro_get_samples_per_ts__min(int32_t *value);
-uint8_t ism330dhcx_gyro_get_samples_per_ts__max(int32_t *value);
+uint8_t ism330dhcx_gyro_get_samples_per_ts(int32_t *value);
 uint8_t ism330dhcx_gyro_get_dim(int32_t *value);
 uint8_t ism330dhcx_gyro_get_ioffset(float *value);
 uint8_t ism330dhcx_gyro_get_measodr(float *value);
@@ -375,21 +388,20 @@ uint8_t ism330dhcx_gyro_get_sd_dps(int32_t *value);
 uint8_t ism330dhcx_gyro_get_sensitivity(float *value);
 uint8_t ism330dhcx_gyro_get_data_type(char **value);
 uint8_t ism330dhcx_gyro_get_sensor_annotation(char **value);
+uint8_t ism330dhcx_gyro_get_sensor_category(int32_t *value);
 uint8_t ism330dhcx_gyro_get_stream_id(int8_t *value);
 uint8_t ism330dhcx_gyro_get_ep_id(int8_t *value);
 uint8_t ism330dhcx_gyro_set_odr(float value);
 uint8_t ism330dhcx_gyro_set_fs(float value);
 uint8_t ism330dhcx_gyro_set_enable(bool value);
-uint8_t ism330dhcx_gyro_set_samples_per_ts__val(int32_t value);
+uint8_t ism330dhcx_gyro_set_samples_per_ts(int32_t value);
 uint8_t ism330dhcx_gyro_set_sensor_annotation(const char *value);
 
 /* ISM330DHCX_MLC PnPL Component ---------------------------------------------*/
 uint8_t ism330dhcx_mlc_comp_init(void);
 char* ism330dhcx_mlc_get_key(void);
 uint8_t ism330dhcx_mlc_get_enable(bool *value);
-uint8_t ism330dhcx_mlc_get_samples_per_ts__val(int32_t *value);
-uint8_t ism330dhcx_mlc_get_samples_per_ts__min(int32_t *value);
-uint8_t ism330dhcx_mlc_get_samples_per_ts__max(int32_t *value);
+uint8_t ism330dhcx_mlc_get_samples_per_ts(int32_t *value);
 uint8_t ism330dhcx_mlc_get_ucf_status(bool *value);
 uint8_t ism330dhcx_mlc_get_dim(int32_t *value);
 uint8_t ism330dhcx_mlc_get_ioffset(float *value);
@@ -397,10 +409,10 @@ uint8_t ism330dhcx_mlc_get_data_type(char **value);
 uint8_t ism330dhcx_mlc_get_usb_dps(int32_t *value);
 uint8_t ism330dhcx_mlc_get_sd_dps(int32_t *value);
 uint8_t ism330dhcx_mlc_get_sensor_annotation(char **value);
+uint8_t ism330dhcx_mlc_get_sensor_category(int32_t *value);
 uint8_t ism330dhcx_mlc_get_stream_id(int8_t *value);
 uint8_t ism330dhcx_mlc_get_ep_id(int8_t *value);
 uint8_t ism330dhcx_mlc_set_enable(bool value);
-uint8_t ism330dhcx_mlc_set_samples_per_ts__val(int32_t value);
 uint8_t ism330dhcx_mlc_set_sensor_annotation(const char *value);
 uint8_t ism330dhcx_mlc_load_file(IIsm330dhcx_Mlc_t *ifn, const char *data, int32_t size);
 
@@ -410,9 +422,7 @@ char* iis2dlpc_acc_get_key(void);
 uint8_t iis2dlpc_acc_get_odr(float *value);
 uint8_t iis2dlpc_acc_get_fs(float *value);
 uint8_t iis2dlpc_acc_get_enable(bool *value);
-uint8_t iis2dlpc_acc_get_samples_per_ts__val(int32_t *value);
-uint8_t iis2dlpc_acc_get_samples_per_ts__min(int32_t *value);
-uint8_t iis2dlpc_acc_get_samples_per_ts__max(int32_t *value);
+uint8_t iis2dlpc_acc_get_samples_per_ts(int32_t *value);
 uint8_t iis2dlpc_acc_get_dim(int32_t *value);
 uint8_t iis2dlpc_acc_get_ioffset(float *value);
 uint8_t iis2dlpc_acc_get_measodr(float *value);
@@ -421,12 +431,13 @@ uint8_t iis2dlpc_acc_get_sd_dps(int32_t *value);
 uint8_t iis2dlpc_acc_get_sensitivity(float *value);
 uint8_t iis2dlpc_acc_get_data_type(char **value);
 uint8_t iis2dlpc_acc_get_sensor_annotation(char **value);
+uint8_t iis2dlpc_acc_get_sensor_category(int32_t *value);
 uint8_t iis2dlpc_acc_get_stream_id(int8_t *value);
 uint8_t iis2dlpc_acc_get_ep_id(int8_t *value);
 uint8_t iis2dlpc_acc_set_odr(float value);
 uint8_t iis2dlpc_acc_set_fs(float value);
 uint8_t iis2dlpc_acc_set_enable(bool value);
-uint8_t iis2dlpc_acc_set_samples_per_ts__val(int32_t value);
+uint8_t iis2dlpc_acc_set_samples_per_ts(int32_t value);
 uint8_t iis2dlpc_acc_set_sensor_annotation(const char *value);
 
 /* STTS22H_TEMP PnPL Component -----------------------------------------------*/
@@ -435,9 +446,7 @@ char* stts22h_temp_get_key(void);
 uint8_t stts22h_temp_get_odr(float *value);
 uint8_t stts22h_temp_get_fs(float *value);
 uint8_t stts22h_temp_get_enable(bool *value);
-uint8_t stts22h_temp_get_samples_per_ts__val(int32_t *value);
-uint8_t stts22h_temp_get_samples_per_ts__min(int32_t *value);
-uint8_t stts22h_temp_get_samples_per_ts__max(int32_t *value);
+uint8_t stts22h_temp_get_samples_per_ts(int32_t *value);
 uint8_t stts22h_temp_get_dim(int32_t *value);
 uint8_t stts22h_temp_get_ioffset(float *value);
 uint8_t stts22h_temp_get_measodr(float *value);
@@ -446,12 +455,36 @@ uint8_t stts22h_temp_get_sd_dps(int32_t *value);
 uint8_t stts22h_temp_get_sensitivity(float *value);
 uint8_t stts22h_temp_get_data_type(char **value);
 uint8_t stts22h_temp_get_sensor_annotation(char **value);
+uint8_t stts22h_temp_get_sensor_category(int32_t *value);
 uint8_t stts22h_temp_get_stream_id(int8_t *value);
 uint8_t stts22h_temp_get_ep_id(int8_t *value);
 uint8_t stts22h_temp_set_odr(float value);
 uint8_t stts22h_temp_set_enable(bool value);
-uint8_t stts22h_temp_set_samples_per_ts__val(int32_t value);
+uint8_t stts22h_temp_set_samples_per_ts(int32_t value);
 uint8_t stts22h_temp_set_sensor_annotation(const char *value);
+
+/* STTS22H_TEMP_EXT PnPL Component -------------------------------------------*/
+uint8_t stts22h_ext_temp_comp_init(void);
+char* stts22h_ext_temp_get_key(void);
+uint8_t stts22h_ext_temp_get_odr(float *value);
+uint8_t stts22h_ext_temp_get_fs(float *value);
+uint8_t stts22h_ext_temp_get_enable(bool *value);
+uint8_t stts22h_ext_temp_get_samples_per_ts(int32_t *value);
+uint8_t stts22h_ext_temp_get_dim(int32_t *value);
+uint8_t stts22h_ext_temp_get_ioffset(float *value);
+uint8_t stts22h_ext_temp_get_measodr(float *value);
+uint8_t stts22h_ext_temp_get_usb_dps(int32_t *value);
+uint8_t stts22h_ext_temp_get_sd_dps(int32_t *value);
+uint8_t stts22h_ext_temp_get_sensitivity(float *value);
+uint8_t stts22h_ext_temp_get_data_type(char **value);
+uint8_t stts22h_ext_temp_get_sensor_annotation(char **value);
+uint8_t stts22h_ext_temp_get_sensor_category(int32_t *value);
+uint8_t stts22h_ext_temp_get_stream_id(int8_t *value);
+uint8_t stts22h_ext_temp_get_ep_id(int8_t *value);
+uint8_t stts22h_ext_temp_set_odr(float value);
+uint8_t stts22h_ext_temp_set_enable(bool value);
+uint8_t stts22h_ext_temp_set_samples_per_ts(int32_t value);
+uint8_t stts22h_ext_temp_set_sensor_annotation(const char *value);
 
 /* ILPS22QS_PRESS PnPL Component ---------------------------------------------*/
 uint8_t ilps22qs_press_comp_init(void);
@@ -459,9 +492,7 @@ char* ilps22qs_press_get_key(void);
 uint8_t ilps22qs_press_get_odr(float *value);
 uint8_t ilps22qs_press_get_fs(float *value);
 uint8_t ilps22qs_press_get_enable(bool *value);
-uint8_t ilps22qs_press_get_samples_per_ts__val(int32_t *value);
-uint8_t ilps22qs_press_get_samples_per_ts__min(int32_t *value);
-uint8_t ilps22qs_press_get_samples_per_ts__max(int32_t *value);
+uint8_t ilps22qs_press_get_samples_per_ts(int32_t *value);
 uint8_t ilps22qs_press_get_dim(int32_t *value);
 uint8_t ilps22qs_press_get_ioffset(float *value);
 uint8_t ilps22qs_press_get_measodr(float *value);
@@ -470,12 +501,13 @@ uint8_t ilps22qs_press_get_sd_dps(int32_t *value);
 uint8_t ilps22qs_press_get_sensitivity(float *value);
 uint8_t ilps22qs_press_get_data_type(char **value);
 uint8_t ilps22qs_press_get_sensor_annotation(char **value);
+uint8_t ilps22qs_press_get_sensor_category(int32_t *value);
 uint8_t ilps22qs_press_get_stream_id(int8_t *value);
 uint8_t ilps22qs_press_get_ep_id(int8_t *value);
 uint8_t ilps22qs_press_set_odr(float value);
 uint8_t ilps22qs_press_set_fs(float value);
 uint8_t ilps22qs_press_set_enable(bool value);
-uint8_t ilps22qs_press_set_samples_per_ts__val(int32_t value);
+uint8_t ilps22qs_press_set_samples_per_ts(int32_t value);
 uint8_t ilps22qs_press_set_sensor_annotation(const char *value);
 
 /* IMP34DT05_MIC PnPL Component ----------------------------------------------*/
@@ -484,9 +516,7 @@ char* imp34dt05_mic_get_key(void);
 uint8_t imp34dt05_mic_get_odr(float *value);
 uint8_t imp34dt05_mic_get_aop(float *value);
 uint8_t imp34dt05_mic_get_enable(bool *value);
-uint8_t imp34dt05_mic_get_samples_per_ts__val(int32_t *value);
-uint8_t imp34dt05_mic_get_samples_per_ts__min(int32_t *value);
-uint8_t imp34dt05_mic_get_samples_per_ts__max(int32_t *value);
+uint8_t imp34dt05_mic_get_samples_per_ts(int32_t *value);
 uint8_t imp34dt05_mic_get_dim(int32_t *value);
 uint8_t imp34dt05_mic_get_ioffset(float *value);
 uint8_t imp34dt05_mic_get_measodr(float *value);
@@ -495,11 +525,12 @@ uint8_t imp34dt05_mic_get_sd_dps(int32_t *value);
 uint8_t imp34dt05_mic_get_sensitivity(float *value);
 uint8_t imp34dt05_mic_get_data_type(char **value);
 uint8_t imp34dt05_mic_get_sensor_annotation(char **value);
+uint8_t imp34dt05_mic_get_sensor_category(int32_t *value);
 uint8_t imp34dt05_mic_get_stream_id(int8_t *value);
 uint8_t imp34dt05_mic_get_ep_id(int8_t *value);
 uint8_t imp34dt05_mic_set_odr(float value);
 uint8_t imp34dt05_mic_set_enable(bool value);
-uint8_t imp34dt05_mic_set_samples_per_ts__val(int32_t value);
+uint8_t imp34dt05_mic_set_samples_per_ts(int32_t value);
 uint8_t imp34dt05_mic_set_sensor_annotation(const char *value);
 
 /* IIS2ICLX_ACC PnPL Component -----------------------------------------------*/
@@ -508,9 +539,7 @@ char* iis2iclx_acc_get_key(void);
 uint8_t iis2iclx_acc_get_odr(float *value);
 uint8_t iis2iclx_acc_get_fs(float *value);
 uint8_t iis2iclx_acc_get_enable(bool *value);
-uint8_t iis2iclx_acc_get_samples_per_ts__val(int32_t *value);
-uint8_t iis2iclx_acc_get_samples_per_ts__min(int32_t *value);
-uint8_t iis2iclx_acc_get_samples_per_ts__max(int32_t *value);
+uint8_t iis2iclx_acc_get_samples_per_ts(int32_t *value);
 uint8_t iis2iclx_acc_get_dim(int32_t *value);
 uint8_t iis2iclx_acc_get_ioffset(float *value);
 uint8_t iis2iclx_acc_get_measodr(float *value);
@@ -519,12 +548,13 @@ uint8_t iis2iclx_acc_get_sd_dps(int32_t *value);
 uint8_t iis2iclx_acc_get_sensitivity(float *value);
 uint8_t iis2iclx_acc_get_data_type(char **value);
 uint8_t iis2iclx_acc_get_sensor_annotation(char **value);
+uint8_t iis2iclx_acc_get_sensor_category(int32_t *value);
 uint8_t iis2iclx_acc_get_stream_id(int8_t *value);
 uint8_t iis2iclx_acc_get_ep_id(int8_t *value);
 uint8_t iis2iclx_acc_set_odr(float value);
 uint8_t iis2iclx_acc_set_fs(float value);
 uint8_t iis2iclx_acc_set_enable(bool value);
-uint8_t iis2iclx_acc_set_samples_per_ts__val(int32_t value);
+uint8_t iis2iclx_acc_set_samples_per_ts(int32_t value);
 uint8_t iis2iclx_acc_set_sensor_annotation(const char *value);
 
 /* AutoMode PnPL Component ---------------------------------------------------*/
@@ -532,14 +562,14 @@ uint8_t automode_comp_init(void);
 char* automode_get_key(void);
 uint8_t automode_get_enabled(bool *value);
 uint8_t automode_get_nof_acquisitions(int32_t *value);
-uint8_t automode_get_start_delay_ms(int32_t *value);
-uint8_t automode_get_datalog_time_length(int32_t *value);
-uint8_t automode_get_idle_time_length(int32_t *value);
+uint8_t automode_get_start_delay_s(int32_t *value);
+uint8_t automode_get_logging_period_s(int32_t *value);
+uint8_t automode_get_idle_period_s(int32_t *value);
 uint8_t automode_set_enabled(bool value);
 uint8_t automode_set_nof_acquisitions(int32_t value);
-uint8_t automode_set_start_delay_ms(int32_t value);
-uint8_t automode_set_datalog_time_length(int32_t value);
-uint8_t automode_set_idle_time_length(int32_t value);
+uint8_t automode_set_start_delay_s(int32_t value);
+uint8_t automode_set_logging_period_s(int32_t value);
+uint8_t automode_set_idle_period_s(int32_t value);
 
 /* Log Controller PnPL Component ---------------------------------------------*/
 uint8_t log_controller_comp_init(void);
@@ -610,12 +640,12 @@ char* firmware_info_get_key(void);
 uint8_t firmware_info_get_alias(char **value);
 uint8_t firmware_info_get_fw_name(char **value);
 uint8_t firmware_info_get_fw_version(char **value);
-uint8_t firmware_info_get_serial_number(char **value);
+uint8_t firmware_info_get_part_number(char **value);
 uint8_t firmware_info_get_device_url(char **value);
 uint8_t firmware_info_get_fw_url(char **value);
 uint8_t firmware_info_get_mac_address(char **value);
 uint8_t firmware_info_set_alias(const char *value);
-uint8_t firmware_info_set_mac_address(const char *value);
+
 /* Device Information PnPL Component -----------------------------------------*/
 uint8_t DeviceInformation_comp_init(void);
 char* DeviceInformation_get_key(void);
@@ -627,6 +657,9 @@ uint8_t DeviceInformation_get_processorArchitecture(char **value);
 uint8_t DeviceInformation_get_processorManufacturer(char **value);
 uint8_t DeviceInformation_get_totalStorage(float *value);
 uint8_t DeviceInformation_get_totalMemory(float *value);
+
+/* user space ----------------------------------------------------------------*/
+uint8_t set_mac_address(const char *value);
 
 
 #ifdef __cplusplus

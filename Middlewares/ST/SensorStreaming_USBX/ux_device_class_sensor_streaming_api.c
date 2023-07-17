@@ -27,10 +27,6 @@
 #include "ux_device_stack.h"
 #include "ux_device_class_sensor_streaming.h"
 
-#define HEADER_CH_SIZE        1U
-#define HEADER_COUNTER_SIZE   4U
-#define HEADER_SIZE           (HEADER_CH_SIZE + HEADER_COUNTER_SIZE)
-
 /**
  * @brief  ux_device_class_sensor_streaming_SetTransmissionEP
  *
@@ -88,27 +84,24 @@ UINT ux_device_class_sensor_streaming_SetRxDataBuffer(UX_SLAVE_CLASS_SENSOR_STRE
  * @param  size: length of each packet in bytes
  * @retval status
  */
-UINT ux_device_class_sensor_streaming_SetTxDataBuffer(UX_SLAVE_CLASS_SENSOR_STREAMING *sensor_streaming, uint8_t id, uint8_t *ptr, uint16_t size)
+UINT ux_device_class_sensor_streaming_SetTxDataBuffer(UX_SLAVE_CLASS_SENSOR_STREAMING *sensor_streaming, uint8_t ch_number, uint8_t *ptr, uint16_t item_size, uint8_t items)
 {
   STREAMING_HandleTypeDef *hwcid = (STREAMING_HandleTypeDef*) sensor_streaming->hwcid;
-  uint8_t **tx_buffer = hwcid->tx_buffer;
-  uint32_t *tx_buff_idx = hwcid->tx_buff_idx;
-  uint16_t *ch_data_size = hwcid->ch_data_size;
-  uint32_t *p_src;
+  UINT res = UX_SUCCESS;
+  CircularBufferDL2 *cbdl2 = CBDL2_Alloc(items);
+  if(cbdl2 != NULL)
+  {
+    hwcid->tx_cbdl2[ch_number] = cbdl2;
 
-  tx_buffer[id] = ptr;
-  p_src = (uint32_t*) tx_buffer[id];
-  /* Double buffer contains 2 * usb data packet + 1st byte (id) + pkt counter for each half */
-  ch_data_size[id] = (size * 2U) + (HEADER_SIZE * 2U);
-  /* write the id at the beginning of the buffer (first byte) */
-  ptr[0] = id;
-  /* initialize pkt counter */
-  p_src = (uint32_t*) &((uint8_t*) (p_src))[HEADER_CH_SIZE];
-  *p_src = 0U;
-  /* move buffer index after header */
-  tx_buff_idx[id] = HEADER_SIZE;
+    /* Initialize the CircularBuffer with the specified parameters */
+    CBDL2_Init(cbdl2, ptr, item_size, true);
+  }
+  else
+  {
+    res = UX_ERROR;
+  }
 
-  return (UX_SUCCESS);
+  return res;
 }
 
 /**
@@ -121,7 +114,9 @@ UINT ux_device_class_sensor_streaming_SetTxDataBuffer(UX_SLAVE_CLASS_SENSOR_STRE
 UINT ux_device_class_sensor_streaming_CleanTxDataBuffer(UX_SLAVE_CLASS_SENSOR_STREAMING *sensor_streaming, uint8_t ch_number)
 {
   STREAMING_HandleTypeDef *hwcid = (STREAMING_HandleTypeDef*) sensor_streaming->hwcid;
-  hwcid->tx_buff_reset[ch_number] = 1;
+
+  CBDL2_Free(hwcid->tx_cbdl2[ch_number]);
+  hwcid->tx_cbdl2[ch_number] = NULL;
   return (UX_SUCCESS);
 }
 
@@ -138,113 +133,23 @@ UX_INTERRUPT_SAVE_AREA //used by UX_DISABLE and UX_ENABLE isr
 UINT ux_device_class_sensor_streaming_FillTxDataBuffer(UX_SLAVE_CLASS_SENSOR_STREAMING *sensor_streaming, uint8_t ch_number, uint8_t *buf, uint32_t size)
 {
   STREAMING_HandleTypeDef *hwcid = (STREAMING_HandleTypeDef*) sensor_streaming->hwcid;
-  uint8_t *p_dst = hwcid->tx_buffer[ch_number];
-  uint32_t *p_byte_counter_dst;
-  uint32_t dst_size = hwcid->ch_data_size[ch_number];
-  uint32_t dst_idx = hwcid->tx_buff_idx[ch_number];
-  uint32_t src_idx = 0;
-  uint32_t half_size = dst_size / 2U;
-  uint8_t mode;
+  UINT res = UX_SUCCESS;
+  CircularBufferDL2 *cbdl2 = hwcid->tx_cbdl2[ch_number];
+  bool item_ready;
 
-  if(hwcid->tx_buff_reset[ch_number] == 1U)
+  if(hwcid->streaming_status == STREAMING_STATUS_STARTED)
   {
-    /* write ch_number at the beginning of the buffer (first byte) */
-    p_dst[0] = ch_number;
-
-    /* initialize pkt counter to zero */
-    p_byte_counter_dst = (uint32_t*) &p_dst[1];
-    *p_byte_counter_dst = 0U;
-
-    /* Move buffer index to position 5
-     * 1 Byte: channel number
-     * 4 Bytes: Byte counter to detect data loss on the host
-     * */
-    dst_idx = HEADER_SIZE;
-
-    UX_DISABLE
-    hwcid->tx_buff_status[ch_number] = 0U;
-    UX_RESTORE
-
-    hwcid->tx_byte_counter[ch_number] = 0U;
-    hwcid->tx_buff_reset[ch_number] = 0U;
-  }
-
-  /* if the half or end buffer is not reached after the copy, use memcpy */
-  uint32_t size_after_copy = dst_idx + size;
-
-  if(size_after_copy < half_size) /* data to be copied won't exceed the first half of the dest buffer */
-  {
-    mode = 1U; /* use memcpy*/
-  }
-  else if(size_after_copy < dst_size) /* data to be copied won't exceed the end of the buffer*/
-  {
-    if(dst_idx < half_size) /* data to be copied exceeds the first half of the dest buffer*/
+    if(CBDL2_FillCurrentItem(cbdl2, ch_number, buf, size, &item_ready) != SYS_NO_ERROR_CODE)
     {
-      mode = 0U; /* bytewise copy */
-    }
-    else /* data to be copied won't exceed the end of the buffer*/
-    {
-      mode = 1U; /* use memcpy*/
-    }
-  }
-  else /* data to be copied exceeds the end of the buffer*/
-  {
-    mode = 0U; /* bytewise copy */
-  }
-
-  if(mode == 0U) /* bytewise copy */
-  {
-    while(src_idx < size)
-    {
-      p_dst[dst_idx++] = buf[src_idx++];
-
-      if(dst_idx >= dst_size)
-      {
-        UX_DISABLE
-        hwcid->tx_buff_status[ch_number] = 2U;
-        UX_RESTORE
-
-        /* write ch_number at the beginning of the buffer (first byte) */
-        p_dst[0] = ch_number;
-
-        /* incrementing pkt counter by the size of data in half buffer */
-        hwcid->tx_byte_counter[ch_number] += (half_size - HEADER_SIZE);
-        p_byte_counter_dst = (uint32_t*) &p_dst[HEADER_CH_SIZE];
-        *p_byte_counter_dst = hwcid->tx_byte_counter[ch_number];
-
-        /* move buffer index after header */
-        dst_idx = HEADER_SIZE;
-      }
-      else if(dst_idx==half_size)
-      {
-        UX_DISABLE
-        hwcid->tx_buff_status[ch_number] = 1U;
-        UX_RESTORE
-
-        /* write ch_number at the beginning of the second half of the buffer */
-        p_dst[dst_idx] = ch_number;
-
-        /* incrementing pkt counter by the size of data in half buffer */
-        hwcid->tx_byte_counter[ch_number] += (half_size - HEADER_SIZE);
-        p_byte_counter_dst = (uint32_t*) &p_dst[dst_idx + HEADER_CH_SIZE];
-        *p_byte_counter_dst = hwcid->tx_byte_counter[ch_number];
-
-        /* move buffer index after header */
-        dst_idx = (dst_idx + HEADER_SIZE);
-      }
-      else
-      {
-        /* Nothing to do*/
-      }
+      res = UX_ERROR;
     }
   }
   else
   {
-    (void) memcpy(&p_dst[dst_idx], buf, size);
-    dst_idx += size;
+    res = UX_INVALID_STATE;
   }
-  hwcid->tx_buff_idx[ch_number] = dst_idx;
-  return (UX_SUCCESS);
+
+  return res;
 }
 
 /**
@@ -260,7 +165,6 @@ UINT ux_device_class_sensor_streaming_StartStreaming(UX_SLAVE_CLASS_SENSOR_STREA
 
   for(uint8_t i = 0; i < (SS_N_IN_ENDPOINTS); i++)
   {
-    sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].ep_param.last_packet_sent = 1;
     (void) _ux_utility_thread_resume(&sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].thread);
   }
   *status = STREAMING_STATUS_STARTED;

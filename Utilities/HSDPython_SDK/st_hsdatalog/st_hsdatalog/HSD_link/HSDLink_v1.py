@@ -51,7 +51,7 @@ class HSDLink_v1:
                 os.makedirs(acquisition_folder)
             self.__acquisition_folder = acquisition_folder
         else:
-            self.__acquisition_folder = os.path.join(self.__acquisition_folder, "{}_{}".format(self.get_device_presentation_string(),datetime.today().strftime('%Y%m%d_%H_%M_%S')))
+            self.__acquisition_folder = os.path.join(self.__acquisition_folder, "{}".format(datetime.today().strftime('%Y%m%d_%H_%M_%S')))
             os.makedirs(self.__acquisition_folder)
 
     def __create_com_manager(self,dev_com_type):
@@ -211,6 +211,10 @@ class HSDLink_v1:
             #if correctly loaded, save ucf file in acquisition folder
             shutil.copy(ucf_file_path, self.__acquisition_folder)  
         return res
+
+    def upload_ispu_ucf_file(self, d_id:int, s_id:int, ucf_file_path):
+        log.error("ISPU ucf file upload is not supported in HSDatalog1")
+        return False
 
     def get_sensor_data(self, d_id:int, s_id:int, ss_id:int):
         return self.__com_manager.get_sensor_data(d_id, s_id, ss_id)

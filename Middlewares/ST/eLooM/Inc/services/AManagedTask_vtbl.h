@@ -27,9 +27,7 @@
 extern "C" {
 #endif
 
-#include "systypes.h"
-#include "syserror.h"
-#include "systp.h"
+#include "services/eloom_sysbase.h"
 /* MISRA messages linked to FreeRTOS include are ignored */
 /*cstat -MISRAC2012-* */
 #include "tx_api.h"

@@ -57,7 +57,7 @@ extern "C" {
   /* Debug Configuration options. */
 /********************************/
 
-#include "services/systp.h"
+#include "services/eloom_sysbase.h"
 #include <stdint.h>
 #include "sysdebug_config.h"
 

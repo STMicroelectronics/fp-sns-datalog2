@@ -5,7 +5,7 @@
         {
             "board_id": 13,
             "fw_id": 6,
-            "sn": "002A00524841500520363230",
+            "sn": "0023002B5752501720353339",
             "components": [
                 {
                     "lis2du12_acc": {
@@ -22,7 +22,7 @@
                         "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 2048,
-                        "sensitivity": 0.00048799999058246623,
+                        "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "c_type": 0,
                         "stream_id": 2,
@@ -110,7 +110,7 @@
                         "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 15360,
-                        "sensitivity": 0.00048799999058246623,
+                        "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "c_type": 0,
                         "stream_id": 1,
@@ -188,8 +188,8 @@
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M33",
                         "processorManufacturer": "STMicroelectronics",
-                        "totalStorage": 0,
-                        "totalMemory": 0
+                        "totalStorage": 4,
+                        "totalMemory": 784
                     }
                 },
                 {
@@ -197,17 +197,17 @@
                         "alias": "STBOX_PRO_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
                         "fw_version": "1.1.0",
-                        "serial_number": "STEVAL-MKBOXPRO",
+                        "part_number": "STEVAL-MKBOXPRO",
                         "device_url": "www.st.com/sensortileboxpro",
                         "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
-                        "mac_address": "c0:2f:61:e6:e0:ac",
+                        "mac_address": "c1:be:c2:bf:7f:62",
                         "c_type": 2
                     }
                 },
                 {
                     "acquisition_info": {
                         "tags": [],
-                        "name": "STWIN.Box_acquisition",
+                        "name": "Sensortile.Box_PRO_acquisition",
                         "description": "",
                         "uuid": "",
                         "start_time": "",

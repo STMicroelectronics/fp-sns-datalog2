@@ -1,33 +1,49 @@
 /**
- ******************************************************************************
- * @file    App_Model.c
- * @author  SRA
- * @brief   App Application Model and PnPL Components APIs
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    App_Model.c
+  * @author  SRA
+  * @brief   App Application Model and PnPL Components APIs
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *
+  ******************************************************************************
+  */
+
+/**
+  ******************************************************************************
+  * This file has been auto generated from the following Device Template Model:
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_ultrasoundFft;3
+  *
+  * Created by: DTDL2PnPL_cGen version 1.1.0
+  *
+  * WARNING! All changes made to this file will be lost if this is regenerated
+  ******************************************************************************
+  */
 
 #include "App_model.h"
 #include <string.h>
 #include <stdio.h>
-/* USER includes */
 #include "services/SQuery.h"
+
+/* USER includes -------------------------------------------------------------*/
 #include "services/sysdebug.h"
 #include "rtc.h"
 
-/* USER private functions prototypes */
+/* USER private function prototypes ------------------------------------------*/
+static uint8_t __stream_control(ILog_Controller_t *ifn, bool status);
 
-/* USER define */
+
+/* USER defines --------------------------------------------------------------*/
+
+static uint8_t algorithms_cnt = 0;
 #define SYS_DEBUGF(level, message)                SYS_DEBUGF3(SYS_DBG_DT, level, message)
 
 AppModel_t app_model;
@@ -37,77 +53,33 @@ AppModel_t* getAppModel(void)
   return &app_model;
 }
 
-/* Private function declaration ===================================================== */
-static uint8_t __stream_control(ILog_Controller_t *ifn, bool status);
+/* Device Components APIs ----------------------------------------------------*/
 
-/* Device Components APIs =========================================================== */
-
-/* Firmware Information PnPL Component ============================================== */
-uint8_t firmware_info_comp_init(void)
-{
-
-  /* USER Component initialization code */
-  return 0;
-}
-char* firmware_info_get_key(void)
-{
-  return "firmware_info";
-}
-
-uint8_t firmware_info_get_alias(char **value)
-{
-  *value = app_model.firmware_info_model.alias;
-  return 0;
-}
-uint8_t firmware_info_get_fw_name(char **value)
-{
-  *value = "FP-SNS-DATALOG2_UltrasoundFFT";
-  return 0;
-}
-uint8_t firmware_info_get_fw_version(char **value)
-{
-  *value = "1.1.0";
-  return 0;
-}
-uint8_t firmware_info_get_serial_number(char **value)
-{
-  *value = "STEVAL-STWINBX1";
-  return 0;
-}
-uint8_t firmware_info_get_device_url(char **value)
-{
-  *value = "https://www.st.com/stwinbox";
-  return 0;
-}
-uint8_t firmware_info_get_fw_url(char **value)
-{
-  *value = "https://github.com/STMicroelectronics/fp-sns-datalog2";
-  return 0;
-}
-uint8_t firmware_info_set_alias(const char *value)
-{
-  strcpy(app_model.firmware_info_model.alias, value);
-  return 0;
-}
-
-/* FFT DPU PnPL Component =========================================================== */
-AlgorithmModel_t fft_dpu_model;
-
+/* Ultrasound FFT PnPL Component ---------------------------------------------*/
+static AlgorithmModel_t fft_dpu_model;
+uint16_t fft_dpu_id = -1;
 uint8_t fft_dpu_comp_init(void)
 {
   fft_dpu_model.comp_name = fft_dpu_get_key();
 
-  app_model.a_models[0] = &fft_dpu_model;
+  fft_dpu_id = algorithms_cnt;
+  algorithms_cnt +=1;
+  fft_dpu_model.streamParams.stream_id = -1;
+  fft_dpu_model.streamParams.usb_ep = -1;
+  /* USER code */
+
+  //app_model.a_models[id] = &fft_dpu_model;
+  app_model.a_models[fft_dpu_id] = &fft_dpu_model;
 
   /* USER Component initialization code */
-  app_model.a_models[0]->streamParams.stream_id = FFT_DPU_STREAM_ID;
-  app_model.a_models[0]->streamParams.usb_ep = FFT_DPU_USB_EP;
-  app_model.a_models[0]->streamParams.usb_dps = FFT_DPU_USB_DPS;
-  app_model.a_models[0]->packet_size = FFT_DPU_PACKECT_SIZE;
-  app_model.a_models[0]->dim = FFT_DPU_DIM;
-  app_model.a_models[0]->fft_sample_freq = FFT_DPU_SAMPLE_FREQ;
-  app_model.a_models[0]->fft_len = FFT_DPU_FFT_LEN;
-  app_model.a_models[0]->enable = true;
+  app_model.a_models[fft_dpu_id]->streamParams.stream_id = FFT_DPU_STREAM_ID;
+  app_model.a_models[fft_dpu_id]->streamParams.usb_ep = FFT_DPU_USB_EP;
+  app_model.a_models[fft_dpu_id]->streamParams.usb_dps = FFT_DPU_USB_DPS;
+  app_model.a_models[fft_dpu_id]->packet_size = FFT_DPU_PACKECT_SIZE;
+  app_model.a_models[fft_dpu_id]->dim = FFT_DPU_DIM;
+  app_model.a_models[fft_dpu_id]->fft_sample_freq = FFT_DPU_SAMPLE_FREQ;
+  app_model.a_models[fft_dpu_id]->fft_len = FFT_DPU_FFT_LEN;
+  app_model.a_models[fft_dpu_id]->enable = true;
   return 0;
 }
 char* fft_dpu_get_key(void)
@@ -115,75 +87,186 @@ char* fft_dpu_get_key(void)
   return "fft_dpu";
 }
 
-uint8_t fft_dpu_get_FFTLenght(int32_t *value)
-{
-  /* USER Code */
-  return 0;
-}
-uint8_t fft_dpu_get_graphType(char **value)
-{
-  /* USER Code */
-  return 0;
-}
 uint8_t fft_dpu_get_enable(bool *value)
 {
-  *value = app_model.a_models[0]->enable;
+  *value = app_model.a_models[fft_dpu_id]->enable;
   return 0;
 }
-uint8_t fft_dpu_get_stream_id(int8_t *value)
-{
-  *value = app_model.a_models[0]->streamParams.stream_id;
-  return 0;
-}
-uint8_t fft_dpu_get_ep_id(int8_t *value)
-{
-  *value = app_model.a_models[0]->streamParams.usb_ep;
-  return 0;
-}
-uint8_t fft_dpu_get_fft_length(int32_t *value)
-{
-  *value = app_model.a_models[0]->fft_len;
-  return 0;
-}
-uint8_t fft_dpu_get_algorithm_type(char **value)
-{
-  *value = "fft";
-  return 0;
-}
-uint8_t fft_dpu_get_fft_sample_freq(int32_t *value)
-{
-  *value = app_model.a_models[0]->fft_sample_freq;
-  return 0;
-}
-uint8_t fft_dpu_set_enable(bool value)
-{
-  app_model.a_models[0]->enable = value;
-  return 0;
-}
-
-uint8_t fft_dpu_get_usb_dps(int32_t *value)
-{
-  *value = app_model.a_models[0]->streamParams.usb_dps;
-  return 0;
-}
-
 uint8_t fft_dpu_get_data_type(char **value)
 {
   *value = "float";
   return 0;
 }
-uint8_t fft_dpu_get_packet_size(int32_t *value)
+uint8_t fft_dpu_get_fft_length(int32_t *value)
 {
-  *value = app_model.a_models[0]->packet_size;
+  *value = app_model.a_models[fft_dpu_id]->fft_len;
   return 0;
 }
-uint8_t fft_dpu_get_dim(int32_t *value)
+uint8_t fft_dpu_get_fft_sample_freq(int32_t *value)
 {
-  *value = app_model.a_models[0]->dim;
+  *value = app_model.a_models[fft_dpu_id]->fft_sample_freq;
+  return 0;
+}
+uint8_t fft_dpu_get_usb_dps(int32_t *value)
+{
+  *value = app_model.a_models[fft_dpu_id]->streamParams.usb_dps;
+  return 0;
+}
+uint8_t fft_dpu_get_algorithm_type(int32_t *value)
+{
+  *value = 0;
+  return 0;
+}
+uint8_t fft_dpu_get_stream_id(int8_t *value)
+{
+  *value = app_model.a_models[fft_dpu_id]->streamParams.stream_id;
+  return 0;
+}
+uint8_t fft_dpu_get_ep_id(int8_t *value)
+{
+  *value = app_model.a_models[fft_dpu_id]->streamParams.usb_ep;
+  return 0;
+}
+uint8_t fft_dpu_set_enable(bool value)
+{
+  app_model.a_models[fft_dpu_id]->enable = value;
   return 0;
 }
 
-/* Log Controller PnPL Component ==================================================== */
+/* IMP23ABSU_MIC PnPL Component ----------------------------------------------*/
+static SensorModel_t imp23absu_mic_model;
+
+uint8_t imp23absu_mic_comp_init(void)
+{
+  imp23absu_mic_model.comp_name = imp23absu_mic_get_key();
+
+  SQuery_t querySM;
+  SQInit(&querySM, SMGetSensorManager());
+  uint16_t id = SQNextByNameAndType(&querySM, "imp23absu", COM_TYPE_MIC);
+  imp23absu_mic_model.id = id;
+  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
+  imp23absu_mic_model.streamParams.stream_id = -1;
+  imp23absu_mic_model.streamParams.usb_ep = -1;
+  char default_notes[SENSOR_NOTES_LEN] = "\0";
+  imp23absu_mic_set_sensor_annotation(default_notes);
+  /* USER code */
+  imp23absu_mic_model.gui_plot_graph_enable = true;
+  app_model.s_models[id] = &imp23absu_mic_model;
+  __stream_control(NULL, true);
+
+  /* USER Component initialization code */
+  return 0;
+}
+char* imp23absu_mic_get_key(void)
+{
+  return "imp23absu_mic";
+}
+
+uint8_t imp23absu_mic_get_odr(float *value)
+{
+  /* Status update to check if the value has been updated by the FW */
+  uint16_t id = imp23absu_mic_model.id;
+  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
+  *value = imp23absu_mic_model.sensorStatus.ODR;
+  return 0;
+}
+uint8_t imp23absu_mic_get_aop(float *value)
+{
+  uint16_t id = imp23absu_mic_model.id;
+  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
+  *value = imp23absu_mic_model.sensorStatus.FS;
+  return 0;
+}
+uint8_t imp23absu_mic_get_enable(bool *value)
+{
+  /* Status update to check if the value has been updated by the FW */
+  uint16_t id = imp23absu_mic_model.id;
+  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
+  //*value = imp23absu_mic_model.sensorStatus.IsActive;
+  *value = imp23absu_mic_model.gui_plot_graph_enable;
+  return 0;
+}
+uint8_t imp23absu_mic_get_samples_per_ts(int32_t *value)
+{
+  *value = imp23absu_mic_model.streamParams.spts;
+  return 0;
+}
+uint8_t imp23absu_mic_get_dim(int32_t *value)
+{
+  *value = 1;
+  return 0;
+}
+uint8_t imp23absu_mic_get_ioffset(float *value)
+{
+  *value = imp23absu_mic_model.streamParams.ioffset;
+  return 0;
+}
+uint8_t imp23absu_mic_get_measodr(float *value)
+{
+  /* Status update to check if the value has been updated by the FW */
+  uint16_t id = imp23absu_mic_model.id;
+  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
+  *value = imp23absu_mic_model.sensorStatus.MeasuredODR;
+  return 0;
+}
+uint8_t imp23absu_mic_get_usb_dps(int32_t *value)
+{
+  *value = imp23absu_mic_model.streamParams.usb_dps;
+  return 0;
+}
+uint8_t imp23absu_mic_get_sd_dps(int32_t *value)
+{
+  *value = imp23absu_mic_model.streamParams.sd_dps;
+  return 0;
+}
+uint8_t imp23absu_mic_get_sensitivity(float *value)
+{
+  /* Status update to check if the value has been updated by the FW */
+  uint16_t id = imp23absu_mic_model.id;
+  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
+  *value = imp23absu_mic_model.sensorStatus.Sensitivity;
+  return 0;
+}
+uint8_t imp23absu_mic_get_data_type(char **value)
+{
+  *value = "int16";
+  return 0;
+}
+uint8_t imp23absu_mic_get_sensor_annotation(char **value)
+{
+  uint16_t id = imp23absu_mic_model.id;
+  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
+  *value = imp23absu_mic_model.annotation;
+  return 0;
+}
+uint8_t imp23absu_mic_get_sensor_category(int32_t *value)
+{
+  //  *value = imp23absu_mic_model.sensorStatus.ISensorClass;
+  *value = 1; //1 = ISENSOR_CLASS_AUDIO
+  return 0;
+}
+uint8_t imp23absu_mic_get_stream_id(int8_t *value)
+{
+  *value = imp23absu_mic_model.streamParams.stream_id;
+  return 0;
+}
+uint8_t imp23absu_mic_get_ep_id(int8_t *value)
+{
+  *value = imp23absu_mic_model.streamParams.usb_ep;
+  return 0;
+}
+uint8_t imp23absu_mic_set_enable(bool value)
+{
+  imp23absu_mic_model.gui_plot_graph_enable = value;
+  return 0;
+}
+uint8_t imp23absu_mic_set_sensor_annotation(const char *value)
+{
+  strcpy(imp23absu_mic_model.annotation, value);
+  return 0;
+}
+
+/* Log Controller PnPL Component ---------------------------------------------*/
 uint8_t log_controller_comp_init(void)
 {
   app_model.log_controller_model.comp_name = log_controller_get_key();
@@ -206,16 +289,14 @@ uint8_t log_controller_get_sd_mounted(bool *value)
   /* USER Code */
   return 0;
 }
-
 uint8_t log_controller_get_controller_type(int32_t *value)
 {
   *value = 2; /* 0 == HSD log controller, 1 == App classifier controller, 2 = generic log controller */
   return 0;
 }
-
 uint8_t log_controller_save_config(ILog_Controller_t *ifn)
 {
-  /* USER Code */
+  //ILog_Controller_save_config(ifn);
   return 0;
 }
 uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
@@ -278,7 +359,6 @@ uint8_t log_controller_stop_log(ILog_Controller_t *ifn)
   TMCalculateEndTime(app_model.acquisition_info_model.end_time);
   return 0;
 }
-
 uint8_t log_controller_set_time(ILog_Controller_t *ifn, const char *datetime)
 {
   char datetimeStr[3];
@@ -339,157 +419,120 @@ uint8_t log_controller_set_time(ILog_Controller_t *ifn, const char *datetime)
 
   return 0;
 }
-
-/* IMP23ABSU_MIC PnPLComponent ====================================================== */
-SensorModel_t imp23absu_mic_model;
-
-uint8_t imp23absu_mic_comp_init(void)
+uint8_t log_controller_switch_bank(ILog_Controller_t *ifn)
 {
-  imp23absu_mic_model.comp_name = imp23absu_mic_get_key();
-
-  SQuery_t querySM;
-  SQInit(&querySM, SMGetSensorManager());
-  uint16_t id = SQNextByNameAndType(&querySM, "imp23absu", COM_TYPE_MIC);
-  imp23absu_mic_model.id = id;
-  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
-  imp23absu_mic_model.streamParams.stream_id = -1;
-  imp23absu_mic_model.streamParams.usb_ep = -1;
-  /* User code */
-  imp23absu_mic_model.gui_plot_graph_enable = true;
-#if (HSD_USE_DUMMY_DATA == 1)
-  imp23absu_mic_set_samples_per_ts__val(0);
-#else
-  imp23absu_mic_set_samples_per_ts__val(1000);
-#endif
-  app_model.s_models[id] = &imp23absu_mic_model;
-  __stream_control(NULL, true);
+  //ILog_Controller_switch_bank(ifn);
   return 0;
 }
 
-char* imp23absu_mic_get_key(void)
+/* Firmware Information PnPL Component ---------------------------------------*/
+uint8_t firmware_info_comp_init(void)
 {
-  return "imp23absu_mic";
+  app_model.firmware_info_model.comp_name = firmware_info_get_key();
+
+  /* USER Component initialization code */
+  return 0;
+}
+char* firmware_info_get_key(void)
+{
+  return "firmware_info";
 }
 
-uint8_t imp23absu_mic_get_odr(float *value)
+uint8_t firmware_info_get_alias(char **value)
 {
-  /* Status update to check if the value has been updated by the FW */
-  uint16_t id = imp23absu_mic_model.id;
-  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
-  *value = imp23absu_mic_model.sensorStatus.ODR;
+  *value = app_model.firmware_info_model.alias;
   return 0;
 }
-uint8_t imp23absu_mic_get_aop(float *value)
+uint8_t firmware_info_get_fw_name(char **value)
 {
-  *value = imp23absu_mic_model.sensorStatus.FS;
+  *value = "FP-SNS-DATALOG2_UltrasoundFFT";
   return 0;
 }
-uint8_t imp23absu_mic_get_enable(bool *value)
+uint8_t firmware_info_get_fw_version(char **value)
 {
-  /* Status update to check if the value has been updated by the FW */
-  *value = imp23absu_mic_model.gui_plot_graph_enable;
+  *value = "1.2.0";
   return 0;
 }
-uint8_t imp23absu_mic_get_samples_per_ts__val(int32_t *value)
+uint8_t firmware_info_get_part_number(char **value)
 {
-  *value = imp23absu_mic_model.streamParams.spts;
+  *value = "STEVAL-STWINBX1";
   return 0;
 }
-uint8_t imp23absu_mic_get_samples_per_ts__min(int32_t *value)
+uint8_t firmware_info_get_device_url(char **value)
+{
+  *value = "https://www.st.com/stwinbox";
+  return 0;
+}
+uint8_t firmware_info_get_fw_url(char **value)
+{
+  *value = "https://github.com/STMicroelectronics/fp-sns-datalog2";
+  return 0;
+}
+uint8_t firmware_info_get_mac_address(char **value)
+{
+  *value = "";
+  return 0;
+}
+uint8_t firmware_info_set_alias(const char *value)
+{
+  strcpy(app_model.firmware_info_model.alias, value);
+  return 0;
+}
+
+/* Device Information PnPL Component -----------------------------------------*/
+uint8_t DeviceInformation_comp_init(void)
+{
+
+  /* USER Component initialization code */
+  return 0;
+}
+char* DeviceInformation_get_key(void)
+{
+  return "DeviceInformation";
+}
+
+uint8_t DeviceInformation_get_manufacturer(char **value)
+{
+  *value = "STMicroelectronics";
+  return 0;
+}
+uint8_t DeviceInformation_get_model(char **value)
+{
+  *value = "STEVAL-STWINBX1";
+  return 0;
+}
+uint8_t DeviceInformation_get_swVersion(char **value)
+{
+  *value = "1.2.0";
+  return 0;
+}
+uint8_t DeviceInformation_get_osName(char **value)
+{
+  *value = "AzureRTOS";
+  return 0;
+}
+uint8_t DeviceInformation_get_processorArchitecture(char **value)
+{
+  *value = "ARM Cortex-M33";
+  return 0;
+}
+uint8_t DeviceInformation_get_processorManufacturer(char **value)
+{
+  *value = "STMicroelectronics";
+  return 0;
+}
+uint8_t DeviceInformation_get_totalStorage(float *value)
 {
   *value = 0;
   return 0;
 }
-uint8_t imp23absu_mic_get_samples_per_ts__max(int32_t *value)
+uint8_t DeviceInformation_get_totalMemory(float *value)
 {
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1000;
-#endif
+  *value = (SRAM1_SIZE+SRAM2_SIZE+SRAM3_SIZE+SRAM4_SIZE)/1024;
   return 0;
 }
-uint8_t imp23absu_mic_get_dim(int32_t *value)
-{
-  *value = 1;
-  return 0;
-}
-uint8_t imp23absu_mic_get_ioffset(float *value)
-{
-  *value = imp23absu_mic_model.streamParams.ioffset;
-  return 0;
-}
-uint8_t imp23absu_mic_get_measodr(float *value)
-{
-  /* Status update to check if the value has been updated by the FW */
-  uint16_t id = imp23absu_mic_model.id;
-  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
-  *value = imp23absu_mic_model.sensorStatus.MeasuredODR;
-  return 0;
-}
-uint8_t imp23absu_mic_get_usb_dps(int32_t *value)
-{
-  *value = imp23absu_mic_model.streamParams.usb_dps;
-  return 0;
-}
-uint8_t imp23absu_mic_get_sd_dps(int32_t *value)
-{
-  *value = imp23absu_mic_model.streamParams.sd_dps;
-  return 0;
-}
-uint8_t imp23absu_mic_get_sensitivity(float *value)
-{
-  /* Status update to check if the value has been updated by the FW */
-  uint16_t id = imp23absu_mic_model.id;
-  imp23absu_mic_model.sensorStatus = SMSensorGetStatus(id);
-  *value = imp23absu_mic_model.sensorStatus.Sensitivity;
-  return 0;
-}
-uint8_t imp23absu_mic_get_data_type(char **value)
-{
-  *value = "int16";
-  return 0;
-}
-uint8_t imp23absu_mic_get_stream_id(int8_t *value)
-{
-  *value = imp23absu_mic_model.streamParams.stream_id;
-  return 0;
-}
-uint8_t imp23absu_mic_get_ep_id(int8_t *value)
-{
-  *value = imp23absu_mic_model.streamParams.usb_ep;
-  return 0;
-}
-uint8_t imp23absu_mic_set_odr(float value)
-{
-  sys_error_code_t ret = SMSensorSetODR(imp23absu_mic_model.id, value);
-  if(ret == SYS_NO_ERROR_CODE)
-  {
-    imp23absu_mic_model.sensorStatus.ODR = value;
-    __stream_control(NULL, true);
-    return ret;
-  }
-  return 1;
-}
-uint8_t imp23absu_mic_set_enable(bool value)
-{
-  sys_error_code_t ret = SYS_NO_ERROR_CODE;
-  imp23absu_mic_model.gui_plot_graph_enable = value;
-  return ret;
-}
-uint8_t imp23absu_mic_set_samples_per_ts__val(int32_t value)
-{
-  int32_t min_v = 0;
-  imp23absu_mic_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  imp23absu_mic_get_samples_per_ts__max(&max_v);
-  if(value >= min_v && value <= max_v)
-  {
-    imp23absu_mic_model.streamParams.spts = value;
-  }
-  return 0;
-}
-// Acquisition Information PnPL Component ==============================================
+
+/* Acquisition Information PnPL Component ------------------------------------*/
 uint8_t acquisition_info_comp_init(void)
 {
   app_model.acquisition_info_model.comp_name = acquisition_info_get_key();
@@ -499,7 +542,6 @@ uint8_t acquisition_info_comp_init(void)
   acquisition_info_set_description("");
   return 0;
 }
-
 char* acquisition_info_get_key(void)
 {
   return "acquisition_info";
@@ -561,59 +603,6 @@ uint8_t acquisition_info_set_name(const char *value)
 uint8_t acquisition_info_set_description(const char *value)
 {
   strcpy(app_model.acquisition_info_model.description, value);
-  return 0;
-}
-
-/* Device Information PnPL Component ================================================ */
-uint8_t DeviceInformation_comp_init(void)
-{
-
-  /* USER Component initialization code */
-  return 0;
-}
-char* DeviceInformation_get_key(void)
-{
-  return "DeviceInformation";
-}
-
-uint8_t DeviceInformation_get_manufacturer(char **value)
-{
-  *value = "STMicroelectronics";
-  return 0;
-}
-uint8_t DeviceInformation_get_model(char **value)
-{
-  *value = "STEVAL-STWINBX1";
-  return 0;
-}
-uint8_t DeviceInformation_get_swVersion(char **value)
-{
-  *value = "1.1.0";
-  return 0;
-}
-uint8_t DeviceInformation_get_osName(char **value)
-{
-  *value = "AzureRTOS";
-  return 0;
-}
-uint8_t DeviceInformation_get_processorArchitecture(char **value)
-{
-  *value = "ARM Cortex-M33";
-  return 0;
-}
-uint8_t DeviceInformation_get_processorManufacturer(char **value)
-{
-  *value = "STMicroelectronics";
-  return 0;
-}
-uint8_t DeviceInformation_get_totalStorage(float *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t DeviceInformation_get_totalMemory(float *value)
-{
-  //USER Code
   return 0;
 }
 

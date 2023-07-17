@@ -36,10 +36,10 @@ uint16_t SQNextByName(SQuery_t *_this, const char *sensor_name)
   while (SIHasNext(&_this->iterator) && !found_next_sensor)
   {
     uint16_t next_sensor_id = SINext(&_this->iterator);
-    SensorDescriptor_t descriptor = SMSensorGetDescription((uint8_t)next_sensor_id);
+    SensorStatus_t status = SMSensorGetStatus((uint8_t) next_sensor_id);
     /* check if the name match the query */
 
-    if (strncmp(sensor_name, descriptor.Name, SM_MAX_DIM_LABELS) == 0)
+    if (strncmp(sensor_name, status.Name, SM_MAX_DIM_LABELS) == 0)
     {
       sensor_id = next_sensor_id;
       found_next_sensor = true;
@@ -81,8 +81,10 @@ uint16_t SQNextByNameAndType(SQuery_t *_this, const char *sensor_name, uint8_t s
   {
     uint16_t next_sensor_id = SINext(&_this->iterator);
     SensorDescriptor_t descriptor = SMSensorGetDescription((uint8_t) next_sensor_id);
+    SensorStatus_t status = SMSensorGetStatus((uint8_t) next_sensor_id);
+
     /* check if the name match the query */
-    if (strncmp(sensor_name, descriptor.Name, SM_MAX_DIM_LABELS) == 0)
+    if (strncmp(sensor_name, status.Name, SM_MAX_DIM_LABELS) == 0)
     {
       if (descriptor.SensorType == sensor_type)
       {

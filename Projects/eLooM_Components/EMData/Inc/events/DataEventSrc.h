@@ -29,7 +29,6 @@ extern "C" {
 
 #include "events/AEventSrc.h"
 #include "events/AEventSrc_vtbl.h"
-#include "services/sysmem.h"
 
 
 /**

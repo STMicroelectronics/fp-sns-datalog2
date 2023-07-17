@@ -73,6 +73,7 @@
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers"/>
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/usbx/ports/generic/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/eLooM/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/CircularBufferDL2"/>
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/STM32_GenericFFT_Library/Inc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/Third_Party/parson"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include"/>
@@ -124,7 +125,6 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry excluding="BSP/Components" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 						<entry excluding="ST/FileX|ST/usbx/sensor_streaming/ux_device_class_sensor_streaming_change.c|ST/BlueNRG-2/hci/hci_tl_patterns/Template" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 						<entry excluding="eLooM_Components/DPU/Src/AI_HAR_DPU.c|SensorManager/doc|eLooM_Components/DPU/Src/MfccDPU.c|eLooM_Components/SensorManager/Src/LIS2DU12Task.c|Core/Src/DatalogTask.c|eLooM_Components/SensorManager/Src/HTS221Class.c|mx/Src/gpio (2).c|eLooM_Components/DPU/Src/AnomalyThreshold_DPU.c|USBX/App/app_usbx_device.c|eLooM_Components/SensorManager/Src/I2CBusIF.c|SensorManager/Src/LPS22HHTask.c|eLooM_Components/PnPLCompManager/Components/Src/HTS221_TEMP_PnPL - Copy - Copy.c|eLooM_Components/SensorManager/Src/LSM6DSV16XTask.c|Core/Src/_STWIN.box_sd.c|Core/Src/BLE_Implementation.c|Core/Src/hci_tl_interface.c|eLooM_Components/DPU/Src/NeaiDPU.c|Core/Src/___DatalogAppTask.c|eLooM_Components/DPU/Src/Dummy_DPU.c|eLooM_Components/SensorManager/Src/STTS751Task.c|eLooM_Components/SensorManager/Src/ILPS22QSTask.c|mx/Src/sdmmc.c|eLooM_Components/SensorManager/Src/SPIBusTask.c|FileX|SensorManager/Src/LPS22HHClass.c|eLooM_Components/SensorManager/Src/IIS2MDCTask.c|FileX/App/app_filex.c|PnPLCompManager/doc|eLooM_Components/SensorManager/Src/EnvTask.c|SensorManager/Src/IMP34DT05Task.c|eLooM_Components/SensorManager/Src/IIS2ICLXTask.c|PnPLCompManager/Components/Src/SensorStub_2_PnPL.c|eLooM_Components/SensorManager/Src/LIS2MDLTask.c|PnPLCompManager/Components/Src/FwInfoPnPL.c|eLooM_Components/SensorManager/Src/IIS2DHTask.c|eLooM_Components/SensorManager/Src/ISM330ISTask.c|eLooM_Components/DPU/Src/AiUSC_DPU.c|eLooM_Components/DPU/Src/FFT_DPU.c|eLooM_Components/SensorManager/Src/STTS22HTask.c|PnPLCompManager/Components/Src/SensorStubPnPL.c|eLooM_Components/DPU/Src/AiDPU.c|eLooM_Components/DPU/Src/ADPU.c|eLooM_Components/SensorManager/Src/SPIBusIF.c|SensorManager/Src/STTS751Task.c|SensorManager/Src/drivers/DFSDMDriver.c|eLooM_Components/signal_processing_lib/lib_features_extraction/Src/features_extraction.c|eLooM_Components/SensorManager/Src/LPS22HHTask.c|Core/Src/BLETask.c|eLooM_Components/DPU/Src/MfccDPU_Tables.c|eLooM_Components/SensorManager/Src/IMP34DT05Task.c|eLooM_Components/SensorManager/Src/LPS22DFTask.c|eLooM_Components/SensorManager/Src/I2CBusTask.c|eLooM_Components/PnPLCompManager/Components/Src/HTS221_TEMP_PnPL - Copy.c|eLooM_Components/SensorManager/Src/IIS3DWBTask.c|eLooM_Components/DPU/Src/MotionTD_DPU.c|eLooM_Components/PnPLCompManager/Components/Src/SensorStubPnPL.c|eLooM_Components/SensorManager/Src/HTS221Task.c|SensorManager/Src/EnvTask.c|eLooM_Components/DPU/Src/Dummy_DPU2.c|eLooM_Components/SensorManager/Src/MP23DB01HPTask.c|USBX/App/ux_device_sensor_streaming_datalog.c|eLooM_Components/SensorManager/Src/LPS22HHClass.c|SensorManager/Src/IIS2DHTask.c|eLooM_Components/SensorManager/Src/IIS2DLPCTask.c|eLooM_Components/SensorManager/Src/ISM330DHCXTask.c|eLooM_Components/PnPLCompManager/Components/Src/SensorStub_2_PnPL.c|SensorManager/Src/HTS221Class.c|Core/Src/app_threadx.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="User"/>
@@ -202,6 +202,7 @@
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/STM32_GenericFFT_Library/Inc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/Third_Party/parson"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/CircularBufferDL2"/>
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/STWIN.box"/>
@@ -250,7 +251,6 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Core"/>
 						<entry excluding="BSP/Components" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
 						<entry excluding="ST/FileX|ST/usbx/sensor_streaming/ux_device_class_sensor_streaming_change.c|ST/BlueNRG-2/hci/hci_tl_patterns/Template" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 						<entry excluding="eLooM_Components/DPU/Src/AI_HAR_DPU.c|SensorManager/doc|eLooM_Components/DPU/Src/MfccDPU.c|eLooM_Components/SensorManager/Src/LIS2DU12Task.c|Core/Src/DatalogTask.c|eLooM_Components/SensorManager/Src/HTS221Class.c|mx/Src/gpio (2).c|eLooM_Components/DPU/Src/AnomalyThreshold_DPU.c|USBX/App/app_usbx_device.c|eLooM_Components/SensorManager/Src/I2CBusIF.c|SensorManager/Src/LPS22HHTask.c|eLooM_Components/PnPLCompManager/Components/Src/HTS221_TEMP_PnPL - Copy - Copy.c|eLooM_Components/SensorManager/Src/LSM6DSV16XTask.c|Core/Src/_STWIN.box_sd.c|Core/Src/BLE_Implementation.c|Core/Src/hci_tl_interface.c|eLooM_Components/DPU/Src/NeaiDPU.c|Core/Src/___DatalogAppTask.c|eLooM_Components/DPU/Src/Dummy_DPU.c|eLooM_Components/SensorManager/Src/STTS751Task.c|eLooM_Components/SensorManager/Src/ILPS22QSTask.c|mx/Src/sdmmc.c|eLooM_Components/SensorManager/Src/SPIBusTask.c|FileX|SensorManager/Src/LPS22HHClass.c|eLooM_Components/SensorManager/Src/IIS2MDCTask.c|FileX/App/app_filex.c|PnPLCompManager/doc|eLooM_Components/SensorManager/Src/EnvTask.c|SensorManager/Src/IMP34DT05Task.c|eLooM_Components/SensorManager/Src/IIS2ICLXTask.c|PnPLCompManager/Components/Src/SensorStub_2_PnPL.c|eLooM_Components/SensorManager/Src/LIS2MDLTask.c|PnPLCompManager/Components/Src/FwInfoPnPL.c|eLooM_Components/SensorManager/Src/IIS2DHTask.c|eLooM_Components/SensorManager/Src/ISM330ISTask.c|eLooM_Components/DPU/Src/AiUSC_DPU.c|eLooM_Components/DPU/Src/FFT_DPU.c|eLooM_Components/SensorManager/Src/STTS22HTask.c|PnPLCompManager/Components/Src/SensorStubPnPL.c|eLooM_Components/DPU/Src/AiDPU.c|eLooM_Components/DPU/Src/ADPU.c|eLooM_Components/SensorManager/Src/SPIBusIF.c|SensorManager/Src/STTS751Task.c|SensorManager/Src/drivers/DFSDMDriver.c|eLooM_Components/signal_processing_lib/lib_features_extraction/Src/features_extraction.c|eLooM_Components/SensorManager/Src/LPS22HHTask.c|Core/Src/BLETask.c|eLooM_Components/DPU/Src/MfccDPU_Tables.c|eLooM_Components/SensorManager/Src/IMP34DT05Task.c|eLooM_Components/SensorManager/Src/LPS22DFTask.c|eLooM_Components/SensorManager/Src/I2CBusTask.c|eLooM_Components/PnPLCompManager/Components/Src/HTS221_TEMP_PnPL - Copy.c|eLooM_Components/SensorManager/Src/IIS3DWBTask.c|eLooM_Components/DPU/Src/MotionTD_DPU.c|eLooM_Components/PnPLCompManager/Components/Src/SensorStubPnPL.c|eLooM_Components/SensorManager/Src/HTS221Task.c|SensorManager/Src/EnvTask.c|eLooM_Components/DPU/Src/Dummy_DPU2.c|eLooM_Components/SensorManager/Src/MP23DB01HPTask.c|USBX/App/ux_device_sensor_streaming_datalog.c|eLooM_Components/SensorManager/Src/LPS22HHClass.c|SensorManager/Src/IIS2DHTask.c|eLooM_Components/SensorManager/Src/IIS2DLPCTask.c|eLooM_Components/SensorManager/Src/ISM330DHCXTask.c|eLooM_Components/PnPLCompManager/Components/Src/SensorStub_2_PnPL.c|SensorManager/Src/HTS221Class.c|Core/Src/app_threadx.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="User"/>
@@ -265,15 +265,6 @@
 		<project id="U5_ThreadX_CubeMX.null.870406516" name="U5_ThreadX_CubeMX"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.211047172;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.211047172.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1566292361;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1556315319">
-			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1608136520;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1608136520.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.987170615;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.529620886">
-			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
 		<configuration configurationName="Debug">
 			<resource resourceType="PROJECT" workspacePath="/UltrasoundFFT"/>
@@ -283,4 +274,5 @@
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="scannerConfiguration"/>
 </cproject>

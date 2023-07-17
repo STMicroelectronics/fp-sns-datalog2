@@ -23,7 +23,10 @@
 #include "services/sysdebug.h"
 #include <stdio.h>
 #include <stdint.h>
+/* MISRA messages linked to ThreadX include are ignored */
+/*cstat -MISRAC2012-* */
 #include "tx_api.h"
+/*cstat +MISRAC2012-* */
 
 #ifndef SYS_DBG_LEVEL
 #define SYS_DBG_LEVEL    SYS_DBG_LEVEL_VERBOSE
@@ -92,14 +95,12 @@ void null_lockfn()
 }
 
 void SysDebugLock() {
-  UINT xResult = TX_SUCCESS;
   if (SYS_DBG_IS_CALLED_FROM_ISR()) {
-    xResult = tx_semaphore_get(&s_xMutex, TX_NO_WAIT);
+    tx_semaphore_get(&s_xMutex, TX_NO_WAIT);
   }
   else {
-    xResult = tx_semaphore_get(&s_xMutex, TX_WAIT_FOREVER);
-    }
-  assert_param(xResult == TX_SUCCESS);
+    tx_semaphore_get(&s_xMutex, TX_WAIT_FOREVER);
+  }
 }
 
 void SysDebugUnlock() {

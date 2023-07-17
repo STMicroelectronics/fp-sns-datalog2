@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_mkboxpro:fp_sns_datalog2:sensors:lsm6dsv16x_mlc;1
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_mlc;2
   *
-  * Created by: DTDL2PnPL_cGen version 1.0.0
+  * Created by: DTDL2PnPL_cGen version 1.1.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -122,12 +122,8 @@ uint8_t Lsm6dsv16x_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   lsm6dsv16x_mlc_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "lsm6dsv16x_mlc.enable", temp_b);
   int32_t temp_i = 0;
-  lsm6dsv16x_mlc_get_samples_per_ts__val(&temp_i);
-  json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.samples_per_ts.val", temp_i);
-  lsm6dsv16x_mlc_get_samples_per_ts__min(&temp_i);
-  json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.samples_per_ts.min", temp_i);
-  lsm6dsv16x_mlc_get_samples_per_ts__max(&temp_i);
-  json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.samples_per_ts.max", temp_i);
+  lsm6dsv16x_mlc_get_samples_per_ts(&temp_i);
+  json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.samples_per_ts", temp_i);
   lsm6dsv16x_mlc_get_ucf_status(&temp_b);
   json_object_dotset_boolean(JSON_Status, "lsm6dsv16x_mlc.ucf_status", temp_b);
   lsm6dsv16x_mlc_get_dim(&temp_i);
@@ -142,8 +138,10 @@ uint8_t Lsm6dsv16x_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.usb_dps", temp_i);
   lsm6dsv16x_mlc_get_sd_dps(&temp_i);
   json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.sd_dps", temp_i);
+  lsm6dsv16x_mlc_get_sensor_category(&temp_i);
+  json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.sensor_category", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
-  field (this is :sensors). ONLY for Sensors and Algorithms */
+  field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.c_type", COMP_TYPE_SENSOR);
   int8_t temp_int8 = 0;
   lsm6dsv16x_mlc_get_stream_id(&temp_int8);
@@ -181,11 +179,8 @@ uint8_t Lsm6dsv16x_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   }
   if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_mlc.samples_per_ts"))
   {
-    if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_mlc.samples_per_ts.val"))
-    {
-      int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "lsm6dsv16x_mlc.samples_per_ts.val");
-      lsm6dsv16x_mlc_set_samples_per_ts__val(samples_per_ts);
-    }
+    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "lsm6dsv16x_mlc.samples_per_ts");
+    lsm6dsv16x_mlc_set_samples_per_ts(samples_per_ts);
   }
   json_value_free(tempJSON);
   return ret;

@@ -27,8 +27,8 @@
 extern "C" {
 #endif
 
-#include "IApplicationErrorDelegate.h"
-#include "IApplicationErrorDelegateVtbl.h"
+#include "services/IApplicationErrorDelegate.h"
+#include "services/IApplicationErrorDelegateVtbl.h"
 
 /**
  * Create a type name for _NuLLErrorDelegate

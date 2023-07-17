@@ -84,7 +84,7 @@ uint16_t SQNextByType(SQuery_t *_this, uint8_t sensor_type);
   * @param sensor_name [IN] specify the name parameter for the query.
   * @param sensor_type [IN] specify the type parameter for the query.
   * @return the sensor id of the next sensor in the iteration matching the query or SI_NULL_SENSOR
-*/
+  */
 uint16_t SQNextByNameAndType(SQuery_t *_this, const char *sensor_name, uint8_t sensor_type);
 
 /**

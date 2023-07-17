@@ -27,14 +27,8 @@
 extern "C" {
 #endif
 
-#include "systypes.h"
-#include "syserror.h"
-#include "systp.h"
-/* MISRA messages linked to FreeRTOS include are ignored */
-/*cstat -MISRAC2012-* */
-#include "tx_api.h"
-/*cstat -MISRAC2012-* */
-#include "AManagedTask_vtbl.h"
+#include "services/AManagedTask_vtbl.h"
+
 
 /**
  * Create  type name for _IManagedTask_vtb.

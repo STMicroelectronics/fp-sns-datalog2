@@ -26,7 +26,7 @@
 /*  COMPONENT DEFINITION                                   RELEASE        */
 /*                                                                        */
 /*    ux_device_class_audio10.h                           PORTABLE C      */
-/*                                                           6.1.6        */
+/*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
@@ -46,11 +46,28 @@
 /*  04-02-2021     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            added volume RES support,   */
 /*                                            resulting in version 6.1.6  */
+/*  08-02-2021     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            added extern "C" keyword    */
+/*                                            for compatibility with C++, */
+/*                                            resulting in version 6.1.8  */
+/*  07-29-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            added sampling control,     */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 
 #ifndef UX_DEVICE_CLASS_AUDIO10_H
 #define UX_DEVICE_CLASS_AUDIO10_H
+
+/* Determine if a C++ compiler is being used.  If so, ensure that standard 
+   C is used to process the API information.  */ 
+
+#ifdef   __cplusplus 
+
+/* Yes, C++ compiler is present.  Use standard C.  */ 
+extern   "C" { 
+
+#endif  
 
 
 /* Define Audio Class specific AC interface descriptor subclasses.  */
@@ -115,6 +132,13 @@
 #define UX_DEVICE_CLASS_AUDIO10_FU_DELAY_CONTROL                  0x08
 #define UX_DEVICE_CLASS_AUDIO10_FU_BASS_BOOST_CONTROL             0x09
 #define UX_DEVICE_CLASS_AUDIO10_FU_LOUNDNESS_CONTROL              0x0A
+
+
+/* Define Audio Class specific endpoint control selectors.  */
+
+#define UX_DEVICE_CLASS_AUDIO10_EP_CONTROL_UNDEFINED              0x00
+#define UX_DEVICE_CLASS_AUDIO10_EP_SAMPLING_FREQ_CONTROL          0x01
+#define UX_DEVICE_CLASS_AUDIO10_EP_PITCH_CONTROL                  0x02
 
 
 /* Define Audio Class encoding format types.  */
@@ -337,10 +361,13 @@ typedef struct UX_DEVICE_CLASS_AUDIO10_AS_DATA_ENDPOINT_DESCRIPTOR_STRUCT
 
 typedef struct UX_DEVICE_CLASS_AUDIO10_CONTROL_STRUCT
 {
-    ULONG           ux_device_class_audio10_control_fu_id;
-
     ULONG           ux_device_class_audio10_control_changed;
 
+    ULONG           ux_device_class_audio10_control_ep_addr;        /* Endpoint address for sampling frequencies control.  */
+    UCHAR           *ux_device_class_audio10_control_sam_freq_types;/* Format Type I Descriptor - bSamFreqType and followings.  */
+    ULONG           ux_device_class_audio10_control_sam_freq;       /* Current sampling frequency.  */
+
+    ULONG           ux_device_class_audio10_control_fu_id;
     USHORT          ux_device_class_audio10_control_mute[1];
     SHORT           ux_device_class_audio10_control_volume_min[1];
     SHORT           ux_device_class_audio10_control_volume_max[1];
@@ -348,8 +375,9 @@ typedef struct UX_DEVICE_CLASS_AUDIO10_CONTROL_STRUCT
     SHORT           ux_device_class_audio10_control_volume[1];
 } UX_DEVICE_CLASS_AUDIO10_CONTROL;
 
-#define UX_DEVICE_CLASS_AUDIO10_CONTROL_MUTE_CHANGED   1
-#define UX_DEVICE_CLASS_AUDIO10_CONTROL_VOLUME_CHANGED 2
+#define UX_DEVICE_CLASS_AUDIO10_CONTROL_MUTE_CHANGED                1u
+#define UX_DEVICE_CLASS_AUDIO10_CONTROL_VOLUME_CHANGED              2u
+#define UX_DEVICE_CLASS_AUDIO20_CONTROL_FREQUENCY_CHANGED           4u
 
 typedef struct UX_DEVICE_CLASS_AUDIO10_CONTROL_GROUP_STRUCT
 {
@@ -362,5 +390,11 @@ UINT _ux_device_class_audio10_control_process(UX_DEVICE_CLASS_AUDIO *audio,
                                               UX_DEVICE_CLASS_AUDIO10_CONTROL_GROUP *group);
 
 #define ux_device_class_audio10_control_process _ux_device_class_audio10_control_process
+
+/* Determine if a C++ compiler is being used.  If so, complete the standard 
+   C conditional started above.  */   
+#ifdef __cplusplus
+} 
+#endif 
 
 #endif /* ifndef UX_DEVICE_CLASS_AUDIO10_H */

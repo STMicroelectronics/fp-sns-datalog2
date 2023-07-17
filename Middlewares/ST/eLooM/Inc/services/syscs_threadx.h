@@ -1,6 +1,6 @@
 /**
  ******************************************************************************
- * @file    syscs_freertos.h
+ * @file    syscs_threadx.h
  * @author  STMicroelectronics - AIS - MCD Team
  * @version M.m.b
  * @date    June 16, 2022
@@ -38,11 +38,11 @@ extern "C" {
 /* Public API declaration */
 /**************************/
 
-#define SYS_DECLARE_CS(cs)                     UINT cs
+#define SYS_DECLARE_CS_IMP(cs)                     UINT cs  /**< Used to declare a critical section (cs) object. */
 
-#define SYS_ENTER_CRITICAL(cs)                 cs = tx_interrupt_control(TX_INT_DISABLE);
+#define SYS_ENTER_CRITICAL_IMP(cs)                 cs = tx_interrupt_control(TX_INT_DISABLE)  /**< Used to enter a critical section. */
 
-#define SYS_EXIT_CRITICAL(cs)                  tx_interrupt_control(cs)
+#define SYS_EXIT_CRITICAL_IMP(cs)                  tx_interrupt_control(cs) /**< Used to exit a critical section. */
 
 
 /* Inline functions definition */

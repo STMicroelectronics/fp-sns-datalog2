@@ -25,8 +25,8 @@
 /*                                                                        */
 /*  APPLICATION INTERFACE DEFINITION                       RELEASE        */
 /*                                                                        */
-/*    txm_module_port.h                               Cortex-M7/MPU/AC6   */
-/*                                                           6.1.7        */
+/*    txm_module_port.h                                 Cortex-M7/AC6     */
+/*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Scott Larson, Microsoft Corporation                                 */
@@ -40,11 +40,13 @@
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020      Scott Larson            Initial Version 6.1           */
-/*  11-09-2020      Scott Larson            Modified comment(s),          */
-/*                                            resulting in version 6.1.2  */
-/*  06-02-2021      Scott Larson            Added support for 8 MPU,      */
-/*                                            resulting in version 6.1.7  */
+/*  10-15-2021      Scott Larson            Initial Version 6.1.9         */
+/*  01-31-2022      Scott Larson            Modified comments and made    */
+/*                                            heap user-configurable,     */
+/*                                            resulting in version 6.1.10 */
+/*  07-29-2022      Scott Larson            Enabled user-defined and      */
+/*                                            default MPU settings,       */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 
@@ -95,6 +97,11 @@ The following extensions must also be defined in tx_port.h:
                                                 VOID   (*tx_timer_module_expiration_function)(ULONG id);
 */
 
+/* Users can define the module heap size. */
+#ifndef TXM_MODULE_HEAP_SIZE
+#define TXM_MODULE_HEAP_SIZE                    512
+#endif
+
 /* Define the kernel stack size for a module thread.  */
 #ifndef TXM_MODULE_KERNEL_STACK_SIZE
 #define TXM_MODULE_KERNEL_STACK_SIZE            768
@@ -114,6 +121,60 @@ The following extensions must also be defined in tx_port.h:
 #ifndef TXM_MODULE_MPU_SHARED_ACCESS_CONTROL
 #define TXM_MODULE_MPU_SHARED_ACCESS_CONTROL    0x12070000
 #endif
+
+/* For Cortex-M devices with 16 MPU regions, the last four regions (12-15)
+   are not used by ThreadX. These may be defined by the user.  */
+#define TXM_MODULE_MPU_USER_DEFINED_RBAR_12     0
+#define TXM_MODULE_MPU_USER_DEFINED_RASR_12     0
+#define TXM_MODULE_MPU_USER_DEFINED_RBAR_13     0
+#define TXM_MODULE_MPU_USER_DEFINED_RASR_13     0
+#define TXM_MODULE_MPU_USER_DEFINED_RBAR_14     0
+#define TXM_MODULE_MPU_USER_DEFINED_RASR_14     0
+#define TXM_MODULE_MPU_USER_DEFINED_RBAR_15     0
+#define TXM_MODULE_MPU_USER_DEFINED_RASR_15     0
+
+
+/* Users can define these default MPU configuration values.
+
+   If TXM_MODULE_MPU_DEFAULT is *not* defined, the MPU is disabled
+   when a thread that is not owned by a module is running
+   and the defines below are not used.
+
+   If TXM_MODULE_MPU_DEFAULT is defined, the MPU is configured to the
+   below values when a thread that is not owned by a module is running.  */
+#define TXM_MODULE_MPU_DEFAULT_RBAR_0           0
+#define TXM_MODULE_MPU_DEFAULT_RASR_0           0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_1           0
+#define TXM_MODULE_MPU_DEFAULT_RASR_1           0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_2           0
+#define TXM_MODULE_MPU_DEFAULT_RASR_2           0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_3           0
+#define TXM_MODULE_MPU_DEFAULT_RASR_3           0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_4           0
+#define TXM_MODULE_MPU_DEFAULT_RASR_4           0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_5           0
+#define TXM_MODULE_MPU_DEFAULT_RASR_5           0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_6           0
+#define TXM_MODULE_MPU_DEFAULT_RASR_6           0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_7           0
+#define TXM_MODULE_MPU_DEFAULT_RASR_7           0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_8           0
+#define TXM_MODULE_MPU_DEFAULT_RASR_8           0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_9           0
+#define TXM_MODULE_MPU_DEFAULT_RASR_9           0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_10          0
+#define TXM_MODULE_MPU_DEFAULT_RASR_10          0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_11          0
+#define TXM_MODULE_MPU_DEFAULT_RASR_11          0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_12          0
+#define TXM_MODULE_MPU_DEFAULT_RASR_12          0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_13          0
+#define TXM_MODULE_MPU_DEFAULT_RASR_13          0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_14          0
+#define TXM_MODULE_MPU_DEFAULT_RASR_14          0
+#define TXM_MODULE_MPU_DEFAULT_RBAR_15          0
+#define TXM_MODULE_MPU_DEFAULT_RASR_15          0
+
 
 /* Define constants specific to the tools the module can be built with for this particular modules port.  */
 
@@ -169,10 +230,10 @@ The following extensions must also be defined in tx_port.h:
 
 #define INLINE_DECLARE inline
 
-#ifndef TXM_MODULE_MANAGER_8_MPU
+#ifdef TXM_MODULE_MANAGER_16_MPU
 
 /* Define the number of MPU entries assigned to the code and data sections.
-   On Cortex-M7 parts, there are 16 total entries. ThreadX uses one for access
+   On some Cortex-M7 parts, there are 16 total entries. ThreadX uses one for access
    to the kernel entry function, thus 15 remain for code and data protection.  */
 #define TXM_MODULE_MPU_TOTAL_ENTRIES        16
 #define TXM_MODULE_MPU_CODE_ENTRIES         4
@@ -202,10 +263,10 @@ typedef struct TXM_MODULE_MPU_INFO_STRUCT
     ULONG                   txm_module_instance_shared_memory_address[TXM_MODULE_MPU_SHARED_ENTRIES];   \
     ULONG                   txm_module_instance_shared_memory_length[TXM_MODULE_MPU_SHARED_ENTRIES];
 
-#else   /* TXM_MODULE_MANAGER_8_MPU is defined */
+#else   /* TXM_MODULE_MANAGER_16_MPU is not defined */
 
 /* Define the number of MPU entries assigned to the code and data sections.
-   On Cortex-M4 parts, there are 8 total entries. ThreadX uses one for access
+   On Cortex-M3, M4, and some M7 parts, there are 8 total entries. ThreadX uses one for access
    to the kernel entry function, thus 7 remain for code and data protection.  */
 #define TXM_MODULE_MANAGER_CODE_MPU_ENTRIES     4
 #define TXM_MODULE_MANAGER_DATA_MPU_ENTRIES     3
@@ -223,7 +284,7 @@ typedef struct TXM_MODULE_MPU_INFO_STRUCT
     ULONG               txm_module_instance_shared_memory_address;                  \
     ULONG               txm_module_instance_shared_memory_length;
 
-#endif  /* TXM_MODULE_MANAGER_8_MPU */
+#endif  /* TXM_MODULE_MANAGER_16_MPU */
 
 /* Define the memory fault information structure that is populated when a memory fault occurs.  */
 
@@ -346,7 +407,7 @@ typedef struct TXM_MODULE_MANAGER_MEMORY_FAULT_INFO_STRUCT
 /* Define the macros to perform port-specific checks when passing pointers to the kernel.  */
 
 /* Define macro to make sure object is inside the module's data.  */
-#ifndef TXM_MODULE_MANAGER_8_MPU
+#ifdef TXM_MODULE_MANAGER_16_MPU
 #define TXM_MODULE_MANAGER_CHECK_INSIDE_DATA(module_instance, obj_ptr, obj_size) \
     _txm_module_manager_inside_data_check(module_instance, obj_ptr, obj_size)
 #else
@@ -380,6 +441,6 @@ UINT  _txm_module_manager_inside_data_check(TXM_MODULE_INSTANCE *module_instance
 
 #define TXM_MODULE_MANAGER_VERSION_ID   \
 CHAR                            _txm_module_manager_version_id[] =  \
-                                    "Copyright (c) Microsoft Corporation. All rights reserved.  *  ThreadX Module Cortex-M7/MPU/AC6 Version 6.1.7 *";
+                                    "Copyright (c) Microsoft Corporation. All rights reserved.  *  ThreadX Module Cortex-M7/AC6 Version 6.1.12 *";
 
 #endif

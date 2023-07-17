@@ -27,8 +27,8 @@
 extern "C" {
 #endif
 
-
-#include "syslowpower.h"
+#include "services/eloom_sysbase.h"
+#include "services/syslowpower.h"
 
 
 /**

@@ -26,7 +26,7 @@
 /*  COMPONENT DEFINITION                                   RELEASE        */ 
 /*                                                                        */ 
 /*    ux_host_class_hub.h                                 PORTABLE C      */ 
-/*                                                           6.1          */
+/*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
@@ -43,11 +43,28 @@
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  08-02-2021     Wen Wang                 Modified comment(s),          */
+/*                                            added extern "C" keyword    */
+/*                                            for compatibility with C++, */
+/*                                            resulting in version 6.1.8  */
+/*  07-29-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            added standalone support,   */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 
 #ifndef UX_HOST_CLASS_HUB_H
 #define UX_HOST_CLASS_HUB_H
+
+/* Determine if a C++ compiler is being used.  If so, ensure that standard 
+   C is used to process the API information.  */ 
+
+#ifdef   __cplusplus 
+
+/* Yes, C++ compiler is present.  Use standard C.  */ 
+extern   "C" { 
+
+#endif  
 
 
 /* Define HUB Class constants.  */
@@ -111,11 +128,11 @@
 
 /* Define HUB Class port change constants.  */
 
-#define UX_HOST_CLASS_HUB_PORT_CHANGE_CONNECTION                0x00001
-#define UX_HOST_CLASS_HUB_PORT_CHANGE_ENABLE                    0x00002
-#define UX_HOST_CLASS_HUB_PORT_CHANGE_SUSPEND                   0x00004
-#define UX_HOST_CLASS_HUB_PORT_CHANGE_OVER_CURRENT              0x00008
-#define UX_HOST_CLASS_HUB_PORT_CHANGE_RESET                     0x00010
+#define UX_HOST_CLASS_HUB_PORT_CHANGE_CONNECTION                0x00001u
+#define UX_HOST_CLASS_HUB_PORT_CHANGE_ENABLE                    0x00002u
+#define UX_HOST_CLASS_HUB_PORT_CHANGE_SUSPEND                   0x00004u
+#define UX_HOST_CLASS_HUB_PORT_CHANGE_OVER_CURRENT              0x00008u
+#define UX_HOST_CLASS_HUB_PORT_CHANGE_RESET                     0x00010u
 
 
 /* Define HUB Class other constants.  */
@@ -135,6 +152,38 @@
 /* Define HUB Class structure.  */
 
 #define UX_MAX_HUB_PORTS                                        15
+
+
+/* Define HUB state machine states.  */
+
+#define UX_HOST_CLASS_HUB_ENUM_GET_STATUS                       (UX_STATE_STEP + 0)
+#define UX_HOST_CLASS_HUB_ENUM_POWER_CHECK                      (UX_STATE_STEP + 1)
+#define UX_HOST_CLASS_HUB_ENUM_SET_CONFIG                       (UX_STATE_STEP + 2)
+#define UX_HOST_CLASS_HUB_ENUM_SET_CONFIG_DONE                  (UX_STATE_STEP + 3)
+#define UX_HOST_CLASS_HUB_ENUM_GET_HUB_DESC                     (UX_STATE_STEP + 4)
+#define UX_HOST_CLASS_HUB_ENUM_GET_HUB_DESC_DONE                (UX_STATE_STEP + 5)
+#define UX_HOST_CLASS_HUB_ENUM_PORT_POWER                       (UX_STATE_STEP + 6)
+#define UX_HOST_CLASS_HUB_ENUM_PORT_POWER_DELAY                 (UX_STATE_STEP + 7)
+#define UX_HOST_CLASS_HUB_ENUM_PORT_POWER_ON                    (UX_STATE_STEP + 8)
+#define UX_HOST_CLASS_HUB_ENUM_PORT_NEXT                        (UX_STATE_STEP + 9)
+#define UX_HOST_CLASS_HUB_ENUM_INTERRUPT_START                  (UX_STATE_STEP + 10)
+#define UX_HOST_CLASS_HUB_ENUM_DONE                             (UX_STATE_STEP + 11)
+#define UX_HOST_CLASS_HUB_ENUM_TRANS_WAIT                       (UX_STATE_STEP + 12)
+#define UX_HOST_CLASS_HUB_ENUM_DELAY_WAIT                       (UX_STATE_STEP + 13)
+
+#define UX_HOST_CLASS_HUB_CHANGE_CHECK                          (UX_STATE_STEP + 0)
+#define UX_HOST_CLASS_HUB_CHANGE_NEXT                           (UX_STATE_STEP + 1)
+#define UX_HOST_CLASS_HUB_RESET                                 (UX_STATE_STEP + 2)
+#define UX_HOST_CLASS_HUB_STATUS_GET                            (UX_STATE_STEP + 3)
+#define UX_HOST_CLASS_HUB_STATUS_GET_DONE                       (UX_STATE_STEP + 4)
+#define UX_HOST_CLASS_HUB_STATUS_PROCESS                        (UX_STATE_STEP + 5)
+#define UX_HOST_CLASS_HUB_RESET_PROCESS                         (UX_STATE_STEP + 6)
+#define UX_HOST_CLASS_HUB_CONNECT_PROCESS                       (UX_STATE_STEP + 7)
+#define UX_HOST_CLASS_HUB_DISC_DISABLED                         (UX_STATE_STEP + 8)
+#define UX_HOST_CLASS_HUB_DISC_CLEAR_1                          (UX_STATE_STEP + 9)
+#define UX_HOST_CLASS_HUB_TRANS_WAIT                            (UX_STATE_STEP + 10)
+#define UX_HOST_CLASS_HUB_DELAY_WAIT                            (UX_STATE_STEP + 11)
+
 
 typedef struct UX_HUB_DESCRIPTOR_STRUCT
 {
@@ -163,13 +212,28 @@ typedef struct UX_HOST_CLASS_HUB_STRUCT
     UX_INTERFACE    *ux_host_class_hub_interface;
     UINT            ux_host_class_hub_instance_status;
     UINT            ux_host_class_hub_state;
-    UINT            ux_host_class_hub_enumeration_retry_count;
     UINT            ux_host_class_hub_change_semaphore;
     struct UX_HUB_DESCRIPTOR_STRUCT         
                     ux_host_class_hub_descriptor;
     UINT            ux_host_class_hub_port_state;
     UINT            ux_host_class_hub_port_power;
 
+#if defined(UX_HOST_STANDALONE)
+    UINT            ux_host_class_hub_run_status;
+    UCHAR           *ux_host_class_hub_allocated;
+    UX_TRANSFER     *ux_host_class_hub_transfer;
+
+    USHORT          ux_host_class_hub_run_port_change;
+    USHORT          ux_host_class_hub_run_port_status;
+
+    ULONG           ux_host_class_hub_wait_start;
+    ULONG           ux_host_class_hub_wait_ms;
+
+    UCHAR           ux_host_class_hub_enum_state;
+    UCHAR           ux_host_class_hub_run_state;
+    UCHAR           ux_host_class_hub_next_state;
+    UCHAR           ux_host_class_hub_run_port;
+#endif
 } UX_HOST_CLASS_HUB;
 
 
@@ -195,6 +259,14 @@ UINT    _ux_host_class_hub_port_reset(UX_HOST_CLASS_HUB *hub, UINT port);
 UINT    _ux_host_class_hub_ports_power(UX_HOST_CLASS_HUB *hub);
 UINT    _ux_host_class_hub_status_get(UX_HOST_CLASS_HUB *hub, UINT port, USHORT *port_status, USHORT *port_change);
 VOID    _ux_host_class_hub_transfer_request_completed(UX_TRANSFER *transfer_request);
+
+UINT    _ux_host_class_hub_tasks_run(UX_HOST_CLASS *hub_class);
+
+/* Determine if a C++ compiler is being used.  If so, complete the standard 
+   C conditional started above.  */   
+#ifdef __cplusplus
+} 
+#endif 
 
 #endif
 

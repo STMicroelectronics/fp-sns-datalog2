@@ -39,6 +39,8 @@
 #include "stm32l5xx.h"
 #elif defined(SYS_TP_MCU_STM32G4)
 #include "stm32g4xx.h"
+#elif defined(SYS_TP_MCU_STM32H7)
+#include "stm32h7xx.h"
 #else
 #error "no target platform defined in the project options."
 #endif
@@ -60,6 +62,8 @@
 #include "stm32l5xx_ll_tim.h"
 #elif defined(SYS_TP_MCU_STM32G4)
 #include "stm32g4xx_ll_tim.h"
+#elif defined(SYS_TP_MCU_STM32H7)
+#include "stm32h7xx_ll_tim.h"
 #else
 #error "no target platform defined in the project options."
 #endif
@@ -103,6 +107,21 @@
 
 #endif
 #endif
+
+/* Early system initialization. */
+/********************************/
+/* With the support of STM32H7 some HAL macro used by the SysInit() and in the
+ * early system initialization inside the INIT task control loop are chenged.
+ */
+
+#if defined (SYS_TP_MCU_STM32H7)
+#define SYS_RCC_FLAG_WWDGRST         RCC_FLAG_WWDG1RST
+#define SYS_DBGMCU_FREEZE_WWDG()     __HAL_DBGMCU_FREEZE_WWDG1()
+#else
+#define SYS_RCC_FLAG_WWDGRST         RCC_FLAG_WWDGRST
+#define SYS_DBGMCU_FREEZE_WWDG()     __HAL_DBGMCU_FREEZE_WWDG()
+#endif
+
 
 /* X-CUBE-AI specific define */
 /*****************************/

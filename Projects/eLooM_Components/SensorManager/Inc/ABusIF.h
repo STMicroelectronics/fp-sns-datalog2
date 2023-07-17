@@ -23,9 +23,7 @@
 extern "C" {
 #endif
 
-#include "services/systp.h"
-#include "services/systypes.h"
-#include "services/syserror.h"
+#include "services/eloom_sysbase.h"
 #include "tx_api.h"
 
 
@@ -123,8 +121,8 @@ struct _ABusIF
   struct _IBus *m_pxBus;
 
   /**
-   * Synchronization object used to synchronize the sensor with the bus.
-   */
+    * Synchronization object used to synchronize the sensor with the bus.
+    */
   TX_QUEUE *p_request_queue;
 
   /**

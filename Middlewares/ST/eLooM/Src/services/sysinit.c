@@ -244,7 +244,7 @@ sys_error_code_t SysInit(boolean_t bEnableBootIF) {
   }
 #ifdef DEBUG
   HAL_DBGMCU_EnableDBGStopMode();
-  __HAL_DBGMCU_FREEZE_WWDG();
+  SYS_DBGMCU_FREEZE_WWDG();
 #endif /* DEBUG */
 #endif /* SYS_DEBUG */
 
@@ -419,11 +419,11 @@ static void InitTaskRun(ULONG thread_input) {
   tx_queue_create(&s_xTheSystem.m_xSysQueue, "SYS_Q", INIT_TASK_CFG_QUEUE_ITEM_SIZE / sizeof(uint32_t), pcMemory, INIT_TASK_CFG_QUEUE_ITEM_SIZE * INIT_TASK_CFG_QUEUE_LENGTH);
 
   /* Check if the system has resumed from WWDG reset*/
-  if (__HAL_RCC_GET_FLAG(RCC_FLAG_WWDGRST) != RESET) {
+  if (__HAL_RCC_GET_FLAG(SYS_RCC_FLAG_WWDGRST) != RESET) {
     __NOP();
-
     SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("INIT: start after WWDG reset!\r\n"));
   }
+#ifndef SYS_TP_MCU_STM32H7
   /* Check if the system has resumed from the Option Byte loading occurred*/
   if (__HAL_RCC_GET_FLAG(RCC_FLAG_OBLRST) != RESET) {
     HAL_FLASH_OB_Lock();
@@ -431,6 +431,7 @@ static void InitTaskRun(ULONG thread_input) {
 
     SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("INIT: start after OB reset!\r\n"));
   }
+#endif
 
   /* check the reset flags*/
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("INIT: reset flags: 0x%x\r\n", READ_BIT(RCC->CSR, 0xFF000000U)));

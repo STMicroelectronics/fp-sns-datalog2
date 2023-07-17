@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ilps22qs_press;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:ilps22qs_press;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.0.0
+  * Created by: DTDL2PnPL_cGen version 1.1.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -52,6 +52,7 @@ extern "C" {
 #include "parson.h"
 #include "IPnPLComponent.h"
 #include "IPnPLComponent_vtbl.h"
+
 
 /**
   * Create a type name for _Ilps22qs_Press_PnPL.

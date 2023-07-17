@@ -105,10 +105,12 @@ UINT _ux_device_class_sensor_streaming_activate(UX_SLAVE_CLASS_COMMAND *command)
     sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].ep_param.tx_state = 0U;
   }
 
+#if 0
   for(i = 0U; i < SS_N_CHANNELS_MAX; i++)
   {
     sensor_streaming->hwcid->tx_buff_status[i] = 0U;
   }
+#endif
 
   /* If trace is enabled, insert this event into the trace buffer.  */
   UX_TRACE_IN_LINE_INSERT(UX_TRACE_DEVICE_CLASS_SENSOR_STREAMING_ACTIVATE, sensor_streaming, 0, 0, 0, UX_TRACE_DEVICE_CLASS_EVENTS, 0, 0)

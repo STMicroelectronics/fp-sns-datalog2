@@ -29,10 +29,9 @@
 extern "C" {
 #endif
 
-#include "systp.h"
-#include "AManagedTask.h"
-#include "AManagedTaskEx.h"
-#include "AManagedTaskEx_vtbl.h"
+#include "services/AManagedTask.h"
+#include "services/AManagedTaskEx.h"
+#include "services/AManagedTaskEx_vtbl.h"
 
 /**
  * An application context is a linked list of Managed tasks.

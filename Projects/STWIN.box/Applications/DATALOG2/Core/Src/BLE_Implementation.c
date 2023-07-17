@@ -21,8 +21,27 @@
 #include "BLE_Manager.h"
 #include "OTA.h"
 #include "App_model.h"
-#include "ble_dctrl_class.h"
+#include "ble_stream_class.h"
 #include "UtilTask.h"
+#include "services/SQuery.h"
+
+/* Private Types ------------------------------------------------------------*/
+typedef struct
+{
+
+  uint8_t mlc_id;
+  BLE_NotifyEvent_t mlc_enabled;
+  uint8_t mlc_out[9];
+  uint8_t mlc_data_ready;
+
+  uint8_t pnpl_id;
+
+  /* for sensor data define circular buffer to accumulate until it's able to send it */
+
+}BLE_stream;
+
+BLE_stream customStream;
+
 
 /* Exported Variables --------------------------------------------------------*/
 volatile uint8_t paired = FALSE;
@@ -32,6 +51,8 @@ volatile uint32_t NeedToClearSecureDB=0;
 /* Private variables ---------------------------------------------------------*/
 static uint32_t NeedToRebootBoard = 0;
 static uint32_t NeedToSwapBanks = 0;
+
+
 
 /* Imported Variables --------------------------------------------------------*/
 uint8_t CurrentActiveBank = 0;
@@ -43,6 +64,7 @@ static void DisconnectionCompletedFunction(void);
 static void PairingCompletedFunction(uint8_t PairingStatus);
 static uint32_t DebugConsoleCommandParsing(uint8_t *att_data, uint8_t data_length);
 
+static void MLCisNotificationSubscribed(BLE_NotifyEvent_t Event);
 
 /* Private defines -----------------------------------------------------------*/
 
@@ -65,11 +87,17 @@ static void ExtConfigSetNameCommandCallback(uint8_t *NewName);
 static void ExtConfigReadBanksFwIdCommandCallback(uint8_t *CurBank, uint16_t *FwId1, uint16_t *FwId2);
 static void ExtConfigBanksSwapCommandCallback(void);
 
-/** @brief Initialize the BlueNRG stack and services
+static void BLE_SetCustomStreamID(void);
+static sys_error_code_t BLE_PostCustomData(uint8_t id_stream, uint8_t *buf, uint32_t size);
+static void BLE_SendCustomData(uint8_t id_stream);
+static void BLE_SendCommand(char *buf, uint32_t size);
+
+/**
+ * @brief Initialize the BlueNRG stack and services
  * @param  None
  * @retval None
  */
-void BluetoothInit(void)
+void BLE_BluetoothInit(void)
 {
   /* BlueNRG stack setting */
   BLE_StackValue.ConfigValueOffsets = CONFIG_DATA_PUBADDR_OFFSET;
@@ -155,7 +183,7 @@ void BluetoothInit(void)
   char mac_string[18];
   sprintf(mac_string, "%x:%x:%x:%x:%x:%x", BLE_StackValue.BleMacAddress[5], BLE_StackValue.BleMacAddress[4], BLE_StackValue.BleMacAddress[3],
           BLE_StackValue.BleMacAddress[2], BLE_StackValue.BleMacAddress[1], BLE_StackValue.BleMacAddress[0]);
-  firmware_info_set_mac_address(mac_string);
+  set_mac_address(mac_string);
 }
 
 /**
@@ -175,6 +203,13 @@ void BLE_InitCustomService(void)
   CustomConnectionCompleted = &ConnectionCompletedFunction;
 
   CustomPairingCompleted = &PairingCompletedFunction;
+
+  /* Enable notification callback */
+
+  CustomNotifyEventMachineLearningCore = &MLCisNotificationSubscribed;
+
+  /* Define Custom Function for Write Request PnPLike */
+  CustomWriteRequestPnPLike = &WriteRequestCommandLikeFunction;
 
   /***************************************/
 
@@ -196,7 +231,7 @@ void BLE_InitCustomService(void)
     PRINT_DBG("Error adding HSD characteristic\r\n");
   }
 
-  /****************************************/
+  /***************************************/
 
   /***********************************************************************************
    * Callback functions to manage the extended configuration characteristic commands *
@@ -218,9 +253,131 @@ void BLE_InitCustomService(void)
       CustomExtConfigBanksSwapCommandCallback           = &ExtConfigBanksSwapCommandCallback;
     }
   }
+
+  /* Init custom ble stream callbakc */
+  ble_stream_SetCustomStreamIDCallback = &BLE_SetCustomStreamID;
+  ble_stream_PostCustomDataCallback = &BLE_PostCustomData;
+  ble_stream_SendCustomDataCallback = &BLE_SendCustomData;
+  ble_stream_SendCommandCallback = &BLE_SendCommand;
+
+  /* Custom stream initialization */
+  customStream.mlc_enabled = BLE_NOTIFY_UNSUB;
+  customStream.mlc_data_ready = 0;
+
+}
+
+uint8_t BLE_GetFWID(void)
+{
+  return PnPLGetFWID();
 }
 
 
+/**
+ * @brief Assign ID to each stream
+ * @param  None
+ * @retval None
+ */
+static void BLE_SetCustomStreamID(void)
+{
+  SQuery_t querySM;
+  SQInit(&querySM, SMGetSensorManager());
+  customStream.mlc_id = SQNextByNameAndType(&querySM, "ism330dhcx", COM_TYPE_MLC);
+}
+
+/**
+ * @brief Save data in the relevant buffer
+ * @param  uint8_t id_stream indicates the correct stream to be filled
+ * @param  uint8_t *buf data to be saved
+ * @param  uint32_t size number of byte to be saved
+ * @retval None
+ */
+static sys_error_code_t BLE_PostCustomData(uint8_t id_stream, uint8_t *buf, uint32_t size)
+{
+  sys_error_code_t res = SYS_NOT_IMPLEMENTED_ERROR_CODE;
+
+  if(id_stream == customStream.mlc_id)
+  {
+    memcpy(customStream.mlc_out, buf, size);
+    customStream.mlc_data_ready = 1;
+    res = SYS_NO_ERROR_CODE;
+  }
+
+  return res;
+
+}
+
+/**
+ * @brief Send data on the relevant characteristics if possible
+ * @param  uint8_t id_stream indicates the correct stream to be sent
+ * @retval None
+ */
+static void BLE_SendCustomData(uint8_t id_stream)
+{
+  if(id_stream == customStream.mlc_id)
+  {
+    if(customStream.mlc_data_ready && (customStream.mlc_enabled == BLE_NOTIFY_SUB))
+    {
+      BLE_MachineLearningCoreUpdate((uint8_t*) &customStream.mlc_out, (uint8_t*) &customStream.mlc_out[8]);
+    }
+  }
+
+}
+
+static void BLE_SendCommand(char *buf, uint32_t size)
+{
+  if (buf != NULL)
+  {
+  tBleStatus ret;
+  uint32_t j = 0, chunk, tot_len;
+  uint8_t *buffer_out;
+  uint32_t length_wTP;
+
+  if ((size % 19U) == 0U)
+  {
+    length_wTP = (size / 19U) + size;
+  }
+  else
+  {
+    length_wTP = (size / 19U) + 1U + size;
+  }
+
+  buffer_out = BLE_MallocFunction(sizeof(uint8_t) * length_wTP);
+
+  if (buffer_out == NULL)
+  {
+    BLE_MANAGER_PRINTF("Error: Mem calloc error [%ld]: %d@%s\r\n", length_wTP, __LINE__, __FILE__);
+    // TODO: manage error
+    return;
+  }
+  else
+  {
+    tot_len = BLE_Command_TP_Encapsulate(buffer_out, (uint8_t *) buf, size, 20);
+
+    j = 0;
+
+    /* Data are sent as notifications*/
+    while (j < tot_len)
+    {
+      /* TODO: different MTU must be managed with MaxBLECharLen */
+
+      chunk = MIN(20, tot_len - j);
+
+      ret = BLE_PnPLikeUpdate(&buffer_out[j], chunk);
+
+      if (ret == BLE_STATUS_INSUFFICIENT_RESOURCES)
+      {
+        ble_sendMSG_wait();
+      }
+      else if (ret == BLE_STATUS_SUCCESS)
+      {
+        j += chunk;
+      }
+    }
+  }
+
+  BLE_FreeFunction(buffer_out);
+  }
+}
 
 
 /**
@@ -257,6 +414,7 @@ static uint32_t DebugConsoleParsing(uint8_t * att_data, uint8_t data_length)
 
   return SendBackData;
 }
+
 
 /**
  * @brief  This function makes the parsing of the Debug Console Commands
@@ -398,8 +556,10 @@ static void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t Addre
     paired = TRUE;
   }
 
-  ULONG msg = BLE_DCTRL_CMD_CONNECTED;
-  ble_dctrl_msg(&msg);
+  streamMsg_t msg;
+  msg.messageId = BLE_ISTREAM_MSG_CONNECTED;
+  msg.streamID = 0;
+  ble_stream_msg(&msg);
 
 }
 
@@ -430,8 +590,9 @@ static void DisconnectionCompletedFunction(void)
 
   HAL_Delay(100);
 
-  ULONG msg = BLE_DCTRL_CMD_DISCONNECTED;
-  ble_dctrl_msg(&msg);
+  streamMsg_t msg;
+  msg.messageId = BLE_ISTREAM_MSG_DISCONNECTED;
+  ble_stream_msg(&msg);
 
   setConnectable();
 }
@@ -461,6 +622,16 @@ static void PairingCompletedFunction(uint8_t PairingStatus)
   {
     paired = FALSE;
   }
+}
+
+/**
+ * @brief  This function is called when the characteristic is subscribed or unsubscribed
+ * @param  event Enum type for Service Notification Change
+ * @retval None
+ */
+static void MLCisNotificationSubscribed(BLE_NotifyEvent_t Event)
+{
+  customStream.mlc_enabled = Event;
 }
 
 /***********************************************************************************

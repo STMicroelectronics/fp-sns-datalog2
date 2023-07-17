@@ -105,7 +105,7 @@ class HSDatalogConverter:
 
     @staticmethod
     def to_xsv(df, filename, extension, separator, mode = 'w'):
-        df.to_csv(filename + extension, separator, mode = mode, index = False, header = True if mode == 'w' else False, float_format='%14.9f')
+        df.to_csv(filename + extension, separator, mode = mode, compression = None, index = False, header = True if mode == 'w' else False, float_format='%14.6f')
         log.info("--> File: \"{}\" converted chunk appended successfully".format(filename + extension))
 
     @staticmethod

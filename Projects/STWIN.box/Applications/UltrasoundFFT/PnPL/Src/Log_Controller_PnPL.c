@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:other:log_controller;2
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.1.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -38,8 +37,6 @@
 
 #include "Log_Controller_PnPL.h"
 #include "Log_Controller_PnPL_vtbl.h"
-#include "ILog_Controller.h"
-#include "ILog_Controller_vtbl.h"
 
 static const IPnPLComponent_vtbl sLog_Controller_PnPL_CompIF_vtbl =
 {
@@ -66,12 +63,10 @@ struct _Log_Controller_PnPL
   ILog_Controller_t *cmdIF;
 };
 
-/* Objects instance */
-/********************/
+/* Objects instance ----------------------------------------------------------*/
 static Log_Controller_PnPL sLog_Controller_PnPL;
 
-// Public API definition
-// *********************
+/* Public API definition -----------------------------------------------------*/
 IPnPLComponent_t *Log_Controller_PnPLAlloc()
 {
   IPnPLComponent_t *pxObj = (IPnPLComponent_t *) &sLog_Controller_PnPL;
@@ -93,8 +88,7 @@ uint8_t Log_Controller_PnPLInit(IPnPLComponent_t *_this,  ILog_Controller_t *inf
 }
 
 
-// IPnPLComponent virtual functions definition
-// *******************************************
+/* IPnPLComponent virtual functions definition -------------------------------*/
 char *Log_Controller_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 {
   return log_controller_get_key();
@@ -102,7 +96,7 @@ char *Log_Controller_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 
 uint8_t Log_Controller_PnPL_vtblGetNCommands(IPnPLComponent_t *_this)
 {
-  return 4;
+  return 5;
 }
 
 char *Log_Controller_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
@@ -120,6 +114,9 @@ char *Log_Controller_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
     break;
   case 3:
     return "log_controller*set_time";
+    break;
+  case 4:
+    return "log_controller*switch_bank";
     break;
   }
   return 0;
@@ -154,7 +151,7 @@ uint8_t Log_Controller_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
     *size = json_serialization_size(tempJSON);
   }
 
-  //no need to free temp_j as it is part of tempJSON
+  /* No need to free temp_j as it is part of tempJSON */
   json_value_free(tempJSON);
 
   return 0;
@@ -187,6 +184,10 @@ uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *s
   {
     const char *datetime = json_object_dotget_string(tempJSONObject, "log_controller*set_time.datetime");
     log_controller_set_time(p_if_owner->cmdIF, datetime);
+  }
+  if (json_object_dothas_value(tempJSONObject, "log_controller*switch_bank"))
+  {
+    log_controller_switch_bank(p_if_owner->cmdIF);
   }
   json_value_free(tempJSON);
   return 0;

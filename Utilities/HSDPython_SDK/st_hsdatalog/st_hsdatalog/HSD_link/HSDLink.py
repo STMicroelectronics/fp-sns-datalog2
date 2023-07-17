@@ -24,6 +24,7 @@ from st_hsdatalog.HSD_link.HSDLink_v2 import HSDLink_v2
 from st_hsdatalog.HSD_link.HSDLink_v1 import HSDLink_v1
 from st_hsdatalog.HSD_utils.exceptions import CommunicationEngineOpenError
 import st_hsdatalog.HSD_utils.logger as logger
+from st_pnpl.PnPLCmd import PnPLCMDManager
 
 log = logger.get_logger(__name__)
 
@@ -84,7 +85,7 @@ class SensorAcquisitionThread(Thread):
                 res = self.sensor_data_file.write(sensor_data)
 
 class HSDLink:
-    def create_hsd_link(self, dev_com_type: str = 'stwin_hsd', acquisition_folder = None):       
+    def create_hsd_link(self, dev_com_type: str = 'stwin_hsd', acquisition_folder = None, plug_callback = None, unplug_callback = None):       
         self.dev_com_type = dev_com_type
         self.acquisition_folder = acquisition_folder
         self.is_datalog2 = False
@@ -107,7 +108,7 @@ class HSDLink:
             if self.dev_com_type == "stwin_hsd":
                 self.dev_com_type = "pnpl"
             try:
-                hsd_link = HSDLink_v2(self.dev_com_type, self.acquisition_folder)
+                hsd_link = HSDLink_v2(self.dev_com_type, self.acquisition_folder, plug_callback, unplug_callback)
                 if hsd_link.nof_connected_devices == 0:
                     log.warning("No HSDatalog_v2 devices connected!")
                     self.is_datalog2 = False
@@ -122,6 +123,10 @@ class HSDLink:
         return hsd_link
     
     @staticmethod
+    def get_versiontuple(v):
+        return tuple(map(int, (v.split("."))))
+    
+    @staticmethod
     def is_v2(hsd_link):
         return isinstance(hsd_link, HSDLink_v2)
     
@@ -131,6 +136,18 @@ class HSDLink:
             return hsd_link.get_device_presentation_string(device_id)
         else:
             return None
+        
+    @staticmethod
+    def get_device_identity(hsd_link, device_id):
+        """Alternative to get_device_presentation_string [only for HSD2 v>=1.2.0]
+        """
+        if HSDLink.is_v2(hsd_link):
+            return hsd_link.send_command(device_id, PnPLCMDManager.create_get_identity_string_cmd())
+            # fw_info = hsd_link.get_firmware_info(device_id)
+            # if(HSDLink.__versiontuple(fw_info["firmware_info"]["fw_version"]) >= HSDLink.__versiontuple("1.2.0")):
+            #     message = PnPLCMDManager.create_get_identity_string_cmd().encode()
+            #     return hsd_link.send_command(device_id, json.dumps(message))
+        return None
     
     @staticmethod
     def get_version(hsd_link):
@@ -178,10 +195,11 @@ class HSDLink:
             return None
     
     @staticmethod
-    def get_firmware_info(self, device_id):
-        if self.selected_device_id is not None:
-            return self.hsd_link.get_firmware_info(device_id)
-        return None
+    def get_firmware_info(hsd_link, device_id):
+        if isinstance(hsd_link, HSDLink_v2):
+            return hsd_link.get_firmware_info(device_id)
+        else:
+            return None
     
     @staticmethod
     def set_acquisition_info(hsd_link, device_id, acq_name, acq_desc):
@@ -207,9 +225,13 @@ class HSDLink:
     @staticmethod
     def set_sensor_enable(hsd_link, d_id, new_status, sensor_name = None, s_id = None, ss_id = None):
         if isinstance(hsd_link, HSDLink_v1):
-            return hsd_link.get_sub_sensor_isActive(d_id, s_id, ss_id, new_status)
+            if s_id is not None: 
+                if ss_id is None:
+                    return hsd_link.set_sensor_active(d_id, s_id, new_status)
+                else:
+                    return hsd_link.set_sub_sensor_active(d_id, s_id, ss_id, new_status)
         else:
-            return hsd_link.get_sensor_enable(d_id, sensor_name)
+            return hsd_link.set_sensor_enable(d_id, new_status, sensor_name)      
 
     @staticmethod
     def get_sensor_odr(hsd_link, d_id, sensor_name = None, s_id = None, ss_id = None):
@@ -217,6 +239,13 @@ class HSDLink:
             return hsd_link.get_sub_sensor_odr(d_id, s_id, ss_id)
         else:
             return hsd_link.get_sensor_odr(d_id, sensor_name)
+
+    @staticmethod 
+    def set_sensor_odr(hsd_link, d_id, new_odr, sensor_name = None, s_id = None, ss_id = None):
+        if isinstance(hsd_link, HSDLink_v1):
+            return hsd_link.set_sub_sensor_odr(d_id, s_id, ss_id, new_odr)
+        else:
+            return hsd_link.set_sensor_odr(d_id, new_odr, sensor_name)
     
     @staticmethod
     def get_sensor_fs(hsd_link, d_id, sensor_name = None, s_id = None, ss_id = None):
@@ -227,6 +256,16 @@ class HSDLink:
                 return hsd_link.get_sensor_aop(d_id, sensor_name)
             else:
                 return hsd_link.get_sensor_fs(d_id, sensor_name)
+    
+    @staticmethod
+    def set_sensor_fs(hsd_link, d_id, new_fs, sensor_name = None, s_id = None, ss_id = None):
+        if isinstance(hsd_link, HSDLink_v1):
+            return hsd_link.set_sub_sensor_fs(d_id, s_id, ss_id, new_fs)
+        else:
+            if "_mic" in sensor_name:
+                return hsd_link.set_sensor_aop(d_id, new_fs, sensor_name)
+            else:
+                return hsd_link.set_sensor_fs(d_id, new_fs, sensor_name)
             
     @staticmethod
     def get_sensor_spts(hsd_link, d_id, sensor_name = None, s_id = None, ss_id = None):
@@ -234,6 +273,13 @@ class HSDLink:
             return hsd_link.get_sub_sensor_sample_per_ts(d_id, s_id, ss_id)
         else:
             return hsd_link.get_sensor_samples_per_ts(d_id, sensor_name)
+    
+    @staticmethod
+    def set_sensor_spts(hsd_link, d_id, new_spts, sensor_name = None, s_id = None, ss_id = None):
+        if isinstance(hsd_link, HSDLink_v1):
+            return hsd_link.set_samples_per_timestamp(d_id, s_id, ss_id, new_spts)
+        else:
+            return hsd_link.set_sensor_samples_per_ts(d_id, new_spts, sensor_name)
     
     def init_sensors_data_counters(self, sensor_list):
         if isinstance(self, HSDLink_v1):
@@ -267,6 +313,15 @@ class HSDLink:
         else:
             if device_id is not None and current_mlc_sensor_list is None:
                 return hsd_link.get_sensors(device_id, type_filter="mlc", only_active=False)
+            
+    @staticmethod
+    def get_updated_ispu_sensor_list(hsd_link, device_id, current_ispu_sensor_list):
+        if isinstance(hsd_link, HSDLink_v1):
+            if device_id is not None and current_ispu_sensor_list is None:
+                return hsd_link.get_sub_sensors(device_id, type_filter="ISPU", only_active=False)
+        else:
+            if device_id is not None and current_ispu_sensor_list is None:
+                return hsd_link.get_sensors(device_id, type_filter="ispu", only_active=False)
         
     @staticmethod
     def get_mlc_id(hsd_link, device_id):
@@ -278,7 +333,7 @@ class HSDLink:
                         mlc_id = [mlc_s.id, mlc_s.sensor_descriptor.sub_sensor_descriptor[0].id]
                         return mlc_id
         else:
-            if device_id is not None and mlc_sensor_list is None:
+            if device_id is not None and mlc_sensor_list is not None:
                 #NOTE WIP - @ the moment only 1 MLC per board is supported
                 for mlc_s in mlc_sensor_list:
                     if 'mlc' in mlc_s:
@@ -287,10 +342,28 @@ class HSDLink:
                         return mlc_id
     
     @staticmethod
+    def get_ispu_id(hsd_link, device_id):
+        ispu_sensor_list = HSDLink.get_updated_ispu_sensor_list(hsd_link, device_id, None)
+        if isinstance(hsd_link, HSDLink_v1):
+            if device_id is not None and ispu_sensor_list is not None:
+                for ispu_s in ispu_sensor_list:
+                    if ispu_s.name == 'ISM330IS':
+                        ispu_id = [ispu_s.id, ispu_s.sensor_descriptor.sub_sensor_descriptor[0].id]
+                        return ispu_id
+        else:
+            if device_id is not None and ispu_sensor_list is not None:
+                #NOTE WIP - @ the moment only 1 MLC per board is supported
+                for ispu_s in ispu_sensor_list:
+                    if 'ispu' in ispu_s:
+                        ispu_sensor_list = ispu_s
+                        ispu_id = ispu_sensor_list.index(ispu_s)
+                        return ispu_id
+    
+    @staticmethod
     def upload_mlc_ucf_file(hsd_link, device_id, ucf_file):
         # MLC configuration file [<a_mlc_configuration_file>.ufc]        
         if isinstance(hsd_link, HSDLink_v1):
-            if ucf_file != '' and os.path.exists(ucf_file):
+            if ucf_file is not None and ucf_file != '' and os.path.exists(ucf_file):
                 mlc_id = HSDLink.get_mlc_id(hsd_link, device_id)
                 if mlc_id is not None:
                     res = hsd_link.upload_mlc_ucf_file(device_id, mlc_id[0], ucf_file)
@@ -302,7 +375,7 @@ class HSDLink:
                     if not res:
                         log.warning("Error in MLC enable!")
         else:
-            if ucf_file != '' and os.path.exists(ucf_file):
+            if ucf_file is not None and ucf_file != '' and os.path.exists(ucf_file):
                 mlc_sensor = HSDLink.get_updated_mlc_sensor_list(hsd_link, device_id, None)
                 if mlc_sensor is not None:
                     res = hsd_link.upload_mlc_ucf_file(device_id, list(mlc_sensor.keys())[0], ucf_file)
@@ -310,6 +383,31 @@ class HSDLink:
                         log.warning("Error in MLC configuration update!")
                     #Activate MLC sensor
                     time.sleep(0.05) #TODO remove it when this issue will be fixed in FW
+
+    @staticmethod
+    def upload_ispu_ucf_file(hsd_link, device_id, ucf_file):
+        # ISPU configuration file [<a_ispu_configuration_file>.ufc]        
+        if isinstance(hsd_link, HSDLink_v1):
+            if ucf_file is not None and ucf_file != '' and os.path.exists(ucf_file):
+                ispu_id = HSDLink.get_ispu_id(hsd_link, device_id)
+                if ispu_id is not None:
+                    res = hsd_link.upload_ispu_ucf_file(device_id, ispu_id[0], ucf_file)
+                    if not res:
+                        log.warning("Error in ISPU configuration update!")
+                    #Activate ISPU sensor
+                    time.sleep(0.05) #TODO remove it when this issue will be fixed in FW
+                    res = hsd_link.set_sub_sensor_active(device_id, ispu_id[0], ispu_id[1], True)
+                    if not res:
+                        log.warning("Error in ISPU enable!")
+        else:
+            if ucf_file is not None and ucf_file != '' and os.path.exists(ucf_file):
+                ispu_sensor = HSDLink.get_updated_ispu_sensor_list(hsd_link, device_id, None)
+                if ispu_sensor is not None:
+                    res = hsd_link.upload_ispu_ucf_file(device_id, list(ispu_sensor.keys())[0], ucf_file)
+                    if not res:
+                        log.warning("Error in ISPU configuration update!")
+                    #Activate ISPU sensor
+                    time.sleep(0.5) #TODO remove it when this issue will be fixed in FW
     
     @staticmethod
     def set_RTC(hsd_link, device_id):
@@ -371,10 +469,17 @@ class HSDLink:
             threads_stop_flags.append(stopFlag)
             thread = SensorAcquisitionThread(stopFlag, hsd_link, sensor_data_file, device_id, sensor, print_data_cnt = print_data_cnt)
             thread.start()
+
+    @staticmethod
+    def stop_sensor_acquisition_threads(threads_stop_flags, sensor_data_files):
+        for sf in threads_stop_flags:
+            sf.set()
+        for f in sensor_data_files:
+            f.close()
     
     @staticmethod
     def stop_log(hsd_link, device_id):
-        hsd_link.stop_log(device_id)
+        return hsd_link.stop_log(device_id)
         
     @staticmethod
     def start_log(hsd_link, device_id, sub_folder = True):

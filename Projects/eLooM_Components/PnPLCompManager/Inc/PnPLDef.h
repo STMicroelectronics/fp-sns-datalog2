@@ -27,13 +27,13 @@ extern "C" {
 #define PNPL_CMD_GET            (uint8_t)(0x10)
 #define PNPL_CMD_SET            (uint8_t)(0x20)
 #define PNPL_CMD_UPDATE_DEVICE  (uint8_t)(0x21)
-#define PNPL_CMD_SYSTEM_CONFIG  (uint8_t)(0x40) //TODO check this
-#define PNPL_CMD_SYSTEM_INFO    (uint8_t)(0x50) //TODO check this
+#define PNPL_CMD_SYSTEM_CONFIG  (uint8_t)(0x40)
+#define PNPL_CMD_SYSTEM_INFO    (uint8_t)(0x50)
 #define PNPL_CMD_COMPUTE_STREAM_IDS (uint8_t)(0x60)
 #define PNPL_CMD_ERROR          (uint8_t)(0x70)
 
 #define COMP_KEY_MAX_LENGTH     32
-#define COM_MAX_PNPL_COMPONENTS 20 //TODO check this
+#define COM_MAX_PNPL_COMPONENTS 20
 
 #define PNPL_CMD_NO_ERROR_CODE      (0x0u)
 #define PNPL_CMD_ERROR_CODE         (0x1u)

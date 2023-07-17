@@ -24,7 +24,7 @@
 // in order to manage the inline.
 // See also http://stackoverflow.com/questions/26503235/c-inline-function-and-gcc
 #if defined (__GNUC__) || defined(__ICCARM__)
-extern sys_error_code_t IStream_init(IStream_t *_this, void *param);
+extern sys_error_code_t IStream_init(IStream_t *_this, uint8_t comm_interface_id, void *param);
 extern sys_error_code_t IStream_enable(IStream_t *_this);
 extern sys_error_code_t IStream_disable(IStream_t *_this);
 extern boolean_t IStream_is_enabled(IStream_t *_this);

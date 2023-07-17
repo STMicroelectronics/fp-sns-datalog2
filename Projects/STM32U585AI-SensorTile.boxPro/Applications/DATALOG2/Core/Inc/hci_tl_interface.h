@@ -65,8 +65,7 @@ void hci_tl_lowlevel_init(void);
   * @param  None
   * @retval None
   */
-void hci_tl_lowlevel_isr(void);
-void hci_tl_isr(uint16_t pin);
+void hci_tl_lowlevel_isr(uint16_t nPin);
 
 #ifdef __cplusplus
 }

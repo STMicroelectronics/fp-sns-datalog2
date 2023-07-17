@@ -30,15 +30,13 @@ extern "C" {
 #endif
 
 
-
-#include "services/systp.h"
-#include "services/syserror.h"
 #include "services/AManagedTaskEx.h"
 #include "services/AManagedTaskEx_vtbl.h"
 #include "events/DataEventSrc.h"
 #include "events/DataEventSrc_vtbl.h"
 #include "ISensor.h"
 #include "ISensor_vtbl.h"
+
 
 /**
   * Create  type name for _IMP34DT05Task.

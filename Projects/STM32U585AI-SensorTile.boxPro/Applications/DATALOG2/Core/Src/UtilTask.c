@@ -232,7 +232,7 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
 
   /* Software timer for user led management */
   if (TX_SUCCESS != tx_timer_create(&p_obj->user_led_timer, "USER_LED_T", UtilTaskSwTimerCallbackUserLed, (ULONG)TX_NULL,
-                         AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS), UTIL_TASK_CFG_UL_TIMER_PERIOD_MS,
+                         AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS),
                          TX_AUTO_ACTIVATE))
   {
     res = SYS_APP_TASK_INIT_ERROR_CODE;

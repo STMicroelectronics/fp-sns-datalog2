@@ -144,11 +144,16 @@ static void Write_Request_PnPLike(void *BleCharPointer,uint16_t handle, uint16_t
      if(CommandBufLen>0U)
      {
        CustomWriteRequestPnPLike(ble_command_buffer, CommandBufLen);
+#if (BLE_DEBUG_LEVEL>1)
+       BLE_MANAGER_PRINTF("\r\n%s\r\n",ble_command_buffer);
+#endif
      }
   }
   else
   {
-    BLE_MANAGER_PRINTF("\r\n\nWrite request PnPLike function not defined\r\n\n");
+#if (BLE_DEBUG_LEVEL>1)
+    BLE_MANAGER_PRINTF("\r\nWrite request PnPLike function not defined\r\n");
+#endif
   }
 }
 

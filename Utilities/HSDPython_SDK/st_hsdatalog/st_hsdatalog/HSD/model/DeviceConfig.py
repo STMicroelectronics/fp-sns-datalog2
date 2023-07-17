@@ -81,6 +81,8 @@ class DeviceInfo:
     data_file_ext: Optional[str] = None
     data_file_format: Optional[str] = None
     n_sensor: Optional[int] = None
+    model: Optional[str] = None #from v1.5.0
+    ble_mac_address: Optional[str] = None #from v1.5.0
 
     @staticmethod
     def from_dict(obj: Any) -> 'DeviceInfo':
@@ -94,7 +96,11 @@ class DeviceInfo:
         data_file_ext = from_union([from_str, from_none], obj.get("dataFileExt"))
         data_file_format = from_union([from_str, from_none], obj.get("dataFileFormat"))
         n_sensor = from_union([from_int, from_none], obj.get("nSensor"))
-        return DeviceInfo(serial_number, alias, part_number, url, fw_name, fw_version, data_file_ext, data_file_format, n_sensor)
+        model = obj.get("model","")
+        model:model
+        ble_mac_address = obj.get("bleMacAddress","")
+        ble_mac_address:ble_mac_address
+        return DeviceInfo(serial_number, alias, part_number, url, fw_name, fw_version, data_file_ext, data_file_format, n_sensor, model, ble_mac_address)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -107,6 +113,8 @@ class DeviceInfo:
         result["dataFileExt"] = from_union([from_str, from_none], self.data_file_ext)
         result["dataFileFormat"] = from_union([from_str, from_none], self.data_file_format)
         result["nSensor"] = from_union([from_int, from_none], self.n_sensor)
+        result["model"] = from_union([from_str, from_none], self.model)
+        result["bleMacAddress"] = from_union([from_str, from_none], self.ble_mac_address)
         return result
 
 

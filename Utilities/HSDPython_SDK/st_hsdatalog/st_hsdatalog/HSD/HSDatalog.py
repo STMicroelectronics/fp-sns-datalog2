@@ -24,6 +24,7 @@ from st_hsdatalog.HSD.model.DeviceConfig import Device
 from st_hsdatalog.HSD_utils.converters import HSDatalogConverter
 from st_hsdatalog.HSD_utils.exceptions import *
 import st_hsdatalog.HSD_utils.logger as logger
+from st_pnpl.DTDL.dtdl_utils import ComponentTypeEnum
 
 log = logger.get_logger(__name__)
 
@@ -109,7 +110,8 @@ class HSDatalog:
         s_list = hsd.get_sensor_list(only_active = only_active)
         if isinstance(hsd, HSDatalog_v2):
             a_list = hsd.get_algorithm_list(only_active = only_active)
-            component = hsd.prompt_component_select_CLI(s_list + a_list)
+            ac_list = hsd.get_actuator_list(only_active = only_active)
+            component = hsd.prompt_component_select_CLI(s_list + a_list + ac_list)
         else:
             component = hsd.prompt_sensor_select_CLI(s_list)
         return component
@@ -197,10 +199,11 @@ class HSDatalog:
     def get_sensor_spts(hsd, sensor):
         if isinstance(hsd, HSDatalog_v2):
             s_name = HSDatalog.get_sensor_name(hsd, sensor)
-            if "samples_per_ts" in sensor[s_name]:
-                return sensor[s_name]["samples_per_ts"]["val"]
+            spts = sensor[s_name].get("samples_per_ts")
+            if isinstance(spts, int):
+                return spts
             else:
-                return None
+                return spts.get("val")
         else:
             s_descriptor_list = sensor.sensor_descriptor.sub_sensor_descriptor
             s_status_list = sensor.sensor_status.sub_sensor_status
@@ -218,9 +221,11 @@ class HSDatalog:
     def get_all_components(hsd, only_active):
         s_list = hsd.get_sensor_list(only_active=only_active)
         a_list = []
+        ac_list = []
         if isinstance(hsd, HSDatalog_v2):
             a_list = hsd.get_algorithm_list(only_active=True)
-            return s_list + a_list
+            ac_list = hsd.get_actuator_list(only_active=True)
+            return s_list + a_list + ac_list
         else:
             return s_list
     
@@ -246,7 +251,7 @@ class HSDatalog:
         time_offset = 0 if start_time is None else start_time
         while (isLastChunk == 0):
 
-            if end_time is not None and time_offset + chunk_time_size > end_time:
+            if end_time != -1 and time_offset + chunk_time_size > end_time:
                 chunk_time_size = end_time - time_offset
             
             data = hsd.get_data_and_timestamps(comp_name, comp_type, start_time = time_offset, end_time = time_offset + chunk_time_size, raw_flag = True)[0]
@@ -299,14 +304,16 @@ class HSDatalog:
     
     @staticmethod
     def __convert_to_xsv(hsd, comp_name, comp_type, odr, start_time, end_time, labeled, raw_data, output_folder, file_format):
-        chunk_size = 10000000 #feel fre to change it
+        chunk_size = 10000000 #feel fre to change it (samples)
         chunk_time_size = chunk_size/odr # seconds
         isLastChunk = False
-        time_offset = 0 if start_time is None else start_time
+        # time_offset = 0 if start_time is None else start_time
+        time_offset = start_time or 0
         
         log.info("--> Conversion started...")
-        while isLastChunk == 0:
-            if end_time is not None and time_offset + chunk_time_size > end_time:
+        # while isLastChunk == 0:
+        while not isLastChunk:
+            if end_time != -1 and time_offset + chunk_time_size > end_time:
                 #read exactly the missing samples up to end_time
                 chunk_time_size = end_time - time_offset
 
@@ -320,12 +327,13 @@ class HSDatalog:
                     HSDatalogConverter.to_tsv(df, sensor_file_name, mode = 'w' if time_offset == 0 else 'a')
 
                 if len(df) == 0 or len(df) < chunk_size:
-                    isLastChunk = 1
+                    isLastChunk = True
                     log.info("--> Conversion completed")
                 else:
-                    time_offset = time_offset + chunk_time_size
+                    log.info("--> Chunk Conversion completed")
+                    time_offset += chunk_time_size
             else:
-                isLastChunk = 1
+                isLastChunk = True
     
     @staticmethod
     def get_dataframe(hsd, component, start_time = 0, end_time = -1, labeled = False, raw_data = False) -> list: 
@@ -376,6 +384,18 @@ class HSDatalog:
     
     @staticmethod
     def convert_dat_to_xsv(hsd, component, start_time, end_time, labeled, raw_data, output_folder, file_format):
+        """_summary_
+
+        Args:
+            hsd (_type_): _description_
+            component (_type_): _description_
+            start_time (_type_): _description_
+            end_time (_type_): -1 TODO
+            labeled (_type_): _description_
+            raw_data (_type_): _description_
+            output_folder (_type_): _description_
+            file_format (_type_): _description_
+        """
         if isinstance(hsd, HSDatalog_v2):
             c_name = list(component.keys())[0]
             odr = None
@@ -439,7 +459,7 @@ class HSDatalog:
         time_offset = 0 if start_time is None else start_time
         
         while isLastChunk == 0:
-            if end_time is not None and time_offset + chunk_time_size > end_time:
+            if end_time != -1 and time_offset + chunk_time_size > end_time:
                 chunk_time_size = end_time - time_offset
 
             if chunk_size == 0:
@@ -464,6 +484,7 @@ class HSDatalog:
                     log.info("--> {} Nanoedge conversion completed successfully".format(comp_name))
                 else:
                     time_offset = time_offset + chunk_time_size
+                    log.info("--> {} chunk conversion completed successfully".format(comp_name))
             else:
                 isLastChunk = 1
                 log.info("--> {} Nanoedge conversion completed successfully".format(comp_name))
@@ -535,7 +556,7 @@ class HSDatalog:
             isLastChunk = False
             time_offset = 0 if start_time is None else start_time
             while isLastChunk == 0:
-                if end_time is not None and time_offset + chunk_time_size > end_time:
+                if end_time != -1 and time_offset + chunk_time_size > end_time:
                     chunk_time_size = end_time - time_offset
 
                 res = hsd.get_data_and_timestamps(comp_name, comp_type, start_time = time_offset, end_time = time_offset + chunk_time_size, raw_flag = True)
@@ -550,6 +571,7 @@ class HSDatalog:
                     isLastChunk = 1
                 else:
                     time_offset = time_offset + chunk_time_size
+                    log.info("--> {} chunk conversion completed successfully".format(comp_name))
                 HSDatalogConverter.wav_append(wav_file,pcm_data)
             HSDatalogConverter.wav_close(wav_file)
         except Exception as err:
@@ -587,9 +609,9 @@ class HSDatalog:
             c_type = None
             if "c_type" in component[c_name]:
                 c_type = component[c_name]["c_type"]
-                if c_type == 0:
+                if c_type == ComponentTypeEnum.SENSOR.value or c_type == ComponentTypeEnum.ACTUATOR.value:
                     hsd.get_sensor_plot(c_name, c_type, start_time, end_time, label = label, subplots = subplots, raw_flag = raw_data)
-                elif c_type == 1:
+                elif c_type == ComponentTypeEnum.ALGORITHM.value:
                     hsd.get_algorithm_plot(c_name, start_time, end_time, label = label, subplots = subplots, raw_flag = raw_data)
             else:
                 if c_type is None:

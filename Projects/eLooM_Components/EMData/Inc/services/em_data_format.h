@@ -61,8 +61,7 @@ extern "C" {
 #include <stddef.h>
 #include <stdarg.h>
 #include <string.h>
-#include "services/systp.h"
-#include "services/syserror.h"
+#include "services/eloom_sysbase.h"
 
 #ifndef EM_DATA_CFG_MAX_SHAPE
 #define EM_DATA_CFG_MAX_SHAPE          3

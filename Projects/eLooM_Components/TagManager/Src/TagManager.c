@@ -19,7 +19,6 @@
  ******************************************************************************
  */
 
-#include "stm32u5xx_hal.h"
 #include "TagManager.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -367,3 +366,19 @@ sys_error_code_t TMResetTagListCounter(void)
   TagsN = 0;
   return res;
 }
+
+sys_error_code_t TMCloseAllOpenedTags(void)
+{
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  uint8_t id;
+  for(id = 0; id < HSD_SW_TAG_CLASS_NUM; id++)
+  {
+    if(SWTagClasses[id].enabled == true && SWTagClasses[id].status == true)
+    {
+      TMSetSWTag(false, id);
+    }
+  }
+  return res;
+}
+

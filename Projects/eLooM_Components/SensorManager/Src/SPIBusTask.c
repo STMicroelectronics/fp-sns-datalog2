@@ -120,7 +120,7 @@ static const SPIBusTaskClass_t sTheClass =
 
 /* Public API definition */
 
-AManagedTaskEx* SPIBusTaskAlloc(const void *p_mx_drv_cfg)
+AManagedTaskEx *SPIBusTaskAlloc(const void *p_mx_drv_cfg)
 {
   SPIBusTask *p_task = SysAlloc(sizeof(SPIBusTask));
 
@@ -130,14 +130,14 @@ AManagedTaskEx* SPIBusTaskAlloc(const void *p_mx_drv_cfg)
   p_task->super.vptr = &sTheClass.vtbl;
   p_task->p_mx_drv_cfg = p_mx_drv_cfg;
 
-  return (AManagedTaskEx*) p_task;
+  return (AManagedTaskEx *) p_task;
 }
 
 sys_error_code_t SPIBusTaskConnectDevice(SPIBusTask *_this, SPIBusIF *p_bus_if)
 {
   assert_param(_this);
 
-  ((ABusIF*)p_bus_if)->p_request_queue = &_this->in_queue;
+  ((ABusIF *)p_bus_if)->p_request_queue = &_this->in_queue;
 
   return IBusConnectDevice(_this->p_bus_if, &p_bus_if->super);
 }

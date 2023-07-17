@@ -1,3 +1,18 @@
+
+# ******************************************************************************
+# * @attention
+# *
+# * Copyright (c) 2022 STMicroelectronics.
+# * All rights reserved.
+# *
+# * This software is licensed under terms that can be found in the LICENSE file
+# * in the root directory of this software component.
+# * If no LICENSE file comes with this software, it is provided AS-IS.
+# *
+# *
+# ******************************************************************************
+#
+
 import setuptools
 import os
 
@@ -6,9 +21,9 @@ with open("LICENSE.md", "r") as fh:
 
 setuptools.setup(
     name="st_dtdl_gui",
-    version="1.1.0",
+    version="1.2.0",
     author="SRA-ASP",
-    author_email="",
+    author_email="matteo.ronchi@st.com",
     description="STMicroelectronics Graphical Widgets from DTDL collection python package",
     long_description=long_description,
     long_description_content_type="text\\markdown",
@@ -26,6 +41,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Topic :: Software Development :: Embedded Systems"
     ],
     install_requires=[

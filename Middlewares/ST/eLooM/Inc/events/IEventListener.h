@@ -29,8 +29,6 @@
 extern "C" {
 #endif
 
-#include "services/systypes.h"
-#include "services/syserror.h"
 #include "events/IListener.h"
 #include "events/IListener_vtbl.h"
 

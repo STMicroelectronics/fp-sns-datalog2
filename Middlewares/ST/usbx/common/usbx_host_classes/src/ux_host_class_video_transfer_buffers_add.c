@@ -35,7 +35,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _ux_host_class_video_transfer_buffers_add           PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
@@ -50,6 +50,9 @@
 /*                                                                        */
 /*    Note the maximum number of transfers could be buffered is           */
 /*    UX_HOST_CLASS_VIDEO_TRANSFER_REQUEST_COUNT - 1.                     */
+/*                                                                        */
+/*    Note check ux_host_class_video_max_payload_get to see minimum       */
+/*    recommended buffer size.                                            */
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
@@ -66,8 +69,8 @@
 /*                                                                        */
 /*    _ux_host_stack_class_instance_verify  Verify instance is valid      */
 /*    _ux_host_stack_transfer_request       Process transfer request      */
-/*    _ux_utility_semaphore_get             Get semaphore                 */
-/*    _ux_utility_semaphore_put             Release semaphore             */
+/*    _ux_host_semaphore_get                Get semaphore                 */
+/*    _ux_host_semaphore_put                Release semaphore             */
 /*    _ux_system_error_handler              Log system error              */
 /*                                                                        */
 /*  CALLED BY                                                             */
@@ -81,6 +84,19 @@
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  10-15-2021     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            use pre-calculated value    */
+/*                                            instead of wMaxPacketSize,  */
+/*                                            resulting in version 6.1.9  */
+/*  01-31-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            refined macros names,       */
+/*                                            resulting in version 6.1.10 */
+/*  04-25-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            fixed standalone compile,   */
+/*                                            resulting in version 6.1.11 */
+/*  07-29-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            set pending on endpoint,    */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 UINT  _ux_host_class_video_transfer_buffers_add(UX_HOST_CLASS_VIDEO *video, UCHAR** buffers, ULONG num_buffers)
@@ -89,6 +105,7 @@ UINT  _ux_host_class_video_transfer_buffers_add(UX_HOST_CLASS_VIDEO *video, UCHA
 UINT            status;
 UX_TRANSFER     *transfer_request;
 UX_TRANSFER     *previous_transfer;
+UX_ENDPOINT     *endpoint;
 ULONG           transfer_index;
 ULONG           packet_size;
 UINT            i;
@@ -105,17 +122,20 @@ UINT            i;
     }
 
     /* Protect thread reentry to this instance.  */
-    status =  _ux_utility_semaphore_get(&video -> ux_host_class_video_semaphore, UX_WAIT_FOREVER);
+    status =  _ux_host_semaphore_get(&video -> ux_host_class_video_semaphore, UX_WAIT_FOREVER);
     if (status != UX_SUCCESS)
         return(status);
 
+    /* Get endpoint.  */
+    endpoint = video -> ux_host_class_video_isochronous_endpoint;
+
     /* Ensure we have a selected interface that allows isoch transmission.  */
-    if ((video -> ux_host_class_video_isochronous_endpoint == UX_NULL) ||
-        (video -> ux_host_class_video_isochronous_endpoint -> ux_endpoint_descriptor.wMaxPacketSize == 0))
+    if ((endpoint == UX_NULL) ||
+        (endpoint -> ux_endpoint_descriptor.wMaxPacketSize == 0))
     {
 
         /* Unprotect thread reentry to this instance.  */
-        status =  _ux_utility_semaphore_put(&video -> ux_host_class_video_semaphore);
+        _ux_host_semaphore_put(&video -> ux_host_class_video_semaphore);
 
         /* Error trap. */
         _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_CLASS, UX_HOST_CLASS_VIDEO_WRONG_INTERFACE);
@@ -145,16 +165,14 @@ UINT            i;
     {
 
         /* Unprotect thread reentry to this instance.  */
-        status =  _ux_utility_semaphore_put(&video -> ux_host_class_video_semaphore);
+        _ux_host_semaphore_put(&video -> ux_host_class_video_semaphore);
 
         /* Return error status.  */
         return(status);
     }
 
     /* Calculate packet size.  */
-    packet_size = video -> ux_host_class_video_isochronous_endpoint -> ux_endpoint_descriptor.wMaxPacketSize;
-    if (packet_size & UX_MAX_NUMBER_OF_TRANSACTIONS_MASK)
-        packet_size = (packet_size & UX_MAX_PACKET_SIZE_MASK) * (((packet_size & UX_MAX_NUMBER_OF_TRANSACTIONS_MASK) >> UX_MAX_NUMBER_OF_TRANSACTIONS_SHIFT) + 1);
+    packet_size = video -> ux_host_class_video_current_max_payload_size;
 
     /* Add buffers one by one.  */
     for (i = 0,
@@ -166,11 +184,11 @@ UINT            i;
         transfer_request = &video->ux_host_class_video_transfer_requests[transfer_index];
 
         /* Select the direction. We do this by taking the endpoint direction.  */
-        transfer_request -> ux_transfer_request_type =  video -> ux_host_class_video_isochronous_endpoint ->
-            ux_endpoint_descriptor.bEndpointAddress & UX_REQUEST_DIRECTION;
+        transfer_request -> ux_transfer_request_type =  endpoint ->
+                ux_endpoint_descriptor.bEndpointAddress & UX_REQUEST_DIRECTION;
 
         /* Fill the transfer request with all the required fields.  */
-        transfer_request -> ux_transfer_request_endpoint =             video -> ux_host_class_video_isochronous_endpoint;
+        transfer_request -> ux_transfer_request_endpoint =             endpoint;
         transfer_request -> ux_transfer_request_data_pointer =         buffers[i];
         transfer_request -> ux_transfer_request_requested_length =     packet_size;
         transfer_request -> ux_transfer_request_completion_function =  _ux_host_class_video_transfer_request_callback;
@@ -196,15 +214,17 @@ UINT            i;
     transfer_request = &video -> ux_host_class_video_transfer_requests[video->ux_host_class_video_transfer_request_start_index];
 
     /* Move request index.  */
-    video->ux_host_class_video_transfer_request_start_index = transfer_index;
+    video -> ux_host_class_video_transfer_request_start_index = transfer_index;
+
+    /* Set endpoint to pending state, for callback and abort to check.  */
+    endpoint -> ux_endpoint_transfer_request.ux_transfer_request_completion_code = UX_TRANSFER_STATUS_PENDING;
 
     /* Transfer the transfer request (list).  */
     status =  _ux_host_stack_transfer_request(transfer_request);
 
     /* Unprotect thread reentry to this instance.  */
-    _ux_utility_semaphore_put(&video -> ux_host_class_video_semaphore);
+    _ux_host_semaphore_put(&video -> ux_host_class_video_semaphore);
 
     /* Return completion status.  */
     return(status);
 }
-

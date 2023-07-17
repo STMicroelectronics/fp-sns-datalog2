@@ -1,9 +1,9 @@
 Metadata-Version: 2.1
 Name: st-pnpl
-Version: 1.1.0
+Version: 1.2.0
 Summary: STMicroelectronics PnP-Like and DTDL Device Template Models management python package
 Home-page: 
-Author: Matteo Ronchi
+Author: SRA-ASP
 Author-email: matteo.ronchi@st.com
 License: BSD 3-clause
 Classifier: License :: BSD License (BSD-3-Clause)
@@ -14,6 +14,7 @@ Classifier: Programming Language :: Python :: 3.7
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
 Classifier: Topic :: Software Development :: Embedded Systems
 Description-Content-Type: text\markdown
 License-File: LICENSE.md

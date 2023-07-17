@@ -928,6 +928,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_ll_usb.c</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/ST/CircularBufferDL2/CircularBufferDL2.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/CircularBufferDL2/CircularBufferDL2.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/CircularBufferDL2/CircularBufferDL2.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/CircularBufferDL2/CircularBufferDL2.h</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/ST/GenericFFT/fft.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_GenericFFT_Library/Src/fft.c</locationURI>
@@ -1193,14 +1203,14 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Startup/startup_stm32u585aiixq.s</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Inc/Acquisition_Information_PnPL.h</name>
+			<name>User/PnPL/Inc/Acquisition_Info_PnPL.h</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Acquisition_Information_PnPL.h</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Acquisition_Info_PnPL.h</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Inc/Acquisition_Information_PnPL_vtbl.h</name>
+			<name>User/PnPL/Inc/Acquisition_Info_PnPL_vtbl.h</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Acquisition_Information_PnPL_vtbl.h</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Acquisition_Info_PnPL_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Inc/Deviceinformation_PnPL.h</name>
@@ -1253,9 +1263,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Log_Controller_PnPL_vtbl.h</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Src/Acquisition_Information_PnPL.c</name>
+			<name>User/PnPL/Src/Acquisition_Info_PnPL.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Acquisition_Information_PnPL.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Acquisition_Info_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Src/Deviceinformation_PnPL.c</name>
@@ -1296,6 +1306,16 @@
 			<name>User/USBX/App/PCDDriver_vtbl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/USBX/App/PCDDriver_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/USBX/App/usbx_callbacks.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/USBX/App/usbx_callbacks.c</locationURI>
+		</link>
+		<link>
+			<name>User/USBX/App/usbx_callbacks.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/USBX/App/usbx_callbacks.h</locationURI>
 		</link>
 		<link>
 			<name>User/USBX/App/usbx_dctrl_class.c</name>
@@ -1538,6 +1558,11 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_interrupt_handler.c</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/ST/usbx/controller/ux_dcd_stm32_transfer_abort.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_transfer_abort.c</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/ST/usbx/controller/ux_dcd_stm32_transfer_request.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_transfer_request.c</locationURI>
@@ -1546,11 +1571,6 @@
 			<name>Middlewares/ST/usbx/controller/ux_dcd_stm32_uninitialize.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_uninitialize.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/usbx/sensor_streaming/ux_dcd_stm32_callback_sof.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/SensorStreaming_USBX/ux_dcd_stm32_callback_sof.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/usbx/sensor_streaming/ux_device_class_sensor_streaming.h</name>
@@ -1596,6 +1616,11 @@
 			<name>Middlewares/ST/usbx/sensor_streaming/ux_device_class_sensor_streaming_read.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming_read.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/usbx/sensor_streaming/ux_device_class_sensor_streaming_sof.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming_sof.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/usbx/sensor_streaming/ux_device_class_sensor_streaming_thread.c</name>
@@ -2453,66 +2478,6 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_timer_thread_entry.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_buffer_full_notify.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_buffer_full_notify.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_disable.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_disable.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_enable.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_enable.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_event_filter.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_event_filter.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_event_unfilter.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_event_unfilter.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_initialize.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_initialize.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_interrupt_control.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_interrupt_control.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_isr_enter_insert.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_isr_enter_insert.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_isr_exit_insert.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_isr_exit_insert.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_object_register.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_object_register.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_object_unregister.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_object_unregister.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/ThreadX/common/src/tx_trace_user_event_insert.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/tx_trace_user_event_insert.c</locationURI>
-		</link>
-		<link>
 			<name>Middlewares/ST/ThreadX/common/src/txe_block_allocate.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common/src/txe_block_allocate.c</locationURI>
@@ -3336,26 +3301,6 @@
 			<name>Middlewares/ST/usbx/core/src/ux_system_uninitialize.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/core/src/ux_system_uninitialize.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/usbx/core/src/ux_trace_event_insert.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/core/src/ux_trace_event_insert.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/usbx/core/src/ux_trace_event_update.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/core/src/ux_trace_event_update.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/usbx/core/src/ux_trace_object_register.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/core/src/ux_trace_object_register.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/usbx/core/src/ux_trace_object_unregister.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/core/src/ux_trace_object_unregister.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/usbx/core/src/ux_utility_debug_callback_register.c</name>

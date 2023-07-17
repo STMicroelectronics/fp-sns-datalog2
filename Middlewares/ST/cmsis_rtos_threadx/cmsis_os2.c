@@ -84,7 +84,7 @@
                                                 ((uint32_t)THREADX_MINOR_VERSION * 10000UL) + \
                                                 ((uint32_t)THREADX_PATCH_VERSION * 1UL))
 
-#define KERNEL_ID                               ("AzureRTOS ThreadX")
+#define KERNEL_ID                               ("Azure RTOS ThreadX")
 
 #define IS_IRQ_MODE()                           (__get_IPSR() != 0U)
 
@@ -93,14 +93,25 @@
 /* Default thread stack size */
 #define RTOS2_INTERNAL_BYTE_POOL_SIZE           256
 
+#ifndef USE_DYNAMIC_MEMORY_ALLOCATION
+   #ifndef USE_MEMORY_POOL_ALLOCATION
+      #error "CMSIS RTOS ThreadX Wrapper cmsis_os2.c: USE_DYNAMIC_MEMORY_ALLOCATION or USE_MEMORY_POOL_ALLOCATION must be defined"
+   #endif
+#endif
+
 /* Default stack byte pool memory size */
 #ifndef RTOS2_BYTE_POOL_STACK_SIZE
-#define RTOS2_BYTE_POOL_STACK_SIZE              3 * 1024
+  #define RTOS2_BYTE_POOL_STACK_SIZE              3 * 1024
 #endif
 
 /* Default stack byte pool memory size */
 #ifndef RTOS2_BYTE_POOL_HEAP_SIZE
-#define RTOS2_BYTE_POOL_HEAP_SIZE               4 * 1024
+  #define RTOS2_BYTE_POOL_HEAP_SIZE               4 * 1024
+#endif
+
+/* Default time slice for the created threads */
+#ifndef RTOS2_DEFAULT_TIME_SLICE
+#define RTOS2_DEFAULT_TIME_SLICE                4
 #endif
 
 /* Default stack byte pool memory type */
@@ -234,8 +245,15 @@ static osStatus_t MemInit(void)
 {
   /* Allocated memory size */
   uint32_t bytepool_size = RTOS2_BYTE_POOL_STACK_SIZE;
+#ifdef USE_DYNAMIC_MEMORY_ALLOCATION  
   /* Unused memory address */
   CHAR *unused_memory = NULL;
+#else
+  #ifdef USE_MEMORY_POOL_ALLOCATION
+    CHAR *unused_memory_Stack = NULL;
+    CHAR *unused_memory_Heap = NULL;
+  #endif
+#endif  
 
   /* If the memory size the be allocated is less then the TX_BYTE_POOL_MIN */
   if (bytepool_size < TX_BYTE_POOL_MIN)
@@ -243,10 +261,19 @@ static osStatus_t MemInit(void)
     /* We should at least allocate TX_BYTE_POOL_MIN */
     bytepool_size = TX_BYTE_POOL_MIN;
   }
-
-  /* Initialize the Heap BytePool address */
-  unused_memory = (CHAR *)_tx_initialize_unused_memory;
-
+/* Initialize the Heap BytePool address */
+#ifdef USE_DYNAMIC_MEMORY_ALLOCATION  
+  unused_memory = (CHAR *)_tx_initialize_unused_memory;  
+#else
+  #ifdef USE_MEMORY_POOL_ALLOCATION  
+  static CHAR freememStack[RTOS2_BYTE_POOL_STACK_SIZE + RTOS2_INTERNAL_BYTE_POOL_SIZE];
+  static CHAR freememHeap[RTOS2_BYTE_POOL_HEAP_SIZE + RTOS2_INTERNAL_BYTE_POOL_SIZE];
+  unused_memory_Stack = (CHAR *)freememStack;
+  unused_memory_Heap = (CHAR *)freememHeap;
+  #endif
+#endif
+  
+#ifdef USE_DYNAMIC_MEMORY_ALLOCATION 
   /* Create a byte memory pool from which to allocate the timer control
      block */
   if (tx_byte_pool_create(&StackBytePool, "Byte Pool Stack", unused_memory,
@@ -287,7 +314,37 @@ static osStatus_t MemInit(void)
 
   /* Update the _tx_initialize_unused_memory */
   _tx_initialize_unused_memory = unused_memory;
+  
+#else
+  #ifdef USE_MEMORY_POOL_ALLOCATION 
+  /* Create a byte memory pool from which to allocate the timer control
+     block */
+  if (tx_byte_pool_create(&StackBytePool, "Byte Pool Stack", unused_memory_Stack,
+                          RTOS2_INTERNAL_BYTE_POOL_SIZE + bytepool_size) != TX_SUCCESS)
+  {
+    /* Return osError in case of error */
+    return (osError);
+  }
+  /* Set bytepool_size to the user configured Heap size */
+  bytepool_size = RTOS2_BYTE_POOL_HEAP_SIZE;
 
+  /* If the memory size the be allocated is less then the TX_BYTE_POOL_MIN */
+  if (bytepool_size < TX_BYTE_POOL_MIN)
+  {
+    /* We should at least allocate TX_BYTE_POOL_MIN */
+    bytepool_size = TX_BYTE_POOL_MIN;
+  }
+
+  /* Create a byte memory pool from which to allocate the timer control
+     block */
+  if (tx_byte_pool_create(&HeapBytePool, "Byte Pool Heap", unused_memory_Heap,
+                          RTOS2_INTERNAL_BYTE_POOL_SIZE + bytepool_size) != TX_SUCCESS)
+  {
+    /* Return osError in case of error */
+    return (osError);
+  }
+  #endif
+#endif  
   return (osOK);
 }
 
@@ -846,7 +903,7 @@ osThreadId_t osThreadNew(osThreadFunc_t func, void *argument, const osThreadAttr
        its value to the priority or deactivated using
        TX_DISABLE_PREEMPTION_THRESHOLD */
     if (tx_thread_create(thread_ptr, name_ptr, (void(*)(ULONG))func, entry_input, stack_start, stack_size, priority,
-                         priority, TX_NO_TIME_SLICE, TX_AUTO_START) != TX_SUCCESS)
+                         priority, RTOS2_DEFAULT_TIME_SLICE, TX_AUTO_START) != TX_SUCCESS)
     {
       /* Check if the memory for thread control block has been internally
          allocated */
@@ -1061,7 +1118,7 @@ uint32_t osThreadGetStackSize(osThreadId_t thread_id)
   /* The specific thread stack size in bytes */
   unsigned int stack_size;
 
-  /* Check if this API is called from Interrupt Service Routines, the thread_id 
+  /* Check if this API is called from Interrupt Service Routines, the thread_id
      is NULL or thread_id->tx_thread_id != TX_THREAD_ID */
   if (IS_IRQ_MODE() || (thread_ptr == NULL) || (thread_ptr->tx_thread_id != TX_THREAD_ID))
   {
@@ -1724,7 +1781,7 @@ osTimerId_t osTimerNew(osTimerFunc_t func, osTimerType_t type, void *argument, c
   /* The name_ptr as null-terminated string */
   CHAR *name_ptr = NULL;
   /* The timer expiration input */
-  ULONG *expiration_input = NULL;
+  ULONG expiration_input = 0U;
   /* The timer reschedule ticks */
   ULONG reschedule_ticks = 0U;
   /* The size of control block */
@@ -1803,11 +1860,11 @@ osTimerId_t osTimerNew(osTimerFunc_t func, osTimerType_t type, void *argument, c
     if (argument != NULL)
     {
       /* Set the expiration_input */
-      expiration_input = (ULONG *)argument;
+      expiration_input = (ULONG)argument;
     }
 
     /* Call the tx_timer_create function to create the new timer */
-    if (tx_timer_create(timer_ptr, name_ptr, (void(*)(ULONG))func, *expiration_input, 1, reschedule_ticks,
+    if (tx_timer_create(timer_ptr, name_ptr, (void(*)(ULONG))func, expiration_input, 1, reschedule_ticks,
                         TX_NO_ACTIVATE) != TX_SUCCESS)
     {
       /* Check if the memory for timer control block has been internally
@@ -2402,7 +2459,7 @@ uint32_t osEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags,
   /* The ThreadX get options */
   UINT get_option = 0;
   /* The actual flags */
-  ULONG actual_flags = 0;
+  ULONG actual_flags;
   /* ThreadX APIs status */
   UINT status;
 
@@ -2415,13 +2472,33 @@ uint32_t osEventFlagsWait(osEventFlagsId_t ef_id, uint32_t flags,
   }
   else
   {
-    if (options == osFlagsNoClear)
+    /* No clear option is used */
+    if ((options & osFlagsNoClear) == osFlagsNoClear)
     {
-      get_option = TX_AND;
+      if ((options & osFlagsWaitAll) == osFlagsWaitAll)
+      {
+        /* AND event option is used */
+        get_option = TX_AND;
+      }
+      else
+      {
+        /* OR event option is used */
+        get_option = TX_OR;
+      }
     }
+    /* Clear option is used */
     else
     {
-      get_option = TX_AND_CLEAR;
+      if ((options & osFlagsWaitAll) == osFlagsWaitAll)
+      {
+        /* AND clear event option is used */
+        get_option = TX_AND_CLEAR;
+      }
+      else
+      {
+        /* OR clear event option is used */
+        get_option = TX_OR_CLEAR;
+      }
     }
     /* Call the tx_event_flags_get to get flags */
     status = tx_event_flags_get(eventflags_ptr, requested_flags, get_option, &actual_flags, wait_option);
@@ -2520,7 +2597,7 @@ osMutexId_t osMutexNew(const osMutexAttr_t *attr)
   /* Pointer to the mutex name */
   CHAR *name_ptr = NULL;
   /* The mutex inherit status */
-  UINT inherit = TX_INHERIT;
+  UINT inherit = TX_NO_INHERIT;
   /* The size of control block */
   ULONG cb_size = sizeof(TX_MUTEX);
 
@@ -2549,7 +2626,10 @@ osMutexId_t osMutexNew(const osMutexAttr_t *attr)
           inherit = TX_NO_INHERIT;
         }
       }
-
+      else
+      {
+        inherit = TX_NO_INHERIT;
+      }
       /* Check if the control block size is equal to 0 */
       if (attr->cb_size == 0U)
       {
@@ -3139,8 +3219,8 @@ osStatus_t osSemaphoreDelete(osSemaphoreId_t semaphore_id)
 /*---------------------------------------------------------------------------*/
 
 /**
-  * @brief   The function osMessageQueueNew creates and initializes a message queue 
-  *         object. The function returns a message queue object identifier 
+  * @brief   The function osMessageQueueNew creates and initializes a message queue
+  *         object. The function returns a message queue object identifier
   *         or NULL in case of an error.
   *         The function can be called after kernel initialization with osKernelInitialize.
   *         It is possible to create message queue objects before the RTOS kernel is
@@ -3721,13 +3801,18 @@ osStatus_t osMessageQueueGet(osMessageQueueId_t mq_id, void *msg_ptr, uint8_t *m
     }
     else if (tx_status == TX_QUEUE_EMPTY)
     {
-      /* Return osErrorResource in case of error */
-      status = osErrorResource;
+      /* Return osErrorTimeout in case of error */
+      status = osErrorTimeout;
+    }
+    else if (tx_status == TX_WAIT_ERROR)
+    {
+      /* Return osErrorParameter when a non-zero timeout is used in ISR context */
+      status = osErrorParameter;
     }
     else
     {
-      /* Return osErrorTimeout in case of error */
-      status = osErrorTimeout;
+      /* Return osErrorResource in case of error */
+      status = osErrorResource;
     }
   }
 

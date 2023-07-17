@@ -26,7 +26,7 @@
 /*  PORT SPECIFIC C INFORMATION                            RELEASE        */
 /*                                                                        */
 /*    tx_port.h                                         Cortex-M23/GNU    */
-/*                                                           6.1.3        */
+/*                                                           6.1.12       */
 /*                                                                        */
 /*  AUTHOR                                                                */
 /*                                                                        */
@@ -57,6 +57,16 @@
 /*                                            conditional compilation     */
 /*                                            for ARMv8-M (Cortex M23/33) */
 /*                                            resulting in version 6.1.7  */
+/*  10-15-2021      Scott Larson            Modified comment(s), improved */
+/*                                            stack check error handling, */
+/*                                            resulting in version 6.1.9  */
+/*  04-25-2022      Scott Larson            Modified comments and added   */
+/*                                            volatile to registers,      */
+/*                                            resulting in version 6.1.11 */
+/*  07-29-2022      Scott Larson            Modified comments and changed */
+/*                                            secure stack initialization */
+/*                                            macro to port-specific,     */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 
@@ -91,12 +101,6 @@ typedef short                                   SHORT;
 typedef unsigned short                          USHORT;
 #define ULONG64_DEFINED
 
-/* This port overrides tx_thread_stack_error_notify with an architecture specific version */
-#define TX_PORT_THREAD_STACK_ERROR_NOTIFY
-
-/* This port overrides tx_thread_stack_error_handler with an architecture specific version */
-#define TX_PORT_THREAD_STACK_ERROR_HANDLER
-
 /* Function prototypes for this port. */
 struct  TX_THREAD_STRUCT;
 UINT    _txe_thread_secure_stack_allocate(struct TX_THREAD_STRUCT *thread_ptr, ULONG stack_size);
@@ -104,17 +108,9 @@ UINT    _txe_thread_secure_stack_free(struct TX_THREAD_STRUCT *thread_ptr);
 UINT    _tx_thread_secure_stack_allocate(struct TX_THREAD_STRUCT *tx_thread, ULONG stack_size);
 UINT    _tx_thread_secure_stack_free(struct TX_THREAD_STRUCT *tx_thread);
 
-/* This hardware has stack checking that we take advantage of - do NOT define. */
-#ifdef TX_ENABLE_STACK_CHECKING
-    #error "Do not define TX_ENABLE_STACK_CHECKING"
-#endif
+/* This port handles stack errors. */
+#define TX_PORT_THREAD_STACK_ERROR_HANDLING
 
-/* If user does not want to terminate thread on stack overflow, 
-   #define the TX_THREAD_NO_TERMINATE_STACK_ERROR symbol.
-   The thread will be rescheduled and continue to cause the exception.
-   It is suggested user code handle this by registering a notification with the
-   tx_thread_stack_error_notify function. */
-/*#define TX_THREAD_NO_TERMINATE_STACK_ERROR */
 
 /* Define the system API mappings based on the error checking 
    selected by the user.  Note: this section is only applicable to 
@@ -186,14 +182,14 @@ UINT    _tx_thread_secure_stack_free(struct TX_THREAD_STRUCT *tx_thread);
    For example, if the time source is at the address 0x0a800024 and is 16-bits in size, the clock 
    source constants would be:
 
-#define TX_TRACE_TIME_SOURCE                    *((ULONG *) 0x0a800024)
+#define TX_TRACE_TIME_SOURCE                    *((volatile ULONG *) 0x0a800024)
 #define TX_TRACE_TIME_MASK                      0x0000FFFFUL
 
 */
 
 #ifndef TX_MISRA_ENABLE
 #ifndef TX_TRACE_TIME_SOURCE
-#define TX_TRACE_TIME_SOURCE                    *((ULONG *) 0xE0001004)
+#define TX_TRACE_TIME_SOURCE                    *((volatile ULONG *) 0xE0001004)
 #endif
 #else
 ULONG   _tx_misra_time_stamp_get(VOID);
@@ -349,7 +345,7 @@ ULONG   _tx_misra_ipsr_get(VOID);
 #if !defined(TX_SINGLE_MODE_SECURE) && !defined(TX_SINGLE_MODE_NON_SECURE)
 /* Initialize secure stacks for threads calling secure functions. */
 extern void    _tx_thread_secure_stack_initialize(void);
-#define TX_INITIALIZE_KERNEL_ENTER_EXTENSION            _tx_thread_secure_stack_initialize();
+#define TX_PORT_SPECIFIC_PRE_INITIALIZATION             _tx_thread_secure_stack_initialize();
 #endif
 
 /* Define the macro to ensure _tx_thread_preempt_disable is set early in initialization in order to 
@@ -416,7 +412,8 @@ __attribute__( ( always_inline ) ) static inline void _tx_thread_system_return_i
 {
 unsigned int interrupt_save;
 
-    *((ULONG *) 0xE000ED04) = ((ULONG) 0x10000000);
+    /* Set PendSV to invoke ThreadX scheduler.  */
+    *((volatile ULONG *) 0xE000ED04) = ((ULONG) 0x10000000);
     if (_get_ipsr() == 0)
     {
         interrupt_save = __get_primask_value();
@@ -450,7 +447,7 @@ unsigned int interrupt_save;
 
 #ifdef TX_THREAD_INIT
 CHAR                            _tx_version_id[] = 
-                                    "Copyright (c) Microsoft Corporation. All rights reserved.  *  ThreadX Cortex-M23/GNU Version 6.1.3 *";
+                                    "Copyright (c) Microsoft Corporation. All rights reserved.  *  ThreadX Cortex-M23/GNU Version 6.1.12 *";
 #else
 #ifdef TX_MISRA_ENABLE
 extern  CHAR                    _tx_version_id[100];

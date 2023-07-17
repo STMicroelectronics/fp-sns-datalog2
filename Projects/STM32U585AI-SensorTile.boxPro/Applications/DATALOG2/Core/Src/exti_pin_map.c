@@ -31,7 +31,7 @@ void LSM6DSV16XTask_EXTI_Callback(uint16_t nPin);
 void LIS2MDLTask_EXTI_Callback(uint16_t nPin);
 //void Util_PWR_EXTI_Callback(uint16_t nPin);
 //void NFC_INT_EXTI_Callback(uint16_t nPin);
-void hci_tl_isr(uint16_t nPin);
+void hci_tl_lowlevel_isr(uint16_t nPin);
 
 EXTI_BEGIN_P2F_MAP()
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_13, Util_USR_EXTI_Callback)
@@ -42,5 +42,5 @@ EXTI_P2F_MAP_ENTRY(GPIO_PIN_4, LSM6DSV16XTask_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_6, LIS2MDLTask_EXTI_Callback)
 //  EXTI_P2F_MAP_ENTRY(GPIO_PIN_10, Util_PWR_EXTI_Callback)
 //  EXTI_P2F_MAP_ENTRY(GPIO_PIN_13, NFC_INT_EXTI_Callback)
-EXTI_P2F_MAP_ENTRY(GPIO_PIN_11, hci_tl_isr)
+EXTI_P2F_MAP_ENTRY(GPIO_PIN_11, hci_tl_lowlevel_isr)
 EXTI_END_P2F_MAP()

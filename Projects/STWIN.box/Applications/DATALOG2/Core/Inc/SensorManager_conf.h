@@ -29,6 +29,7 @@
 
 #define I2CDRV_CFG_HARDWARE_PERIPHERALS_COUNT   2
 
+
 #define IIS2DLPC_FIFO_ENABLED 1
 #define IIS2ICLX_FIFO_ENABLED 1
 #define IIS3DWB_FIFO_ENABLED 1
@@ -53,6 +54,7 @@
 //#define IIS3DWB_TASK_CFG_TAG                      (CON34_PIN_26)
 #define IIS3DWB_TASK_CFG_TAG                      (CON34_PIN_5)
 #endif
+#define IIS3DWB_TASK_CFG_MAX_INSTANCES_COUNT    2
 
 // file IIS2DLPCTask.c
 #define IIS2DLPC_TASK_CFG_STACK_DEPTH             (TX_MINIMUM_STACK*7)
@@ -79,6 +81,7 @@
 // file STTS22HTask.c
 #define STTS22H_TASK_CFG_STACK_DEPTH              (TX_MINIMUM_STACK*7)
 #define STTS22H_TASK_CFG_PRIORITY                 (8)
+#define STTS22H_TASK_CFG_MAX_INSTANCES_COUNT      2
 
 // file IMP34DT05Task.c
 #define IMP34DT05_TASK_CFG_STACK_DEPTH            (TX_MINIMUM_STACK*7)

@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_mkboxpro:fp_sns_datalog2:sensors:stts22h_temp;1
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:stts22h_temp;2
   *
-  * Created by: DTDL2PnPL_cGen version 1.0.0
+  * Created by: DTDL2PnPL_cGen version 1.1.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -142,12 +142,8 @@ uint8_t Stts22h_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   stts22h_temp_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "stts22h_temp.enable", temp_b);
   int32_t temp_i = 0;
-  stts22h_temp_get_samples_per_ts__val(&temp_i);
-  json_object_dotset_number(JSON_Status, "stts22h_temp.samples_per_ts.val", temp_i);
-  stts22h_temp_get_samples_per_ts__min(&temp_i);
-  json_object_dotset_number(JSON_Status, "stts22h_temp.samples_per_ts.min", temp_i);
-  stts22h_temp_get_samples_per_ts__max(&temp_i);
-  json_object_dotset_number(JSON_Status, "stts22h_temp.samples_per_ts.max", temp_i);
+  stts22h_temp_get_samples_per_ts(&temp_i);
+  json_object_dotset_number(JSON_Status, "stts22h_temp.samples_per_ts", temp_i);
   stts22h_temp_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "stts22h_temp.dim", temp_i);
   stts22h_temp_get_ioffset(&temp_f);
@@ -163,8 +159,10 @@ uint8_t Stts22h_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   char *temp_s = "";
   stts22h_temp_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "stts22h_temp.data_type", temp_s);
+  stts22h_temp_get_sensor_category(&temp_i);
+  json_object_dotset_number(JSON_Status, "stts22h_temp.sensor_category", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
-  field (this is :sensors). ONLY for Sensors and Algorithms */
+  field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "stts22h_temp.c_type", COMP_TYPE_SENSOR);
   int8_t temp_int8 = 0;
   stts22h_temp_get_stream_id(&temp_int8);
@@ -224,11 +222,8 @@ uint8_t Stts22h_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   }
   if (json_object_dothas_value(tempJSONObject, "stts22h_temp.samples_per_ts"))
   {
-    if (json_object_dothas_value(tempJSONObject, "stts22h_temp.samples_per_ts.val"))
-    {
-      int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "stts22h_temp.samples_per_ts.val");
-      stts22h_temp_set_samples_per_ts__val(samples_per_ts);
-    }
+    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "stts22h_temp.samples_per_ts");
+    stts22h_temp_set_samples_per_ts(samples_per_ts);
   }
   json_value_free(tempJSON);
   return ret;

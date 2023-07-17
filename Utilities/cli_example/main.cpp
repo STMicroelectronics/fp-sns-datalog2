@@ -25,6 +25,20 @@
 
 using namespace std;
 
+// TODO: Next version --> Hotplug events notification support
+// void plug_callback()
+// {
+//     std::cout << "HSD DEVICE PLUGGED" << std::endl;
+//     return;
+// }
+
+// void unplug_callback()
+// {
+//     std::cout << "HSD DEVICE UNPLUGGED" << std::endl;
+//     return;
+// }
+// TODO: Next version --> Hotplug events notification support
+
 int main(int argc, char *argv[])
 {
     /* ---------------------------- Parse command line options ---------------------------- */
@@ -47,6 +61,9 @@ int main(int argc, char *argv[])
 
         exit(0);
     }
+    // TODO: Next version --> Hotplug events notification support
+    // hs_datalog_register_usb_hotplug_callback(plug_callback, unplug_callback);
+    // TODO: Next version --> Hotplug events notification support
 
     if(input.cmdOptionExists("-g"))
     {
@@ -96,7 +113,6 @@ int main(int argc, char *argv[])
         hs_datalog_free(tmp1);
         exit(0);
     }
-
 
     const std::string &fileNameParam = input.getCmdOption("-f");
     ifstream configFile;
@@ -223,7 +239,8 @@ int main(int argc, char *argv[])
     char * deviceInfo;
     string deviceAlias;
 
-    if(hs_datalog_get_component_status(deviceID, &fwInfo, "firmware_info") != ST_HS_DATALOG_OK)
+    char* fwInfo_str = (char*)"firmware_info";
+    if(hs_datalog_get_component_status(deviceID, &fwInfo, fwInfo_str) != ST_HS_DATALOG_OK)
     {
         cout << "Error occurred while retrieving FW Information Component\n";
         cout << "Press any key to exit \n";
@@ -245,8 +262,8 @@ int main(int argc, char *argv[])
         getchar();
         return -1;
     }
-
-    if(hs_datalog_get_component_status(deviceID, &deviceInfo, "DeviceInformation") != ST_HS_DATALOG_OK)
+    char* deviceInfo_str = (char*)"DeviceInformation";
+    if(hs_datalog_get_component_status(deviceID, &deviceInfo, deviceInfo_str) != ST_HS_DATALOG_OK)
     {
         cout << "Error occurred while retrieving FW Information Component\n";
         cout << "Press any key to exit \n";
@@ -342,7 +359,8 @@ int main(int argc, char *argv[])
         ucfFile.read (ucfData, static_cast<int>(size_ucf));
 
         //TODO REDESIGN THIS!
-        hs_datalog_load_ucf_to_mlc(0, "ism330dhcx", (uint8_t *)ucfData, size_ucf);
+        char* ism330dhcx_str = (char*)"ism330dhcx";
+        hs_datalog_load_ucf_to_mlc(0, ism330dhcx_str, (uint8_t *)ucfData, size_ucf);
 
         if(hs_datalog_free(ucfData) != ST_HS_DATALOG_OK)
         {
@@ -366,7 +384,8 @@ int main(int argc, char *argv[])
     {
         char *tagsInfo;
 //        hs_datalog_get_tags_info(deviceID, &tagsInfo);
-        hs_datalog_get_component_status(deviceID, &tagsInfo, "tags_info");
+        char* tagsInfo_str = (char*)"tags_info";
+        hs_datalog_get_component_status(deviceID, &tagsInfo, tagsInfo_str);
 
         cout << tagsInfo << endl;
         auto tags_json = nlohmann::json::parse(tagsInfo);
@@ -424,7 +443,9 @@ int main(int argc, char *argv[])
         //TODO like @row 344
 //        hs_datalog_set_Enable_pnpl(deviceID, true, "ism330dhcx","mlc");
 //        hs_datalog_set_Enable_pnpl(deviceID, true, "ism330dhcx_mlc");
-        hs_datalog_set_boolean_property(deviceID, true, "ism330dhcx_mlc", "enable");
+        char* ism330dhcx_mlc_str = (char*)"ism330dhcx_mlc";
+        char* enable_str = (char*)"enable";
+        hs_datalog_set_boolean_property(deviceID, true, ism330dhcx_mlc_str, enable_str);
     }
 
 
@@ -437,7 +458,8 @@ int main(int argc, char *argv[])
     for (auto c : sNames)
     {
         bool tmp_enable;
-        hs_datalog_get_boolean_property(deviceID, &tmp_enable, c, "enable");
+        char* enable_str = (char*)"enable";
+        hs_datalog_get_boolean_property(deviceID, &tmp_enable, c, enable_str);
 
         FILE * tmp_f = nullptr;
         if(tmp_enable){
@@ -581,14 +603,16 @@ int main(int argc, char *argv[])
                 char *tag_prop_name_cstr = new char[tag_prop_name.length() + 1];
                 strcpy(tag_prop_name_cstr, tag_prop_name.c_str());
 
+                char* tagsInfo_str = (char*)"tags_info";
+                char* status_str = (char*)"status";
                 if(!result->second)
-                {    
-                    hs_datalog_set_boolean_property(deviceID, true, "tags_info", tag_prop_name_cstr, "status");
+                {
+                    hs_datalog_set_boolean_property(deviceID, true, tagsInfo_str, tag_prop_name_cstr, status_str);
                     result->second=true;
                 }
                 else
                 {
-                    hs_datalog_set_boolean_property(deviceID, false, "tags_info", tag_prop_name_cstr, "status");
+                    hs_datalog_set_boolean_property(deviceID, false, tagsInfo_str, tag_prop_name_cstr, status_str);
                     result->second=false;
                 }
 
@@ -668,7 +692,8 @@ int main(int argc, char *argv[])
 
 
     char * acquisitionInfo;
-    if(hs_datalog_get_component_status(deviceID, &acquisitionInfo, "acquisition_info") != ST_HS_DATALOG_OK)
+    char* acquisitionInfo_str = (char*)"acquisition_info";
+    if(hs_datalog_get_component_status(deviceID, &acquisitionInfo, acquisitionInfo_str) != ST_HS_DATALOG_OK)
     {
         cout << "Error occurred while retrieving device status \n";
         cout << "Press any key to exit \n";

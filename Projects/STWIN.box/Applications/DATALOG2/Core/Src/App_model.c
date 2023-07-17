@@ -20,10 +20,10 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2;1
-  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2;3
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2Ispu;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.0.0
+  * Created by: DTDL2PnPL_cGen version 1.1.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -76,10 +76,11 @@ uint8_t ism330is_acc_comp_init(void)
   ism330is_acc_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  ism330is_acc_set_samples_per_ts__val(0);
+  ism330is_acc_set_samples_per_ts(0);
 #else
-  ism330is_acc_set_samples_per_ts__val(1000);
+  ism330is_acc_set_samples_per_ts(100);
 #endif
+  ism330is_acc_set_odr(104);
   app_model.s_models[id] = &ism330is_acc_model;
   __stream_control(NULL, true);
   return 0;
@@ -113,23 +114,9 @@ uint8_t ism330is_acc_get_enable(bool *value)
   *value = ism330is_acc_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t ism330is_acc_get_samples_per_ts__val(int32_t *value)
+uint8_t ism330is_acc_get_samples_per_ts(int32_t *value)
 {
   *value = ism330is_acc_model.streamParams.spts;
-  return 0;
-}
-uint8_t ism330is_acc_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t ism330is_acc_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1000;
-#endif
   return 0;
 }
 uint8_t ism330is_acc_get_dim(int32_t *value)
@@ -180,6 +167,13 @@ uint8_t ism330is_acc_get_sensor_annotation(char **value)
   *value = ism330is_acc_model.annotation;
   return 0;
 }
+
+uint8_t ism330is_acc_get_sensor_category(int32_t *value)
+{
+//  *value = ism330is_acc_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
 uint8_t ism330is_acc_get_stream_id(int8_t *value)
 {
   *value = ism330is_acc_model.streamParams.stream_id;
@@ -197,6 +191,9 @@ uint8_t ism330is_acc_set_odr(float value)
   {
     ism330is_acc_model.sensorStatus.ODR = value;
     app_model.ispu_ucf_valid = false;
+#if (HSD_USE_DUMMY_DATA != 1)
+    ism330is_acc_set_samples_per_ts((int32_t)value);
+#endif
     __stream_control(NULL, true);
   }
   return ret;
@@ -232,12 +229,11 @@ uint8_t ism330is_acc_set_enable(bool value)
   return ret;
 }
 
-uint8_t ism330is_acc_set_samples_per_ts__val(int32_t value)
+uint8_t ism330is_acc_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  ism330is_acc_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  ism330is_acc_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 1000;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     ism330is_acc_model.streamParams.spts = value;
@@ -269,10 +265,11 @@ uint8_t ism330is_gyro_comp_init(void)
   ism330is_gyro_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  ism330is_gyro_set_samples_per_ts__val(0);
+  ism330is_gyro_set_samples_per_ts(0);
 #else
-  ism330is_gyro_set_samples_per_ts__val(1000);
+  ism330is_gyro_set_samples_per_ts(100);
 #endif
+  ism330is_gyro_set_odr(104);
   app_model.s_models[id] = &ism330is_gyro_model;
   __stream_control(NULL, true);
   return 0;
@@ -309,24 +306,9 @@ uint8_t ism330is_gyro_get_enable(bool *value)
   return 0;
 }
 
-uint8_t ism330is_gyro_get_samples_per_ts__val(int32_t *value)
+uint8_t ism330is_gyro_get_samples_per_ts(int32_t *value)
 {
   *value = ism330is_gyro_model.streamParams.spts;
-  return 0;
-}
-
-uint8_t ism330is_gyro_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t ism330is_gyro_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1000;
-#endif
   return 0;
 }
 
@@ -377,6 +359,7 @@ uint8_t ism330is_gyro_get_data_type(char **value)
   *value = "int16";
   return 0;
 }
+
 uint8_t ism330is_gyro_get_sensor_annotation(char **value)
 {
   uint16_t id = ism330is_gyro_model.id;
@@ -384,6 +367,14 @@ uint8_t ism330is_gyro_get_sensor_annotation(char **value)
   *value = ism330is_gyro_model.annotation;
   return 0;
 }
+
+uint8_t ism330is_gyro_get_sensor_category(int32_t *value)
+{
+  //  *value = ism330is_gyro_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
+
 uint8_t ism330is_gyro_get_stream_id(int8_t *value)
 {
   *value = ism330is_gyro_model.streamParams.stream_id;
@@ -403,6 +394,9 @@ uint8_t ism330is_gyro_set_odr(float value)
   {
     ism330is_gyro_model.sensorStatus.ODR = value;
     app_model.ispu_ucf_valid = false;
+#if (HSD_USE_DUMMY_DATA != 1)
+    ism330is_gyro_set_samples_per_ts((int32_t)value);
+#endif
     __stream_control(NULL, true);
   }
   return ret;
@@ -440,12 +434,11 @@ uint8_t ism330is_gyro_set_enable(bool value)
   return ret;
 }
 
-uint8_t ism330is_gyro_set_samples_per_ts__val(int32_t value)
+uint8_t ism330is_gyro_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  ism330is_gyro_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  ism330is_gyro_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 1000;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     ism330is_gyro_model.streamParams.spts = value;
@@ -477,9 +470,9 @@ uint8_t ism330is_ispu_comp_init(void)
   ism330is_ispu_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  ism330is_ispu_set_samples_per_ts__val(0);
+  ism330is_ispu_model.streamParams.spts = 0;
 #else
-  ism330is_ispu_set_samples_per_ts__val(1);
+  ism330is_ispu_model.streamParams.spts = 1;
 #endif
   app_model.s_models[id] = &ism330is_ispu_model;
   app_model.ispu_ucf_valid = false;
@@ -498,55 +491,48 @@ uint8_t ism330is_ispu_get_enable(bool *value)
   *value = ism330is_ispu_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t ism330is_ispu_get_samples_per_ts__val(int32_t *value)
+uint8_t ism330is_ispu_get_samples_per_ts(int32_t *value)
 {
   *value = ism330is_ispu_model.streamParams.spts;
   return 0;
 }
-uint8_t ism330is_ispu_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 1;
-  return 0;
-}
-uint8_t ism330is_ispu_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1;
-#endif
-  return 0;
-}
+
 uint8_t ism330is_ispu_get_ucf_status(bool *value)
 {
   *value = app_model.ispu_ucf_valid;
   return 0;
 }
+
 uint8_t ism330is_ispu_get_usb_dps(float *value)
 {
   *value = ism330is_ispu_model.streamParams.usb_dps;
   return 0;
 }
+
 uint8_t ism330is_ispu_get_sd_dps(float *value)
 {
   *value = ism330is_ispu_model.streamParams.sd_dps;
   return 0;
 }
+
 uint8_t ism330is_ispu_get_data_type(char **value)
 {
   *value = "int16";
   return 0;
 }
+
 uint8_t ism330is_ispu_get_dim(int32_t *value)
 {
   *value = 32;
   return 0;
 }
+
 uint8_t ism330is_ispu_get_ioffset(float *value)
 {
   *value = ism330is_ispu_model.streamParams.ioffset;
   return 0;
 }
+
 uint8_t ism330is_ispu_get_sensor_annotation(char **value)
 {
   uint16_t id = ism330is_ispu_model.id;
@@ -554,16 +540,26 @@ uint8_t ism330is_ispu_get_sensor_annotation(char **value)
   *value = ism330is_ispu_model.annotation;
   return 0;
 }
+
+uint8_t ism330is_ispu_get_sensor_category(int32_t *value)
+{
+  //  *value = ism330is_ispu_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
+
 uint8_t ism330is_ispu_get_stream_id(int8_t *value)
 {
   *value = ism330is_ispu_model.streamParams.stream_id;
   return 0;
 }
+
 uint8_t ism330is_ispu_get_ep_id(int8_t *value)
 {
   *value = ism330is_ispu_model.streamParams.usb_ep;
   return 0;
 }
+
 uint8_t ism330is_ispu_set_enable(bool value)
 {
   sys_error_code_t ret = 1;
@@ -582,23 +578,13 @@ uint8_t ism330is_ispu_set_enable(bool value)
   __stream_control(NULL, true);
   return ret;
 }
-uint8_t ism330is_ispu_set_samples_per_ts__val(int32_t value)
-{
-  int32_t min_v = 0;
-  ism330is_ispu_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  ism330is_ispu_get_samples_per_ts__max(&max_v);
-  if(value >= min_v && value <= max_v)
-  {
-    ism330is_ispu_model.streamParams.spts = value;
-  }
-  return 0;
-}
+
 uint8_t ism330is_ispu_set_sensor_annotation(const char *value)
 {
   strcpy(ism330is_ispu_model.annotation, value);
   return 0;
 }
+
 uint8_t ism330is_ispu_load_file(IIsm330is_Ispu_t *ifn, const char *ucf_data, int32_t ucf_size, const char *output_data, int32_t output_size)
 {
     /* USER Code */
@@ -611,6 +597,8 @@ uint8_t ism330is_ispu_load_file(IIsm330is_Ispu_t *ifn, const char *ucf_data, int
 
 /* IIS3DWB_ACC PnPL Component ------------------------------------------------*/
 static SensorModel_t iis3dwb_acc_model;
+
+#define IIS3DWB_INSTANCE_NAME           0x05
 
 uint8_t iis3dwb_acc_comp_init(void)
 {
@@ -626,9 +614,9 @@ uint8_t iis3dwb_acc_comp_init(void)
   char default_notes[SENSOR_NOTES_LEN] = "\0";
   iis3dwb_acc_set_sensor_annotation(default_notes);
 #if (HSD_USE_DUMMY_DATA == 1)
-  iis3dwb_acc_set_samples_per_ts__val(0);
+  iis3dwb_acc_set_samples_per_ts(0);
 #else
-  iis3dwb_acc_set_samples_per_ts__val(1000);
+  iis3dwb_acc_set_samples_per_ts(1000);
 #endif
   app_model.s_models[id] = &iis3dwb_acc_model;
   __stream_control(NULL, true);
@@ -663,23 +651,9 @@ uint8_t iis3dwb_acc_get_enable(bool *value)
   *value = iis3dwb_acc_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t iis3dwb_acc_get_samples_per_ts__val(int32_t *value)
+uint8_t iis3dwb_acc_get_samples_per_ts(int32_t *value)
 {
   *value = iis3dwb_acc_model.streamParams.spts;
-  return 0;
-}
-uint8_t iis3dwb_acc_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t iis3dwb_acc_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1000;
-#endif
   return 0;
 }
 uint8_t iis3dwb_acc_get_dim(int32_t *value)
@@ -730,6 +704,12 @@ uint8_t iis3dwb_acc_get_sensor_annotation(char **value)
   *value = iis3dwb_acc_model.annotation;
   return 0;
 }
+uint8_t iis3dwb_acc_get_sensor_category(int32_t *value)
+{
+  //  *value = iis3dwb_acc_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
 uint8_t iis3dwb_acc_get_stream_id(int8_t *value)
 {
   *value = iis3dwb_acc_model.streamParams.stream_id;
@@ -767,12 +747,11 @@ uint8_t iis3dwb_acc_set_enable(bool value)
   }
   return ret;
 }
-uint8_t iis3dwb_acc_set_samples_per_ts__val(int32_t value)
+uint8_t iis3dwb_acc_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  iis3dwb_acc_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  iis3dwb_acc_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 1000;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     iis3dwb_acc_model.streamParams.spts = value;
@@ -782,6 +761,178 @@ uint8_t iis3dwb_acc_set_samples_per_ts__val(int32_t value)
 uint8_t iis3dwb_acc_set_sensor_annotation(const char *value)
 {
   strcpy(iis3dwb_acc_model.annotation, value);
+  return 0;
+}
+
+/* IIS3DWB_ACC_EXT PnPL Component --------------------------------------------*/
+static SensorModel_t iis3dwb_ext_acc_model;
+
+uint8_t iis3dwb_ext_acc_comp_init(void)
+{
+  iis3dwb_ext_acc_model.comp_name = iis3dwb_ext_acc_get_key();
+
+  SQuery_t querySM;
+  SQInit(&querySM, SMGetSensorManager());
+  uint16_t id = SQNextByNameAndType(&querySM, "iis3dwb_ext", COM_TYPE_ACC);
+  iis3dwb_ext_acc_model.id = id;
+  iis3dwb_ext_acc_model.sensorStatus = SMSensorGetStatus(id);
+  iis3dwb_ext_acc_model.streamParams.stream_id = -1;
+  iis3dwb_ext_acc_model.streamParams.usb_ep = -1;
+  /* USER code */
+  char default_notes[SENSOR_NOTES_LEN] = "[EXTERN]";
+  iis3dwb_ext_acc_set_sensor_annotation(default_notes);
+#if (HSD_USE_DUMMY_DATA == 1)
+  iis3dwb_ext_acc_set_samples_per_ts(0);
+#else
+  iis3dwb_ext_acc_set_samples_per_ts(1000);
+#endif
+  app_model.s_models[id] = &iis3dwb_ext_acc_model;
+  __stream_control(NULL, true);
+
+  /* USER Component initialization code */
+  return 0;
+}
+char* iis3dwb_ext_acc_get_key(void)
+{
+  return "iis3dwb_ext_acc";
+}
+
+uint8_t iis3dwb_ext_acc_get_odr(float *value)
+{
+  uint16_t id = iis3dwb_ext_acc_model.id;
+  iis3dwb_ext_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = iis3dwb_ext_acc_model.sensorStatus.ODR;
+  /* USER Code */
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_fs(float *value)
+{
+  uint16_t id = iis3dwb_ext_acc_model.id;
+  iis3dwb_ext_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = iis3dwb_ext_acc_model.sensorStatus.FS;
+  /* USER Code */
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_enable(bool *value)
+{
+  uint16_t id = iis3dwb_ext_acc_model.id;
+  iis3dwb_ext_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = iis3dwb_ext_acc_model.sensorStatus.IsActive;
+  /* USER Code */
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_samples_per_ts(int32_t *value)
+{
+  *value = iis3dwb_ext_acc_model.streamParams.spts;
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_dim(int32_t *value)
+{
+  *value = 3;
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_ioffset(float *value)
+{
+  *value = iis3dwb_ext_acc_model.streamParams.ioffset;
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_measodr(float *value)
+{
+  uint16_t id = iis3dwb_ext_acc_model.id;
+  iis3dwb_ext_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = iis3dwb_ext_acc_model.sensorStatus.MeasuredODR;
+  /* USER Code */
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_usb_dps(int32_t *value)
+{
+  *value = iis3dwb_ext_acc_model.streamParams.usb_dps;
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_sd_dps(int32_t *value)
+{
+  *value = iis3dwb_ext_acc_model.streamParams.sd_dps;
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_sensitivity(float *value)
+{
+  uint16_t id = iis3dwb_ext_acc_model.id;
+  iis3dwb_ext_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = iis3dwb_ext_acc_model.sensorStatus.Sensitivity;
+  /* USER Code */
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_data_type(char **value)
+{
+  *value = "int16";
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_sensor_annotation(char **value)
+{
+  uint16_t id = iis3dwb_ext_acc_model.id;
+  iis3dwb_ext_acc_model.sensorStatus = SMSensorGetStatus(id);
+  *value = iis3dwb_ext_acc_model.annotation;
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_sensor_category(int32_t *value)
+{
+  //  *value = iis3dwb_ext_acc_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_stream_id(int8_t *value)
+{
+  *value = iis3dwb_ext_acc_model.streamParams.stream_id;
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_get_ep_id(int8_t *value)
+{
+  *value = iis3dwb_ext_acc_model.streamParams.usb_ep;
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_set_fs(float value)
+{
+  sys_error_code_t ret = SMSensorSetFS(iis3dwb_ext_acc_model.id, value);
+  if(ret == SYS_NO_ERROR_CODE)
+  {
+    iis3dwb_ext_acc_model.sensorStatus.FS = value;
+    /* USER Code */
+  }
+  return ret;
+}
+uint8_t iis3dwb_ext_acc_set_enable(bool value)
+{
+  sys_error_code_t ret = 1;
+  if(value)
+  {
+    ret = SMSensorEnable(iis3dwb_ext_acc_model.id);
+  }
+  else
+  {
+    ret = SMSensorDisable(iis3dwb_ext_acc_model.id);
+  }
+  if(ret == SYS_NO_ERROR_CODE)
+  {
+    iis3dwb_ext_acc_model.sensorStatus.IsActive = value;
+    /* USER Code */
+    __stream_control(NULL, true);
+  }
+  return ret;
+}
+uint8_t iis3dwb_ext_acc_set_samples_per_ts(int32_t value)
+{
+  int32_t min_v = 0;
+  int32_t max_v = 1000;
+  /* USER Code */
+  if(value >= min_v && value <= max_v)
+  {
+    iis3dwb_ext_acc_model.streamParams.spts = value;
+  }
+  return 0;
+}
+uint8_t iis3dwb_ext_acc_set_sensor_annotation(const char *value)
+{
+  strcpy(iis3dwb_ext_acc_model.annotation, value);
   return 0;
 }
 
@@ -803,9 +954,9 @@ uint8_t iis2mdc_mag_comp_init(void)
   iis2mdc_mag_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  iis2mdc_mag_set_samples_per_ts__val(0);
+  iis2mdc_mag_set_samples_per_ts(0);
 #else
-  iis2mdc_mag_set_samples_per_ts__val(100);
+  iis2mdc_mag_set_samples_per_ts(100);
 #endif
   app_model.s_models[id] = &iis2mdc_mag_model;
   __stream_control(NULL, true);
@@ -840,23 +991,9 @@ uint8_t iis2mdc_mag_get_enable(bool *value)
   *value = iis2mdc_mag_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t iis2mdc_mag_get_samples_per_ts__val(int32_t *value)
+uint8_t iis2mdc_mag_get_samples_per_ts(int32_t *value)
 {
   *value = iis2mdc_mag_model.streamParams.spts;
-  return 0;
-}
-uint8_t iis2mdc_mag_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t iis2mdc_mag_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 100;
-#endif
   return 0;
 }
 uint8_t iis2mdc_mag_get_dim(int32_t *value)
@@ -907,6 +1044,12 @@ uint8_t iis2mdc_mag_get_sensor_annotation(char **value)
   *value = iis2mdc_mag_model.annotation;
   return 0;
 }
+uint8_t iis2mdc_mag_get_sensor_category(int32_t *value)
+{
+  //  *value = iis2mdc_mag_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
 uint8_t iis2mdc_mag_get_stream_id(int8_t *value)
 {
   *value = iis2mdc_mag_model.streamParams.stream_id;
@@ -923,6 +1066,9 @@ uint8_t iis2mdc_mag_set_odr(float value)
   if(ret == SYS_NO_ERROR_CODE)
   {
     iis2mdc_mag_model.sensorStatus.ODR = value;
+#if (HSD_USE_DUMMY_DATA != 1)
+    iis2mdc_mag_set_samples_per_ts((int32_t)value);
+#endif
     __stream_control(NULL, true);
   }
   return ret;
@@ -945,12 +1091,11 @@ uint8_t iis2mdc_mag_set_enable(bool value)
   }
   return ret;
 }
-uint8_t iis2mdc_mag_set_samples_per_ts__val(int32_t value)
+uint8_t iis2mdc_mag_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  iis2mdc_mag_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  iis2mdc_mag_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 100;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     iis2mdc_mag_model.streamParams.spts = value;
@@ -981,9 +1126,9 @@ uint8_t imp23absu_mic_comp_init(void)
   imp23absu_mic_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  imp23absu_mic_set_samples_per_ts__val(0);
+  imp23absu_mic_set_samples_per_ts(0);
 #else
-  imp23absu_mic_set_samples_per_ts__val(1000);
+  imp23absu_mic_set_samples_per_ts(1000);
 #endif
   app_model.s_models[id] = &imp23absu_mic_model;
   __stream_control(NULL, true);
@@ -1018,23 +1163,9 @@ uint8_t imp23absu_mic_get_enable(bool *value)
   *value = imp23absu_mic_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t imp23absu_mic_get_samples_per_ts__val(int32_t *value)
+uint8_t imp23absu_mic_get_samples_per_ts(int32_t *value)
 {
   *value = imp23absu_mic_model.streamParams.spts;
-  return 0;
-}
-uint8_t imp23absu_mic_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t imp23absu_mic_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1000;
-#endif
   return 0;
 }
 uint8_t imp23absu_mic_get_dim(int32_t *value)
@@ -1085,6 +1216,12 @@ uint8_t imp23absu_mic_get_sensor_annotation(char **value)
   *value = imp23absu_mic_model.annotation;
   return 0;
 }
+uint8_t imp23absu_mic_get_sensor_category(int32_t *value)
+{
+  //  *value = imp23absu_mic_model.sensorStatus.ISensorClass;
+  *value = 1; //1 = ISENSOR_CLASS_AUDIO
+  return 0;
+}
 uint8_t imp23absu_mic_get_stream_id(int8_t *value)
 {
   *value = imp23absu_mic_model.streamParams.stream_id;
@@ -1123,12 +1260,11 @@ uint8_t imp23absu_mic_set_enable(bool value)
   }
   return ret;
 }
-uint8_t imp23absu_mic_set_samples_per_ts__val(int32_t value)
+uint8_t imp23absu_mic_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  imp23absu_mic_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  imp23absu_mic_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 1000;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     imp23absu_mic_model.streamParams.spts = value;
@@ -1159,9 +1295,9 @@ uint8_t ism330dhcx_acc_comp_init(void)
   ism330dhcx_acc_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  ism330dhcx_acc_set_samples_per_ts__val(0);
+  ism330dhcx_acc_set_samples_per_ts(0);
 #else
-  ism330dhcx_acc_set_samples_per_ts__val(1000);
+  ism330dhcx_acc_set_samples_per_ts(1000);
 #endif
   app_model.s_models[id] = &ism330dhcx_acc_model;
   __stream_control(NULL, true);
@@ -1194,23 +1330,9 @@ uint8_t ism330dhcx_acc_get_enable(bool *value)
   *value = ism330dhcx_acc_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t ism330dhcx_acc_get_samples_per_ts__val(int32_t *value)
+uint8_t ism330dhcx_acc_get_samples_per_ts(int32_t *value)
 {
   *value = ism330dhcx_acc_model.streamParams.spts;
-  return 0;
-}
-uint8_t ism330dhcx_acc_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t ism330dhcx_acc_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1000;
-#endif
   return 0;
 }
 uint8_t ism330dhcx_acc_get_dim(int32_t *value)
@@ -1261,6 +1383,12 @@ uint8_t ism330dhcx_acc_get_sensor_annotation(char **value)
   *value = ism330dhcx_acc_model.annotation;
   return 0;
 }
+uint8_t ism330dhcx_acc_get_sensor_category(int32_t *value)
+{
+  //  *value = ism330dhcx_acc_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
 uint8_t ism330dhcx_acc_get_stream_id(int8_t *value)
 {
   *value = ism330dhcx_acc_model.streamParams.stream_id;
@@ -1281,6 +1409,9 @@ uint8_t ism330dhcx_acc_set_odr(float value)
     {
       app_model.mlc_ucf_valid = false;
     }
+#if (HSD_USE_DUMMY_DATA != 1)
+    ism330dhcx_acc_set_samples_per_ts((int32_t)value);
+#endif
     __stream_control(NULL, true);
   }
   return ret;
@@ -1320,12 +1451,11 @@ uint8_t ism330dhcx_acc_set_enable(bool value)
   }
   return ret;
 }
-uint8_t ism330dhcx_acc_set_samples_per_ts__val(int32_t value)
+uint8_t ism330dhcx_acc_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  ism330dhcx_acc_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  ism330dhcx_acc_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 1000;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     ism330dhcx_acc_model.streamParams.spts = value;
@@ -1357,9 +1487,9 @@ uint8_t ism330dhcx_gyro_comp_init(void)
   ism330dhcx_gyro_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  ism330dhcx_gyro_set_samples_per_ts__val(0);
+  ism330dhcx_gyro_set_samples_per_ts(0);
 #else
-  ism330dhcx_gyro_set_samples_per_ts__val(1000);
+  ism330dhcx_gyro_set_samples_per_ts(1000);
 #endif
   app_model.s_models[id] = &ism330dhcx_gyro_model;
   __stream_control(NULL, true);
@@ -1392,23 +1522,9 @@ uint8_t ism330dhcx_gyro_get_enable(bool *value)
   *value = ism330dhcx_gyro_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t ism330dhcx_gyro_get_samples_per_ts__val(int32_t *value)
+uint8_t ism330dhcx_gyro_get_samples_per_ts(int32_t *value)
 {
   *value = ism330dhcx_gyro_model.streamParams.spts;
-  return 0;
-}
-uint8_t ism330dhcx_gyro_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t ism330dhcx_gyro_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1000;
-#endif
   return 0;
 }
 uint8_t ism330dhcx_gyro_get_dim(int32_t *value)
@@ -1459,6 +1575,12 @@ uint8_t ism330dhcx_gyro_get_sensor_annotation(char **value)
   *value = ism330dhcx_gyro_model.annotation;
   return 0;
 }
+uint8_t ism330dhcx_gyro_get_sensor_category(int32_t *value)
+{
+  //  *value = ism330dhcx_gyro_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
 uint8_t ism330dhcx_gyro_get_stream_id(int8_t *value)
 {
   *value = ism330dhcx_gyro_model.streamParams.stream_id;
@@ -1479,6 +1601,9 @@ uint8_t ism330dhcx_gyro_set_odr(float value)
     {
       app_model.mlc_ucf_valid = false;
     }
+#if (HSD_USE_DUMMY_DATA != 1)
+    ism330dhcx_gyro_set_samples_per_ts((int32_t)value);
+#endif
     __stream_control(NULL, true);
   }
   return ret;
@@ -1518,12 +1643,11 @@ uint8_t ism330dhcx_gyro_set_enable(bool value)
   }
   return ret;
 }
-uint8_t ism330dhcx_gyro_set_samples_per_ts__val(int32_t value)
+uint8_t ism330dhcx_gyro_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  ism330dhcx_gyro_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  ism330dhcx_gyro_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 1000;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     ism330dhcx_gyro_model.streamParams.spts = value;
@@ -1553,7 +1677,11 @@ uint8_t ism330dhcx_mlc_comp_init(void)
   char default_notes[SENSOR_NOTES_LEN] = "\0";
   ism330dhcx_mlc_set_sensor_annotation(default_notes);
   /* USER Code */
-  ism330dhcx_mlc_set_samples_per_ts__val(1);
+#if (HSD_USE_DUMMY_DATA == 1)
+  ism330dhcx_mlc_model.streamParams.spts = 0;
+#else
+  ism330dhcx_mlc_model.streamParams.spts = 1;
+#endif
   app_model.s_models[id] = &ism330dhcx_mlc_model;
   app_model.mlc_ucf_valid = false;
   __stream_control(NULL, true);
@@ -1573,23 +1701,9 @@ uint8_t ism330dhcx_mlc_get_enable(bool *value)
   *value = ism330dhcx_mlc_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t ism330dhcx_mlc_get_samples_per_ts__val(int32_t *value)
+uint8_t ism330dhcx_mlc_get_samples_per_ts(int32_t *value)
 {
   *value = ism330dhcx_mlc_model.streamParams.spts;
-  return 0;
-}
-uint8_t ism330dhcx_mlc_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 1;
-  return 0;
-}
-uint8_t ism330dhcx_mlc_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1;
-#endif
   return 0;
 }
 uint8_t ism330dhcx_mlc_get_ucf_status(bool *value)
@@ -1629,6 +1743,12 @@ uint8_t ism330dhcx_mlc_get_sensor_annotation(char **value)
   *value = ism330dhcx_mlc_model.annotation;
   return 0;
 }
+uint8_t ism330dhcx_mlc_get_sensor_category(int32_t *value)
+{
+  //  *value = ism330dhcx_mlc_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
 uint8_t ism330dhcx_mlc_get_stream_id(int8_t *value)
 {
   *value = ism330dhcx_mlc_model.streamParams.stream_id;
@@ -1656,18 +1776,6 @@ uint8_t ism330dhcx_mlc_set_enable(bool value)
   }
   __stream_control(NULL, true);
   return ret;
-}
-uint8_t ism330dhcx_mlc_set_samples_per_ts__val(int32_t value)
-{
-  int32_t min_v = 0;
-  ism330dhcx_mlc_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  ism330dhcx_mlc_get_samples_per_ts__max(&max_v);
-  if(value >= min_v && value <= max_v)
-  {
-    ism330dhcx_mlc_model.streamParams.spts = value;
-  }
-  return 0;
 }
 uint8_t ism330dhcx_mlc_set_sensor_annotation(const char *value)
 {
@@ -1701,9 +1809,9 @@ uint8_t iis2dlpc_acc_comp_init(void)
   iis2dlpc_acc_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  iis2dlpc_acc_set_samples_per_ts__val(0);
+  iis2dlpc_acc_set_samples_per_ts(0);
 #else
-  iis2dlpc_acc_set_samples_per_ts__val(1000);
+  iis2dlpc_acc_set_samples_per_ts(1000);
 #endif
   app_model.s_models[id] = &iis2dlpc_acc_model;
   __stream_control(NULL, true);
@@ -1738,23 +1846,9 @@ uint8_t iis2dlpc_acc_get_enable(bool *value)
   *value = iis2dlpc_acc_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t iis2dlpc_acc_get_samples_per_ts__val(int32_t *value)
+uint8_t iis2dlpc_acc_get_samples_per_ts(int32_t *value)
 {
   *value = iis2dlpc_acc_model.streamParams.spts;
-  return 0;
-}
-uint8_t iis2dlpc_acc_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t iis2dlpc_acc_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1000;
-#endif
   return 0;
 }
 uint8_t iis2dlpc_acc_get_dim(int32_t *value)
@@ -1805,6 +1899,12 @@ uint8_t iis2dlpc_acc_get_sensor_annotation(char **value)
   *value = iis2dlpc_acc_model.annotation;
   return 0;
 }
+uint8_t iis2dlpc_acc_get_sensor_category(int32_t *value)
+{
+  //  *value = iis2dlpc_acc_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
 uint8_t iis2dlpc_acc_get_stream_id(int8_t *value)
 {
   *value = iis2dlpc_acc_model.streamParams.stream_id;
@@ -1821,6 +1921,9 @@ uint8_t iis2dlpc_acc_set_odr(float value)
   if(ret == SYS_NO_ERROR_CODE)
   {
     iis2dlpc_acc_model.sensorStatus.ODR = value;
+#if (HSD_USE_DUMMY_DATA != 1)
+    iis2dlpc_acc_set_samples_per_ts((int32_t)value);
+#endif
     __stream_control(NULL, true);
   }
   return ret;
@@ -1852,12 +1955,11 @@ uint8_t iis2dlpc_acc_set_enable(bool value)
   }
   return ret;
 }
-uint8_t iis2dlpc_acc_set_samples_per_ts__val(int32_t value)
+uint8_t iis2dlpc_acc_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  iis2dlpc_acc_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  iis2dlpc_acc_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 1000;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     iis2dlpc_acc_model.streamParams.spts = value;
@@ -1888,9 +1990,9 @@ uint8_t stts22h_temp_comp_init(void)
   stts22h_temp_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  stts22h_temp_set_samples_per_ts__val(0);
+  stts22h_temp_set_samples_per_ts(0);
 #else
-  stts22h_temp_set_samples_per_ts__val(200);
+  stts22h_temp_set_samples_per_ts(200);
 #endif
   app_model.s_models[id] = &stts22h_temp_model;
   __stream_control(NULL, true);
@@ -1925,23 +2027,9 @@ uint8_t stts22h_temp_get_enable(bool *value)
   *value = stts22h_temp_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t stts22h_temp_get_samples_per_ts__val(int32_t *value)
+uint8_t stts22h_temp_get_samples_per_ts(int32_t *value)
 {
   *value = stts22h_temp_model.streamParams.spts;
-  return 0;
-}
-uint8_t stts22h_temp_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t stts22h_temp_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 200;
-#endif
   return 0;
 }
 uint8_t stts22h_temp_get_dim(int32_t *value)
@@ -1992,6 +2080,12 @@ uint8_t stts22h_temp_get_sensor_annotation(char **value)
   *value = stts22h_temp_model.annotation;
   return 0;
 }
+uint8_t stts22h_temp_get_sensor_category(int32_t *value)
+{
+  //  *value = stts22h_temp_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
 uint8_t stts22h_temp_get_stream_id(int8_t *value)
 {
   *value = stts22h_temp_model.streamParams.stream_id;
@@ -2008,6 +2102,9 @@ uint8_t stts22h_temp_set_odr(float value)
   if(ret == SYS_NO_ERROR_CODE)
   {
     stts22h_temp_model.sensorStatus.ODR = value;
+#if (HSD_USE_DUMMY_DATA != 1)
+    stts22h_temp_set_samples_per_ts((int32_t)value);
+#endif
     __stream_control(NULL, true);
   }
   return ret;
@@ -2030,12 +2127,11 @@ uint8_t stts22h_temp_set_enable(bool value)
   }
   return ret;
 }
-uint8_t stts22h_temp_set_samples_per_ts__val(int32_t value)
+uint8_t stts22h_temp_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  stts22h_temp_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  stts22h_temp_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 200;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     stts22h_temp_model.streamParams.spts = value;
@@ -2045,6 +2141,185 @@ uint8_t stts22h_temp_set_samples_per_ts__val(int32_t value)
 uint8_t stts22h_temp_set_sensor_annotation(const char *value)
 {
   strcpy(stts22h_temp_model.annotation, value);
+  return 0;
+}
+
+/* STTS22H_TEMP_EXT PnPL Component -------------------------------------------*/
+static SensorModel_t stts22h_ext_temp_model;
+
+uint8_t stts22h_ext_temp_comp_init(void)
+{
+  stts22h_ext_temp_model.comp_name = stts22h_ext_temp_get_key();
+
+  SQuery_t querySM;
+  SQInit(&querySM, SMGetSensorManager());
+  uint16_t id = SQNextByNameAndType(&querySM, "stts22h_ext", COM_TYPE_TEMP);
+  stts22h_ext_temp_model.id = id;
+  stts22h_ext_temp_model.sensorStatus = SMSensorGetStatus(id);
+  stts22h_ext_temp_model.streamParams.stream_id = -1;
+  stts22h_ext_temp_model.streamParams.usb_ep = -1;
+  /* USER code */
+
+  char default_notes[SENSOR_NOTES_LEN] = "[EXTERN]";
+  stts22h_ext_temp_set_sensor_annotation(default_notes);
+  /* USER Code */
+  #if (HSD_USE_DUMMY_DATA == 1)
+    stts22h_ext_temp_set_samples_per_ts(0);
+  #else
+    stts22h_ext_temp_set_samples_per_ts(200);
+  #endif
+
+  app_model.s_models[id] = &stts22h_ext_temp_model;
+  __stream_control(NULL, true);
+
+  /* USER Component initialization code */
+  return 0;
+}
+char* stts22h_ext_temp_get_key(void)
+{
+  return "stts22h_ext_temp";
+}
+
+uint8_t stts22h_ext_temp_get_odr(float *value)
+{
+  uint16_t id = stts22h_ext_temp_model.id;
+  stts22h_ext_temp_model.sensorStatus = SMSensorGetStatus(id);
+  *value = stts22h_ext_temp_model.sensorStatus.ODR;
+  /* USER Code */
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_fs(float *value)
+{
+  uint16_t id = stts22h_ext_temp_model.id;
+  stts22h_ext_temp_model.sensorStatus = SMSensorGetStatus(id);
+  *value = stts22h_ext_temp_model.sensorStatus.FS;
+  /* USER Code */
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_enable(bool *value)
+{
+  uint16_t id = stts22h_ext_temp_model.id;
+  stts22h_ext_temp_model.sensorStatus = SMSensorGetStatus(id);
+  *value = stts22h_ext_temp_model.sensorStatus.IsActive;
+  /* USER Code */
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_samples_per_ts(int32_t *value)
+{
+  *value = stts22h_ext_temp_model.streamParams.spts;
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_dim(int32_t *value)
+{
+  *value = 1;
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_ioffset(float *value)
+{
+  *value = stts22h_ext_temp_model.streamParams.ioffset;
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_measodr(float *value)
+{
+  uint16_t id = stts22h_ext_temp_model.id;
+  stts22h_ext_temp_model.sensorStatus = SMSensorGetStatus(id);
+  *value = stts22h_ext_temp_model.sensorStatus.MeasuredODR;
+  /* USER Code */
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_usb_dps(int32_t *value)
+{
+  *value = stts22h_ext_temp_model.streamParams.usb_dps;
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_sd_dps(int32_t *value)
+{
+  *value = stts22h_ext_temp_model.streamParams.sd_dps;
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_sensitivity(float *value)
+{
+  uint16_t id = stts22h_ext_temp_model.id;
+  stts22h_ext_temp_model.sensorStatus = SMSensorGetStatus(id);
+  *value = stts22h_ext_temp_model.sensorStatus.Sensitivity;
+  /* USER Code */
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_data_type(char **value)
+{
+  *value = "float";
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_sensor_annotation(char **value)
+{
+  uint16_t id = stts22h_ext_temp_model.id;
+  stts22h_ext_temp_model.sensorStatus = SMSensorGetStatus(id);
+  *value = stts22h_ext_temp_model.annotation;
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_sensor_category(int32_t *value)
+{
+  //  *value = stts22h_ext_temp_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_stream_id(int8_t *value)
+{
+  *value = stts22h_ext_temp_model.streamParams.stream_id;
+  return 0;
+}
+uint8_t stts22h_ext_temp_get_ep_id(int8_t *value)
+{
+  *value = stts22h_ext_temp_model.streamParams.usb_ep;
+  return 0;
+}
+uint8_t stts22h_ext_temp_set_odr(float value)
+{
+  sys_error_code_t ret = SMSensorSetODR(stts22h_ext_temp_model.id, value);
+  if(ret == SYS_NO_ERROR_CODE)
+  {
+    stts22h_ext_temp_model.sensorStatus.ODR = value;
+    /* USER Code */
+#if (HSD_USE_DUMMY_DATA != 1)
+    stts22h_ext_temp_set_samples_per_ts((int32_t)value);
+#endif
+    __stream_control(NULL, true);
+  }
+  return ret;
+}
+uint8_t stts22h_ext_temp_set_enable(bool value)
+{
+  sys_error_code_t ret = 1;
+  if(value)
+  {
+    ret = SMSensorEnable(stts22h_ext_temp_model.id);
+  }
+  else
+  {
+    ret = SMSensorDisable(stts22h_ext_temp_model.id);
+  }
+  if(ret == SYS_NO_ERROR_CODE)
+  {
+    stts22h_ext_temp_model.sensorStatus.IsActive = value;
+    /* USER Code */
+    __stream_control(NULL, true);
+  }
+  return ret;
+}
+uint8_t stts22h_ext_temp_set_samples_per_ts(int32_t value)
+{
+  int32_t min_v = 0;
+  int32_t max_v = 200;
+  /* USER Code */
+  if(value >= min_v && value <= max_v)
+  {
+    stts22h_ext_temp_model.streamParams.spts = value;
+  }
+  return 0;
+}
+uint8_t stts22h_ext_temp_set_sensor_annotation(const char *value)
+{
+  strcpy(stts22h_ext_temp_model.annotation, value);
   return 0;
 }
 
@@ -2066,9 +2341,9 @@ uint8_t ilps22qs_press_comp_init(void)
   ilps22qs_press_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  ilps22qs_press_set_samples_per_ts__val(0);
+  ilps22qs_press_set_samples_per_ts(0);
 #else
-  ilps22qs_press_set_samples_per_ts__val(200);
+  ilps22qs_press_set_samples_per_ts(200);
 #endif
   app_model.s_models[id] = &ilps22qs_press_model;
   __stream_control(NULL, true);
@@ -2101,23 +2376,9 @@ uint8_t ilps22qs_press_get_enable(bool *value)
   *value = ilps22qs_press_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t ilps22qs_press_get_samples_per_ts__val(int32_t *value)
+uint8_t ilps22qs_press_get_samples_per_ts(int32_t *value)
 {
   *value = ilps22qs_press_model.streamParams.spts;
-  return 0;
-}
-uint8_t ilps22qs_press_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t ilps22qs_press_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 200;
-#endif
   return 0;
 }
 uint8_t ilps22qs_press_get_dim(int32_t *value)
@@ -2168,6 +2429,12 @@ uint8_t ilps22qs_press_get_sensor_annotation(char **value)
   *value = ilps22qs_press_model.annotation;
   return 0;
 }
+uint8_t ilps22qs_press_get_sensor_category(int32_t *value)
+{
+  //  *value = ilps22qs_press_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
 uint8_t ilps22qs_press_get_stream_id(int8_t *value)
 {
   *value = ilps22qs_press_model.streamParams.stream_id;
@@ -2184,6 +2451,9 @@ uint8_t ilps22qs_press_set_odr(float value)
   if(ret == SYS_NO_ERROR_CODE)
   {
     ilps22qs_press_model.sensorStatus.ODR = value;
+#if (HSD_USE_DUMMY_DATA != 1)
+    ilps22qs_press_set_samples_per_ts((int32_t)value);
+#endif
     __stream_control(NULL, true);
   }
   return ret;
@@ -2215,12 +2485,11 @@ uint8_t ilps22qs_press_set_enable(bool value)
   }
   return ret;
 }
-uint8_t ilps22qs_press_set_samples_per_ts__val(int32_t value)
+uint8_t ilps22qs_press_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  ilps22qs_press_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  ilps22qs_press_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 200;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     ilps22qs_press_model.streamParams.spts = value;
@@ -2251,9 +2520,9 @@ uint8_t imp34dt05_mic_comp_init(void)
   imp34dt05_mic_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  imp34dt05_mic_set_samples_per_ts__val(0);
+  imp34dt05_mic_set_samples_per_ts(0);
 #else
-  imp34dt05_mic_set_samples_per_ts__val(1000);
+  imp34dt05_mic_set_samples_per_ts(1000);
 #endif
   app_model.s_models[id] = &imp34dt05_mic_model;
   __stream_control(NULL, true);
@@ -2286,23 +2555,9 @@ uint8_t imp34dt05_mic_get_enable(bool *value)
   *value = imp34dt05_mic_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t imp34dt05_mic_get_samples_per_ts__val(int32_t *value)
+uint8_t imp34dt05_mic_get_samples_per_ts(int32_t *value)
 {
   *value = imp34dt05_mic_model.streamParams.spts;
-  return 0;
-}
-uint8_t imp34dt05_mic_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t imp34dt05_mic_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 1000;
-#endif
   return 0;
 }
 uint8_t imp34dt05_mic_get_dim(int32_t *value)
@@ -2353,6 +2608,12 @@ uint8_t imp34dt05_mic_get_sensor_annotation(char **value)
   *value = imp34dt05_mic_model.annotation;
   return 0;
 }
+uint8_t imp34dt05_mic_get_sensor_category(int32_t *value)
+{
+  //  *value = imp34dt05_mic_model.sensorStatus.ISensorClass;
+  *value = 1; //1 = ISENSOR_CLASS_AUDIO
+  return 0;
+}
 uint8_t imp34dt05_mic_get_stream_id(int8_t *value)
 {
   *value = imp34dt05_mic_model.streamParams.stream_id;
@@ -2391,12 +2652,11 @@ uint8_t imp34dt05_mic_set_enable(bool value)
   }
   return ret;
 }
-uint8_t imp34dt05_mic_set_samples_per_ts__val(int32_t value)
+uint8_t imp34dt05_mic_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  imp34dt05_mic_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  imp34dt05_mic_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 1000;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     imp34dt05_mic_model.streamParams.spts = value;
@@ -2427,9 +2687,9 @@ uint8_t iis2iclx_acc_comp_init(void)
   iis2iclx_acc_set_sensor_annotation(default_notes);
   /* USER Code */
 #if (HSD_USE_DUMMY_DATA == 1)
-  iis2iclx_acc_set_samples_per_ts__val(0);
+  iis2iclx_acc_set_samples_per_ts(0);
 #else
-  iis2iclx_acc_set_samples_per_ts__val(800);
+  iis2iclx_acc_set_samples_per_ts(800);
 #endif
   app_model.s_models[id] = &iis2iclx_acc_model;
   __stream_control(NULL, true);
@@ -2462,23 +2722,9 @@ uint8_t iis2iclx_acc_get_enable(bool *value)
   *value = iis2iclx_acc_model.sensorStatus.IsActive;
   return 0;
 }
-uint8_t iis2iclx_acc_get_samples_per_ts__val(int32_t *value)
+uint8_t iis2iclx_acc_get_samples_per_ts(int32_t *value)
 {
   *value = iis2iclx_acc_model.streamParams.spts;
-  return 0;
-}
-uint8_t iis2iclx_acc_get_samples_per_ts__min(int32_t *value)
-{
-  *value = 0;
-  return 0;
-}
-uint8_t iis2iclx_acc_get_samples_per_ts__max(int32_t *value)
-{
-#if (HSD_USE_DUMMY_DATA == 1)
-  *value = 0;
-#else
-  *value = 800;
-#endif
   return 0;
 }
 uint8_t iis2iclx_acc_get_dim(int32_t *value)
@@ -2529,6 +2775,12 @@ uint8_t iis2iclx_acc_get_sensor_annotation(char **value)
   *value = iis2iclx_acc_model.annotation;
   return 0;
 }
+uint8_t iis2iclx_acc_get_sensor_category(int32_t *value)
+{
+  //  *value = iis2iclx_acc_model.sensorStatus.ISensorClass;
+  *value = 0; //0 = ISENSOR_CLASS_MEMS
+  return 0;
+}
 uint8_t iis2iclx_acc_get_stream_id(int8_t *value)
 {
   *value = iis2iclx_acc_model.streamParams.stream_id;
@@ -2545,6 +2797,9 @@ uint8_t iis2iclx_acc_set_odr(float value)
   if(ret == SYS_NO_ERROR_CODE)
   {
     iis2iclx_acc_model.sensorStatus.ODR = value;
+#if (HSD_USE_DUMMY_DATA != 1)
+    iis2iclx_acc_set_samples_per_ts((int32_t)value);
+#endif
     __stream_control(NULL, true);
   }
   return ret;
@@ -2576,12 +2831,11 @@ uint8_t iis2iclx_acc_set_enable(bool value)
   }
   return ret;
 }
-uint8_t iis2iclx_acc_set_samples_per_ts__val(int32_t value)
+uint8_t iis2iclx_acc_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
-  iis2iclx_acc_get_samples_per_ts__min(&min_v);
-  int32_t max_v = 0;
-  iis2iclx_acc_get_samples_per_ts__max(&max_v);
+  int32_t max_v = 800;
+  /* USER Code */
   if(value >= min_v && value <= max_v)
   {
     iis2iclx_acc_model.streamParams.spts = value;
@@ -2620,22 +2874,22 @@ uint8_t automode_get_nof_acquisitions(int32_t *value)
   *value = app_model.automode_model.nof_acquisitions;
   return 0;
 }
-uint8_t automode_get_start_delay_ms(int32_t *value)
+uint8_t automode_get_start_delay_s(int32_t *value)
 {
   /* USER Code */
-  *value = app_model.automode_model.start_delay_ms;
+  *value = app_model.automode_model.start_delay_s;
   return 0;
 }
-uint8_t automode_get_datalog_time_length(int32_t *value)
+uint8_t automode_get_logging_period_s(int32_t *value)
 {
   /* USER Code */
-  *value = app_model.automode_model.datalog_time_length;
+  *value = app_model.automode_model.logging_period_s;
   return 0;
 }
-uint8_t automode_get_idle_time_length(int32_t *value)
+uint8_t automode_get_idle_period_s(int32_t *value)
 {
   /* USER Code */
-  *value = app_model.automode_model.idle_time_length;
+  *value = app_model.automode_model.idle_period_s;
   return 0;
 }
 uint8_t automode_set_enabled(bool value)
@@ -2650,22 +2904,32 @@ uint8_t automode_set_nof_acquisitions(int32_t value)
   app_model.automode_model.nof_acquisitions = value;
   return 0;
 }
-uint8_t automode_set_start_delay_ms(int32_t value)
+uint8_t automode_set_start_delay_s(int32_t value)
 {
   /* USER Code */
-  app_model.automode_model.start_delay_ms = value;
+  if (value < 3)
+  {
+    /* To avoid issue while opening SD card or handling files, setup a minimum delay */
+    value = 3;
+  }
+  app_model.automode_model.start_delay_s = value;
   return 0;
 }
-uint8_t automode_set_datalog_time_length(int32_t value)
+uint8_t automode_set_logging_period_s(int32_t value)
 {
   /* USER Code */
-  app_model.automode_model.datalog_time_length = value;
+  app_model.automode_model.logging_period_s = value;
   return 0;
 }
-uint8_t automode_set_idle_time_length(int32_t value)
+uint8_t automode_set_idle_period_s(int32_t value)
 {
   /* USER Code */
-  app_model.automode_model.idle_time_length = value;
+  if (value < 3)
+  {
+    /* To avoid issue while opening SD card or handling files, setup a minimum delay */
+    value = 3;
+  }
+  app_model.automode_model.idle_period_s = value;
   return 0;
 }
 
@@ -2754,6 +3018,7 @@ uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
 uint8_t log_controller_stop_log(ILog_Controller_t *ifn)
 {
   PnPLGenerateAcquisitionUUID(app_model.acquisition_info_model.uuid);
+  TMCloseAllOpenedTags();
   ILog_Controller_stop_log(ifn);
   TMCalculateEndTime(app_model.acquisition_info_model.end_time);
   return 0;
@@ -3133,7 +3398,7 @@ uint8_t firmware_info_comp_init(void)
   firmware_info_set_alias(default_alias);
 
   char default_mac_address[MAC_ADDRESS_LENGTH] = "00:00:00:00:00:00";
-  firmware_info_set_mac_address(default_mac_address);
+  set_mac_address(default_mac_address);
   return 0;
 }
 
@@ -3154,10 +3419,10 @@ uint8_t firmware_info_get_fw_name(char **value)
 }
 uint8_t firmware_info_get_fw_version(char **value)
 {
-  *value = "1.1.0";
+  *value = "1.2.0";
   return 0;
 }
-uint8_t firmware_info_get_serial_number(char **value)
+uint8_t firmware_info_get_part_number(char **value)
 {
   *value = "STEVAL-STWINBX1";
   return 0;
@@ -3183,7 +3448,7 @@ uint8_t firmware_info_set_alias(const char *value)
   return 0;
 }
 
-uint8_t firmware_info_set_mac_address(const char *value)
+uint8_t set_mac_address(const char *value)
 {
   strcpy(app_model.firmware_info_model.mac_address, value);
   return 0;
@@ -3212,7 +3477,7 @@ uint8_t DeviceInformation_get_model(char **value)
 }
 uint8_t DeviceInformation_get_swVersion(char **value)
 {
-  *value = "1.1.0";
+  *value = "1.2.0";
   return 0;
 }
 uint8_t DeviceInformation_get_osName(char **value)
@@ -3233,11 +3498,17 @@ uint8_t DeviceInformation_get_processorManufacturer(char **value)
 uint8_t DeviceInformation_get_totalStorage(float *value)
 {
   *value = 0;
+  if(BSP_SD_IsDetected(FX_STM32_SD_INSTANCE))
+  {
+    BSP_SD_CardInfo CardInfo;
+    BSP_SD_GetCardInfo(FX_STM32_SD_INSTANCE, &CardInfo);
+    *value = round(((float)CardInfo.BlockNbr * (float)CardInfo.BlockSize)/1000000000.0f);
+  }
   return 0;
 }
 uint8_t DeviceInformation_get_totalMemory(float *value)
 {
-  *value = 0;
+  *value = (SRAM1_SIZE+SRAM2_SIZE+SRAM3_SIZE+SRAM4_SIZE)/1024;
   return 0;
 }
 

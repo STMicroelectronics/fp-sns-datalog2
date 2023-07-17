@@ -23,8 +23,6 @@
 extern "C" {
 #endif
 
-#include "services/systp.h"
-#include "services/syserror.h"
 #include "services/AManagedTaskEx.h"
 #include "services/AManagedTaskEx_vtbl.h"
 #include "ABusIF.h"
@@ -61,6 +59,19 @@ ISourceObservable *STTS22HTaskGetTempSensorIF(STTS22HTask *_this);
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *STTS22HTaskAlloc(const void *pIRQConfig, const void *pCSConfig, const uint8_t i2c_addr);
+
+/**
+  * Call the default ::STTS22HTaskAlloc and then it overwrite sensor name
+  *
+  * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO connected to the STTS22H sensor and configured in EXTI mode.
+  *        If it is NULL then the sensor is configured in polling mode.
+  * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the SPI CS Pin.
+  * @return a pointer to the generic object ::AManagedTaskEx if success,
+  * or NULL if out of memory error occurs.
+  */
+AManagedTaskEx *STTS22HTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const uint8_t i2c_addr, const char *Name);
 
 /**
   * Get the Bus interface for the sensor task.

@@ -35,6 +35,8 @@ CustomReadRequestAudioSceneClass_t CustomReadRequestAudioSceneClass=NULL;
 /* Data structure pointer for Audio Scene Classification service */
 static BleCharTypeDef BleCharAudioSceneClass;
 
+static uint8_t BleSendAlgorithmCode=0;
+
 /* Private functions ---------------------------------------------------------*/
 static void AttrMod_Request_AudioSceneClass(void *BleCharPointer,uint16_t attr_handle, uint16_t Offset, uint8_t data_length, uint8_t *att_data);
 #if (BLUE_CORE != BLUENRG_LP)
@@ -50,14 +52,20 @@ static void Read_Request_AudioSceneClass(void *BleCharPointer,
 #endif /* (BLUE_CORE != BLUENRG_LP) */
 
 /**
- * @brief  Init Audio Scene Classification service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer forActivity Classification service
+ * @brief  Init Audio Scene Classification info service
+ * @param  uint8_t SendAlgorithmCode 0/1 -> Send also the Audio Scene Classificatio algorithm code
+ * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Activity Classification info service
  */
-BleCharTypeDef* BLE_InitAudioSceneClassService(void)
+BleCharTypeDef* BLE_InitAudioSceneClassService(uint8_t SendAlgorithmCode)
 {
   /* Data structure pointer for BLE service */
   BleCharTypeDef *BleCharPointer;
+  
+  BleSendAlgorithmCode = SendAlgorithmCode;
+  if((BleSendAlgorithmCode!=BLE_ASC_ALG_SCENE_CLASS) & (BleSendAlgorithmCode!=BLE_ASC_ALG_BABY_CRYING)) {
+     BLE_MANAGER_PRINTF("Error: BleSendAlgorithmCode not valid\r\n");
+     return NULL;
+  }
 
   /* Init data structure pointer for Activity Classification info service */
   BleCharPointer = &BleCharAudioSceneClass;
@@ -66,7 +74,7 @@ BleCharTypeDef* BLE_InitAudioSceneClassService(void)
   BleCharPointer->Read_Request_CB= Read_Request_AudioSceneClass;
   COPY_AUDIO_SCENE_CLASS_CHAR_UUID((BleCharPointer->uuid));
   BleCharPointer->Char_UUID_Type =UUID_TYPE_128;
-  BleCharPointer->Char_Value_Length=2+1; /* 2 byte timestamp, 1 byte aucoustic scene classification */
+  BleCharPointer->Char_Value_Length=2+1+BleSendAlgorithmCode; /* 2 byte timestamp, 1 byte aucoustic scene classification +1 BleSendAlgorithmCode (optional)*/
   BleCharPointer->Char_Properties = ((uint8_t)CHAR_PROP_NOTIFY) | ((uint8_t)CHAR_PROP_READ);
   BleCharPointer->Security_Permissions=ATTR_PERMISSION_NONE;
   BleCharPointer->GATT_Evt_Mask=GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP;
@@ -86,17 +94,22 @@ BleCharTypeDef* BLE_InitAudioSceneClassService(void)
 /**
  * @brief  Update Audio Scene Classification characteristic
  * @param  BLE_ASC_output_t ASC_Code Audio Scene Classification Code
+ * @param BLE_ASC_Algorithm_t ASC_AlgId Algorithm Id
  * @retval tBleStatus   Status
  */
-tBleStatus BLE_AudioSceneClassUpdate(BLE_ASC_output_t ASC_Code)
+tBleStatus BLE_AudioSceneClassUpdate(BLE_ASC_output_t ASC_Code,BLE_ASC_Algorithm_t ASC_AlgId)
 {  
   tBleStatus ret;
-  uint8_t buff[2+1];
+  uint8_t buff[2+1+1];
 
   STORE_LE_16(buff  ,(HAL_GetTick()>>3));
   buff[2] = (uint8_t) ASC_Code;
+  
+  if(BleSendAlgorithmCode) {
+    buff[3] = (uint8_t) ASC_AlgId;
+  }
 
-  ret = ACI_GATT_UPDATE_CHAR_VALUE(&BleCharAudioSceneClass, 0, 2+1,buff);
+  ret = ACI_GATT_UPDATE_CHAR_VALUE(&BleCharAudioSceneClass, 0, 2+1+BleSendAlgorithmCode,buff);
 
   if (ret != (tBleStatus)BLE_STATUS_SUCCESS){
     if(BLE_StdErr_Service==BLE_SERV_ENABLE){
@@ -156,8 +169,9 @@ static void Read_Request_AudioSceneClass(void *VoidCharPointer,uint16_t handle)
 {
   if(CustomReadRequestAudioSceneClass != NULL) {
     BLE_ASC_output_t ASC_Code;
-    CustomReadRequestAudioSceneClass(&ASC_Code);
-    BLE_AudioSceneClassUpdate(ASC_Code);
+    BLE_ASC_Algorithm_t ASC_AlgId;
+    CustomReadRequestAudioSceneClass(&ASC_Code,&ASC_AlgId);
+    BLE_AudioSceneClassUpdate(ASC_Code,ASC_AlgId);
   } else {
     BLE_MANAGER_PRINTF("\r\n\nRead request ASC function not defined\r\n\n");
   }
@@ -174,14 +188,19 @@ static void Read_Request_AudioSceneClass(void *BleCharPointer,
   tBleStatus ret;
   if(CustomReadRequestAudioSceneClass != NULL) {
     BLE_ASC_output_t ASC_Code;
-    uint8_t buff[2+1];
+    BLE_ASC_Algorithm_t ASC_AlgId;
+    uint8_t buff[2+1+1];
 
-    CustomReadRequestAudioSceneClass(&ASC_Code);
+    CustomReadRequestAudioSceneClass(&ASC_Code,&ASC_AlgId);
  
     STORE_LE_16(buff  ,(HAL_GetTick()>>3));
     buff[2] = (uint8_t) ASC_Code;
     
-    ret = aci_gatt_srv_write_handle_value_nwk(handle, 0, 2+1,buff);
+    if(BleSendAlgorithmCode) {
+      buff[3] = (uint8_t) ASC_AlgId;
+    }
+    
+    ret = aci_gatt_srv_write_handle_value_nwk(handle, 0, 2+1+BleSendAlgorithmCode,buff);
     if (ret != (tBleStatus)BLE_STATUS_SUCCESS){
       if(BLE_StdErr_Service==BLE_SERV_ENABLE){
         BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "Error Updating ASC Char\n");

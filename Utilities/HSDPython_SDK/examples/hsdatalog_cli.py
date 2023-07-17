@@ -36,13 +36,14 @@ class HSDInfo():
 
     class CLIFlags():
         
-        def __init__(self, output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, time_sec, interactive_mode):
+        def __init__(self, output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, ispu_out_fmt, time_sec, interactive_mode):
             self.output_folder = output_folder
             self.sub_datetime_folder = sub_datetime_folder
             self.acq_name = acq_name
             self.acq_desc = acq_desc
             self.file_config = file_config
-            self.ucf_file = ucf_file
+            self.ucf_file = ucf_file if ucf_file != "" else None
+            self.ispu_out_fmt = ispu_out_fmt if ispu_out_fmt != "" else None
             self.time_sec = time_sec
             self.interactive_mode = interactive_mode
     
@@ -56,7 +57,9 @@ class HSDInfo():
     selected_device_id = None
     selected_fw_info = None
     mlc_sensor_list = None
+    ispu_sensor_list = None
     selected_mlc_id = None
+    selected_ispu_id = None
     is_log_started = False
     is_log_manually_stopped = False
     output_acquisition_path = None
@@ -70,7 +73,7 @@ class HSDInfo():
         #Initialize the HSD_PythonSDK HSD_link module
         self.hsd_link_factory = HSDLink()
         self.hsd_link = self.hsd_link_factory.create_hsd_link(acquisition_folder = cli_flags.output_folder)
-        
+
         #Get the connected device list
         self.device_list = HSDLink.get_devices(self.hsd_link)
 
@@ -143,15 +146,40 @@ class HSDInfo():
         all_sensor_list = HSDLink.get_sensor_list(self.hsd_link, self.selected_device_id, only_active=False)
         HSDLink.init_sensors_data_counters(self.hsd_link, all_sensor_list)
 
-    def update_mlc_sensor_list(self):
+    def update_ai_sensor_list(self):
         self.mlc_sensor_list = HSDLink.get_updated_mlc_sensor_list(self.hsd_link, self.selected_device_id, self.mlc_sensor_list)
+        self.ispu_sensor_list = HSDLink.get_updated_ispu_sensor_list(self.hsd_link, self.selected_device_id, self.ispu_sensor_list)
         if self.mlc_sensor_list is not None and len(self.mlc_sensor_list) > 0:
             self.selected_mlc_id = HSDLink.get_mlc_id(self.hsd_link, self.selected_device_id)
+        if self.ispu_sensor_list is not None and len(self.ispu_sensor_list) > 0:
+            self.selected_ispu_id = HSDLink.get_ispu_id(self.hsd_link, self.selected_device_id)
 
-    def upload_mlc_ucf_file(self):
+    def upload_ai_ucf_file(self):
         if self.selected_mlc_id is not None:
             HSDLink.upload_mlc_ucf_file(self.hsd_link, self.selected_device_id, self.cli_flags.ucf_file)
             self.update_sensor_list()
+        if self.selected_ispu_id is not None:
+            HSDLink.upload_ispu_ucf_file(self.hsd_link, self.selected_device_id, self.cli_flags.ucf_file)
+            self.update_sensor_list()
+
+    def save_ai_ucf_file(self):
+        self.output_acquisition_path = HSDLink.get_acquisition_folder(self.hsd_link)
+        if self.cli_flags.ucf_file is not None:
+            ucf_filename = os.path.basename(self.cli_flags.ucf_file)
+            shutil.copyfile(self.cli_flags.ucf_file, os.path.join(self.output_acquisition_path, ucf_filename))
+            log.info("{} File correctly saved".format(ucf_filename))
+    
+    def save_ispu_out_fmt_file(self):
+        self.output_acquisition_path = HSDLink.get_acquisition_folder(self.hsd_link)
+        if self.cli_flags.ispu_out_fmt is not None:
+            shutil.copyfile(self.cli_flags.ispu_out_fmt, os.path.join(self.output_acquisition_path,"ispu_output_format.json"))
+            log.info("ispu_output_format.json File correctly saved")
+    
+
+    # def upload_mlc_ucf_file(self):
+    #     if self.selected_mlc_id is not None:
+    #         HSDLink.upload_mlc_ucf_file(self.hsd_link, self.selected_device_id, self.cli_flags.ucf_file)
+    #         self.update_sensor_list()
 
     def update_tag_list(self):
         if self.selected_device_id is not None:
@@ -181,7 +209,12 @@ class HSDInfo():
         HSDLink.stop_log(self.hsd_link, self.selected_device_id)
         self.is_log_started = False
         HSDLink.save_json_device_file(self.hsd_link, self.selected_device_id, self.output_acquisition_path)
+        log.info("Device Config json File correctly saved")
         HSDLink.save_json_acq_info_file(self.hsd_link, self.selected_device_id, self.output_acquisition_path)
+        log.info("Acquisition Info json File correctly saved")
+        #Save ISPU output format json file if passed as CLI parameter
+        self.save_ai_ucf_file()
+        self.save_ispu_out_fmt_file()
         HSDLink.refresh_hsd_link(self.hsd_link) #Needed by HSDLink_v1
 
 def show_help(ctx, param, value):
@@ -207,15 +240,16 @@ def validate_duration(ctx, param, value):
 @click.option('-an','--acq_name', help="Acquisition name", type=str)
 @click.option('-ad','--acq_desc', help="Acquisition description", type=str)
 @click.option('-f', '--file_config', help="Device configuration file (JSON)", default='')
-@click.option('-u', '--ucf_file', help="UCF Configuration file for MLC", default='')
+@click.option('-u', '--ucf_file', help="UCF Configuration file for MLC or ISPU", default='')
+@click.option('-iof', '--ispu_out_fmt', help="ISPU output format descrition json. If passed, this json will be saved in acquisition folder", default='')
 @click.option('-t', '--time_sec', help="Duration of the current acquisition [seconds]", callback=validate_duration, type=int, default=-1)
 @click.option('-i', '--interactive_mode', help="Interactive mode. It allows to select a connected device, get info and start the acquisition process",  is_flag=True, default=False)
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
-def hsd_CLI(output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, time_sec, interactive_mode):
+def hsd_CLI(output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, ispu_out_fmt, time_sec, interactive_mode):
     last_scene = None
 
-    cli_flags = HSDInfo.CLIFlags(output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, time_sec, interactive_mode)
+    cli_flags = HSDInfo.CLIFlags(output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, ispu_out_fmt, time_sec, interactive_mode)
     hsd_info = HSDInfo(cli_flags)
 
     while True:
@@ -240,5 +274,5 @@ def demo(screen, scene, hsd_info):
 
     screen.play(scenes, stop_on_resize=True, start_scene=scene, allow_int=True)
 
-if __name__ == '__main__':          
+if __name__ == '__main__':
     hsd_CLI()

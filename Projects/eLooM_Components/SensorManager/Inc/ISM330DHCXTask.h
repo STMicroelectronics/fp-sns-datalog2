@@ -23,8 +23,6 @@
 extern "C" {
 #endif
 
-#include "services/systp.h"
-#include "services/syserror.h"
 #include "services/AManagedTaskEx.h"
 #include "services/AManagedTaskEx_vtbl.h"
 #include "ABusIF.h"
@@ -81,11 +79,11 @@ ISourceObservable *ISM330DHCXTaskGetGyroSensorIF(ISM330DHCXTask *_this);
 ISourceObservable *ISM330DHCXTaskGetMlcSensorIF(ISM330DHCXTask *_this);
 
 /**
- * Get the ::ISensorLL_t interface the sensor.
- * @param _this [IN] specifies a pointer to a task object.
- * @return a pointer to the generic object ::ISensorLL_t
- */
-ISensorLL_t* ISM330DHCXTaskGetSensorLLIF(ISM330DHCXTask *_this);
+  * Get the ::ISensorLL_t interface the sensor.
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return a pointer to the generic object ::ISensorLL_t
+  */
+ISensorLL_t *ISM330DHCXTaskGetSensorLLIF(ISM330DHCXTask *_this);
 
 /**
   * Allocate an instance of ISM330DHCXTask.

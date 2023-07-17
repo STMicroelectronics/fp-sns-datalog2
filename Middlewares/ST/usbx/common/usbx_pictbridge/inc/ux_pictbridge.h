@@ -26,7 +26,7 @@
 /*  COMPONENT DEFINITION                                   RELEASE        */ 
 /*                                                                        */ 
 /*    ux_pictbridge.h                                     PORTABLE C      */ 
-/*                                                           6.1          */
+/*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
@@ -46,11 +46,28 @@
 /*                                            TX symbols instead of using */
 /*                                            them directly,              */
 /*                                            resulting in version 6.1    */
+/*  08-02-2021     Wen Wang                 Modified comment(s),          */
+/*                                            added extern "C" keyword    */
+/*                                            for compatibility with C++, */
+/*                                            resulting in version 6.1.8  */
+/*  07-29-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            added magic number defines, */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 
 #ifndef UX_PICTBRIDGE_H
 #define UX_PICTBRIDGE_H
+
+/* Determine if a C++ compiler is being used.  If so, ensure that standard 
+   C is used to process the API information.  */ 
+
+#ifdef   __cplusplus 
+
+/* Yes, C++ compiler is present.  Use standard C.  */ 
+extern   "C" { 
+
+#endif  
 
 struct UX_PICTBRIDGE_STRUCT;
 
@@ -84,6 +101,8 @@ struct UX_PICTBRIDGE_STRUCT;
 #define UX_PICTBRIDGE_MAX_PIMA_OBJECT_BUFFER                1024
 #define UX_PICTBRIDGE_MAX_EVENT_NUMBER                      8
 #define UX_PICTBRIDGE_MAX_DEVINFO_ARRAY_SIZE                16
+#define UX_PICTBRIDGE_MAX_NUMBER_STORAGE_IDS                64
+#define UX_PICTBRIDGE_MAX_NUMBER_OBJECT_HANDLES             64
 #define UX_PICTBRIDGE_OBJECT_SCRIPT                         0x3002
 #define UX_PICTBRIDGE_THREAD_STACK_SIZE                     2048
 #define UX_PICTBRIDGE_THREAD_PRIORITY_CLASS                 20
@@ -622,8 +641,8 @@ typedef struct UX_PICTBRIDGE_STRUCT
 {
 
     VOID                                                    *ux_pictbridge_pima;
-    ULONG                                                   ux_pictbridge_storage_ids[64];
-    ULONG                                                   ux_pictbridge_object_handles_array[64];
+    ULONG                                                   ux_pictbridge_storage_ids[UX_PICTBRIDGE_MAX_NUMBER_STORAGE_IDS];
+    ULONG                                                   ux_pictbridge_object_handles_array[UX_PICTBRIDGE_MAX_NUMBER_OBJECT_HANDLES];
     UX_PICTBRIDGE_EVENT                                     ux_pictbridge_event_array[UX_PICTBRIDGE_MAX_EVENT_NUMBER];
     UX_PICTBRIDGE_EVENT                                     *ux_pictbridge_event_array_head;
     UX_PICTBRIDGE_EVENT                                     *ux_pictbridge_event_array_tail;
@@ -1037,6 +1056,12 @@ extern UCHAR _ux_pictbridge_xml_tag_line_printinfo[];
 extern UCHAR _ux_pictbridge_xml_tag_line_fileid[];
 extern UCHAR _ux_pictbridge_xml_tag_line_filename[];
 extern UCHAR _ux_pictbridge_xml_tag_line_date[];
+
+/* Determine if a C++ compiler is being used.  If so, complete the standard 
+   C conditional started above.  */   
+#ifdef __cplusplus
+} 
+#endif 
 
 #endif
 

@@ -76,7 +76,7 @@ VOID _ux_device_class_sensor_streaming_bulkin_entry(ULONG ss)
         }
 #endif
 
-        (void)_ux_device_class_sensor_streaming_write(param->endpoint, param->tx_buffer, param->tx_size, &actual_length);
+        (void)_ux_device_class_sensor_streaming_write(param->endpoint, (uint8_t*) CB_GetItemData(param->ready_item), CB_GetItemSize((CircularBuffer *)param->cbdl2), &actual_length);
 
 #if defined(ENABLE_THREADX_DBG_PIN) && defined(ENABLE_USBX_EP_DBG_PIN)
         switch(param->endpoint->ux_slave_endpoint_descriptor.bEndpointAddress)
@@ -100,6 +100,8 @@ VOID _ux_device_class_sensor_streaming_bulkin_entry(ULONG ss)
             break;
         }
 #endif
+        /* Release the buffer item and reset tx_state */
+        CB_ReleaseItem((CircularBuffer *)param->cbdl2, param->ready_item);
         param->tx_state = 0;
       }
     }

@@ -40,6 +40,7 @@ UINT _ux_device_class_sensor_streaming_initialize(UX_SLAVE_CLASS_COMMAND *comman
   UX_SLAVE_CLASS_SENSOR_STREAMING *sensor_streaming;
   UX_SLAVE_CLASS *slave_class;
   UINT status;
+  UINT i;
 
   /* Get the class container.  */
   slave_class = command->ux_slave_class_command_class_ptr;
@@ -75,22 +76,23 @@ UINT _ux_device_class_sensor_streaming_initialize(UX_SLAVE_CLASS_COMMAND *comman
 
   UX_THREAD_EXTENSION_PTR_SET(&(slave_class -> ux_slave_class_thread), slave_class)
 
-  for(UINT ii = 0; ii < SS_N_IN_ENDPOINTS; ii++)
+  for(i = 0; i < SS_N_IN_ENDPOINTS; i++)
   {
-    status = _ux_utility_semaphore_create(&sensor_streaming->ux_slave_class_sensor_streaming_bulkin[ii].ep_param.semaphore, "semaphore 0", 0);
+    status = _ux_utility_semaphore_create(&sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].ep_param.semaphore, "semaphore 0", 0);
     if(status != UX_SUCCESS)
     {
       return status;
     }
 
     /* Allocate some memory for the bulk in thread stack. */
-    sensor_streaming->ux_slave_class_sensor_streaming_bulkin[ii].thread_stack =
+    sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].thread_stack =
         _ux_utility_memory_allocate(UX_NO_ALIGN, UX_REGULAR_MEMORY, SS_CLASS_THREAD_STACK_SIZE);
 
-    status = _ux_utility_thread_create(&sensor_streaming->ux_slave_class_sensor_streaming_bulkin[ii].thread, "ux_slave_bulkin_thread",
+    /* Create one thread for each IN endpoint */
+    status = _ux_utility_thread_create(&sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].thread, "ux_slave_bulkin_thread",
                                        _ux_device_class_sensor_streaming_bulkin_entry,
-                                       (ULONG) (ALIGN_TYPE) &sensor_streaming->ux_slave_class_sensor_streaming_bulkin[ii].ep_param,
-                                       (VOID*) sensor_streaming->ux_slave_class_sensor_streaming_bulkin[ii].thread_stack,
+                                       (ULONG) (ALIGN_TYPE) &sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].ep_param,
+                                       (VOID*) sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].thread_stack,
                                        SS_BULKIN_THREAD_STACK_SIZE,
                                        SS_BULKIN_THREAD_PRIO,
                                        SS_BULKIN_THREAD_PRIO,
@@ -101,9 +103,14 @@ UINT _ux_device_class_sensor_streaming_initialize(UX_SLAVE_CLASS_COMMAND *comman
     }
 
 #if defined(ENABLE_THREADX_DBG_PIN) && defined(USB_EP_BULKIN_TASK_CFG_TAG)
-    sensor_streaming->ux_slave_class_sensor_streaming_bulkin[ii].thread.pxTaskTag = USB_EP_BULKIN_TASK_CFG_TAG;
+    sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].thread.pxTaskTag = USB_EP_BULKIN_TASK_CFG_TAG;
 #endif
+  }
 
+  /* Reset ep_map */
+  for(i = 0; i < SS_N_CHANNELS_MAX; i++)
+  {
+    sensor_streaming->hwcid->ep_map[i] = SS_ENDPOINT_NOT_ASSIGNED;
   }
 
   /* Success, complete remaining settings.  */

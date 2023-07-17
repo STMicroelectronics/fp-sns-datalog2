@@ -14,6 +14,7 @@
 #
 
 import json
+import time
 
 from st_pnpl.DTDL import device_template_model as DTM
 
@@ -27,22 +28,27 @@ log = logger.get_logger(__name__)
 
 class PnPLHSD_CommandManager:
 
-    def __init__(self, cmd_set):
+    def __init__(self, cmd_set, plug_callback = None, unplug_callback = None):
         
         self.cmd_set = None
         self.hsd_dll = HSD_Dll()
+
+        if plug_callback is not None and unplug_callback is not None:
+            log.warning("Hotplug event management is not supported yet. your plug_callback and unplug_callback will be ignored.")
+            self.hsd_dll.hs_datalog_register_usb_hotplug_callback(plug_callback, unplug_callback)
+        # time.sleep(1)
         if(not self.hsd_dll.hs_datalog_open()):
             log.error("Error in Communication Engine opening (libhs_datalog_v2 DLL/so)")
             raise CommunicationEngineOpenError
         else:
             log.info("Communication Engine UP (libhs_datalog_v2 DLL/so)")
     
-    def __del__(self):
-        if(not self.hsd_dll.hs_datalog_close()):
-            log.error("Error in Communication Engine closure (libhs_datalog_v2 DLL/so)")
-            raise CommunicationEngineCloseError
-        else:
-            log.info("Communication Engine DOWN (libhs_datalog_v2 DLL/so)")
+    # def __del__(self):
+    #     if(not self.hsd_dll.hs_datalog_close()):
+    #         log.error("Error in Communication Engine closure (libhs_datalog_v2 DLL/so)")
+    #         raise CommunicationEngineCloseError
+    #     else:
+    #         log.info("Communication Engine DOWN (libhs_datalog_v2 DLL/so)")
 
     def open(self):
         return self.hsd_dll.hs_datalog_open()
@@ -98,6 +104,16 @@ class PnPLHSD_CommandManager:
             raise EmptyCommandResponse("get_device_presentation_string")
         log.error("Missing Device id")
         raise PnPLCommandError("get_device_presentation_string")
+    
+    def get_device_identity(self, d_id: int):
+        if d_id is not None:
+            res = self.hsd_dll.hs_datalog_get_identity(d_id)
+            if res[0]:
+                return {"board_id" : res[1], "fw_id": res[2]}
+            log.error("Empty response from get_device_identity(d_id={})".format(d_id))
+            raise EmptyCommandResponse("get_device_identity")
+        log.error("Missing Device id")
+        raise PnPLCommandError("get_device_identity")
     
     def get_device_alias(self, d_id: int):
         return self.get_device_info(d_id)["firmware_info"]["alias"]
@@ -382,6 +398,6 @@ class PnPLHSD_CommandManager:
 
 class PnPLHSD_Creator:
     def __create_cmd_set(self): return None
-    def create_cmd_manager(self):
+    def create_cmd_manager(self, plug_callback = None, unplug_callback = None):
         cmd_set = self.__create_cmd_set()
-        return PnPLHSD_CommandManager(cmd_set)
+        return PnPLHSD_CommandManager(cmd_set, plug_callback, unplug_callback)

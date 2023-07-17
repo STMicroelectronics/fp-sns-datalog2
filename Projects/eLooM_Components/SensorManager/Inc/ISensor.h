@@ -25,9 +25,6 @@ extern "C" {
 #endif
 
 
-#include "services/systypes.h"
-#include "services/syserror.h"
-#include "services/systp.h"
 #include "SensorDef.h"
 #include "services/ISourceObservable.h"
 

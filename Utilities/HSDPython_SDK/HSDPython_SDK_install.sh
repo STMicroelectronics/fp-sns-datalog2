@@ -27,9 +27,9 @@ echo "installing st_pnpl..."
 echo "==================================================="
 if [ -z $1 ]
 then
-	python3 -m pip install st_pnpl/dist/st_pnpl-1.1.0-py3-none-any.whl
+	python3 -m pip install st_pnpl/dist/st_pnpl-1.2.0-py3-none-any.whl
 else
-	python3 -m pip install st_pnpl/dist/st_pnpl-1.1.0-py3-none-any.whl --proxy=$1
+	python3 -m pip install st_pnpl/dist/st_pnpl-1.2.0-py3-none-any.whl --proxy=$1
 fi
 # Section 3: st_dtdl_gui
 echo "==================================================="
@@ -37,9 +37,9 @@ echo "installing st_dtdl_gui..."
 echo "==================================================="
 if [ -z $1 ]
 then
-	python3 -m pip install st_dtdl_gui/dist/st_dtdl_gui-1.1.0-py3-none-any.whl
+	python3 -m pip install st_dtdl_gui/dist/st_dtdl_gui-1.2.0-py3-none-any.whl
 else
-	python3 -m pip install st_dtdl_gui/dist/st_dtdl_gui-1.1.0-py3-none-any.whl --proxy=$1
+	python3 -m pip install st_dtdl_gui/dist/st_dtdl_gui-1.2.0-py3-none-any.whl --proxy=$1
 fi
 # Section 4: st_hsdatalog (GUI version)
 echo "==================================================="
@@ -47,9 +47,9 @@ echo "installing st_hsdatalog (GUI version)..."
 echo "==================================================="
 if [ -z $1 ]
 then
-	python3 -m pip install st_hsdatalog/dist/GUI/st_hsdatalog-2.1.0-py3-none-any.whl
+	python3 -m pip install st_hsdatalog/dist/GUI/st_hsdatalog-2.2.0-py3-none-any.whl
 else
-	python3 -m pip install st_hsdatalog/dist/GUI/st_hsdatalog-2.1.0-py3-none-any.whl --proxy=$1
+	python3 -m pip install st_hsdatalog/dist/GUI/st_hsdatalog-2.2.0-py3-none-any.whl --proxy=$1
 fi
 # Section 5: asciimatics needed from hsdatalog_cli.py example script
 echo "==================================================="

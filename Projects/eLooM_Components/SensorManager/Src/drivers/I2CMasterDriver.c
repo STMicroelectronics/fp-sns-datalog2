@@ -29,39 +29,55 @@
 
 #define SYS_DEBUGF(level, message)              SYS_DEBUGF3(SYS_DBG_DRIVERS, level, message)
 
-/**
-  * I2CMasterDriver Driver virtual table.
-  */
-static const IIODriver_vtbl sI2CMasterDriver_vtbl =
-{
-  I2CMasterDriver_vtblInit,
-  I2CMasterDriver_vtblStart,
-  I2CMasterDriver_vtblStop,
-  I2CMasterDriver_vtblDoEnterPowerMode,
-  I2CMasterDriver_vtblReset,
-  I2CMasterDriver_vtblWrite,
-  I2CMasterDriver_vtblRead
-};
 
 /**
-  * Data associated to the hardware peripheral.
+  * Class object declaration
   */
-typedef struct _I2CPeripheralResources_t
+typedef struct _I2CMasterDriverClass
 {
   /**
-    * Synchronization object used by the driver to synchronize the I2C ISR with the task using the driver;
+    * I2CMasterDriver class virtual table.
     */
-  TX_SEMAPHORE *sync_obj;
-} I2CPeripheralResources_t;
+  const IIODriver_vtbl vtbl;
 
+  /**
+    * Memory buffer used to allocate the map (hardware IP, eLoom driver).
+    */
+  HWDriverMapElement_t ip_drv_map_elements[I2CDRV_CFG_HARDWARE_PERIPHERALS_COUNT];
+
+  /**
+    * This map is used to link an hardware I2C with an instance of the driver object. The key of the map is the address of the hardware IP.
+    */
+  HWDriverMap_t ip_drv_map;
+
+} I2CMasterDriverClass_t;
+
+
+/* Private objects definition.*/
+/******************************/
 
 /**
-  *
+  * The only class instance.
   */
-static I2CPeripheralResources_t sI2CHwResources[I2CDRV_CFG_HARDWARE_PERIPHERALS_COUNT];
-static HWDriverMapElement_t sI2CDrvMapElements[I2CDRV_CFG_HARDWARE_PERIPHERALS_COUNT];
-static HWDriverMap_t sI2CDrvMap = { 0 };
-static uint8_t sInstances = 0;
+static I2CMasterDriverClass_t sTheClass =
+{
+  /*
+   * vtbl
+   */
+  {
+    I2CMasterDriver_vtblInit,
+    I2CMasterDriver_vtblStart,
+    I2CMasterDriver_vtblStop,
+    I2CMasterDriver_vtblDoEnterPowerMode,
+    I2CMasterDriver_vtblReset,
+    I2CMasterDriver_vtblWrite,
+    I2CMasterDriver_vtblRead
+  },
+
+  {{0}}, /* ip_drv_map_elements */
+  {0}  /* ip_drv_map */
+};
+
 
 /* Private member function declaration */
 /***************************************/
@@ -86,35 +102,19 @@ sys_error_code_t I2CMasterDriverSetDeviceAddr(I2CMasterDriver_t *_this, uint16_t
 
 IIODriver *I2CMasterDriverAlloc(void)
 {
-  IIODriver *res = NULL;
+  IIODriver *p_new_driver = (IIODriver *) SysAlloc(sizeof(I2CMasterDriver_t));;
 
-  if(sI2CDrvMap.size == 0)
+  if (p_new_driver == NULL)
   {
-    HWDriverMap_Init(&sI2CDrvMap, sI2CDrvMapElements, I2CDRV_CFG_HARDWARE_PERIPHERALS_COUNT);
+    SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+    SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - alloc failed.\r\n"));
+  }
+  else
+  {
+    p_new_driver->vptr = &sTheClass.vtbl;
   }
 
-  HWDriverMapElement_t *p_element = NULL;
-  p_element = HWDriverMap_GetFreeElement(&sI2CDrvMap);
-
-  if(p_element != NULL)
-  {
-    /* Check if there is room to allocate a new instance */
-    p_element->p_driver_obj = (IDriver *) SysAlloc(sizeof(I2CMasterDriver_t));
-
-    if (p_element->p_driver_obj == NULL)
-    {
-      SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
-      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - alloc failed.\r\n"));
-    }
-    else
-    {
-      p_element->p_driver_obj->vptr = (IDriver_vtbl*)&sI2CMasterDriver_vtbl;
-      p_element->p_static_param = (void*)&sI2CHwResources[sInstances];
-      sInstances++;
-    }
-    res = (IIODriver*)p_element->p_driver_obj;
-  }
-  return res;
+  return p_new_driver;
 }
 
 sys_error_code_t I2CMasterDriver_vtblInit(IDriver *_this, void *p_params)
@@ -130,7 +130,7 @@ sys_error_code_t I2CMasterDriver_vtblInit(IDriver *_this, void *p_params)
   p_obj->mx_handle.p_mx_i2c_cfg->p_mx_dma_init_f();
   p_obj->mx_handle.p_mx_i2c_cfg->p_mx_init_f();
 
-  /* Register SPI DMA complete Callback*/
+  /* Register I2C DMA complete Callback*/
   if (HAL_OK != HAL_I2C_RegisterCallback(p_i2c, HAL_I2C_MEM_RX_COMPLETE_CB_ID, I2CMasterDrvMemTxRxCpltCallback))
   {
     SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
@@ -148,10 +148,18 @@ sys_error_code_t I2CMasterDriver_vtblInit(IDriver *_this, void *p_params)
   }
   else
   {
-    HWDriverMapElement_t *p_element;
-    p_element = HWDriverMap_FindByInstance(&sI2CDrvMap, _this);
+    if (!HWDriverMap_IsInitialized(&sTheClass.ip_drv_map))
+    {
+      (void) HWDriverMap_Init(&sTheClass.ip_drv_map, sTheClass.ip_drv_map_elements, I2CDRV_CFG_HARDWARE_PERIPHERALS_COUNT);
+    }
 
-    if(p_element == NULL)
+    /* Add the driver to the map.
+     * Use the peripheral address as unique key for the map. */
+    HWDriverMapElement_t *p_element = NULL;
+    uint32_t key = (uint32_t) p_obj->mx_handle.p_mx_i2c_cfg->p_i2c_handle->Instance;
+    p_element = HWDriverMap_AddElement(&sTheClass.ip_drv_map, key, _this);
+
+    if (p_element == NULL)
     {
       SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
@@ -159,24 +167,17 @@ sys_error_code_t I2CMasterDriver_vtblInit(IDriver *_this, void *p_params)
     else
     {
       nRes = tx_semaphore_create(&p_obj->sync_obj, "I2CDrv", 0);
-      if(nRes != TX_SUCCESS)
+      if (nRes != TX_SUCCESS)
       {
         SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
         res = SYS_OUT_OF_MEMORY_ERROR_CODE;
-      }
-      else
-      {
-        /* Use the peripheral address as unique key for the map */
-        p_element->key = (uint32_t) p_obj->mx_handle.p_mx_i2c_cfg->p_i2c_handle->Instance;
 
-        ((I2CPeripheralResources_t*) p_element->p_static_param)->sync_obj = &p_obj->sync_obj;
-
-        /* initialize the software resources*/
-        p_obj->target_device_addr = 0;
-        SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("I2CMasterDriver: initialization done.\r\n"));
+        (void) HWDriverMap_RemoveElement(&sTheClass.ip_drv_map, key);
       }
     }
   }
+
+  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("I2CMasterDriver: initialization done: %d.\r\n", res));
 
   return res;
 }
@@ -288,16 +289,16 @@ sys_error_code_t I2CMasterDriver_vtblRead(IIODriver *_this, uint8_t *p_data_buff
 
 static void I2CMasterDrvMemTxRxCpltCallback(I2C_HandleTypeDef *p_i2c)
 {
-  HWDriverMapElement_t *p_element;
+  HWDriverMapValue_t *p_val;
   TX_SEMAPHORE *sync_obj;
 
-  p_element = HWDriverMap_FindByKey(&sI2CDrvMap, (uint32_t)p_i2c->Instance);
+  p_val = HWDriverMap_FindByKey(&sTheClass.ip_drv_map, (uint32_t) p_i2c->Instance);
 
-  if(p_element != NULL)
+  if (p_val != NULL)
   {
-    sync_obj = ((I2CPeripheralResources_t*) p_element->p_static_param)->sync_obj;
+    sync_obj = &((I2CMasterDriver_t *)p_val->p_driver_obj)->sync_obj;
 
-    if(sync_obj != NULL)
+    if (sync_obj != NULL)
     {
       tx_semaphore_put(sync_obj);
     }

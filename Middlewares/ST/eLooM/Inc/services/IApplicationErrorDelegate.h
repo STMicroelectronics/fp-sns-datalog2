@@ -29,9 +29,9 @@
 extern "C" {
 #endif
 
-#include "ApplicationContext.h"
-#include "IErrorFirstResponder.h"
-#include "IErrorFirstResponderVtbl.h"
+#include "services/ApplicationContext.h"
+#include "services/IErrorFirstResponder.h"
+#include "services/IErrorFirstResponderVtbl.h"
 
 /**
  * Create  type name for _IApplicationErrorDelegate.

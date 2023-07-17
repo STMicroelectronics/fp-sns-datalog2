@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="14.3.0">
-  <zoom_level>8</zoom_level>
+<diagram program="umlet" version="15.1">
+  <zoom_level>11</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>168</x>
-      <y>680</y>
-      <w>1096</w>
-      <h>48</h>
+      <x>220</x>
+      <y>1133</y>
+      <w>1507</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>valign=center
 halign=center
@@ -20,10 +20,10 @@ fg=red</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>168</x>
-      <y>736</y>
-      <w>1096</w>
-      <h>48</h>
+      <x>220</x>
+      <y>1210</y>
+      <w>1507</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>valign=center
 halign=center
@@ -34,10 +34,10 @@ HARDWARE (STM32)</panel_attributes>
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>176</x>
-      <y>168</y>
-      <w>312</w>
-      <h>392</h>
+      <x>231</x>
+      <y>374</y>
+      <w>429</w>
+      <h>594</h>
     </coordinates>
     <panel_attributes>*Event*
 --
@@ -49,10 +49,10 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>808</x>
-      <y>600</y>
-      <w>120</w>
-      <h>32</h>
+      <x>1100</x>
+      <y>1023</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>STM32xxx HAL
 bg=#06a1ce
@@ -63,10 +63,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>672</x>
-      <y>600</y>
-      <w>120</w>
-      <h>32</h>
+      <x>913</x>
+      <y>1023</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>CMSIS
 valign=center
@@ -77,12 +77,12 @@ fg=#00978a</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>536</x>
-      <y>600</y>
-      <w>120</w>
-      <h>32</h>
+      <x>660</x>
+      <y>1023</y>
+      <w>231</w>
+      <h>44</h>
     </coordinates>
-    <panel_attributes>FreeRTOS
+    <panel_attributes>RTOS (FreeRTOS or ThreadX)
 valign=center
 halign=center
 bg=green</panel_attributes>
@@ -91,10 +91,10 @@ bg=green</panel_attributes>
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>496</x>
-      <y>368</y>
-      <w>488</w>
-      <h>192</h>
+      <x>671</x>
+      <y>704</y>
+      <w>671</w>
+      <h>264</h>
     </coordinates>
     <panel_attributes>*Low Level API*
 --
@@ -106,10 +106,10 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>680</x>
-      <y>424</y>
-      <w>120</w>
-      <h>32</h>
+      <x>814</x>
+      <y>726</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 Driver
@@ -121,10 +121,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>496</x>
-      <y>168</y>
-      <w>488</w>
-      <h>192</h>
+      <x>671</x>
+      <y>374</y>
+      <w>671</w>
+      <h>319</h>
     </coordinates>
     <panel_attributes>*Services Layer*
 --
@@ -136,10 +136,10 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>168</x>
-      <y>64</y>
-      <w>1096</w>
-      <h>64</h>
+      <x>220</x>
+      <y>231</y>
+      <w>1507</w>
+      <h>88</h>
     </coordinates>
     <panel_attributes>*Application Layer*
 --
@@ -151,10 +151,10 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>168</x>
-      <y>136</y>
-      <w>1096</w>
-      <h>536</h>
+      <x>220</x>
+      <y>330</y>
+      <w>1507</w>
+      <h>792</h>
     </coordinates>
     <panel_attributes>*Hardware Abstraction Layer - eLooM*
 --
@@ -167,10 +167,10 @@ fg=red</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>1136</x>
-      <y>168</y>
-      <w>56</w>
-      <h>392</h>
+      <x>1551</x>
+      <y>374</y>
+      <w>77</w>
+      <h>594</h>
     </coordinates>
     <panel_attributes>Debug
 bg=#b4bcde
@@ -181,10 +181,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>176</x>
-      <y>568</y>
-      <w>1080</w>
-      <h>88</h>
+      <x>231</x>
+      <y>979</y>
+      <w>1485</w>
+      <h>121</h>
     </coordinates>
     <panel_attributes>*Kernel*
 --
@@ -196,10 +196,10 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>352</x>
-      <y>216</y>
-      <w>120</w>
-      <h>32</h>
+      <x>473</x>
+      <y>495</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 Listener
@@ -211,10 +211,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>800</x>
-      <y>264</y>
-      <w>120</w>
-      <h>32</h>
+      <x>1089</x>
+      <y>561</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;instance&gt;&gt;
 INIT Task
@@ -226,10 +226,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>648</x>
-      <y>200</y>
-      <w>120</w>
-      <h>32</h>
+      <x>880</x>
+      <y>473</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 ManagedTask
@@ -241,10 +241,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>656</x>
-      <y>264</y>
-      <w>120</w>
-      <h>32</h>
+      <x>891</x>
+      <y>561</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>Application Context
 bg=#b4bcde
@@ -255,10 +255,10 @@ halign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>704</x>
-      <y>224</y>
-      <w>24</w>
-      <h>56</h>
+      <x>957</x>
+      <y>506</y>
+      <w>33</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
@@ -266,10 +266,10 @@ halign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>768</x>
-      <y>272</y>
-      <w>48</w>
-      <h>24</h>
+      <x>1045</x>
+      <y>572</y>
+      <w>66</w>
+      <h>33</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
@@ -277,10 +277,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>216</x>
-      <y>280</y>
-      <w>120</w>
-      <h>32</h>
+      <x>286</x>
+      <y>583</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 Event Listener
@@ -292,10 +292,10 @@ halign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>264</x>
-      <y>240</y>
-      <w>168</w>
-      <h>56</h>
+      <x>352</x>
+      <y>528</y>
+      <w>231</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>190.0;10.0;190.0;30.0;10.0;30.0;10.0;50.0</additional_attributes>
@@ -303,10 +303,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>216</x>
-      <y>432</y>
-      <w>120</w>
-      <h>32</h>
+      <x>286</x>
+      <y>792</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 Event Source
@@ -318,10 +318,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>352</x>
-      <y>488</y>
-      <w>120</w>
-      <h>32</h>
+      <x>473</x>
+      <y>869</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 Event
@@ -333,22 +333,22 @@ halign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>264</x>
-      <y>456</y>
-      <w>104</w>
-      <h>64</h>
+      <x>341</x>
+      <y>825</y>
+      <w>154</w>
+      <h>88</h>
     </coordinates>
     <panel_attributes>lt=-
 genetare &gt;</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;60.0;110.0;60.0</additional_attributes>
+    <additional_attributes>20.0;10.0;20.0;60.0;120.0;60.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>184</x>
-      <y>288</y>
-      <w>72</w>
-      <h>176</h>
+      <x>242</x>
+      <y>594</y>
+      <w>99</w>
+      <h>242</h>
     </coordinates>
     <panel_attributes>lt=-
 
@@ -362,10 +362,10 @@ send to ^</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>1000</x>
-      <y>264</y>
-      <w>120</w>
-      <h>32</h>
+      <x>1364</x>
+      <y>561</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 AppErrorDelegate
@@ -378,10 +378,10 @@ layer=1</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>1000</x>
-      <y>360</y>
-      <w>120</w>
-      <h>32</h>
+      <x>1364</x>
+      <y>693</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 ErrFirstResponder
@@ -394,10 +394,10 @@ layer=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1032</x>
-      <y>288</y>
-      <w>96</w>
-      <h>88</h>
+      <x>1408</x>
+      <y>594</y>
+      <w>132</w>
+      <h>121</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=1
@@ -408,10 +408,10 @@ instant notify v</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>912</x>
-      <y>264</y>
-      <w>104</w>
-      <h>40</h>
+      <x>1243</x>
+      <y>561</y>
+      <w>143</w>
+      <h>55</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=
@@ -422,10 +422,10 @@ delegate &gt;</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>800</x>
-      <y>320</y>
-      <w>120</w>
-      <h>32</h>
+      <x>1089</x>
+      <y>638</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 Boot
@@ -437,10 +437,10 @@ halign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>856</x>
-      <y>288</y>
-      <w>40</w>
-      <h>48</h>
+      <x>1166</x>
+      <y>594</y>
+      <w>55</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=-
 m2=0..1</panel_attributes>
@@ -449,10 +449,10 @@ m2=0..1</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>504</x>
-      <y>200</y>
-      <w>120</w>
-      <h>32</h>
+      <x>682</x>
+      <y>473</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 ManagedTaskEx
@@ -464,10 +464,10 @@ halign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>616</x>
-      <y>208</y>
-      <w>48</w>
-      <h>24</h>
+      <x>836</x>
+      <y>484</y>
+      <w>66</w>
+      <h>33</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>40.0;10.0;10.0;10.0</additional_attributes>
@@ -475,10 +475,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>1200</x>
-      <y>168</y>
-      <w>56</w>
-      <h>392</h>
+      <x>1639</x>
+      <y>374</y>
+      <w>77</w>
+      <h>594</h>
     </coordinates>
     <panel_attributes>Trace
 bg=#b4bcde
@@ -489,10 +489,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>800</x>
-      <y>200</y>
-      <w>120</w>
-      <h>32</h>
+      <x>1089</x>
+      <y>473</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 AppPowerModeHelper
@@ -504,10 +504,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLFrame</id>
     <coordinates>
-      <x>992</x>
-      <y>168</y>
-      <w>136</w>
-      <h>392</h>
+      <x>1353</x>
+      <y>374</y>
+      <w>187</w>
+      <h>594</h>
     </coordinates>
     <panel_attributes>*Error*
 --
@@ -519,10 +519,10 @@ layer=-1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>856</x>
-      <y>224</y>
-      <w>24</w>
-      <h>56</h>
+      <x>1166</x>
+      <y>506</y>
+      <w>33</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
@@ -530,10 +530,10 @@ layer=-1</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>624</x>
-      <y>1008</y>
-      <w>120</w>
-      <h>32</h>
+      <x>847</x>
+      <y>1584</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;instance&gt;&gt;
 INIT Task
@@ -545,10 +545,10 @@ bg=white</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>384</x>
-      <y>1008</y>
-      <w>120</w>
-      <h>32</h>
+      <x>517</x>
+      <y>1584</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 AppPowerModeHelper
@@ -560,10 +560,10 @@ halign=center</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>864</x>
-      <y>1008</y>
-      <w>120</w>
-      <h>32</h>
+      <x>1177</x>
+      <y>1584</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 AppErrorDelegate
@@ -576,10 +576,10 @@ layer=1</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>624</x>
-      <y>936</y>
-      <w>120</w>
-      <h>32</h>
+      <x>847</x>
+      <y>1485</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>Application Context
 bg=#b4bcde
@@ -590,10 +590,10 @@ halign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>496</x>
-      <y>1008</y>
-      <w>144</w>
-      <h>40</h>
+      <x>671</x>
+      <y>1584</y>
+      <w>198</w>
+      <h>55</h>
     </coordinates>
     <panel_attributes>lt=-
 m1=0..1
@@ -603,10 +603,10 @@ m1=0..1
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>736</x>
-      <y>1008</y>
-      <w>144</w>
-      <h>40</h>
+      <x>1001</x>
+      <y>1584</y>
+      <w>198</w>
+      <h>55</h>
     </coordinates>
     <panel_attributes>lt=-
 m2=0..1
@@ -616,10 +616,10 @@ delegates to &gt;</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>680</x>
-      <y>960</y>
-      <w>80</w>
-      <h>64</h>
+      <x>924</x>
+      <y>1518</y>
+      <w>110</w>
+      <h>88</h>
     </coordinates>
     <panel_attributes>lt=-&gt;&gt;&gt;&gt;&gt;
 manages ^</panel_attributes>
@@ -628,10 +628,10 @@ manages ^</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>384</x>
-      <y>1072</y>
-      <w>120</w>
-      <h>32</h>
+      <x>517</x>
+      <y>1672</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;instance&gt;&gt;
 AppPowerMode
@@ -644,10 +644,10 @@ bg=white</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>440</x>
-      <y>1032</y>
-      <w>24</w>
-      <h>56</h>
+      <x>594</x>
+      <y>1617</y>
+      <w>33</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
@@ -655,10 +655,10 @@ bg=white</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>864</x>
-      <y>1072</y>
-      <w>120</w>
-      <h>32</h>
+      <x>1177</x>
+      <y>1672</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;instance&gt;&gt;
 AppError
@@ -671,10 +671,10 @@ bg=white</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>920</x>
-      <y>1032</y>
-      <w>24</w>
-      <h>56</h>
+      <x>1254</x>
+      <y>1617</y>
+      <w>33</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
@@ -682,10 +682,10 @@ bg=white</panel_attributes>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>680</x>
-      <y>480</y>
-      <w>120</w>
-      <h>32</h>
+      <x>726</x>
+      <y>803</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;IF&gt;&gt;
 IODriver
@@ -697,36 +697,21 @@ halign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>728</x>
-      <y>448</y>
-      <w>24</w>
-      <h>48</h>
+      <x>803</x>
+      <y>759</y>
+      <w>110</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+    <additional_attributes>80.0;10.0;80.0;30.0;10.0;30.0;10.0;40.0</additional_attributes>
   </element>
   <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>352</x>
-      <y>432</y>
-      <w>120</w>
-      <h>32</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;IF&gt;&gt;
-Source Observable
-bg=#b4bcde
-valign=center
-halign=center</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLGeneric</id>
-    <coordinates>
-      <x>216</x>
-      <y>352</y>
-      <w>120</w>
-      <h>32</h>
+      <x>286</x>
+      <y>682</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Abstract Class&gt;&gt;
 Abstarct Event Source
@@ -738,32 +723,21 @@ halign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>264</x>
-      <y>376</y>
-      <w>24</w>
-      <h>72</h>
+      <x>352</x>
+      <y>715</y>
+      <w>33</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;70.0;10.0;10.0</additional_attributes>
   </element>
   <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>328</x>
-      <y>440</y>
-      <w>40</w>
-      <h>24</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;30.0;10.0</additional_attributes>
-  </element>
-  <element>
     <id>UMLGeneric</id>
     <coordinates>
-      <x>352</x>
-      <y>320</y>
-      <w>120</w>
-      <h>32</h>
+      <x>473</x>
+      <y>638</y>
+      <w>165</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>SysEvt
 bg=#b4bcde
@@ -774,14 +748,198 @@ halign=center</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>464</x>
-      <y>288</y>
-      <w>360</w>
-      <h>64</h>
+      <x>627</x>
+      <y>594</y>
+      <w>495</w>
+      <h>88</h>
     </coordinates>
     <panel_attributes>lt=..
 &lt; process
 fg=light_gray</panel_attributes>
     <additional_attributes>10.0;60.0;300.0;60.0;430.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>902</x>
+      <y>803</y>
+      <w>132</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;IF&gt;&gt;
+TsDriver
+bg=#b4bcde
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>825</x>
+      <y>880</y>
+      <w>132</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>SwTsDriver
+bg=#b4bcde
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>979</x>
+      <y>880</y>
+      <w>143</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>HwTsDriver
+bg=#b4bcde
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>880</x>
+      <y>759</y>
+      <w>99</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;70.0;30.0;70.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>957</x>
+      <y>836</y>
+      <w>99</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;30.0;70.0;30.0;70.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>880</x>
+      <y>836</y>
+      <w>110</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>80.0;10.0;80.0;30.0;10.0;30.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>682</x>
+      <y>561</y>
+      <w>165</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>SysTimestamp
+bg=#b4bcde
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1089</x>
+      <y>407</y>
+      <w>165</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>MTMap
+bg=#b4bcde
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>1089</x>
+      <y>726</y>
+      <w>165</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>HWDriverMap
+bg=#b4bcde
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>968</x>
+      <y>737</y>
+      <w>143</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0+</panel_attributes>
+    <additional_attributes>10.0;10.0;110.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1034</x>
+      <y>418</y>
+      <w>77</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0+</panel_attributes>
+    <additional_attributes>10.0;70.0;30.0;70.0;30.0;10.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1144</x>
+      <y>924</y>
+      <w>121</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>MX driver
+bg=0xE6007E</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>880</x>
+      <y>407</y>
+      <w>165</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;RTOS&gt;&gt;
+SysMem
+bg=#b4bcde
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLGeneric</id>
+    <coordinates>
+      <x>682</x>
+      <y>407</y>
+      <w>165</w>
+      <h>44</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;RTOS&gt;&gt;
+SysCS
+bg=#b4bcde
+valign=center
+halign=center</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

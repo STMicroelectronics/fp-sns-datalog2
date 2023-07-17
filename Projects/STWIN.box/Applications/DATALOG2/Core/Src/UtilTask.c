@@ -355,7 +355,7 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
 
   /* Software timer for user led management */
   if (TX_SUCCESS != tx_timer_create(&p_obj->user_led_timer, "USER_LED_T", UtilTaskSwTimerCallbackUserLed, (ULONG)TX_NULL,
-                         AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS), UTIL_TASK_CFG_UL_TIMER_PERIOD_MS,
+                         AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS),
                          TX_AUTO_ACTIVATE))
   {
     res = SYS_APP_TASK_INIT_ERROR_CODE;
@@ -391,7 +391,7 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
   /* Force low signal on SPI pins */
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOI, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_3, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOI, GPIO_PIN_1|GPIO_PIN_3, GPIO_PIN_RESET);
   HAL_Delay(100);
   /* Re-initialize SPI pins */
   HAL_SPI_MspInit(&hspi2);

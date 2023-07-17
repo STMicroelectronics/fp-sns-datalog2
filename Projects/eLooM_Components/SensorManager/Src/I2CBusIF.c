@@ -18,7 +18,7 @@
   */
 
 #include "I2CBusIF.h"
-#include "services/sysmem.h"
+
 
 // Private functions declaration
 // *****************************

@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    DeviceinformationPnPL.h
+  * @file    Deviceinformation_PnPL.h
   * @author  SRA
   * @brief   Deviceinformation PnPL Component Manager
   ******************************************************************************
@@ -17,9 +17,22 @@
   ******************************************************************************
   */
 
+/**
+  ******************************************************************************
+  * This file has been auto generated from the following DTDL Component:
+  * dtmi:azure:DeviceManagement:DeviceInformation;1
+  *
+  * Created by: DTDL2PnPL_cGen version 1.1.0
+  *
+  * WARNING! All changes made to this file will be lost if this is regenerated
+  ******************************************************************************
+  */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _PNPL_DEVICEINFORMATION_H_
 #define _PNPL_DEVICEINFORMATION_H_
+
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,13 +43,13 @@ extern "C" {
 #include "IPnPLComponent.h"
 #include "IPnPLComponent_vtbl.h"
 
+
 /**
   * Create a type name for _Deviceinformation_PnPL.
  */
 typedef struct _Deviceinformation_PnPL Deviceinformation_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Deviceinformation_PnPLAlloc(void);
 

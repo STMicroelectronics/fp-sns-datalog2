@@ -1,21 +1,21 @@
 /**
- ******************************************************************************
- * @file    SUcfProtocol.c
- * @author  SRA - MCD
- * @brief
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    SUcfProtocol.c
+  * @author  SRA - MCD
+  * @brief
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *
+  ******************************************************************************
+  */
 
 #include "services/SUcfProtocol.h"
 #include "tx_api.h"
@@ -51,9 +51,9 @@ sys_error_code_t UCFP_LoadCompressedUcf(SUcfProtocol_t *_this, const char *p_ucf
   ucf_data[2] = '\0';
   ucf_data[3] = '\0';
 
-  for(i = 0; i < ucf_lines; i++)
+  for (i = 0; i < ucf_lines; i++)
   {
-    if(*p_ucf == 'W' || *p_ucf == 'w')
+    if (*p_ucf == 'W' || *p_ucf == 'w')
     {
       /* Wait command */
       p_ucf++;
@@ -79,7 +79,7 @@ sys_error_code_t UCFP_LoadCompressedUcf(SUcfProtocol_t *_this, const char *p_ucf
       data = (uint8_t) strtol(ucf_data, NULL, 16);
 
       res = ISensorWriteReg(_this->sensor_ll, reg, &data, 1);
-      if(SYS_IS_ERROR_CODE(res))
+      if (SYS_IS_ERROR_CODE(res))
       {
         break;
       }
@@ -87,7 +87,7 @@ sys_error_code_t UCFP_LoadCompressedUcf(SUcfProtocol_t *_this, const char *p_ucf
   }
 
   /* Sync sensor internal model with the sensor registers written by the ucf */
-  if(ISensorSyncModel(_this->sensor_ll) != SYS_NO_ERROR_CODE)
+  if (ISensorSyncModel(_this->sensor_ll) != SYS_NO_ERROR_CODE)
   {
     res = SYS_BASE_ERROR_CODE;
   }
@@ -115,13 +115,13 @@ sys_error_code_t UCFP_LoadUcfHeader(SUcfProtocol_t *_this, const ucf_line_ext_t 
   uint32_t ucf_lines = size / sizeof(ucf_line_ext_t);
   uint32_t i;
 
-  for(i = 0; i < ucf_lines; i++)
+  for (i = 0; i < ucf_lines; i++)
   {
-    switch(p_ucf[i].op)
+    switch (p_ucf[i].op)
     {
       case MEMS_UCF_OP_WRITE:
         res = ISensorWriteReg(_this->sensor_ll, p_ucf[i].address, &p_ucf[i].data, 1);
-        if(SYS_IS_ERROR_CODE(res))
+        if (SYS_IS_ERROR_CODE(res))
         {
           break;
         }
@@ -141,7 +141,7 @@ sys_error_code_t UCFP_LoadUcfHeader(SUcfProtocol_t *_this, const ucf_line_ext_t 
   }
 
   /* Sync sensor internal model with the sensor registers written by the ucf */
-  if(ISensorSyncModel(_this->sensor_ll) != SYS_NO_ERROR_CODE)
+  if (ISensorSyncModel(_this->sensor_ll) != SYS_NO_ERROR_CODE)
   {
     res = SYS_BASE_ERROR_CODE;
   }
@@ -149,7 +149,8 @@ sys_error_code_t UCFP_LoadUcfHeader(SUcfProtocol_t *_this, const ucf_line_ext_t 
   return res;
 }
 
-sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, char *p_compressed_ucf, uint32_t compressed_ucf_size,
+sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, char *p_compressed_ucf,
+                                       uint32_t compressed_ucf_size,
                                        uint32_t *compressed_ucf_size_actual)
 {
   char *p_ch = NULL;
@@ -157,15 +158,15 @@ sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, cha
   uint32_t i = 0;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  p_ch = strtok((char*) p_ucf, " -,_\r\n");
-  while(p_ch != NULL)
+  p_ch = strtok((char *) p_ucf, " -,_\r\n");
+  while (p_ch != NULL)
   {
-    if(i >= compressed_ucf_size)
+    if (i >= compressed_ucf_size)
     {
       res = SYS_OUT_OF_MEMORY_ERROR_CODE;
       return res;
     }
-    if(strncmp(p_ch, "Ac", 2) == 0)
+    if (strncmp(p_ch, "Ac", 2) == 0)
     {
       p_ch = strtok(NULL, " -,_\r\n");
       p_compressed_ucf[i++] = p_ch[0];
@@ -174,7 +175,7 @@ sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, cha
       p_compressed_ucf[i++] = p_ch[0];
       p_compressed_ucf[i++] = p_ch[1];
     }
-    else if(strncmp(p_ch, "WAIT", 2) == 0)
+    else if (strncmp(p_ch, "WAIT", 2) == 0)
     {
       p_ch = strtok(NULL, " -,_\r\n");
       uint16_t number = atol(p_ch);
@@ -193,20 +194,21 @@ sys_error_code_t UCFP_GetCompressedUcf(const char *p_ucf, uint32_t ucf_size, cha
   return res;
 }
 
-sys_error_code_t UCFP_GetUcf(const char *p_compressed_ucf, uint32_t compressed_ucf_size, char *p_ucf, uint32_t ucf_size, uint32_t *ucf_size_actual)
+sys_error_code_t UCFP_GetUcf(const char *p_compressed_ucf, uint32_t compressed_ucf_size, char *p_ucf, uint32_t ucf_size,
+                             uint32_t *ucf_size_actual)
 {
   uint32_t i;
   uint32_t out_size = 0;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  for(i = 0; i < compressed_ucf_size / 4; i++)
+  for (i = 0; i < compressed_ucf_size / 4; i++)
   {
-    if(out_size >= ucf_size)
+    if (out_size >= ucf_size)
     {
       res = SYS_OUT_OF_MEMORY_ERROR_CODE;
       return res;
     }
-    if(p_compressed_ucf[4U * i] != 'W')
+    if (p_compressed_ucf[4U * i] != 'W')
     {
       *p_ucf++ = 'A';
       *p_ucf++ = 'c';
@@ -227,12 +229,12 @@ sys_error_code_t UCFP_GetUcf(const char *p_compressed_ucf, uint32_t compressed_u
       *p_ucf++ = 'T';
       *p_ucf++ = ' ';
       /* copy the first 2 numbers only if they are != '0' */
-      if(p_compressed_ucf[4 * i + 1] != '0')
+      if (p_compressed_ucf[4 * i + 1] != '0')
       {
         *p_ucf++ = p_compressed_ucf[4 * i + 1];
         out_size++;
       }
-      if(p_compressed_ucf[4 * i + 2] != '0')
+      if (p_compressed_ucf[4 * i + 2] != '0')
       {
         *p_ucf++ = p_compressed_ucf[4 * i + 2];
         out_size++;

@@ -54,6 +54,7 @@
 #include "Tags_Info_PnPL.h"
 #include "Log_Controller_PnPL.h"
 #include "Iis3dwb_Acc_PnPL.h"
+#include "Iis3dwb_Ext_Acc_PnPL.h"
 #include "Ism330dhcx_Acc_PnPL.h"
 #include "Ism330dhcx_Gyro_PnPL.h"
 #include "Ism330dhcx_Mlc_PnPL.h"
@@ -64,6 +65,7 @@
 #include "Imp23absu_Mic_PnPL.h"
 #include "Iis2dlpc_Acc_PnPL.h"
 #include "Stts22h_Temp_PnPL.h"
+#include "Stts22h_Ext_Temp_PnPL.h"
 #include "Ilps22qs_Press_PnPL.h"
 #include "Imp34dt05_Mic_PnPL.h"
 #include "Iis2iclx_Acc_PnPL.h"
@@ -78,6 +80,7 @@ static IPnPLComponent_t *pFirmwareInfoPnPLObj = NULL;
 static IPnPLComponent_t *pAcquisitionInfoPnPLObj = NULL;
 static IPnPLComponent_t *pTagsInfoPnPLObj = NULL;
 static IPnPLComponent_t *pIIS3DWB_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pIIS3DWB_Ext_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pISM330DHCX_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pISM330DHCX_GYRO_PnPLObj = NULL;
 static IPnPLComponent_t *pISM330DHCX_MLC_PnPLObj = NULL;
@@ -88,6 +91,7 @@ static IPnPLComponent_t *pIIS2MDC_MAG_PnPLObj = NULL;
 static IPnPLComponent_t *pIMP23ABSU_MIC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2DLPC_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pSTTS22H_TEMP_PnPLObj = NULL;
+static IPnPLComponent_t *pSTTS22H_Ext_TEMP_PnPLObj = NULL;
 static IPnPLComponent_t *pILPS22QS_PRESS_PnPLObj = NULL;
 static IPnPLComponent_t *pIMP34DT05_MIC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2ICLX_ACC_PnPLObj = NULL;
@@ -109,12 +113,14 @@ static AManagedTaskEx *sI2C3BusObj = NULL;
   * Sensor task object.
   */
 static AManagedTaskEx *sIIS3DWBObj = NULL;
+static AManagedTaskEx *sIIS3DWBExtObj = NULL;
 static AManagedTaskEx *sISM330DHCXObj = NULL;
 static AManagedTaskEx *sIIS2MDCObj = NULL;
 static AManagedTaskEx *sIMP23ABSUObj = NULL;
 static AManagedTaskEx *sIIS2DLPCObj = NULL;
 static AManagedTaskEx *sILPS22QSObj = NULL;
 static AManagedTaskEx *sSTTS22HObj = NULL;
+static AManagedTaskEx *sSTTS22HExtObj = NULL;
 static AManagedTaskEx *sIMP34DT05Obj = NULL;
 static AManagedTaskEx *sIIS2ICLXObj = NULL;
 static AManagedTaskEx *sISM330ISObj = NULL;
@@ -153,13 +159,6 @@ static EPowerMode spAppPMState2SMPMStateMap[] =
   */
 static sys_error_code_t SensorManagerStateMachineRemap(EPowerMode *pPMState2PMStateMap);
 
-/**
- *  Flags for external Add-on
- */
-static boolean_t sExtIis3dwb = FALSE;
-static boolean_t sExtIis330is = FALSE;
-static boolean_t sExtStts22h = FALSE;
-
 /* eLooM framework entry points definition */
 /*******************************************/
 
@@ -168,16 +167,19 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   assert_param(pAppContext);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   uint8_t stts22h_address;
+  boolean_t sExtIis3dwb = FALSE;
+  boolean_t sExtIis330is = FALSE;
+  boolean_t sExtStts22h = FALSE;
 
   /* Workaround to set malloc/free function even if BLE Init fails */
   json_set_allocation_functions(SysAlloc, SysFree);
 
-  /* Check the HW configuration to load the tasks accordingly */
+  /************ Check availability of external sensors ************/
   sExtIis3dwb = HardwareDetection_Check_Ext_IIS3DWB();
   sExtIis330is = HardwareDetection_Check_Ext_ISM330IS();
   sExtStts22h = HardwareDetection_Check_Ext_STTS22H(&stts22h_address);
 
-  /* Allocate the task objects */
+  /************ Allocate task objects ************/
   sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams, &MX_GPIO_PA8InitParams, &MX_GPIO_PA0InitParams, &MX_GPIO_PD0InitParams, &MX_TIM5InitParams, &MX_ADC4InitParams,
 		  	  	  	  	  	  &MX_GPIO_UBInitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams);
   sDatalogAppObj = DatalogAppTaskAlloc();
@@ -186,44 +188,40 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   sIIS2DLPCObj = IIS2DLPCTaskAlloc(&MX_GPIO_INT2_DLPCInitParams, &MX_GPIO_CS_DLPCInitParams);
   sIIS2ICLXObj = IIS2ICLXTaskAlloc(&MX_GPIO_INT1_ICLXInitParams, &MX_GPIO_CS_ICLXInitParams);
   sIIS2MDCObj = IIS2MDCTaskAlloc(&MX_GPIO_INT_MAGInitParams, NULL);
+  sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_DWBInitParams, &MX_GPIO_CS_DWBInitParams);
 
   if(sExtIis3dwb)
   {
     /* Use the external IIS3DWB and onboard ISM330DHCX  */
-    sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_EXTERNAL_DWBInitParams, &MX_GPIO_CS_EXTERNALInitParams);
+    sIIS3DWBExtObj = IIS3DWBTaskAllocSetName(&MX_GPIO_INT1_EXTERNAL_DWBInitParams, &MX_GPIO_CS_EXTERNALInitParams, "iis3dwb_ext");
     sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams, &MX_GPIO_CS_DHCXInitParams);
   }
   else if (sExtIis330is)
   {
 	  FW_ID = FW_ID_DATALOG2_ISPU;
     /* Use the onboard IIS3DWB and the external ISM330IS */
-//    sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_DWBInitParams, &MX_GPIO_CS_DWBInitParams);
     sISM330ISObj = ISM330ISTaskAlloc(&MX_GPIO_INT2_EXInitParams, &MX_GPIO_INT1_EXTERNAL_ISPUInitParams, &MX_GPIO_CS_EXTERNALInitParams);
   }
   else
   {
     /* Use the onboard IIS3DWB and ISM330DHCX */
-    sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_DWBInitParams, &MX_GPIO_CS_DWBInitParams);
     sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams, &MX_GPIO_CS_DHCXInitParams);
   }
 
+  /* Use the onboard STTS22H (address low) */
+  sSTTS22HObj = STTS22HTaskAlloc(NULL, NULL, STTS22H_I2C_ADD_L);
   if(sExtStts22h)
   {
     /* Use the external STTS22H on I2C3 */
-    sSTTS22HObj = STTS22HTaskAlloc(NULL, NULL, stts22h_address);
+    sSTTS22HExtObj = STTS22HTaskAllocSetName(NULL, NULL, stts22h_address, "stts22h_ext");
     sI2C3BusObj = I2CBusTaskAlloc(&MX_I2C3InitParams);
-  }
-  else
-  {
-    /* Use the onboard STTS22H (address low) */
-    sSTTS22HObj = STTS22HTaskAlloc(NULL, NULL, STTS22H_I2C_ADD_L);
   }
 
   sILPS22QSObj = ILPS22QSTaskAlloc(NULL, NULL);
   sIMP23ABSUObj = IMP23ABSUTaskAlloc(&MX_MDF1InitParams, &MX_ADC1InitParams);
   sIMP34DT05Obj = IMP34DT05TaskAlloc(&MX_ADF1InitParams);
 
-  /* Add the task object to the context. */
+  /************ Add the task object to the context ************/
   res = ACAddTask(pAppContext, (AManagedTask *) sUtilObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sDatalogAppObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sI2C2BusObj);
@@ -233,10 +231,12 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS2ICLXObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS2MDCObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS3DWBObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sIIS3DWBExtObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sILPS22QSObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIMP23ABSUObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIMP34DT05Obj);
   res = ACAddTask(pAppContext, (AManagedTask *) sSTTS22HObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sSTTS22HExtObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sISM330DHCXObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sISM330ISObj);
 
@@ -247,10 +247,16 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   pIMP23ABSU_MIC_PnPLObj = Imp23absu_Mic_PnPLAlloc();
   pIMP34DT05_MIC_PnPLObj = Imp34dt05_Mic_PnPLAlloc();
   pSTTS22H_TEMP_PnPLObj = Stts22h_Temp_PnPLAlloc();
+  pIIS3DWB_ACC_PnPLObj = Iis3dwb_Acc_PnPLAlloc();
 
-  if (sIIS3DWBObj)
+  if (sSTTS22HExtObj)
   {
-    pIIS3DWB_ACC_PnPLObj = Iis3dwb_Acc_PnPLAlloc();
+    pSTTS22H_Ext_TEMP_PnPLObj = Stts22h_Ext_Temp_PnPLAlloc();
+  }
+
+  if (sIIS3DWBExtObj)
+  {
+    pIIS3DWB_Ext_ACC_PnPLObj = Iis3dwb_Ext_Acc_PnPLAlloc();
   }
   if(sISM330DHCXObj)
   {
@@ -281,30 +287,28 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
 {
   UNUSED(pAppContext);
 
-  /* Re-map the state machine of the Integrated tasks */
+  /************ Re-map the state machine of the Integrated tasks ************/
   SensorManagerStateMachineRemap(spAppPMState2SMPMStateMap);
 
-  /* Connect the sensor task to the bus. */
+  /************ Connect the sensor task to the bus ************/
   I2CBusTaskConnectDevice((I2CBusTask *) sI2C2BusObj, (I2CBusIF *)IIS2MDCTaskGetSensorIF((IIS2MDCTask *) sIIS2MDCObj));
   I2CBusTaskConnectDevice((I2CBusTask *) sI2C2BusObj, (I2CBusIF *)ILPS22QSTaskGetSensorIF((ILPS22QSTask *) sILPS22QSObj));
 
-  if(sI2C3BusObj)
+  /* Use I2C2 for Internal STTS22H */
+  I2CBusTaskConnectDevice((I2CBusTask *) sI2C2BusObj, (I2CBusIF *)STTS22HTaskGetSensorIF((STTS22HTask *) sSTTS22HObj));
+  if (sSTTS22HExtObj)
   {
     /* Use I2C3 for External STTS22H */
-    I2CBusTaskConnectDevice((I2CBusTask *) sI2C3BusObj, (I2CBusIF *)STTS22HTaskGetSensorIF((STTS22HTask *) sSTTS22HObj));
-  }
-  else
-  {
-    /* Use I2C2 for Internal STTS22H */
-    I2CBusTaskConnectDevice((I2CBusTask *) sI2C2BusObj, (I2CBusIF *)STTS22HTaskGetSensorIF((STTS22HTask *) sSTTS22HObj));
+    I2CBusTaskConnectDevice((I2CBusTask *) sI2C3BusObj, (I2CBusIF *)STTS22HTaskGetSensorIF((STTS22HTask *) sSTTS22HExtObj));
   }
 
   SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)IIS2DLPCTaskGetSensorIF((IIS2DLPCTask *) sIIS2DLPCObj));
   SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)IIS2ICLXTaskGetSensorIF((IIS2ICLXTask *) sIIS2ICLXObj));
 
-  if(sIIS3DWBObj)
+  SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)IIS3DWBTaskGetSensorIF((IIS3DWBTask *) sIIS3DWBObj));
+  if(sIIS3DWBExtObj)
   {
-    SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)IIS3DWBTaskGetSensorIF((IIS3DWBTask *) sIIS3DWBObj));
+    SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)IIS3DWBTaskGetSensorIF((IIS3DWBTask *) sIIS3DWBExtObj));
   }
   if(sISM330DHCXObj)
   {
@@ -315,7 +319,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)ISM330ISTaskGetSensorIF((ISM330ISTask *) sISM330ISObj));
   }
 
-  /* Connect the Sensor events */
+  /************ Connect the Sensor events to the DatalogAppTask ************/
   IEventListener *DatalogAppListener = DatalogAppTask_GetEventListenerIF((DatalogAppTask *) sDatalogAppObj);
   IEventSrcAddEventListener(IIS2DLPCTaskGetEventSrcIF((IIS2DLPCTask *) sIIS2DLPCObj), DatalogAppListener);
   IEventSrcAddEventListener(IIS2ICLXTaskGetEventSrcIF((IIS2ICLXTask *) sIIS2ICLXObj), DatalogAppListener);
@@ -324,10 +328,14 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   IEventSrcAddEventListener(IMP23ABSUTaskGetEventSrcIF((IMP23ABSUTask *) sIMP23ABSUObj), DatalogAppListener);
   IEventSrcAddEventListener(IMP34DT05TaskGetEventSrcIF((IMP34DT05Task *) sIMP34DT05Obj), DatalogAppListener);
   IEventSrcAddEventListener(STTS22HTaskGetTempEventSrcIF((STTS22HTask *) sSTTS22HObj), DatalogAppListener);
-
-  if(sIIS3DWBObj)
+  IEventSrcAddEventListener(IIS3DWBTaskGetEventSrcIF((IIS3DWBTask *) sIIS3DWBObj), DatalogAppListener);
+  if (sSTTS22HExtObj)
   {
-    IEventSrcAddEventListener(IIS3DWBTaskGetEventSrcIF((IIS3DWBTask *) sIIS3DWBObj), DatalogAppListener);
+    IEventSrcAddEventListener(STTS22HTaskGetTempEventSrcIF((STTS22HTask *) sSTTS22HExtObj), DatalogAppListener);
+  }
+  if(sIIS3DWBExtObj)
+  {
+    IEventSrcAddEventListener(IIS3DWBTaskGetEventSrcIF((IIS3DWBTask *) sIIS3DWBExtObj), DatalogAppListener);
   }
   if(sISM330DHCXObj)
   {
@@ -342,7 +350,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     IEventSrcAddEventListener(ISM330ISTaskGetMlcEventSrcIF((ISM330ISTask *) sISM330ISObj), DatalogAppListener);
   }
 
-//Sensor PnPL Components
+  /************ Sensor PnPL Components ************/
   Iis2dlpc_Acc_PnPLInit(pIIS2DLPC_ACC_PnPLObj);
   Iis2iclx_Acc_PnPLInit(pIIS2ICLX_ACC_PnPLObj);
   Iis2mdc_Mag_PnPLInit(pIIS2MDC_MAG_PnPLObj);
@@ -350,10 +358,17 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   Imp23absu_Mic_PnPLInit(pIMP23ABSU_MIC_PnPLObj);
   Imp34dt05_Mic_PnPLInit(pIMP34DT05_MIC_PnPLObj);
   Stts22h_Temp_PnPLInit(pSTTS22H_TEMP_PnPLObj);
+  Iis3dwb_Acc_PnPLInit(pIIS3DWB_ACC_PnPLObj);
 
-  if(sIIS3DWBObj)
+  if (sSTTS22HExtObj)
   {
-    Iis3dwb_Acc_PnPLInit(pIIS3DWB_ACC_PnPLObj);
+    Stts22h_Ext_Temp_PnPLInit(pSTTS22H_Ext_TEMP_PnPLObj);
+    stts22h_temp_set_enable(false);
+  }
+  if(sIIS3DWBExtObj)
+  {
+    Iis3dwb_Ext_Acc_PnPLInit(pIIS3DWB_Ext_ACC_PnPLObj);
+    iis3dwb_acc_set_enable(false);
   }
   if(sISM330DHCXObj)
   {
@@ -368,7 +383,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     Ism330is_Ispu_PnPLInit(pISM330IS_ISPU_PnPLObj, DatalogAppTask_GetIIspuControllerIF((DatalogAppTask*) sDatalogAppObj, (AManagedTask*) sISM330ISObj));
   }
 
-//Other PnPL Components
+  /************ Other PnPL Components ************/
   Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
   Firmware_Info_PnPLInit(pFirmwareInfoPnPLObj);
   Acquisition_Info_PnPLInit(pAcquisitionInfoPnPLObj);
@@ -376,23 +391,16 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   Log_Controller_PnPLInit(pLogControllerPnPLObj, DatalogAppTask_GetILogControllerIF((DatalogAppTask *) sDatalogAppObj));
   Automode_PnPLInit(pAutomodePnPLObj);
 
-  if(sExtIis3dwb)
-  {
-    iis3dwb_acc_set_sensor_annotation("[EXTERN]\0");
-  }
-  else
-  {
-    iis3dwb_acc_set_sensor_annotation("\0");
-  }
-
-  if(sExtStts22h)
-  {
-    stts22h_temp_set_sensor_annotation("[EXTERN]\0");
-  }
-  else
-  {
-    stts22h_temp_set_sensor_annotation("\0");
-  }
+  /************ Set GUI label for external components ************/
+//  if(sIIS3DWBExtObj)
+//  {
+//    iis3dwb_ext_acc_set_sensor_annotation("[EXTERN]");
+//  }
+//
+//  if(sSTTS22HExtObj)
+//  {
+//    stts22h_temp_set_sensor_annotation("[EXTERN]");
+//  }
 
   return SYS_NO_ERROR_CODE;
 }
@@ -417,7 +425,7 @@ static sys_error_code_t SensorManagerStateMachineRemap(EPowerMode *pPMState2PMSt
   assert_param(pPMState2PMStateMap != NULL);
 
   AMTSetPMStateRemapFunc((AManagedTask *) sI2C2BusObj, pPMState2PMStateMap);
-  if(sExtIis3dwb)
+  if(sI2C3BusObj)
   {
     AMTSetPMStateRemapFunc((AManagedTask*) sI2C3BusObj, pPMState2PMStateMap);
   }
@@ -429,9 +437,15 @@ static sys_error_code_t SensorManagerStateMachineRemap(EPowerMode *pPMState2PMSt
   AMTSetPMStateRemapFunc((AManagedTask *) sIMP23ABSUObj, pPMState2PMStateMap);
   AMTSetPMStateRemapFunc((AManagedTask *) sIMP34DT05Obj, pPMState2PMStateMap);
   AMTSetPMStateRemapFunc((AManagedTask *) sSTTS22HObj, pPMState2PMStateMap);
-  if (sIIS3DWBObj)
+  AMTSetPMStateRemapFunc((AManagedTask *) sIIS3DWBObj, pPMState2PMStateMap);
+
+  if (sSTTS22HExtObj)
   {
-    AMTSetPMStateRemapFunc((AManagedTask *) sIIS3DWBObj, pPMState2PMStateMap);
+    AMTSetPMStateRemapFunc((AManagedTask *) sSTTS22HExtObj, pPMState2PMStateMap);
+  }
+  if (sIIS3DWBExtObj)
+  {
+    AMTSetPMStateRemapFunc((AManagedTask *) sIIS3DWBExtObj, pPMState2PMStateMap);
   }
   if(sISM330DHCXObj)
   {
@@ -444,3 +458,17 @@ static sys_error_code_t SensorManagerStateMachineRemap(EPowerMode *pPMState2PMSt
 
   return SYS_NO_ERROR_CODE;
 }
+
+
+void EXT_INT1_EXTI_Callback(uint16_t nPin)
+{
+  if(sIIS3DWBExtObj)
+  {
+    IIS3DWBTask_EXTI_Callback(nPin);
+  }
+  else
+  {
+    ISM330ISTask_EXTI_Callback(nPin);
+  }
+}
+

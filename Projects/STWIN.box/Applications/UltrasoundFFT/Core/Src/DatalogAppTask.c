@@ -27,6 +27,7 @@
 #include "usbx_dctrl_class.h"
 #include "PnPLCompManager.h"
 #include "App_model.h"
+#include "rtc.h"
 
 #ifndef DT_TASK_CFG_STACK_DEPTH
 #define DT_TASK_CFG_STACK_DEPTH              (TX_MINIMUM_STACK*2)
@@ -41,6 +42,10 @@
 #endif
 
 #define DT_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(ULONG)
+
+#define COMM_ID_SDCARD                       0U
+#define COMM_ID_USB                          1U
+#define COMM_ID_BLE                          2U
 
 #define SYS_DEBUGF(level, message)                SYS_DEBUGF3(SYS_DBG_DT, level, message)
 
@@ -201,8 +206,11 @@ static const DatalogAppTaskClass_t sTheClass =
         DatalogAppTask_vtblICommandParse_t_serialize_response },
 
     {
+        NULL,
         DatalogAppTask_start_vtbl,
-        DatalogAppTask_stop_vtbl },
+        DatalogAppTask_stop_vtbl,
+        DatalogAppTask_set_time_vtbl,
+        NULL },
 
     {/* Algorithm Event Listener */
         algorithmEvtListener_OnStatusChange_vtbl,
@@ -341,7 +349,7 @@ VOID **pvStackStart,
   IEventListenerSetOwner((IEventListener*) &p_obj->algorithmListener, (void*) p_obj);
 
   p_obj->usbx_device = (usbx_dctrl_class_t*) usbx_dctrl_class_alloc((void*) &MX_PCDInitParams);
-  IStream_init((IStream_t*) p_obj->usbx_device, 0);
+  IStream_init((IStream_t*) p_obj->usbx_device, COMM_ID_USB, 0);
   IStream_set_parse_IF((IStream_t*) p_obj->usbx_device, DatalogAppTask_GetICommandParseIF(p_obj));
 
   return res;
@@ -771,6 +779,71 @@ uint8_t DatalogAppTask_stop_vtbl(ILog_Controller_t *_this)
     {
         .nRawEvent = SYS_PM_MAKE_EVENT(SYS_PM_EVT_SRC_DATALOG, 0) };
     SysPostPowerModeEvent(evt);
+  }
+
+  return 0;
+}
+
+uint8_t DatalogAppTask_set_time_vtbl(ILog_Controller_t *_this, const char *datetime)
+{
+  assert_param(_this != NULL);
+
+  char datetimeStr[3];
+
+  //internal input format: yyyyMMdd_hh_mm_ss
+
+  RTC_DateTypeDef sdate;
+  RTC_TimeTypeDef stime;
+
+  /** extract year string (only the last two digit). It will be necessary to add 2000*/
+  datetimeStr[0] = datetime[2];
+  datetimeStr[1] = datetime[3];
+  datetimeStr[2] = '\0';
+  sdate.Year = atoi(datetimeStr);
+
+  /** extract month string */
+  datetimeStr[0] = datetime[4];
+  datetimeStr[1] = datetime[5];
+  sdate.Month = atoi(datetimeStr);
+
+  /** extract day string */
+  datetimeStr[0] = datetime[6];
+  datetimeStr[1] = datetime[7];
+  sdate.Date = atoi(datetimeStr);
+
+  /** Week day initialization (not used)*/
+  sdate.WeekDay = RTC_WEEKDAY_MONDAY; //Not used
+
+  /** extract hour string */
+  datetimeStr[0] = datetime[9];
+  datetimeStr[1] = datetime[10];
+  stime.Hours = atoi(datetimeStr);
+
+  /** extract minute string */
+  datetimeStr[0] = datetime[12];
+  datetimeStr[1] = datetime[13];
+  stime.Minutes = atoi(datetimeStr);
+
+  /** extract second string */
+  datetimeStr[0] = datetime[15];
+  datetimeStr[1] = datetime[16];
+  stime.Seconds = atoi(datetimeStr);
+
+  /** not used */
+  //stime.TimeFormat = RTC_HOURFORMAT12_AM;
+  stime.SecondFraction = 0;
+  stime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
+  stime.StoreOperation = RTC_STOREOPERATION_RESET;
+
+  if(HAL_RTC_SetTime(&hrtc, &stime, RTC_FORMAT_BIN) != HAL_OK)
+  {
+    while(1)
+      ;
+  }
+  if(HAL_RTC_SetDate(&hrtc, &sdate, RTC_FORMAT_BIN) != HAL_OK)
+  {
+    while(1)
+      ;
   }
 
   return 0;

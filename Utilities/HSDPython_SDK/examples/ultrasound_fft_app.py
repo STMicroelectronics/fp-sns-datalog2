@@ -16,7 +16,7 @@
 #
 
 import sys
-
+from datetime import datetime
 # import cProfile
 # from pstats import Stats
 
@@ -25,6 +25,8 @@ from PySide6 import QtCore
 
 from st_hsdatalog.HSD_GUI.HSD_MainWindow import HSD_MainWindow
 
+import st_hsdatalog.HSD_utils.logger as logger
+log = logger.setup_applevel_logger(is_debug = True, file_name= "{}_app_debug.log".format(datetime.today().strftime('%Y%m%d_%H_%M_%S')))
 
 def main():
     QApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)

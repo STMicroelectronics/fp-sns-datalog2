@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 /* IStream virtual functions */
-sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, void *param);
+sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, uint8_t comm_interface_id, void *param);
 sys_error_code_t usbx_dctrl_vtblStream_enable(IStream_t *_this);
 sys_error_code_t usbx_dctrl_vtblStream_disable(IStream_t *_this);
 boolean_t usbx_dctrl_vtblStream_is_enabled(IStream_t *_this);

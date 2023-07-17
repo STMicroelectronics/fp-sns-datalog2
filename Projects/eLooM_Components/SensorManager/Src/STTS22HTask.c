@@ -26,6 +26,7 @@
 #include "events/IDataEventListener.h"
 #include "events/IDataEventListener_vtbl.h"
 #include "services/SysTimestamp.h"
+#include "services/ManagedTaskMap.h"
 #include "stts22h_reg.h"
 #include <string.h>
 #include "services/sysdebug.h"
@@ -52,6 +53,10 @@
 #endif
 
 #define STTS22H_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(SMMessage)
+
+#ifndef STTS22H_TASK_CFG_MAX_INSTANCES_COUNT
+#define STTS22H_TASK_CFG_MAX_INSTANCES_COUNT      1
+#endif
 
 #define SYS_DEBUGF(level, message)      SYS_DEBUGF3(SYS_DBG_STTS22H, level, message)
 
@@ -90,8 +95,8 @@ struct _STTS22HTask
   const MX_GPIOParams_t *pCSConfig;
 
   /**
-   * I2C Device Address
-   */
+    * I2C Device Address
+    */
   uint8_t i2c_addr;
 
   /**
@@ -114,7 +119,11 @@ struct _STTS22HTask
     */
   SensorStatus_t sensor_status;
 
+  /**
+    * Data
+    */
   EMData_t data;
+
   /**
     * Specifies the sensor ID for the temperature sensor.
     */
@@ -159,22 +168,32 @@ typedef struct _STTS22HTaskClass
   /**
     * STTS22HTask class virtual table.
     */
-  AManagedTaskEx_vtbl vtbl;
+  const AManagedTaskEx_vtbl vtbl;
 
   /**
     * Temperature IF virtual table.
     */
-  ISensor_vtbl sensor_if_vtbl;
+  const ISensor_vtbl sensor_if_vtbl;
 
   /**
     * Specifies temperature sensor capabilities.
     */
-  SensorDescriptor_t class_descriptor;
+  const SensorDescriptor_t class_descriptor;
 
   /**
     * STTS22HTask (PM_STATE, ExecuteStepFunc) map.
     */
-  pExecuteStepFunc_t p_pm_state2func_map[3];
+  const pExecuteStepFunc_t p_pm_state2func_map[3];
+
+  /**
+    * Memory buffer used to allocate the map (key, value).
+    */
+  MTMapElement_t task_map_elements[STTS22H_TASK_CFG_MAX_INSTANCES_COUNT];
+
+  /**
+    * This map is used to link Cube HAL callback with an instance of the sensor task object. The key of the map is the address of the task instance.
+    */
+  MTMap_t task_map;
 } STTS22HTaskClass_t;
 
 /* Private member function declaration */// ***********************************
@@ -250,9 +269,9 @@ static sys_error_code_t STTS22HTaskConfigureIrqPin(const STTS22HTask *_this, boo
 /**
   * Callback function called when the software timer expires.
   *
-  * @param xTimer [IN] specifies the handle of the expired timer.
+  * @param param [IN] specifies an application defined parameter.
   */
-static void STTS22HTaskTimerCallbackFunction(ULONG timer);
+static void STTS22HTaskTimerCallbackFunction(ULONG param);
 
 /**
   * IRQ callback
@@ -289,12 +308,12 @@ static inline sys_error_code_t STTS22HTaskPostReportToBack(STTS22HTask *_this, S
 /**
   * The only instance of the task object.
   */
-static STTS22HTask sTaskObj;
+//static STTS22HTask sTaskObj;
 
 /**
   * The class object.
   */
-static const STTS22HTaskClass_t sTheClass =
+static STTS22HTaskClass_t sTheClass =
 {
   /* Class virtual table */
   {
@@ -356,7 +375,9 @@ static const STTS22HTaskClass_t sTheClass =
     STTS22HTaskExecuteStepState1,
     NULL,
     STTS22HTaskExecuteStepDatalog,
-  }
+  },
+  {{0}}, /* task_map_elements */
+  {0}  /* task_map */
 };
 
 /* Public API definition */
@@ -369,20 +390,35 @@ ISourceObservable *STTS22HTaskGetTempSensorIF(STTS22HTask *_this)
 
 AManagedTaskEx *STTS22HTaskAlloc(const void *pIRQConfig, const void *pCSConfig, const uint8_t i2c_addr)
 {
-  /* This allocator implements the singleton design pattern. */
+  STTS22HTask *p_new_obj = SysAlloc(sizeof(STTS22HTask));
 
-  /* Initialize the super class */
-  AMTInitEx(&sTaskObj.super);
+  if (p_new_obj != NULL)
+  {
+    /* Initialize the super class */
+    AMTInitEx(&p_new_obj->super);
 
-  sTaskObj.super.vptr = &sTheClass.vtbl;
-  sTaskObj.sensor_if.vptr = &sTheClass.sensor_if_vtbl;
-  sTaskObj.sensor_descriptor = &sTheClass.class_descriptor;
+    p_new_obj->super.vptr = &sTheClass.vtbl;
+    p_new_obj->sensor_if.vptr = &sTheClass.sensor_if_vtbl;
+    p_new_obj->sensor_descriptor = &sTheClass.class_descriptor;
 
-  sTaskObj.pIRQConfig = (MX_GPIOParams_t *)pIRQConfig;
-  sTaskObj.pCSConfig = (MX_GPIOParams_t *)pCSConfig;
-  sTaskObj.i2c_addr = i2c_addr;
+    p_new_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
+    p_new_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
+    p_new_obj->i2c_addr = i2c_addr;
 
-  return (AManagedTaskEx *) &sTaskObj;
+    strcpy(p_new_obj->sensor_status.Name, sTheClass.class_descriptor.Name);
+  }
+  return (AManagedTaskEx *) p_new_obj;
+}
+
+AManagedTaskEx *STTS22HTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const uint8_t i2c_addr,
+                                        const char *Name)
+{
+  STTS22HTask *p_new_obj = (STTS22HTask *)STTS22HTaskAlloc(pIRQConfig, pCSConfig, i2c_addr);
+
+  /* Overwrite default name with the one selected by the application */
+  strcpy(p_new_obj->sensor_status.Name, Name);
+
+  return (AManagedTaskEx *) p_new_obj;
 }
 
 ABusIF *STTS22HTaskGetSensorIF(STTS22HTask *_this)
@@ -457,7 +493,7 @@ sys_error_code_t STTS22HTask_vtblOnCreateTask(
         &p_obj->read_fifo_timer,
         "STTS22H_T",
         STTS22HTaskTimerCallbackFunction,
-        0,
+        (ULONG)_this,
         AMT_MS_TO_TICKS(STTS22H_TASK_CFG_TIMER_PERIOD_MS),
         0,
         TX_NO_ACTIVATE))
@@ -502,6 +538,26 @@ sys_error_code_t STTS22HTask_vtblOnCreateTask(
     return res;
   }
   IEventSrcInit(p_obj->p_temp_event_src);
+
+  if (!MTMap_IsInitialized(&sTheClass.task_map))
+  {
+    (void) MTMap_Init(&sTheClass.task_map, sTheClass.task_map_elements, STTS22H_TASK_CFG_MAX_INSTANCES_COUNT);
+  }
+
+  /* Add the managed task to the map.*/
+  if (p_obj->pIRQConfig != NULL)
+  {
+    /* Use the PIN as unique key for the map. */
+    MTMapElement_t *p_element = NULL;
+    uint32_t key = (uint32_t) p_obj->pIRQConfig->pin;
+    p_element = MTMap_AddElement(&sTheClass.task_map, key, _this);
+    if (p_element == NULL)
+    {
+      SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+      res = SYS_INVALID_PARAMETER_ERROR_CODE;
+      return res;
+    }
+  }
 
   //TODO: I don't have data buffer
   //memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
@@ -826,7 +882,7 @@ sys_error_code_t STTS22HTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifo
   assert_param(_this != NULL);
   /* Does not support this virtual function.*/
   SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
-  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("STTS22H: warning - SetFifoWM() not supported.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("STTS22H: warning - SetFifoWM() not supported.\r\n"));
   return SYS_INVALID_FUNC_CALL_ERROR_CODE;
 }
 
@@ -1010,15 +1066,15 @@ static sys_error_code_t STTS22HTaskExecuteStepDatalog(AManagedTask *_this)
 
       case SM_MESSAGE_ID_DATA_READY:
       {
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL,("STTS22H: new data.\r\n"));
-        if (p_obj->pIRQConfig == NULL)
-        {
-          if (TX_SUCCESS != tx_timer_change(&p_obj->read_fifo_timer, AMT_MS_TO_TICKS(p_obj->task_delay),
-                                            AMT_MS_TO_TICKS(p_obj->task_delay)))
-          {
-            return SYS_UNDEFINED_ERROR_CODE;
-          }
-        }
+        SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("STTS22H: new data.\r\n"));
+//        if (p_obj->pIRQConfig == NULL)
+//        {
+//          if (TX_SUCCESS != tx_timer_change(&p_obj->read_fifo_timer, AMT_MS_TO_TICKS(p_obj->task_delay),
+//                                            AMT_MS_TO_TICKS(p_obj->task_delay)))
+//          {
+//            return SYS_UNDEFINED_ERROR_CODE;
+//          }
+//        }
 
         res = STTS22HTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
@@ -1028,8 +1084,8 @@ static sys_error_code_t STTS22HTaskExecuteStepDatalog(AManagedTask *_this)
           double delta_timestamp = timestamp - p_obj->prev_timestamp;
           p_obj->prev_timestamp = timestamp;
 
-            /* update measuredODR */
-            p_obj->sensor_status.MeasuredODR = 1.0f / (float) delta_timestamp;
+          /* update measuredODR */
+          p_obj->sensor_status.MeasuredODR = 1.0f / (float) delta_timestamp;
 
           EMD_1dInit(&p_obj->data, (uint8_t *)&p_obj->temperature, E_EM_FLOAT, 1);
 
@@ -1040,13 +1096,13 @@ static sys_error_code_t STTS22HTaskExecuteStepDatalog(AManagedTask *_this)
 
           SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("STTS22H: ts = %f\r\n", (float)timestamp));
         }
-          if (p_obj->pIRQConfig == NULL)
-          {
-            if (TX_SUCCESS != tx_timer_activate(&p_obj->read_fifo_timer))
-            {
-              res = SYS_UNDEFINED_ERROR_CODE;
-            }
-          }
+//          if (p_obj->pIRQConfig == NULL)
+//          {
+//            if (TX_SUCCESS != tx_timer_activate(&p_obj->read_fifo_timer))
+//            {
+//              res = SYS_UNDEFINED_ERROR_CODE;
+//            }
+//          }
         break;
       }
 
@@ -1055,24 +1111,29 @@ static sys_error_code_t STTS22HTaskExecuteStepDatalog(AManagedTask *_this)
         switch (report.sensorMessage.nCmdID)
         {
           case SENSOR_CMD_ID_INIT:
-              res = STTS22HTaskSensorInit(p_obj);
-              if(!SYS_IS_ERROR_CODE(res))
+            res = STTS22HTaskSensorInit(p_obj);
+            if (!SYS_IS_ERROR_CODE(res))
+            {
+              if (p_obj->sensor_status.IsActive == true)
               {
-                if(p_obj->sensor_status.IsActive == true)
+                if (p_obj->pIRQConfig == NULL)
                 {
-                  if(p_obj->pIRQConfig == NULL)
+                  if (TX_SUCCESS != tx_timer_change(&p_obj->read_fifo_timer, AMT_MS_TO_TICKS(p_obj->task_delay),
+                                                    AMT_MS_TO_TICKS(p_obj->task_delay)))
                   {
-                    if(TX_SUCCESS != tx_timer_activate(&p_obj->read_fifo_timer))
-                    {
-                      res = SYS_UNDEFINED_ERROR_CODE;
-                    }
+                    res = SYS_UNDEFINED_ERROR_CODE;
                   }
-                  else
+                  if (TX_SUCCESS != tx_timer_activate(&p_obj->read_fifo_timer))
                   {
-                    STTS22HTaskConfigureIrqPin(p_obj, FALSE);
+                    res = SYS_UNDEFINED_ERROR_CODE;
                   }
                 }
+                else
+                {
+                  STTS22HTaskConfigureIrqPin(p_obj, FALSE);
+                }
               }
+            }
             break;
           case SENSOR_CMD_ID_SET_ODR:
             res = STTS22HTaskSensorSetODR(p_obj, report);
@@ -1205,27 +1266,22 @@ static sys_error_code_t STTS22HTaskSensorInit(STTS22HTask *_this)
   if (_this->sensor_status.ODR < 2.0f)
   {
     stts22h_odr_temp = STTS22H_1Hz;
-    _this->task_delay = 1000;
   }
   else if (_this->sensor_status.ODR < 26.0f)
   {
     stts22h_odr_temp = STTS22H_25Hz;
-    _this->task_delay = 40;
   }
   else if (_this->sensor_status.ODR < 51.0f)
   {
     stts22h_odr_temp = STTS22H_50Hz;
-    _this->task_delay = 20;
   }
   else if (_this->sensor_status.ODR < 101.0f)
   {
     stts22h_odr_temp = STTS22H_100Hz;
-    _this->task_delay = 10;
   }
   else
   {
     stts22h_odr_temp = STTS22H_200Hz;
-    _this->task_delay = 5;
   }
 
   if (_this->sensor_status.IsActive)
@@ -1237,6 +1293,8 @@ static sys_error_code_t STTS22HTaskSensorInit(STTS22HTask *_this)
     stts22h_temp_data_rate_set(p_sensor_drv, STTS22H_POWER_DOWN);
     _this->sensor_status.IsActive = false;
   }
+
+  _this->task_delay = (uint16_t)(1000.0f / _this->sensor_status.ODR);
 
   return res;
 }
@@ -1311,27 +1369,22 @@ static sys_error_code_t STTS22HTaskSensorSetODR(STTS22HTask *_this, SMMessage re
     else if (ODR < 2.0f)
     {
       ODR = 1.0f;
-      _this->task_delay = 1000;
     }
     else if (ODR < 26.0f)
     {
       ODR = 25.0f;
-      _this->task_delay = 40;
     }
     else if (ODR < 51.0f)
     {
       ODR = 50.0f;
-      _this->task_delay = 20;
     }
     else if (ODR < 101.0f)
     {
       ODR = 100.0f;
-      _this->task_delay = 10;
     }
     else
     {
       ODR = 200.0f;
-      _this->task_delay = 5;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
@@ -1461,33 +1514,37 @@ static sys_error_code_t STTS22HTaskConfigureIrqPin(const STTS22HTask *_this, boo
 
 /* CubeMX integration */
 
-static void STTS22HTaskTimerCallbackFunction(ULONG timer)
+static void STTS22HTaskTimerCallbackFunction(ULONG param)
 {
+  STTS22HTask *p_obj = (STTS22HTask *) param;
   SMMessage report;
   report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY;
   report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
 
-//  if (sTaskObj.in_queue != NULL) { //TODO: STF.Port - how to check if the queue has been initialized ??
-  if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &report, TX_NO_WAIT))
+  if (TX_SUCCESS != tx_queue_send(&p_obj->in_queue, &report, TX_NO_WAIT))
   {
     /* unable to send the report. Signal the error */
     sys_error_handler();
   }
-//  }
 }
 
 void STTS22HTask_EXTI_Callback(uint16_t nPin)
 {
+  MTMapValue_t *p_val;
+  TX_QUEUE *p_queue;
   SMMessage report;
   report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY;
   report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
 
-  //  if (sTaskObj.in_queue != NULL) { //TODO: STF.Port - how to check if the queue has been initialized ??
-  if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &report, TX_NO_WAIT))
+  p_val = MTMap_FindByKey(&sTheClass.task_map, (uint32_t) nPin);
+  if (p_val != NULL)
   {
-    /* unable to send the report. Signal the error */
-    sys_error_handler();
+    p_queue = &((STTS22HTask *)p_val->p_mtask_obj)->in_queue;
+    if (TX_SUCCESS != tx_queue_send(p_queue, &report, TX_NO_WAIT))
+    {
+      /* unable to send the report. Signal the error */
+      sys_error_handler();
+    }
   }
-//  }
 }
 

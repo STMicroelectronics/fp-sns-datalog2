@@ -27,8 +27,8 @@
 extern "C" {
 #endif
 
-#include "IErrorFirstResponder.h"
-#include "systp.h"
+#include "services/IErrorFirstResponder.h"
+
 
 /**
  * Create  type name for _IErrFirstResponder.

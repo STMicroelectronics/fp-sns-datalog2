@@ -52,7 +52,7 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
 
 // ICommandParse_t virtual functions
 sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_this, char *commandString,
-                                                              uint8_t mode);
+                                                              uint8_t comm_interface_id);
 sys_error_code_t DatalogAppTask_vtblICommandParse_t_serialize_response(ICommandParse_t *_this, char **response_name,
                                                                        char **buff, uint32_t *size,
                                                                        uint8_t pretty);

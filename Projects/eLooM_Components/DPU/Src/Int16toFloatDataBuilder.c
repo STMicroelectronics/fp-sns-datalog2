@@ -22,7 +22,6 @@
 
 #include "Int16toFloatDataBuilder.h"
 #include "Int16toFloatDataBuilder_vtbl.h"
-#include "services/sysmem.h"
 #include "services/sysdebug.h"
 
 #define SYS_DEBUGF(level, message)                   SYS_DEBUGF3(SYS_DBG_DPU, level, message)

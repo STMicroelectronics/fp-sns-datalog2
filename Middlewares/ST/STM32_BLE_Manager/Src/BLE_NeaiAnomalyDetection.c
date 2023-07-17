@@ -59,7 +59,7 @@ BleCharTypeDef* BLE_InitADService(void)
 
   BleCharPointer->Char_UUID_Type= UUID_TYPE_128;
   BleCharPointer->Char_Value_Length= ADCharSize;
-  BleCharPointer->Char_Properties= ((uint8_t)(CHAR_PROP_NOTIFY))|((uint8_t)(CHAR_PROP_WRITE));
+  BleCharPointer->Char_Properties= ((uint8_t)(CHAR_PROP_NOTIFY))|((uint8_t)(CHAR_PROP_WRITE_WITHOUT_RESP));
   BleCharPointer->Security_Permissions= ATTR_PERMISSION_NONE;
   BleCharPointer->GATT_Evt_Mask= GATT_NOTIFY_ATTRIBUTE_WRITE;
   BleCharPointer->Enc_Key_Size= 16;

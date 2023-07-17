@@ -35,7 +35,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _ux_host_class_video_entities_parse                 PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
@@ -79,6 +79,13 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  09-30-2020     Chaoqiong Xiao           Initial Version 6.1           */
+/*  08-02-2021     Wen Wang                 Modified comment(s),          */
+/*                                            fixed spelling error,       */
+/*                                            resulting in version 6.1.8  */
+/*  07-29-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            fixed parameter/variable    */
+/*                                            names conflict C++ keyword, */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 UINT _ux_host_class_video_entities_parse(UX_HOST_CLASS_VIDEO *video,
@@ -90,7 +97,7 @@ UINT _ux_host_class_video_entities_parse(UX_HOST_CLASS_VIDEO *video,
 
 UCHAR                                           *descriptor;
 UCHAR                                           *interface_descriptor;
-UX_INTERFACE                                    *interface;
+UX_INTERFACE                                    *interface_ptr;
 ULONG                                           total_descriptor_length;
 ULONG                                           descriptor_length;
 ULONG                                           descriptor_type;
@@ -133,7 +140,7 @@ UINT                                            status;
                 if (descriptor[5] == UX_HOST_CLASS_VIDEO_CLASS)
                 {
 
-                    /* VideoControl Inteface.  */
+                    /* VideoControl Interface.  */
                     if (descriptor[6] == UX_HOST_CLASS_VIDEO_SUBCLASS_CONTROL)
 
                         /* Mark we have found it.  */
@@ -142,8 +149,8 @@ UINT                                            status;
                     {
 
                         /* VideoStreaming interface, currently only one supported.  */
-                        interface = video -> ux_host_class_video_streaming_interface;
-                        if (descriptor[2] == interface -> ux_interface_descriptor.bInterfaceNumber)
+                        interface_ptr = video -> ux_host_class_video_streaming_interface;
+                        if (descriptor[2] == interface_ptr -> ux_interface_descriptor.bInterfaceNumber)
 
                             /* Mark we have found it.  */
                             interface_descriptor = descriptor;

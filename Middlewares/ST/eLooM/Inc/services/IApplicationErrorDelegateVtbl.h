@@ -27,9 +27,7 @@
 extern "C" {
 #endif
 
-#include "systypes.h"
-#include "syserror.h"
-#include "systp.h"
+#include "services/eloom_sysbase.h"
 
 /**
  * Create  type name for _IApplicationErrorDelegate_vtbl.

@@ -1,4 +1,19 @@
 
+# ******************************************************************************
+# * @attention
+# *
+# * Copyright (c) 2022 STMicroelectronics.
+# * All rights reserved.
+# *
+# * This software is licensed under terms that can be found in the LICENSE file
+# * in the root directory of this software component.
+# * If no LICENSE file comes with this software, it is provided AS-IS.
+# *
+# *
+# ******************************************************************************
+#
+
+
 import json
 
 class PnPLCmdField:
@@ -16,9 +31,14 @@ class PnPLCMDManager:
     #     message = {"system_info":""}
     #     return json.dumps(message)
     
-    @staticmethod #NEW from HSDatalog2  v1.1.0
+    @staticmethod
     def create_get_presentation_string_cmd():
         message = {"get_presentation":""}
+        return json.dumps(message)
+    
+    @staticmethod #Only for HSDatalog2 > v1.2.0
+    def create_get_identity_string_cmd():
+        message = {"get_identity":""}
         return json.dumps(message)
 
     @staticmethod
@@ -39,14 +59,6 @@ class PnPLCMDManager:
                 }
             }
         return json.dumps(message)
-
-    #TODO
-    # @staticmethod
-    # def create_set_property_cmd(comp_name, prop_list:dict):
-    #     message = {
-    #         comp_name: prop_list
-    #         }
-    #     return json.dumps(message)
     
     @staticmethod
     def create_command_cmd(comp_name: str, command_name: str, req_name: str = None, req_value = None):
@@ -65,14 +77,4 @@ class PnPLCMDManager:
                 }
             }
         return json.dumps(message)
-
-    #TODO
-    # @staticmethod
-    # def create_command_cmd(comp_name: str, command_name: str, req_name: str, cmd_fields:dict):
-    #     message = {
-    #         comp_name + "*" + command_name: {
-    #                 req_name: cmd_fields
-    #             }
-    #         }
-    #     return json.dumps(message)
         

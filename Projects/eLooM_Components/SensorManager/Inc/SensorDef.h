@@ -31,8 +31,7 @@ extern "C" {
 
 
 
-#include "services/systp.h"
-#include "services/syserror.h"
+#include "services/eloom_sysbase.h"
 
 
 #define COM_TYPE_ACC    1
@@ -135,6 +134,11 @@ typedef struct _SensorStatus_t SensorStatus_t;
 struct _SensorStatus_t
 {
   /**
+    * Specifies the sensor name.
+    */
+  char Name[SM_MAX_DIM_LABELS];
+
+  /**
     * Specifies the full scale.
     */
   float FS;
@@ -145,11 +149,6 @@ struct _SensorStatus_t
   float Sensitivity;
 
   /**
-    * Specifies if the subsensor is active or not.
-    */
-  boolean_t IsActive;
-
-  /**
     * Specifies the nominal data rate.
     */
   float ODR;
@@ -158,6 +157,11 @@ struct _SensorStatus_t
     * Specifies the effective data rate.
     */
   float MeasuredODR;
+
+  /**
+    * Specifies if the subsensor is active or not.
+    */
+  boolean_t IsActive;
 };
 
 

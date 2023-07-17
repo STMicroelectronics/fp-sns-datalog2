@@ -45,7 +45,7 @@ extern "C" {
 #define ACC_BLUENRG_CONGESTION
 
 /* Define the Delay function to use inside the BLE Manager (HAL_Delay/osDelay) */
-#define BLE_MANAGER_DELAY HAL_Delay
+#define BLE_MANAGER_DELAY tx_thread_sleep
   
 /****************** Malloc/Free **************************/
 #define BLE_MallocFunction SysAlloc

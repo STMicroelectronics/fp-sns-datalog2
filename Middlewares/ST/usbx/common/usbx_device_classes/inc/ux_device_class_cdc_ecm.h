@@ -24,7 +24,7 @@
 /*  COMPONENT DEFINITION                                   RELEASE        */ 
 /*                                                                        */ 
 /*    ux_device_class_cdc_ecm.h                           PORTABLE C      */ 
-/*                                                           6.1          */
+/*                                                           6.2.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
@@ -44,14 +44,55 @@
 /*                                            TX symbols instead of using */
 /*                                            them directly,              */
 /*                                            resulting in version 6.1    */
+/*  08-02-2021     Wen Wang                 Modified comment(s),          */
+/*                                            fixed spelling error,       */
+/*                                            added extern "C" keyword    */
+/*                                            for compatibility with C++, */
+/*                                            resulting in version 6.1.8  */
+/*  04-25-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            fixed standalone compile,   */
+/*                                            resulting in version 6.1.11 */
+/*  10-31-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            added wait definitions,     */
+/*                                            resulting in version 6.2.0  */
 /*                                                                        */
 /**************************************************************************/
 
 #ifndef UX_DEVICE_CLASS_CDC_ECM_H
 #define UX_DEVICE_CLASS_CDC_ECM_H
 
+/* Determine if a C++ compiler is being used.  If so, ensure that standard 
+   C is used to process the API information.  */ 
+
+#ifdef   __cplusplus 
+
+/* Yes, C++ compiler is present.  Use standard C.  */ 
+extern   "C" { 
+
+#endif  
+
+#if !defined(UX_DEVICE_STANDALONE)
 #include "nx_api.h"
 #include "ux_network_driver.h"
+#else
+
+/* Assume NX definitions for compiling.  */
+#define NX_PACKET                                               VOID*
+/*
+UINT  _ux_network_driver_deactivate(VOID *ux_instance, VOID *ux_network_handle);
+VOID  _ux_network_driver_link_up(VOID *ux_network_handle);
+VOID  _ux_network_driver_link_down(VOID *ux_network_handle);
+*/
+#ifndef _ux_network_driver_deactivate
+#define _ux_network_driver_deactivate(a,b)                      do {} while(0)
+#endif
+#ifndef _ux_network_driver_link_up
+#define _ux_network_driver_link_up(a)                           do {} while(0)
+#endif
+#ifndef _ux_network_driver_link_down
+#define _ux_network_driver_link_down(a)                         do {} while(0)
+#endif
+#endif
 
 /* Define generic CDC_ECM equivalences.  */
 #define UX_DEVICE_CLASS_CDC_ECM_CLASS_COMMUNICATION_CONTROL                 0x02
@@ -120,7 +161,7 @@
 #define UX_DEVICE_CLASS_CDC_ECM_VERSION_MAJOR                               0x00000001
 #define UX_DEVICE_CLASS_CDC_ECM_VERSION_MINOR                               0x00000000
 
-/* Define CDC_ECM Conection type supported. Set to conectionless.  */
+/* Define CDC_ECM Connection type supported. Set to conectionless.  */
 #define UX_DEVICE_CLASS_CDC_ECM_DF_CONNECTIONLESS                           0x00000001
 #define UX_DEVICE_CLASS_CDC_ECM_DF_CONNECTION_ORIENTED                      0x00000002
 #define UX_DEVICE_CLASS_CDC_ECM_DF_CONNECTION_SUPPORTED                     UX_DEVICE_CLASS_CDC_ECM_DF_CONNECTIONLESS
@@ -236,6 +277,12 @@
 #define UX_DEVICE_CLASS_CDC_ECM_PACKET_POOL_WAIT                            1000
 #endif
 
+#ifndef UX_DEVICE_CLASS_CDC_ECM_PACKET_POOL_INST_WAIT
+#define UX_DEVICE_CLASS_CDC_ECM_PACKET_POOL_INST_WAIT                       1000
+#endif
+
+#define UX_DEVICE_CLASS_CDC_ECM_LINK_CHECK_WAIT                             10
+
 /* Define Slave CDC_ECM Class Calling Parameter structure */
 
 typedef struct UX_SLAVE_CLASS_CDC_ECM_PARAMETER_STRUCT
@@ -274,26 +321,32 @@ typedef struct UX_SLAVE_CLASS_CDC_ECM_STRUCT
     ULONG                                   ux_slave_class_cdc_ecm_ethernet_multicast_filter;
     ULONG                                   ux_slave_class_cdc_ecm_ethernet_power_management_filter;
     ULONG                                   ux_slave_class_cdc_ecm_ethernet_packet_filter;
-    UX_EVENT_FLAGS_GROUP                    ux_slave_class_cdc_ecm_event_flags_group;
     UCHAR                                   ux_slave_class_cdc_ecm_local_node_id[UX_DEVICE_CLASS_CDC_ECM_NODE_ID_LENGTH];
     UCHAR                                   ux_slave_class_cdc_ecm_remote_node_id[UX_DEVICE_CLASS_CDC_ECM_NODE_ID_LENGTH];
-    NX_IP                                   *ux_slave_class_cdc_ecm_nx_ip;
     ULONG                                   ux_slave_class_cdc_ecm_nx_ip_address;
     ULONG                                   ux_slave_class_cdc_ecm_nx_ip_network_mask;
+
+#if !defined(UX_DEVICE_STANDALONE)
+    NX_IP                                   *ux_slave_class_cdc_ecm_nx_ip;
     NX_INTERFACE                            *ux_slave_class_cdc_ecm_nx_interface;
     NX_PACKET                               *ux_slave_class_cdc_ecm_xmit_queue;
     NX_PACKET                               *ux_slave_class_cdc_ecm_xmit_queue_tail;
     NX_PACKET                               *ux_slave_class_cdc_ecm_receive_queue;
-    UCHAR                                   *ux_slave_class_cdc_ecm_pool_memory;
-    NX_PACKET_POOL                          ux_slave_class_cdc_ecm_packet_pool;
+    NX_PACKET_POOL                          *ux_slave_class_cdc_ecm_packet_pool;
+#endif
+
+#if !defined(UX_DEVICE_STANDALONE)
+    UX_EVENT_FLAGS_GROUP                    ux_slave_class_cdc_ecm_event_flags_group;
     UX_THREAD                               ux_slave_class_cdc_ecm_bulkin_thread;
     UX_THREAD                               ux_slave_class_cdc_ecm_bulkout_thread;
     UX_THREAD                               ux_slave_class_cdc_ecm_interrupt_thread;
+    UX_MUTEX                                ux_slave_class_cdc_ecm_mutex;
     UCHAR                                   *ux_slave_class_cdc_ecm_bulkin_thread_stack;
     UCHAR                                   *ux_slave_class_cdc_ecm_bulkout_thread_stack;
     UCHAR                                   *ux_slave_class_cdc_ecm_interrupt_thread_stack;
+#endif
+
     ULONG                                   ux_slave_class_cdc_ecm_link_state;
-    UX_MUTEX                                ux_slave_class_cdc_ecm_mutex;
     VOID                                    *ux_slave_class_cdc_ecm_network_handle;
     
 } UX_SLAVE_CLASS_CDC_ECM;
@@ -338,5 +391,11 @@ VOID  _ux_device_class_cdc_ecm_interrupt_thread(ULONG cdc_ecm_class);
 #define ux_device_class_cdc_ecm_entry    _ux_device_class_cdc_ecm_entry
 #define ux_device_class_cdc_ecm_read     _ux_device_class_cdc_ecm_read 
 #define ux_device_class_cdc_ecm_write    _ux_device_class_cdc_ecm_write
+
+/* Determine if a C++ compiler is being used.  If so, complete the standard 
+   C conditional started above.  */   
+#ifdef __cplusplus
+} 
+#endif 
 
 #endif /* UX_DEVICE_CLASS_CDC_ECM_H */

@@ -17,7 +17,7 @@ from st_hsdatalog.HSD.model.DeviceConfig import Device, DeviceInfo, Sensor, HwTa
 from st_hsdatalog.HSD.model.AcquisitionInfo import Tag
 import st_hsdatalog.HSD_utils.logger as logger
 
-log = logger.setup_applevel_logger(is_debug = False, file_name= "app_debug.log")
+log = logger.get_logger(__name__)
 
 class CLIInteraction:
 
@@ -63,6 +63,42 @@ class CLIInteraction:
         else:
             return a_list[int(choice)]
 
+    @staticmethod
+    def select_items(what: str, a_list: list):
+        selected_elements = []
+        print("Enter the indices of the elements you want to select (space-separated).")
+        print("Type 'done' when you're finished. 'all' to select all elements")
+        done_flag = False
+
+        while not done_flag:
+            for i, c in enumerate(a_list):
+                if what == "PnPL_Component":
+                    item_id = list(c.keys())[0]
+                else:
+                    item_id = str(c)
+                print(str(i) + ' - ' + item_id)
+            index_input = input("Index: ")
+
+            ids = index_input.split(" ")
+            for id in ids:
+                if id == "all":
+                    for e in a_list:
+                        selected_elements.append(list(e.keys())[0])
+                    done_flag = True
+                if id == "done":
+                    done_flag = True
+                else:
+                    try:
+                        id = int(id)
+                        if 0 <= id < len(a_list):
+                            selected_elements.append(list(a_list[id].keys())[0])
+                        else:
+                            print("Invalid index! Try again.")
+                    except ValueError:
+                        print("Invalid input! Please enter a valid index or 'done'.")
+        print("Selected elements:", selected_elements)
+        return selected_elements
+    
     @staticmethod
     def present_items(item_list: list):
         for item in item_list:
@@ -114,6 +150,8 @@ class CLIInteraction:
     def present_item(item):
         if isinstance(item , DeviceInfo):
             print("Serial number: {}".format(item.serial_number))
+            if item.model is not None:
+                print("Model: {}".format(item.model))
             print("Device alias: {}".format(item.alias))
             print("Part number: {}".format(item.part_number))
             print("Website: {}".format(item.url))
@@ -121,6 +159,8 @@ class CLIInteraction:
             print("FW version: {}".format(item.fw_version))
             print("Data file extension: {}".format(item.data_file_ext))
             print("Data file format: {}".format(item.data_file_format))
+            if item.ble_mac_address is not None:
+                print("BLE MAC address: {}".format(item.ble_mac_address))
         elif isinstance(item , Sensor):
             s_descriptor_list = item.sensor_descriptor.sub_sensor_descriptor
             s_status_list = item.sensor_status.sub_sensor_status

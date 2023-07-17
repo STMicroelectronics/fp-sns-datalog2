@@ -24,11 +24,13 @@ st_dtdl_gui/UI/connection_widget.ui
 st_dtdl_gui/UI/device_template_load_widget.ui
 st_dtdl_gui/UI/graph_widget.ui
 st_dtdl_gui/UI/output_class_widget.ui
+st_dtdl_gui/UI/plot_label_widget.ui
 st_dtdl_gui/UI/plot_widget.ui
 st_dtdl_gui/UI/plots_array_output.ui
 st_dtdl_gui/UI/resources.qrc
 st_dtdl_gui/UI/resources_rc.py
 st_dtdl_gui/UI/send_command_widget.ui
+st_dtdl_gui/UI/slow_mc_telemetries_widget.ui
 st_dtdl_gui/UI/styles.py
 st_dtdl_gui/UI/sub_plot.ui
 st_dtdl_gui/UI/icons/ST16418_ST-Logo-Ico_3.ico
@@ -46,6 +48,7 @@ st_dtdl_gui/UI/icons/outline_autorenew_white_18dp.png
 st_dtdl_gui/UI/icons/outline_backup_table_white_18dp.png
 st_dtdl_gui/UI/icons/outline_check_white_18dp.png
 st_dtdl_gui/UI/icons/outline_close_white_36dp.png
+st_dtdl_gui/UI/icons/outline_description_white_18dp.png
 st_dtdl_gui/UI/icons/outline_done_outline_white_18dp.png
 st_dtdl_gui/UI/icons/outline_edit_white_18dp.png
 st_dtdl_gui/UI/icons/outline_file_upload_white_18dp.png
@@ -70,8 +73,11 @@ st_dtdl_gui/UI/icons/outline_zoom_in_white_18dp.png
 st_dtdl_gui/UI/images/AI_Output.png
 st_dtdl_gui/UI/images/ISPU.png
 st_dtdl_gui/UI/images/Motor_Anomaly_Class.png
+st_dtdl_gui/UI/images/Motor_Magnet_Class.png
 st_dtdl_gui/UI/images/Motor_Normal_Class.png
 st_dtdl_gui/UI/images/Motor_Vibration_Class.png
+st_dtdl_gui/UI/images/Nanoedge_ISPU.png
+st_dtdl_gui/UI/images/Nanoedge_STM32.png
 st_dtdl_gui/UI/images/__init__.py
 st_dtdl_gui/UI/images/st_logo.png
 st_dtdl_gui/Utils/DataClass.py
@@ -85,9 +91,13 @@ st_dtdl_gui/Widgets/DeviceTemplateLoadingWidget.py
 st_dtdl_gui/Widgets/LoadingWindow.py
 st_dtdl_gui/Widgets/PropertyWidget.py
 st_dtdl_gui/Widgets/TelemetryWidget.py
+st_dtdl_gui/Widgets/ToggleButton.py
 st_dtdl_gui/Widgets/__init__.py
 st_dtdl_gui/Widgets/Plots/AnalogGaugeWidget.py
+st_dtdl_gui/Widgets/Plots/AnomalyDetectorWidget.py
+st_dtdl_gui/Widgets/Plots/CheckBoxListWidget.py
 st_dtdl_gui/Widgets/Plots/ClassifierOutputWidget.py
+st_dtdl_gui/Widgets/Plots/LabelPlotWidget.py
 st_dtdl_gui/Widgets/Plots/LevelPlotWidget.py
 st_dtdl_gui/Widgets/Plots/PlotBarFFTWidget.py
 st_dtdl_gui/Widgets/Plots/PlotBarWidget.py

@@ -33,7 +33,6 @@ extern "C" {
 
 #include "events/IEventSrc.h"
 #include "events/IEventSrc_vtbl.h"
-#include "services/systp.h"
 
 
 #ifndef AEVENT_SRC_CFG_MAX_LISTENERS

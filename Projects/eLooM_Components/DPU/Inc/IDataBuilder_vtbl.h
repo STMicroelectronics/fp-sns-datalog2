@@ -27,9 +27,7 @@ extern "C" {
 #endif
 
 
-#include "services/systp.h"
-#include "services/systypes.h"
-#include "services/syserror.h"
+#include "services/eloom_sysbase.h"
 
 
 /**

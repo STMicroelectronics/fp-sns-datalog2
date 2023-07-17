@@ -3,18 +3,18 @@
   * @file    SensorManager.c
   * @author  SRA - MCD
   * @brief
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "SensorManager.h"
@@ -206,18 +206,18 @@ uint32_t SMGetnBytesPerSample(uint8_t id)
 {
   if (id < SMGetNsensor())
   {
-	ISourceObservable *sensor_observable = SMGetSensorObserver(id);
-	EMData_t data_info = ISourceGetDataInfo(sensor_observable);
-	uint16_t data_type_size = EMD_GetElementSize(&data_info);
-	if (EMD_GetDimensions(&data_info) > 1)
-	{
-		uint16_t data_dimension = EMD_GetShape(&data_info, EMD_GetDimensions(&data_info)-1);
-		return (uint32_t)(data_type_size * data_dimension);
-	}
-	else
-	{
-		return (uint32_t)(data_type_size);
-	}
+    ISourceObservable *sensor_observable = SMGetSensorObserver(id);
+    EMData_t data_info = ISourceGetDataInfo(sensor_observable);
+    uint16_t data_type_size = EMD_GetElementSize(&data_info);
+    if (EMD_GetDimensions(&data_info) > 1)
+    {
+      uint16_t data_dimension = EMD_GetShape(&data_info, EMD_GetDimensions(&data_info) - 1);
+      return (uint32_t)(data_type_size * data_dimension);
+    }
+    else
+    {
+      return (uint32_t)(data_type_size);
+    }
   }
   else
   {

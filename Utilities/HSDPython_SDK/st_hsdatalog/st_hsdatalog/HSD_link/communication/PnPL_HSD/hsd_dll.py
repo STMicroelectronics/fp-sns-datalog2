@@ -47,7 +47,7 @@ class HSD_Dll_Wrapper:
         print(platform.architecture()[0])
         dll_name = ""
         if platform.system() == 'Linux':
-            if platform.machine() == 'armv7l':
+            if platform.machine() == 'armv7l' or platform.machine() == 'aarch64':
                 dll_name = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0] + "/libhs_datalog/raspberryPi/libhs_datalog_v2.so"
             else:
                 dll_name = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0] + "/libhs_datalog/linux/libhs_datalog_v2.so"
@@ -58,6 +58,15 @@ class HSD_Dll_Wrapper:
             dllabspath = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0] + os.path.sep + os.path.join("libhs_datalog", dll_subfolder)
             os.environ['PATH'] = dllabspath + os.pathsep + os.environ['PATH']
             self._hsd_dll = cdll.LoadLibrary(util.find_library(dll_name))
+
+        callaback_type = ctypes.CFUNCTYPE(None)
+
+        self.hs_datalog_register_usb_hotplug_callback = wrap_hsd_function(
+            self._hsd_dll,
+            'hs_datalog_register_usb_hotplug_callback',
+            ctypes.c_int,
+            (callaback_type, callaback_type)
+        )
 
         ## WP2 [OK]
         self.hs_datalog_open = wrap_hsd_function(
@@ -135,6 +144,14 @@ class HSD_Dll_Wrapper:
         self.hs_datalog_get_presentation = wrap_hsd_function(
             self._hsd_dll,
             'hs_datalog_get_presentation',
+            ctypes.c_int,
+            [ctypes.c_int, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int)]
+        )
+
+        ## Only from HSD2 v >= 1.2.0
+        self.hs_datalog_get_identity = wrap_hsd_function(
+            self._hsd_dll,
+            'hs_datalog_get_identity',
             ctypes.c_int,
             [ctypes.c_int, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int)]
         )
@@ -311,10 +328,23 @@ class HSD_Dll:
 
     def __init__(self):
         self.hsd_wrapper = HSD_Dll_Wrapper()
+        self.plug_callaback_ptr = None
+        self.unplug_callaback_ptr = None
 
-    def hs_datalog_open(self) -> bool:
+    def hs_datalog_register_usb_hotplug_callback(self, plug_callback, unplug_callback) -> bool:
         try:
-            return self.hsd_wrapper.hs_datalog_open() == ST_HS_DATALOG_OK
+            callaback_type = ctypes.CFUNCTYPE(None)
+            self.plug_callaback_ptr = callaback_type(plug_callback)
+            self.unplug_callaback_ptr = callaback_type(unplug_callback)
+            return self.hsd_wrapper.hs_datalog_register_usb_hotplug_callback(self.plug_callaback_ptr, self.unplug_callaback_ptr) == ST_HS_DATALOG_OK
+        except OSError:
+            return False
+    
+    def hs_datalog_open(self) -> bool:
+        res = None
+        try:
+            res = self.hsd_wrapper.hs_datalog_open()
+            return res == ST_HS_DATALOG_OK
         except OSError:
             return False
 
@@ -380,6 +410,13 @@ class HSD_Dll:
         bId = ctypes.c_int()
         fwId = ctypes.c_int()
         res = self.hsd_wrapper.hs_datalog_get_presentation(dIdC, ctypes.byref(bId), ctypes.byref(fwId))
+        return ( res == ST_HS_DATALOG_OK, bId.value, fwId.value)
+    
+    def hs_datalog_get_identity(self, dId : int) -> [bool, int, int]:
+        dIdC = ctypes.c_int(dId)
+        bId = ctypes.c_int()
+        fwId = ctypes.c_int()
+        res = self.hsd_wrapper.hs_datalog_get_identity(dIdC, ctypes.byref(bId), ctypes.byref(fwId))
         return ( res == ST_HS_DATALOG_OK, bId.value, fwId.value)
 
     def hs_datalog_get_device_alias(self, dId : int) -> [bool, str]:

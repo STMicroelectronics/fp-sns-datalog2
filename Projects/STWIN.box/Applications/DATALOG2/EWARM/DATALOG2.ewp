@@ -388,6 +388,7 @@
                     <state>$PROJ_DIR$/../../../../eLooM_Components/TagManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/PnPLCompManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/EMData/Inc</state>
+                    <state>$PROJ_DIR$/../../../../../Middlewares/ST/CircularBufferDL2</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -1338,6 +1339,7 @@
                     <state>TX_SINGLE_MODE_NON_SECURE=1</state>
                     <state>USE_HAL_DRIVER</state>
                     <state>STM32U585xx</state>
+                    <state>ENABLE_THREADX_DBG_PIN</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -1473,6 +1475,7 @@
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/usbx/ports/generic/inc</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/eLooM/Inc</state>
+                    <state>$PROJ_DIR$/../../../../../Middlewares/ST/CircularBufferDL2</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/Third_Party/parson</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/threadx/ports/cortex_m33/iar/inc</state>
@@ -1499,6 +1502,7 @@
                     <state>$PROJ_DIR$/../../../../eLooM_Components/TagManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/PnPLCompManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/EMData/Inc</state>
+                    <state>$PROJ_DIR$/../../../../../Middlewares/ST/threadx/utility/execution_profile_kit</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -2640,12 +2644,6 @@
                         <name>$PROJ_DIR$\..\Core\Inc\automode.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\ble_dctrl_class.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\ble_dctrl_class_vtbl.h</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\BLE_Implementation.h</name>
                     </file>
                     <file>
@@ -2653,6 +2651,12 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Inc\BLE_Manager_Conf.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Core\Inc\ble_stream_class.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Core\Inc\ble_stream_class_vtbl.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Inc\bluenrg_conf.h</name>
@@ -2739,9 +2743,6 @@
                         <name>$PROJ_DIR$\..\Core\Inc\sysdebug_config.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\task_execution_profile.h</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\tx_user.h</name>
                     </file>
                     <file>
@@ -2784,10 +2785,10 @@
                         <name>$PROJ_DIR$\..\Core\Src\automode.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Src\ble_dctrl_class.c</name>
+                        <name>$PROJ_DIR$\..\Core\Src\BLE_Implementation.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Src\BLE_Implementation.c</name>
+                        <name>$PROJ_DIR$\..\Core\Src\ble_stream_class.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\DatalogAppTask.c</name>
@@ -3003,64 +3004,70 @@
                         <name>$PROJ_DIR$\..\PnPL\Inc\Firmware_Info_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IIS2DLPC_ACC_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis2dlpc_Acc_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IIS2DLPC_ACC_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis2dlpc_Acc_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IIS2ICLX_ACC_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis2iclx_Acc_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IIS2ICLX_ACC_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis2iclx_Acc_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IIS2MDC_MAG_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis2mdc_Mag_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IIS2MDC_MAG_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis2mdc_Mag_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IIS3DWB_ACC_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis3dwb_Acc_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IIS3DWB_ACC_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis3dwb_Acc_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\ILPS22QS_PRESS_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis3dwb_Ext_Acc_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\ILPS22QS_PRESS_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis3dwb_Ext_Acc_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IMP23ABSU_MIC_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ilps22qs_Press_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IMP23ABSU_MIC_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ilps22qs_Press_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IMP34DT05_MIC_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Imp23absu_Mic_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\IMP34DT05_MIC_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Imp23absu_Mic_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\ISM330DHCX_ACC_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Imp34dt05_Mic_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\ISM330DHCX_ACC_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Imp34dt05_Mic_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\ISM330DHCX_GYRO_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Acc_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\ISM330DHCX_GYRO_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Acc_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\ISM330DHCX_MLC_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Gyro_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\ISM330DHCX_MLC_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Gyro_PnPL_vtbl.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Mlc_PnPL.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Mlc_PnPL_vtbl.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Acc_PnPL.h</name>
@@ -3087,10 +3094,16 @@
                         <name>$PROJ_DIR$\..\PnPL\Inc\Log_Controller_PnPL_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\STTS22H_TEMP_PnPL.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Stts22h_Ext_Temp_PnPL.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\STTS22H_TEMP_PnPL_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Stts22h_Ext_Temp_PnPL_vtbl.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Stts22h_Temp_PnPL.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Stts22h_Temp_PnPL_vtbl.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\PnPL\Inc\Tags_Info_PnPL.h</name>
@@ -3114,34 +3127,37 @@
                         <name>$PROJ_DIR$\..\PnPL\Src\Firmware_Info_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\IIS2DLPC_ACC_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Iis2dlpc_Acc_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\IIS2ICLX_ACC_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Iis2iclx_Acc_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\IIS2MDC_MAG_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Iis2mdc_Mag_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\IIS3DWB_ACC_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Iis3dwb_Acc_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\ILPS22QS_PRESS_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Iis3dwb_Ext_Acc_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\IMP23ABSU_MIC_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Ilps22qs_Press_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\IMP34DT05_MIC_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Imp23absu_Mic_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\ISM330DHCX_ACC_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Imp34dt05_Mic_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\ISM330DHCX_GYRO_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330dhcx_Acc_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\ISM330DHCX_MLC_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330dhcx_Gyro_PnPL.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330dhcx_Mlc_PnPL.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\PnPL\Src\Ism330is_Acc_PnPL.c</name>
@@ -3156,7 +3172,10 @@
                         <name>$PROJ_DIR$\..\PnPL\Src\Log_Controller_PnPL.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\STTS22H_TEMP_PnPL.c</name>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Stts22h_Ext_Temp_PnPL.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Stts22h_Temp_PnPL.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\PnPL\Src\Tags_Info_PnPL.c</name>
@@ -3175,6 +3194,12 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\USBX\App\PCDDriver_vtbl.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\USBX\App\usbx_callbacks.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\USBX\App\usbx_callbacks.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\USBX\App\usbx_dctrl_class.c</name>
@@ -3272,12 +3297,6 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_adc_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_comp.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cordic.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cortex.c</name>
             </file>
             <file>
@@ -3287,22 +3306,7 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_crc_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cryp.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cryp_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dac.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dac_ex.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dcache.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dcmi.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dma.c</name>
@@ -3317,31 +3321,16 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_exti.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_fdcan.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_flash.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_flash_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_fmac.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_gpio.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_gtzc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_hash.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_hash_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_hcd.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_i2c.c</name>
@@ -3353,40 +3342,7 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_icache.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_irda.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_iwdg.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_lptim.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_mdf.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_mmc.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_mmc_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_nand.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_nor.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_opamp.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_opamp_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_ospi.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_otfdec.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pcd.c</name>
@@ -3395,19 +3351,10 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pcd_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pka.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pssi.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pwr.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pwr_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_ramcfg.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_rcc.c</name>
@@ -3428,28 +3375,10 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_rtc_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_sai.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_sai_ex.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_sd.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_sd_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smartcard.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smartcard_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smbus.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smbus_ex.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_spi.c</name>
@@ -3458,31 +3387,16 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_spi_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_sram.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_tim.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_tim_ex.c</name>
             </file>
             <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_tsc.c</name>
-            </file>
-            <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_uart.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_uart_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_usart.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_usart_ex.c</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_wwdg.c</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_ll_sdmmc.c</name>
@@ -3617,6 +3531,15 @@
                 </group>
             </group>
             <group>
+                <name>CircularBufferDL2</name>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\CircularBufferDL2\CircularBufferDL2.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\CircularBufferDL2\CircularBufferDL2.h</name>
+                </file>
+            </group>
+            <group>
                 <name>eLooM</name>
                 <group>
                     <name>Inc</name>
@@ -3735,6 +3658,9 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\eLooM\Inc\services\IErrorFirstResponderVtbl.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\eLooM\Inc\services\ManagedTaskMap.h</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\eLooM\Inc\services\NullErrorDelegate.h</name>
@@ -4824,42 +4750,6 @@
                         <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_timer_thread_entry.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_buffer_full_notify.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_disable.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_enable.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_event_filter.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_event_unfilter.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_initialize.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_interrupt_control.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_isr_enter_insert.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_isr_exit_insert.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_object_register.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_object_unregister.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_user_event_insert.c</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\threadx\common\src\txe_block_allocate.c</name>
                     </file>
                     <file>
@@ -5429,6 +5319,9 @@
                             <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\usbx_stm32_device_controllers\ux_dcd_stm32_interrupt_handler.c</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\usbx_stm32_device_controllers\ux_dcd_stm32_transfer_abort.c</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\usbx_stm32_device_controllers\ux_dcd_stm32_transfer_request.c</name>
                         </file>
                         <file>
@@ -5438,9 +5331,6 @@
                 </group>
                 <group>
                     <name>SensorStreaming_USBX</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_dcd_stm32_callback_sof.c</name>
-                    </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming.h</name>
                     </file>
@@ -5467,6 +5357,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_read.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_sof.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_thread.c</name>

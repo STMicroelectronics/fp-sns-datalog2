@@ -23,9 +23,7 @@
 extern "C" {
 #endif
 
-#include "services/systypes.h"
-#include "services/syserror.h"
-#include "services/systp.h"
+#include "services/eloom_sysbase.h"
 
 /**
   * Declare a type name for the struct _IBus_vtbl

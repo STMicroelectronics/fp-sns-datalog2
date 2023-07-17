@@ -33,42 +33,28 @@
 
 #include "automode.h"
 
+#include "DatalogAppTask.h"
+
 #define SYS_DEBUGF(level, message)        	SYS_DEBUGF3(SYS_DBG_SDC, level, message)
 #define MAX_INSTANCES 1
+
+#define SD_BUFFER_ITEMS   2U
 
 #if defined(DEBUG) || defined (SYS_DEBUG)
 #define sObj                              	sFileXObj
 #endif
 
 /* The other files are located in fx_file[] from SENSOR_DAT_FILES position */
-#define OTHER_FILES_ID                    (SENSOR_DAT_FILES - 1)
+#define OTHER_FILES_ID                    (FILEX_DCTRL_DAT_FILES_COUNT - 1)
 
 #define SKIP_LIST_SIZE           	(1)
 
 /* Private variable ------------------------------------------------------------*/
-//char *components_names[SKIP_LIST_SIZE] =
-//{
-//    "deviceinfo",
-//    "fwinfo",
-//    "iis2dlpc_acc",
-//    "iis2iclx_acc",
-//    "iis2mdc_mag",
-//    "iis3dwb_acc",
-//    "ilps22qs_press",
-//    "imp23absu_mic",
-//    "imp34dt05_mic",
-//    "ism330dhcx_acc",
-//    "ism330dhcx_gyro",
-//    "ism330dhcx_mlc",
-//    "log_controller",
-//    "stts22h_temp",
-//    "tags_info" };
 
 char *skip_list[SKIP_LIST_SIZE] =
 {
     "acquisition_info" };
 
-//filex_dctrl_class_t sObj[MAX_INSTANCES] = {0};
 static filex_dctrl_class_t sObj;
 
 const static IStream_vtbl filex_dctrl_vtbl =
@@ -90,7 +76,7 @@ const static IStream_vtbl filex_dctrl_vtbl =
 /***************************************/
 void fx_thread_entry(unsigned long thread_input);
 void filex_data_ready(filex_dctrl_class_t *_this, uint32_t data_ready_mask);
-void filex_data_flush(filex_dctrl_class_t *_this, uint8_t sId);
+void filex_data_flush(filex_dctrl_class_t *_this, uint8_t stream_id);
 sys_error_code_t filex_write_config_file(filex_dctrl_class_t *_this, char *file, uint32_t size);
 sys_error_code_t filex_write_acquisition_info(filex_dctrl_class_t *_this, char *acquisition_info, uint32_t size);
 
@@ -108,11 +94,13 @@ IStream_t* filex_dctrl_class_alloc(void)
 
 /* IStream virtual functions definition */
 /*******************************/
-sys_error_code_t filex_dctrl_vtblStream_init(IStream_t *_this, void *param)
+sys_error_code_t filex_dctrl_vtblStream_init(IStream_t *_this, uint8_t comm_interface_id, void *param)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   filex_dctrl_class_t *obj = (filex_dctrl_class_t*) _this;
+
+  obj->comm_interface_id = comm_interface_id;
 
   /* Allocate FILEX_CFG_STACK_DEPTH. */
   obj->thread_memory_pointer = (UCHAR*) SysAlloc(FILEX_CFG_STACK_DEPTH);
@@ -132,7 +120,7 @@ sys_error_code_t filex_dctrl_vtblStream_init(IStream_t *_this, void *param)
 #endif
 
   /* Allocate the message queue. */
-  obj->queue_memory_pointer = (UCHAR*) SysAlloc(DEFAULT_QUEUE_SIZE * sizeof(uint32_t));
+  obj->queue_memory_pointer = (UCHAR*) SysAlloc(FILEX_DCTRL_DEFAULT_QUEUE_SIZE * sizeof(uint32_t));
   if(obj->queue_memory_pointer == NULL)
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
@@ -141,7 +129,7 @@ sys_error_code_t filex_dctrl_vtblStream_init(IStream_t *_this, void *param)
   }
 
   /* Create the message queue */
-  tx_queue_create(&obj->fx_app_queue, "FileX App queue", TX_1_ULONG, obj->queue_memory_pointer, DEFAULT_QUEUE_SIZE * sizeof(uint32_t));
+  tx_queue_create(&obj->fx_app_queue, "FileX App queue", TX_1_ULONG, obj->queue_memory_pointer, FILEX_DCTRL_DEFAULT_QUEUE_SIZE * sizeof(uint32_t));
   /* Initialize FILEX Memory */
   fx_system_initialize();
 
@@ -178,10 +166,10 @@ sys_error_code_t filex_dctrl_vtblStream_enable(IStream_t *_this)
           break;
         }
       }
-      /* ...and check if there is already a folder named STWINBOX_xxxxx */
-      if(strncmp(return_entry_name, LOG_DIR_PREFIX, 8) == 0)
+      /* and check if there are already some acquisition folders */
+      if(strncmp(return_entry_name, FILEX_DCTRL_LOG_DIR_PREFIX, sizeof(FILEX_DCTRL_LOG_DIR_PREFIX)-1) == 0)
       {
-        tmp = strtol(&return_entry_name[sizeof(LOG_DIR_PREFIX)], NULL, 10);
+        tmp = strtol(&return_entry_name[sizeof(FILEX_DCTRL_LOG_DIR_PREFIX)], NULL, 10);
         if(tmp > obj->dir_n)
         {
           obj->dir_n = tmp;
@@ -286,7 +274,7 @@ sys_error_code_t filex_dctrl_vtblStream_start(IStream_t *_this, void *param)
   else
   {
     obj->dir_n++;
-    sprintf(obj->dir_name, "%s%05d", LOG_DIR_PREFIX, obj->dir_n);
+    sprintf(obj->dir_name, "%s%05d", FILEX_DCTRL_LOG_DIR_PREFIX, obj->dir_n);
   }
 
   ret = fx_directory_create(&obj->sdio_disk, obj->dir_name);
@@ -317,10 +305,10 @@ sys_error_code_t filex_dctrl_vtblStream_stop(IStream_t *_this)
   HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
   HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
 
-  for(ii = 0; ii < SENSOR_DAT_FILES; ii++) /*Close all files*/
+  for(ii = 0; ii < FILEX_DCTRL_DAT_FILES_COUNT; ii++) /*Close all files*/
   {
     /*if file exists*/
-    if(TX_SUCCESS == fx_file_attributes_read(&obj->sdio_disk, obj->data_name[ii], (unsigned int*)&attributes_ptr))
+    if(TX_SUCCESS == fx_file_attributes_read(&obj->sdio_disk, obj->file_dat_name[ii], (unsigned int*)&attributes_ptr))
     {
       if(attributes_ptr == FX_ARCHIVE)
       {
@@ -333,7 +321,7 @@ sys_error_code_t filex_dctrl_vtblStream_stop(IStream_t *_this)
           return SYS_BASE_ERROR_CODE;
         }
 
-        fx_file_date_time_set(&obj->sdio_disk, obj->data_name[ii], ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
+        fx_file_date_time_set(&obj->sdio_disk, obj->file_dat_name[ii], ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
                               (uint32_t) sTime.Minutes, (uint32_t) sTime.Seconds);
       }
     }
@@ -356,91 +344,23 @@ sys_error_code_t filex_dctrl_vtblStream_post_data(IStream_t *_this, uint8_t id_s
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   filex_dctrl_class_t *obj = (filex_dctrl_class_t*) _this;
 
-  uint8_t *p_dst;
-  uint32_t dst_idx, src_idx = 0;
-  uint32_t dst_size, half_size;
-  uint8_t mode;
+  bool item_ready;
+  CircularBufferDL2 *cbdl2 = obj->cbdl2[id_stream];
 
-  half_size = obj->sd_write_buffer_size[id_stream];
-
-  if(half_size != 0)
+  /* Copy the stream data to the buffer item */
+  if(CBDL2_FillCurrentItem(cbdl2, id_stream, buf, size, &item_ready) != SYS_NO_ERROR_CODE)
   {
-    /* double buffer */
-    dst_size = half_size * 2;
-
-    p_dst = obj->sd_write_buffer[id_stream];
-    dst_idx = obj->sd_write_buffer_idx[id_stream];
-
-    /* if the half or end buffer is not reached after the copy, use memcpy */
-    uint32_t size_after_copy = dst_idx + size;
-
-    if(size_after_copy < half_size) /* data to be copied won't exceed the first half of the dest buffer */
+    res = SYS_BASE_ERROR_CODE;
+  }
+  /* Check if the item is ready */
+  if(item_ready == true)
+  {
+    /* unlock write task */
+    unsigned long msg = (id_stream & FILEX_DCTRL_DATA_SENSOR_ID_MASK) | FILEX_DCTRL_DATA_READY_MASK;
+    if(filex_dctrl_msg(obj, &msg) != SYS_NO_ERROR_CODE)
     {
-      mode = 1; /* use memcpy*/
+      res = SYS_TASK_QUEUE_FULL_ERROR_CODE;
     }
-    else if(size_after_copy < dst_size) /* data to be copied won't exceed the end of the buffer*/
-    {
-      if(dst_idx < half_size) /* data to be copied exceeds the first half of the dest buffer*/
-      {
-        mode = 0; /* bytewise copy */
-      }
-      else /* data to be copied won't exceed the end of the buffer*/
-      {
-        mode = 1; /* use memcpy*/
-      }
-    }
-    else /* data to be copied exceeds the end of the buffer*/
-    {
-      mode = 0; /* bytewise copy */
-    }
-
-    if(mode == 0) /* bytewise copy */
-    {
-      /* byte per byte copy to SD buffer, automatic wrap */
-      while(src_idx < size)
-      {
-        p_dst[dst_idx++] = buf[src_idx++];
-
-        if(dst_idx >= dst_size)
-        {
-          dst_idx = 0;
-          obj->byte_counter[id_stream] += (dst_size / 2) - 4;
-          *((uint32_t*) &p_dst[dst_idx]) = obj->byte_counter[id_stream];
-          dst_idx += 4;
-        }
-        else if(dst_idx == half_size)
-        {
-          obj->byte_counter[id_stream] += (dst_size / 2) - 4;
-          *((uint32_t*) &p_dst[dst_idx]) = obj->byte_counter[id_stream];
-          dst_idx += 4;
-        }
-      }
-    }
-    else
-    {
-      memcpy(&p_dst[dst_idx], &buf[src_idx], size);
-      dst_idx += size;
-    }
-
-    if(obj->sd_write_buffer_idx[id_stream] < (dst_size / 2) && dst_idx >= (dst_size / 2)) /* first half full */
-    {
-      /* unlock write task */
-      unsigned long msg = id_stream | FILEX_DCTRL_DATA_READY_MASK | FILEX_DCTRL_DATA_FIRST_HALF_MASK;
-      if(filex_dctrl_msg(obj, &msg) != SYS_NO_ERROR_CODE)
-      {
-        res = SYS_TASK_QUEUE_FULL_ERROR_CODE;
-      }
-    }
-    else if(dst_idx < obj->sd_write_buffer_idx[id_stream]) /* second half full */
-    {
-      unsigned long msg = id_stream | FILEX_DCTRL_DATA_READY_MASK | FILEX_DCTRL_DATA_SECOND_HALF_MASK;
-      if(filex_dctrl_msg(obj, &msg) != SYS_NO_ERROR_CODE)
-      {
-        res = SYS_TASK_QUEUE_FULL_ERROR_CODE;
-      }
-    }
-
-    obj->sd_write_buffer_idx[id_stream] = dst_idx;
   }
 
   return res;
@@ -457,34 +377,39 @@ sys_error_code_t filex_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t
   HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
   HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
 
-  obj->sd_write_buffer[id_stream] = NULL;
-  obj->sd_write_buffer[id_stream] = (uint8_t*) SysAlloc(size * 2);
-
-  if(obj->sd_write_buffer[id_stream] == NULL)
+  /* Allocate a DL2 Circular Buffer with SD_BUFFER_ITEMS elements*/
+  CircularBufferDL2 *cbdl2 = CBDL2_Alloc(SD_BUFFER_ITEMS);
+  if(cbdl2 == NULL)
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
     return res;
   }
+  /* Allocate the buffer to be used assigned to the CBDL2 object */
+  obj->sd_write_buffer[id_stream] = (uint8_t*) SysAlloc(size * SD_BUFFER_ITEMS);
+  if(obj->sd_write_buffer[id_stream] == NULL)
+  {
+    CBDL2_Free(cbdl2);
+    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    return res;
+  }
+  /* Initialize the Circular Buffer with the specified parameters */
+  CBDL2_Init(cbdl2, obj->sd_write_buffer[id_stream], size, false);
+  obj->cbdl2[id_stream] = cbdl2;
 
-  obj->sd_write_buffer_size[id_stream] = size;
-
-  obj->sd_write_buffer_idx[id_stream] = 4;
-  obj->byte_counter[id_stream] = 0;
-
-  sprintf(obj->data_name[id_stream], "%s%s", stream_name, ".dat");
-  if(TX_SUCCESS != fx_file_create(&obj->sdio_disk, obj->data_name[id_stream]))
+  sprintf(obj->file_dat_name[id_stream], "%s%s", stream_name, ".dat");
+  if(TX_SUCCESS != fx_file_create(&obj->sdio_disk, obj->file_dat_name[id_stream]))
   {
     obj->fx_opened = FX_IO_ERROR;
     return SYS_BASE_ERROR_CODE;
   }
 
-  if(TX_SUCCESS != fx_file_open(&obj->sdio_disk, &obj->file_dat[id_stream], obj->data_name[id_stream], FX_OPEN_FOR_WRITE))
+  if(TX_SUCCESS != fx_file_open(&obj->sdio_disk, &obj->file_dat[id_stream], obj->file_dat_name[id_stream], FX_OPEN_FOR_WRITE))
   {
     obj->fx_opened = FX_IO_ERROR;
     return SYS_BASE_ERROR_CODE;
   }
-
   return res;
 }
 
@@ -503,12 +428,10 @@ sys_error_code_t filex_dctrl_vtblStream_set_mode(IStream_t *_this, IStreamMode_t
 
     if(strncmp(response_name, "all", 3) == 0)
     {
-      /*scrivi serialize_cmd nel file device_status.json*/
       filex_write_config_file(obj, serialized_cmd, size);
     }
     else if(strncmp(response_name, "acquisition_info", 16) == 0)
     {
-      /*scrivi serialize_cmd nel file acquisition_info.json*/
       filex_write_acquisition_info(obj, serialized_cmd, size);
     }
     SysFree(serialized_cmd);
@@ -522,6 +445,8 @@ sys_error_code_t filex_dctrl_vtblStream_dealloc(IStream_t *_this, uint8_t id_str
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   filex_dctrl_class_t *obj = (filex_dctrl_class_t*) _this;
+
+  CBDL2_Free(obj->cbdl2[id_stream]);
 
   if(obj->sd_write_buffer[id_stream] != NULL)
   {
@@ -550,7 +475,6 @@ sys_error_code_t filex_dctrl_msg(filex_dctrl_class_t *_this, unsigned long *msg)
 
   uint32_t message = *msg;
 
-  // if(tx_queue_send(&_this->fx_app_queue, &message, TX_WAIT_FOREVER) != TX_SUCCESS)
   if(tx_queue_send(&_this->fx_app_queue, &message, TX_NO_WAIT) != TX_SUCCESS)
   {
     while(1);
@@ -574,7 +498,6 @@ sys_error_code_t filex_dctrl_write_ucf(filex_dctrl_class_t *_this, uint32_t comp
   HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
 
 //  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, (ucf_data));
-//  fflush(stdout);
 
   ucf_file_size = UCFP_UcfSize(compressed_ucf_size);
   p_ucf = SysAlloc(ucf_file_size);
@@ -590,11 +513,11 @@ sys_error_code_t filex_dctrl_write_ucf(filex_dctrl_class_t *_this, uint32_t comp
     return SYS_OUT_OF_MEMORY_ERROR_CODE;
   }
 
-  fx_create = fx_file_create(&_this->sdio_disk, TMP_UCF_FILE_NAME);
+  fx_create = fx_file_create(&_this->sdio_disk, FILEX_DCTRL_TMP_UCF_FILE_NAME);
   if(fx_create == FX_ALREADY_CREATED)
   {
-    fx_file_delete(&_this->sdio_disk, TMP_UCF_FILE_NAME);
-    fx_create = fx_file_create(&_this->sdio_disk, TMP_UCF_FILE_NAME);
+    fx_file_delete(&_this->sdio_disk, FILEX_DCTRL_TMP_UCF_FILE_NAME);
+    fx_create = fx_file_create(&_this->sdio_disk, FILEX_DCTRL_TMP_UCF_FILE_NAME);
   }
 
   if(fx_create != TX_SUCCESS)
@@ -604,18 +527,18 @@ sys_error_code_t filex_dctrl_write_ucf(filex_dctrl_class_t *_this, uint32_t comp
   }
   else
   {
-    fx_file_open(&_this->sdio_disk, &_this->file_tmp, TMP_UCF_FILE_NAME, FX_OPEN_FOR_WRITE);
+    fx_file_open(&_this->sdio_disk, &_this->file_tmp, FILEX_DCTRL_TMP_UCF_FILE_NAME, FX_OPEN_FOR_WRITE);
     fx_file_write(&_this->file_tmp, (uint8_t*) p_ucf, actual_size);
     fx_media_flush(&_this->sdio_disk);
     fx_file_close(&_this->file_tmp);
 
-    fx_file_date_time_set(&_this->sdio_disk, TMP_UCF_FILE_NAME, ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours, (uint32_t) sTime.Minutes,
+    fx_file_date_time_set(&_this->sdio_disk, FILEX_DCTRL_TMP_UCF_FILE_NAME, ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours, (uint32_t) sTime.Minutes,
                           (uint32_t) sTime.Seconds);
   }
 
   SysFree(p_ucf);
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("SDCardTask: %s written to root folder.\r\n", TMP_UCF_FILE_NAME));
+  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("SDCardTask: %s written to root folder.\r\n", FILEX_DCTRL_TMP_UCF_FILE_NAME));
 
   return res;
 }
@@ -632,33 +555,33 @@ sys_error_code_t filex_write_config_file(filex_dctrl_class_t *_this, char *file,
   HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
   HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
 
-  fx_ret = fx_file_create(&_this->sdio_disk, DEVICE_JSON_FILE_NAME);
+  fx_ret = fx_file_create(&_this->sdio_disk, FILEX_DCTRL_DEVICE_JSON_FILE_NAME);
 
   if(fx_ret == FX_ALREADY_CREATED)
   {
-    fx_file_delete(&_this->sdio_disk, DEVICE_JSON_FILE_NAME);
-    fx_ret = fx_file_create(&_this->sdio_disk, DEVICE_JSON_FILE_NAME);
+    fx_file_delete(&_this->sdio_disk, FILEX_DCTRL_DEVICE_JSON_FILE_NAME);
+    fx_ret = fx_file_create(&_this->sdio_disk, FILEX_DCTRL_DEVICE_JSON_FILE_NAME);
     if(fx_ret != FX_SUCCESS)
     {
       _this->fx_opened = FX_IO_ERROR;
       return SYS_BASE_ERROR_CODE;
     }
-    fx_file_open(&_this->sdio_disk, &_this->file_tmp, DEVICE_JSON_FILE_NAME, FX_OPEN_FOR_WRITE);
+    fx_file_open(&_this->sdio_disk, &_this->file_tmp, FILEX_DCTRL_DEVICE_JSON_FILE_NAME, FX_OPEN_FOR_WRITE);
     fx_file_write(&_this->file_tmp, file, size);
     fx_media_flush(&_this->sdio_disk);
     fx_file_close(&_this->file_tmp);
 
-    fx_file_date_time_set(&_this->sdio_disk, DEVICE_JSON_FILE_NAME, ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
+    fx_file_date_time_set(&_this->sdio_disk, FILEX_DCTRL_DEVICE_JSON_FILE_NAME, ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
                           (uint32_t) sTime.Minutes, (uint32_t) sTime.Seconds);
   }
   else if(fx_ret == FX_SUCCESS)
   {
-    fx_file_open(&_this->sdio_disk, &_this->file_tmp, DEVICE_JSON_FILE_NAME, FX_OPEN_FOR_WRITE);
+    fx_file_open(&_this->sdio_disk, &_this->file_tmp, FILEX_DCTRL_DEVICE_JSON_FILE_NAME, FX_OPEN_FOR_WRITE);
     fx_file_write(&_this->file_tmp, file, size);
     fx_media_flush(&_this->sdio_disk);
     fx_file_close(&_this->file_tmp);
 
-    fx_file_date_time_set(&_this->sdio_disk, DEVICE_JSON_FILE_NAME, ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
+    fx_file_date_time_set(&_this->sdio_disk, FILEX_DCTRL_DEVICE_JSON_FILE_NAME, ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
                           (uint32_t) sTime.Minutes, (uint32_t) sTime.Seconds);
   }
   else
@@ -669,7 +592,7 @@ sys_error_code_t filex_write_config_file(filex_dctrl_class_t *_this, char *file,
 
   /* if ucf exists in root, copy tmp_ucf file from root into acquisition folder*/
   char root_ucf[32];
-  sprintf(root_ucf, "%s%s", "../", TMP_UCF_FILE_NAME);
+  sprintf(root_ucf, "%s%s", "../", FILEX_DCTRL_TMP_UCF_FILE_NAME);
 
   fx_ret = fx_file_open(&_this->sdio_disk, &_this->file_tmp, root_ucf, FX_OPEN_FOR_READ);
 
@@ -681,11 +604,11 @@ sys_error_code_t filex_write_config_file(filex_dctrl_class_t *_this, char *file,
     fx_file_read(&_this->file_tmp, (uint8_t*) ucf_file_buffer, ucf_file_size, &actual_bytes);
     fx_file_close(&_this->file_tmp);
 
-    fx_ret = fx_file_create(&_this->sdio_disk, MLC_UCF_FILE_NAME);
+    fx_ret = fx_file_create(&_this->sdio_disk, FILEX_DCTRL_UCF_FILE_NAME);
     if(fx_ret == FX_ALREADY_CREATED)
     {
-      fx_file_delete(&_this->sdio_disk, MLC_UCF_FILE_NAME);
-      fx_ret = fx_file_create(&_this->sdio_disk, MLC_UCF_FILE_NAME);
+      fx_file_delete(&_this->sdio_disk, FILEX_DCTRL_UCF_FILE_NAME);
+      fx_ret = fx_file_create(&_this->sdio_disk, FILEX_DCTRL_UCF_FILE_NAME);
     }
     if(fx_ret != TX_SUCCESS)
     {
@@ -693,12 +616,12 @@ sys_error_code_t filex_write_config_file(filex_dctrl_class_t *_this, char *file,
       return SYS_BASE_ERROR_CODE;
     }
 
-    fx_file_open(&_this->sdio_disk, &_this->file_tmp, MLC_UCF_FILE_NAME, FX_OPEN_FOR_WRITE);
+    fx_file_open(&_this->sdio_disk, &_this->file_tmp, FILEX_DCTRL_UCF_FILE_NAME, FX_OPEN_FOR_WRITE);
     fx_file_write(&_this->file_tmp, (uint8_t*) ucf_file_buffer, ucf_file_size);
     fx_media_flush(&_this->sdio_disk);
     fx_file_close(&_this->file_tmp);
 
-    fx_file_date_time_set(&_this->sdio_disk, MLC_UCF_FILE_NAME, ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
+    fx_file_date_time_set(&_this->sdio_disk, FILEX_DCTRL_UCF_FILE_NAME, ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
                           (uint32_t) sTime.Minutes, (uint32_t) sTime.Seconds);
 
     SysFree(ucf_file_buffer);
@@ -716,18 +639,18 @@ sys_error_code_t filex_write_acquisition_info(filex_dctrl_class_t *_this, char *
   HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
   HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
 
-  if(TX_SUCCESS != fx_file_create(&_this->sdio_disk, ACQUISITION_INFO_FILE_NAME))
+  if(TX_SUCCESS != fx_file_create(&_this->sdio_disk, FILEX_DCTRL_ACQUISITION_INFO_FILE_NAME))
   {
     _this->fx_opened = FX_IO_ERROR;
     return SYS_BASE_ERROR_CODE;
   }
 
-  fx_file_open(&_this->sdio_disk, &_this->file_tmp, ACQUISITION_INFO_FILE_NAME, FX_OPEN_FOR_WRITE);
+  fx_file_open(&_this->sdio_disk, &_this->file_tmp, FILEX_DCTRL_ACQUISITION_INFO_FILE_NAME, FX_OPEN_FOR_WRITE);
   fx_file_write(&_this->file_tmp, acquisition_info, size);
   fx_media_flush(&_this->sdio_disk);
   fx_file_close(&_this->file_tmp);
 
-  fx_file_date_time_set(&_this->sdio_disk, ACQUISITION_INFO_FILE_NAME, ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
+  fx_file_date_time_set(&_this->sdio_disk, FILEX_DCTRL_ACQUISITION_INFO_FILE_NAME, ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
                         (uint32_t) sTime.Minutes, (uint32_t) sTime.Seconds);
 
   return res;
@@ -801,77 +724,52 @@ void fx_thread_entry(unsigned long thread_input)
 
 void filex_data_ready(filex_dctrl_class_t *_this, uint32_t data_ready_mask)
 {
-  uint32_t sID = data_ready_mask & FILEX_DCTRL_DATA_SENSOR_ID_MASK;
-  if(data_ready_mask & FILEX_DCTRL_DATA_FIRST_HALF_MASK) /* Data available on first half of the circular buffer */
+  uint32_t stream_id = data_ready_mask & FILEX_DCTRL_DATA_SENSOR_ID_MASK;
+  CircularBufferDL2 *cbdl2 = _this->cbdl2[stream_id];
+  CBItem *p_item;
+  if(CB_GetReadyItemFromTail((CircularBuffer*) cbdl2, &p_item) == SYS_NO_ERROR_CODE)
   {
 #ifdef ENABLE_THREADX_DBG_PIN
     BSP_DEBUG_PIN_On(CON34_PIN_22);
 #endif
-    if(FX_SUCCESS != fx_file_write(&_this->file_dat[sID], _this->sd_write_buffer[sID], _this->sd_write_buffer_size[sID]))
+    if(FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t*) CB_GetItemData(p_item), CB_GetItemSize((CircularBuffer *)cbdl2)))
     {
       SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
     }
 #ifdef ENABLE_THREADX_DBG_PIN
     BSP_DEBUG_PIN_Off(CON34_PIN_22);
 #endif
-  }
-  else /* Data available on second half of the circular buffer */
-  {
-#ifdef ENABLE_THREADX_DBG_PIN
-    BSP_DEBUG_PIN_On(CON34_PIN_22);
-#endif
-    if(FX_SUCCESS != fx_file_write(&_this->file_dat[sID], _this->sd_write_buffer[sID] + _this->sd_write_buffer_size[sID], _this->sd_write_buffer_size[sID]))
-    {
-      SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
-    }
-#ifdef ENABLE_THREADX_DBG_PIN
-    BSP_DEBUG_PIN_Off(CON34_PIN_22);
-#endif
+    /* Release the buffer item and reset tx_state */
+    CB_ReleaseItem((CircularBuffer *)cbdl2, p_item);
   }
 }
 
-void filex_data_flush(filex_dctrl_class_t *_this, uint8_t sId)
+void filex_data_flush(filex_dctrl_class_t *_this, uint8_t stream_id)
 {
-  uint32_t buf_size = _this->sd_write_buffer_size[sId];
-  if(_this->sd_write_buffer_idx[sId] > 0 && _this->sd_write_buffer_idx[sId] < (buf_size - 1))
+  CircularBufferDL2 *cbdl2 = _this->cbdl2[stream_id];
+  CBItem *p_item;
+  uint32_t item_size = CB_GetItemSize((CircularBuffer *)cbdl2);
+
+  if(CB_GetReadyItemFromTail((CircularBuffer*) cbdl2, &p_item) == SYS_NO_ERROR_CODE)
   {
-    /* flush from the beginning */
-    if(FX_SUCCESS != fx_file_write(&_this->file_dat[sId], _this->sd_write_buffer[sId], _this->sd_write_buffer_idx[sId] + 1))
+    if(FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t*) CB_GetItemData(p_item), item_size))
     {
       SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
     }
+    /* Release the buffer item and reset tx_state */
+    CB_ReleaseItem((CircularBuffer *)cbdl2, p_item);
   }
-  else if(_this->sd_write_buffer_idx[sId] > (buf_size - 1) && _this->sd_write_buffer_idx[sId] < (2 * buf_size - 1))
+
+  uint32_t byte_counter = cbdl2->byte_counter;
+  if(byte_counter > 0 && byte_counter < item_size)
   {
-    /* flush from half buffer */
-    if(FX_SUCCESS != fx_file_write(&_this->file_dat[sId], _this->sd_write_buffer[sId] + buf_size, _this->sd_write_buffer_idx[sId] + 1 - buf_size))
+    if(FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t*) CB_GetItemData(cbdl2->p_current_item), byte_counter))
     {
       SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
     }
   }
 }
 
-sys_error_code_t filex_dctrl_set_IIsm330dhcx_Mlc_IF(IStream_t *_this, IIsm330dhcx_Mlc_t *ifn)
-{
-  assert_param(_this != NULL);
-  assert_param(ifn != NULL);
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
-  filex_dctrl_class_t *p_obj = (filex_dctrl_class_t*) _this;
-
-  p_obj->ism330dhcx_mlc = ifn;
-  return res;
-}
-
-sys_error_code_t filex_dctrl_set_IIsm330is_Ispu_IF(IStream_t *_this, IIsm330is_Ispu_t *ifn)
-{
-  assert_param(_this != NULL);
-  assert_param(ifn != NULL);
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
-  filex_dctrl_class_t *p_obj = (filex_dctrl_class_t*) _this;
-
-  p_obj->ism330is_ispu = ifn;
-  return res;
-}
 
 static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
 {
@@ -897,7 +795,7 @@ static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
       if(strncmp(p_file_ext, "json", 4) == 0) /* 'json' extension */
       {
         /* Check file name */
-        if(strncmp(entry_name, DEVICE_JSON_FILE_NAME, sizeof(DEVICE_JSON_FILE_NAME)) == 0)
+        if(strncmp(entry_name, FILEX_DCTRL_DEVICE_JSON_FILE_NAME, sizeof(FILEX_DCTRL_DEVICE_JSON_FILE_NAME)) == 0)
         {
           status = fx_file_open(&_this->sdio_disk, &_this->file_tmp, entry_name, FX_OPEN_FOR_READ);
           if(status == FX_SUCCESS)
@@ -920,15 +818,15 @@ static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
               p_json[size] = '\0'; //terminator
 
               /* allocate buffer for PnPL Command*/
-              p_cmd_json = (char*) SysAlloc(sizeof(SET_STATUS_CMD) + size + sizeof(TERMINATOR));
+              p_cmd_json = (char*) SysAlloc(sizeof(FILEX_DCTRL_SET_STATUS_CMD) + size + sizeof(FILEX_DCTRL_TERMINATOR));
               if(p_cmd_json == NULL)
               {
                 SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
               }
 
-              strcat(p_cmd_json, SET_STATUS_CMD);
+              strcat(p_cmd_json, FILEX_DCTRL_SET_STATUS_CMD);
               strcat(p_cmd_json, p_json);
-              strcat(p_cmd_json, TERMINATOR);
+              strcat(p_cmd_json, FILEX_DCTRL_TERMINATOR);
             }
           }
         }
@@ -971,7 +869,7 @@ static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
   if(p_cmd_json != NULL) /* First load the JSON config file found in SD card (if available) */
   {
     /* Build command*/
-    IParseCommand(_this->cmd_parser, p_cmd_json, 0);
+    IParseCommand(_this->cmd_parser, p_cmd_json, sObj.comm_interface_id);
     SysFree(p_cmd_json);
     SysFree(p_json);
   }
@@ -979,14 +877,8 @@ static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
   {
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("SDCardTask: UCF loaded from root folder.\r\n"));
 
-    if(PnPLGetFWID() == FW_ID_DATALOG2_ISPU)
-    {
-      ism330is_ispu_load_file(_this->ism330is_ispu, p_compressed_ucf, actual_ucf_size, "", 0); //TODO
-    }
-    else
-    {
-      ism330dhcx_mlc_load_file(_this->ism330dhcx_mlc, p_compressed_ucf, actual_ucf_size);
-    }
+    DatalogAppTask_load_ucf(p_compressed_ucf, actual_ucf_size, "", 0);
+
     SysFree(p_compressed_ucf);
     ucf_found = false;
   }

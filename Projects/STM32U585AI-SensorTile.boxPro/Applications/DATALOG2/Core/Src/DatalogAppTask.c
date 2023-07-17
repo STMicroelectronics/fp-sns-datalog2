@@ -25,7 +25,7 @@
 
 #include "filex_dctrl_class.h"
 #include "usbx_dctrl_class.h"
-#include "ble_dctrl_class.h"
+#include "ble_stream_class.h"
 #include "PnPLCompManager.h"
 #include "App_model.h"
 
@@ -59,6 +59,9 @@
 #define ADV_OB_ALARM                              0
 #define ADV_OB_ICON                               1
 
+#define COMM_ID_SDCARD                            0U
+#define COMM_ID_USB                               1U
+#define COMM_ID_BLE                               2U
 
 #define SYS_DEBUGF(level, message)                SYS_DEBUGF3(SYS_DBG_DT, level, message)
 
@@ -91,7 +94,7 @@ struct _DatalogAppTask
   filex_dctrl_class_t *filex_device;
 
   /** FILEX ctrl class **/
-  ble_dctrl_class_t *ble_device;
+  ble_stream_class_t *ble_device;
 
   ICommandParse_t parser;
 //TODO could be more useful to have a CommandParse Class? (ICommandParse + PnPLCommand_t)
@@ -364,7 +367,7 @@ sys_error_code_t DatalogAppTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
 
   /* create the software timer for advertise messages*/
   if (TX_SUCCESS != tx_timer_create(&p_obj->ble_advertise_timer, "BLE_ADV_T", DatalogAppTaskAdvOBTimerCallbackFunction, (ULONG)TX_NULL,
-                         AMT_MS_TO_TICKS(DATALOG_APP_TASK_CFG_TIMER_PERIOD_MS), DATALOG_APP_TASK_CFG_TIMER_PERIOD_MS,
+                         AMT_MS_TO_TICKS(DATALOG_APP_TASK_CFG_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(DATALOG_APP_TASK_CFG_TIMER_PERIOD_MS),
                          TX_NO_ACTIVATE))
   {
     res = SYS_APP_TASK_INIT_ERROR_CODE;
@@ -396,17 +399,15 @@ sys_error_code_t DatalogAppTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
   IEventListenerSetOwner((IEventListener *) &p_obj->sensorListener, (void *) p_obj);
 
   p_obj->usbx_device = (usbx_dctrl_class_t *) usbx_dctrl_class_alloc((void *) &MX_PCDInitParams);
-  IStream_init((IStream_t *) p_obj->usbx_device, 0);
+  IStream_init((IStream_t *) p_obj->usbx_device, COMM_ID_USB, 0);
   IStream_set_parse_IF((IStream_t *) p_obj->usbx_device, DatalogAppTask_GetICommandParseIF(p_obj));
 
   p_obj->filex_device = (filex_dctrl_class_t *) filex_dctrl_class_alloc();
-  IStream_init((IStream_t *) p_obj->filex_device, 0);
+  IStream_init((IStream_t *) p_obj->filex_device, COMM_ID_SDCARD, 0);
   IStream_set_parse_IF((IStream_t *) p_obj->filex_device, DatalogAppTask_GetICommandParseIF(p_obj));
 
-  filex_dctrl_set_ILsm6dsv16x_Mlc_IF((IStream_t *) p_obj->filex_device, &p_obj->pnplMLCCtrl);
-
-  p_obj->ble_device = (ble_dctrl_class_t *) ble_dctrl_class_alloc();
-  IStream_init((IStream_t *) p_obj->ble_device, 0);
+  p_obj->ble_device = (ble_stream_class_t *) ble_stream_class_alloc();
+  IStream_init((IStream_t *) p_obj->ble_device, COMM_ID_BLE, 0);
   IStream_set_parse_IF((IStream_t *) p_obj->ble_device, DatalogAppTask_GetICommandParseIF(p_obj));
   p_obj->ble_device->adv_id = SM_MAX_SENSORS+1;
 
@@ -470,9 +471,7 @@ sys_error_code_t DatalogAppTask_vtblDoEnterPowerMode(AManagedTask *_this, const 
   }
   if(NewPowerMode == E_POWER_MODE_SENSORS_ACTIVE)
   {
-    SQuery_t querySM;
-    SQInit(&querySM, SMGetSensorManager());
-    p_obj->ble_device->mlc_id = SQNextByNameAndType(&querySM, "lsm6dsv16x", COM_TYPE_MLC);
+
   }
 
   return res;
@@ -618,15 +617,6 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
     }
 #else
 
-    /* send MLC output via BLE */
-    if(sId == p_obj->ble_device->mlc_id)
-    {
-      if (IStream_is_enabled((IStream_t *) p_obj->ble_device))
-      {
-        res = IStream_post_data((IStream_t *) p_obj->ble_device,  p_obj->ble_device->mlc_id, data_buf, 5);
-      }
-    }
-
     if (p_obj->sensorContext[sId].old_time_stamp == -1.0f)
     {
       p_obj->datalog_model->s_models[sId]->streamParams.ioffset = p_evt->timestamp; /*TODO: can I use PnPL Setter? no*/
@@ -649,6 +639,10 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
           {
             res = IStream_post_data((IStream_t *) p_obj->filex_device, sId, data_buf, samplesToSend * nBytesPerSample);
           }
+          if (IStream_is_enabled((IStream_t *) p_obj->ble_device))
+          {
+            res = IStream_post_data((IStream_t *) p_obj->ble_device,  sId, data_buf, samplesToSend * nBytesPerSample);
+          }
           if (res != 0)
           {
             SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
@@ -669,6 +663,10 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
           if (IStream_is_enabled((IStream_t *) p_obj->filex_device))
           {
             res = IStream_post_data((IStream_t *) p_obj->filex_device, sId, data_buf, p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample);
+          }
+          if (IStream_is_enabled((IStream_t *) p_obj->ble_device))
+          {
+            res = IStream_post_data((IStream_t *) p_obj->ble_device,  sId, data_buf, p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample);
           }
           if (res != 0)
           {
@@ -715,7 +713,7 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
 }
 
 // ICommandParse_t virtual functions
-sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_this, char *commandString, uint8_t mode)
+sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_this, char *commandString, uint8_t comm_interface_id)
 {
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -725,7 +723,7 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_
   int pnp_res = PnPLParseCommand(commandString, &p_obj->outPnPLCommand);
   if (pnp_res == SYS_NO_ERROR_CODE)
   {
-    if (IStream_is_enabled((IStream_t *) p_obj->usbx_device) && (mode == 1))
+    if (IStream_is_enabled((IStream_t *) p_obj->usbx_device) && (comm_interface_id == COMM_ID_USB))
     {
       if (p_obj->outPnPLCommand.comm_type != PNPL_CMD_GET && p_obj->outPnPLCommand.comm_type != PNPL_CMD_SYSTEM_INFO)
       {
@@ -736,7 +734,7 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_
         IStream_set_mode((IStream_t *) p_obj->usbx_device, TRANSMIT);
       }
     }
-    else if (IStream_is_enabled((IStream_t *) p_obj->filex_device) && (mode == 0))
+    else if (IStream_is_enabled((IStream_t *) p_obj->filex_device) && (comm_interface_id == COMM_ID_SDCARD))
     {
       if (p_obj->outPnPLCommand.comm_type != PNPL_CMD_GET && p_obj->outPnPLCommand.comm_type != PNPL_CMD_SYSTEM_INFO)
       {
@@ -747,7 +745,7 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_
         IStream_set_mode((IStream_t *) p_obj->filex_device, TRANSMIT);
       }
     }
-    else if (IStream_is_enabled((IStream_t *) p_obj->ble_device) && (mode == 2))
+    else if (IStream_is_enabled((IStream_t *) p_obj->ble_device) && (comm_interface_id == COMM_ID_BLE))
     {
       if (p_obj->outPnPLCommand.comm_type != PNPL_CMD_GET && p_obj->outPnPLCommand.comm_type != PNPL_CMD_SYSTEM_INFO)
       {
@@ -801,7 +799,7 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_send_ctrl_msg(ICommandParse_
 
   switch(*msg)
   {
-    case BLE_DCTRL_CMD_START_ADV_OB:
+    case BLE_ISTREAM_MSG_START_ADV_OB:
 
       if (TX_SUCCESS != tx_timer_activate(&p_obj->ble_advertise_timer))
       {
@@ -811,7 +809,7 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_send_ctrl_msg(ICommandParse_
 
       break;
 
-    case BLE_DCTRL_CMD_STOP_ADV_OB:
+    case BLE_ISTREAM_MSG_STOP_ADV_OB:
 
       if (TX_SUCCESS != tx_timer_deactivate(&p_obj->ble_advertise_timer))
       {
@@ -1063,6 +1061,7 @@ uint8_t DatalogAppTask_load_lsm6dsv16x_ucf_vtbl(ILsm6dsv16x_Mlc_t *_this, uint32
   p_obj->datalog_model->s_models[id]->sensorStatus.IsActive = sensorStatus.IsActive;
   p_obj->datalog_model->s_models[id]->sensorStatus.ODR = sensorStatus.ODR;
   p_obj->datalog_model->s_models[id]->sensorStatus.FS = sensorStatus.FS;
+  p_obj->datalog_model->s_models[id]->streamParams.spts = (int32_t)sensorStatus.ODR;
 
   SQInit(&q3, SMGetSensorManager());
   id = SQNextByNameAndType(&q3, "lsm6dsv16x", COM_TYPE_GYRO);
@@ -1071,12 +1070,19 @@ uint8_t DatalogAppTask_load_lsm6dsv16x_ucf_vtbl(ILsm6dsv16x_Mlc_t *_this, uint32
   p_obj->datalog_model->s_models[id]->sensorStatus.IsActive = sensorStatus.IsActive;
   p_obj->datalog_model->s_models[id]->sensorStatus.ODR = sensorStatus.ODR;
   p_obj->datalog_model->s_models[id]->sensorStatus.FS = sensorStatus.FS;
+  p_obj->datalog_model->s_models[id]->streamParams.spts = (int32_t)sensorStatus.ODR;
 
   SQInit(&q4, SMGetSensorManager());
   id = SQNextByNameAndType(&q4, "lsm6dsv16x", COM_TYPE_MLC);
   sensorStatus = SMSensorGetStatus(id);
   p_obj->datalog_model->s_models[id]->sensorStatus.IsActive = sensorStatus.IsActive;
 
+  return 0;
+}
+
+uint8_t DatalogAppTask_load_ucf(const char *p_ucf_data, uint32_t ucf_size, const char *p_output_data, int32_t output_size)
+{
+  lsm6dsv16x_mlc_load_file(&sTaskObj.pnplMLCCtrl, ucf_size, p_ucf_data);
   return 0;
 }
 
@@ -1172,8 +1178,11 @@ static VOID DatalogAppTaskAdvOBTimerCallbackFunction(ULONG timer)
 
   IStream_post_data((IStream_t *) sTaskObj.ble_device, sTaskObj.ble_device->adv_id, adv_option_bytes, 3);
 
-  ULONG msg = BLE_DCTRL_CMD_UPDATE_ADV;
-  ble_dctrl_msg(&msg);
+  streamMsg_t msg;
+  msg.messageId = BLE_ISTREAM_MSG_UPDATE_ADV;
+  msg.streamID = sTaskObj.ble_device->adv_id;
+  ble_stream_msg(&msg);
+
 }
 
 

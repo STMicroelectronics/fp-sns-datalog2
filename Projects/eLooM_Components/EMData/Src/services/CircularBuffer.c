@@ -28,72 +28,6 @@
 #define CB_IS_EMPTY(p_cb)              (((p_cb)->head_idx == (p_cb)->tail_idx) && ((p_cb)->p_items[(p_cb)->head_idx].status.status == CB_ITEM_FREE) ? 1 : 0)
 #define CB_IS_FULL(p_cb)               (((p_cb)->head_idx == (p_cb)->tail_idx) && ((p_cb)->p_items[(p_cb)->head_idx].status.status != CB_ITEM_FREE) ? 1 : 0)
 
-/**
-* Specifies the status of a ::CBItem. An item can be:
-* - FREE: an item is free if it is not allocated and it cannot be used by the application.
-* - NEW: an item is new if it allocated and can be used by the application to produce its content.
-* - READY: an item is ready if the application has produced its content and it can be consumed.
-*/
-typedef struct _CBItemStatus
-{
-  /**
-  * Status bit.
-  */
-  uint8_t status :2;
-
-  /**
-  * reserved. Must be set to zero.
-  */
-  uint8_t reserved :6;
-} CBItemStatus;
-
-/**
-* ::CBItem internal state.
-*/
-struct _CBItem
-{
-  /**
-  * Specifies the user defined data managed by the circular buffer.
-  */
-  void *p_data;
-
-  /**
-  * Specifies a status flag added to each item. It is used to manage the item.
-  */
-  CBItemStatus status;
-};
-
-/**
-* ::CircularBuffer internal state.
-*/
-struct _CircularBuffer
-{
-
-  /**
-  * Specifies the index of the circular buffer tail.
-  */
-  uint16_t tail_idx;
-
-  /**
-  * Specifies the index of the circular buffer head.
-  */
-  uint16_t head_idx;
-
-  /**
-  * Specifies the maximum number of items that is possible to store in the buffer.
-  */
-  uint16_t item_count;
-
-  /**
-  * Specifies the item size.
-  */
-  uint16_t item_size;
-
-  /**
-  * Specified the buffer of items managed as a circular buffer.
-  */
-  CBItem *p_items;
-};
 
 // Private functions declarations
 // ******************************
@@ -131,7 +65,7 @@ void CB_Free(CircularBuffer *_this)
   SysFree(_this);
 }
 
-uint16_t CB_Init(CircularBuffer *_this, void *p_items_buffer, uint16_t item_size)
+uint16_t CB_Init(CircularBuffer *_this, void *p_items_buffer, uint32_t item_size)
 {
   assert_param(_this);
   assert_param(p_items_buffer);
@@ -214,10 +148,10 @@ uint32_t CB_GetItemsCount(CircularBuffer *_this)
   return  ret;
 }
 
-uint16_t CB_GetItemSize(CircularBuffer *_this)
+uint32_t CB_GetItemSize(CircularBuffer *_this)
 {
   assert_param(_this);
-  uint16_t ret = 0;
+  uint32_t ret = 0;
   SYS_DECLARE_CS(cs);
 
   SYS_ENTER_CRITICAL(cs);

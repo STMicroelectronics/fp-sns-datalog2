@@ -76,3 +76,24 @@ class TypeConversion:
             'double': 'd',
         }
         return switcher.get(check_type, "error")
+    
+    @staticmethod
+    def get_str_format(check_type):
+        switcher = {
+            'uint8_t': '{:.0f}',
+            'uint8': '{:.0f}',
+            'int8_t': '{:.0f}',
+            'int8': '{:.0f}',
+            'uint16_t': '{:.0f}',
+            'uint16': '{:.0f}',
+            'int16_t': '{:.0f}',
+            'int16': '{:.0f}',
+            'uint32_t': '{:.0f}',
+            'uint32': '{:.0f}',
+            'int32_t': '{:.0f}',
+            'int32': '{:.0f}',
+            'float': '{:.6f}',
+            'float32': '{:.6f}',
+            'double': '{:.6f}',
+        }
+        return switcher.get(check_type, "error")

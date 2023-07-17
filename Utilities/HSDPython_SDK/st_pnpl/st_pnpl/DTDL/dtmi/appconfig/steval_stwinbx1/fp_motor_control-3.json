@@ -1,0 +1,2586 @@
+[
+  {
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control;3",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:slow_mc_telemetries;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "Slow Motor Telemetries"
+        },
+        "name": "slow_mc_telemetries",
+        "schema": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:fast_mc_telemetries;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "Fast Motor Telemetries "
+        },
+        "name": "fast_mc_telemetries",
+        "schema": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:iis3dwb_acc;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "IIS3DWB_ACC"
+        },
+        "name": "iis3dwb_acc",
+        "schema": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:imp23absu_mic;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "IMP23ABSU_MIC"
+        },
+        "name": "imp23absu_mic",
+        "schema": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:stts22h_temp;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "STTS22H_TEMP"
+        },
+        "name": "stts22h_temp",
+        "schema": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:log_controller;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "Log Controller"
+        },
+        "name": "log_controller",
+        "schema": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:motor_controller;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "Motor Controller"
+        },
+        "name": "motor_controller",
+        "schema": "dtmi:stdev:steval_stwinbx1:fp_motor_control:other:motor_controller;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:tags_info;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "Tags Information"
+        },
+        "name": "tags_info",
+        "schema": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:acquisition_info;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "Acquisition Information"
+        },
+        "name": "acquisition_info",
+        "schema": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:firmware_info;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "Firmware Information"
+        },
+        "name": "firmware_info",
+        "schema": "dtmi:stdev:other:firmware_info;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:DeviceInformation;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "Device Information"
+        },
+        "name": "DeviceInformation",
+        "schema": "dtmi:azure:DeviceManagement:DeviceInformation;1"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:applications_stblesensor;3",
+        "@type": "Component",
+        "displayName": {
+          "en": "Applications ST BLE Sensor"
+        },
+        "name": "applications_stblesensor",
+        "schema": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor;1"
+      }
+    ],
+    "displayName": {
+      "en": "fp_motor_control-3"
+    },
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ]
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:sampling_time;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Sampling Time"
+        },
+        "name": "sampling_time",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:sampling_time:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:sampling_time:schema:ms200;1",
+              "displayName": {
+                "en": "200"
+              },
+              "enumValue": 0,
+              "name": "ms200"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:sampling_time:schema:ms250;1",
+              "displayName": {
+                "en": "250"
+              },
+              "enumValue": 1,
+              "name": "ms250"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:sampling_time:schema:ms300;1",
+              "displayName": {
+                "en": "300"
+              },
+              "enumValue": 2,
+              "name": "ms300"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:sampling_time:schema:ms350;1",
+              "displayName": {
+                "en": "350"
+              },
+              "enumValue": 3,
+              "name": "ms350"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:sampling_time:schema:ms400;1",
+              "displayName": {
+                "en": "400"
+              },
+              "enumValue": 4,
+              "name": "ms400"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "millisecond",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Type"
+        },
+        "name": "type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:max_num_telemetries;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Max Number of Telemetries"
+        },
+        "name": "max_num_telemetries",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:enable;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true,
+        "initialValue": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:temperature;1",
+        "@type": "Property",
+        "description": {
+          "en": "slow_mc_telemetry"
+        },
+        "displayName": {
+          "en": "Temperature"
+        },
+        "name": "temperature",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:temperature:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:temperature:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:temperature:schema:graph_type;1",
+              "displayName": {
+                "en": "Graph Type"
+              },
+              "name": "graph_type",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:temperature:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:temperature:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:temperature:schema:unit;1",
+              "displayName": {
+                "en": "Unit"
+              },
+              "name": "unit",
+              "schema": "string"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:ref_speed;1",
+        "@type": "Property",
+        "description": {
+          "en": "slow_mc_telemetry"
+        },
+        "displayName": {
+          "en": "Ref Speed"
+        },
+        "name": "ref_speed",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:ref_speed:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:ref_speed:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:ref_speed:schema:graph_type;1",
+              "displayName": {
+                "en": "Graph Type"
+              },
+              "name": "graph_type",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:ref_speed:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:ref_speed:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:ref_speed:schema:unit;1",
+              "displayName": {
+                "en": "Unit"
+              },
+              "name": "unit",
+              "schema": "string"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:speed;1",
+        "@type": "Property",
+        "description": {
+          "en": "slow_mc_telemetry"
+        },
+        "displayName": {
+          "en": "Speed"
+        },
+        "name": "speed",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:speed:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:speed:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:speed:schema:graph_type;1",
+              "displayName": {
+                "en": "Graph Type"
+              },
+              "name": "graph_type",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:speed:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:speed:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:speed:schema:unit;1",
+              "displayName": {
+                "en": "Unit"
+              },
+              "name": "unit",
+              "schema": "string"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:v_bus;1",
+        "@type": "Property",
+        "description": {
+          "en": "slow_mc_telemetry"
+        },
+        "displayName": {
+          "en": "Bus Voltage"
+        },
+        "name": "v_bus",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:v_bus:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:v_bus:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:v_bus:schema:graph_type;1",
+              "displayName": {
+                "en": "Graph Type"
+              },
+              "name": "graph_type",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:v_bus:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:v_bus:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:slow_mc_telemetries:v_bus:schema:unit;1",
+              "displayName": {
+                "en": "Unit"
+              },
+              "name": "unit",
+              "schema": "string"
+            }
+          ]
+        },
+        "writable": true
+      }
+    ],
+    "displayName": {
+      "en": "Slow Motor Telemetries"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Type"
+        },
+        "name": "type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:max_num_telemetries;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Max Number of Telemetries"
+        },
+        "name": "max_num_telemetries",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimension"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q_ref;1",
+        "@type": "Property",
+        "description": {
+          "en": "fast_mc_telemetry"
+        },
+        "displayName": {
+          "en": "I_Q_REF"
+        },
+        "name": "i_q_ref",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q_ref:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q_ref:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q_ref:schema:graph_type;1",
+              "displayName": {
+                "en": "Graph Type"
+              },
+              "name": "graph_type",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q_ref:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q_ref:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q_ref:schema:unit;1",
+              "displayName": {
+                "en": "Unit"
+              },
+              "name": "unit",
+              "schema": "string"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q;1",
+        "@type": "Property",
+        "description": {
+          "en": "fast_mc_telemetry"
+        },
+        "displayName": {
+          "en": "I_Q"
+        },
+        "name": "i_q",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q:schema:graph_type;1",
+              "displayName": {
+                "en": "Graph Type"
+              },
+              "name": "graph_type",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_q:schema:unit;1",
+              "displayName": {
+                "en": "Unit"
+              },
+              "name": "unit",
+              "schema": "string"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d_ref;1",
+        "@type": "Property",
+        "description": {
+          "en": "fast_mc_telemetry"
+        },
+        "displayName": {
+          "en": "I_D_REF"
+        },
+        "name": "i_d_ref",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d_ref:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d_ref:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d_ref:schema:graph_type;1",
+              "displayName": {
+                "en": "Graph Type"
+              },
+              "name": "graph_type",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d_ref:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d_ref:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d_ref:schema:unit;1",
+              "displayName": {
+                "en": "Unit"
+              },
+              "name": "unit",
+              "schema": "string"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d;1",
+        "@type": "Property",
+        "description": {
+          "en": "fast_mc_telemetry"
+        },
+        "displayName": {
+          "en": "I_D"
+        },
+        "name": "i_d",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d:schema:graph_type;1",
+              "displayName": {
+                "en": "Graph Type"
+              },
+              "name": "graph_type",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "double"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:actuators:fast_mc_telemetries:i_d:schema:unit;1",
+              "displayName": {
+                "en": "Unit"
+              },
+              "name": "unit",
+              "schema": "string"
+            }
+          ]
+        },
+        "writable": true
+      }
+    ],
+    "displayName": {
+      "en": "Fast Motor Telemetries "
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:odr:schema:hz26667;1",
+              "displayName": {
+                "en": "26667"
+              },
+              "enumValue": 0,
+              "name": "hz26667"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs:schema:g2;1",
+              "displayName": {
+                "en": "2"
+              },
+              "enumValue": 0,
+              "name": "g2"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs:schema:g4;1",
+              "displayName": {
+                "en": "4"
+              },
+              "enumValue": 1,
+              "name": "g4"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs:schema:g8;1",
+              "displayName": {
+                "en": "8"
+              },
+              "enumValue": 2,
+              "name": "g8"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:fs:schema:g16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 3,
+              "name": "g16"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "gForce",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:iis3dwb_acc:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IIS3DWB_ACC"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema:hz16000;1",
+              "displayName": {
+                "en": "16000"
+              },
+              "enumValue": 0,
+              "name": "hz16000"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema:hz32000;1",
+              "displayName": {
+                "en": "32000"
+              },
+              "enumValue": 1,
+              "name": "hz32000"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema:hz48000;1",
+              "displayName": {
+                "en": "48000"
+              },
+              "enumValue": 2,
+              "name": "hz48000"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema:hz96000;1",
+              "displayName": {
+                "en": "96000"
+              },
+              "enumValue": 3,
+              "name": "hz96000"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:odr:schema:hz192000;1",
+              "displayName": {
+                "en": "192000"
+              },
+              "enumValue": 4,
+              "name": "hz192000"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:aop;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "AOP"
+        },
+        "name": "aop",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:aop:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:aop:schema:dbspl130;1",
+              "displayName": {
+                "en": "130"
+              },
+              "enumValue": 0,
+              "name": "dbspl130"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": false,
+        "displayUnit": {
+          "en": "Waveform"
+        }
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:imp23absu_mic:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IMP23ABSU_MIC"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema:hz1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 0,
+              "name": "hz1"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema:hz25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 1,
+              "name": "hz25"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema:hz50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 2,
+              "name": "hz50"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema:hz100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 3,
+              "name": "hz100"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:odr:schema:hz200;1",
+              "displayName": {
+                "en": "200"
+              },
+              "enumValue": 4,
+              "name": "hz200"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:fs;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:fs:schema:cdeg100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 0,
+              "name": "cdeg100"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "degreeCelsius",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:samples_per_ts;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:samples_per_ts:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:samples_per_ts:schema:val;1",
+              "displayName": {
+                "en": "Value"
+              },
+              "name": "val",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:samples_per_ts:schema:min;1",
+              "displayName": {
+                "en": "Min"
+              },
+              "name": "min",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:samples_per_ts:schema:max;1",
+              "displayName": {
+                "en": "Max"
+              },
+              "name": "max",
+              "schema": "integer"
+            }
+          ],
+          "writable": true
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:sensors:stts22h_temp:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "STTS22H_TEMP"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:log_controller:save_config;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Set Default Configuration"
+        },
+        "name": "save_config"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:log_controller:log_status;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Log Status"
+        },
+        "name": "log_status",
+        "schema": "boolean",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:log_controller:sd_mounted;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "SD Card Mounted"
+        },
+        "name": "sd_mounted",
+        "schema": "boolean",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:log_controller:start_log;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Start Acquisition"
+        },
+        "name": "start_log",
+        "request": {
+          "@type": "CommandPayload",
+          "displayName": {
+            "en": "Log Interface"
+          },
+          "name": "interface",
+          "schema": {
+            "@type": "Enum",
+            "displayName": {
+              "en": "Enum"
+            },
+            "enumValues": [
+              {
+                "displayName": {
+                  "en": "SD Card"
+                },
+                "enumValue": 0,
+                "name": "sd_card"
+              },
+              {
+                "displayName": {
+                  "en": "USB"
+                },
+                "enumValue": 1,
+                "name": "usb"
+              }
+            ],
+            "valueSchema": "integer"
+          }
+        }
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:log_controller:stop_log;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Stop Acquisition"
+        },
+        "name": "stop_log"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:log_controller:set_time;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Set Time"
+        },
+        "name": "set_time",
+        "request": {
+          "@type": "CommandPayload",
+          "description": {
+            "en": "yyyyMMdd_hh_mm_ss"
+          },
+          "displayName": {
+            "en": "datetime"
+          },
+          "name": "datetime",
+          "schema": "string"
+        }
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:log_controller:controller_type;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Controller Type"
+        },
+        "name": "controller_type",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "Log Controller"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:other:motor_controller;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:other:motor_controller:connect;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Connect"
+        },
+        "name": "connect"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:other:motor_controller:start_motor;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Start Motor"
+        },
+        "name": "start_motor"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:other:motor_controller:stop_motor;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Stop Motor"
+        },
+        "name": "stop_motor"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:other:motor_controller:set_motor_speed;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Set Motor Speed"
+        },
+        "name": "set_motor_speed",
+        "request": {
+          "@type": "CommandPayload",
+          "displayName": {
+            "en": "Speed"
+          },
+          "name": "speed",
+          "schema": "integer"
+        }
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:other:motor_controller:motor_reset;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Motor Reset"
+        },
+        "name": "motor_reset"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:other:motor_controller:ack_fault;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Ack Fault"
+        },
+        "name": "ack_fault"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:other:motor_controller:enable_fast_telemetry;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Enable Fast Telemetry"
+        },
+        "name": "enable_fast_telemetry"
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_motor_control:other:motor_controller:disable_fast_telemetry;1",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Disable Fast Telemetry"
+        },
+        "name": "disable_fast_telemetry"
+      }
+    ],
+    "displayName": {
+      "en": "Motor Controller"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:max_tags_num;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Maximum Tag number per acquisition"
+        },
+        "name": "max_tags_num",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag0;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "SW Tag Class 0"
+        },
+        "name": "sw_tag0",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag0:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag0:schema:label;1",
+              "displayName": {
+                "en": "Label"
+              },
+              "name": "label",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag0:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag0:schema:status;1",
+              "displayName": {
+                "en": "Status"
+              },
+              "name": "status",
+              "schema": "boolean"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag1;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "SW Tag Class 1"
+        },
+        "name": "sw_tag1",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag1:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag1:schema:label;1",
+              "displayName": {
+                "en": "Label"
+              },
+              "name": "label",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag1:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag1:schema:status;1",
+              "displayName": {
+                "en": "Status"
+              },
+              "name": "status",
+              "schema": "boolean"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag2;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "SW Tag Class 2"
+        },
+        "name": "sw_tag2",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag2:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag2:schema:label;1",
+              "displayName": {
+                "en": "Label"
+              },
+              "name": "label",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag2:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag2:schema:status;1",
+              "displayName": {
+                "en": "Status"
+              },
+              "name": "status",
+              "schema": "boolean"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag3;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "SW Tag Class 3"
+        },
+        "name": "sw_tag3",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag3:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag3:schema:label;1",
+              "displayName": {
+                "en": "Label"
+              },
+              "name": "label",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag3:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag3:schema:status;1",
+              "displayName": {
+                "en": "Status"
+              },
+              "name": "status",
+              "schema": "boolean"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag4;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "SW Tag Class 4"
+        },
+        "name": "sw_tag4",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag4:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag4:schema:label;1",
+              "displayName": {
+                "en": "Label"
+              },
+              "name": "label",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag4:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:tags_info:sw_tag4:schema:status;1",
+              "displayName": {
+                "en": "Status"
+              },
+              "name": "status",
+              "schema": "boolean"
+            }
+          ]
+        },
+        "writable": true
+      }
+    ],
+    "displayName": {
+      "en": "Tags Information"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:name;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Acquisition Name"
+        },
+        "name": "name",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:description;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Acquisition Description"
+        },
+        "name": "description",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:uuid;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Acquisition UUID"
+        },
+        "name": "uuid",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:start_time;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Acquisition Start Time"
+        },
+        "name": "start_time",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:end_time;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Acquisition End Time"
+        },
+        "name": "end_time",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:data_ext;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Exported Data Extension"
+        },
+        "name": "data_ext",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:data_fmt;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Exported Data Format"
+        },
+        "name": "data_fmt",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:tags;1",
+        "@type": "Property",
+        "comment": "JSON Value",
+        "displayName": {
+          "en": "Tag List"
+        },
+        "name": "tags",
+        "schema": "vector",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:interface;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Acquisition Interface"
+        },
+        "name": "interface",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:interface:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:interface:schema:sd;1",
+              "displayName": {
+                "en": "SD Card"
+              },
+              "enumValue": "0",
+              "name": "sd"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:interface:schema:usb;1",
+              "displayName": {
+                "en": "USB"
+              },
+              "enumValue": "1",
+              "name": "usb"
+            }
+          ],
+          "valueSchema": "string"
+        },
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:acquisition_info:schema_version;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Schema Version"
+        },
+        "name": "schema_version",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "Acquisition Information"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:other:firmware_info;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:other:firmware_info:alias;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Alias"
+        },
+        "name": "alias",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:stdev:other:firmware_info:fw_name;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Firmware Name"
+        },
+        "name": "fw_name",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:other:firmware_info:fw_version;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Firmware Version"
+        },
+        "name": "fw_version",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:other:firmware_info:serial_number;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Serial Number"
+        },
+        "name": "serial_number",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:other:firmware_info:device_url;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Device URL"
+        },
+        "name": "device_url",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:stdev:other:firmware_info:fw_url;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Firmware URL"
+        },
+        "name": "fw_url",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "Firmware Information"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:azure:DeviceManagement:DeviceInformation;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@type": "Property",
+        "description": {
+          "en": "Company name of the device manufacturer. This could be the same as the name of the original equipment manufacturer (OEM). Ex. Contoso."
+        },
+        "displayName": {
+          "en": "Manufacturer"
+        },
+        "name": "manufacturer",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": "Property",
+        "description": {
+          "en": "Device model name or ID. Ex. Surface Book 2."
+        },
+        "displayName": {
+          "en": "Device model"
+        },
+        "name": "model",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": "Property",
+        "description": {
+          "en": "Version of the software on your device. This could be the version of your firmware. Ex. 1.3.45"
+        },
+        "displayName": {
+          "en": "Software version"
+        },
+        "name": "swVersion",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": "Property",
+        "description": {
+          "en": "Name of the operating system on the device. Ex. Windows 10 IoT Core."
+        },
+        "displayName": {
+          "en": "Operating system name"
+        },
+        "name": "osName",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": "Property",
+        "description": {
+          "en": "Architecture of the processor on the device. Ex. x64 or ARM."
+        },
+        "displayName": {
+          "en": "Processor architecture"
+        },
+        "name": "processorArchitecture",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": "Property",
+        "description": {
+          "en": "Name of the manufacturer of the processor on the device. Ex. Intel."
+        },
+        "displayName": {
+          "en": "Processor manufacturer"
+        },
+        "name": "processorManufacturer",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": "Property",
+        "description": {
+          "en": "Total available storage on the device in kilobytes. Ex. 2048000 kilobytes."
+        },
+        "displayName": {
+          "en": "Total storage"
+        },
+        "name": "totalStorage",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@type": "Property",
+        "description": {
+          "en": "Total available memory on the device in kilobytes. Ex. 256000 kilobytes."
+        },
+        "displayName": {
+          "en": "Total memory"
+        },
+        "name": "totalMemory",
+        "schema": "double",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "Device Information"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "HS Datalog 2"
+        },
+        "name": "hsdatalog2",
+        "schema": {
+          "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:iis3dwb_acc;1",
+              "displayName": {
+                "en": "IIS3DWB_ACC"
+              },
+              "name": "iis3dwb_acc",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:iis2mdc_mag;1",
+              "displayName": {
+                "en": "IIS2MDC_MAG"
+              },
+              "name": "iis2mdc_mag",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:imp23absu_mic;1",
+              "displayName": {
+                "en": "IMP23ABSU_MIC"
+              },
+              "name": "imp23absu_mic",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:ism330dhcx_acc;1",
+              "displayName": {
+                "en": "ISM330DHCX_ACC"
+              },
+              "name": "ism330dhcx_acc",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:ism330dhcx_gyro;1",
+              "displayName": {
+                "en": "ISM330DHCX_GYRO"
+              },
+              "name": "ism330dhcx_gyro",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:ism330dhcx_mlc;1",
+              "displayName": {
+                "en": "ISM330DHCX_MLC"
+              },
+              "name": "ism330dhcx_mlc",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:iis2dlpc_acc;1",
+              "displayName": {
+                "en": "IIS2DLPC_ACC"
+              },
+              "name": "iis2dlpc_acc",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:stts22h_temp;1",
+              "displayName": {
+                "en": "STTS22H_TEMP"
+              },
+              "name": "stts22h_temp",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:ilps22qs_press;1",
+              "displayName": {
+                "en": "ILPS22QS_PRESS"
+              },
+              "name": "ilps22qs_press",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:imp34dt05_mic;1",
+              "displayName": {
+                "en": "IMP34DT05_MIC"
+              },
+              "name": "imp34dt05_mic",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:iis2iclx_acc;1",
+              "displayName": {
+                "en": "IIS2ICLX_ACC"
+              },
+              "name": "iis2iclx_acc",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:log_controller;1",
+              "displayName": {
+                "en": "Log Controller"
+              },
+              "name": "log_controller",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:deviceinfo;1",
+              "displayName": {
+                "en": "Device Information"
+              },
+              "name": "deviceinfo",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:tags_info;1",
+              "displayName": {
+                "en": "Tags Information"
+              },
+              "name": "tags_info",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:acquisition_info;1",
+              "displayName": {
+                "en": "Acquisition Information"
+              },
+              "name": "acquisition_info",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:stdev:steval_stwinbx1:fp_sns_datalog2:other:applications_stblesensor:hsdatalog2:schema:firmware_info;1",
+              "displayName": {
+                "en": "Firmware Information"
+              },
+              "name": "firmware_info",
+              "schema": "string"
+            }
+          ]
+        },
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "Applications ST BLE Sensor"
+    }
+  }
+]

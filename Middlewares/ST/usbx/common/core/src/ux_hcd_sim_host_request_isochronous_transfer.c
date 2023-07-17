@@ -34,7 +34,7 @@
 /*  FUNCTION                                               RELEASE        */ 
 /*                                                                        */ 
 /*    _ux_hcd_sim_host_request_isochronous_transfer       PORTABLE C      */ 
-/*                                                           6.1          */
+/*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
@@ -68,6 +68,15 @@
 /*  05-19-2020     Chaoqiong Xiao           Initial Version 6.0           */
 /*  09-30-2020     Chaoqiong Xiao           Modified comment(s),          */
 /*                                            resulting in version 6.1    */
+/*  10-15-2021     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            fixed payload calculation,  */
+/*                                            resulting in version 6.1.9  */
+/*  01-31-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            added standalone support,   */
+/*                                            resulting in version 6.1.10 */
+/*  07-29-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            fixed partial transfer,     */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 UINT  _ux_hcd_sim_host_request_isochronous_transfer(UX_HCD_SIM_HOST *hcd_sim_host, UX_TRANSFER *transfer_request)
@@ -84,6 +93,7 @@ ULONG                       transfer_request_payload_length;
 ULONG                       isoch_packet_payload_length;
 UCHAR *                     data_pointer;
 ULONG                       current_frame_number;
+ULONG                       n_trans, packet_size;
     
 
     /* Get the pointer to the Endpoint.  */
@@ -95,7 +105,23 @@ ULONG                       current_frame_number;
     /* If the transfer_request specifies a max packet length other than the endpoint
        size, we force the transfer request value into the endpoint.  */
     if (transfer_request -> ux_transfer_request_packet_length == 0)
-        transfer_request -> ux_transfer_request_packet_length =  (ULONG) endpoint -> ux_endpoint_descriptor.wMaxPacketSize;
+    {
+
+        /* For wMaxPacketSize, bits 10..0 specify the maximum packet size (max 1024),
+           bits 12..11 specify the number of additional transactions (max 2),
+           the calculation below will not cause overflow using 32-bit operation.
+           Note wMaxPacketSize validation has been done in ux_host_stack_new_endpoint_create.c,
+           before endpoint creation, so the value can be directly used here.  */
+        packet_size = endpoint -> ux_endpoint_descriptor.wMaxPacketSize & UX_MAX_PACKET_SIZE_MASK;
+        n_trans = endpoint -> ux_endpoint_descriptor.wMaxPacketSize & UX_MAX_NUMBER_OF_TRANSACTIONS_MASK;
+        if (n_trans)
+        {
+            n_trans >>= UX_MAX_NUMBER_OF_TRANSACTIONS_SHIFT;
+            n_trans ++;
+            packet_size *= n_trans;
+        }
+        transfer_request -> ux_transfer_request_packet_length = packet_size;
+    }
 
     /* Remember the packet length.  */
     isoch_packet_payload_length =  transfer_request -> ux_transfer_request_packet_length;
@@ -137,6 +163,9 @@ ULONG                       current_frame_number;
 
             data_td -> ux_sim_host_iso_td_direction =  UX_HCD_SIM_HOST_TD_OUT;
 
+        /* Mark the TD with the DATA phase.  */
+        data_td -> ux_sim_host_iso_td_status |=  UX_HCD_SIM_HOST_TD_DATA_PHASE;
+
         /* Set the frame number.  */
         ed -> ux_sim_host_ed_frame =  current_frame_number;
 
@@ -144,15 +173,15 @@ ULONG                       current_frame_number;
         data_td -> ux_sim_host_iso_td_buffer =  data_pointer;
 
         /* Update the length of the transfer for this TD.  */
-        data_td -> ux_sim_host_iso_td_length =  isoch_packet_payload_length;
+        data_td -> ux_sim_host_iso_td_length = UX_MIN(transfer_request_payload_length, isoch_packet_payload_length);
 
         /* Attach the endpoint and transfer request to the TD.  */
         data_td -> ux_sim_host_iso_td_transfer_request =  transfer_request;
         data_td -> ux_sim_host_iso_td_ed =  ed;
 
         /* Adjust the data payload length and the data payload pointer.  */
-        transfer_request_payload_length -=  isoch_packet_payload_length;
-        data_pointer +=  isoch_packet_payload_length;
+        transfer_request_payload_length -= data_td -> ux_sim_host_iso_td_length;
+        data_pointer += data_td -> ux_sim_host_iso_td_length;
 
         /* Prepare the next frame for the next TD in advance.  */
         current_frame_number++;

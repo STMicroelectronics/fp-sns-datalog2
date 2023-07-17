@@ -14,8 +14,8 @@ The list of features supported by the current implementation are as below:
 |-------------------------------|------------|------------------------------|
 |Kernel Information and Control |      Y     | It provide version/system information and starts/controls the RTOS Kernel. [More...](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS__KernelCtrl.html) |
 |Thread Management              |      Y     | It define, create, and control thread functions.. [More...](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS__ThreadMgmt.html) |
-|Thread Flags                   |      Y     | It synchronize threads using flags. [More...](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS__ThreadFlagsMgmt.html) |
-|Event Flags                    |      N     | It synchronize threads using event flags. [More...](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS__EventFlags.html) |
+|Thread Flags                   |      N     | It synchronize threads using flags. [More...](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS__ThreadFlagsMgmt.html) |
+|Event Flags                    |      Y     | It synchronize threads using event flags. [More...](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS__EventFlags.html) |
 |Generic Wait Functions         |      Y     | It wait for a certain period of time..  [More...](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS__Wait.html) |
 |Timer Management               |      Y     | It create and control timer and timer callback functions.  [More...](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS__TimerMgmt.html) |
 |Mutex Management               |      Y     | It synchronize resource access using Mutual Exclusion (Mutex). [More...](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS__MutexMgmt.html) |
@@ -24,25 +24,6 @@ The list of features supported by the current implementation are as below:
 |Message Queue                  |      Y     | It exchange messages between threads in a FIFO-like operation. [More...](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS__Message.html) |
 
 For more information about CMSIS-RTOS v2 APIs, please refer to the ARM manual: [CMSIS-RTOS API v2](https://www.keil.com/pack/doc/cmsis/RTOS2/html/group__CMSIS__RTOS.html)
-
-# Update history
-
-### V1.0.1 / 21-June-2021
-
-Main changes
-- Fix the remaining stack space calculation
-- Add the missing suspension state (TX_QUEUE_SUSP, TX_SEMAPHORE_SUSP, TX_EVENT_FLAG, TX_BLOCK_MEMORY, TX_BYTE_MEMORY, TX_IO_DRIVER, TX_FILE, TX_TCP_IP, TX_MUTEX_SUSP, TX_PRIORITY_CHANGE)
-
-Dependencies:
-- Azure RTOS ThreadX V6.1.7
-
-### V1.0.0 / 25-February-2021
-
-Main changes
-- First official release of CMSIS-RTOS v2 wrapper for ThreadX on STM32 MCU series
-
-Dependencies:
-- Azure RTOS ThreadX V6.1.3
 
 # CMSIS-RTOS v2 design
 

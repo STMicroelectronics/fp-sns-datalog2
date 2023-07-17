@@ -88,6 +88,7 @@ sys_error_code_t TMSetHWTag(bool enable, uint8_t id);
 HSD_Tag_t* TMGetTagList(void);
 uint8_t TMGetTagListSize(void);
 sys_error_code_t TMResetTagListCounter(void);
+sys_error_code_t TMCloseAllOpenedTags(void);
 
 /* Inline functions definition */
 /*******************************/

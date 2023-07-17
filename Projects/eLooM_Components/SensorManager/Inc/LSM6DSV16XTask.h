@@ -1,21 +1,21 @@
 /**
- ******************************************************************************
- * @file    LSM6DSV16XTask.h
- * @author  SRA - MCD
- * @brief
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    LSM6DSV16XTask.h
+  * @author  SRA - MCD
+  * @brief
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *
+  ******************************************************************************
+  */
 #ifndef LSM6DSV16XTASK_H_
 #define LSM6DSV16XTASK_H_
 
@@ -23,8 +23,6 @@
 extern "C" {
 #endif
 
-#include "services/systp.h"
-#include "services/syserror.h"
 #include "services/AManagedTaskEx.h"
 #include "services/AManagedTaskEx_vtbl.h"
 #include "ABusIF.h"
@@ -49,28 +47,28 @@ extern "C" {
 #define LSM6DSV16X_CFG_MAX_LISTENERS         2
 
 /**
- * Create a type name for _LSM6DSV16XTask.
- */
+  * Create a type name for _LSM6DSV16XTask.
+  */
 typedef struct _LSM6DSV16XTask LSM6DSV16XTask;
 
 // Public API declaration
 //***********************
 
 /**
- * Get the ISourceObservable interface for the accelerometer.
- * @param _this [IN] specifies a pointer to a task object.
- * @return a pointer to the generic object ::ISourceObservable if success,
- * or NULL if out of memory error occurs.
- */
-ISourceObservable* LSM6DSV16XTaskGetAccSensorIF(LSM6DSV16XTask *_this);
+  * Get the ISourceObservable interface for the accelerometer.
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return a pointer to the generic object ::ISourceObservable if success,
+  * or NULL if out of memory error occurs.
+  */
+ISourceObservable *LSM6DSV16XTaskGetAccSensorIF(LSM6DSV16XTask *_this);
 
 /**
- * Get the ISourceObservable interface for the gyroscope.
- * @param _this [IN] specifies a pointer to a task object.
- * @return a pointer to the generic object ::ISourceObservable if success,
- * or NULL if out of memory error occurs.
- */
-ISourceObservable* LSM6DSV16XTaskGetGyroSensorIF(LSM6DSV16XTask *_this);
+  * Get the ISourceObservable interface for the gyroscope.
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return a pointer to the generic object ::ISourceObservable if success,
+  * or NULL if out of memory error occurs.
+  */
+ISourceObservable *LSM6DSV16XTaskGetGyroSensorIF(LSM6DSV16XTask *_this);
 
 /**
   * Get the ISourceObservable interface for mlc.
@@ -81,55 +79,55 @@ ISourceObservable* LSM6DSV16XTaskGetGyroSensorIF(LSM6DSV16XTask *_this);
 ISourceObservable *LSM6DSV16XTaskGetMlcSensorIF(LSM6DSV16XTask *_this);
 
 /**
- * Get the ::ISensorLL_t interface the sensor.
- * @param _this [IN] specifies a pointer to a task object.
- * @return a pointer to the generic object ::ISensorLL_t
- */
-ISensorLL_t* LSM6DSV16XTaskGetSensorLLIF(LSM6DSV16XTask *_this);
+  * Get the ::ISensorLL_t interface the sensor.
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return a pointer to the generic object ::ISensorLL_t
+  */
+ISensorLL_t *LSM6DSV16XTaskGetSensorLLIF(LSM6DSV16XTask *_this);
 
 /**
- * Allocate an instance of LSM6DSV16XTask.
- *
- * @param pIRQ1Config [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
- *        It must be a GPIO connected to the ISM33DHCX sensor and configured in EXTI mode.
- *        If it is NULL then the sensor is configured in polling mode.
- * @param pMLCConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
- *        It must be a GPIO connected to the ISM33DHCX MLC and configured in EXTI mode.
- * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
- *        It must be a GPIO identifying the SPI CS Pin.
- * @return a pointer to the generic object ::AManagedTaskEx if success,
- * or NULL if out of memory error occurs.
- */
-AManagedTaskEx* LSM6DSV16XTaskAlloc(const void *pIRQConfig, const void *pMLCConfig, const void *pCSConfig);
+  * Allocate an instance of LSM6DSV16XTask.
+  *
+  * @param pIRQ1Config [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO connected to the ISM33DHCX sensor and configured in EXTI mode.
+  *        If it is NULL then the sensor is configured in polling mode.
+  * @param pMLCConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO connected to the ISM33DHCX MLC and configured in EXTI mode.
+  * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the SPI CS Pin.
+  * @return a pointer to the generic object ::AManagedTaskEx if success,
+  * or NULL if out of memory error occurs.
+  */
+AManagedTaskEx *LSM6DSV16XTaskAlloc(const void *pIRQConfig, const void *pMLCConfig, const void *pCSConfig);
 
 /**
- * Get the Bus interface for the sensor task.
- *
- * @param _this [IN] specifies a pointer to a task object.
- * @return a pointer to the Bus interface of the sensor.
- */
-ABusIF* LSM6DSV16XTaskGetSensorIF(LSM6DSV16XTask *_this);
+  * Get the Bus interface for the sensor task.
+  *
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return a pointer to the Bus interface of the sensor.
+  */
+ABusIF *LSM6DSV16XTaskGetSensorIF(LSM6DSV16XTask *_this);
 
 /**
- * Get the ::IEventSrc interface for the sensor task.
- * @param _this [IN] specifies a pointer to a task object.
- * @return a pointer to the ::IEventSrc interface of the sensor.
- */
-IEventSrc* LSM6DSV16XTaskGetAccEventSrcIF(LSM6DSV16XTask *_this);
+  * Get the ::IEventSrc interface for the sensor task.
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return a pointer to the ::IEventSrc interface of the sensor.
+  */
+IEventSrc *LSM6DSV16XTaskGetAccEventSrcIF(LSM6DSV16XTask *_this);
 
 /**
- * Get the ::IEventSrc interface for the sensor task.
- * @param _this [IN] specifies a pointer to a task object.
- * @return a pointer to the ::IEventSrc interface of the sensor.
- */
-IEventSrc* LSM6DSV16XTaskGetGyroEventSrcIF(LSM6DSV16XTask *_this);
+  * Get the ::IEventSrc interface for the sensor task.
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return a pointer to the ::IEventSrc interface of the sensor.
+  */
+IEventSrc *LSM6DSV16XTaskGetGyroEventSrcIF(LSM6DSV16XTask *_this);
 
 /**
- * Get the ::IEventSrc interface for the sensor task.
- * @param _this [IN] specifies a pointer to a task object.
- * @return a pointer to the ::IEventSrc interface of the sensor.
- */
-IEventSrc* LSM6DSV16XTaskGetMlcEventSrcIF(LSM6DSV16XTask *_this);
+  * Get the ::IEventSrc interface for the sensor task.
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return a pointer to the ::IEventSrc interface of the sensor.
+  */
+IEventSrc *LSM6DSV16XTaskGetMlcEventSrcIF(LSM6DSV16XTask *_this);
 
 // Inline functions definition
 // ***************************

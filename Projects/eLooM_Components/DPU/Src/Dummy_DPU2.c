@@ -22,7 +22,6 @@
 
 #include "Dummy_DPU2.h"
 #include "Dummy_DPU2_vtbl.h"
-#include "services/sysmem.h"
 #include "services/sysdebug.h"
 
 

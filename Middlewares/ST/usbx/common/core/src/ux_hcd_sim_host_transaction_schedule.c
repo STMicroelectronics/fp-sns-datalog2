@@ -36,7 +36,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _ux_hcd_sim_host_transaction_schedule               PORTABLE C      */
-/*                                                           6.1.6        */
+/*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Chaoqiong Xiao, Microsoft Corporation                               */
@@ -81,6 +81,21 @@
 /*                                            fixed control OUT transfer, */
 /*                                            supported bi-dir-endpoints, */
 /*                                            resulting in version 6.1.6  */
+/*  10-15-2021     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            improved check for tests,   */
+/*                                            added error trap case,      */
+/*                                            resulting in version 6.1.9  */
+/*  01-31-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            added standalone support,   */
+/*                                            cleared transfer status     */
+/*                                            before semaphore wakeup to  */
+/*                                            avoid a race condition,     */
+/*                                            resulting in version 6.1.10 */
+/*  07-29-2022     Chaoqiong Xiao           Modified comment(s),          */
+/*                                            refined device ZLP flow,    */
+/*                                            adjusted control request    */
+/*                                            data length handling,       */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 UINT  _ux_hcd_sim_host_transaction_schedule(UX_HCD_SIM_HOST *hcd_sim_host, UX_HCD_SIM_HOST_ED *ed)
@@ -164,13 +179,23 @@ UX_SLAVE_DCD            *dcd;
         /* For control transfer, stall is for protocol error and it's cleared any time when SETUP is received */
         slave_ed -> ux_sim_slave_ed_status &= ~(ULONG)UX_DCD_SIM_SLAVE_ED_STATUS_STALLED;
 
-        /* Set the length to the setup transaction buffer.  */
-        slave_transfer_request -> ux_slave_transfer_request_actual_length =  td -> ux_sim_host_td_length;
+        /* Validate the length to the setup transaction buffer.  */
+        UX_ASSERT(td -> ux_sim_host_td_length == 8);
+
+        /* Reset actual data length (not including SETUP received) so far.  */
+        slave_transfer_request -> ux_slave_transfer_request_actual_length =  0;
 
         /* Move the buffer from the host TD to the device TD.  */
         _ux_utility_memory_copy(slave_transfer_request -> ux_slave_transfer_request_setup,
                                 td -> ux_sim_host_td_buffer,
                                 td -> ux_sim_host_td_length); /* Use case of memcpy is verified. */
+
+#if defined(UX_HOST_STANDALONE)
+
+        /* The setup buffer is allocated, release it since it's used.  */
+        _ux_utility_memory_free(td -> ux_sim_host_td_buffer);
+        td -> ux_sim_host_td_buffer = UX_NULL;
+#endif
 
         /* The setup phase never fails. We acknowledge the transfer code here by taking the TD out of the endpoint.  */
         ed -> ux_sim_host_ed_head_td =  td -> ux_sim_host_td_next_td;
@@ -188,15 +213,16 @@ UX_SLAVE_DCD            *dcd;
                the data needs to be copied into the device buffer first before invoking the control
                dispatcher.  */
 
-            /* Get the length we expect from the SETUP packet.  */
+            /* Get the length we expect from the SETUP packet (target the entire available control buffer).  */
             slave_transfer_request -> ux_slave_transfer_request_requested_length = _ux_utility_short_get(slave_transfer_request -> ux_slave_transfer_request_setup + 6);
 
             /* Avoid buffer overflow.  */
             if (slave_transfer_request -> ux_slave_transfer_request_requested_length > UX_SLAVE_REQUEST_CONTROL_MAX_LENGTH)
+            {
+                /* Error trap.  */
+                _ux_system_error_handler(UX_SYSTEM_LEVEL_THREAD, UX_SYSTEM_CONTEXT_DCD, UX_TRANSFER_BUFFER_OVERFLOW);
                 slave_transfer_request -> ux_slave_transfer_request_requested_length = UX_SLAVE_REQUEST_CONTROL_MAX_LENGTH;
-
-            /* Reset what we have received so far.  */
-            slave_transfer_request -> ux_slave_transfer_request_actual_length =  0;
+            }
 
             /* And reprogram the current buffer address to the beginning of the buffer.  */
             slave_transfer_request -> ux_slave_transfer_request_current_data_pointer =  slave_transfer_request -> ux_slave_transfer_request_data_pointer;
@@ -326,7 +352,7 @@ UX_SLAVE_DCD            *dcd;
             td -> ux_sim_host_td_status =  UX_UNUSED;
 
             /* Then, we wake up the host.  */
-            _ux_utility_semaphore_put(&transfer_request -> ux_transfer_request_semaphore);
+            _ux_host_semaphore_put(&transfer_request -> ux_transfer_request_semaphore);
         }
     }
     else
@@ -348,7 +374,7 @@ UX_SLAVE_DCD            *dcd;
             UX_TRACE_IN_LINE_INSERT(UX_TRACE_ERROR, UX_TRANSFER_STALLED, transfer_request, 0, 0, UX_TRACE_ERRORS, 0, 0)
 
             /* Wake up the host side.  */
-            _ux_utility_semaphore_put(&transfer_request -> ux_transfer_request_semaphore);
+            _ux_host_semaphore_put(&transfer_request -> ux_transfer_request_semaphore);
 
             /* Clean up this ED.  */
             head_td =  ed -> ux_sim_host_ed_head_td;
@@ -383,17 +409,22 @@ UX_SLAVE_DCD            *dcd;
             else
                 transaction_length =  td -> ux_sim_host_td_length;
 
-            if (td -> ux_sim_host_td_direction == UX_HCD_SIM_HOST_TD_OUT)
+            if (transaction_length)
+            {
+                if (td -> ux_sim_host_td_direction == UX_HCD_SIM_HOST_TD_OUT)
 
-                /* Send the requested host data to the device.  */
-                _ux_utility_memory_copy(slave_transfer_request -> ux_slave_transfer_request_current_data_pointer, td -> ux_sim_host_td_buffer,
-                                        transaction_length); /* Use case of memcpy is verified. */
+                    /* Send the requested host data to the device.  */
+                    _ux_utility_memory_copy(slave_transfer_request -> ux_slave_transfer_request_current_data_pointer,
+                                            td -> ux_sim_host_td_buffer,
+                                            transaction_length); /* Use case of memcpy is verified. */
 
-            else
+                else
 
-                /* Send the requested host data to the device.  */
-                _ux_utility_memory_copy(td -> ux_sim_host_td_buffer, slave_transfer_request -> ux_slave_transfer_request_current_data_pointer,
-                                        transaction_length); /* Use case of memcpy is verified. */
+                    /* Send the requested host data to the device.  */
+                    _ux_utility_memory_copy(td -> ux_sim_host_td_buffer,
+                                            slave_transfer_request -> ux_slave_transfer_request_current_data_pointer,
+                                            transaction_length); /* Use case of memcpy is verified. */
+            }
 
             /* Update buffers.  */
             td -> ux_sim_host_td_buffer +=  transaction_length;
@@ -424,12 +455,20 @@ UX_SLAVE_DCD            *dcd;
             wake_slave =  UX_FALSE;
 
             /* Does the slave have absolutely no more data to send? */
-            if ((slave_transfer_request -> ux_slave_transfer_request_actual_length == slave_transfer_request -> ux_slave_transfer_request_requested_length &&
-                 slave_transfer_request -> ux_slave_transfer_request_force_zlp == UX_TRUE) ||
-                (transaction_length == 0) ||
-                (transaction_length % slave_endpoint -> ux_slave_endpoint_descriptor.wMaxPacketSize))
+            if (slave_endpoint -> ux_slave_endpoint_descriptor.wMaxPacketSize == 0) /* Special for tests (avoid DIV0/MOD0) */
             {
 
+                /* This happens only if device descriptor bMaxPacketSize0 is zero, assume it's OK for the first control
+                   requests to let host check the descriptor.
+                   If wMaxPacketSize is zero, host reject the device and transfer never started to get here.  */
+                wake_host =  UX_TRUE;
+                wake_slave =  UX_TRUE;
+            }
+            else if ((transaction_length == 0) ||
+                     (transaction_length % slave_endpoint -> ux_slave_endpoint_descriptor.wMaxPacketSize))
+            {
+
+                /* Host got ZLP or short packet.  */
                 wake_host =  UX_TRUE;
                 wake_slave =  UX_TRUE;
             }
@@ -441,8 +480,15 @@ UX_SLAVE_DCD            *dcd;
                     wake_host = UX_TRUE;
 
                 /* Is the slaves's transfer completed?  */
-                if (slave_transfer_request -> ux_slave_transfer_request_actual_length == slave_transfer_request -> ux_slave_transfer_request_requested_length)
-                    wake_slave = UX_TRUE;
+                if (slave_transfer_request -> ux_slave_transfer_request_actual_length ==
+                    slave_transfer_request -> ux_slave_transfer_request_requested_length)
+                {
+                    if (slave_transfer_request -> ux_slave_transfer_request_requested_length == 0 ||
+                        slave_transfer_request -> ux_slave_transfer_request_force_zlp == 0)
+                        wake_slave = UX_TRUE;
+                    else
+                        slave_transfer_request -> ux_slave_transfer_request_force_zlp = 0;
+                }
             }
 
             if (wake_slave == UX_TRUE)
@@ -458,11 +504,14 @@ UX_SLAVE_DCD            *dcd;
                 if (slave_ed -> ux_sim_slave_ed_index != 0)
                 {
 
-                    /* Reset the ED to NO TRANSFER status.  */
+                    /* Clear pending flag.  */
                     slave_ed -> ux_sim_slave_ed_status &= ~(ULONG)UX_DCD_SIM_SLAVE_ED_STATUS_TRANSFER;
 
+                    /* Set done flag.  */
+                    slave_ed -> ux_sim_slave_ed_status |= UX_DCD_SIM_SLAVE_ED_STATUS_DONE;
+
                     /* Wake up the slave side.  */
-                    _ux_utility_semaphore_put(&slave_transfer_request -> ux_slave_transfer_request_semaphore);
+                    _ux_device_semaphore_put(&slave_transfer_request -> ux_slave_transfer_request_semaphore);
                 }
             }
 
@@ -508,7 +557,7 @@ UX_SLAVE_DCD            *dcd;
                     transfer_request -> ux_transfer_request_completion_function(transfer_request);
 
                 /* Wake up the host side.  */
-                _ux_utility_semaphore_put(&transfer_request -> ux_transfer_request_semaphore);
+                _ux_host_semaphore_put(&transfer_request -> ux_transfer_request_semaphore);
             }
         }
     }

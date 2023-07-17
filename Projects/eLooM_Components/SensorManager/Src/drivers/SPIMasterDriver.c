@@ -28,40 +28,55 @@
 
 #define SYS_DEBUGF(level, message)              SYS_DEBUGF3(SYS_DBG_DRIVERS, level, message)
 
-/**
-  * SPIMasterDriver Driver virtual table.
-  */
-static const IIODriver_vtbl sSPIMasterDriver_vtbl =
-{
-  SPIMasterDriver_vtblInit,
-  SPIMasterDriver_vtblStart,
-  SPIMasterDriver_vtblStop,
-  SPIMasterDriver_vtblDoEnterPowerMode,
-  SPIMasterDriver_vtblReset,
-  SPIMasterDriver_vtblWrite,
-  SPIMasterDriver_vtblRead
-};
 
 /**
-  * Data associated to the hardware peripheral.
+  * Class object declaration
   */
-typedef struct _SPIPeripheralResources_t
+typedef struct _SPIMasterDriverClass
 {
   /**
-    * Synchronization object used by the driver to synchronize the SPI ISR with the task using the driver.
+    * SPIMasterDriver class virtual table.
     */
-  TX_SEMAPHORE *sync_obj;
+  const IIODriver_vtbl vtbl;
 
-#if (SYS_DBG_ENABLE_TA4 == 1)
-  traceHandle m_xSpiTraceHandle;
-#endif
-} SPIPeripheralResources_t;
+  /**
+    * Memory buffer used to allocate the map (hardware IP, eLoom driver).
+    */
+  HWDriverMapElement_t ip_drv_map_elements[SPIDRV_CFG_HARDWARE_PERIPHERALS_COUNT];
+
+  /**
+    * This map is used to link an hardware SPI with an instance of the driver object. The key of the map is the address of the hardware IP.
+    */
+  HWDriverMap_t ip_drv_map;
+
+} SPIMasterDriverClass_t;
 
 
-static SPIPeripheralResources_t sSPIHwResources[SPIDRV_CFG_HARDWARE_PERIPHERALS_COUNT];
-static HWDriverMapElement_t sSPIDrvMapElements[SPIDRV_CFG_HARDWARE_PERIPHERALS_COUNT];
-static HWDriverMap_t sSPIDrvMap = { 0 };
-static uint8_t sInstances = 0;
+/* Private objects definition.*/
+/******************************/
+
+/**
+  * The only class instance.
+  */
+static SPIMasterDriverClass_t sTheClass =
+{
+  /*
+   * vtbl
+   */
+  {
+    SPIMasterDriver_vtblInit,
+    SPIMasterDriver_vtblStart,
+    SPIMasterDriver_vtblStop,
+    SPIMasterDriver_vtblDoEnterPowerMode,
+    SPIMasterDriver_vtblReset,
+    SPIMasterDriver_vtblWrite,
+    SPIMasterDriver_vtblRead
+  },
+
+  {{0}}, /* ip_drv_map_elements */
+  {0}  /* ip_drv_map */
+};
+
 
 /* Private member function declaration */
 /***************************************/
@@ -77,35 +92,18 @@ static void SPIMasterDriverTxRxCpltCallback(SPI_HandleTypeDef *p_spi);
 
 IIODriver *SPIMasterDriverAlloc(void)
 {
-  IIODriver *res = NULL;
-
-  if(sSPIDrvMap.size == 0)
+  IIODriver *p_new_driver = (IIODriver *) SysAlloc(sizeof(SPIMasterDriver_t));
+  if (p_new_driver == NULL)
   {
-    HWDriverMap_Init(&sSPIDrvMap, sSPIDrvMapElements, SPIDRV_CFG_HARDWARE_PERIPHERALS_COUNT);
+    SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+    SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("SPIMasterDriver - alloc failed.\r\n"));
+  }
+  else
+  {
+    p_new_driver->vptr = &sTheClass.vtbl;
   }
 
-  HWDriverMapElement_t *p_element = NULL;
-  p_element = HWDriverMap_GetFreeElement(&sSPIDrvMap);
-
-  if(p_element != NULL)
-  {
-    /* Check if there is room to allocate a new instance */
-    p_element->p_driver_obj = (IDriver*) SysAlloc(sizeof(SPIMasterDriver_t));
-
-    if(p_element->p_driver_obj == NULL)
-    {
-      SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
-      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("SPIMasterDriver - alloc failed.\r\n"));
-    }
-    else
-    {
-      p_element->p_driver_obj->vptr = (IDriver_vtbl*) &sSPIMasterDriver_vtbl;
-      p_element->p_static_param = (void*) &sSPIHwResources[sInstances];
-      sInstances++;
-    }
-    res = (IIODriver*) p_element->p_driver_obj;
-  }
-  return res;
+  return p_new_driver;
 }
 
 sys_error_code_t SPIMasterDriver_vtblInit(IDriver *_this, void *p_params)
@@ -134,10 +132,19 @@ sys_error_code_t SPIMasterDriver_vtblInit(IDriver *_this, void *p_params)
   }
   else
   {
-    HWDriverMapElement_t *p_element;
-    p_element = HWDriverMap_FindByInstance(&sSPIDrvMap, _this);
+    if (!HWDriverMap_IsInitialized(&sTheClass.ip_drv_map))
+    {
+      (void) HWDriverMap_Init(&sTheClass.ip_drv_map, sTheClass.ip_drv_map_elements, SPIDRV_CFG_HARDWARE_PERIPHERALS_COUNT);
+    }
 
-    if(p_element == NULL)
+    /* Add the driver to the map.
+     * Use the peripheral address as unique key for the map. */
+    HWDriverMapElement_t *p_element = NULL;
+    uint32_t key = (uint32_t) p_obj->mx_handle.p_mx_spi_cfg->p_spi_handle->Instance;
+    p_element = HWDriverMap_AddElement(&sTheClass.ip_drv_map, key, _this);
+
+
+    if (p_element == NULL)
     {
       SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
@@ -145,22 +152,17 @@ sys_error_code_t SPIMasterDriver_vtblInit(IDriver *_this, void *p_params)
     else
     {
       nRes = tx_semaphore_create(&p_obj->sync_obj, "SPIDrv", 0);
-      if(nRes != TX_SUCCESS)
+      if (nRes != TX_SUCCESS)
       {
         SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
         res = SYS_OUT_OF_MEMORY_ERROR_CODE;
-      }
-      else
-      {
-        /* Use the peripheral address as unique key for the map */
-        p_element->key = (uint32_t) p_obj->mx_handle.p_mx_spi_cfg->p_spi_handle->Instance;
 
-        ((SPIPeripheralResources_t*) p_element->p_static_param)->sync_obj = &p_obj->sync_obj;
-
-        SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("SPIMasterDriver: initialization done.\r\n"));
+        (void) HWDriverMap_RemoveElement(&sTheClass.ip_drv_map, key);
       }
     }
   }
+
+  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("SPIMasterDriver: initialization done: %d.\r\n", res));
 
   return res;
 }
@@ -335,23 +337,23 @@ sys_error_code_t SPIMasterDriverDeselectDevice(SPIMasterDriver_t *_this, GPIO_Ty
 
 static void SPIMasterDriverTxRxCpltCallback(SPI_HandleTypeDef *p_spi)
 {
-  HWDriverMapElement_t *p_element;
+  HWDriverMapValue_t *p_val;
   TX_SEMAPHORE *sync_obj;
 
-  p_element = HWDriverMap_FindByKey(&sSPIDrvMap, (uint32_t) p_spi->Instance);
+  p_val = HWDriverMap_FindByKey(&sTheClass.ip_drv_map, (uint32_t) p_spi->Instance);
 
-  if(p_element != NULL)
+  if (p_val != NULL)
   {
 #if (SYS_DBG_ENABLE_TA4 == 1)
     if (xTraceIsRecordingEnabled())
     {
-      vTraceStoreISRBegin(((SPIPeripheralResources_t*) p_element->p_static_param)->m_xSpiTraceHandle);
+      vTraceStoreISRBegin(((SPIPeripheralResources_t *) p_element->p_static_param)->m_xSpiTraceHandle);
     }
 #endif
 
-    sync_obj = ((SPIPeripheralResources_t*) p_element->p_static_param)->sync_obj;
+    sync_obj = &((SPIMasterDriver_t *)p_val->p_driver_obj)->sync_obj;
 
-    if(sync_obj != NULL)
+    if (sync_obj != NULL)
     {
       tx_semaphore_put(sync_obj);
     }

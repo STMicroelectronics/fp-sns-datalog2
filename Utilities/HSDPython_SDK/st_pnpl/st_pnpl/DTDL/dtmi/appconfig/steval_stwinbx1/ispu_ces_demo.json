@@ -31,6 +31,15 @@
         "schema": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:fft_dpu;1"
       },
       {
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:neai_processing;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "NEAI Processing"
+        },
+        "name": "neai_processing",
+        "schema": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:neai_processing;1"
+      },
+      {
         "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:firmware_info;1",
         "@type": "Component",
         "displayName": {
@@ -472,32 +481,7 @@
           "en": "Algorithm Type"
         },
         "name": "algorithm_type",
-        "schema": {
-          "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ism330is_ispu:algorithm_type:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ism330is_ispu:algorithm_type:schema:fft;1",
-              "displayName": {
-                "en": "FFT"
-              },
-              "enumValue": "0",
-              "name": "fft"
-            },
-            {
-              "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ism330is_ispu:algorithm_type:schema:classification_model;1",
-              "displayName": {
-                "en": "Classification Model"
-              },
-              "enumValue": "1",
-              "name": "classification_model"
-            }
-          ],
-          "valueSchema": "string"
-        },
+        "schema": "integer",
         "writable": false
       },
       {
@@ -611,24 +595,7 @@
           "en": "Algorithm Type"
         },
         "name": "algorithm_type",
-        "schema": {
-          "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:fft_dpu:algorithm_type:schema;1",
-          "@type": "Enum",
-          "displayName": {
-            "en": "Enum"
-          },
-          "enumValues": [
-            {
-              "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:fft_dpu:algorithm_type:schema:fft;1",
-              "displayName": {
-                "en": "FFT "
-              },
-              "enumValue": "0",
-              "name": "fft"
-            }
-          ],
-          "valueSchema": "string"
-        },
+        "schema": "integer",
         "writable": false
       },
       {
@@ -749,10 +716,7 @@
     "@type": "Interface",
     "contents": [
       {
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
+        "@type": "Property",
         "description": {
           "en": "Company name of the device manufacturer. This could be the same as the name of the original equipment manufacturer (OEM). Ex. Contoso."
         },
@@ -764,10 +728,7 @@
         "writable": false
       },
       {
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
+        "@type": "Property",
         "description": {
           "en": "Device model name or ID. Ex. Surface Book 2."
         },
@@ -779,10 +740,7 @@
         "writable": false
       },
       {
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
+        "@type": "Property",
         "description": {
           "en": "Version of the software on your device. This could be the version of your firmware. Ex. 1.3.45"
         },
@@ -794,10 +752,7 @@
         "writable": false
       },
       {
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
+        "@type": "Property",
         "description": {
           "en": "Name of the operating system on the device. Ex. Windows 10 IoT Core."
         },
@@ -809,10 +764,7 @@
         "writable": false
       },
       {
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
+        "@type": "Property",
         "description": {
           "en": "Architecture of the processor on the device. Ex. x64 or ARM."
         },
@@ -824,10 +776,7 @@
         "writable": false
       },
       {
-        "@type": [
-          "Property",
-          "StringValue"
-        ],
+        "@type": "Property",
         "description": {
           "en": "Name of the manufacturer of the processor on the device. Ex. Intel."
         },
@@ -839,10 +788,7 @@
         "writable": false
       },
       {
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
+        "@type": "Property",
         "description": {
           "en": "Total available storage on the device in kilobytes. Ex. 2048000 kilobytes."
         },
@@ -854,10 +800,7 @@
         "writable": false
       },
       {
-        "@type": [
-          "Property",
-          "NumberValue"
-        ],
+        "@type": "Property",
         "description": {
           "en": "Total available memory on the device in kilobytes. Ex. 256000 kilobytes."
         },
@@ -1160,6 +1103,127 @@
     ],
     "displayName": {
       "en": "App Controller"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:neai_processing;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ai_processing:algorithm_type;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "comment": "1 = classification_model",
+        "displayName": {
+          "en": "Algorithm Type"
+        },
+        "name": "algorithm_type",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ai_processing:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enable"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ai_processing:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ai_processing:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ai_processing:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Number of Classes"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ai_processing:algo_out;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Algorithm Outputs"
+        },
+        "name": "algo_out",
+        "schema": {
+          "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ai_processing:algo_out:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ai_processing:algo_out:schema:signal;1",
+              "displayName": {
+                "en": "Signal"
+              },
+              "name": "signal",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ai_processing:algo_out:schema:class;1",
+              "displayName": {
+                "en": "Class"
+              },
+              "name": "class",
+              "schema": "integer"
+            },
+            {
+              "@id": "dtmi:appconfig:steval_stwinbx1:ispu_ces_demo:algorithms:ai_processing:algo_out:schema:confidence;1",
+              "displayName": {
+                "en": "Confidence"
+              },
+              "name": "confidence",
+              "schema": "integer"
+            }
+          ]
+        },
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "NEAI Processing"
     }
   }
 ]

@@ -26,9 +26,8 @@
 extern "C" {
 #endif
 
-#include "services/systypes.h"
-#include "services/syserror.h"
-#include "services/systp.h"
+#include "services/eloom_sysbase.h"
+
 
 typedef struct _IEventSrc_vtbl IEventSrc_vtbl;
 

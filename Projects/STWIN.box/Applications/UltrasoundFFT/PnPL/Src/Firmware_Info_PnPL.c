@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Firmware_InfoPnPL.c
+  * @file    Firmware_Info_PnPL.c
   * @author  SRA
   * @brief   Firmware_Info PnPL Component Manager
   ******************************************************************************
@@ -17,6 +17,17 @@
   ******************************************************************************
   */
 
+/**
+  ******************************************************************************
+  * This file has been auto generated from the following DTDL Component:
+  * dtmi:vespucci:other:firmware_info;3
+  *
+  * Created by: DTDL2PnPL_cGen version 1.1.0
+  *
+  * WARNING! All changes made to this file will be lost if this is regenerated
+  ******************************************************************************
+  */
+
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
 #include "App_model.h"
@@ -26,7 +37,6 @@
 
 #include "Firmware_Info_PnPL.h"
 #include "Firmware_Info_PnPL_vtbl.h"
-
 
 static const IPnPLComponent_vtbl sFirmware_Info_PnPL_CompIF_vtbl =
 {
@@ -47,15 +57,13 @@ struct _Firmware_Info_PnPL
     * Implements the IPnPLComponent interface.
     */
   IPnPLComponent_t component_if;
-  
+
 };
 
-/* Objects instance */
-/********************/
+/* Objects instance ----------------------------------------------------------*/
 static Firmware_Info_PnPL sFirmware_Info_PnPL;
 
-// Public API definition
-// *********************
+/* Public API definition -----------------------------------------------------*/
 IPnPLComponent_t *Firmware_Info_PnPLAlloc()
 {
   IPnPLComponent_t *pxObj = (IPnPLComponent_t *) &sFirmware_Info_PnPL;
@@ -67,7 +75,7 @@ IPnPLComponent_t *Firmware_Info_PnPLAlloc()
 }
 
 uint8_t Firmware_Info_PnPLInit(IPnPLComponent_t *_this)
-  {
+{
   IPnPLComponent_t *component_if = _this;
   PnPLAddComponent(component_if);
   firmware_info_comp_init();
@@ -75,8 +83,7 @@ uint8_t Firmware_Info_PnPLInit(IPnPLComponent_t *_this)
 }
 
 
-// IPnPLComponent virtual functions definition
-// *******************************************
+/* IPnPLComponent virtual functions definition -------------------------------*/
 char *Firmware_Info_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 {
   return firmware_info_get_key();
@@ -107,12 +114,15 @@ uint8_t Firmware_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   json_object_dotset_string(JSON_Status, "firmware_info.fw_name", temp_s);
   firmware_info_get_fw_version(&temp_s);
   json_object_dotset_string(JSON_Status, "firmware_info.fw_version", temp_s);
-  firmware_info_get_serial_number(&temp_s);
-  json_object_dotset_string(JSON_Status, "firmware_info.serial_number", temp_s);
+  firmware_info_get_part_number(&temp_s);
+  json_object_dotset_string(JSON_Status, "firmware_info.part_number", temp_s);
   firmware_info_get_device_url(&temp_s);
   json_object_dotset_string(JSON_Status, "firmware_info.device_url", temp_s);
   firmware_info_get_fw_url(&temp_s);
   json_object_dotset_string(JSON_Status, "firmware_info.fw_url", temp_s);
+  firmware_info_get_mac_address(&temp_s);
+  json_object_dotset_string(JSON_Status, "firmware_info.mac_address", temp_s);
+  json_object_dotset_number(JSON_Status, "firmware_info.c_type", COMP_TYPE_OTHER);
 
   if (pretty == 1)
   {
@@ -125,7 +135,7 @@ uint8_t Firmware_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
     *size = json_serialization_size(tempJSON);
   }
 
-  //no need to free temp_j as it is part of tempJSON
+  /* No need to free temp_j as it is part of tempJSON */
   json_value_free(tempJSON);
 
   return 0;
@@ -135,7 +145,7 @@ uint8_t Firmware_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
-  
+
   uint8_t ret = 0;
   if (json_object_dothas_value(tempJSONObject, "firmware_info.alias"))
   {

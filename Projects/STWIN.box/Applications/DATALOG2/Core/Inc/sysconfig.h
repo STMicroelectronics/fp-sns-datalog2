@@ -31,9 +31,9 @@
 // Board ID and FW_ID
 // *********************
 
-#define BOARD_ID              0x0E
-#define FW_ID_DATALOG2        0x12
-#define FW_ID_DATALOG2_ISPU   0x13
+#define BOARD_ID                      0x0E
+#define FW_ID_DATALOG2                0x15
+#define FW_ID_DATALOG2_ISPU           0x16
 
 // Drivers configuration
 // *********************
@@ -75,7 +75,7 @@
 
 
 /* SensorManager configuration */
-#define SM_MAX_SENSORS                            11U
+#define SM_MAX_SENSORS                            13U
 
 
 
@@ -106,7 +106,7 @@
 #define FILEX_TASK_CFG_TAG                        (CON34_PIN_5)
 #endif
 
-// file ble_dctrl_class.c
+// file ble_stream_class.c
 /* BLE Send Thread parameters */
 #define BLE_SEND_CFG_STACK_DEPTH                  (TX_MINIMUM_STACK*15)
 #define BLE_SEND_CFG_PRIORITY                     (15)

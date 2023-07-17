@@ -27,9 +27,9 @@ echo "installing st_pnpl..."
 echo "==================================================="
 if [ -z $1 ]
 then
-	python3 -m pip install st_pnpl/dist/st_pnpl-1.1.0-py3-none-any.whl
+	python3 -m pip install st_pnpl/dist/st_pnpl-1.2.0-py3-none-any.whl
 else
-	python3 -m pip install st_pnpl/dist/st_pnpl-1.1.0-py3-none-any.whl --proxy=$1
+	python3 -m pip install st_pnpl/dist/st_pnpl-1.2.0-py3-none-any.whl --proxy=$1
 fi
 # Section 3: st_hsdatalog (NO GUI version)
 echo "==================================================="
@@ -37,9 +37,9 @@ echo "installing st_hsdatalog (NO GUI version)..."
 echo "==================================================="
 if [ -z $1 ]
 then
-	python3 -m pip install st_hsdatalog/dist/noGUI/st_hsdatalog-2.1.0-py3-none-any.whl
+	python3 -m pip install st_hsdatalog/dist/noGUI/st_hsdatalog-2.2.0-py3-none-any.whl
 else
-	python3 -m pip install st_hsdatalog/dist/noGUI/st_hsdatalog-2.1.0-py3-none-any.whl --proxy=$1
+	python3 -m pip install st_hsdatalog/dist/noGUI/st_hsdatalog-2.2.0-py3-none-any.whl --proxy=$1
 fi
 # Section 4: asciimatics needed from hsdatalog_cli.py example script
 echo "==================================================="

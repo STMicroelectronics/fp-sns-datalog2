@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:other:firmware_info;1
+  * dtmi:vespucci:other:firmware_info;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.0.0
+  * Created by: DTDL2PnPL_cGen version 1.1.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -42,6 +42,8 @@ extern "C" {
 #include "parson.h"
 #include "IPnPLComponent.h"
 #include "IPnPLComponent_vtbl.h"
+
+
 /**
   * Create a type name for _Firmware_Info_PnPL.
  */

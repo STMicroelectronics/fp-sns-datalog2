@@ -21,10 +21,10 @@
 
 /* Include */
 /***********/
-#include "task_execution_profile.h"
 #include "STWIN.box_debug_pins.h"
 #include "tx_api.h"
 #include "tx_thread.h"
+#include "tx_execution_profile.h"
 
 /* Private variable declaration */
 /********************************/
@@ -33,6 +33,12 @@ static uint8_t pxTaskTag;
 
 /* Public function definition */
 /******************************/
+
+void _tx_execution_initialize(void)
+{
+
+}
+
 /**
 * @brief  _tx_execution_thread_enter definition.
 *         This function will be called in the PendSV during context switch

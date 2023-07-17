@@ -15,7 +15,7 @@
   *
   ******************************************************************************
   */
-  
+
 #ifndef AI_HAR_DPU_VTBL_H_
 #define AI_HAR_DPU_VTBL_H_
 
@@ -24,9 +24,8 @@ extern "C" {
 #endif
 
 
-#include "services/systp.h"
-#include "services/systypes.h"
-#include "services/syserror.h"
+#include "services/eloom_sysbase.h"
+
 
 /* IDPU virtual functions */
 sys_error_code_t AI_HAR_DPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t out_data); /*!< @sa IDPU2_Process */

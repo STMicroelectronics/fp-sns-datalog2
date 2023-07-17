@@ -35,8 +35,8 @@ class HSDLink_v2:
     __base_acquisition_folder = None
     __acquisition_folder = None
     
-    def __init__(self, dev_com_type: str = 'pnpl', acquisition_folder = None):
-        self.__create_com_manager(dev_com_type)
+    def __init__(self, dev_com_type: str = 'pnpl', acquisition_folder = None, plug_callback = None, unplug_callback = None):
+        self.__create_com_manager(dev_com_type, plug_callback, unplug_callback)
         
         self.sensor_data_counts = {}
         self.nof_connected_devices = 0
@@ -67,13 +67,13 @@ class HSDLink_v2:
     def close(self):
         return self.__com_manager.close()
 
-    def __create_com_manager(self,dev_com_type):
+    def __create_com_manager(self,dev_com_type, plug_callback = None, unplug_callback = None):
         if dev_com_type == 'pnpl':
             factory = PnPLHSD_Creator()
         else:
             log.error("Invalid Command Set selected: {}".format(dev_com_type))
             raise InvalidCommandSetError(dev_com_type)
-        self.__com_manager:PnPLHSD_CommandManager = factory.create_cmd_manager()
+        self.__com_manager:PnPLHSD_CommandManager = factory.create_cmd_manager(plug_callback, unplug_callback)
         #Command set presentation
         log.info(self.get_cmd_set_presentation_string())
 
@@ -110,7 +110,10 @@ class HSDLink_v2:
         return self.__com_manager.get_device_status(d_id)
     
     def get_component_status(self, d_id:int, component_name:str):
-        return self.__com_manager.get_component_status(d_id, component_name)
+        try:
+            return self.__com_manager.get_component_status(d_id, component_name)
+        except:
+            return None
 
     def get_device_alias(self, d_id:int):
         return self.__com_manager.get_device_alias(d_id)
@@ -146,7 +149,10 @@ class HSDLink_v2:
         return self.__com_manager.get_float_property(d_id, sensor_name, "aop")
 
     def get_sensor_samples_per_ts(self, d_id:int, sensor_name:str):
-        return self.__com_manager.get_integer_property(d_id, sensor_name, "samples_per_ts", "val")
+        try:
+            return self.__com_manager.get_integer_property(d_id, sensor_name, "samples_per_ts")
+        except:
+            return self.__com_manager.get_integer_property(d_id, sensor_name, "samples_per_ts", "val")
     
     def get_sensor_initial_offset(self, d_id:int, sensor_name:str):
         return self.__com_manager.get_float_property(d_id, sensor_name, "ioffset")
@@ -275,6 +281,9 @@ class HSDLink_v2:
 
     def set_sensor_fs(self, d_id: int, new_fs: float, comp_name: str):
         return self.__com_manager.set_property(d_id, new_fs, comp_name, "fs")
+
+    def set_sensor_aop(self, d_id: int, new_aop: float, comp_name: str):
+        return self.__com_manager.set_property(d_id, new_aop, comp_name, "aop")
 
     def set_sensor_samples_per_ts(self, d_id: int, new_spts: int, comp_name: str):
         return self.__com_manager.set_property(d_id, new_spts, comp_name, "samples_per_ts", "val")
@@ -438,7 +447,7 @@ class HSDLink_v2:
             log.error("Error loading UCF file [\"{}\"] in {} Component".format(ucf_file_path, comp_name))
         return res
     
-    def upload_ispu_ucf_file(self, d_id:int, comp_name:str, ucf_file_path, output_json_file_path):
+    def upload_ispu_ucf_file(self, d_id:int, comp_name:str, ucf_file_path, output_json_file_path = None):
         with open(ucf_file_path, "r") as f:
             lines = f.readlines()
         lines = [line.replace(' ', '') for line in lines]

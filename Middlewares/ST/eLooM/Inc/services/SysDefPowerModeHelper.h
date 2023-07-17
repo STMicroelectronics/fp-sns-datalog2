@@ -28,8 +28,8 @@ extern "C" {
 #endif
 
 
-#include "IAppPowerModeHelper.h"
-#include "IAppPowerModeHelper_vtbl.h"
+#include "services/IAppPowerModeHelper.h"
+#include "services/IAppPowerModeHelper_vtbl.h"
 
 
 /**

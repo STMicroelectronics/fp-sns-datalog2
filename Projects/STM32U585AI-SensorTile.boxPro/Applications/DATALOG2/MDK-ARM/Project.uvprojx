@@ -340,7 +340,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>DEBUG, SYS_DEBUG, SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\eLooM_Components\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\eLooM_Components\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -410,14 +410,19 @@
               <FilePath>..\Core\Src\AppPowerModeHelper.c</FilePath>
             </File>
             <File>
-              <FileName>ble_dctrl_class.c</FileName>
+              <FileName>automode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\ble_dctrl_class.c</FilePath>
+              <FilePath>..\Core\Src\automode.c</FilePath>
             </File>
             <File>
               <FileName>BLE_Implementation.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\BLE_Implementation.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_stream_class.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ble_stream_class.c</FilePath>
             </File>
             <File>
               <FileName>DatalogAppTask.c</FileName>
@@ -438,6 +443,16 @@
               <FileName>ICommandParse.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\ICommandParse.c</FilePath>
+            </File>
+            <File>
+              <FileName>ILog_Controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ILog_Controller.c</FilePath>
+            </File>
+            <File>
+              <FileName>ILsm6dsv16x_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ILsm6dsv16x_Mlc.c</FilePath>
             </File>
             <File>
               <FileName>IStream.c</FileName>
@@ -465,9 +480,19 @@
               <FilePath>..\Core\Src\stm32u5xx_it.c</FilePath>
             </File>
             <File>
+              <FileName>syscalls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\syscalls.c</FilePath>
+            </File>
+            <File>
               <FileName>sysinit_mx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\sysinit_mx.c</FilePath>
+            </File>
+            <File>
+              <FileName>task_execution_profile.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\task_execution_profile.c</FilePath>
             </File>
             <File>
               <FileName>UtilTask.c</FileName>
@@ -478,31 +503,6 @@
               <FileName>tx_initialize_low_level.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\Core\Src\tx_initialize_low_level.s</FilePath>
-            </File>
-            <File>
-              <FileName>automode.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\automode.c</FilePath>
-            </File>
-            <File>
-              <FileName>ILog_Controller.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ILog_Controller.c</FilePath>
-            </File>
-            <File>
-              <FileName>ILsm6dsv16x_Mlc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ILsm6dsv16x_Mlc.c</FilePath>
-            </File>
-            <File>
-              <FileName>task_execution_profile.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\task_execution_profile.c</FilePath>
-            </File>
-            <File>
-              <FileName>syscalls.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\syscalls.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -683,6 +683,11 @@
               <FileName>PCDDriver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USBX\App\PCDDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbx_callbacks.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USBX\App\usbx_callbacks.c</FilePath>
             </File>
             <File>
               <FileName>usbx_dctrl_class.c</FileName>
@@ -920,16 +925,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_adc_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_comp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_comp.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_cordic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cordic.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_cortex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cortex.c</FilePath>
@@ -945,16 +940,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_crc_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_cryp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cryp.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_cryp_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cryp_ex.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_dac.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dac.c</FilePath>
@@ -968,11 +953,6 @@
               <FileName>stm32u5xx_hal_dcache.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dcache.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_dcmi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dcmi.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_hal_dma.c</FileName>
@@ -995,11 +975,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_exti.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_fdcan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_fdcan.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_flash.c</FilePath>
@@ -1010,11 +985,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_flash_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_fmac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_fmac.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_gpio.c</FilePath>
@@ -1023,21 +993,6 @@
               <FileName>stm32u5xx_hal_gtzc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_gtzc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_hash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_hash.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_hash_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_hash_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_hcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_hcd.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_hal_i2c.c</FileName>
@@ -1055,64 +1010,9 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_icache.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_irda.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_irda.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_iwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_iwdg.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_lptim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_lptim.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_mdf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_mdf.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_mmc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_mmc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_mmc_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_mmc_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_nand.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_nand.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_nor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_nor.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_opamp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_opamp.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_opamp_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_opamp_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_ospi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_ospi.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_otfdec.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_otfdec.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_hal_pcd.c</FileName>
@@ -1125,16 +1025,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pcd_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_pka.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pka.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_pssi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pssi.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_pwr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pwr.c</FilePath>
@@ -1143,11 +1033,6 @@
               <FileName>stm32u5xx_hal_pwr_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pwr_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_ramcfg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_ramcfg.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_hal_rcc.c</FileName>
@@ -1195,26 +1080,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_sd_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_smartcard.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smartcard.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_smartcard_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smartcard_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_smbus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smbus.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_smbus_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smbus_ex.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_spi.c</FilePath>
@@ -1223,11 +1088,6 @@
               <FileName>stm32u5xx_hal_spi_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_spi_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_sram.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_hal_tim.c</FileName>
@@ -1240,11 +1100,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_tim_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_tsc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_tsc.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_uart.c</FilePath>
@@ -1253,21 +1108,6 @@
               <FileName>stm32u5xx_hal_uart_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_uart_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_usart_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_usart_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_wwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_wwdg.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_ll_sdmmc.c</FileName>
@@ -1575,101 +1415,6 @@
               <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_directory_short_name_get_extended.c</FilePath>
             </File>
             <File>
-              <FileName>fx_fault_tolerant_add_bitmap_log.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_add_bitmap_log.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_add_checksum_log.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_add_checksum_log.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_add_dir_log.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_add_dir_log.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_add_FAT_log.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_add_FAT_log.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_apply_logs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_apply_logs.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_calculate_checksum.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_calculate_checksum.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_cleanup_FAT_chain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_cleanup_FAT_chain.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_create_log_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_create_log_file.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_enable.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_enable.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_read_directory_sector.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_read_directory_sector.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_read_FAT.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_read_FAT.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_read_log_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_read_log_file.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_recover.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_recover.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_reset_log_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_reset_log_file.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_set_FAT_chain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_set_FAT_chain.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_transaction_end.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_transaction_end.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_transaction_fail.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_transaction_fail.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_transaction_start.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_transaction_start.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_write_log_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_write_log_file.c</FilePath>
-            </File>
-            <File>
               <FileName>fx_file_allocate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_file_allocate.c</FilePath>
@@ -1938,91 +1683,6 @@
               <FileName>fx_system_timer_entry.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_system_timer_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_trace_event_insert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_trace_event_insert.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_trace_event_update.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_trace_event_update.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_trace_object_register.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_trace_object_register.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_trace_object_unregister.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_trace_object_unregister.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_directory_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_directory_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_directory_entry_change.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_directory_entry_change.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_directory_entry_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_directory_entry_read.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_directory_rename.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_directory_rename.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_directory_search.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_directory_search.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_file_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_file_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_file_rename.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_file_rename.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_length_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_length_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_length_get_extended.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_length_get_extended.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_name_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_name_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_name_get_extended.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_name_get_extended.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_short_name_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_short_name_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_short_name_get_extended.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_short_name_get_extended.c</FilePath>
             </File>
             <File>
               <FileName>fx_utility_16_unsigned_read.c</FileName>
@@ -2558,46 +2218,6 @@
               <FileName>fxe_system_time_set.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_system_time_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_directory_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_directory_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_directory_rename.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_directory_rename.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_file_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_file_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_file_rename.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_file_rename.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_name_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_name_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_name_get_extended.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_name_get_extended.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_short_name_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_short_name_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_short_name_get_extended.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_short_name_get_extended.c</FilePath>
             </File>
             <File>
               <FileName>fx_stm32_sd_driver.c</FileName>
@@ -3200,66 +2820,6 @@
               <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_timer_thread_entry.c</FilePath>
             </File>
             <File>
-              <FileName>tx_trace_buffer_full_notify.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_buffer_full_notify.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_disable.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_disable.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_enable.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_enable.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_event_filter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_event_filter.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_event_unfilter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_event_unfilter.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_initialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_initialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_interrupt_control.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_interrupt_control.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_isr_enter_insert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_isr_enter_insert.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_isr_exit_insert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_isr_exit_insert.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_object_register.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_object_register.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_object_unregister.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_object_unregister.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_user_event_insert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_user_event_insert.c</FilePath>
-            </File>
-            <File>
               <FileName>txe_block_allocate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\txe_block_allocate.c</FilePath>
@@ -3625,71 +3185,6 @@
           <GroupName>Middlewares/ST/usbx/core</GroupName>
           <Files>
             <File>
-              <FileName>ux_dcd_sim_slave_address_set.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_address_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_endpoint_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_endpoint_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_endpoint_destroy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_endpoint_destroy.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_endpoint_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_endpoint_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_endpoint_stall.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_endpoint_stall.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_endpoint_status.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_endpoint_status.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_frame_number_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_frame_number_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_function.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_function.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_initialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_initialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_initialize_complete.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_initialize_complete.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_state_change.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_state_change.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_transfer_abort.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_transfer_abort.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_transfer_request.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_transfer_request.c</FilePath>
-            </File>
-            <File>
               <FileName>ux_device_class_dpump_activate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_device_class_dpump_activate.c</FilePath>
@@ -3850,516 +3345,6 @@
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_device_stack_uninitialize.c</FilePath>
             </File>
             <File>
-              <FileName>ux_hcd_sim_host_asynch_queue_process.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_asynch_queue_process.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_asynch_schedule.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_asynch_schedule.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_asynchronous_endpoint_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_asynchronous_endpoint_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_asynchronous_endpoint_destroy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_asynchronous_endpoint_destroy.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_controller_disable.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_controller_disable.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_ed_obtain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_ed_obtain.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_ed_td_clean.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_ed_td_clean.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_endpoint_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_endpoint_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_entry.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_frame_number_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_frame_number_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_frame_number_set.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_frame_number_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_initialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_initialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_interrupt_endpoint_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_interrupt_endpoint_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_iso_queue_process.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_iso_queue_process.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_iso_schedule.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_iso_schedule.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_isochronous_endpoint_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_isochronous_endpoint_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_isochronous_td_obtain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_isochronous_td_obtain.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_least_traffic_list_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_least_traffic_list_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_periodic_endpoint_destroy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_periodic_endpoint_destroy.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_periodic_schedule.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_periodic_schedule.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_periodic_tree_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_periodic_tree_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_port_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_port_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_port_status_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_port_status_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_regular_td_obtain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_regular_td_obtain.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_request_bulk_transfer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_request_bulk_transfer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_request_control_transfer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_request_control_transfer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_request_interupt_transfer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_request_interupt_transfer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_request_isochronous_transfer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_request_isochronous_transfer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_request_transfer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_request_transfer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_timer_function.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_timer_function.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_transaction_schedule.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_transaction_schedule.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_transfer_abort.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_transfer_abort.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_uninitialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_uninitialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_activate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_activate.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_configure.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_configure.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_deactivate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_deactivate.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_endpoints_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_endpoints_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_entry.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_ioctl.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_ioctl.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_read.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_write.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_write.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_bandwidth_check.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_bandwidth_check.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_bandwidth_claim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_bandwidth_claim.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_bandwidth_release.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_bandwidth_release.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_call.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_call.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_device_scan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_device_scan.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_instance_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_instance_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_instance_destroy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_instance_destroy.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_instance_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_instance_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_instance_verify.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_instance_verify.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_interface_scan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_interface_scan.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_register.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_register.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_unregister.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_unregister.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_descriptor_parse.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_descriptor_parse.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_enumerate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_enumerate.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_instance_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_instance_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_instance_delete.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_instance_delete.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_interface_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_interface_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_interface_scan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_interface_scan.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_set.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_delay_ms.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_delay_ms.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_address_set.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_address_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_configuration_activate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_configuration_activate.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_configuration_deactivate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_configuration_deactivate.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_configuration_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_configuration_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_configuration_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_configuration_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_configuration_select.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_configuration_select.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_descriptor_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_descriptor_read.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_remove.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_remove.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_resources_free.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_resources_free.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_string_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_string_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_endpoint_instance_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_endpoint_instance_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_endpoint_instance_delete.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_endpoint_instance_delete.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_endpoint_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_endpoint_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_endpoint_transfer_abort.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_endpoint_transfer_abort.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_enum_thread_entry.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_enum_thread_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_hcd_register.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_hcd_register.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_hcd_thread_entry.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_hcd_thread_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_hcd_transfer_request.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_hcd_transfer_request.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_hcd_unregister.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_hcd_unregister.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_hnp_polling_thread_entry.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_hnp_polling_thread_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_initialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_initialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interface_endpoint_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interface_endpoint_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interface_instance_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interface_instance_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interface_instance_delete.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interface_instance_delete.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interface_set.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interface_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interface_setting_select.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interface_setting_select.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interfaces_scan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interfaces_scan.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_new_configuration_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_new_configuration_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_new_device_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_new_device_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_new_device_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_new_device_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_new_endpoint_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_new_endpoint_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_new_interface_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_new_interface_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_rh_change_process.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_rh_change_process.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_rh_device_extraction.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_rh_device_extraction.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_rh_device_insertion.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_rh_device_insertion.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_role_swap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_role_swap.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_transfer_request.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_transfer_request.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_transfer_request_abort.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_transfer_request_abort.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_uninitialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_uninitialize.c</FilePath>
-            </File>
-            <File>
               <FileName>ux_system_error_handler.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_system_error_handler.c</FilePath>
@@ -4373,26 +3358,6 @@
               <FileName>ux_system_uninitialize.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_system_uninitialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_trace_event_insert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_trace_event_insert.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_trace_event_update.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_trace_event_update.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_trace_object_register.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_trace_object_register.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_trace_object_unregister.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_trace_object_unregister.c</FilePath>
             </File>
             <File>
               <FileName>ux_utility_debug_callback_register.c</FileName>
@@ -4739,16 +3704,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\usbx_stm32_device_controllers\ux_dcd_stm32_uninitialize.c</FilePath>
             </File>
+            <File>
+              <FileName>ux_dcd_stm32_transfer_abort.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\usbx_stm32_device_controllers\ux_dcd_stm32_transfer_abort.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Middlewares/ST/SensorStreaming_USBX</GroupName>
           <Files>
-            <File>
-              <FileName>ux_dcd_stm32_callback_sof.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_dcd_stm32_callback_sof.c</FilePath>
-            </File>
             <File>
               <FileName>ux_device_class_sensor_streaming_activate.c</FileName>
               <FileType>1</FileType>
@@ -4790,6 +3755,11 @@
               <FilePath>..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_read.c</FilePath>
             </File>
             <File>
+              <FileName>ux_device_class_sensor_streaming_sof.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_sof.c</FilePath>
+            </File>
+            <File>
               <FileName>ux_device_class_sensor_streaming_thread.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_thread.c</FilePath>
@@ -4798,6 +3768,16 @@
               <FileName>ux_device_class_sensor_streaming_write.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_write.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares\ST\CircularBufferDL2</GroupName>
+          <Files>
+            <File>
+              <FileName>CircularBufferDL2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\CircularBufferDL2\CircularBufferDL2.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5143,7 +4123,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\eLooM_Components\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\eLooM_Components\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -5213,14 +4193,19 @@
               <FilePath>..\Core\Src\AppPowerModeHelper.c</FilePath>
             </File>
             <File>
-              <FileName>ble_dctrl_class.c</FileName>
+              <FileName>automode.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\ble_dctrl_class.c</FilePath>
+              <FilePath>..\Core\Src\automode.c</FilePath>
             </File>
             <File>
               <FileName>BLE_Implementation.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\BLE_Implementation.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_stream_class.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ble_stream_class.c</FilePath>
             </File>
             <File>
               <FileName>DatalogAppTask.c</FileName>
@@ -5241,6 +4226,16 @@
               <FileName>ICommandParse.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\ICommandParse.c</FilePath>
+            </File>
+            <File>
+              <FileName>ILog_Controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ILog_Controller.c</FilePath>
+            </File>
+            <File>
+              <FileName>ILsm6dsv16x_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\ILsm6dsv16x_Mlc.c</FilePath>
             </File>
             <File>
               <FileName>IStream.c</FileName>
@@ -5268,9 +4263,19 @@
               <FilePath>..\Core\Src\stm32u5xx_it.c</FilePath>
             </File>
             <File>
+              <FileName>syscalls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\syscalls.c</FilePath>
+            </File>
+            <File>
               <FileName>sysinit_mx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\sysinit_mx.c</FilePath>
+            </File>
+            <File>
+              <FileName>task_execution_profile.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\task_execution_profile.c</FilePath>
             </File>
             <File>
               <FileName>UtilTask.c</FileName>
@@ -5281,31 +4286,6 @@
               <FileName>tx_initialize_low_level.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\Core\Src\tx_initialize_low_level.s</FilePath>
-            </File>
-            <File>
-              <FileName>automode.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\automode.c</FilePath>
-            </File>
-            <File>
-              <FileName>ILog_Controller.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ILog_Controller.c</FilePath>
-            </File>
-            <File>
-              <FileName>ILsm6dsv16x_Mlc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ILsm6dsv16x_Mlc.c</FilePath>
-            </File>
-            <File>
-              <FileName>task_execution_profile.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\task_execution_profile.c</FilePath>
-            </File>
-            <File>
-              <FileName>syscalls.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\syscalls.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5486,6 +4466,11 @@
               <FileName>PCDDriver.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USBX\App\PCDDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbx_callbacks.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\USBX\App\usbx_callbacks.c</FilePath>
             </File>
             <File>
               <FileName>usbx_dctrl_class.c</FileName>
@@ -5723,16 +4708,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_adc_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_comp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_comp.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_cordic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cordic.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_cortex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cortex.c</FilePath>
@@ -5748,16 +4723,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_crc_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_cryp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cryp.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_cryp_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_cryp_ex.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_dac.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dac.c</FilePath>
@@ -5771,11 +4736,6 @@
               <FileName>stm32u5xx_hal_dcache.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dcache.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_dcmi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_dcmi.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_hal_dma.c</FileName>
@@ -5798,11 +4758,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_exti.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_fdcan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_fdcan.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_flash.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_flash.c</FilePath>
@@ -5813,11 +4768,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_flash_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_fmac.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_fmac.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_gpio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_gpio.c</FilePath>
@@ -5826,21 +4776,6 @@
               <FileName>stm32u5xx_hal_gtzc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_gtzc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_hash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_hash.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_hash_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_hash_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_hcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_hcd.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_hal_i2c.c</FileName>
@@ -5858,64 +4793,9 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_icache.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_irda.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_irda.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_iwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_iwdg.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_lptim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_lptim.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_mdf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_mdf.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_mmc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_mmc.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_mmc_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_mmc_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_nand.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_nand.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_nor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_nor.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_opamp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_opamp.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_opamp_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_opamp_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_ospi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_ospi.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_otfdec.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_otfdec.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_hal_pcd.c</FileName>
@@ -5928,16 +4808,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pcd_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_pka.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pka.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_pssi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pssi.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_pwr.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pwr.c</FilePath>
@@ -5946,11 +4816,6 @@
               <FileName>stm32u5xx_hal_pwr_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_pwr_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_ramcfg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_ramcfg.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_hal_rcc.c</FileName>
@@ -5998,26 +4863,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_sd_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_smartcard.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smartcard.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_smartcard_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smartcard_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_smbus.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smbus.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_smbus_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_smbus_ex.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_spi.c</FilePath>
@@ -6026,11 +4871,6 @@
               <FileName>stm32u5xx_hal_spi_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_spi_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_sram.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_sram.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_hal_tim.c</FileName>
@@ -6043,11 +4883,6 @@
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_tim_ex.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_tsc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_tsc.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_hal_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_uart.c</FilePath>
@@ -6056,21 +4891,6 @@
               <FileName>stm32u5xx_hal_uart_ex.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_uart_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_usart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_usart.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_usart_ex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_usart_ex.c</FilePath>
-            </File>
-            <File>
-              <FileName>stm32u5xx_hal_wwdg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\STM32U5xx_HAL_Driver\Src\stm32u5xx_hal_wwdg.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_ll_sdmmc.c</FileName>
@@ -6378,101 +5198,6 @@
               <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_directory_short_name_get_extended.c</FilePath>
             </File>
             <File>
-              <FileName>fx_fault_tolerant_add_bitmap_log.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_add_bitmap_log.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_add_checksum_log.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_add_checksum_log.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_add_dir_log.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_add_dir_log.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_add_FAT_log.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_add_FAT_log.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_apply_logs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_apply_logs.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_calculate_checksum.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_calculate_checksum.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_cleanup_FAT_chain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_cleanup_FAT_chain.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_create_log_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_create_log_file.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_enable.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_enable.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_read_directory_sector.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_read_directory_sector.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_read_FAT.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_read_FAT.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_read_log_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_read_log_file.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_recover.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_recover.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_reset_log_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_reset_log_file.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_set_FAT_chain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_set_FAT_chain.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_transaction_end.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_transaction_end.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_transaction_fail.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_transaction_fail.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_transaction_start.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_transaction_start.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_fault_tolerant_write_log_file.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_fault_tolerant_write_log_file.c</FilePath>
-            </File>
-            <File>
               <FileName>fx_file_allocate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_file_allocate.c</FilePath>
@@ -6741,91 +5466,6 @@
               <FileName>fx_system_timer_entry.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_system_timer_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_trace_event_insert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_trace_event_insert.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_trace_event_update.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_trace_event_update.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_trace_object_register.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_trace_object_register.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_trace_object_unregister.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_trace_object_unregister.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_directory_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_directory_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_directory_entry_change.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_directory_entry_change.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_directory_entry_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_directory_entry_read.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_directory_rename.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_directory_rename.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_directory_search.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_directory_search.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_file_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_file_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_file_rename.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_file_rename.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_length_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_length_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_length_get_extended.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_length_get_extended.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_name_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_name_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_name_get_extended.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_name_get_extended.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_short_name_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_short_name_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>fx_unicode_short_name_get_extended.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fx_unicode_short_name_get_extended.c</FilePath>
             </File>
             <File>
               <FileName>fx_utility_16_unsigned_read.c</FileName>
@@ -7361,46 +6001,6 @@
               <FileName>fxe_system_time_set.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_system_time_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_directory_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_directory_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_directory_rename.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_directory_rename.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_file_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_file_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_file_rename.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_file_rename.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_name_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_name_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_name_get_extended.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_name_get_extended.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_short_name_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_short_name_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>fxe_unicode_short_name_get_extended.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\filex\common\src\fxe_unicode_short_name_get_extended.c</FilePath>
             </File>
             <File>
               <FileName>fx_stm32_sd_driver.c</FileName>
@@ -8003,66 +6603,6 @@
               <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_timer_thread_entry.c</FilePath>
             </File>
             <File>
-              <FileName>tx_trace_buffer_full_notify.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_buffer_full_notify.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_disable.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_disable.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_enable.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_enable.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_event_filter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_event_filter.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_event_unfilter.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_event_unfilter.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_initialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_initialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_interrupt_control.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_interrupt_control.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_isr_enter_insert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_isr_enter_insert.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_isr_exit_insert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_isr_exit_insert.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_object_register.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_object_register.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_object_unregister.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_object_unregister.c</FilePath>
-            </File>
-            <File>
-              <FileName>tx_trace_user_event_insert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\tx_trace_user_event_insert.c</FilePath>
-            </File>
-            <File>
               <FileName>txe_block_allocate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\threadx\common\src\txe_block_allocate.c</FilePath>
@@ -8428,71 +6968,6 @@
           <GroupName>Middlewares/ST/usbx/core</GroupName>
           <Files>
             <File>
-              <FileName>ux_dcd_sim_slave_address_set.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_address_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_endpoint_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_endpoint_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_endpoint_destroy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_endpoint_destroy.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_endpoint_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_endpoint_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_endpoint_stall.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_endpoint_stall.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_endpoint_status.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_endpoint_status.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_frame_number_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_frame_number_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_function.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_function.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_initialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_initialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_initialize_complete.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_initialize_complete.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_state_change.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_state_change.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_transfer_abort.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_transfer_abort.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_dcd_sim_slave_transfer_request.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_dcd_sim_slave_transfer_request.c</FilePath>
-            </File>
-            <File>
               <FileName>ux_device_class_dpump_activate.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_device_class_dpump_activate.c</FilePath>
@@ -8653,516 +7128,6 @@
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_device_stack_uninitialize.c</FilePath>
             </File>
             <File>
-              <FileName>ux_hcd_sim_host_asynch_queue_process.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_asynch_queue_process.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_asynch_schedule.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_asynch_schedule.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_asynchronous_endpoint_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_asynchronous_endpoint_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_asynchronous_endpoint_destroy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_asynchronous_endpoint_destroy.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_controller_disable.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_controller_disable.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_ed_obtain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_ed_obtain.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_ed_td_clean.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_ed_td_clean.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_endpoint_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_endpoint_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_entry.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_frame_number_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_frame_number_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_frame_number_set.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_frame_number_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_initialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_initialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_interrupt_endpoint_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_interrupt_endpoint_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_iso_queue_process.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_iso_queue_process.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_iso_schedule.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_iso_schedule.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_isochronous_endpoint_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_isochronous_endpoint_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_isochronous_td_obtain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_isochronous_td_obtain.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_least_traffic_list_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_least_traffic_list_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_periodic_endpoint_destroy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_periodic_endpoint_destroy.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_periodic_schedule.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_periodic_schedule.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_periodic_tree_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_periodic_tree_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_port_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_port_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_port_status_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_port_status_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_regular_td_obtain.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_regular_td_obtain.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_request_bulk_transfer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_request_bulk_transfer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_request_control_transfer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_request_control_transfer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_request_interupt_transfer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_request_interupt_transfer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_request_isochronous_transfer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_request_isochronous_transfer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_request_transfer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_request_transfer.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_timer_function.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_timer_function.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_transaction_schedule.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_transaction_schedule.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_transfer_abort.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_transfer_abort.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_hcd_sim_host_uninitialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_hcd_sim_host_uninitialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_activate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_activate.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_configure.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_configure.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_deactivate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_deactivate.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_endpoints_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_endpoints_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_entry.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_ioctl.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_ioctl.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_read.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_class_dpump_write.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_class_dpump_write.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_bandwidth_check.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_bandwidth_check.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_bandwidth_claim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_bandwidth_claim.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_bandwidth_release.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_bandwidth_release.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_call.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_call.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_device_scan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_device_scan.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_instance_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_instance_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_instance_destroy.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_instance_destroy.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_instance_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_instance_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_instance_verify.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_instance_verify.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_interface_scan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_interface_scan.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_register.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_register.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_class_unregister.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_class_unregister.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_descriptor_parse.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_descriptor_parse.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_enumerate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_enumerate.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_instance_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_instance_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_instance_delete.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_instance_delete.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_interface_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_interface_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_interface_scan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_interface_scan.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_configuration_set.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_configuration_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_delay_ms.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_delay_ms.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_address_set.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_address_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_configuration_activate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_configuration_activate.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_configuration_deactivate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_configuration_deactivate.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_configuration_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_configuration_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_configuration_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_configuration_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_configuration_select.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_configuration_select.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_descriptor_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_descriptor_read.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_remove.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_remove.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_resources_free.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_resources_free.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_device_string_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_device_string_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_endpoint_instance_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_endpoint_instance_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_endpoint_instance_delete.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_endpoint_instance_delete.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_endpoint_reset.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_endpoint_reset.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_endpoint_transfer_abort.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_endpoint_transfer_abort.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_enum_thread_entry.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_enum_thread_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_hcd_register.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_hcd_register.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_hcd_thread_entry.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_hcd_thread_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_hcd_transfer_request.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_hcd_transfer_request.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_hcd_unregister.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_hcd_unregister.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_hnp_polling_thread_entry.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_hnp_polling_thread_entry.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_initialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_initialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interface_endpoint_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interface_endpoint_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interface_instance_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interface_instance_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interface_instance_delete.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interface_instance_delete.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interface_set.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interface_set.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interface_setting_select.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interface_setting_select.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_interfaces_scan.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_interfaces_scan.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_new_configuration_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_new_configuration_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_new_device_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_new_device_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_new_device_get.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_new_device_get.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_new_endpoint_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_new_endpoint_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_new_interface_create.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_new_interface_create.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_rh_change_process.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_rh_change_process.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_rh_device_extraction.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_rh_device_extraction.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_rh_device_insertion.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_rh_device_insertion.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_role_swap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_role_swap.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_transfer_request.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_transfer_request.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_transfer_request_abort.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_transfer_request_abort.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_host_stack_uninitialize.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_host_stack_uninitialize.c</FilePath>
-            </File>
-            <File>
               <FileName>ux_system_error_handler.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_system_error_handler.c</FilePath>
@@ -9176,26 +7141,6 @@
               <FileName>ux_system_uninitialize.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_system_uninitialize.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_trace_event_insert.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_trace_event_insert.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_trace_event_update.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_trace_event_update.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_trace_object_register.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_trace_object_register.c</FilePath>
-            </File>
-            <File>
-              <FileName>ux_trace_object_unregister.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_trace_object_unregister.c</FilePath>
             </File>
             <File>
               <FileName>ux_utility_debug_callback_register.c</FileName>
@@ -9542,16 +7487,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\usbx_stm32_device_controllers\ux_dcd_stm32_uninitialize.c</FilePath>
             </File>
+            <File>
+              <FileName>ux_dcd_stm32_transfer_abort.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\usbx_stm32_device_controllers\ux_dcd_stm32_transfer_abort.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Middlewares/ST/SensorStreaming_USBX</GroupName>
           <Files>
-            <File>
-              <FileName>ux_dcd_stm32_callback_sof.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_dcd_stm32_callback_sof.c</FilePath>
-            </File>
             <File>
               <FileName>ux_device_class_sensor_streaming_activate.c</FileName>
               <FileType>1</FileType>
@@ -9593,6 +7538,11 @@
               <FilePath>..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_read.c</FilePath>
             </File>
             <File>
+              <FileName>ux_device_class_sensor_streaming_sof.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_sof.c</FilePath>
+            </File>
+            <File>
               <FileName>ux_device_class_sensor_streaming_thread.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_thread.c</FilePath>
@@ -9601,6 +7551,16 @@
               <FileName>ux_device_class_sensor_streaming_write.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\SensorStreaming_USBX\ux_device_class_sensor_streaming_write.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares\ST\CircularBufferDL2</GroupName>
+          <Files>
+            <File>
+              <FileName>CircularBufferDL2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\CircularBufferDL2\CircularBufferDL2.c</FilePath>
             </File>
           </Files>
         </Group>

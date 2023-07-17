@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:other:firmware_info;1
+  * dtmi:vespucci:other:firmware_info;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.0.0
+  * Created by: DTDL2PnPL_cGen version 1.1.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -114,8 +114,8 @@ uint8_t Firmware_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   json_object_dotset_string(JSON_Status, "firmware_info.fw_name", temp_s);
   firmware_info_get_fw_version(&temp_s);
   json_object_dotset_string(JSON_Status, "firmware_info.fw_version", temp_s);
-  firmware_info_get_serial_number(&temp_s);
-  json_object_dotset_string(JSON_Status, "firmware_info.serial_number", temp_s);
+  firmware_info_get_part_number(&temp_s);
+  json_object_dotset_string(JSON_Status, "firmware_info.part_number", temp_s);
   firmware_info_get_device_url(&temp_s);
   json_object_dotset_string(JSON_Status, "firmware_info.device_url", temp_s);
   firmware_info_get_fw_url(&temp_s);

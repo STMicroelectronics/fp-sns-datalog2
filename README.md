@@ -41,12 +41,15 @@ Here is the list of references to user documents:
 
 -   IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1
 -   RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37
--   STM32CubeIDE v1.12.0
+-   STM32CubeIDE v1.12.1
 
 ## Supported Devices and Boards
 
 - [STEVAL-MKBOXPRO](https://www.st.com/sensortileboxpro)
 - [STEVAL-STWINBX1](https://www.st.com/stwinbox)
+- [B-U585I-IOT02A](https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html)
+- [X-NUCLEO-IKS02A1](https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html) with [NUCLEO-U575ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html)
+- [X-NUCLEO-IKS02A1](https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html) with [NUCLEO-H7A3ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html)
 
 ## Backward Compatibility
 

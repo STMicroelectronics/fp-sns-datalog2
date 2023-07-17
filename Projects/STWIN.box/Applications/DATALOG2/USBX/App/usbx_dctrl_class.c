@@ -19,6 +19,7 @@
 
 #include "usbx_dctrl_class.h"
 #include "usbx_dctrl_class_vtbl.h"
+#include "usbx_callbacks.h"
 
 #include "PCDDriver.h"
 #include "ux_api.h"
@@ -172,7 +173,7 @@ int8_t datalog_class_control(void *_this, uint8_t isHostToDevice, uint8_t cmd, u
 
         if (counter == 0) /* The complete message has been received */
         {
-          IParseCommand(obj->cmd_parser, serialized_cmd, 1);
+          IParseCommand(obj->cmd_parser, serialized_cmd, sObj.comm_interface_id);
         }
         break;
       }
@@ -233,7 +234,7 @@ int8_t datalog_class_control(void *_this, uint8_t isHostToDevice, uint8_t cmd, u
 
 /* IStream virtual functions definition */
 /*******************************/
-sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, void *param)
+sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, uint8_t comm_interface_id, void *param)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -256,6 +257,8 @@ sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, void *param)
 
   UCHAR *pointer = obj->memory_pointer;
   obj->is_class_initialized_by_the_host = false;
+
+  obj->comm_interface_id = comm_interface_id;
 
   if (tx_byte_pool_create(&obj->ux_device_app_byte_pool, "Ux App memory pool", obj->ux_device_byte_pool_buffer,
                           UX_DEVICE_APP_MEM_POOL_SIZE) != TX_SUCCESS)
@@ -295,11 +298,13 @@ sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, void *param)
   /* Get_Language_Id_Framework and get the length */
   language_id_framework = USBD_Get_Language_Id_Framework(&language_id_framework_length);
 
-  /* The code below is required for installing the device portion of USBX.
-   In this application */
+#if (USBX_MAJOR_VERSION == 6) && (USBX_MINOR_VERSION >= 2)
+  tx_status = ux_device_stack_initialize(NULL, 0, device_framework_full_speed, device_framework_fs_length, string_framework, string_framework_length,
+                                         language_id_framework, language_id_framework_length, USBD_ChangeFunction);
+#else
   tx_status = ux_device_stack_initialize(NULL, 0, device_framework_full_speed, device_framework_fs_length, string_framework, string_framework_length,
                                          language_id_framework, language_id_framework_length, UX_NULL);
-
+#endif
   /* Check the device stack class status */
   if (tx_status != UX_SUCCESS)
   {
@@ -432,20 +437,22 @@ sys_error_code_t usbx_dctrl_vtblStream_post_data(IStream_t *_this, uint8_t id_st
   return res;
 }
 
-sys_error_code_t usbx_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t id_stream, uint32_t size,
-                                                      const char *stream_name)
+
+
+sys_error_code_t usbx_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t id_stream, uint32_t size, const char *stream_name)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   usbx_dctrl_class_t *obj = (usbx_dctrl_class_t *) _this;
+  assert_param(obj->sensor_streaming_device != NULL);
 
   obj->TxBuffer[id_stream] = NULL;
-  obj->TxBuffer[id_stream] = (uint8_t *) SysAlloc(size * 2 + 2 + 8);  /* Double buffer: data + id_stream + pkt counter */
+  obj->TxBuffer[id_stream] = (uint8_t *) SysAlloc((size + SS_HEADER_SIZE) * SS_CH_QUEUE_ITEMS);  /* Double buffer: data + id_stream + pkt counter */
+
   if (obj->TxBuffer[id_stream] != NULL)
   {
-    ux_device_class_sensor_streaming_SetTxDataBuffer(obj->sensor_streaming_device, id_stream, obj->TxBuffer[id_stream],
-                                                     size);
-    ux_device_class_sensor_streaming_CleanTxDataBuffer(obj->sensor_streaming_device, id_stream);
+    ux_device_class_sensor_streaming_SetTxDataBuffer(obj->sensor_streaming_device, id_stream, obj->TxBuffer[id_stream], size + SS_HEADER_SIZE, SS_CH_QUEUE_ITEMS);
+    //ux_device_class_sensor_streaming_CleanTxDataBuffer(obj->sensor_streaming_device, id_stream);
   }
   else
   {

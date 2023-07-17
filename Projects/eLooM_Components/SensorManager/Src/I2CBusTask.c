@@ -145,7 +145,7 @@ sys_error_code_t I2CBusTaskConnectDevice(I2CBusTask *_this, I2CBusIF *p_bus_if)
 {
   assert_param(_this);
 
-  ((ABusIF*)p_bus_if)->p_request_queue = &_this->in_queue;
+  ((ABusIF *)p_bus_if)->p_request_queue = &_this->in_queue;
 
   return IBusConnectDevice(_this->p_bus_if, &p_bus_if->super);
 }
@@ -385,9 +385,10 @@ sys_error_code_t I2CBusTask_vtblConnectDevice(IBus *_this, ABusIF *pxBusIF)
     pxBusIF->m_xConnector.pfWriteReg = I2CBusTaskWrite;
     pxBusIF->m_pfBusCtrl = I2CBusTaskCtrl;
     pxBusIF->m_pxBus = _this;
-    ((I2CBusTaskIBus*) _this)->p_owner->connected_devices++;
+    ((I2CBusTaskIBus *) _this)->p_owner->connected_devices++;
 
-    SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("I2CBUS: connected device: %d\r\n", ((I2CBusTaskIBus *)_this)->p_owner->connected_devices));
+    SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("I2CBUS: connected device: %d\r\n",
+                                       ((I2CBusTaskIBus *)_this)->p_owner->connected_devices));
   }
   else
   {

@@ -31,7 +31,7 @@ typedef struct _IStream_vtbl IStream_vtbl;
 
 struct _IStream_vtbl
 {
-  sys_error_code_t (*init_stream)(IStream_t *_this, void *param);
+  sys_error_code_t (*init_stream)(IStream_t *_this, uint8_t comm_interface_id, void *param);
   sys_error_code_t (*enable_stream)(IStream_t *_this);
   sys_error_code_t (*disable_stream)(IStream_t *_this);
   boolean_t (*is_enabled_stream)(IStream_t *_this);
@@ -56,9 +56,9 @@ struct _IStream_t
 // Inline functions definition
 // ***************************
 
-inline sys_error_code_t IStream_init(IStream_t *_this, void *param)
+inline sys_error_code_t IStream_init(IStream_t *_this, uint8_t comm_interface_id, void *param)
 {
-  return _this->vptr->init_stream(_this, param);
+  return _this->vptr->init_stream(_this, comm_interface_id, param);
 }
 
 inline sys_error_code_t IStream_enable(IStream_t *_this)

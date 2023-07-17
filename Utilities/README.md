@@ -16,3 +16,7 @@ The scripts have been successfully tested with Python 3.10.
 
 Python_SDK folder contains also a "how to use" Jupyter Notebook, with easy-to-use examples
 to show the main functionalities of our HSDatalog Python SDK.
+
+In addition, BoardReset folder contains a script useful to fully reset STWIN.box and 
+Sensortile.box PRO. The script reset the board configuration to the default flash bank
+and flash newly the DATALOG2 firmware

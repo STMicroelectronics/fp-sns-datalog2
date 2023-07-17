@@ -36,7 +36,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _fx_media_open                                      PORTABLE C      */
-/*                                                           6.1          */
+/*                                                           6.2.0        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
@@ -129,6 +129,13 @@
 /*                                            disable force memset,       */
 /*                                            build options and cache,    */
 /*                                            resulting in version 6.1    */
+/*  01-31-2022     William E. Lamie         Modified comment(s), fixed    */
+/*                                            errors without cache,       */
+/*                                            resulting in version 6.1.10 */
+/*  10-31-2022     Tiejun Zhou              Modified comment(s),          */
+/*                                            fixed memory buffer when    */
+/*                                            cache is disabled,          */
+/*                                            resulting in version 6.2.0  */
 /*                                                                        */
 /**************************************************************************/
 UINT  _fx_media_open(FX_MEDIA *media_ptr, CHAR *media_name,
@@ -163,10 +170,10 @@ FX_INT_SAVE_AREA
 
 #ifdef FX_DISABLE_FORCE_MEMORY_OPERATION
     _fx_utility_memory_set((UCHAR *)media_ptr, 0, sizeof(FX_MEDIA));
+#endif /* FX_DISABLE_FORCE_MEMORY_OPERATION */
 #ifdef FX_DISABLE_CACHE
     media_ptr -> fx_media_memory_buffer_sector = (ULONG64)-1;
 #endif /* FX_DISABLE_CACHE */
-#endif /* FX_DISABLE_FORCE_MEMORY_OPERATION */
 
     /* Save the basic information in the media control block.  */
     media_ptr -> fx_media_name =                        media_name;
@@ -337,13 +344,8 @@ FX_INT_SAVE_AREA
     /* Pickup the additional info sector number. This will only be used in FAT32 situations.  */
     additional_info_sector =  _fx_utility_16_unsigned_read(&media_ptr -> fx_media_driver_buffer[48]);
 
-#ifndef FX_DISABLE_CACHE
-    /* Determine how many logical sectors can be cached with user's supplied
-       buffer area - there must be at least enough for one sector!  */
-    media_ptr -> fx_media_sector_cache_size =  memory_size / media_ptr -> fx_media_bytes_per_sector;
-
     /* Is there at least one?  */
-    if (media_ptr -> fx_media_sector_cache_size == 0)
+    if (memory_size < media_ptr -> fx_media_bytes_per_sector)
     {
 
         /* Build the "uninitialize" I/O driver request.  */
@@ -359,6 +361,11 @@ FX_INT_SAVE_AREA
         /* Error in the buffer size supplied by user.  */
         return(FX_BUFFER_ERROR);
     }
+
+#ifndef FX_DISABLE_CACHE
+    /* Determine how many logical sectors can be cached with user's supplied
+       buffer area - there must be at least enough for one sector!  */
+    media_ptr -> fx_media_sector_cache_size =  memory_size / media_ptr -> fx_media_bytes_per_sector;
 
     /* If trace is enabled, register this object.  */
     FX_TRACE_OBJECT_REGISTER(FX_TRACE_OBJECT_TYPE_MEDIA, media_ptr, media_name, FX_MAX_FAT_CACHE, media_ptr -> fx_media_sector_cache_size)
@@ -651,6 +658,7 @@ FX_INT_SAVE_AREA
         (media_ptr -> fx_media_sector_cache_list_ptr) -> fx_cached_sector_valid =  FX_FALSE;
 #else
         buffer_ptr =  media_ptr -> fx_media_memory_buffer;
+        media_ptr -> fx_media_memory_buffer_sector = (ULONG64)-1;
 #endif /* FX_DISABLE_CACHE */
 
         /* Read the FAT32 additional information sector from the device.  */

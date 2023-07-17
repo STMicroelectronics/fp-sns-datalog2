@@ -45,9 +45,9 @@
   * @retval       interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv16x_read_reg(stmdev_ctx_t *ctx, uint8_t reg,
-                            uint8_t *data,
-                            uint16_t len)
+int32_t __weak lsm6dsv16x_read_reg(stmdev_ctx_t *ctx, uint8_t reg,
+                                   uint8_t *data,
+                                   uint16_t len)
 {
   int32_t ret;
 
@@ -66,9 +66,9 @@ int32_t lsm6dsv16x_read_reg(stmdev_ctx_t *ctx, uint8_t reg,
   * @retval       interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv16x_write_reg(stmdev_ctx_t *ctx, uint8_t reg,
-                             uint8_t *data,
-                             uint16_t len)
+int32_t __weak lsm6dsv16x_write_reg(stmdev_ctx_t *ctx, uint8_t reg,
+                                    uint8_t *data,
+                                    uint16_t len)
 {
   int32_t ret;
 
@@ -530,14 +530,16 @@ int32_t lsm6dsv16x_device_id_get(stmdev_ctx_t *ctx, uint8_t *val)
   * @brief  Accelerometer output data rate (ODR) selection.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      XL_ODR_OFF, XL_ODR_AT_1Hz875, XL_ODR_AT_7Hz5, XL_ODR_AT_15Hz, XL_ODR_AT_30Hz, XL_ODR_AT_60Hz, XL_ODR_AT_120Hz, XL_ODR_AT_240Hz, XL_ODR_AT_480Hz, XL_ODR_AT_960Hz, XL_ODR_AT_1920Hz, XL_ODR_AT_3840Hz, XL_ODR_AT_7680Hz,
+  * @param  val      lsm6dsv16x_data_rate_t enum
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
 int32_t lsm6dsv16x_xl_data_rate_set(stmdev_ctx_t *ctx,
-                                    lsm6dsv16x_xl_data_rate_t val)
+                                    lsm6dsv16x_data_rate_t val)
 {
   lsm6dsv16x_ctrl1_t ctrl1;
+  lsm6dsv16x_haodr_cfg_t haodr;
+  uint8_t sel;
   int32_t ret;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_CTRL1, (uint8_t *)&ctrl1, 1);
@@ -547,6 +549,14 @@ int32_t lsm6dsv16x_xl_data_rate_set(stmdev_ctx_t *ctx,
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_CTRL1, (uint8_t *)&ctrl1, 1);
   }
 
+  sel = ((uint8_t)val >> 4) & 0xFU;
+  if (sel != 0U)
+  {
+    ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_HAODR_CFG, (uint8_t *)&haodr, 1);
+    haodr.haodr_sel = sel;
+    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_HAODR_CFG, (uint8_t *)&haodr, 1);
+  }
+
   return ret;
 }
 
@@ -554,74 +564,198 @@ int32_t lsm6dsv16x_xl_data_rate_set(stmdev_ctx_t *ctx,
   * @brief  Accelerometer output data rate (ODR) selection.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      XL_ODR_OFF, XL_ODR_AT_1Hz875, XL_ODR_AT_7Hz5, XL_ODR_AT_15Hz, XL_ODR_AT_30Hz, XL_ODR_AT_60Hz, XL_ODR_AT_120Hz, XL_ODR_AT_240Hz, XL_ODR_AT_480Hz, XL_ODR_AT_960Hz, XL_ODR_AT_1920Hz, XL_ODR_AT_3840Hz, XL_ODR_AT_7680Hz,
+  * @param  val      lsm6dsv16x_data_rate_t enum
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
 int32_t lsm6dsv16x_xl_data_rate_get(stmdev_ctx_t *ctx,
-                                    lsm6dsv16x_xl_data_rate_t *val)
+                                    lsm6dsv16x_data_rate_t *val)
 {
   lsm6dsv16x_ctrl1_t ctrl1;
+  lsm6dsv16x_haodr_cfg_t haodr;
+  uint8_t sel;
   int32_t ret;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_CTRL1, (uint8_t *)&ctrl1, 1);
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_HAODR_CFG, (uint8_t *)&haodr, 1);
+  sel = haodr.haodr_sel;
 
   switch (ctrl1.odr_xl)
   {
-    case LSM6DSV16X_XL_ODR_OFF:
-      *val = LSM6DSV16X_XL_ODR_OFF;
+    case LSM6DSV16X_ODR_OFF:
+      *val = LSM6DSV16X_ODR_OFF;
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_1Hz875:
-      *val = LSM6DSV16X_XL_ODR_AT_1Hz875;
+    case LSM6DSV16X_ODR_AT_1Hz875:
+      *val = LSM6DSV16X_ODR_AT_1Hz875;
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_7Hz5:
-      *val = LSM6DSV16X_XL_ODR_AT_7Hz5;
+    case LSM6DSV16X_ODR_AT_7Hz5:
+      *val = LSM6DSV16X_ODR_AT_7Hz5;
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_15Hz:
-      *val = LSM6DSV16X_XL_ODR_AT_15Hz;
+    case LSM6DSV16X_ODR_AT_15Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_15Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_15Hz625;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_12Hz5;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_30Hz:
-      *val = LSM6DSV16X_XL_ODR_AT_30Hz;
+    case LSM6DSV16X_ODR_AT_30Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_30Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_31Hz25;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_25Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_60Hz:
-      *val = LSM6DSV16X_XL_ODR_AT_60Hz;
+    case LSM6DSV16X_ODR_AT_60Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_60Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_62Hz5;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_50Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_120Hz:
-      *val = LSM6DSV16X_XL_ODR_AT_120Hz;
+    case LSM6DSV16X_ODR_AT_120Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_120Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_125Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_100Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_240Hz:
-      *val = LSM6DSV16X_XL_ODR_AT_240Hz;
+    case LSM6DSV16X_ODR_AT_240Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_240Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_250Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_200Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_480Hz:
-      *val = LSM6DSV16X_XL_ODR_AT_480Hz;
+    case LSM6DSV16X_ODR_AT_480Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_480Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_500Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_400Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_960Hz:
-      *val = LSM6DSV16X_XL_ODR_AT_960Hz;
+    case LSM6DSV16X_ODR_AT_960Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_960Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_1000Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_800Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_1920Hz:
-      *val = LSM6DSV16X_XL_ODR_AT_1920Hz;
+    case LSM6DSV16X_ODR_AT_1920Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_1920Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_2000Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_1600Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_3840Hz:
-      *val = LSM6DSV16X_XL_ODR_AT_3840Hz;
+    case LSM6DSV16X_ODR_AT_3840Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_3840Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_4000Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_3200Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_XL_ODR_AT_7680Hz:
-      *val = LSM6DSV16X_XL_ODR_AT_7680Hz;
+    case LSM6DSV16X_ODR_AT_7680Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_7680Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_8000Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_6400Hz;
+          break;
+      }
       break;
 
     default:
-      *val = LSM6DSV16X_XL_ODR_OFF;
+      *val = LSM6DSV16X_ODR_OFF;
       break;
   }
   return ret;
@@ -631,7 +765,7 @@ int32_t lsm6dsv16x_xl_data_rate_get(stmdev_ctx_t *ctx,
   * @brief  Accelerometer operating mode selection.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      XL_HIGH_PERFORMANCE_MD, XL_HIGH_ACCURANCY_ODR_MD, XL_LOW_POWER_2_AVG_MD, XL_LOW_POWER_4_AVG_MD, XL_LOW_POWER_8_AVG_MD, XL_NORMAL_MD,
+  * @param  val      XL_HIGH_PERFORMANCE_MD, XL_HIGH_ACCURACY_ODR_MD, XL_LOW_POWER_2_AVG_MD, XL_LOW_POWER_4_AVG_MD, XL_LOW_POWER_8_AVG_MD, XL_NORMAL_MD,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -655,7 +789,7 @@ int32_t lsm6dsv16x_xl_mode_set(stmdev_ctx_t *ctx, lsm6dsv16x_xl_mode_t val)
   * @brief  Accelerometer operating mode selection.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      XL_HIGH_PERFORMANCE_MD, XL_HIGH_ACCURANCY_ODR_MD, XL_LOW_POWER_2_AVG_MD, XL_LOW_POWER_4_AVG_MD, XL_LOW_POWER_8_AVG_MD, XL_NORMAL_MD,
+  * @param  val      XL_HIGH_PERFORMANCE_MD, XL_HIGH_ACCURACY_ODR_MD, XL_LOW_POWER_2_AVG_MD, XL_LOW_POWER_4_AVG_MD, XL_LOW_POWER_8_AVG_MD, XL_NORMAL_MD,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -672,8 +806,12 @@ int32_t lsm6dsv16x_xl_mode_get(stmdev_ctx_t *ctx, lsm6dsv16x_xl_mode_t *val)
       *val = LSM6DSV16X_XL_HIGH_PERFORMANCE_MD;
       break;
 
-    case LSM6DSV16X_XL_HIGH_ACCURANCY_ODR_MD:
-      *val = LSM6DSV16X_XL_HIGH_ACCURANCY_ODR_MD;
+    case LSM6DSV16X_XL_HIGH_ACCURACY_ODR_MD:
+      *val = LSM6DSV16X_XL_HIGH_ACCURACY_ODR_MD;
+      break;
+
+    case LSM6DSV16X_XL_ODR_TRIGGERED_MD:
+      *val = LSM6DSV16X_XL_ODR_TRIGGERED_MD;
       break;
 
     case LSM6DSV16X_XL_LOW_POWER_2_AVG_MD:
@@ -703,14 +841,16 @@ int32_t lsm6dsv16x_xl_mode_get(stmdev_ctx_t *ctx, lsm6dsv16x_xl_mode_t *val)
   * @brief  Gyroscope output data rate (ODR) selection.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      GY_ODR_OFF, GY_ODR_AT_7Hz5, GY_ODR_AT_15Hz, GY_ODR_AT_30Hz, GY_ODR_AT_60Hz, GY_ODR_AT_120Hz, GY_ODR_AT_240Hz, GY_ODR_AT_480Hz, GY_ODR_AT_960Hz, GY_ODR_AT_1920Hz, GY_ODR_AT_3840Hz, GY_ODR_AT_7680Hz,
+  * @param  val      lsm6dsv16x_data_rate_t enum
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
 int32_t lsm6dsv16x_gy_data_rate_set(stmdev_ctx_t *ctx,
-                                    lsm6dsv16x_gy_data_rate_t val)
+                                    lsm6dsv16x_data_rate_t val)
 {
   lsm6dsv16x_ctrl2_t ctrl2;
+  lsm6dsv16x_haodr_cfg_t haodr;
+  uint8_t sel;
   int32_t ret;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_CTRL2, (uint8_t *)&ctrl2, 1);
@@ -721,6 +861,14 @@ int32_t lsm6dsv16x_gy_data_rate_set(stmdev_ctx_t *ctx,
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_CTRL2, (uint8_t *)&ctrl2, 1);
   }
 
+  sel = ((uint8_t)val >> 4) & 0xFU;
+  if (sel != 0U)
+  {
+    ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_HAODR_CFG, (uint8_t *)&haodr, 1);
+    haodr.haodr_sel = sel;
+    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_HAODR_CFG, (uint8_t *)&haodr, 1);
+  }
+
   return ret;
 }
 
@@ -728,70 +876,198 @@ int32_t lsm6dsv16x_gy_data_rate_set(stmdev_ctx_t *ctx,
   * @brief  Gyroscope output data rate (ODR) selection.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      GY_ODR_OFF, GY_ODR_AT_7Hz5, GY_ODR_AT_15Hz, GY_ODR_AT_30Hz, GY_ODR_AT_60Hz, GY_ODR_AT_120Hz, GY_ODR_AT_240Hz, GY_ODR_AT_480Hz, GY_ODR_AT_960Hz, GY_ODR_AT_1920Hz, GY_ODR_AT_3840Hz, GY_ODR_AT_7680Hz,
+  * @param  val      lsm6dsv16x_data_rate_t enum
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
 int32_t lsm6dsv16x_gy_data_rate_get(stmdev_ctx_t *ctx,
-                                    lsm6dsv16x_gy_data_rate_t *val)
+                                    lsm6dsv16x_data_rate_t *val)
 {
   lsm6dsv16x_ctrl2_t ctrl2;
+  lsm6dsv16x_haodr_cfg_t haodr;
+  uint8_t sel;
   int32_t ret;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_CTRL2, (uint8_t *)&ctrl2, 1);
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_HAODR_CFG, (uint8_t *)&haodr, 1);
+  sel = haodr.haodr_sel;
 
   switch (ctrl2.odr_g)
   {
-    case LSM6DSV16X_GY_ODR_OFF:
-      *val = LSM6DSV16X_GY_ODR_OFF;
+    case LSM6DSV16X_ODR_OFF:
+      *val = LSM6DSV16X_ODR_OFF;
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_7Hz5:
-      *val = LSM6DSV16X_GY_ODR_AT_7Hz5;
+    case LSM6DSV16X_ODR_AT_1Hz875:
+      *val = LSM6DSV16X_ODR_AT_1Hz875;
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_15Hz:
-      *val = LSM6DSV16X_GY_ODR_AT_15Hz;
+    case LSM6DSV16X_ODR_AT_7Hz5:
+      *val = LSM6DSV16X_ODR_AT_7Hz5;
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_30Hz:
-      *val = LSM6DSV16X_GY_ODR_AT_30Hz;
+    case LSM6DSV16X_ODR_AT_15Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_15Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_15Hz625;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_12Hz5;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_60Hz:
-      *val = LSM6DSV16X_GY_ODR_AT_60Hz;
+    case LSM6DSV16X_ODR_AT_30Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_30Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_31Hz25;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_25Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_120Hz:
-      *val = LSM6DSV16X_GY_ODR_AT_120Hz;
+    case LSM6DSV16X_ODR_AT_60Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_60Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_62Hz5;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_50Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_240Hz:
-      *val = LSM6DSV16X_GY_ODR_AT_240Hz;
+    case LSM6DSV16X_ODR_AT_120Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_120Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_125Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_100Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_480Hz:
-      *val = LSM6DSV16X_GY_ODR_AT_480Hz;
+    case LSM6DSV16X_ODR_AT_240Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_240Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_250Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_200Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_960Hz:
-      *val = LSM6DSV16X_GY_ODR_AT_960Hz;
+    case LSM6DSV16X_ODR_AT_480Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_480Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_500Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_400Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_1920Hz:
-      *val = LSM6DSV16X_GY_ODR_AT_1920Hz;
+    case LSM6DSV16X_ODR_AT_960Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_960Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_1000Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_800Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_3840Hz:
-      *val = LSM6DSV16X_GY_ODR_AT_3840Hz;
+    case LSM6DSV16X_ODR_AT_1920Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_1920Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_2000Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_1600Hz;
+          break;
+      }
       break;
 
-    case LSM6DSV16X_GY_ODR_AT_7680Hz:
-      *val = LSM6DSV16X_GY_ODR_AT_7680Hz;
+    case LSM6DSV16X_ODR_AT_3840Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_3840Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_4000Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_3200Hz;
+          break;
+      }
+      break;
+
+    case LSM6DSV16X_ODR_AT_7680Hz:
+      switch (sel)
+      {
+        default:
+        case 0:
+          *val = LSM6DSV16X_ODR_AT_7680Hz;
+          break;
+        case 1:
+          *val = LSM6DSV16X_ODR_HA01_AT_8000Hz;
+          break;
+        case 2:
+          *val = LSM6DSV16X_ODR_HA02_AT_6400Hz;
+          break;
+      }
       break;
 
     default:
-      *val = LSM6DSV16X_GY_ODR_OFF;
+      *val = LSM6DSV16X_ODR_OFF;
       break;
   }
   return ret;
@@ -801,7 +1077,7 @@ int32_t lsm6dsv16x_gy_data_rate_get(stmdev_ctx_t *ctx,
   * @brief  Gyroscope operating mode selection.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      GY_HIGH_PERFORMANCE_MD, GY_HIGH_ACCURANCY_ODR_MD, GY_SLEEP_MD, GY_LOW_POWER_MD,
+  * @param  val      GY_HIGH_PERFORMANCE_MD, GY_HIGH_ACCURACY_ODR_MD, GY_SLEEP_MD, GY_LOW_POWER_MD,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -824,7 +1100,7 @@ int32_t lsm6dsv16x_gy_mode_set(stmdev_ctx_t *ctx, lsm6dsv16x_gy_mode_t val)
   * @brief  Gyroscope operating mode selection.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      GY_HIGH_PERFORMANCE_MD, GY_HIGH_ACCURANCY_ODR_MD, GY_SLEEP_MD, GY_LOW_POWER_MD,
+  * @param  val      GY_HIGH_PERFORMANCE_MD, GY_HIGH_ACCURACY_ODR_MD, GY_SLEEP_MD, GY_LOW_POWER_MD,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -840,8 +1116,8 @@ int32_t lsm6dsv16x_gy_mode_get(stmdev_ctx_t *ctx, lsm6dsv16x_gy_mode_t *val)
       *val = LSM6DSV16X_GY_HIGH_PERFORMANCE_MD;
       break;
 
-    case LSM6DSV16X_GY_HIGH_ACCURANCY_ODR_MD:
-      *val = LSM6DSV16X_GY_HIGH_ACCURANCY_ODR_MD;
+    case LSM6DSV16X_GY_HIGH_ACCURACY_ODR_MD:
+      *val = LSM6DSV16X_GY_HIGH_ACCURACY_ODR_MD;
       break;
 
     case LSM6DSV16X_GY_SLEEP_MD:
@@ -946,6 +1222,54 @@ int32_t lsm6dsv16x_block_data_update_get(stmdev_ctx_t *ctx, uint8_t *val)
 }
 
 /**
+  * @brief  Configure ODR trigger. [set]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      number of data in the reference period.
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv16x_odr_trig_cfg_set(stmdev_ctx_t *ctx, uint8_t val)
+{
+  lsm6dsv16x_odr_trig_cfg_t odr_trig;
+  int32_t ret;
+
+  if (val >= 1U && val <= 3U)
+  {
+    return -1;
+  }
+
+  ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_ODR_TRIG_CFG, (uint8_t *)&odr_trig, 1);
+
+  if (ret == 0)
+  {
+    odr_trig.odr_trig_nodr = val;
+    ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_ODR_TRIG_CFG, (uint8_t *)&odr_trig, 1);
+  }
+
+  return ret;
+}
+
+/**
+  * @brief  Configure ODR trigger. [get]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      number of data in the reference period.
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv16x_odr_trig_cfg_get(stmdev_ctx_t *ctx, uint8_t *val)
+{
+  lsm6dsv16x_odr_trig_cfg_t odr_trig;
+  int32_t ret;
+
+  ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_ODR_TRIG_CFG, (uint8_t *)&odr_trig, 1);
+  *val = odr_trig.odr_trig_nodr;
+
+  return ret;
+}
+
+/**
   * @brief  Enables pulsed data-ready mode (~75 us).[set]
   *
   * @param  ctx      read / write interface definitions
@@ -1000,6 +1324,64 @@ int32_t lsm6dsv16x_data_ready_mode_get(stmdev_ctx_t *ctx,
       *val = LSM6DSV16X_DRDY_LATCHED;
       break;
   }
+  return ret;
+}
+
+/**
+  * @brief  Enables interrupt.[set]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      enable/disable, latched/pulsed
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv16x_interrupt_enable_set(stmdev_ctx_t *ctx,
+                                        lsm6dsv16x_interrupt_mode_t val)
+{
+  lsm6dsv16x_tap_cfg0_t cfg;
+  lsm6dsv16x_functions_enable_t func;
+  int32_t ret;
+
+  ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_FUNCTIONS_ENABLE, (uint8_t *)&func, 1);
+
+  if (ret == 0)
+  {
+    func.interrupts_enable = val.enable;
+    ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_FUNCTIONS_ENABLE, (uint8_t *)&func, 1);
+  }
+
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_TAP_CFG0, (uint8_t *)&cfg, 1);
+
+  if (ret == 0)
+  {
+    cfg.lir = val.lir;
+    ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_TAP_CFG0, (uint8_t *)&cfg, 1);
+  }
+
+  return ret;
+}
+
+/**
+  * @brief  Enables latched interrupt mode.[get]
+  *
+  * @param  ctx      read / write interface definitions
+  * @param  val      enable/disable, latched/pulsed
+  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  *
+  */
+int32_t lsm6dsv16x_interrupt_enable_get(stmdev_ctx_t *ctx,
+                                        lsm6dsv16x_interrupt_mode_t *val)
+{
+  lsm6dsv16x_tap_cfg0_t cfg;
+  lsm6dsv16x_functions_enable_t func;
+  int32_t ret;
+
+  ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_FUNCTIONS_ENABLE, (uint8_t *)&func, 1);
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_TAP_CFG0, (uint8_t *)&cfg, 1);
+
+  val->enable = func.interrupts_enable;
+  val->lir = cfg.lir;
+
   return ret;
 }
 
@@ -1455,6 +1837,7 @@ int32_t lsm6dsv16x_pin_int1_route_set(stmdev_ctx_t *ctx,
                                       lsm6dsv16x_pin_int_route_t *val)
 {
   lsm6dsv16x_int1_ctrl_t          int1_ctrl;
+  lsm6dsv16x_md1_cfg_t            md1_cfg;
   int32_t ret;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_INT1_CTRL, (uint8_t *)&int1_ctrl, 1);
@@ -1468,6 +1851,19 @@ int32_t lsm6dsv16x_pin_int1_route_set(stmdev_ctx_t *ctx,
 
   ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_INT1_CTRL, (uint8_t *)&int1_ctrl,
                               1);
+
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_MD1_CFG, (uint8_t *)&md1_cfg, 1);
+
+  md1_cfg.int1_shub            = val->shub;
+  md1_cfg.int1_emb_func        = val->emb_func;
+  md1_cfg.int1_6d              = val->sixd;
+  md1_cfg.int1_single_tap      = val->single_tap;
+  md1_cfg.int1_double_tap      = val->double_tap;
+  md1_cfg.int1_wu              = val->wakeup;
+  md1_cfg.int1_ff              = val->freefall;
+  md1_cfg.int1_sleep_change    = val->sleep_change;
+
+  ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_MD1_CFG, (uint8_t *)&md1_cfg, 1);
 
   return ret;
 }
@@ -1484,6 +1880,7 @@ int32_t lsm6dsv16x_pin_int1_route_get(stmdev_ctx_t *ctx,
                                       lsm6dsv16x_pin_int_route_t *val)
 {
   lsm6dsv16x_int1_ctrl_t          int1_ctrl;
+  lsm6dsv16x_md1_cfg_t            md1_cfg;
   int32_t ret;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_INT1_CTRL, (uint8_t *)&int1_ctrl, 1);
@@ -1494,6 +1891,17 @@ int32_t lsm6dsv16x_pin_int1_route_get(stmdev_ctx_t *ctx,
   val->fifo_ovr  = int1_ctrl.int1_fifo_ovr;
   val->fifo_full = int1_ctrl.int1_fifo_full;
   val->cnt_bdr   = int1_ctrl.int1_cnt_bdr;
+
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_MD1_CFG, (uint8_t *)&md1_cfg, 1);
+
+  val->shub         = md1_cfg.int1_shub;
+  val->emb_func     = md1_cfg.int1_emb_func;
+  val->sixd         = md1_cfg.int1_6d;
+  val->single_tap   = md1_cfg.int1_single_tap;
+  val->double_tap   = md1_cfg.int1_double_tap;
+  val->wakeup       = md1_cfg.int1_wu;
+  val->freefall     = md1_cfg.int1_ff;
+  val->sleep_change = md1_cfg.int1_sleep_change;
 
   return ret;
 }
@@ -1510,6 +1918,7 @@ int32_t lsm6dsv16x_pin_int2_route_set(stmdev_ctx_t *ctx,
                                       lsm6dsv16x_pin_int_route_t *val)
 {
   lsm6dsv16x_int2_ctrl_t          int2_ctrl;
+  lsm6dsv16x_md2_cfg_t            md2_cfg;
   int32_t ret;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_INT2_CTRL, (uint8_t *)&int2_ctrl, 1);
@@ -1526,6 +1935,19 @@ int32_t lsm6dsv16x_pin_int2_route_set(stmdev_ctx_t *ctx,
   ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_INT2_CTRL, (uint8_t *)&int2_ctrl,
                               1);
 
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_MD2_CFG, (uint8_t *)&md2_cfg, 1);
+
+  md2_cfg.int2_timestamp       = val->timestamp;
+  md2_cfg.int2_emb_func        = val->emb_func;
+  md2_cfg.int2_6d              = val->sixd;
+  md2_cfg.int2_single_tap      = val->single_tap;
+  md2_cfg.int2_double_tap      = val->double_tap;
+  md2_cfg.int2_wu              = val->wakeup;
+  md2_cfg.int2_ff              = val->freefall;
+  md2_cfg.int2_sleep_change    = val->sleep_change;
+
+  ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_MD2_CFG, (uint8_t *)&md2_cfg, 1);
+
   return ret;
 }
 
@@ -1541,6 +1963,7 @@ int32_t lsm6dsv16x_pin_int2_route_get(stmdev_ctx_t *ctx,
                                       lsm6dsv16x_pin_int_route_t *val)
 {
   lsm6dsv16x_int2_ctrl_t          int2_ctrl;
+  lsm6dsv16x_md2_cfg_t            md2_cfg;
   int32_t ret;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_INT2_CTRL, (uint8_t *)&int2_ctrl, 1);
@@ -1553,6 +1976,17 @@ int32_t lsm6dsv16x_pin_int2_route_get(stmdev_ctx_t *ctx,
   val->cnt_bdr        = int2_ctrl.int2_cnt_bdr;
   val->drdy_g_eis     = int2_ctrl.int2_drdy_g_eis;
   val->emb_func_endop = int2_ctrl.int2_emb_func_endop;
+
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_MD2_CFG, (uint8_t *)&md2_cfg, 1);
+
+  val->timestamp      = md2_cfg.int2_timestamp;
+  val->emb_func       = md2_cfg.int2_emb_func;
+  val->sixd           = md2_cfg.int2_6d;
+  val->single_tap     = md2_cfg.int2_single_tap;
+  val->double_tap     = md2_cfg.int2_double_tap;
+  val->wakeup         = md2_cfg.int2_wu;
+  val->freefall       = md2_cfg.int2_ff;
+  val->sleep_change   = md2_cfg.int2_sleep_change;
 
   return ret;
 }
@@ -1698,10 +2132,7 @@ int32_t lsm6dsv16x_all_sources_get(stmdev_ctx_t *ctx,
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_SRC, (uint8_t *)&emb_func_src, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   val->emb_func_stand_by = emb_func_exec_status.emb_func_endop;
   val->emb_func_time_exceed = emb_func_exec_status.emb_func_exec_ovr;
@@ -1720,10 +2151,7 @@ int32_t lsm6dsv16x_all_sources_get(stmdev_ctx_t *ctx,
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_STATUS_MASTER, (uint8_t *)&status_shub, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   val->sh_endop = status_shub.sens_hub_endop;
   val->sh_wr_once = status_shub.wr_once_done;
@@ -2783,10 +3211,7 @@ int32_t lsm6dsv16x_fifo_compress_algo_real_time_set(stmdev_ctx_t *ctx,
     emb_func_en_b.fifo_compr_en = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_B, (uint8_t *)&emb_func_en_b, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3603,10 +4028,7 @@ int32_t lsm6dsv16x_fifo_stpcnt_batch_set(stmdev_ctx_t *ctx, uint8_t val)
     emb_func_fifo_en_a.step_counter_fifo_en = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_FIFO_EN_A, (uint8_t *)&emb_func_fifo_en_a, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3632,10 +4054,7 @@ int32_t lsm6dsv16x_fifo_stpcnt_batch_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = emb_func_fifo_en_a.step_counter_fifo_en;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3664,10 +4083,7 @@ int32_t lsm6dsv16x_fifo_mlc_batch_set(stmdev_ctx_t *ctx, uint8_t val)
     emb_func_fifo_en_a.mlc_fifo_en = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_FIFO_EN_A, (uint8_t *)&emb_func_fifo_en_a, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3693,10 +4109,7 @@ int32_t lsm6dsv16x_fifo_mlc_batch_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = emb_func_fifo_en_a.mlc_fifo_en;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3725,10 +4138,7 @@ int32_t lsm6dsv16x_fifo_mlc_filt_batch_set(stmdev_ctx_t *ctx, uint8_t val)
     emb_func_fifo_en_b.mlc_filter_feature_fifo_en = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_FIFO_EN_B, (uint8_t *)&emb_func_fifo_en_b, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3754,10 +4164,7 @@ int32_t lsm6dsv16x_fifo_mlc_filt_batch_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = emb_func_fifo_en_b.mlc_filter_feature_fifo_en;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3786,10 +4193,7 @@ int32_t lsm6dsv16x_fifo_batch_sh_slave_0_set(stmdev_ctx_t *ctx, uint8_t val)
     slv0_config.batch_ext_sens_0_en = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SLV0_CONFIG, (uint8_t *)&slv0_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3815,10 +4219,7 @@ int32_t lsm6dsv16x_fifo_batch_sh_slave_0_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = slv0_config.batch_ext_sens_0_en;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3847,10 +4248,7 @@ int32_t lsm6dsv16x_fifo_batch_sh_slave_1_set(stmdev_ctx_t *ctx, uint8_t val)
     slv1_config.batch_ext_sens_1_en = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SLV1_CONFIG, (uint8_t *)&slv1_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3876,10 +4274,7 @@ int32_t lsm6dsv16x_fifo_batch_sh_slave_1_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = slv1_config.batch_ext_sens_1_en;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3908,10 +4303,7 @@ int32_t lsm6dsv16x_fifo_batch_sh_slave_2_set(stmdev_ctx_t *ctx, uint8_t val)
     slv2_config.batch_ext_sens_2_en = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SLV2_CONFIG, (uint8_t *)&slv2_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3937,10 +4329,7 @@ int32_t lsm6dsv16x_fifo_batch_sh_slave_2_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = slv2_config.batch_ext_sens_2_en;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3969,10 +4358,7 @@ int32_t lsm6dsv16x_fifo_batch_sh_slave_3_set(stmdev_ctx_t *ctx, uint8_t val)
     slv3_config.batch_ext_sens_3_en = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SLV3_CONFIG, (uint8_t *)&slv3_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -3998,10 +4384,7 @@ int32_t lsm6dsv16x_fifo_batch_sh_slave_3_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = slv3_config.batch_ext_sens_3_en;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -5174,10 +5557,7 @@ int32_t lsm6dsv16x_fsm_mode_set(stmdev_ctx_t *ctx, lsm6dsv16x_fsm_mode_t val)
   {
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_B, (uint8_t *)&emb_func_en_b, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -5200,10 +5580,7 @@ int32_t lsm6dsv16x_fsm_mode_get(stmdev_ctx_t *ctx, lsm6dsv16x_fsm_mode_t *val)
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_FSM_ENABLE, (uint8_t *)&fsm_enable, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   val->fsm1_en = fsm_enable.fsm1_en;
   val->fsm2_en = fsm_enable.fsm2_en;
@@ -5234,10 +5611,7 @@ int32_t lsm6dsv16x_fsm_long_cnt_set(stmdev_ctx_t *ctx, uint16_t val)
   buff[0] = (uint8_t)(val - (buff[1] * 256U));
 
   ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_FSM_LONG_COUNTER_L, (uint8_t *)&buff[0], 2);
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -5260,10 +5634,7 @@ int32_t lsm6dsv16x_fsm_long_cnt_get(stmdev_ctx_t *ctx, uint16_t *val)
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_FSM_LONG_COUNTER_L, &buff[0], 2);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   *val = buff[1];
   *val = (*val * 256U) + buff[0];
@@ -5288,10 +5659,7 @@ int32_t lsm6dsv16x_fsm_out_get(stmdev_ctx_t *ctx, lsm6dsv16x_fsm_out_t *val)
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_FSM_OUTS1, (uint8_t *)val, 8);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -5321,10 +5689,7 @@ int32_t lsm6dsv16x_fsm_data_rate_set(stmdev_ctx_t *ctx,
     fsm_odr.fsm_odr = (uint8_t)val & 0x07U;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_FSM_ODR, (uint8_t *)&fsm_odr, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -5348,10 +5713,7 @@ int32_t lsm6dsv16x_fsm_data_rate_get(stmdev_ctx_t *ctx,
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_FSM_ODR, (uint8_t *)&fsm_odr, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
 
   switch (fsm_odr.fsm_odr)
@@ -5414,7 +5776,7 @@ static uint16_t npy_floatbits_to_halfbits(uint32_t f)
     {
       /* Inf or NaN */
       f_sig = (f & 0x007fffffu);
-      if (f_sig != 0)
+      if (f_sig != 0U)
       {
         /* NaN - propagate the flag in the significand... */
         uint16_t ret = (uint16_t)(0x7c00u + (f_sig >> 13));
@@ -5475,7 +5837,7 @@ static uint16_t npy_floatbits_to_halfbits(uint32_t f)
      * exponent giving a subnormal `f_exp = 0x38000000 >> 23 = 112`, which
      * offsets the new first bit. At most the shift can be 1+10 bits.
      */
-    f_sig >>= (113 - f_exp);
+    f_sig >>= (113U - f_exp);
     /* Handle rounding by adding 1 to the bit beyond half precision */
 #if NPY_HALF_ROUND_TIES_TO_EVEN
     /*
@@ -5587,6 +5949,7 @@ int32_t lsm6dsv16x_sflp_game_gbias_set(stmdev_ctx_t *ctx,
   /* Calculate k factor */
   switch (sflp_odr)
   {
+    default:
     case LSM6DSV16X_SFLP_15Hz:
       k = 0.04f;
       break;
@@ -5616,9 +5979,9 @@ int32_t lsm6dsv16x_sflp_game_gbias_set(stmdev_ctx_t *ctx,
   ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_CTRL1, conf_saved, 2);
   ret += lsm6dsv16x_xl_mode_set(ctx, LSM6DSV16X_XL_HIGH_PERFORMANCE_MD);
   ret += lsm6dsv16x_gy_mode_set(ctx, LSM6DSV16X_GY_HIGH_PERFORMANCE_MD);
-  if ((conf_saved[0] & 0x0FU) == LSM6DSV16X_XL_ODR_OFF)
+  if (((uint8_t)conf_saved[0] & 0x0FU) == (uint8_t)LSM6DSV16X_ODR_OFF)
   {
-    ret += lsm6dsv16x_xl_data_rate_set(ctx, LSM6DSV16X_XL_ODR_AT_120Hz);
+    ret += lsm6dsv16x_xl_data_rate_set(ctx, LSM6DSV16X_ODR_AT_120Hz);
   }
 
   /* Make sure to turn the sensor-hub master off */
@@ -5633,7 +5996,7 @@ int32_t lsm6dsv16x_sflp_game_gbias_set(stmdev_ctx_t *ctx,
   {
     ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EXEC_STATUS,
                                (uint8_t *)&emb_func_sts, 1);
-  } while (emb_func_sts.emb_func_endop != 1);
+  } while (emb_func_sts.emb_func_endop != 1U);
   ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   // enable gbias setting
@@ -5643,7 +6006,7 @@ int32_t lsm6dsv16x_sflp_game_gbias_set(stmdev_ctx_t *ctx,
 
   /* enable algos */
   ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_EMBED_FUNC_MEM_BANK);
-  emb_func_en_saved[0] |= 0x02; /* force SFLP GAME en */
+  emb_func_en_saved[0] |= 0x02U; /* force SFLP GAME en */
   ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, emb_func_en_saved,
                               2);
   ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
@@ -5654,32 +6017,32 @@ int32_t lsm6dsv16x_sflp_game_gbias_set(stmdev_ctx_t *ctx,
   do
   {
     ret += lsm6dsv16x_flag_data_ready_get(ctx, &drdy);
-  } while (drdy.drdy_xl != 1);
+  } while (drdy.drdy_xl != 1U);
   ret += lsm6dsv16x_acceleration_raw_get(ctx, xl_data);
 
   /* force sflp initialization */
   ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_SENSOR_HUB_MEM_BANK);
-  for (i = 0; i < 3; i++)
+  for (i = 0; i < 3U; i++)
   {
     j = 0;
     data_tmp = (int32_t)xl_data[i];
     data_tmp <<= xl_fs; // shift based on current fs
-    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_1 + 3 * i,
+    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_1 + 3U * i,
                                 &data_ptr[j++], 1);
-    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_2 + 3 * i,
+    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_2 + 3U * i,
                                 &data_ptr[j++], 1);
-    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_3 + 3 * i, &data_ptr[j],
+    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_3 + 3U * i, &data_ptr[j],
                                 1);
   }
-  for (i = 0; i < 3; i++)
+  for (i = 0; i < 3U; i++)
   {
     j = 0;
     data_tmp = 0;
-    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_10 + 3 * i,
+    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_10 + 3U * i,
                                 &data_ptr[j++], 1);
-    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_11 + 3 * i,
+    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_11 + 3U * i,
                                 &data_ptr[j++], 1);
-    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_12 + 3 * i, &data_ptr[j],
+    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SENSOR_HUB_12 + 3U * i, &data_ptr[j],
                                 1);
   }
   ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
@@ -5691,7 +6054,7 @@ int32_t lsm6dsv16x_sflp_game_gbias_set(stmdev_ctx_t *ctx,
   {
     ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EXEC_STATUS,
                                (uint8_t *)&emb_func_sts, 1);
-  } while (emb_func_sts.emb_func_endop != 1);
+  } while (emb_func_sts.emb_func_endop != 1U);
   ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   /* write gbias in embedded advanced features registers */
@@ -6373,40 +6736,46 @@ int32_t lsm6dsv16x_ff_thresholds_get(stmdev_ctx_t *ctx,
   * @brief  It enables Machine Learning Core feature (MLC). When the Machine Learning Core is enabled the Finite State Machine (FSM) programs are executed before executing the MLC algorithms.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      DISABLE, MLC_BEFORE_FSM, MLC_AFTER_FSM,
+  * @param  val      MLC_OFF, MLC_ON, MLC_BEFORE_FSM,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv16x_mlc_mode_set(stmdev_ctx_t *ctx, lsm6dsv16x_mlc_mode_t val)
+int32_t lsm6dsv16x_mlc_set(stmdev_ctx_t *ctx, lsm6dsv16x_mlc_mode_t val)
 {
-  lsm6dsv16x_emb_func_en_b_t emb_func_en_b;
-  lsm6dsv16x_emb_func_en_a_t emb_func_en_a;
+  lsm6dsv16x_emb_func_en_b_t emb_en_b;
+  lsm6dsv16x_emb_func_en_a_t emb_en_a;
   int32_t ret;
 
   ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_EMBED_FUNC_MEM_BANK);
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, (uint8_t *)&emb_func_en_a, 1);
-  }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_B, (uint8_t *)&emb_func_en_b, 1);
-  }
-  emb_func_en_a.mlc_before_fsm_en = (uint8_t)val & 0x01U;
-  emb_func_en_b.mlc_en = ((uint8_t)val & 0x02U) >> 1;
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, (uint8_t *)&emb_func_en_a, 1);
-  }
-  if (ret == 0)
-  {
 
-    ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_B, (uint8_t *)&emb_func_en_b, 1);
-  }
   if (ret == 0)
   {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
+    ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, (uint8_t *)&emb_en_a, 1);
+    ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_B, (uint8_t *)&emb_en_b, 1);
+
+    switch (val)
+    {
+      case LSM6DSV16X_MLC_OFF:
+        emb_en_a.mlc_before_fsm_en = 0;
+        emb_en_b.mlc_en = 0;
+        break;
+      case LSM6DSV16X_MLC_ON:
+        emb_en_a.mlc_before_fsm_en = 0;
+        emb_en_b.mlc_en = 1;
+        break;
+      case LSM6DSV16X_MLC_ON_BEFORE_FSM:
+        emb_en_a.mlc_before_fsm_en = 1;
+        emb_en_b.mlc_en = 0;
+        break;
+      default:
+        break;
+    }
+
+    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, (uint8_t *)&emb_en_a, 1);
+    ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_B, (uint8_t *)&emb_en_b, 1);
   }
+
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -6415,48 +6784,43 @@ int32_t lsm6dsv16x_mlc_mode_set(stmdev_ctx_t *ctx, lsm6dsv16x_mlc_mode_t val)
   * @brief  It enables Machine Learning Core feature (MLC). When the Machine Learning Core is enabled the Finite State Machine (FSM) programs are executed before executing the MLC algorithms.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      DISABLE, MLC_BEFORE_FSM, MLC_AFTER_FSM,
+  * @param  val      MLC_OFF, MLC_ON, MLC_BEFORE_FSM,
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv16x_mlc_mode_get(stmdev_ctx_t *ctx, lsm6dsv16x_mlc_mode_t *val)
+int32_t lsm6dsv16x_mlc_get(stmdev_ctx_t *ctx, lsm6dsv16x_mlc_mode_t *val)
 {
-  lsm6dsv16x_emb_func_en_a_t emb_func_en_a;
-  lsm6dsv16x_emb_func_en_b_t emb_func_en_b;
+  lsm6dsv16x_emb_func_en_b_t emb_en_b;
+  lsm6dsv16x_emb_func_en_a_t emb_en_a;
   int32_t ret;
 
   ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_EMBED_FUNC_MEM_BANK);
+
   if (ret == 0)
   {
-    ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, (uint8_t *)&emb_func_en_a, 1);
-  }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_B, (uint8_t *)&emb_func_en_b, 1);
-  }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
+    ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, (uint8_t *)&emb_en_a, 1);
+    ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_B, (uint8_t *)&emb_en_b, 1);
+
+    if (emb_en_a.mlc_before_fsm_en == 0U && emb_en_b.mlc_en == 0U)
+    {
+      *val = LSM6DSV16X_MLC_OFF;
+    }
+    else if (emb_en_a.mlc_before_fsm_en == 0U && emb_en_b.mlc_en == 1U)
+    {
+      *val = LSM6DSV16X_MLC_ON;
+    }
+    else if (emb_en_a.mlc_before_fsm_en == 1U)
+    {
+      *val = LSM6DSV16X_MLC_ON_BEFORE_FSM;
+    }
+    else
+    {
+      /* Do nothing */
+    }
   }
 
-  switch ((emb_func_en_b.mlc_en << 1) + emb_func_en_a.mlc_before_fsm_en)
-  {
-    case LSM6DSV16X_DISABLE:
-      *val = LSM6DSV16X_DISABLE;
-      break;
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
-    case LSM6DSV16X_MLC_BEFORE_FSM:
-      *val = LSM6DSV16X_MLC_BEFORE_FSM;
-      break;
-
-    case LSM6DSV16X_MLC_AFTER_FSM:
-      *val = LSM6DSV16X_MLC_AFTER_FSM;
-      break;
-
-    default:
-      *val = LSM6DSV16X_DISABLE;
-      break;
-  }
   return ret;
 }
 
@@ -6485,10 +6849,7 @@ int32_t lsm6dsv16x_mlc_data_rate_set(stmdev_ctx_t *ctx,
     mlc_odr.mlc_odr = (uint8_t)val & 0x07U;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_MLC_ODR, (uint8_t *)&mlc_odr, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -6512,10 +6873,7 @@ int32_t lsm6dsv16x_mlc_data_rate_get(stmdev_ctx_t *ctx,
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_MLC_ODR, (uint8_t *)&mlc_odr, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   switch (mlc_odr.mlc_odr)
   {
@@ -6571,10 +6929,7 @@ int32_t lsm6dsv16x_mlc_out_get(stmdev_ctx_t *ctx, lsm6dsv16x_mlc_out_t *val)
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_MLC1_SRC, (uint8_t *)val, 4);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
   return ret;
 }
 
@@ -7314,10 +7669,10 @@ int32_t lsm6dsv16x_ah_qvar_zin_get(stmdev_ctx_t *ctx,
 }
 
 /**
-  * @brief  Enables AH_QVAR chain. When this bit is set to '1', the AH_QVAR buffers are connected to the SDx/AH1/Qvar1 and SCx/AH2/Qvar2 pins. Before setting this bit to 1, the accelerometer and gyroscope sensor have to be configured in power-down mode.[set]
+  * @brief  Enables AH_QVAR chain. When this bit is set to ‘1’, the AH_QVAR buffers are connected to the SDx/AH1/Qvar1 and SCx/AH2/Qvar2 pins. Before setting this bit to 1, the accelerometer and gyroscope sensor have to be configured in power-down mode.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      Enables AH_QVAR chain. When this bit is set to '1', the AH_QVAR buffers are connected to the SDx/AH1/Qvar1 and SCx/AH2/Qvar2 pins. Before setting this bit to 1, the accelerometer and gyroscope sensor have to be configured in power-down mode.
+  * @param  val      Enables AH_QVAR chain. When this bit is set to ‘1’, the AH_QVAR buffers are connected to the SDx/AH1/Qvar1 and SCx/AH2/Qvar2 pins. Before setting this bit to 1, the accelerometer and gyroscope sensor have to be configured in power-down mode.
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -7338,10 +7693,10 @@ int32_t lsm6dsv16x_ah_qvar_mode_set(stmdev_ctx_t *ctx,
 }
 
 /**
-  * @brief  Enables AH_QVAR chain. When this bit is set to '1', the AH_QVAR buffers are connected to the SDx/AH1/Qvar1 and SCx/AH2/Qvar2 pins. Before setting this bit to 1, the accelerometer and gyroscope sensor have to be configured in power-down mode.[get]
+  * @brief  Enables AH_QVAR chain. When this bit is set to ‘1’, the AH_QVAR buffers are connected to the SDx/AH1/Qvar1 and SCx/AH2/Qvar2 pins. Before setting this bit to 1, the accelerometer and gyroscope sensor have to be configured in power-down mode.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      Enables AH_QVAR chain. When this bit is set to '1', the AH_QVAR buffers are connected to the SDx/AH1/Qvar1 and SCx/AH2/Qvar2 pins. Before setting this bit to 1, the accelerometer and gyroscope sensor have to be configured in power-down mode.
+  * @param  val      Enables AH_QVAR chain. When this bit is set to ‘1’, the AH_QVAR buffers are connected to the SDx/AH1/Qvar1 and SCx/AH2/Qvar2 pins. Before setting this bit to 1, the accelerometer and gyroscope sensor have to be configured in power-down mode.
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -7567,10 +7922,7 @@ int32_t lsm6dsv16x_sh_read_data_raw_get(stmdev_ctx_t *ctx,
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_SENSOR_HUB_1, (uint8_t *) val,
                               len);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
 
   return ret;
@@ -7601,10 +7953,7 @@ int32_t lsm6dsv16x_sh_slave_connected_set(stmdev_ctx_t *ctx,
     master_config.aux_sens_on = (uint8_t)val & 0x3U;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_MASTER_CONFIG, (uint8_t *)&master_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -7628,10 +7977,7 @@ int32_t lsm6dsv16x_sh_slave_connected_get(stmdev_ctx_t *ctx,
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_MASTER_CONFIG, (uint8_t *)&master_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   switch (master_config.aux_sens_on)
   {
@@ -7682,10 +8028,7 @@ int32_t lsm6dsv16x_sh_master_set(stmdev_ctx_t *ctx, uint8_t val)
     master_config.master_on = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_MASTER_CONFIG, (uint8_t *)&master_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -7711,10 +8054,7 @@ int32_t lsm6dsv16x_sh_master_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = master_config.master_on;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -7743,10 +8083,7 @@ int32_t lsm6dsv16x_sh_pass_through_set(stmdev_ctx_t *ctx, uint8_t val)
     master_config.pass_through_mode = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_MASTER_CONFIG, (uint8_t *)&master_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -7772,10 +8109,7 @@ int32_t lsm6dsv16x_sh_pass_through_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = master_config.pass_through_mode;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -7805,10 +8139,7 @@ int32_t lsm6dsv16x_sh_syncro_mode_set(stmdev_ctx_t *ctx,
     master_config.start_config = (uint8_t)val & 0x01U;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_MASTER_CONFIG, (uint8_t *)&master_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -7832,10 +8163,7 @@ int32_t lsm6dsv16x_sh_syncro_mode_get(stmdev_ctx_t *ctx,
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_MASTER_CONFIG, (uint8_t *)&master_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   switch (master_config.start_config)
   {
@@ -7879,10 +8207,7 @@ int32_t lsm6dsv16x_sh_write_mode_set(stmdev_ctx_t *ctx,
     master_config.write_once = (uint8_t)val & 0x01U;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_MASTER_CONFIG, (uint8_t *)&master_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -7906,10 +8231,7 @@ int32_t lsm6dsv16x_sh_write_mode_get(stmdev_ctx_t *ctx,
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_MASTER_CONFIG, (uint8_t *)&master_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
 
   switch (master_config.write_once)
@@ -7930,10 +8252,10 @@ int32_t lsm6dsv16x_sh_write_mode_get(stmdev_ctx_t *ctx,
 }
 
 /**
-  * @brief  Reset Master logic and output registers. Must be set to '1' and then set it to '0'.[set]
+  * @brief  Reset Master logic and output registers. Must be set to ‘1’ and then set it to ‘0’.[set]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      Reset Master logic and output registers. Must be set to '1' and then set it to '0'.
+  * @param  val      Reset Master logic and output registers. Must be set to ‘1’ and then set it to ‘0’.
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -7953,19 +8275,16 @@ int32_t lsm6dsv16x_sh_reset_set(stmdev_ctx_t *ctx, uint8_t val)
     master_config.rst_master_regs = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_MASTER_CONFIG, (uint8_t *)&master_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
 
 /**
-  * @brief  Reset Master logic and output registers. Must be set to '1' and then set it to '0'.[get]
+  * @brief  Reset Master logic and output registers. Must be set to ‘1’ and then set it to ‘0’.[get]
   *
   * @param  ctx      read / write interface definitions
-  * @param  val      Reset Master logic and output registers. Must be set to '1' and then set it to '0'.
+  * @param  val      Reset Master logic and output registers. Must be set to ‘1’ and then set it to ‘0’.
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
@@ -7982,10 +8301,7 @@ int32_t lsm6dsv16x_sh_reset_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = master_config.rst_master_regs;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8027,10 +8343,7 @@ int32_t lsm6dsv16x_sh_cfg_write(stmdev_ctx_t *ctx,
                                &(val->slv0_data), 1);
   }
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8060,10 +8373,7 @@ int32_t lsm6dsv16x_sh_data_rate_set(stmdev_ctx_t *ctx,
     slv0_config.shub_odr = (uint8_t)val & 0x07U;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_SLV0_CONFIG, (uint8_t *)&slv0_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8087,10 +8397,7 @@ int32_t lsm6dsv16x_sh_data_rate_get(stmdev_ctx_t *ctx,
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_SLV0_CONFIG, (uint8_t *)&slv0_config, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   switch (slv0_config.shub_odr)
   {
@@ -8171,10 +8478,7 @@ int32_t lsm6dsv16x_sh_slv0_cfg_read(stmdev_ctx_t *ctx,
                                (uint8_t *)&slv0_config, 1);
   }
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8225,10 +8529,7 @@ int32_t lsm6dsv16x_sh_slv1_cfg_read(stmdev_ctx_t *ctx,
                                (uint8_t *)&slv1_config, 1);
   }
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8279,10 +8580,7 @@ int32_t lsm6dsv16x_sh_slv2_cfg_read(stmdev_ctx_t *ctx,
                                (uint8_t *)&slv2_config, 1);
   }
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8333,10 +8631,7 @@ int32_t lsm6dsv16x_sh_slv3_cfg_read(stmdev_ctx_t *ctx,
                                (uint8_t *)&slv3_config, 1);
   }
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8639,11 +8934,8 @@ int32_t lsm6dsv16x_sigmot_mode_set(stmdev_ctx_t *ctx, uint8_t val)
     emb_func_en_a.sign_motion_en = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, (uint8_t *)&emb_func_en_a, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
 
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8668,10 +8960,7 @@ int32_t lsm6dsv16x_sigmot_mode_get(stmdev_ctx_t *ctx, uint8_t *val)
   }
   *val = emb_func_en_a.sign_motion_en;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8724,10 +9013,7 @@ int32_t lsm6dsv16x_stpcnt_mode_set(stmdev_ctx_t *ctx,
     emb_func_en_a.pedo_en = val.step_counter_enable;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, (uint8_t *)&emb_func_en_a, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   if (ret == 0)
   {
@@ -8762,10 +9048,7 @@ int32_t lsm6dsv16x_stpcnt_mode_get(stmdev_ctx_t *ctx,
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, (uint8_t *)&emb_func_en_a, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   if (ret == 0)
   {
@@ -8795,10 +9078,8 @@ int32_t lsm6dsv16x_stpcnt_steps_get(stmdev_ctx_t *ctx, uint16_t *val)
   {
     ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_STEP_COUNTER_L, &buff[0], 2);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
+
   *val = buff[1];
   *val = (*val * 256U) + buff[0];
 
@@ -8829,10 +9110,7 @@ int32_t lsm6dsv16x_stpcnt_rst_step_set(stmdev_ctx_t *ctx, uint8_t val)
     emb_func_src.pedo_rst_step = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_SRC, (uint8_t *)&emb_func_src, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8858,10 +9136,7 @@ int32_t lsm6dsv16x_stpcnt_rst_step_get(stmdev_ctx_t *ctx, uint8_t *val)
 
   *val = emb_func_src.pedo_rst_step;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -8968,7 +9243,7 @@ int32_t lsm6dsv16x_stpcnt_period_get(stmdev_ctx_t *ctx, uint16_t *val)
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv16x_sflp_game_rotation_set(stmdev_ctx_t *ctx, uint16_t val)
+int32_t lsm6dsv16x_sflp_game_rotation_set(stmdev_ctx_t *ctx, uint8_t val)
 {
   lsm6dsv16x_emb_func_en_a_t emb_func_en_a;
   int32_t ret;
@@ -8995,7 +9270,7 @@ int32_t lsm6dsv16x_sflp_game_rotation_set(stmdev_ctx_t *ctx, uint16_t val)
   * @retval          interface status (MANDATORY: return 0 -> no Error)
   *
   */
-int32_t lsm6dsv16x_sflp_game_rotation_get(stmdev_ctx_t *ctx, uint16_t *val)
+int32_t lsm6dsv16x_sflp_game_rotation_get(stmdev_ctx_t *ctx, uint8_t *val)
 {
   lsm6dsv16x_emb_func_en_a_t emb_func_en_a;
   int32_t ret;
@@ -9120,9 +9395,9 @@ int32_t lsm6dsv16x_tap_detection_set(stmdev_ctx_t *ctx,
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_TAP_CFG0, (uint8_t *)&tap_cfg0, 1);
   if (ret == 0)
   {
-    tap_cfg0.tap_z_en = val.tap_x_en;
+    tap_cfg0.tap_x_en = val.tap_x_en;
     tap_cfg0.tap_y_en = val.tap_y_en;
-    tap_cfg0.tap_x_en = val.tap_z_en;
+    tap_cfg0.tap_z_en = val.tap_z_en;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_TAP_CFG0, (uint8_t *)&tap_cfg0, 1);
   }
 
@@ -9144,7 +9419,7 @@ int32_t lsm6dsv16x_tap_detection_get(stmdev_ctx_t *ctx,
   int32_t ret;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_TAP_CFG0, (uint8_t *)&tap_cfg0, 1);
-  val->tap_x_en = tap_cfg0.tap_z_en;
+  val->tap_x_en = tap_cfg0.tap_x_en;
   val->tap_y_en = tap_cfg0.tap_y_en;
   val->tap_z_en = tap_cfg0.tap_z_en;
 
@@ -9440,10 +9715,7 @@ int32_t lsm6dsv16x_tilt_mode_set(stmdev_ctx_t *ctx, uint8_t val)
     emb_func_en_a.tilt_en = val;
     ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_EMB_FUNC_EN_A, (uint8_t *)&emb_func_en_a, 1);
   }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -9468,10 +9740,7 @@ int32_t lsm6dsv16x_tilt_mode_get(stmdev_ctx_t *ctx, uint8_t *val)
   }
   *val = emb_func_en_a.tilt_en;
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
-  }
+  ret += lsm6dsv16x_mem_bank_set(ctx, LSM6DSV16X_MAIN_MEM_BANK);
 
   return ret;
 }
@@ -9765,112 +10034,31 @@ int32_t lsm6dsv16x_act_sleep_xl_odr_get(stmdev_ctx_t *ctx,
   *
   */
 int32_t lsm6dsv16x_act_thresholds_set(stmdev_ctx_t *ctx,
-                                      lsm6dsv16x_act_thresholds_t val)
+                                      lsm6dsv16x_act_thresholds_t *val)
 {
   lsm6dsv16x_inactivity_ths_t inactivity_ths;
   lsm6dsv16x_inactivity_dur_t inactivity_dur;
   lsm6dsv16x_wake_up_ths_t wake_up_ths;
+  lsm6dsv16x_wake_up_dur_t wake_up_dur;
   int32_t ret;
-  float_t tmp;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_INACTIVITY_DUR, (uint8_t *)&inactivity_dur, 1);
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_INACTIVITY_THS, (uint8_t *)&inactivity_ths, 1);
-  }
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_INACTIVITY_THS, (uint8_t *)&inactivity_ths, 1);
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_WAKE_UP_THS, (uint8_t *)&wake_up_ths, 1);
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_WAKE_UP_DUR, (uint8_t *)&wake_up_dur, 1);
 
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_WAKE_UP_THS, (uint8_t *)&wake_up_ths, 1);
-  }
+  inactivity_dur.wu_inact_ths_w = val->inactivity_cfg.wu_inact_ths_w;
+  inactivity_dur.xl_inact_odr = val->inactivity_cfg.xl_inact_odr;
+  inactivity_dur.inact_dur = val->inactivity_cfg.inact_dur;
 
-  if ((val.wk_ths_mg < (uint32_t)(7.8125f * 63.0f))
-      && (val.inact_ths_mg < (uint32_t)(7.8125f * 63.0f)))
-  {
-    inactivity_dur.wu_inact_ths_w = 0;
+  inactivity_ths.inact_ths = val->inactivity_ths;
+  wake_up_ths.wk_ths = val->threshold;
+  wake_up_dur.wake_dur = val->duration;
 
-    tmp = (float_t)val.inact_ths_mg / 7.8125f;
-    inactivity_ths.inact_ths = (uint8_t)tmp;
-
-    tmp = (float_t)val.wk_ths_mg / 7.8125f;
-    wake_up_ths.wk_ths = (uint8_t)tmp;
-  }
-  else if ((val.wk_ths_mg < (uint32_t)(15.625f * 63.0f))
-           && (val.inact_ths_mg < (uint32_t)(15.625f * 63.0f)))
-  {
-    inactivity_dur.wu_inact_ths_w = 1;
-
-    tmp = (float_t)val.inact_ths_mg / 15.625f;
-    inactivity_ths.inact_ths = (uint8_t)tmp;
-
-    tmp = (float_t)val.wk_ths_mg / 15.625f;
-    wake_up_ths.wk_ths = (uint8_t)tmp;
-  }
-  else if ((val.wk_ths_mg < (uint32_t)(31.25f * 63.0f))
-           && (val.inact_ths_mg < (uint32_t)(31.25f * 63.0f)))
-  {
-    inactivity_dur.wu_inact_ths_w = 2;
-
-    tmp = (float_t)val.inact_ths_mg / 31.25f;
-    inactivity_ths.inact_ths = (uint8_t)tmp;
-
-    tmp = (float_t)val.wk_ths_mg / 31.25f;
-    wake_up_ths.wk_ths = (uint8_t)tmp;
-  }
-  else if ((val.wk_ths_mg < (uint32_t)(62.5f * 63.0f))
-           && (val.inact_ths_mg < (uint32_t)(62.5f * 63.0f)))
-  {
-    inactivity_dur.wu_inact_ths_w = 3;
-
-    tmp = (float_t)val.inact_ths_mg / 62.5f;
-    inactivity_ths.inact_ths = (uint8_t)tmp;
-
-    tmp = (float_t)val.wk_ths_mg / 62.5f;
-    wake_up_ths.wk_ths = (uint8_t)tmp;
-  }
-  else if ((val.wk_ths_mg < (uint32_t)(125.0f * 63.0f))
-           && (val.inact_ths_mg < (uint32_t)(125.0f * 63.0f)))
-  {
-    inactivity_dur.wu_inact_ths_w = 4;
-
-    tmp = (float_t)val.inact_ths_mg / 125.0f;
-    inactivity_ths.inact_ths = (uint8_t)tmp;
-
-    tmp = (float_t)val.wk_ths_mg / 125.0f;
-    wake_up_ths.wk_ths = (uint8_t)tmp;
-  }
-  else if ((val.wk_ths_mg < (uint32_t)(250.0f * 63.0f))
-           && (val.inact_ths_mg < (uint32_t)(250.0f * 63.0f)))
-  {
-    inactivity_dur.wu_inact_ths_w = 5;
-
-    tmp = (float_t)val.inact_ths_mg / 250.0f;
-    inactivity_ths.inact_ths = (uint8_t)tmp;
-
-    tmp = (float_t)val.wk_ths_mg / 250.0f;
-    wake_up_ths.wk_ths = (uint8_t)tmp;
-  }
-  else // out of limit
-  {
-    inactivity_dur.wu_inact_ths_w = 5;
-    inactivity_ths.inact_ths = 0x3FU;
-    wake_up_ths.wk_ths = 0x3FU;
-  }
-
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_INACTIVITY_DUR, (uint8_t *)&inactivity_dur, 1);
-  }
-  if (ret == 0)
-  {
-
-    ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_INACTIVITY_THS, (uint8_t *)&inactivity_ths, 1);
-  }
-  if (ret == 0)
-  {
-
-    ret = lsm6dsv16x_write_reg(ctx, LSM6DSV16X_WAKE_UP_THS, (uint8_t *)&wake_up_ths, 1);
-  }
+  ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_INACTIVITY_DUR, (uint8_t *)&inactivity_dur, 1);
+  ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_INACTIVITY_THS, (uint8_t *)&inactivity_ths, 1);
+  ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_WAKE_UP_THS, (uint8_t *)&wake_up_ths, 1);
+  ret += lsm6dsv16x_write_reg(ctx, LSM6DSV16X_WAKE_UP_DUR, (uint8_t *)&wake_up_dur, 1);
 
   return ret;
 }
@@ -9889,69 +10077,21 @@ int32_t lsm6dsv16x_act_thresholds_get(stmdev_ctx_t *ctx,
   lsm6dsv16x_inactivity_dur_t inactivity_dur;
   lsm6dsv16x_inactivity_ths_t inactivity_ths;
   lsm6dsv16x_wake_up_ths_t wake_up_ths;
+  lsm6dsv16x_wake_up_dur_t wake_up_dur;
   int32_t ret;
-  float_t tmp;
 
   ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_INACTIVITY_DUR, (uint8_t *)&inactivity_dur, 1);
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_INACTIVITY_THS, (uint8_t *)&inactivity_ths, 1);
-  }
-  if (ret == 0)
-  {
-    ret = lsm6dsv16x_read_reg(ctx, LSM6DSV16X_WAKE_UP_THS, (uint8_t *)&wake_up_ths, 1);
-  }
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_INACTIVITY_THS, (uint8_t *)&inactivity_ths, 1);
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_WAKE_UP_THS, (uint8_t *)&wake_up_ths, 1);
+  ret += lsm6dsv16x_read_reg(ctx, LSM6DSV16X_WAKE_UP_DUR, (uint8_t *)&wake_up_dur, 1);
 
-  switch (inactivity_dur.wu_inact_ths_w)
-  {
-    case 0:
-      tmp = (float_t)wake_up_ths.wk_ths * 7.8125f;
-      val->wk_ths_mg = (uint32_t)tmp;
+  val->inactivity_cfg.wu_inact_ths_w = inactivity_dur.wu_inact_ths_w;
+  val->inactivity_cfg.xl_inact_odr = inactivity_dur.xl_inact_odr;
+  val->inactivity_cfg.inact_dur = inactivity_dur.inact_dur;
 
-      tmp = (float_t)inactivity_ths.inact_ths * 7.8125f;
-      val->inact_ths_mg = (uint32_t)tmp;
-      break;
-
-    case 1:
-      tmp = (float_t)wake_up_ths.wk_ths * 15.625f;
-      val->wk_ths_mg = (uint32_t)tmp;
-
-      tmp = (float_t)inactivity_ths.inact_ths * 15.625f;
-      val->inact_ths_mg = (uint32_t)tmp;
-      break;
-
-    case 2:
-      tmp = (float_t)wake_up_ths.wk_ths * 31.25f;
-      val->wk_ths_mg = (uint32_t)tmp;
-
-      tmp = (float_t)inactivity_ths.inact_ths * 31.25f;
-      val->inact_ths_mg = (uint32_t)tmp;
-      break;
-
-    case 3:
-      tmp = (float_t)wake_up_ths.wk_ths * 62.5f;
-      val->wk_ths_mg = (uint32_t)tmp;
-
-      tmp = (float_t)inactivity_ths.inact_ths * 62.5f;
-      val->inact_ths_mg = (uint32_t)tmp;
-      break;
-
-    case 4:
-      tmp = (float_t)wake_up_ths.wk_ths * 125.0f;
-      val->wk_ths_mg = (uint32_t)tmp;
-
-      tmp = (float_t)inactivity_ths.inact_ths * 125.0f;
-      val->inact_ths_mg = (uint32_t)tmp;
-      break;
-
-    default:
-      tmp = (float_t)wake_up_ths.wk_ths * 250.0f;
-      val->wk_ths_mg = (uint32_t)tmp;
-
-      tmp = (float_t)inactivity_ths.inact_ths * 250.0f;
-      val->inact_ths_mg = (uint32_t)tmp;
-      break;
-  }
+  val->inactivity_ths = inactivity_ths.inact_ths;
+  val->threshold = wake_up_ths.wk_ths;
+  val->duration = wake_up_dur.wake_dur;
 
   return ret;
 }

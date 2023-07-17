@@ -938,9 +938,14 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_ll_usb.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/SensorStreaming_USBX/ux_dcd_stm32_callback_sof.c</name>
+			<name>Middlewares/ST/CircularBufferDL2/CircularBufferDL2.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/SensorStreaming_USBX/ux_dcd_stm32_callback_sof.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/CircularBufferDL2/CircularBufferDL2.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/CircularBufferDL2/CircularBufferDL2.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/CircularBufferDL2/CircularBufferDL2.h</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming.h</name>
@@ -986,6 +991,11 @@
 			<name>Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming_read.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming_read.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming_sof.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming_sof.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming_thread.c</name>
@@ -1153,19 +1163,19 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/automode.h</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Inc/ble_dctrl_class.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_dctrl_class.h</locationURI>
-		</link>
-		<link>
-			<name>User/Core/Inc/ble_dctrl_class_vtbl.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_dctrl_class_vtbl.h</locationURI>
-		</link>
-		<link>
 			<name>User/Core/Inc/ble_list_utils.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_list_utils.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Inc/ble_stream_class.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_stream_class.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Inc/ble_stream_class_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_stream_class_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Inc/bluenrg_conf.h</name>
@@ -1196,11 +1206,6 @@
 			<name>User/Core/Inc/sysdebug_config.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/sysdebug_config.h</locationURI>
-		</link>
-		<link>
-			<name>User/Core/Inc/task_execution_profile.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/task_execution_profile.h</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Inc/tx_user.h</name>
@@ -1278,9 +1283,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/automode.c</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Src/ble_dctrl_class.c</name>
+			<name>User/Core/Src/ble_stream_class.c</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/ble_dctrl_class.c</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/ble_stream_class.c</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Src/exti_pin_map.c</name>
@@ -1358,11 +1363,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/FileX/App/filex_dctrl_class_vtbl.h</locationURI>
 		</link>
 		<link>
-			<name>User/FileX/App/fx_user.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/FileX/App/fx_user.h</locationURI>
-		</link>
-		<link>
 			<name>User/FileX/Target/fx_stm32_sd_driver.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/FileX/Target/fx_stm32_sd_driver.h</locationURI>
@@ -1371,6 +1371,11 @@
 			<name>User/FileX/Target/fx_stm32_sd_driver_glue.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/FileX/Target/fx_stm32_sd_driver_glue.c</locationURI>
+		</link>
+		<link>
+			<name>User/FileX/Target/fx_user.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/FileX/Target/fx_user.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Inc/Acquisition_Info_PnPL.h</name>
@@ -1451,6 +1456,16 @@
 			<name>User/PnPL/Inc/Iis3dwb_Acc_PnPL_vtbl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Iis3dwb_Acc_PnPL_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Inc/Iis3dwb_Ext_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Iis3dwb_Ext_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Inc/Iis3dwb_Ext_Acc_PnPL_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Iis3dwb_Ext_Acc_PnPL_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Inc/Ilps22qs_Press_PnPL.h</name>
@@ -1553,6 +1568,16 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Log_Controller_PnPL_vtbl.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Inc/Stts22h_Ext_Temp_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Stts22h_Ext_Temp_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Inc/Stts22h_Ext_Temp_PnPL_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Stts22h_Ext_Temp_PnPL_vtbl.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Inc/Stts22h_Temp_PnPL.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Inc/Stts22h_Temp_PnPL.h</locationURI>
@@ -1613,6 +1638,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Iis3dwb_Acc_PnPL.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Src/Iis3dwb_Ext_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Iis3dwb_Ext_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Src/Ilps22qs_Press_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Ilps22qs_Press_PnPL.c</locationURI>
@@ -1663,6 +1693,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Log_Controller_PnPL.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Src/Stts22h_Ext_Temp_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Stts22h_Ext_Temp_PnPL.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Src/Stts22h_Temp_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Src/Stts22h_Temp_PnPL.c</locationURI>
@@ -1686,6 +1721,16 @@
 			<name>User/USBX/App/PCDDriver_vtbl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/USBX/App/PCDDriver_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/USBX/App/usbx_callbacks.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/USBX/App/usbx_callbacks.c</locationURI>
+		</link>
+		<link>
+			<name>User/USBX/App/usbx_callbacks.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/USBX/App/usbx_callbacks.h</locationURI>
 		</link>
 		<link>
 			<name>User/USBX/App/usbx_dctrl_class.c</name>
@@ -4583,6 +4628,11 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/eLooM/Inc/services/IErrorFirstResponderVtbl.h</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/ST/eLooM/Inc/services/ManagedTaskMap.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/eLooM/Inc/services/ManagedTaskMap.h</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/ST/eLooM/Inc/services/NullErrorDelegate.h</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/eLooM/Inc/services/NullErrorDelegate.h</locationURI>
@@ -4771,6 +4821,11 @@
 			<name>Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_interrupt_handler.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_interrupt_handler.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_transfer_abort.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_transfer_abort.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_transfer_request.c</name>

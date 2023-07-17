@@ -57,12 +57,12 @@ uint8_t automode_setup(void)
          * folder name = STWINBOX_xxxxx --> 100000 */
         automode_model.nof_acquisitions = 2 * 100000;
       }
-      automode_get_start_delay_ms(&automode_model.start_delay_ms);
-      automode_get_datalog_time_length(&automode_model.datalog_time_length);
-      automode_get_idle_time_length(&automode_model.idle_time_length);
+      automode_get_start_delay_s(&automode_model.start_delay_s);
+      automode_get_logging_period_s(&automode_model.logging_period_s);
+      automode_get_idle_period_s(&automode_model.idle_period_s);
 
       /* If automode is enabled, setup timer to start/stop acquisitions automatically */
-      tx_timer_create(&automode_timer, "automode_T", automode_timer_callback, (ULONG) TX_NULL, (automode_model.start_delay_ms), 0, TX_AUTO_ACTIVATE);
+      tx_timer_create(&automode_timer, "automode_T", automode_timer_callback, (ULONG) TX_NULL, (automode_model.start_delay_s)*1000, 0, TX_AUTO_ACTIVATE);
     }
     else
     {
@@ -70,12 +70,12 @@ uint8_t automode_setup(void)
       automode_set_enabled(false);
     }
 
-    automode_get_start_delay_ms(&automode_model.start_delay_ms);
-    automode_get_datalog_time_length(&automode_model.datalog_time_length);
-    automode_get_idle_time_length(&automode_model.idle_time_length);
+    automode_get_start_delay_s(&automode_model.start_delay_s);
+    automode_get_logging_period_s(&automode_model.logging_period_s);
+    automode_get_idle_period_s(&automode_model.idle_period_s);
 
     /* If automode is enabled, setup timer to start/stop acquisitions automatically */
-    tx_timer_create(&automode_timer, "automode_T", automode_timer_callback, (ULONG) TX_NULL, (automode_model.start_delay_ms), 0, TX_AUTO_ACTIVATE);
+    tx_timer_create(&automode_timer, "automode_T", automode_timer_callback, (ULONG) TX_NULL, (automode_model.start_delay_s)*1000, 0, TX_AUTO_ACTIVATE);
   }
   return 0;
 }
@@ -96,12 +96,12 @@ static void automode_timer_callback(ULONG timer)
   {
     if((automode_model.nof_acquisitions % 2) == 0) /* even stage --> datalog */
     {
-      tx_timer_change(&automode_timer, automode_model.datalog_time_length, 0);
+      tx_timer_change(&automode_timer, (automode_model.logging_period_s)*1000, 0);
       tx_timer_activate(&automode_timer);
     }
     else /* odd stage --> idle */
     {
-      tx_timer_change(&automode_timer, automode_model.idle_time_length, 0);
+      tx_timer_change(&automode_timer, (automode_model.idle_period_s)*1000, 0);
       tx_timer_activate(&automode_timer);
     }
     DatalogAppTask_msg((ULONG) DT_USER_BUTTON);

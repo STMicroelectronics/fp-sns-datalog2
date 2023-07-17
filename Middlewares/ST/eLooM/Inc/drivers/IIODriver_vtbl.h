@@ -29,10 +29,16 @@ extern "C" {
 #endif
 
 
-#include "IDriver_vtbl.h"
+#include "drivers/IDriver_vtbl.h"
 
+/**
+ *  Create  type name for _IIODriver_vtbl.
+ */
 typedef struct _IIODriver_vtbl IIODriver_vtbl;
 
+/**
+ * Virtual table for the IIODriver class.
+ */
 struct _IIODriver_vtbl {
   sys_error_code_t (*Init)(IDriver *_this, void *pParams);
   sys_error_code_t (*Start)(IDriver *_this);
@@ -44,10 +50,13 @@ struct _IIODriver_vtbl {
 };
 
 /**
- * IDriver interface internal state. This is the base interface for the the driver subsystem.
+ * IIODriver interface internal state. This is the base interface for a driver with I/O capabilities.
  * It declares only the virtual table used to implement the inheritance.
  */
 struct _IIODriver {
+  /**
+   * Class virtual pointer.
+   */
   const IIODriver_vtbl *vptr;
 };
 

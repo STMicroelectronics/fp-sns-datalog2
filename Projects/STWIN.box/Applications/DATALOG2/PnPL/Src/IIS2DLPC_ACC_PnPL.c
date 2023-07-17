@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:iis2dlpc_acc;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:iis2dlpc_acc;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.0.0
+  * Created by: DTDL2PnPL_cGen version 1.1.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -166,12 +166,8 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   iis2dlpc_acc_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "iis2dlpc_acc.enable", temp_b);
   int32_t temp_i = 0;
-  iis2dlpc_acc_get_samples_per_ts__val(&temp_i);
-  json_object_dotset_number(JSON_Status, "iis2dlpc_acc.samples_per_ts.val", temp_i);
-  iis2dlpc_acc_get_samples_per_ts__min(&temp_i);
-  json_object_dotset_number(JSON_Status, "iis2dlpc_acc.samples_per_ts.min", temp_i);
-  iis2dlpc_acc_get_samples_per_ts__max(&temp_i);
-  json_object_dotset_number(JSON_Status, "iis2dlpc_acc.samples_per_ts.max", temp_i);
+  iis2dlpc_acc_get_samples_per_ts(&temp_i);
+  json_object_dotset_number(JSON_Status, "iis2dlpc_acc.samples_per_ts", temp_i);
   iis2dlpc_acc_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "iis2dlpc_acc.dim", temp_i);
   iis2dlpc_acc_get_ioffset(&temp_f);
@@ -189,8 +185,10 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   json_object_dotset_string(JSON_Status, "iis2dlpc_acc.data_type", temp_s);
   iis2dlpc_acc_get_sensor_annotation(&temp_s);
   json_object_dotset_string(JSON_Status, "iis2dlpc_acc.sensor_annotation", temp_s);
+  iis2dlpc_acc_get_sensor_category(&temp_i);
+  json_object_dotset_number(JSON_Status, "iis2dlpc_acc.sensor_category", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
-  field (this is :sensors). ONLY for Sensors and Algorithms */
+  field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "iis2dlpc_acc.c_type", COMP_TYPE_SENSOR);
   int8_t temp_int8 = 0;
   iis2dlpc_acc_get_stream_id(&temp_int8);
@@ -278,11 +276,8 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   }
   if (json_object_dothas_value(tempJSONObject, "iis2dlpc_acc.samples_per_ts"))
   {
-    if (json_object_dothas_value(tempJSONObject, "iis2dlpc_acc.samples_per_ts.val"))
-    {
-      int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "iis2dlpc_acc.samples_per_ts.val");
-      iis2dlpc_acc_set_samples_per_ts__val(samples_per_ts);
-    }
+    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "iis2dlpc_acc.samples_per_ts");
+    iis2dlpc_acc_set_samples_per_ts(samples_per_ts);
   }
   if (json_object_dothas_value(tempJSONObject, "iis2dlpc_acc.sensor_annotation"))
   {

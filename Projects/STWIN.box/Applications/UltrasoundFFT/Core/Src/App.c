@@ -35,18 +35,18 @@
 #include "PnPLCompManager.h"
 #include "Deviceinformation_PnPL.h"
 #include "Firmware_Info_PnPL.h"
-#include "Acquisition_Information_PnPL.h"
+#include "Acquisition_Info_PnPL.h"
 #include "Log_Controller_PnPL.h"
 #include "Fft_Dpu_PnPL.h"
 
 #include "Imp23absu_Mic_PnPL.h"
 #include "parson.h"
 
-static uint8_t FW_ID = 0x14;
+static uint8_t FW_ID = 0x17;
 
 static IPnPLComponent_t *pLogControllerPnPLObj = NULL;
 static IPnPLComponent_t *pIMP23ABSU_MIC_PnPLObj = NULL;
-static IPnPLComponent_t *pAcquisition_Information_PnPLObj = NULL;
+static IPnPLComponent_t *pAcquisition_Info_PnPLObj = NULL;
 static IPnPLComponent_t *pDeviceinformation_PnPLObj = NULL;
 static IPnPLComponent_t *Firmware_Info_PnPLObj = NULL;
 static IPnPLComponent_t *Fft_Dpu_PnPLObj = NULL;
@@ -121,7 +121,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 
   pIMP23ABSU_MIC_PnPLObj = Imp23absu_Mic_PnPLAlloc();
   pLogControllerPnPLObj = Log_Controller_PnPLAlloc();
-  pAcquisition_Information_PnPLObj = Acquisition_Information_PnPLAlloc();
+  pAcquisition_Info_PnPLObj = Acquisition_Info_PnPLAlloc();
   pDeviceinformation_PnPLObj = Deviceinformation_PnPLAlloc();
   Firmware_Info_PnPLObj = Firmware_Info_PnPLAlloc();
   Fft_Dpu_PnPLObj = Fft_Dpu_PnPLAlloc();
@@ -161,7 +161,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   /* Other PnPL Components */
   Log_Controller_PnPLInit(pLogControllerPnPLObj, DatalogAppTask_GetILogControllerIF((DatalogAppTask*) sDatalogAppObj));
 
-  Acquisition_Information_PnPLInit(pAcquisition_Information_PnPLObj);
+  Acquisition_Info_PnPLInit(pAcquisition_Info_PnPLObj);
 
   Deviceinformation_PnPLInit(pDeviceinformation_PnPLObj);
 

@@ -540,6 +540,13 @@ static uint8_t extract_PnPL_cmd_data(char *commandString, uint8_t *commandType, 
       json_value_free(tempJSON);
       return PNPL_CMD_NO_ERROR_CODE;
     }
+    else if (strcmp(componentName, "get_identity") == 0)//NOTE New get_identity command (Asked from SW-Platform)
+    {
+      *commandType = PNPL_CMD_SYSTEM_INFO;
+      strcpy(componentName, "");
+      json_value_free(tempJSON);
+      return PNPL_CMD_NO_ERROR_CODE;
+    }
   }
   json_value_free(tempJSON);
   //Not JSON command!
@@ -583,7 +590,6 @@ uint8_t PnPLParseCommand(char *commandString, PnPLCommand_t *command)
     }
     if (commandType == PNPL_CMD_SYSTEM_CONFIG)
     {
-      //TODO merge this logic with SET?? or make a function!
       for (uint8_t i = 0; i < PnPLGetNComponents(); i++)
       {
         IPnPLComponent_t *p_obj = (IPnPLComponent_t *)(spPnPLObj.Components[i]);
@@ -649,6 +655,38 @@ uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uin
   return ret;
 }
 
+static uint8_t setTelemetryValue(uint8_t type, JSON_Object* json_obj, char* name, void* value, uint8_t n_sub_telemetries)
+{
+	switch (type) {
+		case PNPL_INT:
+			json_object_dotset_number(json_obj, name, (double) *(int*) value);
+			break;
+		case PNPL_FLOAT:
+			json_object_dotset_number(json_obj, name, *(float*) value);
+			break;
+		case PNPL_STRING:
+			json_object_dotset_string(json_obj, name, (const char*) value);
+			break;
+		case PNPL_BOOLEAN:
+			json_object_dotset_boolean(json_obj, name, *(int*) value);
+			break;
+		case PNPL_TELEMETRY:
+			for (uint8_t j = 0; j < n_sub_telemetries; j++){
+				uint8_t sub_telemetry_type = ((PnPLTelemetry_t*) value)[j].telemetry_type;
+			    char dotStr[(COMP_KEY_MAX_LENGTH * 2) + 1];
+				(void)strcpy(dotStr, name);
+				(void)strcat(dotStr, ".");
+				(void)strcat(dotStr, ((PnPLTelemetry_t*) value)[j].telemetry_name);
+				uint8_t n_sub_sub_telemetries = ((PnPLTelemetry_t*) value)[j].n_sub_telemetries;
+				setTelemetryValue(sub_telemetry_type, json_obj, dotStr, ((PnPLTelemetry_t*) value)[j].telemetry_value, n_sub_sub_telemetries);
+			}
+			break;
+		default:
+			break;
+	}
+	return PNPL_CMD_NO_ERROR_CODE;
+}
+
 /*
  * {
  *  "comp_name": {
@@ -662,67 +700,31 @@ uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uin
  * */
 uint8_t PnPLSerializeTelemetry(char *compName, PnPLTelemetry_t *telemetryValue, uint8_t telemetryNum, char **telemetryJSON, uint32_t *size, uint8_t pretty)
 {
+	JSON_Value *root_value = json_value_init_object();
+	JSON_Object *root_object = json_value_get_object(root_value);
 
-  JSON_Value *tempJSON;
-  JSON_Object *JSON_Telemetry;
+	JSON_Value *telemetry_value = json_value_init_object();
+	JSON_Object *telemetry_object = json_value_get_object(telemetry_value);
 
-  tempJSON = json_value_init_object();
-  JSON_Telemetry = json_value_get_object(tempJSON);
+	for (uint8_t i = 0; i < telemetryNum; i++) {
+		uint8_t telemetry_type = telemetryValue[i].telemetry_type;
+		setTelemetryValue(telemetry_type, telemetry_object, telemetryValue[i].telemetry_name, telemetryValue[i].telemetry_value, telemetryValue[i].n_sub_telemetries);
+	}
 
-  for(uint8_t i = 0; i < telemetryNum; i++)
-  {
-    char dotStr[(COMP_KEY_MAX_LENGTH * 2) + 1];
-    (void)strcpy(dotStr, compName);
-    uint8_t telemetry_type = telemetryValue[i].telemetry_type;
-    if(telemetry_type != PNPL_TELEMETRY)
-    {
-      (void)strcat(dotStr, ".");
-      (void)strcat(dotStr, telemetryValue[i].telemetry_name);
-      switch(telemetry_type)
-      {
-        case PNPL_INT:
-          (void)json_object_dotset_number(JSON_Telemetry, dotStr, (double)*(int*)(telemetryValue[i].telemetry_value));
-          break;
-        case PNPL_FLOAT:
-          (void)json_object_dotset_number(JSON_Telemetry, dotStr, *(float*) (telemetryValue[i].telemetry_value));
-          break;
-        case PNPL_STRING:
-          (void)json_object_dotset_string(JSON_Telemetry, dotStr, (const char*) telemetryValue[i].telemetry_value);
-          break;
-        case PNPL_BOOLEAN:
-          (void)json_object_dotset_boolean(JSON_Telemetry, dotStr, *(int*) (telemetryValue[i].telemetry_value));
-          break;
-        default:
-          break;
-      }
-    }
-    else
-    {
-      char *sub_telemetries_json;
-      uint32_t sub_telemetries_size;
+	json_object_set_value(root_object, compName, telemetry_value);
 
-      (void)PnPLSerializeTelemetry(telemetryValue[i].telemetry_name,
-                             (PnPLTelemetry_t*) telemetryValue[i].telemetry_value,
-                             telemetryValue[i].n_sub_telemetries,
-                             &sub_telemetries_json,
-                             &sub_telemetries_size,
-                             0);
-      (void)json_object_set_value(JSON_Telemetry, dotStr, json_parse_string(sub_telemetries_json));
-    }
-  }
+	/* convert to a json string and write to file */
+	if(pretty == 1u)
+	{
+		*telemetryJSON = json_serialize_to_string_pretty(root_value);
+		*size = json_serialization_size_pretty(root_value);
+	}
+	else
+	{
+		*telemetryJSON = json_serialize_to_string(root_value);
+		*size = json_serialization_size(root_value);
+	}
 
-  /* convert to a json string and write to file */
-  if(pretty == 1u)
-  {
-    *telemetryJSON = json_serialize_to_string_pretty(tempJSON);
-    *size = json_serialization_size_pretty(tempJSON);
-  }
-  else
-  {
-    *telemetryJSON = json_serialize_to_string(tempJSON);
-    *size = json_serialization_size(tempJSON);
-  }
-
-  json_value_free(tempJSON);
-  return PNPL_CMD_NO_ERROR_CODE;
+	json_value_free(root_value);
+	return PNPL_CMD_NO_ERROR_CODE;
 }

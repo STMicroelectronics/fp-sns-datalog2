@@ -27,13 +27,18 @@
 extern "C" {
 #endif
 
-#include "services/systypes.h"
+#include "services/eloom_sysbase.h"
 
 
 /**
- * Specifies the structure of a system event that is possible to send to the Init task.
+ * Create a type name for ::_SysEvent.
  */
-typedef union _SysEvent {
+typedef union _SysEvent SysEvent;
+
+/**
+ * Specifies the structure of a system event. A ::SysEvent is used to request a service to the the INIT task.
+ */
+union _SysEvent {
 	/**
 	 * Specifies the semantics of the bit field of a system event.
 	 */
@@ -64,7 +69,7 @@ typedef union _SysEvent {
 	 * Convenient field to operate the data type.
 	 */
 	uint32_t nRawEvent;
-} SysEvent;
+};
 
 // Public API declaration
 //***********************

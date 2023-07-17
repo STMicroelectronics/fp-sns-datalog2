@@ -23,7 +23,6 @@
 
 #include "T1toT2DataBuilder.h"
 #include "T1toT2DataBuilder_vtbl.h"
-#include "services/sysmem.h"
 #include "services/sysdebug.h"
 
 #define SYS_DEBUGF(level, message)                   SYS_DEBUGF3(SYS_DBG_DPU, level, message)

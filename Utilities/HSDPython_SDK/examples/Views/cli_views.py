@@ -1,3 +1,18 @@
+
+# ******************************************************************************
+# * @attention
+# *
+# * Copyright (c) 2022 STMicroelectronics.
+# * All rights reserved.
+# *
+# * This software is licensed under terms that can be found in the LICENSE file
+# * in the root directory of this software component.
+# * If no LICENSE file comes with this software, it is provided AS-IS.
+# *
+# *
+# ******************************************************************************
+#
+
 import os
 import click
 from datetime import datetime, timedelta
@@ -49,14 +64,18 @@ class HSDMainView(Frame):
         else:
             layout_cli_flags.add_widget(Label("- Device configuration file: Default DeviceConfig from the device"))
 
-        if self._hsd_info_model.cli_flags.ucf_file != '' and os.path.exists(self._hsd_info_model.cli_flags.ucf_file):
-            self.mlc_msg_lbl = Label("- Selected UCF file [MLC]: {}".format(self._hsd_info_model.cli_flags.ucf_file))
+        if self._hsd_info_model.cli_flags.ucf_file is not None and os.path.exists(self._hsd_info_model.cli_flags.ucf_file):
+            self.mlc_msg_lbl = Label("- Selected UCF file: {}".format(self._hsd_info_model.cli_flags.ucf_file))
             layout_cli_flags.add_widget(self.mlc_msg_lbl)
 
         else:
-            self.mlc_msg_lbl = Label("- Selected UCF file [MLC]: No UCF file selected")
+            self.mlc_msg_lbl = Label("- Selected UCF file: No UCF file selected")
             self.mlc_msg_lbl.custom_colour = "control"
             layout_cli_flags.add_widget(self.mlc_msg_lbl)
+
+        if self._hsd_info_model.cli_flags.ispu_out_fmt is not None and os.path.exists(self._hsd_info_model.cli_flags.ispu_out_fmt):
+            self.ispu_out_fmt_msg_lbl = Label("- Selected ISPU Output format: {}".format(self._hsd_info_model.cli_flags.ispu_out_fmt))
+            layout_cli_flags.add_widget(self.ispu_out_fmt_msg_lbl)
 
         if self._hsd_info_model.cli_flags.time_sec != -1:
             layout_cli_flags.add_widget(Label("- Duration: {}".format(timedelta(seconds = self._hsd_info_model.cli_flags.time_sec))))
@@ -241,14 +260,18 @@ class HSDLoggingView(Frame):
         else:
             layout_cli_flags.add_widget(Label("- Device configuration file: Default DeviceConfig from the device"))
 
-        if self._hsd_info_model.cli_flags.ucf_file != '' and os.path.exists(self._hsd_info_model.cli_flags.ucf_file):
-            self.mlc_msg_lbl = Label("- Selected UCF file [MLC]: {}".format(self._hsd_info_model.cli_flags.ucf_file))
+        if self._hsd_info_model.cli_flags.ucf_file is not None and os.path.exists(self._hsd_info_model.cli_flags.ucf_file):
+            self.mlc_msg_lbl = Label("- Selected UCF file: {}".format(self._hsd_info_model.cli_flags.ucf_file))
             layout_cli_flags.add_widget(self.mlc_msg_lbl)
 
         else:
-            self.mlc_msg_lbl = Label("- Selected UCF file [MLC]: No UCF file selected")
+            self.mlc_msg_lbl = Label("- Selected UCF file: No UCF file selected")
             self.mlc_msg_lbl.custom_colour = "control"
             layout_cli_flags.add_widget(self.mlc_msg_lbl)
+        
+        if self._hsd_info_model.cli_flags.ispu_out_fmt is not None and os.path.exists(self._hsd_info_model.cli_flags.ispu_out_fmt):
+            self.ispu_out_fmt_msg_lbl = Label("- Selected ISPU Output format: {}".format(self._hsd_info_model.cli_flags.ispu_out_fmt))
+            layout_cli_flags.add_widget(self.ispu_out_fmt_msg_lbl)
 
         if self._hsd_info_model.cli_flags.time_sec != -1:
             layout_cli_flags.add_widget(Label("- Duration: {}".format(timedelta(seconds = self._hsd_info_model.cli_flags.time_sec))))
@@ -388,9 +411,9 @@ class HSDLoggingView(Frame):
                     self._hsd_info_model.update_sensor_list()
                     self._hsd_info_model.init_sensor_data_counters()
                     
-                    #MLC UCF file upload
-                    self._hsd_info_model.update_mlc_sensor_list()
-                    self._hsd_info_model.upload_mlc_ucf_file()
+                    #MLC or ISPU UCF file upload
+                    self._hsd_info_model.update_ai_sensor_list()
+                    self._hsd_info_model.upload_ai_ucf_file()
 
                     self._hsd_info_model.update_tag_list()
                     self._hsd_info_model.init_tag_status_list()
@@ -401,15 +424,19 @@ class HSDLoggingView(Frame):
                 if self._hsd_info_model.is_log_started:
                     
                     #MLC sensor GUI update
-                    if self._hsd_info_model.cli_flags.ucf_file != '' and os.path.exists(self._hsd_info_model.cli_flags.ucf_file):
-                        self.mlc_msg_lbl.text = "- Selected UCF file [MLC]: {}".format(self._hsd_info_model.cli_flags.ucf_file)
+                    if self._hsd_info_model.cli_flags.ucf_file is not None and os.path.exists(self._hsd_info_model.cli_flags.ucf_file):
+                        self.mlc_msg_lbl.text = "- Selected UCF file: {}".format(self._hsd_info_model.cli_flags.ucf_file)
                         self.mlc_msg_lbl.custom_colour = "label"
                         if self._hsd_info_model.mlc_sensor_list is not None and len(self._hsd_info_model.mlc_sensor_list) == 0:
-                            self.mlc_msg_lbl = Label("- Selected UCF file [MLC]: Ok, but No active MLC sensors!")
+                            self.mlc_msg_lbl = Label("- Selected UCF file: Ok, but No active MLC or ISPU sensors!")
                             self.mlc_msg_lbl.custom_colour = "invalid"
                     else:
-                        self.mlc_msg_lbl.text = "- Selected UCF file [MLC]: No UCF file selected"
+                        self.mlc_msg_lbl.text = "- Selected UCF file: No UCF file selected"
                         self.mlc_msg_lbl.custom_colour = "control"
+                    
+                    if self._hsd_info_model.cli_flags.ispu_out_fmt is not None and os.path.exists(self._hsd_info_model.cli_flags.ispu_out_fmt):
+                        self.ispu_out_fmt_msg_lbl = Label("- Selected ISPU Output format: {}".format(self._hsd_info_model.cli_flags.ispu_out_fmt))
+                        self.ispu_out_fmt_msg_lbl.custom_colour = "invalid"
 
                     #Log duration management
                     if self._hsd_info_model.cli_flags.time_sec != -1:

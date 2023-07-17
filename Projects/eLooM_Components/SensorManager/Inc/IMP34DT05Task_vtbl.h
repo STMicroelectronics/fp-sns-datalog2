@@ -1,21 +1,21 @@
 /**
- ******************************************************************************
- * @file    IMP34DT05Task_vtbl.h
- * @author  SRA - MCD
- * @brief
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
- 
+  ******************************************************************************
+  * @file    IMP34DT05Task_vtbl.h
+  * @author  SRA - MCD
+  * @brief
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
 #ifndef IMP34DT05TASK_VTBL_H_
 #define IMP34DT05TASK_VTBL_H_
 

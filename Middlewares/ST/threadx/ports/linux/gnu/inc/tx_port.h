@@ -26,7 +26,7 @@
 /*  PORT SPECIFIC C INFORMATION                            RELEASE        */ 
 /*                                                                        */ 
 /*    tx_port.h                                           Linux/GNU       */ 
-/*                                                           6.1          */
+/*                                                           6.1.11       */
 /*                                                                        */
 /*  AUTHOR                                                                */
 /*                                                                        */
@@ -48,6 +48,12 @@
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
 /*  09-30-2020     William E. Lamie         Initial Version 6.1           */
+/*  10-15-2021     William E. Lamie         Modified comment(s), added    */
+/*                                            symbol ULONG64_DEFINED,     */
+/*                                            resulting in version 6.1.9  */
+/*  04-25-2022     William E. Lamie         Modified comment(s), removed  */
+/*                                            useless definition,         */
+/*                                            resulting in version 6.1.11 */
 /*                                                                        */
 /**************************************************************************/
 
@@ -134,7 +140,7 @@ typedef unsigned long                           ULONG;
 typedef short                                   SHORT;
 typedef unsigned short                          USHORT;
 typedef uint64_t                                ULONG64;
-
+#define ULONG64_DEFINED
 
 /* Override the alignment type to use 64-bit alignment and storage for pointers.  */
 
@@ -539,7 +545,7 @@ VOID   _tx_thread_interrupt_restore(UINT previous_posture);
 
 #ifdef TX_THREAD_INIT
 CHAR                            _tx_version_id[] =
-                                    "Copyright (c) Microsoft Corporation * ThreadX Linux/gcc Version 6.1 *";
+                                    "Copyright (c) Microsoft Corporation * ThreadX Linux/gcc Version 6.1.9 *";
 #else
 extern  CHAR                    _tx_version_id[];
 #endif
@@ -562,8 +568,6 @@ void    _tx_linux_thread_init();
 #ifndef TX_LINUX_MEMORY_SIZE
 #define TX_LINUX_MEMORY_SIZE                    64000
 #endif
-
-#define TX_TIMER_TICKS_PER_SECOND               100UL
 
 /* Define priorities of pthreads. */
 

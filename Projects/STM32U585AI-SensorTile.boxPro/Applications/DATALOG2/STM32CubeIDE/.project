@@ -1023,6 +1023,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_ll_usb.c</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/ST/CircularBufferDL2/CircularBufferDL2.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/CircularBufferDL2/CircularBufferDL2.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/CircularBufferDL2/CircularBufferDL2.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/CircularBufferDL2/CircularBufferDL2.h</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/ST/ThreadX/common</name>
 			<type>2</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/threadx/common</locationURI>
@@ -1158,6 +1168,11 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_interrupt_handler.c</locationURI>
 		</link>
 		<link>
+			<name>Middlewares/ST/usbx/controller/ux_dcd_stm32_transfer_abort.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_transfer_abort.c</locationURI>
+		</link>
+		<link>
 			<name>Middlewares/ST/usbx/controller/ux_dcd_stm32_transfer_request.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/usbx_stm32_device_controllers/ux_dcd_stm32_transfer_request.c</locationURI>
@@ -1176,11 +1191,6 @@
 			<name>Middlewares/ST/usbx/core/src</name>
 			<type>2</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/core/src</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/usbx/sensor_streaming/ux_dcd_stm32_callback_sof.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/SensorStreaming_USBX/ux_dcd_stm32_callback_sof.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/usbx/sensor_streaming/ux_device_class_sensor_streaming.h</name>
@@ -1226,6 +1236,11 @@
 			<name>Middlewares/ST/usbx/sensor_streaming/ux_device_class_sensor_streaming_read.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming_read.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/usbx/sensor_streaming/ux_device_class_sensor_streaming_sof.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming_sof.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/usbx/sensor_streaming/ux_device_class_sensor_streaming_thread.c</name>

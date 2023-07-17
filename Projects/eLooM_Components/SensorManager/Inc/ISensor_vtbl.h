@@ -37,7 +37,7 @@ typedef struct _ISensor_vtbl ISensor_vtbl;
 struct _ISensor_vtbl
 {
   uint8_t (*GetId)(ISourceObservable *_this);
-  IEventSrc* (*GetEventSourceIF)(ISourceObservable *_this);
+  IEventSrc *(*GetEventSourceIF)(ISourceObservable *_this);
   EMData_t (*GetDataInfo)(ISourceObservable *_this);
   sys_error_code_t (*SensorGetODR)(ISourceObservable *_this, float *p_measured, float *p_nominal);
   float (*SensorGetFS)(ISourceObservable *_this);
@@ -77,7 +77,7 @@ static inline sys_error_code_t ISensorSetFS(ISensor_t *_this, float FS)
 
 static inline sys_error_code_t ISensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
 {
-  if(_this->vptr->SensorSetFifoWM != NULL)
+  if (_this->vptr->SensorSetFifoWM != NULL)
   {
     return  _this->vptr->SensorSetFifoWM(_this, fifoWM);
   }

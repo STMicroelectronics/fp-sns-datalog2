@@ -54,6 +54,11 @@ struct _usbx_dctrl_class_t
   IStream_t super;
 
   /**
+   * Identification for this specific communication interface
+   */
+  uint8_t comm_interface_id;
+
+  /**
    * Driver object.
    */
   IDriver *m_pxDriver;

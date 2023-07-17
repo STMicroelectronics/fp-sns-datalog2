@@ -18,7 +18,7 @@
   */
 
 #include "SPIBusIF.h"
-#include "services/sysmem.h"
+
 
 // Private functions declaration
 // *****************************

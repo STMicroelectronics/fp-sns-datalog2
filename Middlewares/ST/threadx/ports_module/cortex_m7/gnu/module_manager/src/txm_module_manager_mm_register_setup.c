@@ -25,13 +25,50 @@
 #include "tx_api.h"
 #include "txm_module.h"
 
+#ifdef TXM_MODULE_MPU_DEFAULT
+const ULONG txm_module_default_mpu_registers[32] =
+    {
+        TXM_MODULE_MPU_DEFAULT_RBAR_0,
+        TXM_MODULE_MPU_DEFAULT_RASR_0,
+        TXM_MODULE_MPU_DEFAULT_RBAR_1,
+        TXM_MODULE_MPU_DEFAULT_RASR_1,
+        TXM_MODULE_MPU_DEFAULT_RBAR_2,
+        TXM_MODULE_MPU_DEFAULT_RASR_2,
+        TXM_MODULE_MPU_DEFAULT_RBAR_3,
+        TXM_MODULE_MPU_DEFAULT_RASR_3,
+        TXM_MODULE_MPU_DEFAULT_RBAR_4,
+        TXM_MODULE_MPU_DEFAULT_RASR_4,
+        TXM_MODULE_MPU_DEFAULT_RBAR_5,
+        TXM_MODULE_MPU_DEFAULT_RASR_5,
+        TXM_MODULE_MPU_DEFAULT_RBAR_6,
+        TXM_MODULE_MPU_DEFAULT_RASR_6,
+        TXM_MODULE_MPU_DEFAULT_RBAR_7,
+        TXM_MODULE_MPU_DEFAULT_RASR_7,
+        TXM_MODULE_MPU_DEFAULT_RBAR_8,
+        TXM_MODULE_MPU_DEFAULT_RASR_8,
+        TXM_MODULE_MPU_DEFAULT_RBAR_9,
+        TXM_MODULE_MPU_DEFAULT_RASR_9,
+        TXM_MODULE_MPU_DEFAULT_RBAR_10,
+        TXM_MODULE_MPU_DEFAULT_RASR_10,
+        TXM_MODULE_MPU_DEFAULT_RBAR_11,
+        TXM_MODULE_MPU_DEFAULT_RASR_11,
+        TXM_MODULE_MPU_DEFAULT_RBAR_12,
+        TXM_MODULE_MPU_DEFAULT_RASR_12,
+        TXM_MODULE_MPU_DEFAULT_RBAR_13,
+        TXM_MODULE_MPU_DEFAULT_RASR_13,
+        TXM_MODULE_MPU_DEFAULT_RBAR_14,
+        TXM_MODULE_MPU_DEFAULT_RASR_14,
+        TXM_MODULE_MPU_DEFAULT_RBAR_15,
+        TXM_MODULE_MPU_DEFAULT_RASR_15
+    };
+#endif
 
 /**************************************************************************/
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
-/*    _txm_module_manager_region_size_get             Cortex-M7/MPU/GNU   */
-/*                                                           6.1          */
+/*    _txm_module_manager_region_size_get                 Cortex-M7       */
+/*                                                           6.1.9        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Scott Larson, Microsoft Corporation                                 */
@@ -61,7 +98,7 @@
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     Scott Larson             Initial Version 6.1           */
+/*  10-15-2021      Scott Larson            Initial Version 6.1.9         */
 /*                                                                        */
 /**************************************************************************/
 ULONG  _txm_module_manager_region_size_get(ULONG block_size)
@@ -152,8 +189,8 @@ ULONG   return_value;
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
-/*    _txm_module_manager_calculate_srd_bits          Cortex-M7/MPU/GNU   */
-/*                                                           6.1          */
+/*    _txm_module_manager_calculate_srd_bits              Cortex-M7       */
+/*                                                           6.1.9        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Scott Larson, Microsoft Corporation                                 */
@@ -184,7 +221,7 @@ ULONG   return_value;
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020     Scott Larson             Initial Version 6.1           */
+/*  10-15-2021      Scott Larson            Initial Version 6.1.9         */
 /*                                                                        */
 /**************************************************************************/
 ULONG  _txm_module_manager_calculate_srd_bits(ULONG block_size, ULONG length)
@@ -230,8 +267,8 @@ UINT    srd_bit_index;
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
-/*    _txm_module_manager_mm_register_setup           Cortex-M7/MPU/GNU   */
-/*                                                           6.1.7        */
+/*    _txm_module_manager_mm_register_setup               Cortex-M7       */
+/*                                                           6.1.12       */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Scott Larson, Microsoft Corporation                                 */
@@ -240,6 +277,19 @@ UINT    srd_bit_index;
 /*                                                                        */
 /*    This function sets up the MPU register definitions based on the     */
 /*    module's memory characteristics.                                    */
+/*                                                                        */
+/*    Default MPU layout:                                                 */
+/*    Entry     Description                                               */
+/*      0       Kernel mode entry                                         */
+/*      1       Module code region                                        */
+/*      2       Module code region                                        */
+/*      3       Module code region                                        */
+/*      4       Module code region                                        */
+/*      5       Module data region                                        */
+/*      6       Module data region                                        */
+/*      7       Module data region                                        */
+/*                                                                        */
+/*    If TXM_MODULE_MANAGER_16_MPU is defined, there are 16 MPU slots.    */
 /*    MPU layout for the Cortex-M7:                                       */
 /*    Entry     Description                                               */
 /*      0       Kernel mode entry                                         */
@@ -254,12 +304,11 @@ UINT    srd_bit_index;
 /*      9       Module shared memory region                               */
 /*      10      Module shared memory region                               */
 /*      11      Module shared memory region                               */
-/*      12      Unused region                                             */
-/*      13      Unused region                                             */
-/*      14      Unused region                                             */
-/*      15      Unused region                                             */
+/*      12      User-defined region                                       */
+/*      13      User-defined region                                       */
+/*      14      User-defined region                                       */
+/*      15      User-defined region                                       */
 /*                                                                        */
-/*    If TXM_MODULE_MANAGER_8_MPU is defined, there are only 8 MPU slots. */
 /*                                                                        */
 /*  INPUT                                                                 */
 /*                                                                        */
@@ -281,14 +330,14 @@ UINT    srd_bit_index;
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020      Scott Larson            Initial Version 6.1           */
-/*  06-02-2021      Scott Larson            Added support for 8 MPU,      */
-/*                                            resulting in version 6.1.7  */
+/*  10-15-2021      Scott Larson            Initial Version 6.1.9         */
+/*  07-29-2022      Scott Larson            Enable user defined regions,  */
+/*                                            resulting in version 6.1.12 */
 /*                                                                        */
 /**************************************************************************/
 VOID  _txm_module_manager_mm_register_setup(TXM_MODULE_INSTANCE *module_instance)
 {
-#ifndef TXM_MODULE_MANAGER_8_MPU
+#ifdef TXM_MODULE_MANAGER_16_MPU
 
 ULONG   code_address;
 ULONG   code_size;
@@ -446,18 +495,18 @@ UINT    i;
         /* Increment MPU table index.  */
         mpu_table_index++;
     }
-    
-    /* Setup MPU for the remaining regions.  */
-    while (mpu_table_index < TXM_MODULE_MPU_TOTAL_ENTRIES)
-    {
-        /* Build the base address register with address, MPU region, set Valid bit.  */
-        module_instance -> txm_module_instance_mpu_registers[mpu_table_index].txm_module_mpu_region_address = mpu_table_index | 0x10;
-        
-        /* Increment MPU table index.  */
-        mpu_table_index++;
-    }
 
-#else
+    /* Setup user-defined regions (12-15).  */
+    module_instance -> txm_module_instance_mpu_registers[12].txm_module_mpu_region_address          = TXM_MODULE_MPU_USER_DEFINED_RBAR_12;
+    module_instance -> txm_module_instance_mpu_registers[12].txm_module_mpu_region_attribute_size   = TXM_MODULE_MPU_USER_DEFINED_RASR_12;
+    module_instance -> txm_module_instance_mpu_registers[13].txm_module_mpu_region_address          = TXM_MODULE_MPU_USER_DEFINED_RBAR_13;
+    module_instance -> txm_module_instance_mpu_registers[13].txm_module_mpu_region_attribute_size   = TXM_MODULE_MPU_USER_DEFINED_RASR_13;
+    module_instance -> txm_module_instance_mpu_registers[14].txm_module_mpu_region_address          = TXM_MODULE_MPU_USER_DEFINED_RBAR_14;
+    module_instance -> txm_module_instance_mpu_registers[14].txm_module_mpu_region_attribute_size   = TXM_MODULE_MPU_USER_DEFINED_RASR_14;
+    module_instance -> txm_module_instance_mpu_registers[15].txm_module_mpu_region_address          = TXM_MODULE_MPU_USER_DEFINED_RBAR_15;
+    module_instance -> txm_module_instance_mpu_registers[15].txm_module_mpu_region_attribute_size   = TXM_MODULE_MPU_USER_DEFINED_RASR_15;
+
+#else   /* TXM_MODULE_MANAGER_16_MPU is not defined, only 8 MPU regions. */
 
 ULONG   code_address;
 ULONG   code_size;
@@ -574,7 +623,7 @@ UINT    i;
         for (i = 0; i < TXM_MODULE_MANAGER_CODE_MPU_ENTRIES - 1; i++)
         {
             /* Build the base address register.  */
-            base_address_register =  code_address & ~(block_size - 1) | mpu_register | 0x10;
+            base_address_register = (code_address & ~(block_size - 1)) | mpu_register | 0x10;
             
             /* Check if SRD bits need to be set.  */
             if (code_size < block_size)
@@ -705,13 +754,13 @@ UINT    i;
 #endif
 }
 
-#ifndef TXM_MODULE_MANAGER_8_MPU
+#ifdef TXM_MODULE_MANAGER_16_MPU
 /**************************************************************************/
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
-/*    _txm_module_manager_inside_data_check          Cortex-M7/MPU/GNU    */
-/*                                                           6.1.6        */
+/*    _txm_module_manager_inside_data_check               Cortex-M7       */
+/*                                                           6.1.9        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    Scott Larson, Microsoft Corporation                                 */
@@ -743,10 +792,7 @@ UINT    i;
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  09-30-2020      Scott Larson            Initial Version 6.1           */
-/*  04-02-2021      Scott Larson            Modified comments, added      */
-/*                                            check for overflow,         */
-/*                                            resulting in version 6.1.6  */
+/*  10-15-2021      Scott Larson            Initial Version 6.1.9         */
 /*                                                                        */
 /**************************************************************************/
 UINT _txm_module_manager_inside_data_check(TXM_MODULE_INSTANCE *module_instance, ALIGN_TYPE obj_ptr, UINT obj_size)

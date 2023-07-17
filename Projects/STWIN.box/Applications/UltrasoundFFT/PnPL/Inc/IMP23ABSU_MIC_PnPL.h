@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    Imp23absu_MicPnPL.h
+  * @file    Imp23absu_Mic_PnPL.h
   * @author  SRA
   * @brief   Imp23absu_Mic PnPL Component Manager
   ******************************************************************************
@@ -17,9 +17,24 @@
   ******************************************************************************
   */
 
+/**
+  ******************************************************************************
+  * This file has been auto generated from the following DTDL Component:
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_ultrasoundFft:sensors:imp23absu_mic;2
+  *
+  * Created by: DTDL2PnPL_cGen version 1.1.0
+  *
+  * WARNING! All changes made to this file will be lost if this is regenerated
+  ******************************************************************************
+  */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _PNPL_IMP23ABSU_MIC_H_
 #define _PNPL_IMP23ABSU_MIC_H_
+
+#define imp23absu_mic_odr_hz192000 192000
+#define imp23absu_mic_aop_dbspl130 130
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,13 +45,13 @@ extern "C" {
 #include "IPnPLComponent.h"
 #include "IPnPLComponent_vtbl.h"
 
+
 /**
   * Create a type name for _Imp23absu_Mic_PnPL.
  */
 typedef struct _Imp23absu_Mic_PnPL Imp23absu_Mic_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Imp23absu_Mic_PnPLAlloc(void);
 

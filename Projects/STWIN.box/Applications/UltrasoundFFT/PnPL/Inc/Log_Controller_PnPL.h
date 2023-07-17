@@ -20,12 +20,11 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fp_sns_datalog2:other:log_controller;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:other:log_controller;2
   *
-  * Created by: DTDL2PnPL_cGen version 0.9.0
+  * Created by: DTDL2PnPL_cGen version 1.1.0
   *
-  * WARNING! All changes made in this file will be lost relaunching the
-  *          generation process!
+  * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
@@ -43,14 +42,15 @@ extern "C" {
 #include "parson.h"
 #include "IPnPLComponent.h"
 #include "IPnPLComponent_vtbl.h"
+#include "ILog_Controller.h"
+#include "ILog_Controller_vtbl.h"
 
 /**
   * Create a type name for _Log_Controller_PnPL.
  */
 typedef struct _Log_Controller_PnPL Log_Controller_PnPL;
 
-// Public API declaration
-//***********************
+/* Public API declaration ----------------------------------------------------*/
 
 IPnPLComponent_t *Log_Controller_PnPLAlloc(void);
 

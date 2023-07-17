@@ -22,7 +22,6 @@
 
 #include "DefDataBuilder.h"
 #include "DefDataBuilder_vtbl.h"
-#include "services/sysmem.h"
 #include <string.h>
 #include "services/sysdebug.h"
 

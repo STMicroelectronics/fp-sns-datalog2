@@ -29,8 +29,6 @@
 extern "C" {
 #endif
 
-#include "services/systp.h"
-#include "services/syserror.h"
 #include "services/AManagedTaskEx.h"
 #include "services/AManagedTaskEx_vtbl.h"
 #include "ABusIF.h"

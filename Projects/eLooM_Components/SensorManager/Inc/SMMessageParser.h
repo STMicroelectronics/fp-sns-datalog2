@@ -33,7 +33,6 @@
 extern "C" {
 #endif
 
-#include "services/syserror.h"
 #include "SPIBusIF.h"
 #include "I2CBusIF.h"
 

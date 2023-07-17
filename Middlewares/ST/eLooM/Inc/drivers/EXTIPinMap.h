@@ -42,7 +42,8 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include "services/systp.h"
+#include "services/eloom_sysbase.h"
+
 
 #define EXTI_DECLARE_PIN2F_MAP() \
 		extern const EXTIMapEntry g_xExtiPin2FMap[];

@@ -16,7 +16,7 @@
 #
 
 import sys
-
+from datetime import datetime
 # import cProfile
 # from pstats import Stats
 
@@ -24,6 +24,9 @@ from PySide6.QtWidgets import QApplication
 from PySide6 import QtCore
 
 from st_hsdatalog.HSD_GUI.HSD_MainWindow import HSD_MainWindow
+
+import st_hsdatalog.HSD_utils.logger as logger
+log = logger.setup_applevel_logger(is_debug = True, file_name= "{}_app_debug.log".format(datetime.today().strftime('%Y%m%d_%H_%M_%S')))
 
 def main():
     QApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
@@ -35,7 +38,7 @@ def main():
     mainWindow.setWindowTitle("High Speed Datalog Control SW")
     mainWindow.setAppVersion("v1.0.0")
     mainWindow.setLogMsg("Device is logging --> Board Configuration has been disabled.\nNow you can label your acquisition using the [Tags Information] Component")
-    mainWindow.show()
+    mainWindow.showMaximized()
     app.setAttribute(QtCore.Qt.AA_Use96Dpi)
     app.exec()
 

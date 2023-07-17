@@ -27,7 +27,8 @@
 extern "C" {
 #endif
 
-#include "syslowpower.h"
+#include "services/eloom_sysbase.h"
+#include "services/syslowpower.h"
 /* MISRA messages linked to FreeRTOS include are ignored */
 /*cstat -MISRAC2012-* */
 #include "tx_api.h"
