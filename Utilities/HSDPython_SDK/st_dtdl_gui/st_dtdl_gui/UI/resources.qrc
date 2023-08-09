@@ -1,0 +1,41 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>resources.qrc</file>
+    <file>icons/outline_arrow_back_ios_white_18dp.png</file>
+    <file>icons/outline_description_white_18dp.png</file>
+    <file>icons/outline_keyboard_arrow_down_white_18dp.png</file>
+    <file>icons/outline_keyboard_arrow_up_white_18dp.png</file>
+    <file>icons/outline_audio_file_white_18dp.png</file>
+    <file>icons/outline_settings_white_18dp.png</file>
+    <file>icons/outline_filter_alt_white_18dp.png</file>
+    <file>icons/outline_peak_white_18dp.png</file>
+    <file>icons/outline_file_upload_white_18dp.png</file>
+    <file>icons/outline_audiotrack_white_18dp.png</file>
+    <file>icons/outline_edit_white_18dp.png</file>
+    <file>icons/outline_autorenew_white_18dp.png</file>
+    <file>icons/motor_anomaly_class.png</file>
+    <file>icons/outline_group_work_white_18dp.png</file>
+    <file>icons/outline_open_in_full_white_18dp.png</file>
+    <file>icons/baseline_engineering_white_48dp.png</file>
+    <file>icons/baseline_folder_open_white_18dp.png</file>
+    <file>icons/baseline_multi_table_white_18dp.png</file>
+    <file>icons/baseline_tune_white_18dp.png</file>
+    <file>icons/outline_arrow_bottom_white_18dp.png</file>
+    <file>icons/outline_backup_table_white_18dp.png</file>
+    <file>icons/outline_check_white_18dp.png</file>
+    <file>icons/outline_close_white_36dp.png</file>
+    <file>icons/outline_done_outline_white_18dp.png</file>
+    <file>icons/outline_home_white_18dp.png</file>
+    <file>icons/outline_info_white_18dp.png</file>
+    <file>icons/outline_lamp_white_18dp.png</file>
+    <file>icons/outline_lock_white_18dp.png</file>
+    <file>icons/outline_open_in_full_white_36dp.png</file>
+    <file>icons/outline_open_with_white_18dp.png</file>
+    <file>icons/outline_play_arrow_white_18dp.png</file>
+    <file>icons/outline_save_white_18dp.png</file>
+    <file>icons/outline_settings_input_com_white_18dp.png</file>
+    <file>icons/outline_stop_white_18dp.png</file>
+    <file>icons/outline_zoom_in_white_18dp.png</file>
+    <file>icons/ST16418_ST-Logo-Ico_3.ico</file>
+  </qresource>
+</RCC>
