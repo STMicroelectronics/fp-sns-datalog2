@@ -184,9 +184,11 @@ class HSDLink_v2:
     def get_sw_tag_classes(self, d_id: int):
         sw_tags = dict()
         res = self.get_tags_info(d_id)
-        for t in res["tags_info"]:
-            if "sw" in t:
-                sw_tags[t] = res["tags_info"][t]
+        tags = res.get("tags_info")
+        if tags is not None:
+            for t in res["tags_info"]:
+                if "sw" in t:
+                    sw_tags[t] = res["tags_info"][t]
         return sw_tags
 
     def get_sw_tag_class(self, d_id: int, tag_class_id: int):
@@ -409,7 +411,14 @@ class HSDLink_v2:
             if pres_res is not None:
                 board_id = hex(pres_res["board_id"])
                 fw_id = hex(pres_res["fw_id"])
+                
                 dev_template_json = DeviceTemplateManager.query_dtdl_model(board_id, fw_id)
+                fw_name = self.get_firmware_info(d_id).get("fw_name")
+                if fw_name is not None:
+                    if isinstance(dev_template_json,list):
+                        for dt in dev_template_json:
+                            print(dt)
+                
                 self.__dt_manager = DeviceTemplateManager(dev_template_json)
                 self.__com_manager.update_device(d_id, device_json_file_path, self.__dt_manager.get_components())
                 log.info("Device Template automatically loaded")

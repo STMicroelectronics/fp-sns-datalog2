@@ -3419,7 +3419,7 @@ uint8_t firmware_info_get_fw_name(char **value)
 }
 uint8_t firmware_info_get_fw_version(char **value)
 {
-  *value = "1.2.0";
+  *value = "1.2.1";
   return 0;
 }
 uint8_t firmware_info_get_part_number(char **value)

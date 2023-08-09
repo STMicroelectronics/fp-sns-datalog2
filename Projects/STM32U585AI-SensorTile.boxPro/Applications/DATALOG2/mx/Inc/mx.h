@@ -191,6 +191,11 @@ extern const MX_TIMParams_t MX_TIM5InitParams;
 
 extern const MX_PCDParams_t MX_PCDInitParams;
 
+/**
+  * TIM3 configuration parameters.
+  */
+extern const MX_TIMParams_t MX_TIM3InitParams;
+
 
 #ifdef __cplusplus
 }

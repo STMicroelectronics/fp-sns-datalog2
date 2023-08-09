@@ -102,6 +102,15 @@ class HSDInfo():
     
     def load_device_template(self, board_id, fw_id):
         dev_template_json = DeviceTemplateManager.query_dtdl_model(board_id, fw_id)
+        if isinstance(dev_template_json,dict):
+            fw_name = self.hsd_link.get_firmware_info(self.selected_device_id).get("firmware_info").get("fw_name")
+            if fw_name is not None:
+                splitted_fw_name = fw_name.lower().split("-")
+                reformatted_fw_name = "".join([splitted_fw_name[0]] + [f.capitalize() for f in splitted_fw_name[1:]])
+            for dt in dev_template_json:
+                if reformatted_fw_name.lower() in dev_template_json[dt][0].get("@id").lower():
+                    dev_template_json = dev_template_json[dt]
+                    break
         HSDLink.set_device_template(self.hsd_link, dev_template_json)
     
     def update_fw_info(self):

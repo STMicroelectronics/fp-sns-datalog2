@@ -947,6 +947,7 @@ uint8_t lsm6dsv16x_mlc_load_file(ILsm6dsv16x_Mlc_t *ifn, int32_t size, const cha
   /* User code */
   ILsm6dsv16x_Mlc_load_file(ifn, size, data);
   app_model.mlc_ucf_valid = true;
+  lsm6dsv16x_mlc_model.sensorStatus.IsActive = true;
   __stream_control(NULL, true);
   return 0;
 }
@@ -1961,7 +1962,7 @@ uint8_t firmware_info_get_fw_name(char **value)
 }
 uint8_t firmware_info_get_fw_version(char **value)
 {
-  *value = "1.2.0";
+  *value = "1.2.1";
   return 0;
 }
 uint8_t firmware_info_get_part_number(char **value)

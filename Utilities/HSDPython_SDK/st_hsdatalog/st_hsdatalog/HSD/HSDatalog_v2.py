@@ -174,6 +174,22 @@ class HSDatalog_v2:
         fw_id = hex(self.device_model["fw_id"])
         
         dev_template_json = DeviceTemplateManager.query_dtdl_model(board_id, fw_id)
+        if isinstance(dev_template_json,dict):
+            components = self.device_model.get("components")
+            fw_name = None
+            for c in components:
+                if c.get("firmware_info") is not None:
+                    fir_info = c.get("firmware_info")
+                    if fir_info.get("fw_name") is not None:
+                        fw_name = fir_info.get("fw_name")
+            # fw_name = self.device_model.get("components").get("firmware_info").get("fw_name")
+            if fw_name is not None:
+                splitted_fw_name = fw_name.lower().split("-")
+                reformatted_fw_name = "".join([splitted_fw_name[0]] + [f.capitalize() for f in splitted_fw_name[1:]])
+                for dt in dev_template_json:
+                    if reformatted_fw_name.lower() in  dev_template_json[dt][0].get("@id").lower():
+                        dev_template_json = dev_template_json[dt]
+                        break
         dt_manager = DeviceTemplateManager(dev_template_json)
         self.components_dtdl = dt_manager.get_components()
         for comp_name in self.components_dtdl.keys():

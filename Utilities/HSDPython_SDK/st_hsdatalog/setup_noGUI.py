@@ -21,7 +21,7 @@ with open("LICENSE.md", "r") as fh:
 
 setuptools.setup(
     name="st_hsdatalog",
-    version="2.2.0",
+    version="2.2.1",
     author="SRA-ASP",
     author_email="matteo.ronchi@st.com",
     description="STMicroelectronics High Speed Datalog python package (NO GUI)",

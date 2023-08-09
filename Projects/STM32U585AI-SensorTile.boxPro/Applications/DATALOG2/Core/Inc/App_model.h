@@ -96,8 +96,8 @@ extern "C" {
 #define HSD_ACQ_TIMESTAMP_LENGTH            25U
 
 #define FW_VERSION_MAJOR  '1'
-#define FW_VERSION_MINOR  '1'
-#define FW_VERSION_PATCH  '0'
+#define FW_VERSION_MINOR  '2'
+#define FW_VERSION_PATCH  '1'
 
 #define N_MAX_EP 5
 

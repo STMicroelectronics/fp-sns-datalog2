@@ -59,6 +59,7 @@ extern "C" {
 #define SYS_DBG_SYSTS                      SYS_DBG_ON                 ///< SysTimestamp debug control byte
 #define SYS_DBG_BCP                        SYS_DBG_ON                 ///< Battery Charger Protocol debug control byte
 
+#include "mx.h"
 /* ODeV - hardware configuration for the debug services provided by the framework */
 /**********************************************************************************/
 

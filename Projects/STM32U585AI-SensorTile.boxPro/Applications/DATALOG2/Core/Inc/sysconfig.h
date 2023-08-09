@@ -32,7 +32,7 @@
 // *********************
 
 #define BOARD_ID              0x0D
-#define FW_ID_DATALOG2        0x09
+#define FW_ID_DATALOG2        0x0A
 
 // Other hardware configuration
 // ****************************
@@ -143,10 +143,10 @@
 * - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
 * - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
 */
-//#define SYS_TS_CFG_TSDRIVER_PARAMS &MX_TIM3InitParams
-#define SYS_TS_CFG_TSDRIVER_PARAMS SYS_TS_USE_SW_TSDRIVER
+#define SYS_TS_CFG_TSDRIVER_PARAMS &MX_TIM3InitParams
+//#define SYS_TS_CFG_TSDRIVER_PARAMS SYS_TS_USE_SW_TSDRIVER
 
-//#define SYS_TS_CFG_TSDRIVER_FREQ_HZ SystemCoreClock ///< hardware timer clock frequency in Hz
-#define SYS_TS_CFG_TSDRIVER_FREQ_HZ TX_TIMER_TICKS_PER_SECOND ///< ThreadX clock frequency in Hz
+#define SYS_TS_CFG_TSDRIVER_FREQ_HZ SystemCoreClock ///< hardware timer clock frequency in Hz
+//#define SYS_TS_CFG_TSDRIVER_FREQ_HZ TX_TIMER_TICKS_PER_SECOND ///< ThreadX clock frequency in Hz
 
 #endif /* SYSCONFIG_H_ */

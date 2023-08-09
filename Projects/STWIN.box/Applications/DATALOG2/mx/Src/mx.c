@@ -370,6 +370,16 @@ const MX_ADCParams_t MX_ADC4InitParams =
 };
 
 /**
+  * TIM3 initialization parameters.
+  */
+const MX_TIMParams_t MX_TIM3InitParams =
+{
+  .p_mx_init_f = MX_TIM3_Init,
+  .p_tim = &htim3,
+  .irq_n = TIM3_IRQn
+};
+
+/**
   * TIM4 initialization parameters.
   */
 const MX_TIMParams_t MX_TIM4InitParams =

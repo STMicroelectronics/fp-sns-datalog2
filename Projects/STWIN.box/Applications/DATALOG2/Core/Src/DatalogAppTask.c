@@ -673,11 +673,6 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
           {
             res = IStream_post_data((IStream_t *) p_obj->ble_device,  sId, data_buf, samplesToSend * nBytesPerSample);
           }
-          if (res != 0)
-          {
-            SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
-            return res;
-          }
           if (p_obj->sensorContext[sId].n_samples_to_timestamp != 0)
           {
             p_obj->sensorContext[sId].n_samples_to_timestamp -= samplesToSend;
@@ -697,11 +692,6 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
           if (IStream_is_enabled((IStream_t *) p_obj->ble_device))
           {
             res = IStream_post_data((IStream_t *) p_obj->ble_device,  sId, data_buf, p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample);
-          }
-          if (res != 0)
-          {
-            SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
-            return res;
           }
 
           data_buf += p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample;
