@@ -114,15 +114,18 @@ class DeviceTemplateManager:
         usb_device_catalog_path = os.path.join(os.path.dirname(sys.modules[__name__].__file__),"usb_device_catalog.json")
         with open(usb_device_catalog_path, "r") as catalog:
             temp = json.load(catalog)
+            dtdl_model_ids = []
             for entry in temp:
                 if entry["board_id"] == board_id and entry["fw_id"] == fw_id:
                     if "custom_dtmi" in entry and entry["custom_dtmi"] != "":
                         print("DeviceTemplateManager - ALERT - CUSTOM User dtmi Overwrites the base supported model. Call remove_custom_dtdl_model(...) to restore the original one.")
                         dtdl_model_id = entry["custom_dtmi"]
+                        dtdl_model_ids.append(dtdl_model_id)
                         print("dtmi: {}".format(dtdl_model_id))
                     elif "local_dtmi" in entry and entry["local_dtmi"] != "":
                         print("dtmi found in locally in base supported models")
                         dtdl_model_id = entry["local_dtmi"]
+                        dtdl_model_ids.append(dtdl_model_id)
                         print("dtmi: {}".format(dtdl_model_id))
                     #NOTE for the next version
                     # print("Searching the corresponding Device Template model in Azure Device Models repository...")
@@ -152,7 +155,15 @@ class DeviceTemplateManager:
                     #             print("dtmi found in locally in base supported models")
                     #             dtdl_model_id = entry["local_dtmi"]
                     #             print("dtmi: {}".format(dtdl_model_id))
-                    dtdl_json_path = os.path.join(os.path.dirname(sys.modules[__name__].__file__), dtdl_model_id)
+            if len(dtdl_model_ids) == 1:
+                dtdl_json_path = os.path.join(os.path.dirname(sys.modules[__name__].__file__), dtdl_model_id)
+                with open(dtdl_json_path, "r") as device_model:
+                    return json.load(device_model)
+            else:
+                device_models = {}
+                for dtm_id in dtdl_model_ids:
+                    dtdl_json_path = os.path.join(os.path.dirname(sys.modules[__name__].__file__), dtm_id)
                     with open(dtdl_json_path, "r") as device_model:
-                        return json.load(device_model)
+                        device_models[dtm_id] = json.load(device_model)
+                return device_models
         return ""
