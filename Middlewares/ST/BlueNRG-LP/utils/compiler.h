@@ -1,17 +1,23 @@
-/******************** (C) COPYRIGHT 2015 STMicroelectronics ********************
-* File Name          : compiler.h
-* Author             : AMS - VMA RF Application team 
-* Version            : V1.0.0
-* Date               : 14-September-2015
-* Description        : Compiler-dependent macros.
-********************************************************************************
-* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
-* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
-* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
-* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
-* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
-*******************************************************************************/
+/**
+  ******************************************************************************
+  * @file    compiler.h
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.3.0
+  * @date    20-July-2023
+  * @brief   Compiler-dependent macros.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
 #ifndef __COMPILER_H__
 #define __COMPILER_H__
 

@@ -20,7 +20,7 @@ from st_pnpl.DTDL import device_template_model as DTM
 
 import st_hsdatalog.HSD_utils.logger as logger
 from st_hsdatalog.HSD_utils.exceptions import CommunicationEngineOpenError, CommunicationEngineCloseError, EmptyCommandResponse, PnPLCommandError, \
-    SETCommandError, PnPLSETDeviceStatusCommandError
+    SETCommandError, PnPLSETDeviceStatusCommandError, WrongDeviceConfigFile
 
 from st_hsdatalog.HSD_link.communication.PnPL_HSD.hsd_dll import HSD_Dll
 
@@ -379,10 +379,20 @@ class PnPLHSD_CommandManager:
         with open(device_status_json_file_path) as f:
             device_dict = json.load(f)
             f.close()
-        for component in device_dict["devices"][d_id]["components"]:
-            for key in component.keys():
-                if key in dtdl_components:
-                    self.__set_component_values(d_id, component, dtdl_components[key])
+        pres_res = self.get_device_presentation_string(d_id)
+        if pres_res is not None:
+            board_board_id = hex(pres_res["board_id"])
+            board_fw_id = hex(pres_res["fw_id"])
+            file_board_id = device_dict["devices"][0]["board_id"]
+            file_fw_id = device_dict["devices"][0]["fw_id"]
+            if board_board_id == file_board_id and board_fw_id == file_fw_id:
+                for component in device_dict["devices"][d_id]["components"]:
+                    for key in component.keys():
+                        if key in dtdl_components:
+                            self.__set_component_values(d_id, component, dtdl_components[key])
+            else:
+                log.error("Wrong device_config.json selected. - ID from board: {}, - ID from file: {}".format(pres_res, {"board_id":file_board_id,"fw_id":file_board_id}))
+                raise WrongDeviceConfigFile("ID from board: {}, - ID from file: {}".format(pres_res, {"board_id":file_board_id,"fw_id":file_board_id}))
 
     #WP2 TODO
     #using hsd_dll API (currently used)

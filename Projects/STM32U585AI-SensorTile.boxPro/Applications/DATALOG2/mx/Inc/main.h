@@ -81,10 +81,8 @@ void Error_Handler(void);
 #define GPIO_JP4_GPIO_Port GPIOE
 #define WC_INTB_Pin GPIO_PIN_3
 #define WC_INTB_GPIO_Port GPIOE
-#define WC_INTB_EXTI_IRQn EXTI3_IRQn
 #define SW2_Pin GPIO_PIN_0
 #define SW2_GPIO_Port GPIOE
-#define SW2_EXTI_IRQn EXTI0_IRQn
 #define MDF1_SDI0_Pin GPIO_PIN_3
 #define MDF1_SDI0_GPIO_Port GPIOD
 #define LED2_Pin GPIO_PIN_11
@@ -94,16 +92,10 @@ void Error_Handler(void);
 #define SW1_Pin GPIO_PIN_13
 #define SW1_GPIO_Port GPIOC
 #define SW1_EXTI_IRQn EXTI13_IRQn
-#define MAG_DRDY_Pin GPIO_PIN_6
-#define MAG_DRDY_GPIO_Port GPIOE
-#define MAG_DRDY_EXTI_IRQn EXTI6_IRQn
 #define SPI_DUT_CS2_Pin GPIO_PIN_12
 #define SPI_DUT_CS2_GPIO_Port GPIOG
 #define SW_ON_Pin GPIO_PIN_8
 #define SW_ON_GPIO_Port GPIOF
-#define ACC_INT1_Pin GPIO_PIN_2
-#define ACC_INT1_GPIO_Port GPIOF
-#define ACC_INT1_EXTI_IRQn EXTI2_IRQn
 #define BT_BOOT_Pin GPIO_PIN_1
 #define BT_BOOT_GPIO_Port GPIOD
 #define WC_RSTB_Pin GPIO_PIN_7
@@ -118,24 +110,25 @@ void Error_Handler(void);
 #define SPI_DUT_CS_GPIO_Port GPIOG
 #define DIL_INT2_Pin GPIO_PIN_6
 #define DIL_INT2_GPIO_Port GPIOG
+#define DIL_INT2_EXTI_IRQn EXTI6_IRQn
 #define LOCK_1v8_Pin GPIO_PIN_0
 #define LOCK_1v8_GPIO_Port GPIOC
 #define BUTTON_PWR_Pin GPIO_PIN_1
 #define BUTTON_PWR_GPIO_Port GPIOC
-#define BUTTON_PWR_EXTI_IRQn EXTI1_IRQn
 #define VBATT_Pin GPIO_PIN_0
 #define VBATT_GPIO_Port GPIOB
 #define PRESS_INT_Pin GPIO_PIN_8
 #define PRESS_INT_GPIO_Port GPIOE
-#define PRESS_INT_EXTI_IRQn EXTI8_IRQn
 #define DIL_INT1_Pin GPIO_PIN_2
 #define DIL_INT1_GPIO_Port GPIOG
+#define DIL_INT1_EXTI_IRQn EXTI2_IRQn
 #define MDF1_SDI2_Pin GPIO_PIN_7
 #define MDF1_SDI2_GPIO_Port GPIOE
 #define PWM_OUT_T1_C3_Pin GPIO_PIN_13
 #define PWM_OUT_T1_C3_GPIO_Port GPIOE
 #define BLE_INT_Pin GPIO_PIN_11
 #define BLE_INT_GPIO_Port GPIOB
+#define BLE_INT_EXTI_IRQn EXTI11_IRQn
 #define MDF1_SDI1_Pin GPIO_PIN_12
 #define MDF1_SDI1_GPIO_Port GPIOB
 #define TEMP_INT_Pin GPIO_PIN_15
@@ -144,7 +137,6 @@ void Error_Handler(void);
 #define BLE_SPI_CS_GPIO_Port GPIOA
 #define SD_DETECT_Pin GPIO_PIN_5
 #define SD_DETECT_GPIO_Port GPIOC
-#define SD_DETECT_EXTI_IRQn EXTI5_IRQn
 #define LDO_EN_Pin GPIO_PIN_15
 #define LDO_EN_GPIO_Port GPIOE
 #define IMU_INT1_Pin GPIO_PIN_4
@@ -155,8 +147,9 @@ void Error_Handler(void);
 #define ACC_INT2_EXTI_IRQn EXTI15_IRQn
 #define NFC_GPO_Pin GPIO_PIN_12
 #define NFC_GPO_GPIO_Port GPIOE
+
 /* USER CODE BEGIN Private defines */
-#define INT_EX_EXTI_IRQn EXTI6_IRQn
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -372,6 +372,7 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lps22df</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv16x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/stts22h</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/SensorTileBoxPro</state>
                     <state>$PROJ_DIR$/../Core/Inc</state>
                     <state>$PROJ_DIR$/../PnPL/Inc</state>
@@ -382,7 +383,7 @@
                     <state>$PROJ_DIR$/../mx/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/SensorManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/TagManager/Inc</state>
-                    <state>$PROJ_DIR$/../../../../eLooM_Components/PnPLCompManager/Inc</state>
+                    <state>$PROJ_DIR$/../../../../../Middlewares/ST/PnPLCompManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/EMData/Inc</state>
                 </option>
                 <option>
@@ -1479,6 +1480,7 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lps22df</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv16x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/stts22h</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/SensorTileBoxPro</state>
                     <state>$PROJ_DIR$/../Core/Inc</state>
                     <state>$PROJ_DIR$/../PnPL/Inc</state>
@@ -1489,7 +1491,7 @@
                     <state>$PROJ_DIR$/../mx/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/SensorManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/TagManager/Inc</state>
-                    <state>$PROJ_DIR$/../../../../eLooM_Components/PnPLCompManager/Inc</state>
+                    <state>$PROJ_DIR$/../../../../../Middlewares/ST/PnPLCompManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/EMData/Inc</state>
                 </option>
                 <option>
@@ -2277,33 +2279,6 @@
                 </group>
             </group>
             <group>
-                <name>PnPLCompManager</name>
-                <group>
-                    <name>Inc</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Inc\IPnPLComponent.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Inc\IPnPLComponent_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Inc\PnPLCompManager.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Inc\PnPLDef.h</name>
-                    </file>
-                </group>
-                <group>
-                    <name>Src</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Src\IPnPLComponent.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Src\PnPLCompManager.c</name>
-                    </file>
-                </group>
-            </group>
-            <group>
                 <name>SensorManager</name>
                 <group>
                     <name>Inc</name>
@@ -2549,6 +2524,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\I2CBusTask.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\ISM330ISTask.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\LIS2DU12Task.c</name>
@@ -2800,10 +2778,16 @@
                         <name>$PROJ_DIR$\..\Core\Src\exti_pin_map.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\Core\Src\HardwareDetection.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\Core\Src\hci_tl_interface.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\ICommandParse.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Core\Src\IIsm330is_Ispu.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\ILog_Controller.c</name>
@@ -2819,9 +2803,6 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\OTA.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Src\stm32u5xx_hal_timebase_tim.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\stm32u5xx_it.c</name>
@@ -2914,9 +2895,6 @@
                         <name>$PROJ_DIR$\..\mx\Inc\sai.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\mx\Inc\sdmmc.h</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\mx\Inc\spi.h</name>
                     </file>
                     <file>
@@ -2968,6 +2946,9 @@
                         <name>$PROJ_DIR$\..\mx\Src\spi.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\mx\Src\stm32u5xx_hal_timebase_tim.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\mx\Src\tim.c</name>
                     </file>
                     <file>
@@ -3005,6 +2986,24 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\PnPL\Inc\Firmware_Info_PnPL_vtbl.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Acc_PnPL.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Acc_PnPL_vtbl.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Gyro_PnPL.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Gyro_PnPL_vtbl.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Ispu_PnPL.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Ispu_PnPL_vtbl.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\PnPL\Inc\Lis2du12_Acc_PnPL.h</name>
@@ -3080,6 +3079,15 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\PnPL\Src\Firmware_Info_PnPL.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330is_Acc_PnPL.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330is_Gyro_PnPL.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330is_Ispu_PnPL.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\PnPL\Src\Lis2du12_Acc_PnPL.c</name>
@@ -3172,6 +3180,9 @@
             <name>BSP</name>
             <group>
                 <name>Components</name>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ism330is\ism330is_reg.c</name>
+                </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\lis2du12\lis2du12_reg.c</name>
                 </file>
@@ -4277,6 +4288,33 @@
                     <name>ports</name>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\filex\ports\generic\inc\fx_port.h</name>
+                    </file>
+                </group>
+            </group>
+            <group>
+                <name>PnPLCompManager</name>
+                <group>
+                    <name>Inc</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc\IPnPLComponent.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc\IPnPLComponent_vtbl.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc\PnPLCompManager.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc\PnPLDef.h</name>
+                    </file>
+                </group>
+                <group>
+                    <name>Src</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\IPnPLComponent.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\PnPLCompManager.c</name>
                     </file>
                 </group>
             </group>

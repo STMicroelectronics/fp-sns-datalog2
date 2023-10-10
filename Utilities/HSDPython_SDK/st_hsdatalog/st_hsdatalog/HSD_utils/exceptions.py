@@ -19,7 +19,8 @@ class HSDError(Exception):
     pass
 
 class MissingDeviceModelError(HSDError):
-    pass
+    def __init__(self, board_id = None, fw_id= None):
+         super().__init__("board_id:{}, fw_id:{}".format(board_id, fw_id))
 
 class MissingSensorModelError(HSDError):
     pass
@@ -50,9 +51,16 @@ class SubSensorTypeError(SensorParamsError):
 class NSensorAxesError(SensorParamsError):
     pass
 
+class UnsupportedSensorCategoryError(HSDError):
+    pass
+
 class MissingFileForSensorError(HSDError):
     def __init__(self, file_path, sensor_name):
         super().__init__("{} --x {}".format(file_path, sensor_name))
+
+class MissingISPUOutputDescriptorException(HSDError):
+    def __init__(self, ispu_sensor_name):
+        super().__init__("Missing ISPU output description file for {} sensor".format(ispu_sensor_name))
 
 class DataExtractionError(HSDError):
     def __init__(self, sensor_name, sensor_type= None):
@@ -64,6 +72,10 @@ class DataExtractionError(HSDError):
 class NoDataAtIndexError(HSDError):
     def __init__(self, index, file_path, size):
         super().__init__("index: {}, file: {}, size: {}".format(index,file_path,size))
+
+class FeaturExtractorError(HSDError):
+    def __init__(self, sensor_name):
+         super().__init__("{}".format(sensor_name))
 
 class NanoEdgeConversionError(HSDError):
     def __init__(self, sensor_name):
@@ -105,9 +117,16 @@ class EmptyCommandResponse(HSDLibError):
 class SETCommandError(HSDLibError):
     pass
 
-class PnPLCommandError():
+class PnPLError(Exception):
+    pass
+
+class PnPLCommandError(PnPLError):
     def __init__(self, command_name):
         super().__init__("{}".format(command_name))
 
 class PnPLSETDeviceStatusCommandError(PnPLCommandError):
     pass
+
+class WrongDeviceConfigFile(PnPLError):
+    def __init__(self, error_message):
+        super().__init__("{}".format(error_message))

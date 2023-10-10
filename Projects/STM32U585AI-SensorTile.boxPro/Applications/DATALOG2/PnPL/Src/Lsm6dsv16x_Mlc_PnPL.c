@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_mlc;2
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_mlc;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.1.0
+  * Created by: DTDL2PnPL_cGen version 1.2.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -110,7 +110,8 @@ char *Lsm6dsv16x_Mlc_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
   return 0;
 }
 
-uint8_t Lsm6dsv16x_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Lsm6dsv16x_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                          uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -138,6 +139,8 @@ uint8_t Lsm6dsv16x_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.usb_dps", temp_i);
   lsm6dsv16x_mlc_get_sd_dps(&temp_i);
   json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.sd_dps", temp_i);
+  lsm6dsv16x_mlc_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "lsm6dsv16x_mlc.sensor_annotation", temp_s);
   lsm6dsv16x_mlc_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "lsm6dsv16x_mlc.sensor_category", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
@@ -166,45 +169,95 @@ uint8_t Lsm6dsv16x_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   return 0;
 }
 
-uint8_t Lsm6dsv16x_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Lsm6dsv16x_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
   if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_mlc.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "lsm6dsv16x_mlc.enable");
-    lsm6dsv16x_mlc_set_enable(enable);
+    ret = lsm6dsv16x_mlc_set_enable(enable);
+  if(ret == 0){
+    json_object_dotset_boolean(respJSONObject, "lsm6dsv16x_mlc.enable.value", enable);
+  } else {
+    json_object_dotset_string(respJSONObject, "lsm6dsv16x_mlc.enable.value", "PNPL_SET_ERROR");
+  }
   }
   if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_mlc.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "lsm6dsv16x_mlc.samples_per_ts");
-    lsm6dsv16x_mlc_set_samples_per_ts(samples_per_ts);
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "lsm6dsv16x_mlc.samples_per_ts");
+    ret = lsm6dsv16x_mlc_set_samples_per_ts(samples_per_ts);
+  if(ret == 0){
+    json_object_dotset_number(respJSONObject, "lsm6dsv16x_mlc.samples_per_ts.value", samples_per_ts);
+  } else {
+    json_object_dotset_string(respJSONObject, "lsm6dsv16x_mlc.samples_per_ts.value", "PNPL_SET_ERROR");
+  }
+  }
+  if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_mlc.sensor_annotation"))
+  {
+    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "lsm6dsv16x_mlc.sensor_annotation");
+    ret = lsm6dsv16x_mlc_set_sensor_annotation(sensor_annotation);
+  if(ret == 0){
+    json_object_dotset_string(respJSONObject, "lsm6dsv16x_mlc.sensor_annotation.value", sensor_annotation);
+  } else {
+    json_object_dotset_string(respJSONObject, "lsm6dsv16x_mlc.sensor_annotation.value", "PNPL_SET_ERROR");
+  }
   }
   json_value_free(tempJSON);
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
   return ret;
 }
 
-uint8_t Lsm6dsv16x_Mlc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Lsm6dsv16x_Mlc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   Lsm6dsv16x_Mlc_PnPL *p_if_owner = (Lsm6dsv16x_Mlc_PnPL *) _this;
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
+
+  uint8_t ret = 0;
   if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_mlc*load_file.ucf_data"))
   {
     int32_t size;
     const char *data;
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_mlc*load_file.ucf_data.size"))
     {
-      size =(int32_t) json_object_dotget_number(tempJSONObject, "lsm6dsv16x_mlc*load_file.ucf_data.size");
+      size = (int32_t) json_object_dotget_number(tempJSONObject, "lsm6dsv16x_mlc*load_file.ucf_data.size");
       if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_mlc*load_file.ucf_data.data"))
       {
         data = json_object_dotget_string(tempJSONObject, "lsm6dsv16x_mlc*load_file.ucf_data.data");
-        lsm6dsv16x_mlc_load_file(p_if_owner->cmdIF, size, (char*) data);
+        ret = lsm6dsv16x_mlc_load_file(p_if_owner->cmdIF, size, (char*) data);
+        json_object_dotset_string(respJSONObject, "lsm6dsv16x_mlc*load_file.ucf_data", ret == 0 ? "PNPL_CMD_OK" : "PNPL_CMD_ERROR");
       }
     }
   }
   json_value_free(tempJSON);
-  return 0;
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
+
+  json_value_free(respJSON);
+
+  return ret;
 }

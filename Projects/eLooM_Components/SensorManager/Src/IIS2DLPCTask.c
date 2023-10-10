@@ -27,10 +27,10 @@
 #include "events/IDataEventListener.h"
 #include "events/IDataEventListener_vtbl.h"
 #include "services/SysTimestamp.h"
+#include "services/ManagedTaskMap.h"
 #include "iis2dlpc_reg.h"
 #include <string.h>
 #include "services/sysdebug.h"
-#include "mx.h"
 
 /* Private includes ----------------------------------------------------------*/
 
@@ -46,17 +46,17 @@
 #define IIS2DLPC_TASK_CFG_IN_QUEUE_LENGTH          20u
 #endif
 
+#define IIS2DLPC_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(SMMessage)
+
 #ifndef IIS2DLPC_TASK_CFG_TIMER_PERIOD_MS
 #define IIS2DLPC_TASK_CFG_TIMER_PERIOD_MS          500
 #endif
 
-#define IIS2DLPC_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(SMMessage)
+#ifndef IIS2DLPC_TASK_CFG_MAX_INSTANCES_COUNT
+#define IIS2DLPC_TASK_CFG_MAX_INSTANCES_COUNT      1
+#endif
 
 #define SYS_DEBUGF(level, message)                SYS_DEBUGF3(SYS_DBG_IIS2DLPC, level, message)
-
-#if defined(DEBUG) || defined (SYS_DEBUG)
-#define sTaskObj                                  sIIS2DLPCTaskObj
-#endif
 
 #ifndef HSD_USE_DUMMY_DATA
 #define HSD_USE_DUMMY_DATA 0
@@ -66,94 +66,6 @@
 static uint16_t dummyDataCounter = 0;
 #endif
 
-/**
-  *  IIS2DLPCTask internal structure.
-  */
-struct _IIS2DLPCTask
-{
-  /**
-    * Base class object.
-    */
-  AManagedTaskEx super;
-
-  // Task variables should be added here.
-
-  /**
-    * IRQ GPIO configuration parameters.
-    */
-  const MX_GPIOParams_t *pIRQConfig;
-
-  /**
-    * SPI CS GPIO configuration parameters.
-    */
-  const MX_GPIOParams_t *pCSConfig;
-
-  /**
-    * Bus IF object used to connect the sensor task to the specific bus.
-    */
-  ABusIF *p_sensor_bus_if;
-
-  /**
-    * Implements the accelerometer ISensor interface.
-    */
-  ISensor_t sensor_if;
-
-  /**
-    * Specifies sensor capabilities.
-    */
-  const SensorDescriptor_t *sensor_descriptor;
-
-  /**
-    * Specifies sensor configuration.
-    */
-  SensorStatus_t sensor_status;
-
-  EMData_t data;
-  /**
-    * Specifies the sensor ID for the accelerometer subsensor.
-    */
-  uint8_t acc_id;
-
-  /**
-    * Synchronization object used to send command to the task.
-    */
-  TX_QUEUE in_queue;
-
-  /**
-    * Buffer to store the data read from the sensor
-    */
-  uint8_t p_sensor_data_buff[32 * 6];
-
-  /**
-    * Specifies the FIFO level
-    */
-  uint8_t fifo_level;
-
-  /**
-    * Specifies the FIFO watermark level (it depends from ODR)
-    */
-  uint8_t samples_per_it;
-
-  /**
-    * ::IEventSrc interface implementation for this class.
-    */
-  IEventSrc *p_event_src;
-
-  /**
-    * Software timer used to generate the read command
-    */
-  TX_TIMER read_timer;
-
-  /**
-    * Timer period used to schedule the read command
-    */
-  ULONG iis2dlpc_task_cfg_timer_period_ms;
-
-  /**
-    * Used to update the instantaneous ODR.
-    */
-  double prev_timestamp;
-};
 
 /**
   * Class object declaration
@@ -163,23 +75,34 @@ typedef struct _IIS2DLPCTaskClass
   /**
     * IIS2DLPCTask class virtual table.
     */
-  AManagedTaskEx_vtbl vtbl;
+  const AManagedTaskEx_vtbl vtbl;
 
   /**
     * Accelerometer IF virtual table.
     */
-  ISensor_vtbl sensor_if_vtbl;
+  const ISensorMems_vtbl sensor_if_vtbl;
 
   /**
     * Specifies accelerometer sensor capabilities.
     */
-  SensorDescriptor_t class_descriptor;
+  const SensorDescriptor_t class_descriptor;
 
   /**
     * IIS2DLPCTask (PM_STATE, ExecuteStepFunc) map.
     */
-  pExecuteStepFunc_t p_pm_state2func_map[3];
+  const pExecuteStepFunc_t p_pm_state2func_map[3];
+
+  /**
+    * Memory buffer used to allocate the map (key, value).
+    */
+  MTMapElement_t task_map_elements[IIS2DLPC_TASK_CFG_MAX_INSTANCES_COUNT];
+
+  /**
+    * This map is used to link Cube HAL callback with an instance of the sensor task object. The key of the map is the address of the task instance.   */
+  MTMap_t task_map;
+
 } IIS2DLPCTaskClass_t;
+
 
 /* Private member function declaration */ // ***********************************
 /**
@@ -253,17 +176,15 @@ static sys_error_code_t IIS2DLPCTaskConfigureIrqPin(const IIS2DLPCTask *_this, b
 /**
   * Callback function called when the software timer expires.
   *
-  * @param timer [IN] specifies the handle of the expired timer.
+  * @param param [IN] specifies an application defined parameter.
   */
-static void IIS2DLPCTaskTimerCallbackFunction(ULONG timer);
+static void IIS2DLPCTaskTimerCallbackFunction(ULONG param);
 
-/**
-  * IRQ callback
-  */
-void IIS2DLPCTask_EXTI_Callback(uint16_t nPin);
+
 
 /* Inline function forward declaration */
-// ***********************************
+/***************************************/
+
 /**
   * Private function used to post a report into the front of the task queue.
   * Used to resume the task when the required by the INIT task.
@@ -291,14 +212,14 @@ static inline sys_error_code_t IIS2DLPCTaskPostReportToBack(IIS2DLPCTask *_this,
 /**
   * The only instance of the task object.
   */
-static IIS2DLPCTask sTaskObj;
+//static IIS2DLPCTask sTaskObj;
 
 /**
   * The class object.
   */
-static const IIS2DLPCTaskClass_t sTheClass =
+static IIS2DLPCTaskClass_t sTheClass =
 {
-  /* Class virtual table */
+  /* class virtual table */
   {
     IIS2DLPCTask_vtblHardwareInit,
     IIS2DLPCTask_vtblOnCreateTask,
@@ -310,20 +231,24 @@ static const IIS2DLPCTaskClass_t sTheClass =
   },
   /* class::sensor_if_vtbl virtual table */
   {
-    IIS2DLPCTask_vtblAccGetId,
-    IIS2DLPCTask_vtblGetEventSourceIF,
-    IIS2DLPCTask_vtblAccGetDataInfo,
+    {
+      {
+        IIS2DLPCTask_vtblAccGetId,
+        IIS2DLPCTask_vtblGetEventSourceIF,
+        IIS2DLPCTask_vtblAccGetDataInfo
+      },
+      IIS2DLPCTask_vtblSensorEnable,
+      IIS2DLPCTask_vtblSensorDisable,
+      IIS2DLPCTask_vtblSensorIsEnabled,
+      IIS2DLPCTask_vtblSensorGetDescription,
+      IIS2DLPCTask_vtblSensorGetStatus
+    },
     IIS2DLPCTask_vtblAccGetODR,
     IIS2DLPCTask_vtblAccGetFS,
     IIS2DLPCTask_vtblAccGetSensitivity,
     IIS2DLPCTask_vtblSensorSetODR,
     IIS2DLPCTask_vtblSensorSetFS,
-    IIS2DLPCTask_vtblSensorSetFifoWM,
-    IIS2DLPCTask_vtblSensorEnable,
-    IIS2DLPCTask_vtblSensorDisable,
-    IIS2DLPCTask_vtblSensorIsEnabled,
-    IIS2DLPCTask_vtblSensorGetDescription,
-    IIS2DLPCTask_vtblSensorGetStatus
+    IIS2DLPCTask_vtblSensorSetFifoWM
   },
   /* ACCELEROMETER DESCRIPTOR */
   {
@@ -364,7 +289,10 @@ static const IIS2DLPCTaskClass_t sTheClass =
     IIS2DLPCTaskExecuteStepState1,
     NULL,
     IIS2DLPCTaskExecuteStepDatalog,
-  }
+  },
+
+  {{0}}, /* task_map_elements */
+  {0}  /* task_map */
 };
 
 /* Public API definition */
@@ -376,21 +304,66 @@ ISourceObservable *IIS2DLPCTaskGetAccSensorIF(IIS2DLPCTask *_this)
 
 AManagedTaskEx *IIS2DLPCTaskAlloc(const void *pIRQConfig, const void *pCSConfig)
 {
-  /* This allocator implements the singleton design pattern. */
+  IIS2DLPCTask *p_new_obj = SysAlloc(sizeof(IIS2DLPCTask));
 
-  /* Initialize the super class */
-  AMTInitEx(&sTaskObj.super);
+  if (p_new_obj != NULL)
+  {
+    /* Initialize the super class */
+    AMTInitEx(&p_new_obj->super);
 
-  sTaskObj.super.vptr = &sTheClass.vtbl;
-  sTaskObj.sensor_if.vptr = &sTheClass.sensor_if_vtbl;
-  sTaskObj.sensor_descriptor = &sTheClass.class_descriptor;
+    p_new_obj->super.vptr = &sTheClass.vtbl;
+    p_new_obj->sensor_if.vptr = &sTheClass.sensor_if_vtbl;
+    p_new_obj->sensor_descriptor = &sTheClass.class_descriptor;
 
-  sTaskObj.pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
-  sTaskObj.pCSConfig = (MX_GPIOParams_t *) pCSConfig;
+    p_new_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
+    p_new_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
 
-  strcpy(sTaskObj.sensor_status.Name, sTheClass.class_descriptor.Name);
+    strcpy(p_new_obj->sensor_status.p_name, sTheClass.class_descriptor.p_name);
+  }
 
-  return (AManagedTaskEx *) &sTaskObj;
+  return (AManagedTaskEx *) p_new_obj;
+}
+
+AManagedTaskEx *IIS2DLPCTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name)
+{
+  IIS2DLPCTask *p_new_obj = (IIS2DLPCTask *)IIS2DLPCTaskAlloc(pIRQConfig, pCSConfig);
+
+  /* Overwrite default name with the one selected by the application */
+  strcpy(p_new_obj->sensor_status.p_name, p_name);
+
+  return (AManagedTaskEx *) p_new_obj;
+}
+
+AManagedTaskEx *IIS2DLPCTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig)
+{
+  IIS2DLPCTask *p_obj = (IIS2DLPCTask *)p_mem_block;
+
+  if (p_obj != NULL)
+  {
+    /* Initialize the super class */
+    AMTInitEx(&p_obj->super);
+    p_obj->super.vptr = &sTheClass.vtbl;
+
+    p_obj->super.vptr = &sTheClass.vtbl;
+    p_obj->sensor_if.vptr = &sTheClass.sensor_if_vtbl;
+    p_obj->sensor_descriptor = &sTheClass.class_descriptor;
+
+    p_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
+    p_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
+  }
+
+  return (AManagedTaskEx *)p_obj;
+}
+
+AManagedTaskEx *IIS2DLPCTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                               const char *p_name)
+{
+  IIS2DLPCTask *p_obj = (IIS2DLPCTask *)IIS2DLPCTaskStaticAlloc(p_mem_block, pIRQConfig, pCSConfig);
+
+  /* Overwrite default name with the one selected by the application */
+  strcpy(p_obj->sensor_status.p_name, p_name);
+
+  return (AManagedTaskEx *) p_obj;
 }
 
 ABusIF *IIS2DLPCTaskGetSensorIF(IIS2DLPCTask *_this)
@@ -434,7 +407,7 @@ sys_error_code_t IIS2DLPCTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IIS2DLPCTask *p_obj = (IIS2DLPCTask *) _this;
 
-  /* Create task specific sw resources */
+  /* Create task specific sw resources. */
 
   uint32_t item_size = (uint32_t) IIS2DLPC_TASK_CFG_IN_QUEUE_ITEM_SIZE;
   VOID *p_queue_items_buff = SysAlloc(IIS2DLPC_TASK_CFG_IN_QUEUE_LENGTH * item_size);
@@ -442,21 +415,26 @@ sys_error_code_t IIS2DLPCTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    return res;
   }
-  else if (TX_SUCCESS != tx_queue_create(&p_obj->in_queue, "IIS2DLPC_Q", item_size / 4u, p_queue_items_buff,
-                                         IIS2DLPC_TASK_CFG_IN_QUEUE_LENGTH * item_size))
+  if (TX_SUCCESS != tx_queue_create(&p_obj->in_queue, "IIS2DLPC_Q", item_size / 4u, p_queue_items_buff,
+                                    IIS2DLPC_TASK_CFG_IN_QUEUE_LENGTH * item_size))
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
-  } /* create the software timer*/
-  else if (TX_SUCCESS
-           != tx_timer_create(&p_obj->read_timer, "IIS2DLPC_T", IIS2DLPCTaskTimerCallbackFunction, (ULONG)TX_NULL,
-                              AMT_MS_TO_TICKS(IIS2DLPC_TASK_CFG_TIMER_PERIOD_MS), 0, TX_NO_ACTIVATE))
+    return res;
+  }
+  /* create the software timer*/
+  if (TX_SUCCESS
+      != tx_timer_create(&p_obj->read_timer, "IIS2DLPC_T", IIS2DLPCTaskTimerCallbackFunction, (ULONG)_this,
+                         AMT_MS_TO_TICKS(IIS2DLPC_TASK_CFG_TIMER_PERIOD_MS), 0, TX_NO_ACTIVATE))
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
-  } /* Alloc the bus interface (SPI if the task is given the CS Pin configuration param, I2C otherwise) */
-  else if (p_obj->pCSConfig != NULL)
+    return res;
+  }
+  /* Alloc the bus interface (SPI if the task is given the CS Pin configuration param, I2C otherwise) */
+  if (p_obj->pCSConfig != NULL)
   {
     p_obj->p_sensor_bus_if = SPIBusIFAlloc(IIS2DLPC_ID, p_obj->pCSConfig->port, (uint16_t) p_obj->pCSConfig->pin, 0);
     if (p_obj->p_sensor_bus_if == NULL)
@@ -475,52 +453,70 @@ sys_error_code_t IIS2DLPCTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
     }
   }
 
-  if (!SYS_IS_ERROR_CODE(res))
+  if (SYS_IS_ERROR_CODE(res))
   {
-    /* Initialize the EventSrc interface */
-    p_obj->p_event_src = DataEventSrcAlloc();
-    if (p_obj->p_event_src == NULL)
+    return res;
+  }
+  /* Initialize the EventSrc interface */
+  p_obj->p_event_src = DataEventSrcAlloc();
+  if (p_obj->p_event_src == NULL)
+  {
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+    res = SYS_OUT_OF_MEMORY_ERROR_CODE;
+    return res;
+  }
+  IEventSrcInit(p_obj->p_event_src);
+
+  if (!MTMap_IsInitialized(&sTheClass.task_map))
+  {
+    (void) MTMap_Init(&sTheClass.task_map, sTheClass.task_map_elements, IIS2DLPC_TASK_CFG_MAX_INSTANCES_COUNT);
+  }
+
+  /* Add the managed task to the map.*/
+  if (p_obj->pIRQConfig != NULL)
+  {
+    /* Use the PIN as unique key for the map. */
+    MTMapElement_t *p_element = NULL;
+    uint32_t key = (uint32_t) p_obj->pIRQConfig->pin;
+    p_element = MTMap_AddElement(&sTheClass.task_map, key, _this);
+    if (p_element == NULL)
     {
-      res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
-      SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+      SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+      res = SYS_INVALID_PARAMETER_ERROR_CODE;
+      return res;
     }
-    else
-    {
-      IEventSrcInit(p_obj->p_event_src);
+  }
 
-      memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
-      p_obj->acc_id = 0;
-      p_obj->prev_timestamp = 0.0f;
-      p_obj->fifo_level = 0;
-      p_obj->samples_per_it = 0;
-      _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
+  memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
+  p_obj->acc_id = 0;
+  p_obj->prev_timestamp = 0.0f;
+  p_obj->fifo_level = 0;
+  p_obj->samples_per_it = 0;
+  _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
 
-      *pTaskCode = AMTExRun;
-      *pName = "IIS2DLPC";
-      *pvStackStart = NULL; // allocate the task stack in the system memory pool.
-      *pStackDepth = IIS2DLPC_TASK_CFG_STACK_DEPTH;
-      *pParams = (ULONG) _this;
-      *pPriority = IIS2DLPC_TASK_CFG_PRIORITY;
-      *pPreemptThreshold = IIS2DLPC_TASK_CFG_PRIORITY;
-      *pTimeSlice = TX_NO_TIME_SLICE;
-      *pAutoStart = TX_AUTO_START;
+  *pTaskCode = AMTExRun;
+  *pName = "IIS2DLPC";
+  *pvStackStart = NULL; // allocate the task stack in the system memory pool.
+  *pStackDepth = IIS2DLPC_TASK_CFG_STACK_DEPTH;
+  *pParams = (ULONG) _this;
+  *pPriority = IIS2DLPC_TASK_CFG_PRIORITY;
+  *pPreemptThreshold = IIS2DLPC_TASK_CFG_PRIORITY;
+  *pTimeSlice = TX_NO_TIME_SLICE;
+  *pAutoStart = TX_AUTO_START;
 
-      res = IIS2DLPCTaskSensorInitTaskParams(p_obj);
-      if (SYS_IS_ERROR_CODE(res))
-      {
-        res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
-        SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
-      }
-      else
-      {
-        res = IIS2DLPCTaskSensorRegister(p_obj);
-        if (SYS_IS_ERROR_CODE(res))
-        {
-          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2DLPC: unable to register with DB\r\n"));
-          sys_error_handler();
-        }
-      }
-    }
+  res = IIS2DLPCTaskSensorInitTaskParams(p_obj);
+  if (SYS_IS_ERROR_CODE(res))
+  {
+    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    return res;
+  }
+
+  res = IIS2DLPCTaskSensorRegister(p_obj);
+  if (SYS_IS_ERROR_CODE(res))
+  {
+    SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2DLPC: unable to register with DB\r\n"));
+    sys_error_handler();
   }
 
   return res;
@@ -550,7 +546,7 @@ sys_error_code_t IIS2DLPCTask_vtblDoEnterPowerMode(AManagedTask *_this, const EP
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE);
       }
 
-      // reset the variables for the time stamp computation.
+      // reset the variables for the actual odr computation.
       p_obj->prev_timestamp = 0.0f;
     }
 
@@ -563,6 +559,7 @@ sys_error_code_t IIS2DLPCTask_vtblDoEnterPowerMode(AManagedTask *_this, const EP
       /* Deactivate the sensor */
       iis2dlpc_data_rate_set(p_sensor_drv, IIS2DLPC_XL_ODR_OFF);
       iis2dlpc_fifo_mode_set(p_sensor_drv, IIS2DLPC_BYPASS_MODE);
+      p_obj->samples_per_it = 0;
 
       /* Empty the task queue and disable INT or timer */
       tx_queue_flush(&p_obj->in_queue);
@@ -585,7 +582,7 @@ sys_error_code_t IIS2DLPCTask_vtblDoEnterPowerMode(AManagedTask *_this, const EP
     res = IIS2DLPCTaskEnterLowPowerMode(p_obj);
     if (SYS_IS_ERROR_CODE(res))
     {
-      sys_error_handler();
+      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS2DLPC - Enter Low Power Mode failed.\r\n"));
     }
     if (p_obj->pIRQConfig != NULL)
     {
@@ -704,7 +701,7 @@ IEventSrc *IIS2DLPCTask_vtblGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_event_src;
 }
 
-sys_error_code_t IIS2DLPCTask_vtblAccGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal)
+sys_error_code_t IIS2DLPCTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -719,27 +716,27 @@ sys_error_code_t IIS2DLPCTask_vtblAccGetODR(ISourceObservable *_this, float *p_m
   }
   else
   {
-    *p_measured = p_if_owner->sensor_status.MeasuredODR;
-    *p_nominal = p_if_owner->sensor_status.ODR;
+    *p_measured = p_if_owner->sensor_status.type.mems.measured_odr;
+    *p_nominal = p_if_owner->sensor_status.type.mems.odr;
   }
 
   return res;
 }
 
-float IIS2DLPCTask_vtblAccGetFS(ISourceObservable *_this)
+float IIS2DLPCTask_vtblAccGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   IIS2DLPCTask *p_if_owner = (IIS2DLPCTask *)((uint32_t) _this - offsetof(IIS2DLPCTask, sensor_if));
-  float res = p_if_owner->sensor_status.FS;
+  float res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float IIS2DLPCTask_vtblAccGetSensitivity(ISourceObservable *_this)
+float IIS2DLPCTask_vtblAccGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   IIS2DLPCTask *p_if_owner = (IIS2DLPCTask *)((uint32_t) _this - offsetof(IIS2DLPCTask, sensor_if));
-  float res = p_if_owner->sensor_status.Sensitivity;
+  float res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -753,16 +750,15 @@ EMData_t IIS2DLPCTask_vtblAccGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t IIS2DLPCTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
+sys_error_code_t IIS2DLPCTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-
   IIS2DLPCTask *p_if_owner = (IIS2DLPCTask *)((uint32_t) _this - offsetof(IIS2DLPCTask, sensor_if));
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -774,7 +770,7 @@ sys_error_code_t IIS2DLPCTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) ODR
+      .sensorMessage.nParam = (float) odr
     };
     res = IIS2DLPCTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -782,16 +778,15 @@ sys_error_code_t IIS2DLPCTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
   return res;
 }
 
-sys_error_code_t IIS2DLPCTask_vtblSensorSetFS(ISensor_t *_this, float FS)
+sys_error_code_t IIS2DLPCTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-
   IIS2DLPCTask *p_if_owner = (IIS2DLPCTask *)((uint32_t) _this - offsetof(IIS2DLPCTask, sensor_if));
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -803,7 +798,7 @@ sys_error_code_t IIS2DLPCTask_vtblSensorSetFS(ISensor_t *_this, float FS)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) FS
+      .sensorMessage.nParam = (uint32_t) fs
     };
     res = IIS2DLPCTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -812,7 +807,7 @@ sys_error_code_t IIS2DLPCTask_vtblSensorSetFS(ISensor_t *_this, float FS)
 
 }
 
-sys_error_code_t IIS2DLPCTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+sys_error_code_t IIS2DLPCTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -822,7 +817,7 @@ sys_error_code_t IIS2DLPCTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fif
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -847,7 +842,6 @@ sys_error_code_t IIS2DLPCTask_vtblSensorEnable(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-
   IIS2DLPCTask *p_if_owner = (IIS2DLPCTask *)((uint32_t) _this - offsetof(IIS2DLPCTask, sensor_if));
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
@@ -875,7 +869,6 @@ sys_error_code_t IIS2DLPCTask_vtblSensorDisable(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-
   IIS2DLPCTask *p_if_owner = (IIS2DLPCTask *)((uint32_t) _this - offsetof(IIS2DLPCTask, sensor_if));
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
@@ -903,12 +896,11 @@ boolean_t IIS2DLPCTask_vtblSensorIsEnabled(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   boolean_t res = FALSE;
-
   IIS2DLPCTask *p_if_owner = (IIS2DLPCTask *)((uint32_t) _this - offsetof(IIS2DLPCTask, sensor_if));
 
   if (ISourceGetId((ISourceObservable *) _this) == p_if_owner->acc_id)
   {
-    res = p_if_owner->sensor_status.IsActive;
+    res = p_if_owner->sensor_status.is_active;
   }
   else
   {
@@ -920,7 +912,6 @@ boolean_t IIS2DLPCTask_vtblSensorIsEnabled(ISensor_t *_this)
 
 SensorDescriptor_t IIS2DLPCTask_vtblSensorGetDescription(ISensor_t *_this)
 {
-
   assert_param(_this != NULL);
   IIS2DLPCTask *p_if_owner = (IIS2DLPCTask *)((uint32_t) _this - offsetof(IIS2DLPCTask, sensor_if));
   return *p_if_owner->sensor_descriptor;
@@ -979,14 +970,12 @@ static sys_error_code_t IIS2DLPCTaskExecuteStepState1(AManagedTask *_this)
             res = IIS2DLPCTaskSensorDisable(p_obj, report);
             break;
           default:
-          {
             /* unwanted report */
             res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
             SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
 
             SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS2DLPC: unexpected report in Run: %i\r\n", report.messageID));
             break;
-          }
         }
         break;
       }
@@ -1054,7 +1043,7 @@ static sys_error_code_t IIS2DLPCTaskExecuteStepDatalog(AManagedTask *_this)
             p_obj->prev_timestamp = timestamp;
 
             /* update measuredODR */
-            p_obj->sensor_status.MeasuredODR = (float) p_obj->samples_per_it / (float) delta_timestamp;
+            p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
 
             /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
              * [X0, Y0, Z0]
@@ -1090,7 +1079,7 @@ static sys_error_code_t IIS2DLPCTaskExecuteStepDatalog(AManagedTask *_this)
             res = IIS2DLPCTaskSensorInit(p_obj);
             if (!SYS_IS_ERROR_CODE(res))
             {
-              if (p_obj->sensor_status.IsActive == true)
+              if (p_obj->sensor_status.is_active == true)
               {
                 if (p_obj->pIRQConfig == NULL)
                 {
@@ -1128,26 +1117,24 @@ static sys_error_code_t IIS2DLPCTaskExecuteStepDatalog(AManagedTask *_this)
             res = IIS2DLPCTaskSensorDisable(p_obj, report);
             break;
           default:
-          {
             /* unwanted report */
             res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
-            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
+            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
+            ;
 
             SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS2DLPC: unexpected report in Datalog: %i\r\n", report.messageID));
             break;
-          }
         }
         break;
       }
       default:
-      {
         /* unwanted report */
         res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
-        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
+        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
+        ;
 
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS2DLPC: unexpected report in Datalog: %i\r\n", report.messageID));
         break;
-      }
     }
   }
 
@@ -1258,15 +1245,15 @@ static sys_error_code_t IIS2DLPCTaskSensorInit(IIS2DLPCTask *_this)
   iis2dlpc_data_rate_set(p_sensor_drv, IIS2DLPC_XL_ODR_OFF);
 
   /* Full scale selection. */
-  if (_this->sensor_status.FS < 3.0f)
+  if (_this->sensor_status.type.mems.fs < 3.0f)
   {
     iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_2g);
   }
-  else if (_this->sensor_status.FS < 5.0f)
+  else if (_this->sensor_status.type.mems.fs < 5.0f)
   {
     iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_4g);
   }
-  else if (_this->sensor_status.FS < 9.0f)
+  else if (_this->sensor_status.type.mems.fs < 9.0f)
   {
     iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_8g);
   }
@@ -1275,35 +1262,35 @@ static sys_error_code_t IIS2DLPCTaskSensorInit(IIS2DLPCTask *_this)
     iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_16g);
   }
 
-  if (_this->sensor_status.ODR < 2.0f)
+  if (_this->sensor_status.type.mems.odr < 2.0f)
   {
     iis2dlpc_odr = IIS2DLPC_XL_ODR_1Hz6_LP_ONLY;
   }
-  else if (_this->sensor_status.ODR < 13.0f)
+  else if (_this->sensor_status.type.mems.odr < 13.0f)
   {
     iis2dlpc_odr = IIS2DLPC_XL_ODR_12Hz5;
   }
-  else if (_this->sensor_status.ODR < 26.0f)
+  else if (_this->sensor_status.type.mems.odr < 26.0f)
   {
     iis2dlpc_odr = IIS2DLPC_XL_ODR_25Hz;
   }
-  else if (_this->sensor_status.ODR < 51.0f)
+  else if (_this->sensor_status.type.mems.odr < 51.0f)
   {
     iis2dlpc_odr = IIS2DLPC_XL_ODR_50Hz;
   }
-  else if (_this->sensor_status.ODR < 101.0f)
+  else if (_this->sensor_status.type.mems.odr < 101.0f)
   {
     iis2dlpc_odr = IIS2DLPC_XL_ODR_100Hz;
   }
-  else if (_this->sensor_status.ODR < 201.0f)
+  else if (_this->sensor_status.type.mems.odr < 201.0f)
   {
     iis2dlpc_odr = IIS2DLPC_XL_ODR_200Hz;
   }
-  else if (_this->sensor_status.ODR < 401.0f)
+  else if (_this->sensor_status.type.mems.odr < 401.0f)
   {
     iis2dlpc_odr = IIS2DLPC_XL_ODR_400Hz;
   }
-  else if (_this->sensor_status.ODR < 801.0f)
+  else if (_this->sensor_status.type.mems.odr < 801.0f)
   {
     iis2dlpc_odr = IIS2DLPC_XL_ODR_800Hz;
   }
@@ -1312,14 +1299,14 @@ static sys_error_code_t IIS2DLPCTaskSensorInit(IIS2DLPCTask *_this)
     iis2dlpc_odr = IIS2DLPC_XL_ODR_1k6Hz;
   }
 
-  if (_this->sensor_status.IsActive)
+  if (_this->sensor_status.is_active)
   {
     iis2dlpc_data_rate_set(p_sensor_drv, iis2dlpc_odr);
   }
   else
   {
     iis2dlpc_data_rate_set(p_sensor_drv, IIS2DLPC_XL_ODR_OFF);
-    _this->sensor_status.IsActive = false;
+    _this->sensor_status.is_active = false;
   }
 
 #if IIS2DLPC_FIFO_ENABLED
@@ -1329,7 +1316,7 @@ static sys_error_code_t IIS2DLPCTaskSensorInit(IIS2DLPCTask *_this)
     uint16_t iis2dlpc_wtm_level = 0;
 
     /* iis2dlpc_wtm_level of watermark and samples per int*/
-    iis2dlpc_wtm_level = ((uint16_t) _this->sensor_status.ODR * (uint16_t) IIS2DLPC_MAX_DRDY_PERIOD);
+    iis2dlpc_wtm_level = ((uint16_t) _this->sensor_status.type.mems.odr * (uint16_t) IIS2DLPC_MAX_DRDY_PERIOD);
     if (iis2dlpc_wtm_level > IIS2DLPC_MAX_WTM_LEVEL)
     {
       iis2dlpc_wtm_level = IIS2DLPC_MAX_WTM_LEVEL;
@@ -1369,9 +1356,9 @@ static sys_error_code_t IIS2DLPCTaskSensorInit(IIS2DLPCTask *_this)
   iis2dlpc_pin_int2_route_set(p_sensor_drv, &int2_route);
 
 #if IIS2DLPC_FIFO_ENABLED
-  _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.ODR) * (((float)(_this->samples_per_it)) / 2.0f));
+  _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
 #else
-  _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.ODR);
+  _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 #endif
 
   return res;
@@ -1436,11 +1423,12 @@ static sys_error_code_t IIS2DLPCTaskSensorInitTaskParams(IIS2DLPCTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* ACCELEROMETER SENSOR STATUS */
-  _this->sensor_status.IsActive = TRUE;
-  _this->sensor_status.FS = 16.0f;
-  _this->sensor_status.Sensitivity = 0.0000305f * _this->sensor_status.FS;
-  _this->sensor_status.ODR = 1600.0f;
-  _this->sensor_status.MeasuredODR = 0.0f;
+  _this->sensor_status.isensor_class = ISENSOR_CLASS_MEMS;
+  _this->sensor_status.is_active = TRUE;
+  _this->sensor_status.type.mems.fs = 16.0f;
+  _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
+  _this->sensor_status.type.mems.odr = 1600.0f;
+  _this->sensor_status.type.mems.measured_odr = 0.0f;
   EMD_Init(&_this->data, _this->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 3);
 
   return res;
@@ -1452,64 +1440,67 @@ static sys_error_code_t IIS2DLPCTaskSensorSetODR(IIS2DLPCTask *_this, SMMessage 
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float ODR = (float) report.sensorMessage.nParam;
+  float odr = (float) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
   {
-    if (ODR < 1.0f)
+    if (odr < 1.0f)
     {
       iis2dlpc_data_rate_set(p_sensor_drv, IIS2DLPC_XL_ODR_OFF);
-      /* Do not update the model in case of ODR = 0 */
-      ODR = _this->sensor_status.ODR;
+      /* Do not update the model in case of odr = 0 */
+      odr = _this->sensor_status.type.mems.odr;
     }
-    else if (ODR < 2.0f)
+    else if (odr < 2.0f)
     {
-      ODR = 1.6f;
+      odr = 1.6f;
     }
-    else if (ODR < 13.0f)
+    else if (odr < 13.0f)
     {
-      ODR = 12.5f;
+      odr = 12.5f;
     }
-    else if (ODR < 26.0f)
+    else if (odr < 26.0f)
     {
-      ODR = 25.0f;
+      odr = 25.0f;
     }
-    else if (ODR < 51.0f)
+    else if (odr < 51.0f)
     {
-      ODR = 50.0f;
+      odr = 50.0f;
     }
-    else if (ODR < 101.0f)
+    else if (odr < 101.0f)
     {
-      ODR = 100.0f;
+      odr = 100.0f;
     }
-    else if (ODR < 201.0f)
+    else if (odr < 201.0f)
     {
-      ODR = 200.0f;
+      odr = 200.0f;
     }
-    else if (ODR < 401.0f)
+    else if (odr < 401.0f)
     {
-      ODR = 400.0f;
+      odr = 400.0f;
     }
-    else if (ODR < 801.0f)
+    else if (odr < 801.0f)
     {
-      ODR = 800.0f;
+      odr = 800.0f;
     }
     else
     {
-      ODR = 1600.0f;
+      odr = 1600.0f;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-      _this->sensor_status.ODR = ODR;
-      _this->sensor_status.MeasuredODR = 0.0f;
+      _this->sensor_status.type.mems.odr = odr;
+      _this->sensor_status.type.mems.measured_odr = 0.0f;
     }
   }
   else
   {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
   }
+
+  /* when odr changes the samples_per_it must be recalculated */
+  _this->samples_per_it = 0;
 
   return res;
 }
@@ -1520,36 +1511,36 @@ static sys_error_code_t IIS2DLPCTaskSensorSetFS(IIS2DLPCTask *_this, SMMessage r
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float FS = (float) report.sensorMessage.nParam;
+  float fs = (float) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
   {
-    if (FS < 3.0f)
+    if (fs < 3.0f)
     {
       iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_2g);
-      FS = 2.0f;
+      fs = 2.0f;
     }
-    else if (FS < 5.0f)
+    else if (fs < 5.0f)
     {
       iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_4g);
-      FS = 4.0f;
+      fs = 4.0f;
     }
-    else if (FS < 9.0f)
+    else if (fs < 9.0f)
     {
       iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_8g);
-      FS = 8.0f;
+      fs = 8.0f;
     }
     else
     {
       iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_16g);
-      FS = 16.0f;
+      fs = 16.0f;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-      _this->sensor_status.FS = FS;
-      _this->sensor_status.Sensitivity = 0.0000305f * _this->sensor_status.FS;
+      _this->sensor_status.type.mems.fs = fs;
+      _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
     }
   }
   else
@@ -1566,7 +1557,7 @@ static sys_error_code_t IIS2DLPCTaskSensorSetFifoWM(IIS2DLPCTask *_this, SMMessa
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  uint16_t iis2dlpc_wtm_level = report.sensorMessage.nParam;
+  uint16_t iis2dlpc_wtm_level = (uint16_t)report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -1600,7 +1591,7 @@ static sys_error_code_t IIS2DLPCTaskSensorEnable(IIS2DLPCTask *_this, SMMessage 
 
   if (id == _this->acc_id)
   {
-    _this->sensor_status.IsActive = TRUE;
+    _this->sensor_status.is_active = TRUE;
   }
   else
   {
@@ -1620,7 +1611,7 @@ static sys_error_code_t IIS2DLPCTaskSensorDisable(IIS2DLPCTask *_this, SMMessage
 
   if (id == _this->acc_id)
   {
-    _this->sensor_status.IsActive = FALSE;
+    _this->sensor_status.is_active = FALSE;
     iis2dlpc_data_rate_set(p_sensor_drv, IIS2DLPC_XL_ODR_OFF);
   }
   else
@@ -1634,7 +1625,7 @@ static sys_error_code_t IIS2DLPCTaskSensorDisable(IIS2DLPCTask *_this, SMMessage
 static boolean_t IIS2DLPCTaskSensorIsActive(const IIS2DLPCTask *_this)
 {
   assert_param(_this != NULL);
-  return _this->sensor_status.IsActive;
+  return _this->sensor_status.is_active;
 }
 
 static sys_error_code_t IIS2DLPCTaskEnterLowPowerMode(const IIS2DLPCTask *_this)
@@ -1682,14 +1673,15 @@ static sys_error_code_t IIS2DLPCTaskConfigureIrqPin(const IIS2DLPCTask *_this, b
   return res;
 }
 
-static void IIS2DLPCTaskTimerCallbackFunction(ULONG timer)
+static void IIS2DLPCTaskTimerCallbackFunction(ULONG param)
 {
+  IIS2DLPCTask *p_obj = (IIS2DLPCTask *) param;
   SMMessage report;
   report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY;
   report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
 
   // if (sTaskObj.in_queue != NULL ) {//TODO: STF.Port - how to check if the queue has been initialized ??
-  if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &report, TX_NO_WAIT))
+  if (TX_SUCCESS != tx_queue_send(&p_obj->in_queue, &report, TX_NO_WAIT))
   {
     // unable to send the message. Signal the error
     sys_error_handler();
@@ -1701,15 +1693,20 @@ static void IIS2DLPCTaskTimerCallbackFunction(ULONG timer)
 
 void IIS2DLPCTask_EXTI_Callback(uint16_t nPin)
 {
+  MTMapValue_t *p_val;
+  TX_QUEUE *p_queue;
   SMMessage report;
   report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY;
   report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
 
-  //  if (sTaskObj.in_queue != NULL) { //TODO: STF.Port - how to check if the queue has been initialized ??
-  if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &report, TX_NO_WAIT))
+  p_val = MTMap_FindByKey(&sTheClass.task_map, (uint32_t) nPin);
+  if (p_val != NULL)
   {
-    /* unable to send the report. Signal the error */
-    sys_error_handler();
+    p_queue = &((IIS2DLPCTask *)p_val->p_mtask_obj)->in_queue;
+    if (TX_SUCCESS != tx_queue_send(p_queue, &report, TX_NO_WAIT))
+    {
+      /* unable to send the report. Signal the error */
+      sys_error_handler();
+    }
   }
-  // }
 }

@@ -1,22 +1,23 @@
 /**
   ******************************************************************************
   * @file    hci_tl_interface_template.h
-  * @author  SRA Application Team
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.3.0
+  * @date    20-July-2023
   * @brief   Header file for hci_tl_interface.c
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) ${year} STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Software License Agreement
-  * SLA0055, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0055
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-  */  
-  
+  */ 
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef HCI_TL_INTERFACE_TEMPLATE_H
 #define HCI_TL_INTERFACE_TEMPLATE_H
@@ -130,6 +131,5 @@ void hci_tl_lowlevel_isr(void);
 #endif
 
 #endif /* HCI_TL_INTERFACE_TEMPLATE_H */
-    
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
 

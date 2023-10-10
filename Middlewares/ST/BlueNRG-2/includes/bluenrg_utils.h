@@ -20,7 +20,7 @@
 #define __BLUENRG_UTILS_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -30,9 +30,10 @@
 /* Exported types ------------------------------------------------------------*/
 
 /**
- * Structure inside IFR for configuration options. 
- */
-typedef PACKED(struct) devConfigS  {
+  * Structure inside IFR for configuration options.
+  */
+typedef PACKED(struct) devConfigS
+{
   uint8_t  HS_crystal;
   uint8_t  LS_source;
   uint8_t  SMPS_management;
@@ -55,9 +56,9 @@ typedef PACKED(struct) devConfigS  {
 /* Convert 2 digit number to a BCD number */
 #define INT_TO_BCD(n) ((((uint8_t)n/10)<<4) + (uint8_t)n%10)
 
-/** 
-  * Return values 
-  */ 
+/**
+  * Return values
+  */
 #define BLE_UTIL_SUCCESS                 0
 #define BLE_UTIL_UNSUPPORTED_VERSION     1
 #define BLE_UTIL_WRONG_IMAGE_SIZE        2
@@ -66,7 +67,7 @@ typedef PACKED(struct) devConfigS  {
 #define BLE_UTIL_PARSE_ERROR             5
 #define BLE_UTIL_WRONG_VERIFY            6
 
-/* Exported functions ------------------------------------------------------- */ 
+/* Exported functions ------------------------------------------------------- */
 /**
   * @brief  Flash a new firmware using internal bootloader.
   * @param  fw_image Pointer to the firmware image (raw binary data,
@@ -104,7 +105,7 @@ int program_DEV_CONFIG(const devConfig_t *ifr_image);
   * @retval int        It returns 0 if successful
   */
 uint8_t getBlueNRGVersion(uint8_t *hw_version, uint16_t *fw_version);
-   
+
 #ifdef __cplusplus
 }
 #endif

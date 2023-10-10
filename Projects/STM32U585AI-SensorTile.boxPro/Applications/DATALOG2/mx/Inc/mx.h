@@ -127,22 +127,17 @@ typedef struct _MX_TIMParams_t
 } MX_TIMParams_t;
 
 extern const MX_GPIOParams_t MX_GPIO_UBInitParams;
-extern const MX_GPIOParams_t MX_GPIO_PRESS_INTInitParams;
-extern const MX_GPIOParams_t MX_GPIO_MAG_DRDYInitParams;
-extern const MX_GPIOParams_t MX_GPIO_ACC_INT1InitParams;
+extern const MX_GPIOParams_t MX_GPIO_ACC_INT2InitParams;
 extern const MX_GPIOParams_t MX_GPIO_SPI_SEN_CS_AInitParams;
 extern const MX_GPIOParams_t MX_GPIO_IMU_INT1InitParams;
 extern const MX_GPIOParams_t MX_GPIO_SPI_SEN_CS_GInitParams;
-extern const MX_GPIOParams_t MX_GPIO_PA8InitParams;
-extern const MX_GPIOParams_t MX_GPIO_PA0InitParams;
-extern const MX_GPIOParams_t MX_GPIO_PD0InitParams;
-extern const MX_GPIOParams_t MX_GPIO_INT_EXInitParams;
-extern const MX_GPIOParams_t MX_GPIO_INT2_EXInitParams;
+extern const MX_GPIOParams_t MX_GPIO_INT1_EXTERNALInitParams;
+extern const MX_GPIOParams_t MX_GPIO_INT2_EXTERNALInitParams;
+extern const MX_GPIOParams_t MX_GPIO_CS_EXTERNALInitParams;
 extern const MX_GPIOParams_t MX_GPIO_LED1InitParams;
 extern const MX_GPIOParams_t MX_GPIO_LED2InitParams;
 extern const MX_GPIOParams_t MX_GPIO_LED3InitParams;
 extern const MX_GPIOParams_t MX_GPIO_SW1InitParams;
-extern const MX_GPIOParams_t MX_GPIO_SW2InitParams;
 
 /**
   * SPI2 configuration parameters.

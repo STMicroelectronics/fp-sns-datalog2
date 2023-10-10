@@ -28,14 +28,27 @@
 <h1 id="purpose">Purpose</h1>
 <p>The High-Speed DataLog firmware provides an easy way to save data from any combination of sensors and microphones configured at their maximum sampling rate. Sensor data can be either stored on a micro SD Card, SDHC (Secure Digital High Capacity) formatted with the FAT32 file system, or streamed to a PC via USB (WinUSB class).</p>
 <p>To save data via USB, a command line interface example is available in “Utilities/cli_example”. USB_DataLog_Run.bat and USB_DataLog_Run.sh scripts provide a ready to use example.</p>
+<p>README.md and README_Linux.md describes how to use cli_example properly in Windows and Linux environment.</p>
 </div>
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section12" checked aria-hidden="true"> <label for="collapse-section12" aria-hidden="true">v3.2.0 / 7-Jul-23</label>
+<input type="checkbox" id="collapse-section13" checked aria-hidden="true"> <label for="collapse-section13" aria-hidden="true">v3.3.0 / 29-Sep-23</label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
+<ul>
+<li>Add PnPL SET and COMMAND responses management</li>
+<li>Regenerated exe and dll</li>
+<li>Updated setup files to better describe installation steps</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section12" aria-hidden="true"> <label for="collapse-section12" aria-hidden="true">v3.2.0 / 7-Jul-23</label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
 <ul>
 <li>Regenerated libhs_datalog_v2 DLLs:
 <ul>
@@ -51,8 +64,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true">v3.1.0 / 24-Mar-23</label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
+<h2 id="main-changes-2">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
 <ul>
 <li>Regenerated libhs_datalog_v2 DLLs:
 <ul>
@@ -68,7 +81,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section10"  aria-hidden="true"> <label for="collapse-section10" aria-hidden="true">v3.0.0 / 30-Sep-22</label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
+<h2 id="main-changes-3">Main Changes</h2>
 <h3 id="product-update">Product update</h3>
 <ul>
 <li>Added support for both DATALOG1 and DATALOG2</li>
@@ -78,7 +91,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true">v2.5.0 / 8-Jul-2022</label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
+<h2 id="main-changes-4">Main Changes</h2>
 <h3 id="product-update-1">Product update</h3>
 <ul>
 <li>Added configuration scripts to setup cli_example in Linux and Raspberry environment</li>
@@ -91,7 +104,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">v2.4.0 / 5-Nov-2021</label>
 <div>
-<h2 id="main-changes-4">Main Changes</h2>
+<h2 id="main-changes-5">Main Changes</h2>
 <h3 id="product-update-2">Product update</h3>
 <ul>
 <li><strong>Added new Raspberry pi 3B cli example</strong></li>
@@ -102,7 +115,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true">v2.3.0 / 25-Jun-2021</label>
 <div>
-<h2 id="main-changes-5">Main Changes</h2>
+<h2 id="main-changes-6">Main Changes</h2>
 <h3 id="product-update-3">Product update</h3>
 <ul>
 <li><strong>Added new Raspberry pi 3B dll</strong></li>
@@ -112,8 +125,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true">v2.2.0 / 18-Dec-2020</label>
 <div>
-<h2 id="main-changes-6">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
+<h2 id="main-changes-7">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
 <ul>
 <li>Bug solved: ucf not read correctly if bigger then DeviceConfig.json</li>
 <li><strong>Added new 64-bit dll</strong></li>
@@ -124,8 +137,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true">v2.1.0 / 13-Nov-2020</label>
 <div>
-<h2 id="main-changes-7">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
+<h2 id="main-changes-8">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
 <ul>
 <li>Recompiled cli_example application, both for Linux and Windows</li>
 <li>Added -g option, to get current Device Configuration from the board</li>
@@ -137,8 +150,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true">v2.0.0 / 19-Jun-2020</label>
 <div>
-<h2 id="main-changes-8">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
+<h2 id="main-changes-9">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-5">Maintenance release and product update</h3>
 <ul>
 <li>Redesigned cli_example application, both for Linux and Windows</li>
 <li>Updated compiled libraries (.so and .dll)</li>
@@ -149,7 +162,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">v1.0.0 / 05-Jul-2019</label>
 <div>
-<h2 id="main-changes-9">Main Changes</h2>
+<h2 id="main-changes-10">Main Changes</h2>
 <h3 id="first-official-release">First official release</h3>
 <ul>
 <li>First official release</li>

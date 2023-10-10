@@ -70,13 +70,13 @@ int hs_datalog_close(void);
 int hs_datalog_get_device_number(int * nDevices);
 
 //TODO update comments
-int hs_datalog_set_boolean_property(int dId, bool value, char * comp_name, char* prop_name, char* sub_prop_name = nullptr);
+int hs_datalog_set_boolean_property(int dId, bool value, char * comp_name, char* prop_name, char* sub_prop_name = nullptr, char** response = nullptr);
 //TODO update comments
-int hs_datalog_set_integer_property(int dId, int value, char * comp_name, char* prop_name, char* sub_prop_name = nullptr);
+int hs_datalog_set_integer_property(int dId, int value, char * comp_name, char* prop_name, char* sub_prop_name = nullptr, char** response = nullptr);
 //TODO update comments
-int hs_datalog_set_float_property(int dId, float value, char * comp_name, char* prop_name, char* sub_prop_name = nullptr);
+int hs_datalog_set_float_property(int dId, float value, char * comp_name, char* prop_name, char* sub_prop_name = nullptr, char** response = nullptr);
 //TODO update comments
-int hs_datalog_set_string_property(int dId, char* value, char * comp_name, char* prop_name, char* sub_prop_name = nullptr);
+int hs_datalog_set_string_property(int dId, char* value, char * comp_name, char* prop_name, char* sub_prop_name = nullptr, char** response = nullptr);
 
 /**
  * @brief to configure a device status
@@ -167,7 +167,7 @@ int hs_datalog_get_string_property(int dId, char **value, char* comp_name, char*
   * otherwise
   *
   * */
-int hs_datalog_start_log(int dId, int mode);
+int hs_datalog_start_log(int dId, int mode, char **response);
 
 /**
   * @brief Stop data logging on a specific board.
@@ -178,7 +178,7 @@ int hs_datalog_start_log(int dId, int mode);
   * otherwise
   *
   * */
-int hs_datalog_stop_log(int dId);
+int hs_datalog_stop_log(int dId, char **response);
 
 /**
   * @brief Get the amount of available data from a Component of a specific device.
@@ -220,13 +220,7 @@ int hs_datalog_get_device_status(int dId, char **device);
 int hs_datalog_get_component_status(int dId, char **comp_status, char * comp_name);
 
 //TODO update comments
-int hs_datalog_start_log(int dId, int mode);
-
-//TODO update comments
-int hs_datalog_stop_log(int dId);
-
-//TODO update comments
-int hs_datalog_set_rtc_time(int dId);
+int hs_datalog_set_rtc_time(int dId, char **response);
 
 //TODO update comments
 int hs_datalog_get_components_number(int dId, int * nComponents);
@@ -378,11 +372,12 @@ int hs_datalog_set_acquisition_param(int dId, char * name, char * description);
   * @param comp_name Id of the sensor Component.
   * @param UCF_buffer Byte array that contains the UCF file.
   * @param len The length of the UCF FIle.
+  * @param response PnPL Command response
   *
   *  * @return ST_HS_DATALOG_OK if no error occurred, ST_HS_DATALOG_ERROR
   * otherwise
   * */
-int hs_datalog_load_ucf_to_mlc(int dID, char* comp_name, uint8_t * ucf_buffer, uint32_t len);
+int hs_datalog_load_ucf_to_mlc(int dID, char* comp_name, uint8_t * ucf_buffer, uint32_t len, char **response);
 
 /**
   * @brief Get the maximum number of tags available.

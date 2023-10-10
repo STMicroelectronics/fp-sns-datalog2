@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lis2du12_acc;2
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lis2du12_acc;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.1.0
+  * Created by: DTDL2PnPL_cGen version 1.2.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -183,6 +183,8 @@ uint8_t Lis2du12_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   char *temp_s = "";
   lis2du12_acc_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "lis2du12_acc.data_type", temp_s);
+  lis2du12_acc_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "lis2du12_acc.sensor_annotation", temp_s);
   lis2du12_acc_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "lis2du12_acc.sensor_category", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
@@ -211,10 +213,12 @@ uint8_t Lis2du12_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   return 0;
 }
 
-uint8_t Lis2du12_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Lis2du12_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
   if(json_object_dothas_value(tempJSONObject, "lis2du12_acc.odr"))
@@ -223,29 +227,34 @@ uint8_t Lis2du12_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
     switch(odr)
     {
     case 0:
-      lis2du12_acc_set_odr(lis2du12_acc_odr_hz6);
+      ret = lis2du12_acc_set_odr(lis2du12_acc_odr_hz6);
       break;
     case 1:
-      lis2du12_acc_set_odr(lis2du12_acc_odr_hz12_5);
+      ret = lis2du12_acc_set_odr(lis2du12_acc_odr_hz12_5);
       break;
     case 2:
-      lis2du12_acc_set_odr(lis2du12_acc_odr_hz25);
+      ret = lis2du12_acc_set_odr(lis2du12_acc_odr_hz25);
       break;
     case 3:
-      lis2du12_acc_set_odr(lis2du12_acc_odr_hz50);
+      ret = lis2du12_acc_set_odr(lis2du12_acc_odr_hz50);
       break;
     case 4:
-      lis2du12_acc_set_odr(lis2du12_acc_odr_hz100);
+      ret = lis2du12_acc_set_odr(lis2du12_acc_odr_hz100);
       break;
     case 5:
-      lis2du12_acc_set_odr(lis2du12_acc_odr_hz200);
+      ret = lis2du12_acc_set_odr(lis2du12_acc_odr_hz200);
       break;
     case 6:
-      lis2du12_acc_set_odr(lis2du12_acc_odr_hz400);
+      ret = lis2du12_acc_set_odr(lis2du12_acc_odr_hz400);
       break;
     case 7:
-      lis2du12_acc_set_odr(lis2du12_acc_odr_hz800);
+      ret = lis2du12_acc_set_odr(lis2du12_acc_odr_hz800);
       break;
+    }
+    if(ret == 0){
+      json_object_dotset_number(respJSONObject, "lis2du12_acc.odr.value", odr);
+    } else {
+      json_object_dotset_string(respJSONObject, "lis2du12_acc.odr.value", "PNPL_SET_ERROR");
     }
   }
   if(json_object_dothas_value(tempJSONObject, "lis2du12_acc.fs"))
@@ -254,34 +263,69 @@ uint8_t Lis2du12_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
     switch(fs)
     {
     case 0:
-      lis2du12_acc_set_fs(lis2du12_acc_fs_g2);
+      ret = lis2du12_acc_set_fs(lis2du12_acc_fs_g2);
       break;
     case 1:
-      lis2du12_acc_set_fs(lis2du12_acc_fs_g4);
+      ret = lis2du12_acc_set_fs(lis2du12_acc_fs_g4);
       break;
     case 2:
-      lis2du12_acc_set_fs(lis2du12_acc_fs_g8);
+      ret = lis2du12_acc_set_fs(lis2du12_acc_fs_g8);
       break;
     case 3:
-      lis2du12_acc_set_fs(lis2du12_acc_fs_g16);
+      ret = lis2du12_acc_set_fs(lis2du12_acc_fs_g16);
       break;
+    }
+    if(ret == 0){
+      json_object_dotset_number(respJSONObject, "lis2du12_acc.fs.value", fs);
+    } else {
+      json_object_dotset_string(respJSONObject, "lis2du12_acc.fs.value", "PNPL_SET_ERROR");
     }
   }
   if (json_object_dothas_value(tempJSONObject, "lis2du12_acc.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "lis2du12_acc.enable");
-    lis2du12_acc_set_enable(enable);
+    ret = lis2du12_acc_set_enable(enable);
+    if(ret == 0){
+      json_object_dotset_boolean(respJSONObject, "lis2du12_acc.enable.value", enable);
+    } else {
+      json_object_dotset_string(respJSONObject, "lis2du12_acc.enable.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "lis2du12_acc.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "lis2du12_acc.samples_per_ts");
-    lis2du12_acc_set_samples_per_ts(samples_per_ts);
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "lis2du12_acc.samples_per_ts");
+    ret = lis2du12_acc_set_samples_per_ts(samples_per_ts);
+    if(ret == 0){
+      json_object_dotset_number(respJSONObject, "lis2du12_acc.samples_per_ts.value", samples_per_ts);
+    } else {
+      json_object_dotset_string(respJSONObject, "lis2du12_acc.samples_per_ts.value", "PNPL_SET_ERROR");
+    }
+  }
+  if (json_object_dothas_value(tempJSONObject, "lis2du12_acc.sensor_annotation"))
+  {
+    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "lis2du12_acc.sensor_annotation");
+    ret = lis2du12_acc_set_sensor_annotation(sensor_annotation);
+    if(ret == 0){
+      json_object_dotset_string(respJSONObject, "lis2du12_acc.sensor_annotation.value", sensor_annotation);
+    } else {
+      json_object_dotset_string(respJSONObject, "lis2du12_acc.sensor_annotation.value", "PNPL_SET_ERROR");
+    }
   }
   json_value_free(tempJSON);
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
   return ret;
 }
 
-uint8_t Lis2du12_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Lis2du12_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   return 1;
 }

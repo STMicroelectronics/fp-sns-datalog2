@@ -34,6 +34,9 @@ def from_str(x: Any) -> str:
     assert isinstance(x, str)
     return x
 
+def from_raw_dict(x: Any) -> dict:
+    assert isinstance(x, dict)
+    return x
 
 def from_none(x: Any) -> Any:
     assert x is None
@@ -106,6 +109,9 @@ class SchemaEnum(Enum):
     INTEGER = "integer"
     STRING = "string"
 
+class SchemaType(Enum):
+    ENUM = "Enum"
+    OBJECT = "Object"
 
 @dataclass
 class EnumValue:
@@ -136,12 +142,63 @@ class EnumValue:
         result["schema"] = from_union([lambda x: to_enum(SchemaEnum, x), from_none], self.schema)
         return result
 
+@dataclass
+class Field:
+    display_name: Optional[DisplayName] = None
+    name: Optional[str] = None
+    schema: Optional[SchemaEnum] = None
+    id: Optional[str] = None
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'Field':
+        assert isinstance(obj, dict)
+        display_name = from_union([DisplayName.from_dict, from_none], obj.get("displayName"))
+        name = from_union([from_str, from_none], obj.get("name"))
+        schema = from_union([SchemaEnum, from_none], obj.get("schema"))
+        id = from_union([from_str, from_none], obj.get("@id"))
+        return Field(display_name, name, schema, id)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        if self.display_name is not None:
+            result["displayName"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.display_name)
+        if self.name is not None:
+            result["name"] = from_union([from_str, from_none], self.name)
+        if self.schema is not None:
+            result["schema"] = from_union([lambda x: to_enum(SchemaEnum, x), from_none], self.schema)
+        if self.id is not None:
+            result["@id"] = from_union([from_str, from_none], self.id)
+        return result
+
+@dataclass
+class ResponseSchema:
+    type: Optional[SchemaType] = None
+    display_name: Optional[DisplayName] = None
+    fields: Optional[List[Field]] = None
+
+    @staticmethod
+    def from_dict(obj: Any) -> 'ResponseSchema':
+        assert isinstance(obj, dict)
+        type = from_union([SchemaType, from_none], obj.get("@type"))
+        display_name = from_union([DisplayName.from_dict, from_none], obj.get("displayName"))
+        fields = from_union([lambda x: from_list(Field.from_dict, x), from_none], obj.get("fields"))
+        return ResponseSchema(type, display_name, fields)
+
+    def to_dict(self) -> dict:
+        result: dict = {}
+        if self.type is not None:
+            result["@type"] = from_union([lambda x: to_enum(SchemaType, x), from_none], self.type)
+        if self.display_name is not None:
+            result["displayName"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.display_name)
+        if self.fields is not None:
+            result["fields"] = from_union([lambda x: from_list(lambda x: to_class(Field, x), x), from_none], self.fields)
+        return result
 
 @dataclass
 class Response:
     display_name: Optional[DisplayName] = None
     name: Optional[str] = None
-    schema: Optional[SchemaEnum] = None
+    schema: Optional[Union[ResponseSchema, SchemaEnum]] = None
     type: Optional[str] = None
 
     @staticmethod
@@ -149,29 +206,29 @@ class Response:
         assert isinstance(obj, dict)
         display_name = from_union([DisplayName.from_dict, from_none], obj.get("displayName"))
         name = from_union([from_str, from_none], obj.get("name"))
-        schema = from_union([SchemaEnum, from_none], obj.get("schema"))
+        # schema = from_union([SchemaEnum, from_none], obj.get("schema"))
+        schema = from_union([ResponseSchema.from_dict, SchemaEnum, from_none], obj.get("schema"))
         type = from_union([from_str, from_none], obj.get("@type"))
         return Response(display_name, name, schema, type)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["displayName"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.display_name)
-        result["name"] = from_union([from_str, from_none], self.name)
-        result["schema"] = from_union([lambda x: to_enum(SchemaEnum, x), from_none], self.schema)
-        result["@type"] = from_union([from_str, from_none], self.type)
+        if self.schema is not None:
+            result["schema"] = from_union([lambda x: to_class(ResponseSchema, x), lambda x: to_enum(SchemaEnum, x), from_none], self.schema)
+        if self.type is not None:
+            result["@type"] = from_union([from_str, from_none], self.type)
+        if self.display_name is not None:
+            result["displayName"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.display_name)
+        if self.name is not None:
+            result["name"] = from_union([from_str, from_none], self.name)
         return result
-
-
-class SchemaType(Enum):
-    ENUM = "Enum"
-    OBJECT = "Object"
 
 
 @dataclass
 class RequestSchema:
     type: Optional[SchemaType] = None
     display_name: Optional[DisplayName] = None
-    fields: Optional[List[Response]] = None
+    fields: Optional[List[Field]] = None
     enum_values: Optional[List[EnumValue]] = None
     value_schema: Optional[SchemaEnum] = None
 
@@ -180,7 +237,7 @@ class RequestSchema:
         assert isinstance(obj, dict)
         type = from_union([SchemaType, from_none], obj.get("@type"))
         display_name = from_union([DisplayName.from_dict, from_none], obj.get("displayName"))
-        fields = from_union([lambda x: from_list(Response.from_dict, x), from_none], obj.get("fields"))
+        fields = from_union([lambda x: from_list(Field.from_dict, x), from_none], obj.get("fields"))
         enum_values = from_union([lambda x: from_list(EnumValue.from_dict, x), from_none], obj.get("enumValues"))
         value_schema = from_union([SchemaEnum, from_none], obj.get("valueSchema"))
         return RequestSchema(type, display_name, fields, enum_values, value_schema)
@@ -189,7 +246,7 @@ class RequestSchema:
         result: dict = {}
         result["@type"] = from_union([lambda x: to_enum(SchemaType, x), from_none], self.type)
         result["displayName"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.display_name)
-        result["fields"] = from_union([lambda x: from_list(lambda x: to_class(Response, x), x), from_none], self.fields)
+        result["fields"] = from_union([lambda x: from_list(lambda x: to_class(Field, x), x), from_none], self.fields)
         result["enumValues"] = from_union([lambda x: from_list(lambda x: to_class(EnumValue, x), x), from_none], self.enum_values)
         result["valueSchema"] = from_union([lambda x: to_enum(SchemaEnum, x), from_none], self.value_schema)
         return result
@@ -285,7 +342,7 @@ class Content:
 
     type: Union[List[TypeElement], ContentType, None]
     schema: Union[ContentSchema, None, str]
-    initial_value: Optional[Union[float, bool, str]] = None
+    initial_value: Optional[Union[float, bool, str, dict]] = None
     id: Optional[str] = None
     display_name: Optional[DisplayName] = None
     name: Optional[str] = None
@@ -311,7 +368,7 @@ class Content:
         assert isinstance(obj, dict)
         type = from_union([lambda x: from_list(TypeElement, x), ContentType, from_none], obj.get("@type"))
         schema = from_union([ContentSchema.from_dict, from_str, from_none], obj.get("schema"))
-        initial_value = from_union([from_float, from_bool, from_str, from_none], obj.get("initialValue"))
+        initial_value = from_union([from_float, from_bool, from_str, from_raw_dict, from_none], obj.get("initialValue"))
         id = from_union([from_str, from_none], obj.get("@id"))
         display_name = from_union([DisplayName.from_dict, from_none], obj.get("displayName"))
         name = from_union([from_str, from_none], obj.get("name"))
@@ -340,7 +397,7 @@ class Content:
         if self.schema is not None:
             result["schema"] = from_union([lambda x: to_class(ContentSchema, x), from_str, from_none], self.schema)
         if self.initial_value is not None:
-            result["initialValue"] = from_union([to_float, from_bool, from_str, from_none], self.initial_value)
+            result["initialValue"] = from_union([to_float, from_bool, from_str, from_raw_dict, from_none], self.initial_value)
         if self.id is not None:
             result["@id"] = from_union([from_str, from_none], self.id)
         if self.display_name is not None:

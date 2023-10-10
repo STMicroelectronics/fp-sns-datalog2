@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_GestureRecognition.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Gesture Recognition info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,12 +18,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_GESTURE_RECOGNITION_H_
 #define _BLE_GESTURE_RECOGNITION_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported defines ---------------------------------------------------------*/
@@ -47,26 +47,26 @@ extern CustomNotifyEventGestureRecognition_t CustomNotifyEventGestureRecognition
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Gesture Recognition info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Gesture Recognition info service
- */
-extern BleCharTypeDef* BLE_InitGestureRecognitionService(void);
+  * @brief  Init Gesture Recognition info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Gesture Recognition info service
+  */
+extern BleCharTypeDef *BLE_InitGestureRecognitionService(void);
 
 #ifndef BLE_MANAGER_SDKV2
 /**
- * @brief  Setting Gesture Recognition Advertise Data
- * @param  uint8_t *manuf_data: Advertise Data
- * @retval None
- */
+  * @brief  Setting Gesture Recognition Advertise Data
+  * @param  uint8_t *manuf_data: Advertise Data
+  * @retval None
+  */
 extern void BLE_SetGestureRecognitionAdvertiseData(uint8_t *manuf_data);
 #endif /* BLE_MANAGER_SDKV2 */
 
 /**
- * @brief  Update Gesture Recognition characteristic
- * @param  BLE_GR_output_t GestureRecognitionCode Gesture Recognition Recognized
- * @retval tBleStatus   Status
- */
+  * @brief  Update Gesture Recognition characteristic
+  * @param  BLE_GR_output_t GestureRecognitionCode Gesture Recognition Recognized
+  * @retval tBleStatus   Status
+  */
 extern tBleStatus BLE_GestureRecognitionUpdate(BLE_GR_output_t GestureRecognitionCode);
 
 #ifdef __cplusplus

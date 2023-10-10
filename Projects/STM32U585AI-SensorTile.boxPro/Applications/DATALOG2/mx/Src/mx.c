@@ -47,17 +47,6 @@ const MX_GPIOParams_t MX_GPIO_SW1InitParams =
 };
 
 /**
-  * (USER_BUTTON 2) Initialization parameters.
-  */
-const MX_GPIOParams_t MX_GPIO_SW2InitParams =
-{
-  MX_GPIO_PE0_Init,
-  SW2_EXTI_IRQn,
-  SW2_Pin,
-  SW2_GPIO_Port
-};
-
-/**
   * (LED1) Initialization parameters.
   */
 const MX_GPIOParams_t MX_GPIO_LED1InitParams =
@@ -92,35 +81,14 @@ const MX_GPIOParams_t MX_GPIO_LED3InitParams =
 };
 
 /**
- * (PRESS_INT) Initialization parameters.
- */
-const MX_GPIOParams_t MX_GPIO_PRESS_INTInitParams = {
-    MX_GPIO_PE8_Init,
-    PRESS_INT_EXTI_IRQn,
-    PRESS_INT_Pin,
-    PRESS_INT_GPIO_Port
-};
-
-/**
-  * (MAG_DRDY) Initialization parameters.
-  */
-const MX_GPIOParams_t MX_GPIO_MAG_DRDYInitParams =
-{
-  MX_GPIO_PE6_Init,
-  MAG_DRDY_EXTI_IRQn,
-  MAG_DRDY_Pin,
-  MAG_DRDY_GPIO_Port
-};
-
-/**
   * (ACC_INT1) Initialization parameters.
   */
-const MX_GPIOParams_t MX_GPIO_ACC_INT1InitParams =
+const MX_GPIOParams_t MX_GPIO_ACC_INT2InitParams =
 {
-  MX_GPIO_PF2_Init,
-  ACC_INT1_EXTI_IRQn,
-  ACC_INT1_Pin,
-  ACC_INT1_GPIO_Port
+  MX_GPIO_PF15_Init,
+  ACC_INT2_EXTI_IRQn,
+  ACC_INT2_Pin,
+  ACC_INT2_GPIO_Port
 };
 
 /**
@@ -143,6 +111,39 @@ const MX_GPIOParams_t MX_GPIO_IMU_INT1InitParams =
   IMU_INT1_EXTI_IRQn,
   IMU_INT1_Pin,
   IMU_INT1_GPIO_Port
+};
+
+/**
+  * (DIL_INT1) Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO_INT1_EXTERNALInitParams =
+{
+  MX_GPIO_PG2_Init,
+  DIL_INT1_EXTI_IRQn,
+  DIL_INT1_Pin,
+  DIL_INT1_GPIO_Port
+};
+
+/**
+  * (DIL_INT2) Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO_INT2_EXTERNALInitParams =
+{
+  MX_GPIO_PG6_Init,
+  DIL_INT2_EXTI_IRQn,
+  DIL_INT2_Pin,
+  DIL_INT2_GPIO_Port
+};
+
+/**
+  * (DIL_CS) Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO_CS_EXTERNALInitParams =
+{
+  MX_GPIO_PG1_Init,
+  UsageFault_IRQn, /*!< NOT USED */
+  SPI_DUT_CS_Pin,
+  SPI_DUT_CS_GPIO_Port
 };
 
 /**
@@ -173,6 +174,18 @@ const MX_SPIParams_t MX_SPI2InitParams =
   .p_mx_dma_init_f = MX_GPDMA1_InitCustom,
   .spi_dma_rx_irq_n = GPDMA1_Channel0_IRQn,
   .spi_dma_tx_irq_n = GPDMA1_Channel1_IRQn
+};
+
+/**
+  * SPI2 initialization parameters.
+  */
+const MX_SPIParams_t MX_SPI3InitParams =
+{
+  .p_mx_init_f = MX_SPI3_Init,
+  .p_spi_handle = &hspi3,
+  .p_mx_dma_init_f = MX_GPDMA1_InitCustom,
+  .spi_dma_rx_irq_n = GPDMA1_Channel6_IRQn,
+  .spi_dma_tx_irq_n = GPDMA1_Channel7_IRQn
 };
 
 /**
@@ -242,6 +255,7 @@ const MX_TIMParams_t MX_TIM3InitParams =
   .p_tim = &htim3,
   .irq_n = TIM3_IRQn
 };
+
 
 /**
   * TIM4 initialization parameters.

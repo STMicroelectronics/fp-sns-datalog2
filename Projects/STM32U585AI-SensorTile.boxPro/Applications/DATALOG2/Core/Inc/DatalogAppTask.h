@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -29,8 +29,9 @@ extern "C" {
 #include "drivers/IDriver_vtbl.h"
 #include "events/IDataEventListener.h"
 #include "events/IDataEventListener_vtbl.h"
-#include "usbx_dctrl_class.h"
 #include "filex_dctrl_class.h"
+#include "usbx_dctrl_class.h"
+#include "ble_stream_class.h"
 
 #include "ICommandParse.h"
 #include "ICommandParse_vtbl.h"
@@ -40,6 +41,15 @@ extern "C" {
 #include "ILog_Controller_vtbl.h"
 #include "ILsm6dsv16x_Mlc.h"
 #include "ILsm6dsv16x_Mlc_vtbl.h"
+#include "IIsm330is_Ispu.h"
+#include "IIsm330is_Ispu_vtbl.h"
+
+#include "App_model.h"
+
+#include "LSM6DSV16XTask.h"
+#include "ISM330ISTask.h"
+#include "services/SQuery.h"
+#include "services/SUcfProtocol.h"
 
 
 /* Datalog messages ID */
@@ -58,6 +68,59 @@ typedef struct
   */
 typedef struct _DatalogAppTask DatalogAppTask;
 
+/**
+  *  DatalogAppTask internal structure.
+  */
+struct _DatalogAppTask
+{
+  /**
+    * Base class object.
+    */
+  AManagedTaskEx super;
+  TX_QUEUE in_queue;
+
+  /** Software timer used to send periodical ble advertise messages **/
+  TX_TIMER ble_advertise_timer;
+
+  /** Data Event Listener **/
+  IDataEventListener_t sensorListener;
+  void *owner;
+
+  /** USBX ctrl class **/
+  usbx_dctrl_class_t *usbx_device;
+
+  /** FILEX ctrl class **/
+  filex_dctrl_class_t *filex_device;
+
+  /** FILEX ctrl class **/
+  ble_stream_class_t *ble_device;
+
+  ICommandParse_t parser;
+//TODO could be more useful to have a CommandParse Class? (ICommandParse + PnPLCommand_t)
+  PnPLCommand_t outPnPLCommand;
+
+  /** PnPL interface for Log Control **/
+  ILog_Controller_t pnplLogCtrl;
+
+  /** PnPL interface for MLC **/
+  ILsm6dsv16x_Mlc_t pnplMLCCtrl;
+
+  /** PnPL interface for ISPU **/
+  IIsm330is_Ispu_t pnplISPUCtrl;
+
+  /** SensorLL interface for MLC **/
+  ISensorLL_t *mlc_sensor_ll;
+
+  /** SensorLL interface for ISPU **/
+  ISensorLL_t *ispu_sensor_ll;
+
+  AppModel_t *datalog_model;
+
+  SensorContext_t sensorContext[SM_MAX_SENSORS];
+
+  uint32_t mode;  /* logging interface */
+
+};
 
 // Public API declaration
 //***********************
@@ -77,6 +140,8 @@ ICommandParse_t *DatalogAppTask_GetICommandParseIF(DatalogAppTask *_this);
 ILog_Controller_t *DatalogAppTask_GetILogControllerIF(DatalogAppTask *_this);
 
 ILsm6dsv16x_Mlc_t *DatalogAppTask_GetIMLCControllerIF(DatalogAppTask *_this, AManagedTask *taskObj);
+
+IIsm330is_Ispu_t *DatalogAppTask_GetIIspuControllerIF(DatalogAppTask *_this, AManagedTask *task_obj);
 
 sys_error_code_t DatalogAppTask_msg(ULONG msg);
 

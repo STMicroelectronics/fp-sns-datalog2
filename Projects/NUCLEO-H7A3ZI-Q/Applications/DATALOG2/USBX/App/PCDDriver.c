@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -41,7 +41,8 @@ static const IDriver_vtbl sPCDDriver_vtbl =
 /* Public API definition */
 /*************************/
 
-sys_error_code_t PCDDrvSetFIFO(PCDDriver_t *_this, uint16_t total_fifo_size, uint16_t rx_fifo_size, uint16_t ctrl_fifo_size, uint8_t n_in_ep)
+sys_error_code_t PCDDrvSetFIFO(PCDDriver_t *_this, uint16_t total_fifo_size, uint16_t rx_fifo_size,
+                               uint16_t ctrl_fifo_size, uint8_t n_in_ep)
 {
   assert_param(_this != NULL);
 

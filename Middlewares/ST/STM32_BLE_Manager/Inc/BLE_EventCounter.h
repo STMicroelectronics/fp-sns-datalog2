@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_EventCounter.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Event Counter info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,12 +18,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_EVENTCOUNTER_H_
 #define _BLE_EVENTCOUNTER_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported defines ---------------------------------------------------------*/
@@ -37,17 +37,17 @@ extern CustomNotifyEventCounter_t CustomNotifyEventCounter;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Event Counter info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for EventCounter info service
- */
-extern BleCharTypeDef* BLE_InitEventCounterService(void);
+  * @brief  Init Event Counter info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for EventCounter info service
+  */
+extern BleCharTypeDef *BLE_InitEventCounterService(void);
 
 /**
- * @brief  Update Event Counter characteristic
- * @param uint32_t Event Counter Number
- * @retval tBleStatus   Status
- */
+  * @brief  Update Event Counter characteristic
+  * @param uint32_t Event Counter Number
+  * @retval tBleStatus   Status
+  */
 extern tBleStatus BLE_EventCounterUpdate(uint32_t EventCounter);
 
 #ifdef __cplusplus

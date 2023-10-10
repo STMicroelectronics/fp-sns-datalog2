@@ -31,7 +31,11 @@
 /* Private variables ---------------------------------------------------------*/
 static NFCTAG_DrvTypeDef *Nfctag_Drv = NULL;
 /* static uint8_t NfctagInitialized = 0; */
-static ST25DV_Object_t NfcTagObj;
+static ST25DV_Object_t ST25DVObj;
+static ST25DVxxKC_Object_t ST25DVxxKCObj;
+
+static void *NfcTagObj;
+
 /* Global variables ----------------------------------------------------------*/
 EXTI_HandleTypeDef nfc_exti = {.Line = EXTI_LINE_12};
 
@@ -42,7 +46,7 @@ static uint32_t NFC_GetTick(void);
 static void NFCTAG_GPIO_EXTI_Callback(void);
 /* Functions Definition ------------------------------------------------------*/
 
-int32_t BSP_NFCTAG_Init (uint32_t Instance)
+int32_t BSP_NFCTAG_ST25DV_Probe (uint32_t Instance)
 {
   int32_t status;
   ST25DV_IO_t IO;
@@ -53,27 +57,81 @@ int32_t BSP_NFCTAG_Init (uint32_t Instance)
   IO.DeInit       = BSP_I2C2_DeInit;
   IO.IsReady      = BSP_I2C2_IsReady;
   IO.Read         = BSP_I2C2_ReadReg16;
+  
   IO.Write        = (ST25DV_Write_Func) BSP_I2C2_WriteReg16;
   IO.GetTick      = NFC_GetTick;
 
-  status = ST25DV_RegisterBusIO (&NfcTagObj, &IO);
+  status = ST25DV_RegisterBusIO (&ST25DVObj, &IO);
   if(status != NFCTAG_OK)
     return NFCTAG_ERROR;
 
   Nfctag_Drv = (NFCTAG_DrvTypeDef *)(void *)&St25Dv_Drv;
+
   if(Nfctag_Drv->Init != NULL)
   {
-    status = Nfctag_Drv->Init(&NfcTagObj);
+    status = Nfctag_Drv->Init(&ST25DVObj);
     if(status != NFCTAG_OK)
     {
       Nfctag_Drv = NULL;
       return NFCTAG_ERROR;
     }
+    NfcTagObj = (void *)&ST25DVObj;
   } else {
     Nfctag_Drv = NULL;
     return NFCTAG_ERROR;
   }
   return NFCTAG_OK;
+}
+
+int32_t BSP_NFCTAG_ST25DVxxKC_Probe (uint32_t Instance)
+{
+  int32_t status;
+  ST25DVxxKC_IO_t IO;
+  UNUSED(Instance);
+
+  /* Configure the component */
+  IO.Init         = BSP_I2C2_Init;
+  IO.DeInit       = BSP_I2C2_DeInit;
+  IO.IsReady      = BSP_I2C2_IsReady;
+  IO.Read         = BSP_I2C2_ReadReg16;
+  
+  IO.Write        = (ST25DVxxKC_Write_Func) BSP_I2C2_WriteReg16;
+  IO.GetTick      = BSP_GetTick;
+
+  status = ST25DVxxKC_RegisterBusIO (&ST25DVxxKCObj, &IO);
+  if(status != NFCTAG_OK)
+    return NFCTAG_ERROR;
+
+  Nfctag_Drv = (NFCTAG_DrvTypeDef *)(void *)&St25Dvxxkc_Drv;
+  if(Nfctag_Drv->Init != NULL)
+  {
+    status = Nfctag_Drv->Init(&ST25DVxxKCObj);
+    if(status != NFCTAG_OK)
+    {
+      Nfctag_Drv = NULL;
+      return NFCTAG_ERROR;
+    }
+    NfcTagObj = (void *)&ST25DVxxKCObj;
+  } else {
+    Nfctag_Drv = NULL;
+    return NFCTAG_ERROR;
+  }
+  return NFCTAG_OK;
+}
+
+int32_t BSP_NFCTAG_Init (uint32_t Instance)
+{
+  if(BSP_NFCTAG_ST25DVxxKC_Probe(Instance) == BSP_ERROR_NONE) 
+  { 
+    return NFCTAG_OK;
+  }
+  
+   if(BSP_NFCTAG_ST25DV_Probe(Instance) == BSP_ERROR_NONE) 
+  { 
+    return NFCTAG_OK;
+  }
+  
+  return NFCTAG_ERROR;
 }
 
 static uint32_t NFC_GetTick(void) {
@@ -93,7 +151,8 @@ void BSP_NFCTAG_DeInit( uint32_t Instance )
   if(Nfctag_Drv != NULL)
   {
     Nfctag_Drv = NULL;
-    NfcTagObj.IsInitialized = 0U;
+    ST25DVObj.IsInitialized = 0U;
+    ST25DVxxKCObj.IsInitialized = 0U;
   }
 }
 
@@ -104,18 +163,9 @@ void BSP_NFCTAG_DeInit( uint32_t Instance )
   */
 uint8_t BSP_NFCTAG_isInitialized( uint32_t Instance )
 {
-  uint8_t status;
   UNUSED(Instance);
-  if( NfcTagObj.IsInitialized) {
-    status = 1U;
-  } else {
-    status = 0U;
-  }
-   return status;
+  return ST25DVObj.IsInitialized | ST25DVxxKCObj.IsInitialized;
 }
-
-
-
 
 /**
  * @brief  BSP NFCTAG GPIO callback
@@ -183,7 +233,7 @@ int32_t BSP_NFCTAG_ReadID( uint32_t Instance, uint8_t * const wai_id )
     return NFCTAG_ERROR;
   }
   
-  return Nfctag_Drv->ReadID(&NfcTagObj, wai_id );
+  return Nfctag_Drv->ReadID(NfcTagObj, wai_id );
 }
 
 /**
@@ -199,7 +249,7 @@ int32_t BSP_NFCTAG_IsDeviceReady( uint32_t Instance, const uint32_t Trials )
     return NFCTAG_ERROR;
   }
   
-  return Nfctag_Drv->IsReady(&NfcTagObj, Trials );
+  return Nfctag_Drv->IsReady(NfcTagObj, Trials );
 }
 
 /**
@@ -216,7 +266,7 @@ int32_t BSP_NFCTAG_ConfigIT( uint32_t Instance, const uint16_t ITConfig )
   {
     return NFCTAG_ERROR;
   }
-  return Nfctag_Drv->ConfigIT(&NfcTagObj, ITConfig );
+  return Nfctag_Drv->ConfigIT(NfcTagObj, ITConfig );
 }
 
 /**
@@ -234,7 +284,7 @@ int32_t BSP_NFCTAG_GetITStatus(uint32_t Instance,  uint16_t * const ITConfig )
     return NFCTAG_ERROR;
   }
   
-  return Nfctag_Drv->GetITStatus(&NfcTagObj, ITConfig );
+  return Nfctag_Drv->GetITStatus(NfcTagObj, ITConfig );
 }
 
 /**
@@ -252,7 +302,7 @@ int32_t BSP_NFCTAG_ReadData( uint32_t Instance, uint8_t * const pData, const uin
     return NFCTAG_ERROR;
   }
   
-  return Nfctag_Drv->ReadData(&NfcTagObj, pData, TarAddr, Size );
+  return Nfctag_Drv->ReadData(NfcTagObj, pData, TarAddr, Size );
 }
 
 /**
@@ -270,7 +320,7 @@ int32_t BSP_NFCTAG_WriteData( uint32_t Instance, const uint8_t * const pData, co
     return NFCTAG_ERROR;
   }
   
-  return Nfctag_Drv->WriteData(&NfcTagObj, pData, TarAddr, Size );
+  return Nfctag_Drv->WriteData(NfcTagObj, pData, TarAddr, Size );
 }
 
 /**
@@ -283,8 +333,19 @@ int32_t BSP_NFCTAG_WriteData( uint32_t Instance, const uint8_t * const pData, co
 int32_t BSP_NFCTAG_ReadRegister( uint32_t Instance, uint8_t * const pData, const uint16_t TarAddr, const uint16_t Size )
 {
   UNUSED(Instance);
-
-  return ST25DV_ReadRegister(&NfcTagObj, pData, TarAddr, Size );
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadRegister(NfcTagObj, pData, TarAddr, Size);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadRegister(NfcTagObj, pData, TarAddr, Size);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -297,15 +358,27 @@ int32_t BSP_NFCTAG_ReadRegister( uint32_t Instance, uint8_t * const pData, const
 int32_t BSP_NFCTAG_WriteRegister( uint32_t Instance, const uint8_t * const pData, const uint16_t TarAddr, const uint16_t Size )
 {
   UNUSED(Instance);
-  int32_t ret_value;
+   int32_t ret_value;
 
-  ret_value = ST25DV_WriteRegister(&NfcTagObj, pData, TarAddr, Size );
-  if( ret_value == NFCTAG_OK )
+  if(ST25DVObj.IsInitialized == 1)
   {
-    while( Nfctag_Drv->IsReady(&NfcTagObj, 1 ) != NFCTAG_OK ) {};
+    ret_value = ST25DV_WriteRegister(NfcTagObj, pData, TarAddr, Size);
+    if(ret_value == NFCTAG_OK)
+    {
+      while(Nfctag_Drv->IsReady(NfcTagObj, 1) != NFCTAG_OK) {};
       return NFCTAG_OK;
+    }
   }
   
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteRegister(NfcTagObj, pData, TarAddr, Size);
+    if(ret_value == NFCTAG_OK)
+    {
+      while(Nfctag_Drv->IsReady(NfcTagObj, 1) != NFCTAG_OK) {};
+      return NFCTAG_OK;
+    }
+  }
   return ret_value;
 }
 
@@ -316,10 +389,23 @@ int32_t BSP_NFCTAG_WriteRegister( uint32_t Instance, const uint8_t * const pData
 uint32_t BSP_NFCTAG_GetByteSize( uint32_t Instance )
 {
   UNUSED(Instance);
+  uint32_t ret_value;
   ST25DV_MEM_SIZE mem_size;
-  ST25DV_ReadMemSize(&NfcTagObj, &mem_size );
+  ST25DVxxKC_MEM_SIZE_t mem_size_xxkc;
   
-  return (mem_size.BlockSize+1UL) * (mem_size.Mem_Size+1UL);
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ST25DV_ReadMemSize(NfcTagObj, &mem_size);
+    ret_value = (mem_size.BlockSize + 1UL) * (mem_size.Mem_Size + 1UL);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ST25DVxxKC_ReadMemSize(NfcTagObj, &mem_size_xxkc);
+    ret_value = (mem_size_xxkc.BlockSize + 1UL) * (mem_size_xxkc.Mem_Size + 1UL);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -330,7 +416,19 @@ uint32_t BSP_NFCTAG_GetByteSize( uint32_t Instance )
 int32_t BSP_NFCTAG_ReadICRev( uint32_t Instance, uint8_t * const pICRev )
 {
   UNUSED(Instance);
-  return ST25DV_ReadICRev(&NfcTagObj, pICRev);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadICRev(NfcTagObj, pICRev);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadICRev(NfcTagObj, pICRev);
+  }
+    
+  return ret_value;
 }
 
 
@@ -339,10 +437,22 @@ int32_t BSP_NFCTAG_ReadICRev( uint32_t Instance, uint8_t * const pICRev )
   * @param  pITtime Pointer used to return the coefficient for the GPO Pulse duration (Pulse duration = 302,06 us - ITtime * 512 / fc).
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadITPulse(uint32_t Instance, ST25DV_PULSE_DURATION * const pITtime )
+int32_t BSP_NFCTAG_ReadITPulse(uint32_t Instance, void * const pITtime )
 {
   UNUSED(Instance);
-  return ST25DV_ReadITPulse(&NfcTagObj, pITtime);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadITPulse(NfcTagObj, (ST25DV_PULSE_DURATION *)pITtime);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadITPulse(NfcTagObj, (ST25DVxxKC_PULSE_DURATION_E *)pITtime);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -351,136 +461,284 @@ int32_t BSP_NFCTAG_ReadITPulse(uint32_t Instance, ST25DV_PULSE_DURATION * const 
   * @param    ITtime Coefficient for the Pulse duration to be written (Pulse duration = 302,06 us - ITtime * 512 / fc)
   * @retval   int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteITPulse( uint32_t Instance, const ST25DV_PULSE_DURATION ITtime )
+int32_t BSP_NFCTAG_WriteITPulse( uint32_t Instance, const uint8_t ITtime )
 {
   UNUSED(Instance);
-  return ST25DV_WriteITPulse(&NfcTagObj, ITtime);
+    int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteITPulse(NfcTagObj, (ST25DV_PULSE_DURATION)ITtime);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteITPulse(NfcTagObj, (ST25DVxxKC_PULSE_DURATION_E)ITtime);
+  }
+  
+  return ret_value;
 }
 
 /**
-  * @brief  Reads the ST25DV UID.
-  * @param  pUid Pointer used to return the ST25DV UID value.
+  * @brief  Reads the  UID.
+  * @param  pUid Pointer used to return the  UID value.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadUID( uint32_t Instance, ST25DV_UID * const pUid )
+int32_t BSP_NFCTAG_ReadUID( uint32_t Instance, void * const pUid )
 {
   UNUSED(Instance);
-  return ST25DV_ReadUID(&NfcTagObj, pUid);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadUID(NfcTagObj, (ST25DV_UID *)pUid);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadUID(NfcTagObj, (ST25DVxxKC_UID_t *)pUid);
+  }
+  
+  return ret_value;
+  
 }
 
 /**
-  * @brief  Reads the ST25DV DSFID.
-  * @param  pDsfid Pointer used to return the ST25DV DSFID value.
+  * @brief  Reads the  DSFID.
+  * @param  pDsfid Pointer used to return the  DSFID value.
   * @return int32_t enum status.
   */
 int32_t BSP_NFCTAG_ReadDSFID( uint32_t Instance, uint8_t * const pDsfid )
 {
   UNUSED(Instance);
-  return ST25DV_ReadDSFID(&NfcTagObj, pDsfid);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadDSFID(NfcTagObj, pDsfid);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadDSFID(NfcTagObj, pDsfid);
+  }
+  
+  return ret_value;
 }
 
 /**
-  * @brief  Reads the ST25DV DSFID RF Lock state.
-  * @param  pLockDsfid Pointer on a ST25DV_LOCK_STATUS used to return the DSFID lock state.
+  * @brief  Reads the DSFID RF Lock state.
+  * @param  pLockDsfid Pointer used to return the DSFID lock state.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadDsfidRFProtection( uint32_t Instance, ST25DV_LOCK_STATUS * const pLockDsfid )
+int32_t BSP_NFCTAG_ReadDsfidRFProtection( uint32_t Instance, void * const pLockDsfid )
 {
   UNUSED(Instance);
-  return ST25DV_ReadDsfidRFProtection(&NfcTagObj, pLockDsfid);
+    int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadDsfidRFProtection(NfcTagObj, (ST25DV_LOCK_STATUS *)pLockDsfid);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadDsfidRFProtection(NfcTagObj, (ST25DVxxKC_LOCK_STATUS_E *)pLockDsfid);
+  }
+  
+  return ret_value;
 }
 
 /**
-  * @brief  Reads the ST25DV AFI.
-  * @param  pAfi Pointer used to return the ST25DV AFI value.
+  * @brief  Reads the AFI.
+  * @param  pAfi Pointer used to return the AFI value.
   * @return int32_t enum status.
   */
 int32_t BSP_NFCTAG_ReadAFI( uint32_t Instance, uint8_t * const pAfi )
 {
   UNUSED(Instance);
-  return ST25DV_ReadAFI(&NfcTagObj, pAfi);
+   int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadAFI(NfcTagObj, pAfi);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadAFI(NfcTagObj, pAfi);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the AFI RF Lock state.
-  * @param  pLockAfi Pointer on a ST25DV_LOCK_STATUS used to return the ASFID lock state.
+  * @param  pLockAfi Pointer used to return the ASFID lock state.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadAfiRFProtection( uint32_t Instance, ST25DV_LOCK_STATUS * const pLockAfi )
+int32_t BSP_NFCTAG_ReadAfiRFProtection( uint32_t Instance, void * const pLockAfi )
 {
   UNUSED(Instance);
-  return ST25DV_ReadAfiRFProtection(&NfcTagObj, pLockAfi);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadAfiRFProtection(NfcTagObj, (ST25DV_LOCK_STATUS *)pLockAfi);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadAfiRFProtection(NfcTagObj, (ST25DVxxKC_LOCK_STATUS_E *)pLockAfi);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the I2C Protected Area state.
-  * @param  pProtZone Pointer on a ST25DV_I2C_PROT_ZONE structure used to return the Protected Area state.
+  * @param  pProtZone Pointer used to return the Protected Area state.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadI2CProtectZone( uint32_t Instance, ST25DV_I2C_PROT_ZONE * const pProtZone )
+int32_t BSP_NFCTAG_ReadI2CProtectZone( uint32_t Instance, void * const pProtZone )
 {
   UNUSED(Instance);
-  return ST25DV_ReadI2CProtectZone(&NfcTagObj, pProtZone);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadI2CProtectZone(NfcTagObj, (ST25DV_I2C_PROT_ZONE *)pProtZone);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadI2CProtectZone(NfcTagObj, (ST25DVxxKC_I2C_PROT_ZONE_t *)pProtZone);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief    Sets the I2C write-protected state to an EEPROM Area.
   * @details  Needs the I2C Password presentation to be effective.
-  * @param    Zone                ST25DV_PROTECTION_ZONE value coresponding to the area to protect.
-  * @param    ReadWriteProtection ST25DV_PROTECTION_CONF value corresponding to the protection to be set.
+  * @param    Zone                value coresponding to the area to protect.
+  * @param    ReadWriteProtection value corresponding to the protection to be set.
   * @return   int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteI2CProtectZonex(uint32_t Instance, const ST25DV_PROTECTION_ZONE Zone,  const ST25DV_PROTECTION_CONF ReadWriteProtection )
+int32_t BSP_NFCTAG_WriteI2CProtectZonex(uint32_t Instance, const uint8_t Zone,  const uint8_t ReadWriteProtection )
 {
   UNUSED(Instance);
-  return ST25DV_WriteI2CProtectZonex(&NfcTagObj, Zone, ReadWriteProtection);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteI2CProtectZonex(NfcTagObj, (ST25DV_PROTECTION_ZONE)Zone,
+                                                          (ST25DV_PROTECTION_CONF)ReadWriteProtection);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteI2CProtectZonex(NfcTagObj, (ST25DVxxKC_PROTECTION_ZONE_E)Zone,
+                                                          (ST25DVxxKC_PROTECTION_CONF_E)ReadWriteProtection);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the CCile protection state.
-  * @param  pLockCCFile Pointer on a ST25DV_LOCK_CCFILE value corresponding to the lock state of the CCFile.
+  * @param  pLockCCFile Pointer corresponding to the lock state of the CCFile.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadLockCCFile(uint32_t Instance, ST25DV_LOCK_CCFILE * const pLockCCFile )
+int32_t BSP_NFCTAG_ReadLockCCFile(const uint32_t Instance, void *const pLockCCFile)
 {
   UNUSED(Instance);
-  return ST25DV_ReadLockCCFile(&NfcTagObj, pLockCCFile);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadLockCCFile(NfcTagObj, (ST25DV_LOCK_CCFILE *)pLockCCFile);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadLockCCFile(NfcTagObj, (ST25DVxxKC_LOCK_CCFILE_t *)pLockCCFile);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Locks the CCile to prevent any RF write access.
   * @details  Needs the I2C Password presentation to be effective.
-  * @param  NbBlockCCFile ST25DV_CCFILE_BLOCK value corresponding to the number of blocks to be locked.
-  * @param  LockCCFile    ST25DV_LOCK_CCFILE value corresponding to the lock state to apply on the CCFile.
+  * @param  NbBlockCCFile value corresponding to the number of blocks to be locked.
+  * @param  LockCCFile    value corresponding to the lock state to apply on the CCFile.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteLockCCFile(uint32_t Instance, const ST25DV_CCFILE_BLOCK NbBlockCCFile,  const ST25DV_LOCK_STATUS LockCCFile )
+int32_t BSP_NFCTAG_WriteLockCCFile(const uint32_t Instance, const uint8_t NbBlockCCFile, const uint8_t LockCCFile)
 {
   UNUSED(Instance);
-  return ST25DV_WriteLockCCFile(&NfcTagObj, NbBlockCCFile, LockCCFile);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteLockCCFile(NfcTagObj, (ST25DV_CCFILE_BLOCK)NbBlockCCFile, (ST25DV_LOCK_STATUS)LockCCFile);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteLockCCFile(NfcTagObj, (ST25DVxxKC_CCFILE_BLOCK_E)NbBlockCCFile, \
+                                                          (ST25DVxxKC_LOCK_STATUS_E)LockCCFile);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the Cfg registers protection.
-  * @param  pLockCfg Pointer on a ST25DV_LOCK_STATUS value corresponding to the Cfg registers lock state.
+  * @param  pLockCfg Pointer corresponding to the Cfg registers lock state.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadLockCFG(uint32_t Instance, ST25DV_LOCK_STATUS * const pLockCfg )
+int32_t BSP_NFCTAG_ReadLockCFG(const uint32_t Instance, void *const pLockCfg)
 {
   UNUSED(Instance);
-  return ST25DV_ReadLockCFG(&NfcTagObj, pLockCfg);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadLockCFG(NfcTagObj, (ST25DV_LOCK_STATUS *)pLockCfg);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadLockCFG(NfcTagObj, (ST25DVxxKC_LOCK_STATUS_E *)pLockCfg);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Lock/Unlock the Cfg registers, to prevent any RF write access.
   * @details  Needs the I2C Password presentation to be effective.
-  * @param  LockCfg ST25DV_LOCK_STATUS value corresponding to the lock state to be written.
+  * @param  LockCfg value corresponding to the lock state to be written.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteLockCFG(uint32_t Instance, const ST25DV_LOCK_STATUS LockCfg )
+int32_t BSP_NFCTAG_WriteLockCFG(const uint32_t Instance, const uint8_t LockCfg)
 {
   UNUSED(Instance);
-  return ST25DV_WriteLockCFG(&NfcTagObj, LockCfg);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteLockCFG(NfcTagObj, (ST25DV_LOCK_STATUS)LockCfg);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteLockCFG(NfcTagObj, (ST25DVxxKC_LOCK_STATUS_E)LockCfg);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -488,10 +746,28 @@ int32_t BSP_NFCTAG_WriteLockCFG(uint32_t Instance, const ST25DV_LOCK_STATUS Lock
   * @param  PassWord Password value on 32bits
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_PresentI2CPassword(uint32_t Instance, const ST25DV_PASSWD PassWord )
+int32_t BSP_NFCTAG_PresentI2CPassword(const uint32_t Instance, const void *const PassWord)
 {
   UNUSED(Instance);
-  return ST25DV_PresentI2CPassword(&NfcTagObj, PassWord);
+  int32_t ret_value;
+  ST25DV_PASSWD *password_tmp;
+  ST25DVxxKC_PASSWD_t *passwordxxkc_tmp;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    password_tmp = (ST25DV_PASSWD *)PassWord;
+    
+    ret_value = ST25DV_PresentI2CPassword(NfcTagObj, *password_tmp);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    passwordxxkc_tmp = (ST25DVxxKC_PASSWD_t *)PassWord;
+    
+    ret_value = ST25DVxxKC_PresentI2CPassword(NfcTagObj, *passwordxxkc_tmp);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -500,75 +776,162 @@ int32_t BSP_NFCTAG_PresentI2CPassword(uint32_t Instance, const ST25DV_PASSWD Pas
   * @param  PassWord New I2C PassWord value on 32bits.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteI2CPassword(uint32_t Instance, const ST25DV_PASSWD PassWord )
+int32_t BSP_NFCTAG_WriteI2CPassword(const uint32_t Instance, const void *const PassWord)
 {
   UNUSED(Instance);
-  return ST25DV_WriteI2CPassword(&NfcTagObj, PassWord);
+  int32_t ret_value;
+  ST25DV_PASSWD *password_tmp;
+  ST25DVxxKC_PASSWD_t *passwordxxkc_tmp;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    password_tmp = (ST25DV_PASSWD *)PassWord;
+    
+    ret_value = ST25DV_WriteI2CPassword(NfcTagObj, *password_tmp);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    passwordxxkc_tmp = (ST25DVxxKC_PASSWD_t *)PassWord;
+    
+    ret_value = ST25DVxxKC_WriteI2CPassword(NfcTagObj, *passwordxxkc_tmp);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the RF Zone Security Status (defining the allowed RF accesses).
-  * @param  Zone        ST25DV_PROTECTION_ZONE value coresponding to the protected area.
-  * @param  pRfprotZone Pointer on a ST25DV_RF_PROT_ZONE value corresponding to the area protection state.
+  * @param  Zone        value coresponding to the protected area.
+  * @param  pRfprotZone Pointer corresponding to the area protection state.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadRFZxSS(uint32_t Instance, const ST25DV_PROTECTION_ZONE Zone,  ST25DV_RF_PROT_ZONE * const pRfprotZone )
+int32_t BSP_NFCTAG_ReadRFZxSS(const uint32_t Instance, const uint8_t Zone,
+                                                          void *const pRfprotZone)
 {
   UNUSED(Instance);
-  return ST25DV_ReadRFZxSS(&NfcTagObj, Zone, pRfprotZone);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadRFZxSS(NfcTagObj, (ST25DV_PROTECTION_ZONE)Zone, (ST25DV_RF_PROT_ZONE *)pRfprotZone);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadRFZxSS(NfcTagObj, (ST25DVxxKC_PROTECTION_ZONE_E)Zone,
+                                                          (ST25DVxxKC_RF_PROT_ZONE_t *)pRfprotZone);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Writes the RF Zone Security Status (defining the allowed RF accesses)
   * @details  Needs the I2C Password presentation to be effective.
-  * @param  Zone        ST25DV_PROTECTION_ZONE value corresponding to the area on which to set the RF protection.
-  * @param  RfProtZone  Pointer on a ST25DV_RF_PROT_ZONE value defininf the protection to be set on the area.
+  * @param  Zone        value corresponding to the area on which to set the RF protection.
+  * @param  RfProtZone  Pointer defining the protection to be set on the area.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteRFZxSS(uint32_t Instance, const ST25DV_PROTECTION_ZONE Zone,  const ST25DV_RF_PROT_ZONE RfProtZone )
+int32_t BSP_NFCTAG_WriteRFZxSS(const uint32_t Instance, const uint8_t Zone, const void *const RfProtZone)
 {
   UNUSED(Instance);
-  return ST25DV_WriteRFZxSS(&NfcTagObj, Zone, RfProtZone);
+  int32_t ret_value;
+  ST25DV_RF_PROT_ZONE *rfprotzone_tmp;
+  ST25DVxxKC_RF_PROT_ZONE_t *rfprotzonexxkc_tmp;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    rfprotzone_tmp = (ST25DV_RF_PROT_ZONE *)RfProtZone;
+    
+    ret_value = ST25DV_WriteRFZxSS(NfcTagObj, (ST25DV_PROTECTION_ZONE)Zone, *rfprotzone_tmp);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    rfprotzonexxkc_tmp = (ST25DVxxKC_RF_PROT_ZONE_t *)RfProtZone;
+    
+    ret_value = ST25DVxxKC_WriteRFZxSS(NfcTagObj, (ST25DVxxKC_PROTECTION_ZONE_E)Zone,
+                                                          *rfprotzonexxkc_tmp);
+  }
+  
+  return ret_value;
 }
 
 /**
-  * @brief  Reads the value of the an area end address.
-  * @param  EndZone ST25DV_END_ZONE value corresponding to an area end address.
+  * @brief  Reads the value of the end area address.
+  * @param  EndZone value corresponding to an area end address.
   * @param  pEndZ   Pointer used to return the end address of the area.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadEndZonex(uint32_t Instance, const ST25DV_END_ZONE EndZone,  uint8_t * const pEndZ )
+int32_t BSP_NFCTAG_ReadEndZonex(const uint32_t Instance, const uint8_t EndZone, uint8_t *pEndZ)
 {
   UNUSED(Instance);
-  return ST25DV_ReadEndZonex(&NfcTagObj, EndZone, pEndZ);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadEndZonex(NfcTagObj, (ST25DV_END_ZONE)EndZone, pEndZ);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadEndZonex(NfcTagObj, (ST25DVxxKC_END_ZONE_E)EndZone, pEndZ);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief    Sets the end address of an area.
   * @details  Needs the I2C Password presentation to be effective.
-  * @note     The ST25DV answers a NACK when setting the EndZone2 & EndZone3 to same value than repectively EndZone1 & EndZone2.\n
-  *           These NACKs are ok.
-  * @param  EndZone ST25DV_END_ZONE value corresponding to an area.
+  * @note     The ST25DV-I2C answers a NACK when setting the EndZone2 & EndZone3 to same value 
+  *           than repectively EndZone1 & EndZone2.\n These NACKs are ok.
+  * @param  EndZone value corresponding to an area.
   * @param  EndZ   End zone value to be written.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteEndZonex(uint32_t Instance, const ST25DV_END_ZONE EndZone,  const uint8_t EndZ )
+int32_t BSP_NFCTAG_WriteEndZonex(const uint32_t Instance, const uint8_t EndZone, const uint8_t EndZ)
 {
   UNUSED(Instance);
-  return ST25DV_WriteEndZonex(&NfcTagObj, EndZone, EndZ);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteEndZonex(NfcTagObj, (ST25DV_END_ZONE)EndZone, EndZ);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteEndZonex(NfcTagObj, (ST25DVxxKC_END_ZONE_E)EndZone, EndZ);
+  }
+  
+  return ret_value;
 }
 
 /**
-  * @brief  Initializes the end address of the ST25DV areas with their default values (end of memory).
-  * @details  Needs the I2C Password presentation to be effective..
-  *           The ST25DV answers a NACK when setting the EndZone2 & EndZone3 to same value than repectively EndZone1 & EndZone2.
-  *           These NACKs are ok.
+  * @brief  Initializes the end address of the ST25DV-I2C areas with their default values (end of memory).
+  * @details  Needs the I2C Password presentation to be effective.
+  *           The ST25DV-I2C answers a NACK when setting the EndZone2 & EndZone3 to same value
+  *           than repectively EndZone1 & EndZone2. These NACKs are ok.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_InitEndZone(uint32_t Instance)
+int32_t BSP_NFCTAG_InitEndZone(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_InitEndZone(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_InitEndZone(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_InitEndZone(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -580,55 +943,116 @@ int32_t BSP_NFCTAG_InitEndZone(uint32_t Instance)
   * @param  Zone4Length Length of area4 in bytes (0 to 8000, 0x00 to 0x1F40)
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_CreateUserZone(uint32_t Instance, uint16_t Zone1Length,  uint16_t Zone2Length,  uint16_t Zone3Length,  uint16_t Zone4Length )
+int32_t BSP_NFCTAG_CreateUserZone(const uint32_t Instance, uint16_t Zone1Length, uint16_t Zone2Length, \
+                                                          uint16_t Zone3Length, uint16_t Zone4Length)
 {
   UNUSED(Instance);
-  return ST25DV_CreateUserZone(&NfcTagObj, Zone1Length, Zone2Length, Zone3Length, Zone4Length);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_CreateUserZone(NfcTagObj, Zone1Length, Zone2Length, Zone3Length, Zone4Length);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_CreateUserZone(NfcTagObj, Zone1Length, Zone2Length, Zone3Length, Zone4Length);
+  }
+  
+  return ret_value;
 }
 
 /**
-  * @brief  Reads the ST25DV Memory Size.
-  * @param  pSizeInfo Pointer on a ST25DV_MEM_SIZE structure used to return the Memory size information.
+  * @brief  Reads the ST25DV-I2C Memory Size.
+  * @param  pSizeInfo Pointer used to return the Memory size information.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadMemSize(uint32_t Instance, ST25DV_MEM_SIZE * const pSizeInfo )
+int32_t BSP_NFCTAG_ReadMemSize(const uint32_t Instance, void *const pSizeInfo)
 {
   UNUSED(Instance);
-  return ST25DV_ReadMemSize(&NfcTagObj, pSizeInfo);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadMemSize(NfcTagObj, (ST25DV_MEM_SIZE *)pSizeInfo);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadMemSize(NfcTagObj, (ST25DVxxKC_MEM_SIZE_t *)pSizeInfo);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the Energy harvesting mode.
-  * @param  pEH_mode Pointer on a ST25DV_EH_MODE_STATUS value corresponding to the Energy Harvesting state.
+  * @param  pEH_mode Pointer corresponding to the Energy Harvesting state.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadEHMode(uint32_t Instance, ST25DV_EH_MODE_STATUS * const pEH_mode )
+int32_t BSP_NFCTAG_ReadEHMode(const uint32_t Instance, void *const pEH_mode)
 {
   UNUSED(Instance);
-  return ST25DV_ReadEHMode(&NfcTagObj, pEH_mode);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadEHMode(NfcTagObj, (ST25DV_EH_MODE_STATUS *)pEH_mode);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadEHMode(NfcTagObj, (ST25DVxxKC_EH_MODE_STATUS_E *)pEH_mode);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Sets the Energy harvesting mode.
   * @details  Needs the I2C Password presentation to be effective.
-  * @param  EH_mode ST25DV_EH_MODE_STATUS value for the Energy harvesting mode to be set.
+  * @param  EH_mode value for the Energy harvesting mode to be set.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteEHMode(uint32_t Instance, const ST25DV_EH_MODE_STATUS EH_mode )
+int32_t BSP_NFCTAG_WriteEHMode(const uint32_t Instance, const uint8_t EH_mode)
 {
   UNUSED(Instance);
-  return ST25DV_WriteEHMode(&NfcTagObj, EH_mode);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteEHMode(NfcTagObj, (ST25DV_EH_MODE_STATUS)EH_mode);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteEHMode(NfcTagObj, (ST25DVxxKC_EH_MODE_STATUS_E)EH_mode);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the RF Management configuration.
-  * @param  pRF_Mngt Pointer on a ST25DV_RF_MNGT structure used to return the RF Management configuration.
+  * @param  pRF_Mngt Pointer used to return the RF Management configuration.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadRFMngt(uint32_t Instance, ST25DV_RF_MNGT * const pRF_Mngt )
+int32_t BSP_NFCTAG_ReadRFMngt(const uint32_t Instance, void *const pRF_Mngt)
 {
   UNUSED(Instance);
-  return ST25DV_ReadRFMngt(&NfcTagObj, pRF_Mngt);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadRFMngt(NfcTagObj, (ST25DV_RF_MNGT *)pRF_Mngt);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadRFMngt(NfcTagObj, (ST25DVxxKC_RF_MNGT_t *)pRF_Mngt);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -637,21 +1061,45 @@ int32_t BSP_NFCTAG_ReadRFMngt(uint32_t Instance, ST25DV_RF_MNGT * const pRF_Mngt
   * @param  Rfmngt Value of the RF Management configuration to be written.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteRFMngt(uint32_t Instance, const uint8_t Rfmngt )
+int32_t BSP_NFCTAG_WriteRFMngt(const uint32_t Instance, const uint8_t Rfmngt)
 {
   UNUSED(Instance);
-  return ST25DV_WriteRFMngt(&NfcTagObj, Rfmngt);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteRFMngt(NfcTagObj, Rfmngt);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteRFMngt(NfcTagObj, Rfmngt);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the RFDisable register information.
-  * @param  pRFDisable Pointer on a ST25DV_EN_STATUS value corresponding to the RF Disable status.
+  * @param  pRFDisable Pointer corresponding to the RF Disable status.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_GetRFDisable(uint32_t Instance, ST25DV_EN_STATUS * const pRFDisable )
+int32_t BSP_NFCTAG_GetRFDisable(const uint32_t Instance, void *const pRFDisable)
 {
   UNUSED(Instance);
-  return ST25DV_GetRFDisable(&NfcTagObj, pRFDisable);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_GetRFDisable(NfcTagObj, (ST25DV_EN_STATUS *)pRFDisable);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_GetRFDisable(NfcTagObj, (ST25DVxxKC_EN_STATUS_E *)pRFDisable);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -659,10 +1107,22 @@ int32_t BSP_NFCTAG_GetRFDisable(uint32_t Instance, ST25DV_EN_STATUS * const pRFD
   * @details  Needs the I2C Password presentation to be effective.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_SetRFDisable(uint32_t Instance)
+int32_t BSP_NFCTAG_SetRFDisable(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_SetRFDisable(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_SetRFDisable(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_SetRFDisable(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -670,21 +1130,45 @@ int32_t BSP_NFCTAG_SetRFDisable(uint32_t Instance)
   * @details  Needs the I2C Password presentation to be effective.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ResetRFDisable(uint32_t Instance)
+int32_t BSP_NFCTAG_ResetRFDisable(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_ResetRFDisable(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ResetRFDisable(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ResetRFDisable(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the RFSleep register information.
-  * @param  pRFSleep Pointer on a ST25DV_EN_STATUS value corresponding to the RF Sleep status.
+  * @param  pRFSleep Pointer corresponding to the RF Sleep status.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_GetRFSleep(uint32_t Instance, ST25DV_EN_STATUS * const pRFSleep )
+int32_t BSP_NFCTAG_GetRFSleep(const uint32_t Instance, void *const pRFSleep)
 {
   UNUSED(Instance);
-  return ST25DV_GetRFSleep(&NfcTagObj, pRFSleep);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_GetRFSleep(NfcTagObj, (ST25DV_EN_STATUS *)pRFSleep);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_GetRFSleep(NfcTagObj, (ST25DVxxKC_EN_STATUS_E *)pRFSleep);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -692,10 +1176,22 @@ int32_t BSP_NFCTAG_GetRFSleep(uint32_t Instance, ST25DV_EN_STATUS * const pRFSle
   * @details  Needs the I2C Password presentation to be effective.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_SetRFSleep(uint32_t Instance)
+int32_t BSP_NFCTAG_SetRFSleep(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_SetRFSleep(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_SetRFSleep(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_SetRFSleep(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -703,33 +1199,69 @@ int32_t BSP_NFCTAG_SetRFSleep(uint32_t Instance)
   * @details  Needs the I2C Password presentation to be effective.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ResetRFSleep(uint32_t Instance)
+int32_t BSP_NFCTAG_ResetRFSleep(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_ResetRFSleep(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ResetRFSleep(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ResetRFSleep(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the Mailbox mode.
-  * @param  pMB_mode Pointer on a ST25DV_EH_MODE_STATUS value used to return the Mailbox mode.
+  * @param  pMB_mode Pointer used to return the Mailbox mode.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadMBMode(uint32_t Instance, ST25DV_EN_STATUS * const pMB_mode )
+int32_t BSP_NFCTAG_ReadMBMode(const uint32_t Instance, void *const pMB_mode)
 {
   UNUSED(Instance);
-  return ST25DV_ReadMBMode(&NfcTagObj, pMB_mode);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadMBMode(NfcTagObj, (ST25DV_EN_STATUS *)pMB_mode);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadMBMode(NfcTagObj, (ST25DVxxKC_EN_STATUS_E *)pMB_mode);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Sets the Mailbox mode.
   * @details  Needs the I2C Password presentation to be effective.
-  * @param  MB_mode ST25DV_EN_STATUS value corresponding to the Mailbox mode to be set.
+  * @param  MB_mode value corresponding to the Mailbox mode to be set.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteMBMode(uint32_t Instance, const ST25DV_EN_STATUS MB_mode )
+int32_t BSP_NFCTAG_WriteMBMode(const uint32_t Instance, const uint8_t MB_mode)
 {
   UNUSED(Instance);
-  return ST25DV_WriteMBMode(&NfcTagObj, MB_mode);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteMBMode(NfcTagObj, (ST25DV_EN_STATUS)MB_mode);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteMBMode(NfcTagObj, (ST25DVxxKC_EN_STATUS_E)MB_mode);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -737,10 +1269,22 @@ int32_t BSP_NFCTAG_WriteMBMode(uint32_t Instance, const ST25DV_EN_STATUS MB_mode
   * @param  pWdgDelay Pointer on a uint8_t used to return the watchdog duration coefficient.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadMBWDG(uint32_t Instance, uint8_t * const pWdgDelay )
+int32_t BSP_NFCTAG_ReadMBWDG(const uint32_t Instance, uint8_t *const pWdgDelay)
 {
   UNUSED(Instance);
-  return ST25DV_ReadMBWDG(&NfcTagObj, pWdgDelay);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadMBWDG(NfcTagObj, pWdgDelay);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadMBWDG(NfcTagObj, pWdgDelay);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -749,10 +1293,22 @@ int32_t BSP_NFCTAG_ReadMBWDG(uint32_t Instance, uint8_t * const pWdgDelay )
   * @param  WdgDelay Watchdog duration coefficient to be written (Watch dog duration = MB_WDG*30 ms +/- 6%).
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteMBWDG(uint32_t Instance, const uint8_t WdgDelay )
+int32_t BSP_NFCTAG_WriteMBWDG(const uint32_t Instance, const uint8_t WdgDelay)
 {
   UNUSED(Instance);
-  return ST25DV_WriteMBWDG(&NfcTagObj, WdgDelay);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteMBWDG(NfcTagObj, WdgDelay);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteMBWDG(NfcTagObj, WdgDelay);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -762,10 +1318,23 @@ int32_t BSP_NFCTAG_WriteMBWDG(uint32_t Instance, const uint8_t WdgDelay )
   * @param  NbByte  Number of bytes to be read.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadMailboxData(uint32_t Instance, uint8_t * const pData,  const uint16_t TarAddr,  const uint16_t NbByte )
+int32_t BSP_NFCTAG_ReadMailboxData(const uint32_t Instance, uint8_t *const pData, const uint16_t TarAddr, \
+                                                          const uint16_t NbByte)
 {
   UNUSED(Instance);
-  return ST25DV_ReadMailboxData(&NfcTagObj, pData, TarAddr, NbByte);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadMailboxData(NfcTagObj, pData, TarAddr, NbByte);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadMailboxData(NfcTagObj, pData, TarAddr, NbByte);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -774,10 +1343,22 @@ int32_t BSP_NFCTAG_ReadMailboxData(uint32_t Instance, uint8_t * const pData,  co
   * @param  NbByte  Number of bytes to be written.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteMailboxData(uint32_t Instance, const uint8_t * const pData,  const uint16_t NbByte )
+int32_t BSP_NFCTAG_WriteMailboxData(const uint32_t Instance, const uint8_t *const pData, const uint16_t NbByte)
 {
   UNUSED(Instance);
-  return ST25DV_WriteMailboxData(&NfcTagObj, pData, NbByte);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteMailboxData(NfcTagObj, pData, NbByte);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteMailboxData(NfcTagObj, pData, NbByte);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -787,10 +1368,23 @@ int32_t BSP_NFCTAG_WriteMailboxData(uint32_t Instance, const uint8_t * const pDa
   * @param  NbByte  Number of bytes to be read.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadMailboxRegister(uint32_t Instance, uint8_t * const pData,  const uint16_t TarAddr,  const uint16_t NbByte )
+int32_t BSP_NFCTAG_ReadMailboxRegister(const uint32_t Instance, uint8_t *const pData, const uint16_t TarAddr,
+                                                          const uint16_t NbByte)
 {
   UNUSED(Instance);
-  return ST25DV_ReadMailboxRegister(&NfcTagObj, pData, TarAddr, NbByte);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadMailboxRegister(NfcTagObj, pData, TarAddr, NbByte);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadMailboxRegister(NfcTagObj, pData, TarAddr, NbByte);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -800,25 +1394,50 @@ int32_t BSP_NFCTAG_ReadMailboxRegister(uint32_t Instance, uint8_t * const pData,
   * @param  NbByte  Number of bytes to be written.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteMailboxRegister(uint32_t Instance, const uint8_t * const pData,  const uint16_t TarAddr,  const uint16_t NbByte )
+int32_t BSP_NFCTAG_WriteMailboxRegister(const uint32_t Instance, const uint8_t *const pData, const uint16_t TarAddr, \
+                                                          const uint16_t NbByte)
 {
   UNUSED(Instance);
-  return ST25DV_WriteMailboxRegister(&NfcTagObj, pData, TarAddr, NbByte);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteMailboxRegister(NfcTagObj, pData, TarAddr, NbByte);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteMailboxRegister(NfcTagObj, pData, TarAddr, NbByte);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the status of the security session open register.
-  * @param  pSession Pointer on a ST25DV_I2CSSO_STATUS value used to return the session status.
+  * @param  pSession Pointer used to return the session status.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadI2CSecuritySession_Dyn(uint32_t Instance, ST25DV_I2CSSO_STATUS * const pSession )
+int32_t BSP_NFCTAG_ReadI2CSecuritySession_Dyn(const uint32_t Instance, void *const pSession)
 {
   UNUSED(Instance);
-  return ST25DV_ReadI2CSecuritySession_Dyn(&NfcTagObj, pSession);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadI2CSecuritySession_Dyn(NfcTagObj, (ST25DV_I2CSSO_STATUS *)pSession);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadI2CSecuritySession_Dyn(NfcTagObj, (ST25DVxxKC_I2CSSO_STATUS_E *)pSession);
+  }
+  
+  return ret_value;
 }
 
 /**
-  * @brief  Reads the IT status register from the ST25DV.
+  * @brief  Reads the IT status register from the ST25DV-I2C.
   * @param  pITStatus Pointer on uint8_t, used to return the IT status, such as:
   *                       - RFUSERSTATE = 0x01
   *                       - RFBUSY = 0x02
@@ -831,32 +1450,68 @@ int32_t BSP_NFCTAG_ReadI2CSecuritySession_Dyn(uint32_t Instance, ST25DV_I2CSSO_S
   *
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadITSTStatus_Dyn(uint32_t Instance, uint8_t * const pITStatus )
+int32_t BSP_NFCTAG_ReadITSTStatus_Dyn(const uint32_t Instance, uint8_t *const pITStatus)
 {
   UNUSED(Instance);
-  return ST25DV_ReadITSTStatus_Dyn(&NfcTagObj, pITStatus);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadITSTStatus_Dyn(NfcTagObj, pITStatus);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadITSTStatus_Dyn(NfcTagObj, pITStatus);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Read value of dynamic GPO register configuration.
-  * @param  pGPO ST25DV_GPO pointer of the dynamic GPO configuration to store.
+  * @param  pGPO pointer of the dynamic GPO configuration to store.
   * @retval NFCTAG enum status.
   */
-int32_t BSP_NFCTAG_ReadGPO_Dyn(uint32_t Instance, uint8_t *GPOConfig )
+int32_t BSP_NFCTAG_ReadGPO_Dyn(const uint32_t Instance, uint8_t *GPOConfig)
 {
   UNUSED(Instance);
-  return ST25DV_ReadGPO_Dyn(&NfcTagObj, GPOConfig);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadGPO_Dyn(NfcTagObj, GPOConfig);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadGPO_Dyn(NfcTagObj, GPOConfig);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Get dynamique GPO enable status
-  * @param  pGPO_en ST25DV_EN_STATUS pointer of the GPO enable status to store
+  * @param  pGPO_en pointer of the GPO enable status to store
   * @retval NFCTAG enum status
   */
-int32_t BSP_NFCTAG_GetGPO_en_Dyn(uint32_t Instance, ST25DV_EN_STATUS * const pGPO_en )
+int32_t BSP_NFCTAG_GetGPO_en_Dyn(const uint32_t Instance, void *const pGPO_en)
 {
   UNUSED(Instance);
-  return ST25DV_GetGPO_en_Dyn(&NfcTagObj, pGPO_en);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_GetGPO_en_Dyn(NfcTagObj, (ST25DV_EN_STATUS *)pGPO_en);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_GetGPO_en_Dyn(NfcTagObj, (ST25DVxxKC_EN_STATUS_E *)pGPO_en);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -864,10 +1519,22 @@ int32_t BSP_NFCTAG_GetGPO_en_Dyn(uint32_t Instance, ST25DV_EN_STATUS * const pGP
   * @param  None No parameters.
   * @retval NFCTAG enum status.
   */
-int32_t BSP_NFCTAG_SetGPO_en_Dyn(uint32_t Instance)
+int32_t BSP_NFCTAG_SetGPO_en_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_SetGPO_en_Dyn(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_SetGPO_en_Dyn(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_SetGPO_en_Dyn(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -875,210 +1542,452 @@ int32_t BSP_NFCTAG_SetGPO_en_Dyn(uint32_t Instance)
   * @param  None No parameters.
   * @retval NFCTAG enum status.
   */
-int32_t BSP_NFCTAG_ResetGPO_en_Dyn(uint32_t Instance)
+int32_t BSP_NFCTAG_ResetGPO_en_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_ResetGPO_en_Dyn(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ResetGPO_en_Dyn(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ResetGPO_en_Dyn(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Read value of dynamic EH Ctrl register configuration
-  * @param  pEH_CTRL : ST25DV_EH_CTRL pointer of the dynamic EH Ctrl configuration to store
+  * @param  pEH_CTRL : pointer of the dynamic EH Ctrl configuration to store
   * @retval NFCTAG enum status
   */
-int32_t BSP_NFCTAG_ReadEHCtrl_Dyn(uint32_t Instance, ST25DV_EH_CTRL * const pEH_CTRL )
+int32_t BSP_NFCTAG_ReadEHCtrl_Dyn(const uint32_t Instance, void *const pEH_CTRL)
 {
   UNUSED(Instance);
-  return ST25DV_ReadEHCtrl_Dyn(&NfcTagObj, pEH_CTRL);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadEHCtrl_Dyn(NfcTagObj, (ST25DV_EH_CTRL *)pEH_CTRL);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadEHCtrl_Dyn(NfcTagObj, (ST25DVxxKC_EH_CTRL_t *)pEH_CTRL);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the Energy Harvesting dynamic status.
-  * @param  pEH_Val Pointer on a ST25DV_EN_STATUS value used to return the Energy Harvesting dynamic status.
+  * @param  pEH_Val Pointer used to return the Energy Harvesting dynamic status.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_GetEHENMode_Dyn(uint32_t Instance, ST25DV_EN_STATUS * const pEH_Val )
+int32_t BSP_NFCTAG_GetEHENMode_Dyn(const uint32_t Instance, void *const pEH_Val)
 {
   UNUSED(Instance);
-  return ST25DV_GetEHENMode_Dyn(&NfcTagObj, pEH_Val);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_GetEHENMode_Dyn(NfcTagObj, (ST25DV_EN_STATUS *)pEH_Val);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_GetEHENMode_Dyn(NfcTagObj, (ST25DVxxKC_EN_STATUS_E *)pEH_Val);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Dynamically sets the Energy Harvesting mode.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_SetEHENMode_Dyn(uint32_t Instance)
+int32_t BSP_NFCTAG_SetEHENMode_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_SetEHENMode_Dyn(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_SetEHENMode_Dyn(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_SetEHENMode_Dyn(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Dynamically unsets the Energy Harvesting mode.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ResetEHENMode_Dyn(uint32_t Instance)
+int32_t BSP_NFCTAG_ResetEHENMode_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_ResetEHENMode_Dyn(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ResetEHENMode_Dyn(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ResetEHENMode_Dyn(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the EH_ON status from the EH_CTRL_DYN register.
-  * @param  pEHON Pointer on a ST25DV_EN_STATUS value used to return the EHON status.
+  * @param  pEHON Pointer used to return the EHON status.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_GetEHON_Dyn(uint32_t Instance, ST25DV_EN_STATUS * const pEHON )
+int32_t BSP_NFCTAG_GetEHON_Dyn(const uint32_t Instance, void *const pEHON)
 {
   UNUSED(Instance);
-  return ST25DV_GetEHON_Dyn(&NfcTagObj, pEHON);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_GetEHON_Dyn(NfcTagObj, (ST25DV_EN_STATUS *)pEHON);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_GetEHON_Dyn(NfcTagObj, (ST25DVxxKC_EN_STATUS_E *)pEHON);
+  }
+  
+  return ret_value;
 }
 
 /**
-  * @brief  Checks if RF Field is present in front of the ST25DV.
-  * @param  pRF_Field Pointer on a ST25DV_FIELD_STATUS value used to return the field presence.
+  * @brief  Checks if RF Field is present in front of the ST25DV-I2C.
+  * @param  pRF_Field Pointer used to return the field presence.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_GetRFField_Dyn(uint32_t Instance, ST25DV_FIELD_STATUS * const pRF_Field )
+int32_t BSP_NFCTAG_GetRFField_Dyn(const uint32_t Instance, void *const pRF_Field)
 {
   UNUSED(Instance);
-  return ST25DV_GetRFField_Dyn(&NfcTagObj, pRF_Field);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_GetRFField_Dyn(NfcTagObj, (ST25DV_FIELD_STATUS *)pRF_Field);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_GetRFField_Dyn(NfcTagObj, (ST25DVxxKC_FIELD_STATUS_E *)pRF_Field);
+  }
+  
+  return ret_value;
 }
 
 /**
-  * @brief  Check if VCC is supplying the ST25DV.
-  * @param  pVCC ST25DV_VCC_STATUS pointer of the VCC status to store
+  * @brief  Check if VCC is supplying the ST25DV-I2C.
+  * @param  pVCC pointer of the VCC status to store
   * @retval NFCTAG enum status.
   */
-int32_t BSP_NFCTAG_GetVCC_Dyn(uint32_t Instance, ST25DV_VCC_STATUS * const pVCC )
+int32_t BSP_NFCTAG_GetVCC_Dyn(const uint32_t Instance, void *const pVCC)
 {
   UNUSED(Instance);
-  return ST25DV_GetVCC_Dyn(&NfcTagObj, pVCC);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_GetVCC_Dyn(NfcTagObj, (ST25DV_VCC_STATUS *)pVCC);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_GetVCC_Dyn(NfcTagObj, (ST25DVxxKC_VCC_STATUS_E *)pVCC);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Read value of dynamic RF Management configuration
-  * @param  pRF_Mngt : ST25DV_RF_MNGT pointer of the dynamic RF Management configuration to store
+  * @param  pRF_Mngt pointer of the dynamic RF Management configuration to store
   * @retval NFCTAG enum status
   */
-int32_t BSP_NFCTAG_ReadRFMngt_Dyn(uint32_t Instance, ST25DV_RF_MNGT * const pRF_Mngt )
+int32_t BSP_NFCTAG_ReadRFMngt_Dyn(const uint32_t Instance, void *const pRF_Mngt)
 {
   UNUSED(Instance);
-  return ST25DV_ReadRFMngt_Dyn(&NfcTagObj, pRF_Mngt);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadRFMngt_Dyn(NfcTagObj, (ST25DV_RF_MNGT *)pRF_Mngt);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadRFMngt_Dyn(NfcTagObj, (ST25DVxxKC_RF_MNGT_t *)pRF_Mngt);
+  }
+  
+  return ret_value;
 }
+
 
 /**
   * @brief  Writes a value to the RF Management dynamic register.
   * @param  RF_Mngt Value to be written to the RF Management dynamic register.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_WriteRFMngt_Dyn(uint32_t Instance, const uint8_t RF_Mngt )
+int32_t BSP_NFCTAG_WriteRFMngt_Dyn(const uint32_t Instance, const uint8_t RF_Mngt)
 {
   UNUSED(Instance);
-  return ST25DV_WriteRFMngt_Dyn(&NfcTagObj, RF_Mngt);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_WriteRFMngt_Dyn(NfcTagObj, RF_Mngt);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_WriteRFMngt_Dyn(NfcTagObj, RF_Mngt);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the RFDisable dynamic register information.
-  * @param  pRFDisable Pointer on a ST25DV_EN_STATUS value used to return the RF Disable state.
+  * @param  pRFDisable Pointer used to return the RF Disable state.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_GetRFDisable_Dyn(uint32_t Instance, ST25DV_EN_STATUS * const pRFDisable )
+int32_t BSP_NFCTAG_GetRFDisable_Dyn(const uint32_t Instance, void *const pRFDisable)
 {
   UNUSED(Instance);
-  return ST25DV_GetRFDisable_Dyn(&NfcTagObj, pRFDisable);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_GetRFDisable_Dyn(NfcTagObj, (ST25DV_EN_STATUS *)pRFDisable);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_GetRFDisable_Dyn(NfcTagObj, (ST25DVxxKC_EN_STATUS_E *)pRFDisable);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Sets the RF Disable dynamic configuration.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_SetRFDisable_Dyn(uint32_t Instance)
+int32_t BSP_NFCTAG_SetRFDisable_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_SetRFDisable_Dyn(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_SetRFDisable_Dyn(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_SetRFDisable_Dyn(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Unsets the RF Disable dynamic configuration.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ResetRFDisable_Dyn(uint32_t Instance)
+int32_t BSP_NFCTAG_ResetRFDisable_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_ResetRFDisable_Dyn(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ResetRFDisable_Dyn(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ResetRFDisable_Dyn(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the RFSleep dynamic register information.
-  * @param  pRFSleep Pointer on a ST25DV_EN_STATUS values used to return the RF Sleep state.
+  * @param  pRFSleep Pointer used to return the RF Sleep state.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_GetRFSleep_Dyn(uint32_t Instance, ST25DV_EN_STATUS * const pRFSleep )
+int32_t BSP_NFCTAG_GetRFSleep_Dyn(const uint32_t Instance, void *const pRFSleep)
 {
   UNUSED(Instance);
-  return ST25DV_GetRFSleep_Dyn(&NfcTagObj, pRFSleep);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_GetRFSleep_Dyn(NfcTagObj, (ST25DV_EN_STATUS *)pRFSleep);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_GetRFSleep_Dyn(NfcTagObj, (ST25DVxxKC_EN_STATUS_E *)pRFSleep);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Sets the RF Sleep dynamic configuration.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_SetRFSleep_Dyn(uint32_t Instance)
+int32_t BSP_NFCTAG_SetRFSleep_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_SetRFSleep_Dyn(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_SetRFSleep_Dyn(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_SetRFSleep_Dyn(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Unsets the RF Sleep dynamic configuration.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ResetRFSleep_Dyn(uint32_t Instance)
+int32_t BSP_NFCTAG_ResetRFSleep_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_ResetRFSleep_Dyn(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ResetRFSleep_Dyn(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ResetRFSleep_Dyn(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the Mailbox ctrl dynamic register.
-  * @param  pCtrlStatus Pointer on a ST25DV_MB_CTRL_DYN_STATUS structure used to return the dynamic Mailbox ctrl information.
+  * @param  pCtrlStatus Pointer structure used to return
+  *         the dynamic Mailbox ctrl information.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadMBCtrl_Dyn(uint32_t Instance, ST25DV_MB_CTRL_DYN_STATUS * const pCtrlStatus )
+int32_t BSP_NFCTAG_ReadMBCtrl_Dyn(const uint32_t Instance, void *const pCtrlStatus)
 {
   UNUSED(Instance);
-  return ST25DV_ReadMBCtrl_Dyn(&NfcTagObj, pCtrlStatus);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadMBCtrl_Dyn(NfcTagObj, (ST25DV_MB_CTRL_DYN_STATUS *)pCtrlStatus);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadMBCtrl_Dyn(NfcTagObj, (ST25DVxxKC_MB_CTRL_DYN_STATUS_t *)pCtrlStatus);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Reads the Mailbox Enable dynamic configuration.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_GetMBEN_Dyn(uint32_t Instance, ST25DV_EN_STATUS * const pMBEN )
+int32_t BSP_NFCTAG_GetMBEN_Dyn(const uint32_t Instance, void *const pMBEN)
 {
   UNUSED(Instance);
-  return ST25DV_GetMBEN_Dyn(&NfcTagObj, pMBEN);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_GetMBEN_Dyn(NfcTagObj, (ST25DV_EN_STATUS *)pMBEN);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_GetMBEN_Dyn(NfcTagObj, (ST25DVxxKC_EN_STATUS_E *)pMBEN);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Sets the Mailbox Enable dynamic configuration.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_SetMBEN_Dyn(uint32_t Instance)
+int32_t BSP_NFCTAG_SetMBEN_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_SetMBEN_Dyn(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_SetMBEN_Dyn(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_SetMBEN_Dyn(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
   * @brief  Unsets the Mailbox Enable dynamic configuration.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ResetMBEN_Dyn(uint32_t Instance)
+int32_t BSP_NFCTAG_ResetMBEN_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  return ST25DV_ResetMBEN_Dyn(&NfcTagObj);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ResetMBEN_Dyn(NfcTagObj);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ResetMBEN_Dyn(NfcTagObj);
+  }
+  
+  return ret_value;
 }
 
 /**
@@ -1086,10 +1995,22 @@ int32_t BSP_NFCTAG_ResetMBEN_Dyn(uint32_t Instance)
   * @param  pMBLength Pointer on a uint8_t used to return the Mailbox message length.
   * @return int32_t enum status.
   */
-int32_t BSP_NFCTAG_ReadMBLength_Dyn(uint32_t Instance, uint8_t * const pMBLength )
+int32_t BSP_NFCTAG_ReadMBLength_Dyn(const uint32_t Instance, uint8_t *const pMBLength)
 {
   UNUSED(Instance);
-  return ST25DV_ReadMBLength_Dyn(&NfcTagObj, pMBLength);
+  int32_t ret_value;
+  
+  if(ST25DVObj.IsInitialized == 1)
+  {
+    ret_value = ST25DV_ReadMBLength_Dyn(NfcTagObj, pMBLength);
+  }
+  
+  if(ST25DVxxKCObj.IsInitialized == 1)
+  {
+    ret_value = ST25DVxxKC_ReadMBLength_Dyn(NfcTagObj, pMBLength);
+  }
+  
+  return ret_value;
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

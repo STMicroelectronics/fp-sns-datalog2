@@ -21,6 +21,7 @@ from asciimatics.widgets import Frame, ListBox, Layout, Divider, VerticalDivider
     MultiColumnListBox, Button, TextBox, DropdownList, Widget
 
 from st_hsdatalog.HSD_link import HSDLink_v2
+from st_hsdatalog.HSD_utils.exceptions import WrongDeviceConfigFile
 
 class HSDMainView(Frame):
     def __init__(self, screen, hsd_info):
@@ -255,10 +256,19 @@ class HSDLoggingView(Frame):
         else:
             layout_cli_flags.add_widget(Label("- Acquisition description: "))
 
-        if self._hsd_info_model.cli_flags.file_config != '' and os.path.exists(self._hsd_info_model.cli_flags.file_config):
-            layout_cli_flags.add_widget(Label("- Device configuration file: {}".format(self._hsd_info_model.cli_flags.file_config)))
+        self.device_config_label = None
+        if self._hsd_info_model.cli_flags.file_config is not None:
+            if self._hsd_info_model.cli_flags.file_config != '' and os.path.exists(self._hsd_info_model.cli_flags.file_config):
+                self.device_config_label = Label("- Device configuration file: {}".format(self._hsd_info_model.cli_flags.file_config))
+                # layout_cli_flags.add_widget(Label("- Device configuration file: {}".format(self._hsd_info_model.cli_flags.file_config)))
+            else:
+                self.device_config_label = Label("- Device configuration file: Default DeviceConfig from the device")
+                # layout_cli_flags.add_widget(Label("- Device configuration file: Default DeviceConfig from the device"))
+            self.device_config_label.custom_colour = "label"
         else:
-            layout_cli_flags.add_widget(Label("- Device configuration file: Default DeviceConfig from the device"))
+            self.device_config_label = Label("- Invalid input configuration file --> using default device configuration")
+            self.device_config_label.custom_colour = "invalid"
+        layout_cli_flags.add_widget(self.device_config_label)
 
         if self._hsd_info_model.cli_flags.ucf_file is not None and os.path.exists(self._hsd_info_model.cli_flags.ucf_file):
             self.mlc_msg_lbl = Label("- Selected UCF file: {}".format(self._hsd_info_model.cli_flags.ucf_file))
@@ -405,9 +415,13 @@ class HSDLoggingView(Frame):
 
                     self._hsd_info_model.check_output_folder()
                     self._hsd_info_model.update_acq_params()
-
-                    self._hsd_info_model.upload_device_conf_file()
-
+                    try:
+                        self._hsd_info_model.upload_device_conf_file()
+                    except WrongDeviceConfigFile:
+                        # click.warning("The default configuration will be used")
+                        self._hsd_info_model.cli_flags.file_config = None
+                        self.device_config_label.text = "- Invalid input Device configuration file: --> default device configuration from the board used"
+                        self.device_config_label.custom_colour = "invalid"
                     self._hsd_info_model.update_sensor_list()
                     self._hsd_info_model.init_sensor_data_counters()
                     
@@ -418,6 +432,7 @@ class HSDLoggingView(Frame):
                     self._hsd_info_model.update_tag_list()
                     self._hsd_info_model.init_tag_status_list()
                     
+                    self._hsd_info_model.set_rtc()
                     self._hsd_info_model.start_log()
                     self._hsd_info_model.start_time = datetime.now()
 

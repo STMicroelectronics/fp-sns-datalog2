@@ -50,7 +50,8 @@ static inline sys_error_code_t IParseCommand(ICommandParse_t *_this, char *comma
   return _this->vptr->parse_command(_this, commandString, mode);
 }
 
-static inline sys_error_code_t ISerializeResponse(ICommandParse_t *_this, char **response_name, char **buff, uint32_t *size, uint8_t pretty)
+static inline sys_error_code_t ISerializeResponse(ICommandParse_t *_this, char **response_name, char **buff,
+                                                  uint32_t *size, uint8_t pretty)
 {
   return _this->vptr->serialize_response(_this, response_name, buff, size, pretty);
 }

@@ -1,24 +1,24 @@
 /**
- ******************************************************************************
- * @file    IListener_vtbl.h
- * @author  STMicroelectronics - ST-Korea - MCD Team
- * @version 3.0.0
- * @date    Jan 6, 2017
- *
- * @brief   IListener virtual table definition.
- *
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2021 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    IListener_vtbl.h
+  * @author  STMicroelectronics - ST-Korea - MCD Team
+  * @version 3.0.0
+  * @date    Jan 6, 2017
+  *
+  * @brief   IListener virtual table definition.
+  *
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  ******************************************************************************
+  */
 
 #ifndef INCLUDE_EVENTS_ILISTENERVTBL_H_
 #define INCLUDE_EVENTS_ILISTENERVTBL_H_
@@ -34,12 +34,14 @@ extern "C" {
 typedef struct _IListener_vtbl IListener_vtbl;
 
 
-struct _IListener_vtbl {
-	sys_error_code_t (*OnStatusChange)(IListener *_this);
+struct _IListener_vtbl
+{
+  sys_error_code_t (*OnStatusChange)(IListener *_this);
 };
 
-struct _IListener {
-	const IListener_vtbl *vptr;
+struct _IListener
+{
+  const IListener_vtbl *vptr;
 };
 
 // Public API declaration
@@ -51,8 +53,9 @@ struct _IListener {
 // ***************************
 
 SYS_DEFINE_STATIC_INLINE
-sys_error_code_t IListenerOnStatusChange(IListener *_this) {
-	return _this->vptr->OnStatusChange(_this);
+sys_error_code_t IListenerOnStatusChange(IListener *_this)
+{
+  return _this->vptr->OnStatusChange(_this);
 }
 
 #ifdef __cplusplus

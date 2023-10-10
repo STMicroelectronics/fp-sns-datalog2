@@ -16,7 +16,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -42,6 +42,7 @@ extern "C" {
 #define SYS_DBG_SPIBUS                     SYS_DBG_ON                 ///< SPIBus task debug control byte
 #define SYS_DBG_I2CBUS                     SYS_DBG_ON                 ///< I2CBus task debug control byte
 #define SYS_DBG_LSM6DSV16X                 SYS_DBG_ON                 ///< LSM6DSV16X sensor task debug control byte
+#define SYS_DBG_ISM330IS                   SYS_DBG_ON                 ///< ISM330IS sensor task debug control byte
 #define SYS_DBG_MP23DB01HP                 SYS_DBG_ON                 ///< MP23DB01HP task debug control byte
 #define SYS_DBG_LIS2MDL                    SYS_DBG_ON                 ///< LIS2MDL task debug control byte
 #define SYS_DBG_LIS2DU12                   SYS_DBG_ON                 ///< LIS2DU12 task debug control byte

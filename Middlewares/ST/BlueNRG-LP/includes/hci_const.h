@@ -1,11 +1,23 @@
-/******************************************************************************
-*
-*  File Description 
-*  ---------------------
-* This file defines constants and functions for HCI layer.
-* See Bluetooth Core v 4.0, Vol. 2, Part E.
-* 
-*******************************************************************************/
+/**
+  ******************************************************************************
+  * @file    hci_const.h
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.3.0
+  * @date    20-July-2023
+  * @brief   This file defines constants and functions for HCI layer.
+  *          See Bluetooth Core v 4.0, Vol. 2, Part E.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 #ifndef HCI_CONST_H
 #define HCI_CONST_H

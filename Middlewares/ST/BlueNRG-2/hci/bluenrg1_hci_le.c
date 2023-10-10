@@ -24,7 +24,7 @@ tBleStatus hci_disconnect(uint16_t Connection_Handle,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_disconnect_cp0 *cp0 = (hci_disconnect_cp0*)(cmd_buffer);
+  hci_disconnect_cp0 *cp0 = (hci_disconnect_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Connection_Handle = htob(Connection_Handle, 2);
@@ -40,8 +40,11 @@ tBleStatus hci_disconnect(uint16_t Connection_Handle,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -50,7 +53,7 @@ tBleStatus hci_read_remote_version_information(uint16_t Connection_Handle)
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_read_remote_version_information_cp0 *cp0 = (hci_read_remote_version_information_cp0*)(cmd_buffer);
+  hci_read_remote_version_information_cp0 *cp0 = (hci_read_remote_version_information_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Connection_Handle = htob(Connection_Handle, 2);
@@ -64,8 +67,11 @@ tBleStatus hci_read_remote_version_information(uint16_t Connection_Handle)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -74,7 +80,7 @@ tBleStatus hci_set_event_mask(uint8_t Event_Mask[8])
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_set_event_mask_cp0 *cp0 = (hci_set_event_mask_cp0*)(cmd_buffer);
+  hci_set_event_mask_cp0 *cp0 = (hci_set_event_mask_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   BLUENRG_memcpy((void *) &cp0->Event_Mask, (const void *) Event_Mask, 8);
@@ -87,8 +93,11 @@ tBleStatus hci_set_event_mask(uint8_t Event_Mask[8])
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -103,8 +112,11 @@ tBleStatus hci_reset(void)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -115,7 +127,7 @@ tBleStatus hci_read_transmit_power_level(uint16_t Connection_Handle,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_read_transmit_power_level_cp0 *cp0 = (hci_read_transmit_power_level_cp0*)(cmd_buffer);
+  hci_read_transmit_power_level_cp0 *cp0 = (hci_read_transmit_power_level_cp0 *)(cmd_buffer);
   hci_read_transmit_power_level_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -131,8 +143,11 @@ tBleStatus hci_read_transmit_power_level(uint16_t Connection_Handle,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *Transmit_Power_Level = btoh(resp.Transmit_Power_Level, 1);
@@ -153,8 +168,11 @@ tBleStatus hci_read_local_version_information(uint8_t *HCI_Version,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *HCI_Version = btoh(resp.HCI_Version, 1);
@@ -175,8 +193,11 @@ tBleStatus hci_read_local_supported_commands(uint8_t Supported_Commands[64])
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) Supported_Commands, (const void *) resp.Supported_Commands, 64);
@@ -193,8 +214,11 @@ tBleStatus hci_read_local_supported_features(uint8_t LMP_Features[8])
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) LMP_Features, (const void *) resp.LMP_Features, 8);
@@ -211,8 +235,11 @@ tBleStatus hci_read_bd_addr(uint8_t BD_ADDR[6])
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) BD_ADDR, (const void *) resp.BD_ADDR, 6);
@@ -223,7 +250,7 @@ tBleStatus hci_read_rssi(uint16_t Connection_Handle,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_read_rssi_cp0 *cp0 = (hci_read_rssi_cp0*)(cmd_buffer);
+  hci_read_rssi_cp0 *cp0 = (hci_read_rssi_cp0 *)(cmd_buffer);
   hci_read_rssi_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -237,8 +264,11 @@ tBleStatus hci_read_rssi(uint16_t Connection_Handle,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *RSSI = btoh(resp.RSSI, 1);
@@ -248,7 +278,7 @@ tBleStatus hci_le_set_event_mask(uint8_t LE_Event_Mask[8])
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_event_mask_cp0 *cp0 = (hci_le_set_event_mask_cp0*)(cmd_buffer);
+  hci_le_set_event_mask_cp0 *cp0 = (hci_le_set_event_mask_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   BLUENRG_memcpy((void *) &cp0->LE_Event_Mask, (const void *) LE_Event_Mask, 8);
@@ -261,8 +291,11 @@ tBleStatus hci_le_set_event_mask(uint8_t LE_Event_Mask[8])
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -279,8 +312,11 @@ tBleStatus hci_le_read_buffer_size(uint16_t *HC_LE_ACL_Data_Packet_Length,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *HC_LE_ACL_Data_Packet_Length = btoh(resp.HC_LE_ACL_Data_Packet_Length, 2);
@@ -298,8 +334,11 @@ tBleStatus hci_le_read_local_supported_features(uint8_t LE_Features[8])
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) LE_Features, (const void *) resp.LE_Features, 8);
@@ -309,7 +348,7 @@ tBleStatus hci_le_set_random_address(uint8_t Random_Address[6])
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_random_address_cp0 *cp0 = (hci_le_set_random_address_cp0*)(cmd_buffer);
+  hci_le_set_random_address_cp0 *cp0 = (hci_le_set_random_address_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   BLUENRG_memcpy((void *) &cp0->Random_Address, (const void *) Random_Address, 6);
@@ -322,8 +361,11 @@ tBleStatus hci_le_set_random_address(uint8_t Random_Address[6])
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -339,7 +381,7 @@ tBleStatus hci_le_set_advertising_parameters(uint16_t Advertising_Interval_Min,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_advertising_parameters_cp0 *cp0 = (hci_le_set_advertising_parameters_cp0*)(cmd_buffer);
+  hci_le_set_advertising_parameters_cp0 *cp0 = (hci_le_set_advertising_parameters_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Advertising_Interval_Min = htob(Advertising_Interval_Min, 2);
@@ -366,8 +408,11 @@ tBleStatus hci_le_set_advertising_parameters(uint16_t Advertising_Interval_Min,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -383,8 +428,11 @@ tBleStatus hci_le_read_advertising_channel_tx_power(int8_t *Transmit_Power_Level
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *Transmit_Power_Level = btoh(resp.Transmit_Power_Level, 1);
@@ -395,7 +443,7 @@ tBleStatus hci_le_set_advertising_data(uint8_t Advertising_Data_Length,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_advertising_data_cp0 *cp0 = (hci_le_set_advertising_data_cp0*)(cmd_buffer);
+  hci_le_set_advertising_data_cp0 *cp0 = (hci_le_set_advertising_data_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Advertising_Data_Length = htob(Advertising_Data_Length, 1);
@@ -410,8 +458,11 @@ tBleStatus hci_le_set_advertising_data(uint8_t Advertising_Data_Length,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -421,13 +472,14 @@ tBleStatus hci_le_set_scan_response_data(uint8_t Scan_Response_Data_Length,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_scan_response_data_cp0 *cp0 = (hci_le_set_scan_response_data_cp0*)(cmd_buffer);
+  hci_le_set_scan_response_data_cp0 *cp0 = (hci_le_set_scan_response_data_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Scan_Response_Data_Length = htob(Scan_Response_Data_Length, 1);
   index_input += 1;
   /* FIX: check on Scan_Response_Data introduced to fix issue in projects for Cortex-M33 */
-  if (Scan_Response_Data != NULL) {
+  if (Scan_Response_Data != NULL)
+  {
     BLUENRG_memcpy((void *) &cp0->Scan_Response_Data, (const void *) Scan_Response_Data, 31);
   }
   index_input += 31;
@@ -439,8 +491,11 @@ tBleStatus hci_le_set_scan_response_data(uint8_t Scan_Response_Data_Length,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -449,7 +504,7 @@ tBleStatus hci_le_set_advertise_enable(uint8_t Advertising_Enable)
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_advertise_enable_cp0 *cp0 = (hci_le_set_advertise_enable_cp0*)(cmd_buffer);
+  hci_le_set_advertise_enable_cp0 *cp0 = (hci_le_set_advertise_enable_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Advertising_Enable = htob(Advertising_Enable, 1);
@@ -462,8 +517,11 @@ tBleStatus hci_le_set_advertise_enable(uint8_t Advertising_Enable)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -476,7 +534,7 @@ tBleStatus hci_le_set_scan_parameters(uint8_t LE_Scan_Type,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_scan_parameters_cp0 *cp0 = (hci_le_set_scan_parameters_cp0*)(cmd_buffer);
+  hci_le_set_scan_parameters_cp0 *cp0 = (hci_le_set_scan_parameters_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->LE_Scan_Type = htob(LE_Scan_Type, 1);
@@ -497,8 +555,11 @@ tBleStatus hci_le_set_scan_parameters(uint8_t LE_Scan_Type,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -508,7 +569,7 @@ tBleStatus hci_le_set_scan_enable(uint8_t LE_Scan_Enable,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_scan_enable_cp0 *cp0 = (hci_le_set_scan_enable_cp0*)(cmd_buffer);
+  hci_le_set_scan_enable_cp0 *cp0 = (hci_le_set_scan_enable_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->LE_Scan_Enable = htob(LE_Scan_Enable, 1);
@@ -523,8 +584,11 @@ tBleStatus hci_le_set_scan_enable(uint8_t LE_Scan_Enable,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -544,7 +608,7 @@ tBleStatus hci_le_create_connection(uint16_t LE_Scan_Interval,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_create_connection_cp0 *cp0 = (hci_le_create_connection_cp0*)(cmd_buffer);
+  hci_le_create_connection_cp0 *cp0 = (hci_le_create_connection_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->LE_Scan_Interval = htob(LE_Scan_Interval, 2);
@@ -580,8 +644,11 @@ tBleStatus hci_le_create_connection(uint16_t LE_Scan_Interval,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -596,8 +663,11 @@ tBleStatus hci_le_create_connection_cancel(void)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -613,8 +683,11 @@ tBleStatus hci_le_read_white_list_size(uint8_t *White_List_Size)
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *White_List_Size = btoh(resp.White_List_Size, 1);
@@ -630,8 +703,11 @@ tBleStatus hci_le_clear_white_list(void)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -641,7 +717,7 @@ tBleStatus hci_le_add_device_to_white_list(uint8_t Address_Type,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_add_device_to_white_list_cp0 *cp0 = (hci_le_add_device_to_white_list_cp0*)(cmd_buffer);
+  hci_le_add_device_to_white_list_cp0 *cp0 = (hci_le_add_device_to_white_list_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Address_Type = htob(Address_Type, 1);
@@ -656,8 +732,11 @@ tBleStatus hci_le_add_device_to_white_list(uint8_t Address_Type,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -667,7 +746,7 @@ tBleStatus hci_le_remove_device_from_white_list(uint8_t Address_Type,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_remove_device_from_white_list_cp0 *cp0 = (hci_le_remove_device_from_white_list_cp0*)(cmd_buffer);
+  hci_le_remove_device_from_white_list_cp0 *cp0 = (hci_le_remove_device_from_white_list_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Address_Type = htob(Address_Type, 1);
@@ -682,8 +761,11 @@ tBleStatus hci_le_remove_device_from_white_list(uint8_t Address_Type,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -698,7 +780,7 @@ tBleStatus hci_le_connection_update(uint16_t Connection_Handle,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_connection_update_cp0 *cp0 = (hci_le_connection_update_cp0*)(cmd_buffer);
+  hci_le_connection_update_cp0 *cp0 = (hci_le_connection_update_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Connection_Handle = htob(Connection_Handle, 2);
@@ -724,8 +806,11 @@ tBleStatus hci_le_connection_update(uint16_t Connection_Handle,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -734,7 +819,7 @@ tBleStatus hci_le_set_host_channel_classification(uint8_t LE_Channel_Map[5])
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_host_channel_classification_cp0 *cp0 = (hci_le_set_host_channel_classification_cp0*)(cmd_buffer);
+  hci_le_set_host_channel_classification_cp0 *cp0 = (hci_le_set_host_channel_classification_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   BLUENRG_memcpy((void *) &cp0->LE_Channel_Map, (const void *) LE_Channel_Map, 5);
@@ -747,8 +832,11 @@ tBleStatus hci_le_set_host_channel_classification(uint8_t LE_Channel_Map[5])
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -758,7 +846,7 @@ tBleStatus hci_le_read_channel_map(uint16_t Connection_Handle,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_read_channel_map_cp0 *cp0 = (hci_le_read_channel_map_cp0*)(cmd_buffer);
+  hci_le_read_channel_map_cp0 *cp0 = (hci_le_read_channel_map_cp0 *)(cmd_buffer);
   hci_le_read_channel_map_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -772,8 +860,11 @@ tBleStatus hci_le_read_channel_map(uint16_t Connection_Handle,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) LE_Channel_Map, (const void *) resp.LE_Channel_Map, 5);
@@ -783,7 +874,7 @@ tBleStatus hci_le_read_remote_used_features(uint16_t Connection_Handle)
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_read_remote_used_features_cp0 *cp0 = (hci_le_read_remote_used_features_cp0*)(cmd_buffer);
+  hci_le_read_remote_used_features_cp0 *cp0 = (hci_le_read_remote_used_features_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Connection_Handle = htob(Connection_Handle, 2);
@@ -797,8 +888,11 @@ tBleStatus hci_le_read_remote_used_features(uint16_t Connection_Handle)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -809,7 +903,7 @@ tBleStatus hci_le_encrypt(uint8_t Key[16],
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_encrypt_cp0 *cp0 = (hci_le_encrypt_cp0*)(cmd_buffer);
+  hci_le_encrypt_cp0 *cp0 = (hci_le_encrypt_cp0 *)(cmd_buffer);
   hci_le_encrypt_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -825,8 +919,11 @@ tBleStatus hci_le_encrypt(uint8_t Key[16],
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) Encrypted_Data, (const void *) resp.Encrypted_Data, 16);
@@ -843,8 +940,11 @@ tBleStatus hci_le_rand(uint8_t Random_Number[8])
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) Random_Number, (const void *) resp.Random_Number, 8);
@@ -857,7 +957,7 @@ tBleStatus hci_le_start_encryption(uint16_t Connection_Handle,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_start_encryption_cp0 *cp0 = (hci_le_start_encryption_cp0*)(cmd_buffer);
+  hci_le_start_encryption_cp0 *cp0 = (hci_le_start_encryption_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Connection_Handle = htob(Connection_Handle, 2);
@@ -877,8 +977,11 @@ tBleStatus hci_le_start_encryption(uint16_t Connection_Handle,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -888,7 +991,7 @@ tBleStatus hci_le_long_term_key_request_reply(uint16_t Connection_Handle,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_long_term_key_request_reply_cp0 *cp0 = (hci_le_long_term_key_request_reply_cp0*)(cmd_buffer);
+  hci_le_long_term_key_request_reply_cp0 *cp0 = (hci_le_long_term_key_request_reply_cp0 *)(cmd_buffer);
   hci_le_long_term_key_request_reply_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -904,8 +1007,11 @@ tBleStatus hci_le_long_term_key_request_reply(uint16_t Connection_Handle,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   return BLE_STATUS_SUCCESS;
@@ -914,7 +1020,7 @@ tBleStatus hci_le_long_term_key_requested_negative_reply(uint16_t Connection_Han
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_long_term_key_requested_negative_reply_cp0 *cp0 = (hci_le_long_term_key_requested_negative_reply_cp0*)(cmd_buffer);
+  hci_le_long_term_key_requested_negative_reply_cp0 *cp0 = (hci_le_long_term_key_requested_negative_reply_cp0 *)(cmd_buffer);
   hci_le_long_term_key_requested_negative_reply_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -928,8 +1034,11 @@ tBleStatus hci_le_long_term_key_requested_negative_reply(uint16_t Connection_Han
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   return BLE_STATUS_SUCCESS;
@@ -945,8 +1054,11 @@ tBleStatus hci_le_read_supported_states(uint8_t LE_States[8])
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) LE_States, (const void *) resp.LE_States, 8);
@@ -956,7 +1068,7 @@ tBleStatus hci_le_receiver_test(uint8_t RX_Frequency)
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_receiver_test_cp0 *cp0 = (hci_le_receiver_test_cp0*)(cmd_buffer);
+  hci_le_receiver_test_cp0 *cp0 = (hci_le_receiver_test_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->RX_Frequency = htob(RX_Frequency, 1);
@@ -969,8 +1081,11 @@ tBleStatus hci_le_receiver_test(uint8_t RX_Frequency)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -981,7 +1096,7 @@ tBleStatus hci_le_transmitter_test(uint8_t TX_Frequency,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_transmitter_test_cp0 *cp0 = (hci_le_transmitter_test_cp0*)(cmd_buffer);
+  hci_le_transmitter_test_cp0 *cp0 = (hci_le_transmitter_test_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->TX_Frequency = htob(TX_Frequency, 1);
@@ -998,8 +1113,11 @@ tBleStatus hci_le_transmitter_test(uint8_t TX_Frequency,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -1015,8 +1133,11 @@ tBleStatus hci_le_test_end(uint16_t *Number_Of_Packets)
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *Number_Of_Packets = btoh(resp.Number_Of_Packets, 2);
@@ -1028,7 +1149,7 @@ tBleStatus hci_le_set_data_length(uint16_t Connection_Handle,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_data_length_cp0 *cp0 = (hci_le_set_data_length_cp0*)(cmd_buffer);
+  hci_le_set_data_length_cp0 *cp0 = (hci_le_set_data_length_cp0 *)(cmd_buffer);
   hci_le_set_data_length_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -1046,8 +1167,11 @@ tBleStatus hci_le_set_data_length(uint16_t Connection_Handle,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   return BLE_STATUS_SUCCESS;
@@ -1064,8 +1188,11 @@ tBleStatus hci_le_read_suggested_default_data_length(uint16_t *SuggestedMaxTxOct
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *SuggestedMaxTxOctets = btoh(resp.SuggestedMaxTxOctets, 2);
@@ -1077,7 +1204,7 @@ tBleStatus hci_le_write_suggested_default_data_length(uint16_t SuggestedMaxTxOct
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_write_suggested_default_data_length_cp0 *cp0 = (hci_le_write_suggested_default_data_length_cp0*)(cmd_buffer);
+  hci_le_write_suggested_default_data_length_cp0 *cp0 = (hci_le_write_suggested_default_data_length_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->SuggestedMaxTxOctets = htob(SuggestedMaxTxOctets, 2);
@@ -1092,8 +1219,11 @@ tBleStatus hci_le_write_suggested_default_data_length(uint16_t SuggestedMaxTxOct
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -1109,8 +1239,11 @@ tBleStatus hci_le_read_local_p256_public_key(void)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -1119,7 +1252,7 @@ tBleStatus hci_le_generate_dhkey(uint8_t Remote_P256_Public_Key[64])
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_generate_dhkey_cp0 *cp0 = (hci_le_generate_dhkey_cp0*)(cmd_buffer);
+  hci_le_generate_dhkey_cp0 *cp0 = (hci_le_generate_dhkey_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   BLUENRG_memcpy((void *) &cp0->Remote_P256_Public_Key, (const void *) Remote_P256_Public_Key, 64);
@@ -1133,8 +1266,11 @@ tBleStatus hci_le_generate_dhkey(uint8_t Remote_P256_Public_Key[64])
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -1146,7 +1282,7 @@ tBleStatus hci_le_add_device_to_resolving_list(uint8_t Peer_Identity_Address_Typ
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_add_device_to_resolving_list_cp0 *cp0 = (hci_le_add_device_to_resolving_list_cp0*)(cmd_buffer);
+  hci_le_add_device_to_resolving_list_cp0 *cp0 = (hci_le_add_device_to_resolving_list_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Peer_Identity_Address_Type = htob(Peer_Identity_Address_Type, 1);
@@ -1165,8 +1301,11 @@ tBleStatus hci_le_add_device_to_resolving_list(uint8_t Peer_Identity_Address_Typ
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -1176,7 +1315,7 @@ tBleStatus hci_le_remove_device_from_resolving_list(uint8_t Peer_Identity_Addres
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_remove_device_from_resolving_list_cp0 *cp0 = (hci_le_remove_device_from_resolving_list_cp0*)(cmd_buffer);
+  hci_le_remove_device_from_resolving_list_cp0 *cp0 = (hci_le_remove_device_from_resolving_list_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Peer_Identity_Address_Type = htob(Peer_Identity_Address_Type, 1);
@@ -1191,8 +1330,11 @@ tBleStatus hci_le_remove_device_from_resolving_list(uint8_t Peer_Identity_Addres
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -1207,8 +1349,11 @@ tBleStatus hci_le_clear_resolving_list(void)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -1224,8 +1369,11 @@ tBleStatus hci_le_read_resolving_list_size(uint8_t *Resolving_List_Size)
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *Resolving_List_Size = btoh(resp.Resolving_List_Size, 1);
@@ -1237,7 +1385,7 @@ tBleStatus hci_le_read_peer_resolvable_address(uint8_t Peer_Identity_Address_Typ
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_read_peer_resolvable_address_cp0 *cp0 = (hci_le_read_peer_resolvable_address_cp0*)(cmd_buffer);
+  hci_le_read_peer_resolvable_address_cp0 *cp0 = (hci_le_read_peer_resolvable_address_cp0 *)(cmd_buffer);
   hci_le_read_peer_resolvable_address_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -1253,8 +1401,11 @@ tBleStatus hci_le_read_peer_resolvable_address(uint8_t Peer_Identity_Address_Typ
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) Peer_Resolvable_Address, (const void *) resp.Peer_Resolvable_Address, 6);
@@ -1266,7 +1417,7 @@ tBleStatus hci_le_read_local_resolvable_address(uint8_t Peer_Identity_Address_Ty
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_read_local_resolvable_address_cp0 *cp0 = (hci_le_read_local_resolvable_address_cp0*)(cmd_buffer);
+  hci_le_read_local_resolvable_address_cp0 *cp0 = (hci_le_read_local_resolvable_address_cp0 *)(cmd_buffer);
   hci_le_read_local_resolvable_address_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -1282,8 +1433,11 @@ tBleStatus hci_le_read_local_resolvable_address(uint8_t Peer_Identity_Address_Ty
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) Local_Resolvable_Address, (const void *) resp.Local_Resolvable_Address, 6);
@@ -1293,7 +1447,7 @@ tBleStatus hci_le_set_address_resolution_enable(uint8_t Address_Resolution_Enabl
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_address_resolution_enable_cp0 *cp0 = (hci_le_set_address_resolution_enable_cp0*)(cmd_buffer);
+  hci_le_set_address_resolution_enable_cp0 *cp0 = (hci_le_set_address_resolution_enable_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Address_Resolution_Enable = htob(Address_Resolution_Enable, 1);
@@ -1306,8 +1460,11 @@ tBleStatus hci_le_set_address_resolution_enable(uint8_t Address_Resolution_Enabl
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -1316,7 +1473,7 @@ tBleStatus hci_le_set_resolvable_private_address_timeout(uint16_t RPA_Timeout)
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  hci_le_set_resolvable_private_address_timeout_cp0 *cp0 = (hci_le_set_resolvable_private_address_timeout_cp0*)(cmd_buffer);
+  hci_le_set_resolvable_private_address_timeout_cp0 *cp0 = (hci_le_set_resolvable_private_address_timeout_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->RPA_Timeout = htob(RPA_Timeout, 2);
@@ -1329,8 +1486,11 @@ tBleStatus hci_le_set_resolvable_private_address_timeout(uint16_t RPA_Timeout)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -1350,8 +1510,11 @@ tBleStatus hci_le_read_maximum_data_length(uint16_t *supportedMaxTxOctets,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *supportedMaxTxOctets = btoh(resp.supportedMaxTxOctets, 2);

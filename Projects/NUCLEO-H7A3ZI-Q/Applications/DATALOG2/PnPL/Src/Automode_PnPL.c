@@ -151,22 +151,22 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   }
   if (json_object_dothas_value(tempJSONObject, "automode.nof_acquisitions"))
   {
-    int32_t nof_acquisitions =(int32_t) json_object_dotget_number(tempJSONObject, "automode.nof_acquisitions");
+    int32_t nof_acquisitions = (int32_t) json_object_dotget_number(tempJSONObject, "automode.nof_acquisitions");
     automode_set_nof_acquisitions(nof_acquisitions);
   }
   if (json_object_dothas_value(tempJSONObject, "automode.start_delay_s"))
   {
-    int32_t start_delay_s =(int32_t) json_object_dotget_number(tempJSONObject, "automode.start_delay_s");
+    int32_t start_delay_s = (int32_t) json_object_dotget_number(tempJSONObject, "automode.start_delay_s");
     automode_set_start_delay_s(start_delay_s);
   }
   if (json_object_dothas_value(tempJSONObject, "automode.logging_period_s"))
   {
-    int32_t logging_period_s =(int32_t) json_object_dotget_number(tempJSONObject, "automode.logging_period_s");
+    int32_t logging_period_s = (int32_t) json_object_dotget_number(tempJSONObject, "automode.logging_period_s");
     automode_set_logging_period_s(logging_period_s);
   }
   if (json_object_dothas_value(tempJSONObject, "automode.idle_period_s"))
   {
-    int32_t idle_period_s =(int32_t) json_object_dotget_number(tempJSONObject, "automode.idle_period_s");
+    int32_t idle_period_s = (int32_t) json_object_dotget_number(tempJSONObject, "automode.idle_period_s");
     automode_set_idle_period_s(idle_period_s);
   }
   json_value_free(tempJSON);

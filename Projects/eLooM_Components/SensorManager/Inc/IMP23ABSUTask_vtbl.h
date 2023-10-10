@@ -43,19 +43,18 @@ sys_error_code_t IMP23ABSUTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const
 
 uint8_t IMP23ABSUTask_vtblMicGetId(ISourceObservable *_this);
 IEventSrc *IMP23ABSUTask_vtblGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t IMP23ABSUTask_vtblMicGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-float IMP23ABSUTask_vtblMicGetFS(ISourceObservable *_this);
-float IMP23ABSUTask_vtblMicGetSensitivity(ISourceObservable *_this);
 EMData_t IMP23ABSUTask_vtblMicGetDataInfo(ISourceObservable *_this);
-
-sys_error_code_t IMP23ABSUTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
-sys_error_code_t IMP23ABSUTask_vtblSensorSetFS(ISensor_t *_this, float FS);
-sys_error_code_t IMP23ABSUTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t IMP23ABSUTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t IMP23ABSUTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t IMP23ABSUTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t IMP23ABSUTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t IMP23ABSUTask_vtblSensorGetStatus(ISensor_t *_this);
+uint32_t IMP23ABSUTask_vtblMicGetFrequency(ISensorAudio_t *_this);
+uint8_t IMP23ABSUTask_vtblMicGetVolume(ISensorAudio_t *_this);
+uint8_t IMP23ABSUTask_vtblMicGetResolution(ISensorAudio_t *_this);
+sys_error_code_t IMP23ABSUTask_vtblSensorSetFrequency(ISensorAudio_t *_this, uint32_t frequency);
+sys_error_code_t IMP23ABSUTask_vtblSensorSetVolume(ISensorAudio_t *_this, uint8_t volume);
+sys_error_code_t IMP23ABSUTask_vtblSensorSetResolution(ISensorAudio_t *_this, uint8_t bit_depth);
 
 #ifdef __cplusplus
 }

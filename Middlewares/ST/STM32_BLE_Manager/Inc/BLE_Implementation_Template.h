@@ -9,7 +9,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -26,17 +26,17 @@
 #define _BLE_IMPLEMENTATION_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 
 /**
-* User can added here the header file for the selected BLE features.
-* For example:
-* #include "BLE_Environmental.h"
-* #include "BLE_Inertial.h"
-*/
+  * User can added here the header file for the selected BLE features.
+  * For example:
+  * #include "BLE_Environmental.h"
+  * #include "BLE_Inertial.h"
+  */
 
 #include "BLE_AudioSceneClassification.h"
 
@@ -121,7 +121,7 @@
 #define Help      1
 /* Enable/Disable BlueNRG config extend services */
 #define ENABLE_EXT_CONFIG      1
-/* For Set Certificate Commnad */
+/* For Set Certificate Command */
 #define SetCert      1
 /* Enable/Disable BlueNRG config services */
 #define ENABLE_CONFIG      1
@@ -190,43 +190,14 @@
 
 /* USER CODE BEGIN 1 */
 
-/* Select the used hardware platform
- *
- * STEVAL-WESU1                         --> BLE_MANAGER_STEVAL_WESU1_PLATFORM
- * STEVAL-STLKT01V1 (SensorTile)        --> BLE_MANAGER_SENSOR_TILE_PLATFORM
- * STEVAL-BCNKT01V1 (BlueCoin)          --> BLE_MANAGER_BLUE_COIN_PLATFORM
- * STEVAL-IDB008Vx                      --> BLE_MANAGER_STEVAL_IDB008VX_PLATFORM
- * STEVAL-BCN002V1B (BlueTile)          --> BLE_MANAGER_STEVAL_BCN002V1_PLATFORM
- * STEVAL-MKSBOX1V1 (SensorTile.box)    --> BLE_MANAGER_SENSOR_TILE_BOX_PLATFORM
- * DISCOVERY-IOT01A                     --> BLE_MANAGER_DISCOVERY_IOT01A_PLATFORM
- * STEVAL-STWINKT1                      --> BLE_MANAGER_STEVAL_STWINKT1_PLATFORM
- * STEVAL-STWINKT1B                     --> BLE_MANAGER_STEVAL_STWINKT1B_PLATFORM
- * STEVAL_STWINBX1                      --> BLE_MANAGER_STEVAL_STWINBX1_PLATFORM
- * SENSOR_TILE_BOX_PRO                  --> BLE_MANAGER_SENSOR_TILE_BOX_PRO_PLATFORM
- * STEVAL_ASTRA1                        --> BLE_MANAGER_STEVAL_ASTRA1_PLATFORM
- * STM32NUCLEO Board                    --> BLE_MANAGER_NUCLEO_PLATFORM
- * STM32F446RE_NUCLEO Board             --> BLE_MANAGER_STM32F446RE_NUCLEO_PLATFORM
- * STM32L053R8_NUCLEO Board             --> BLE_MANAGER_STM32L053R8_NUCLEO_PLATFORM
- * STM32L476RG_NUCLEO Board             --> BLE_MANAGER_STM32L476RG_NUCLEO_PLATFORM
- * STM32F401RE_NUCLEO Board             --> BLE_MANAGER_STM32F401RE_NUCLEO_PLATFORM
- * Not defined platform					--> BLE_MANAGER_UNDEF_PLATFORM
- *
- * For example:
- * #define BLE_MANAGER_USED_PLATFORM	BLE_MANAGER_NUCLEO_PLATFORM
- *
-*/
-
-/* Used platform */
-#define BLE_MANAGER_USED_PLATFORM       BLE_MANAGER_STM32L476RG_NUCLEO_PLATFORM
-
 /* STM32 Unique ID */
 #define BLE_STM32_UUID          UID_BASE
 
 /* STM32 MCU_ID */
 #ifdef DBGMCU_BASE
-	#define BLE_STM32_MCU_ID        ((uint32_t *)DBGMCU_BASE)
+#define BLE_STM32_MCU_ID        ((uint32_t *)DBGMCU_BASE)
 #else
-	#define BLE_STM32_MCU_ID        ((uint32_t *)0x00000000UL)
+#define BLE_STM32_MCU_ID        ((uint32_t *)0x00000000UL)
 #endif
 
 /* STM32  Microcontrolles type */
@@ -289,20 +260,20 @@ extern void BLE_SetCustomAdvertiseData(uint8_t *manuf_data);
 extern void BluetoothInit(void);
 extern void DisconnectionCompletedFunction(void);
 extern void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t addr[6]);
-extern void AttrModConfigFunction(uint8_t * att_data, uint8_t data_length);
+extern void AttrModConfigFunction(uint8_t *att_data, uint8_t data_length);
 extern void PairingCompletedFunction(uint8_t PairingStatus);
 extern void SetConnectableFunction(uint8_t *ManufData);
 extern void AciGattTxPoolAvailableEventFunction(void);
 extern void HardwareErrorEventHandlerFunction(uint8_t Hardware_Code);
-extern uint32_t DebugConsoleParsing(uint8_t * att_data, uint8_t data_length);
-extern void WriteRequestConfigFunction(uint8_t * att_data, uint8_t data_length);
+extern uint32_t DebugConsoleParsing(uint8_t *att_data, uint8_t data_length);
+extern void WriteRequestConfigFunction(uint8_t *att_data, uint8_t data_length);
 
-extern void ReadRequestEnvFunction(int32_t *Press,uint16_t *Hum,int16_t *Temp1,int16_t *Temp2);
+extern void ReadRequestEnvFunction(int32_t *Press, uint16_t *Hum, int16_t *Temp1, int16_t *Temp2);
 
 #ifdef BLE_MANAGER_USE_PARSON
 /**********************************************************************************************
- * Callback functions prototypes to manage the extended configuration characteristic commands *
- **********************************************************************************************/
+  * Callback functions prototypes to manage the extended configuration characteristic commands *
+  **********************************************************************************************/
 extern void ExtExtConfigUidCommandCallback(uint8_t **UID);
 extern void ExtConfigVersionFwCommandCallback(uint8_t *Answer);
 extern void ExtConfigInfoCommandCallback(uint8_t *Answer);
@@ -316,7 +287,7 @@ extern void ExtConfigSetCertCommandCallback(uint8_t *Certificate);
 
 extern void ExtConfigRebootOnDFUModeCommandCallback(void);
 extern void ExtConfigPowerOffCommandCallback(void);
-extern void ExtConfigReadBanksFwIdCommandCallback (uint8_t *CurBank,uint16_t *FwId1,uint16_t *FwId2);
+extern void ExtConfigReadBanksFwIdCommandCallback(uint8_t *CurBank, uint16_t *FwId1, uint16_t *FwId2);
 extern void ExtConfigBanksSwapCommandCallback(void);
 
 extern void ExtConfigSetNameCommandCallback(uint8_t *NewName);
@@ -330,8 +301,8 @@ extern void ExtConfigSetSensorConfigCommandCallback(uint8_t *configuration);
 #endif /* BLE_MANAGER_USE_PARSON */
 
 /*************************************************************
- * Callback functions prototypes to manage the notify events *
- *************************************************************/
+  * Callback functions prototypes to manage the notify events *
+  *************************************************************/
 
 extern void NotifyEventAudioSceneClassification(BLE_NotifyEvent_t Event);
 
@@ -400,21 +371,21 @@ extern void WriteRequestSDLog(uint8_t *att_data, uint8_t data_length);
 
 #ifdef BLE_MANAGER_USE_PARSON
 extern void NotifyEventPnpLike(BLE_NotifyEvent_t Event);
-extern void WriteRequestPnPLikeFunctionPointer(uint8_t* received_msg, uint8_t msg_length);
+extern void WriteRequestPnPLikeFunctionPointer(uint8_t *received_msg, uint8_t msg_length);
 #endif /* BLE_MANAGER_USE_PARSON */
 
 extern void NotifyEventEventCounter(BLE_NotifyEvent_t Event);
 
 #ifdef BLE_MANAGER_USE_PARSON
 extern void NotifyEventJson(BLE_NotifyEvent_t Event);
-extern void WriteRequestJson(uint8_t* received_msg, uint8_t msg_length);
+extern void WriteRequestJson(uint8_t *received_msg, uint8_t msg_length);
 #endif /* BLE_MANAGER_USE_PARSON */
 
 extern void NotifyEventNeaiAnomalyDetection(BLE_NotifyEvent_t Event);
-extern void WriteRequestNeaiAnomalyDetection(uint8_t * att_data, uint8_t data_length);
+extern void WriteRequestNeaiAnomalyDetection(uint8_t *att_data, uint8_t data_length);
 
 extern void NotifyEventNeaiNClassClassification(BLE_NotifyEvent_t Event);
-extern void WriteRequestNeaiNClassClassification(uint8_t * att_data, uint8_t data_length);
+extern void WriteRequestNeaiNClassClassification(uint8_t *att_data, uint8_t data_length);
 
 /* USER CODE BEGIN 3 */
 

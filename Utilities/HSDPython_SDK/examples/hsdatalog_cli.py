@@ -151,7 +151,6 @@ class HSDInfo():
             self.sensor_list = HSDLink.get_sensor_list(self.hsd_link, self.selected_device_id, only_active=True)
     
     def init_sensor_data_counters(self):
-        HSDLink.set_RTC(self.hsd_link, self.selected_device_id)
         all_sensor_list = HSDLink.get_sensor_list(self.hsd_link, self.selected_device_id, only_active=False)
         HSDLink.init_sensors_data_counters(self.hsd_link, all_sensor_list)
 
@@ -194,6 +193,9 @@ class HSDInfo():
         if self.selected_device_id is not None:
             self.tag_list = HSDLink.get_sw_tag_classes(self.hsd_link, self.selected_device_id)
 
+    def set_rtc(self):
+        HSDLink.set_RTC(self.hsd_link, self.selected_device_id)
+    
     def init_tag_status_list(self):
         self.tag_status_list = [False] * len(self.tag_list)
 
@@ -226,6 +228,8 @@ class HSDInfo():
         self.save_ispu_out_fmt_file()
         HSDLink.refresh_hsd_link(self.hsd_link) #Needed by HSDLink_v1
 
+
+script_version = "2.0.0"
 def show_help(ctx, param, value):
     if value and not ctx.resilient_parsing:
         click.secho(ctx.get_help(), color=ctx.color)
@@ -253,6 +257,7 @@ def validate_duration(ctx, param, value):
 @click.option('-iof', '--ispu_out_fmt', help="ISPU output format descrition json. If passed, this json will be saved in acquisition folder", default='')
 @click.option('-t', '--time_sec', help="Duration of the current acquisition [seconds]", callback=validate_duration, type=int, default=-1)
 @click.option('-i', '--interactive_mode', help="Interactive mode. It allows to select a connected device, get info and start the acquisition process",  is_flag=True, default=False)
+@click.version_option(script_version, '-v', '--version', prog_name="HSDatalogToUnico", is_flag=True, help="HSDatalogToUnico Converter tool version number")
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
 def hsd_CLI(output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, ispu_out_fmt, time_sec, interactive_mode):

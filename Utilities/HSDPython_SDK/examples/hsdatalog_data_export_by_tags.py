@@ -19,10 +19,13 @@
 
 import os
 import click
+from st_hsdatalog.HSD_utils.dtm import HSDatalogDTM
+from st_hsdatalog.HSD_utils.exceptions import MissingDeviceModelError, MissingISPUOutputDescriptorException
 import st_hsdatalog.HSD_utils.logger as logger
 from st_hsdatalog.HSD.HSDatalog import HSDatalog
 
 log = logger.setup_applevel_logger(is_debug = False, file_name= "app_debug.log")
+script_version = "2.0.0"
 
 def show_help(ctx, param, value):
     if value and not ctx.resilient_parsing:
@@ -48,13 +51,23 @@ def show_help(ctx, param, value):
 @click.option('-et','--end_time', help="End Time - Data conversion will end up in this time (seconds)", type=int, default=-1)
 @click.option('-it','--ignore_datalog_tags', is_flag=True, help="Use this flag to ignore information about annotations taken during acquisition (if any) in the exported data", default=False)
 @click.option('-f', '--out_format', help="Select exported data format", type=click.Choice(['TXT', 'CSV', 'TSV'], case_sensitive=False))
+@click.option('-cdm','--custom_device_model', help="Upload a custom Device Template Model (DTDL)", type=(int, int, str))
+@click.version_option(script_version, '-v', '--version', prog_name="HSDatalogToUnico", is_flag=True, help="HSDatalogToUnico Converter tool version number")
 @click.option('-d', '--debug', is_flag=True, help="[DEBUG] Check for corrupted data and timestamps", default=False)
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
-def hsd_exportByTags(acq_folder, output_folder, sensor_name, start_time, end_time, ignore_datalog_tags, out_format, debug):
+def hsd_exportByTags(acq_folder, output_folder, sensor_name, start_time, end_time, ignore_datalog_tags, out_format, custom_device_model, debug):
+
+    if custom_device_model is not None:
+        HSDatalogDTM.upload_custom_dtm(custom_device_model)
 
     hsd_factory = HSDatalog()
-    hsd = hsd_factory.create_hsd(acq_folder)
+    try:
+        hsd = hsd_factory.create_hsd(acq_folder)
+    except MissingDeviceModelError as error:
+        log.error("Device Template Model identifyed by [{}] not supported".format(error))
+        log.info("Check your input acquisition folder, then try to upload a custom Device Template Model using -cdm flag".format(error))
+        return
 
     output_folder = acq_folder + "_Exported" if output_folder is None else output_folder
     if not os.path.exists(output_folder):
@@ -67,23 +80,32 @@ def hsd_exportByTags(acq_folder, output_folder, sensor_name, start_time, end_tim
         if sensor_name == '':
             component = HSDatalog.ask_for_component(hsd, only_active=True)
             if component is not None:
-                HSDatalog.convert_dat_to_txt_by_tags(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
+                convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
             else:
                 break
 
         elif sensor_name == 'all':
             component_list = HSDatalog.get_all_components(hsd, only_active=True)
             for component in component_list:
-                HSDatalog.convert_dat_to_txt_by_tags(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
+                convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
             df_flag = False
         
         else:
             component = HSDatalog.get_component(hsd, sensor_name)
             if component is not None:
-                HSDatalog.convert_dat_to_txt_by_tags(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
+                convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
             else:
                 log.error("No \"{}\" Component found in your Device Configuration file.".format(sensor_name))
             df_flag = False
+
+def convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format):
+    try:
+        HSDatalog.convert_dat_to_txt_by_tags(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
+    except MissingISPUOutputDescriptorException as ispu_err:
+        log.error(ispu_err)
+        log.warning("Copy the right ISPU output descriptor file in your \"{}\" acquisition folder renamed as \"ispu_output_format.json\"".format(acq_folder))
+    except Exception as err:
+        log.exception(err)
  
 if __name__ == '__main__':
     hsd_exportByTags()

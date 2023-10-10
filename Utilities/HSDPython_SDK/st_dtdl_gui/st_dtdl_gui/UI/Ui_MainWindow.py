@@ -506,6 +506,15 @@ class Ui_MainWindow(object):
         self.page_connection.setObjectName(u"page_connection")
         self.page_connection_vlayout = QVBoxLayout(self.page_connection)
         self.page_connection_vlayout.setObjectName(u"page_connection_vlayout")
+        self.frame_log_file_options = QFrame(self.page_connection)
+        self.frame_log_file_options.setObjectName(u"frame_log_file_options")
+        self.frame_log_file_options.setFrameShape(QFrame.StyledPanel)
+        self.frame_log_file_options.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_4 = QHBoxLayout(self.frame_log_file_options)
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+
+        self.page_connection_vlayout.addWidget(self.frame_log_file_options, 0, Qt.AlignRight)
+
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.page_connection_vlayout.addItem(self.verticalSpacer)
@@ -612,7 +621,7 @@ class Ui_MainWindow(object):
         self.scrollArea_plots.setWidgetResizable(True)
         self.widget_plots = QWidget()
         self.widget_plots.setObjectName(u"widget_plots")
-        self.widget_plots.setGeometry(QRect(0, 0, 580, 609))
+        self.widget_plots.setGeometry(QRect(0, 0, 448, 609))
         sizePolicy5 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         sizePolicy5.setHorizontalStretch(0)
         sizePolicy5.setVerticalStretch(0)

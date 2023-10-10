@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -26,11 +26,11 @@ extern "C" {
 #include "ux_api.h"
 
 /**
- * @brief  USBD_ChangeFunction
- *         This function is called when the device state changes.
- * @param  Device_State: USB Device State
- * @retval status
- */
+  * @brief  USBD_ChangeFunction
+  *         This function is called when the device state changes.
+  * @param  Device_State: USB Device State
+  * @retval status
+  */
 UINT USBD_ChangeFunction(ULONG Device_State);
 
 

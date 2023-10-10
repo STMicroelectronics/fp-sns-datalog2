@@ -359,8 +359,9 @@ int main(int argc, char *argv[])
         ucfFile.read (ucfData, static_cast<int>(size_ucf));
 
         //TODO REDESIGN THIS!
+        char* pnpl_response = nullptr;
         char* ism330dhcx_str = (char*)"ism330dhcx";
-        hs_datalog_load_ucf_to_mlc(0, ism330dhcx_str, (uint8_t *)ucfData, size_ucf);
+        hs_datalog_load_ucf_to_mlc(0, ism330dhcx_str, (uint8_t *)ucfData, size_ucf, &pnpl_response);
 
         if(hs_datalog_free(ucfData) != ST_HS_DATALOG_OK)
         {
@@ -368,6 +369,16 @@ int main(int argc, char *argv[])
          cout << "Press any key to exit \n";
          getchar();
          return -1;
+        }
+
+        if(pnpl_response != nullptr){
+            if(hs_datalog_free(pnpl_response) != ST_HS_DATALOG_OK)
+            {
+            cout << "Error occurred while freeing memory\n";
+            cout << "Press any key to exit \n";
+            getchar();
+            return -1;
+            }
         }
     }
 
@@ -473,10 +484,32 @@ int main(int argc, char *argv[])
 
     /* -------------------- Start logging and wait for user command or timeout  -------------------- */
     /* Set RTC time */
-    hs_datalog_set_rtc_time(deviceID);
+    char * pnpl_response = nullptr;
+    hs_datalog_set_rtc_time(deviceID, &pnpl_response);
+    if(pnpl_response != nullptr){
+        /* Free memory */
+        if(hs_datalog_free(pnpl_response) != ST_HS_DATALOG_OK)
+        {
+            cout << "Error occurred while freeing memory\n";
+            cout << "Press any key to exit \n";
+            getchar();
+            return -1;
+        }
+    }
 
     /* Start logging */
-    hs_datalog_start_log(deviceID, 1); //1:USB
+    pnpl_response = nullptr;
+    hs_datalog_start_log(deviceID, 1, &pnpl_response); //1:USB
+    if(pnpl_response != nullptr){
+        /* Free memory */
+        if(hs_datalog_free(pnpl_response) != ST_HS_DATALOG_OK)
+        {
+            cout << "Error occurred while freeing memory\n";
+            cout << "Press any key to exit \n";
+            getchar();
+            return -1;
+        }
+    }
 
     auto start_time = std::chrono::high_resolution_clock::now();
     auto elapsed_time = std::chrono::duration_cast<std::chrono::milliseconds>( start_time - start_time ).count();
@@ -641,7 +674,18 @@ int main(int argc, char *argv[])
     /* -------------------- Stop logging, close files and connection -------------------- */
 
     /* Stop logging */
-    hs_datalog_stop_log(deviceID);
+    pnpl_response = nullptr;
+    hs_datalog_stop_log(deviceID, &pnpl_response);
+    if(pnpl_response != nullptr){
+        /* Free memory */
+        if(hs_datalog_free(pnpl_response) != ST_HS_DATALOG_OK)
+        {
+            cout << "Error occurred while freeing memory\n";
+            cout << "Press any key to exit \n";
+            getchar();
+            return -1;
+        }
+    }
 
     /* close files */
     for (auto c: sNames)

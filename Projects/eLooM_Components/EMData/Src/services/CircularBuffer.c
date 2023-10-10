@@ -25,8 +25,10 @@
 #define CB_ITEM_READY  0x02  ///< Status of a circular buffer item: READY
 
 #define CB_INCREMENT_IDX(p_cb, idx)    (((idx) + 1) % (p_cb)->item_count)
-#define CB_IS_EMPTY(p_cb)              (((p_cb)->head_idx == (p_cb)->tail_idx) && ((p_cb)->p_items[(p_cb)->head_idx].status.status == CB_ITEM_FREE) ? 1 : 0)
-#define CB_IS_FULL(p_cb)               (((p_cb)->head_idx == (p_cb)->tail_idx) && ((p_cb)->p_items[(p_cb)->head_idx].status.status != CB_ITEM_FREE) ? 1 : 0)
+#define CB_IS_EMPTY(p_cb)              (((p_cb)->head_idx == (p_cb)->tail_idx) &&\
+                                        ((p_cb)->p_items[(p_cb)->head_idx].status.status == CB_ITEM_FREE) ? 1 : 0)
+#define CB_IS_FULL(p_cb)               (((p_cb)->head_idx == (p_cb)->tail_idx) &&\
+                                        ((p_cb)->p_items[(p_cb)->head_idx].status.status != CB_ITEM_FREE) ? 1 : 0)
 
 
 // Private functions declarations
@@ -36,14 +38,14 @@
 // Public API definition
 // **********************
 
-CircularBuffer* CB_Alloc(uint16_t item_count)
+CircularBuffer *CB_Alloc(uint16_t item_count)
 {
   CircularBuffer *p_obj = SysAlloc(sizeof(CircularBuffer));
-  if(p_obj != NULL)
+  if (p_obj != NULL)
   {
     p_obj->p_items = SysAlloc(sizeof(CBItem) * item_count);
 
-    if(p_obj->p_items == NULL)
+    if (p_obj->p_items == NULL)
     {
       /* release the memory */
       SysFree(p_obj);
@@ -75,9 +77,9 @@ uint16_t CB_Init(CircularBuffer *_this, void *p_items_buffer, uint32_t item_size
   _this->tail_idx = 0;
   _this->item_size = item_size;
   uint32_t pData = (uint32_t) p_items_buffer;
-  for(uint32_t i = 0; i < _this->item_count; ++i)
+  for (uint32_t i = 0; i < _this->item_count; ++i)
   {
-    _this->p_items[i].p_data = (void*) pData;
+    _this->p_items[i].p_data = (void *) pData;
     _this->p_items[i].status.status = CB_ITEM_FREE;
     _this->p_items[i].status.reserved = 0;
     pData += item_size;
@@ -119,9 +121,9 @@ uint32_t CB_GetUsedItemsCount(CircularBuffer *_this)
   SYS_DECLARE_CS(cs);
 
   SYS_ENTER_CRITICAL(cs);
-  if(!CB_IS_EMPTY(_this))
+  if (!CB_IS_EMPTY(_this))
   {
-    if(_this->head_idx > _this->tail_idx)
+    if (_this->head_idx > _this->tail_idx)
     {
       items = _this->head_idx - _this->tail_idx;
     }
@@ -169,7 +171,7 @@ uint16_t CB_GetFreeItemFromHead(CircularBuffer *_this, CBItem **p_item)
   SYS_DECLARE_CS(cs);
 
   SYS_ENTER_CRITICAL(cs);
-  if(_this->p_items[_this->head_idx].status.status == CB_ITEM_FREE)
+  if (_this->p_items[_this->head_idx].status.status == CB_ITEM_FREE)
   {
     *p_item = &_this->p_items[_this->head_idx];
     /* Mark the item as NEW */
@@ -195,7 +197,7 @@ uint16_t CB_GetReadyItemFromTail(CircularBuffer *_this, CBItem **p_item)
   SYS_DECLARE_CS(cs);
 
   SYS_ENTER_CRITICAL(cs);
-  if(_this->p_items[_this->tail_idx].status.status == CB_ITEM_READY)
+  if (_this->p_items[_this->tail_idx].status.status == CB_ITEM_READY)
   {
     *p_item = &_this->p_items[_this->tail_idx];
     /* increment the tail pointer */
@@ -221,7 +223,7 @@ uint16_t CB_ReleaseItem(CircularBuffer *_this, CBItem *p_item)
   UNUSED(_this);
 
   SYS_ENTER_CRITICAL(cs);
-  if(p_item->status.status == CB_ITEM_NEW)
+  if (p_item->status.status == CB_ITEM_NEW)
   {
     /* the item is not valid because it has been only allocated but not produced. */
     res = SYS_CB_INVALID_ITEM_ERROR_CODE;
@@ -246,7 +248,7 @@ uint16_t CB_SetItemReady(CircularBuffer *_this, CBItem *p_item)
   UNUSED(_this);
 
   SYS_ENTER_CRITICAL(cs);
-  if(p_item->status.status == CB_ITEM_FREE)
+  if (p_item->status.status == CB_ITEM_FREE)
   {
     /* the item is not valid because it has not been allocated */
     res = SYS_CB_INVALID_ITEM_ERROR_CODE;
@@ -261,21 +263,21 @@ uint16_t CB_SetItemReady(CircularBuffer *_this, CBItem *p_item)
   return res;
 }
 
-void* CB_GetItemData(CBItem *p_item)
+void *CB_GetItemData(CBItem *p_item)
 {
   assert_param(p_item);
 
   return p_item->p_data;
 }
 
-void* CB_GetItemsBuffer(CircularBuffer *_this)
+void *CB_GetItemsBuffer(CircularBuffer *_this)
 {
   assert_param(_this);
 
   return _this->p_items[0].p_data;
 }
 
-CBItem* CB_PeekNextItem(CircularBuffer *_this, CBItem *p_item)
+CBItem *CB_PeekNextItem(CircularBuffer *_this, CBItem *p_item)
 {
   assert_param(_this);
   assert_param(p_item);
@@ -284,9 +286,9 @@ CBItem* CB_PeekNextItem(CircularBuffer *_this, CBItem *p_item)
   /* find p_item in the buffer */
   uint16_t index = 0;
   uint8_t found = 0;
-  while(!found && (index < _this->item_count))
+  while (!found && (index < _this->item_count))
   {
-    if(&_this->p_items[index] == p_item)
+    if (&_this->p_items[index] == p_item)
     {
       found = 1;
     }
@@ -296,7 +298,7 @@ CBItem* CB_PeekNextItem(CircularBuffer *_this, CBItem *p_item)
     }
   }
 
-  if(found)
+  if (found)
   {
     pNextItem = &_this->p_items[CB_INCREMENT_IDX(_this, index)];
   }

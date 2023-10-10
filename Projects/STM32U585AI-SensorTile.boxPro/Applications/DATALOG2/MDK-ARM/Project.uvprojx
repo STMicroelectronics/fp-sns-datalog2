@@ -340,7 +340,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>DEBUG, SYS_DEBUG, SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\eLooM_Components\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro;..\..\..\..\..\Drivers\BSP\Components\ism330is</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -472,7 +472,7 @@
             <File>
               <FileName>stm32u5xx_hal_timebase_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
+              <FilePath>..\mx\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_it.c</FileName>
@@ -503,6 +503,16 @@
               <FileName>tx_initialize_low_level.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\Core\Src\tx_initialize_low_level.s</FilePath>
+            </File>
+            <File>
+              <FileName>HardwareDetection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\HardwareDetection.c</FilePath>
+            </File>
+            <File>
+              <FileName>IIsm330is_Ispu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\IIsm330is_Ispu.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -674,6 +684,21 @@
               <FileType>1</FileType>
               <FilePath>..\PnPL\Src\Tags_Info_PnPL.c</FilePath>
             </File>
+            <File>
+              <FileName>Ism330is_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Src\Ism330is_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism330is_Gyro_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Src\Ism330is_Gyro_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism330is_Ispu_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Src\Ism330is_Ispu_PnPL.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -718,21 +743,6 @@
               <FileName>em_data_format.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\EMData\Src\services\em_data_format.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>eLooM_Components/PnPLCompManager</GroupName>
-          <Files>
-            <File>
-              <FileName>IPnPLComponent.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\eLooM_Components\PnPLCompManager\Src\IPnPLComponent.c</FilePath>
-            </File>
-            <File>
-              <FileName>PnPLCompManager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\eLooM_Components\PnPLCompManager\Src\PnPLCompManager.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -844,6 +854,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\STTS22HTask.c</FilePath>
             </File>
+            <File>
+              <FileName>ISM330ISTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ISM330ISTask.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -883,6 +898,11 @@
               <FileName>stts22h_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\stts22h\stts22h_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>ism330is_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330is\ism330is_reg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1248,6 +1268,21 @@
               <FileName>SysTimestamp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\eLooM\Src\services\SysTimestamp.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/ST/PnPLCompManager</GroupName>
+          <Files>
+            <File>
+              <FileName>IPnPLComponent.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\IPnPLComponent.c</FilePath>
+            </File>
+            <File>
+              <FileName>PnPLCompManager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\PnPLCompManager.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3787,6 +3822,12 @@
         <Group>
           <GroupName>::Compiler</GroupName>
         </Group>
+        <Group>
+          <GroupName>::CMSIS</GroupName>
+        </Group>
+        <Group>
+          <GroupName>::Compiler</GroupName>
+        </Group>
       </Groups>
     </Target>
     <Target>
@@ -4123,7 +4164,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\eLooM_Components\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro;..\..\..\..\..\Drivers\BSP\Components\ism330is</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -4255,7 +4296,7 @@
             <File>
               <FileName>stm32u5xx_hal_timebase_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
+              <FilePath>..\mx\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_it.c</FileName>
@@ -4286,6 +4327,16 @@
               <FileName>tx_initialize_low_level.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\Core\Src\tx_initialize_low_level.s</FilePath>
+            </File>
+            <File>
+              <FileName>HardwareDetection.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\HardwareDetection.c</FilePath>
+            </File>
+            <File>
+              <FileName>IIsm330is_Ispu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\IIsm330is_Ispu.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4457,6 +4508,21 @@
               <FileType>1</FileType>
               <FilePath>..\PnPL\Src\Tags_Info_PnPL.c</FilePath>
             </File>
+            <File>
+              <FileName>Ism330is_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Src\Ism330is_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism330is_Gyro_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Src\Ism330is_Gyro_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism330is_Ispu_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Src\Ism330is_Ispu_PnPL.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4501,21 +4567,6 @@
               <FileName>em_data_format.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\EMData\Src\services\em_data_format.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>eLooM_Components/PnPLCompManager</GroupName>
-          <Files>
-            <File>
-              <FileName>IPnPLComponent.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\eLooM_Components\PnPLCompManager\Src\IPnPLComponent.c</FilePath>
-            </File>
-            <File>
-              <FileName>PnPLCompManager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\eLooM_Components\PnPLCompManager\Src\PnPLCompManager.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4627,6 +4678,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\STTS22HTask.c</FilePath>
             </File>
+            <File>
+              <FileName>ISM330ISTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ISM330ISTask.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4666,6 +4722,11 @@
               <FileName>stts22h_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\stts22h\stts22h_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>ism330is_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330is\ism330is_reg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5031,6 +5092,21 @@
               <FileName>SysTimestamp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\eLooM\Src\services\SysTimestamp.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/ST/PnPLCompManager</GroupName>
+          <Files>
+            <File>
+              <FileName>IPnPLComponent.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\IPnPLComponent.c</FilePath>
+            </File>
+            <File>
+              <FileName>PnPLCompManager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\PnPLCompManager.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -7563,6 +7639,12 @@
               <FilePath>..\..\..\..\..\Middlewares\ST\CircularBufferDL2\CircularBufferDL2.c</FilePath>
             </File>
           </Files>
+        </Group>
+        <Group>
+          <GroupName>::CMSIS</GroupName>
+        </Group>
+        <Group>
+          <GroupName>::Compiler</GroupName>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>

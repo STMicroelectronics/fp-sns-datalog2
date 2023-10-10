@@ -9,7 +9,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -44,7 +44,7 @@ extern "C" {
 #define BLUE_CORE BLUENRG_MS
 
 #ifndef BLE_MANAGER_USE_PARSON
-  #define BLE_MANAGER_NO_PARSON
+#define BLE_MANAGER_NO_PARSON
 #endif /* BLE_MANAGER_USE_PARSON */
 
 /*---------- Out-Of-Band data -----------*/
@@ -55,7 +55,7 @@ extern "C" {
 #define ADDRESS_TYPE      1
 /*---------- Enable High Power mode. High power mode should be enabled only to reach the maximum output power. -----------*/
 #define ENABLE_HIGH_POWER_MODE      0x01
-/*---------- Power amplifier output level - The allowed PA levels depends on the device (see user manual to know wich output power is expected at a given PA level) -----------*/
+/*---------- Power amplifier output level - The allowed PA levels depends on the device (see user manual to know which output power is expected at a given PA level) -----------*/
 #define POWER_AMPLIFIER_OUTPUT_LEVEL      0x04
 /*---------- Length for configuration values. -----------*/
 #define CONFIG_VALUE_LENGTH      6
@@ -96,7 +96,7 @@ extern "C" {
 /* Define the Delay function to use inside the BLE Manager (HAL_Delay/osDelay) */
 #define BLE_MANAGER_DELAY HAL_Delay
 
-/****************** Memory managment functions **************************/
+/****************** Memory management functions **************************/
 #define BLE_MallocFunction      malloc
 #define BLE_FreeFunction        free
 #define BLE_MemCpy              memcpy
@@ -111,18 +111,18 @@ extern "C" {
 #define BLE_DEBUG_LEVEL 1
 
 #ifdef BLE_MANAGER_DEBUG
-  /**
+/**
   * User can change here printf with a custom implementation.
   * For example:
   * #include "STBOX1_config.h"
   * #include "main.h"
-  * #define BLE_MANAGER_PRINTF	STBOX1_PRINTF
+  * #define BLE_MANAGER_PRINTF  STBOX1_PRINTF
   */
 
-  #include <stdio.h>
-  #define BLE_MANAGER_PRINTF(...)	printf(__VA_ARGS__)
+#include <stdio.h>
+#define BLE_MANAGER_PRINTF(...) printf(__VA_ARGS__)
 #else
-  #define BLE_MANAGER_PRINTF(...)
+#define BLE_MANAGER_PRINTF(...)
 #endif
 
 /* USER CODE END 2 */

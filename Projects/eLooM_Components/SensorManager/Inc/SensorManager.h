@@ -28,6 +28,16 @@ extern "C" {
 #include "SensorManager_conf.h"
 #include "ISensor.h"
 #include "ISensor_vtbl.h"
+#include "ISensorAudio.h"
+#include "ISensorAudio_vtbl.h"
+#include "ISensorLight.h"
+#include "ISensorLight_vtbl.h"
+#include "ISensorMems.h"
+#include "ISensorMems_vtbl.h"
+#include "ISensorRanging.h"
+#include "ISensorRanging_vtbl.h"
+#include "ISensorPresence.h"
+#include "ISensorPresence_vtbl.h"
 #include "SensorDef.h"
 
 
@@ -81,9 +91,6 @@ struct _SensorManager_t
 /**************************/
 ISourceObservable *SMGetSensorObserver(uint8_t id);
 uint16_t SMGetNsensor(void);
-sys_error_code_t SMSensorSetODR(uint8_t id, float ODR);
-sys_error_code_t SMSensorSetFS(uint8_t id, float FS);
-sys_error_code_t SMSensorSetFifoWM(uint8_t id, uint16_t fifoWM);
 sys_error_code_t SMSensorEnable(uint8_t id);
 sys_error_code_t SMSensorDisable(uint8_t id);
 SensorDescriptor_t SMSensorGetDescription(uint8_t id);
@@ -92,6 +99,45 @@ sys_error_code_t SMDeviceGetDescription(SensorDescriptor_t *device_description);
 SensorManager_t *SMGetSensorManager(void);
 uint32_t SMGetnBytesPerSample(uint8_t id);
 
+/* Specialized for ISensorMems class */
+sys_error_code_t SMSensorSetODR(uint8_t id, float odr);
+sys_error_code_t SMSensorSetFS(uint8_t id, float fs);
+sys_error_code_t SMSensorSetFifoWM(uint8_t id, uint16_t fifoWM);
+
+/* Specialized for ISensorAudio class */
+sys_error_code_t SMSensorSetFrequency(uint8_t id, uint32_t frequency);
+sys_error_code_t SMSensorSetVolume(uint8_t id, uint8_t volume);
+sys_error_code_t SMSensorSetResolution(uint8_t id, uint8_t bit_depth);
+
+/* Specialized for ISensorRanging class */
+sys_error_code_t SMSensorConfigProfile(uint8_t id, ProfileConfig_t *p_config);
+sys_error_code_t SMSensorConfigIT(uint8_t id, ITConfig_t *p_it_config);
+sys_error_code_t SMSensorSetAddress(uint8_t id, uint32_t address);
+sys_error_code_t SMSensorSetPowerMode(uint8_t id, uint32_t power_mode);
+
+/* Specialized for ISensorPresence class */
+sys_error_code_t SMSensorSetDataFrequency(uint8_t id, float data_frequency);
+sys_error_code_t SMSensorSetTransmittance(uint8_t id, float Transmittance);
+sys_error_code_t SMSensorSetAverageTObject(uint8_t id, uint16_t average_tobject);
+sys_error_code_t SMSensorSetAverageTAmbient(uint8_t id, uint16_t average_tambient);
+sys_error_code_t SMSensorSetPresenceThreshold(uint8_t id, uint16_t presence_threshold);
+sys_error_code_t SMSensorSetPresenceHysteresis(uint8_t id, uint8_t presence_hysteresis);
+sys_error_code_t SMSensorSetMotionThreshold(uint8_t id, uint16_t motion_threshold);
+sys_error_code_t SMSensorSetMotionHysteresis(uint8_t id, uint8_t motion_hysteresis);
+sys_error_code_t SMSensorSetTAmbientShockThreshold(uint8_t id, uint16_t tambient_shock_threshold);
+sys_error_code_t SMSensorSetTAmbientShockHysteresis(uint8_t id, uint8_t tambient_shock_hysteresis);
+sys_error_code_t SMSensorSetLPF_P_M_Bandwidth(uint8_t id, uint16_t bandwidth);
+sys_error_code_t SMSensorSetLPF_P_Bandwidth(uint8_t id, uint16_t bandwidth);
+sys_error_code_t SMSensorSetLPF_M_Bandwidth(uint8_t id, uint16_t bandwidth);
+sys_error_code_t SMSensorSetEmbeddedCompensation(uint8_t id, uint8_t EmbeddedCompensation);
+sys_error_code_t SMSensorSetSoftwareCompensation(uint8_t id, uint8_t SoftwareCompensation);
+sys_error_code_t SMSensorSetSoftwareCompensationAlgorithmConfig(uint8_t id, CompensationAlgorithmConfig_t *pAlgorithmConfig);
+
+
+/* Specialized for ISensorLight class */
+sys_error_code_t SMSensorSetIntermeasurementTime(uint8_t id, uint32_t intermeasurement_time);
+sys_error_code_t SMSensorSetExposureTime(uint8_t id, float exposure_time);
+sys_error_code_t SMSensorSetLightGain(uint8_t id, uint16_t *LightGain);
 
 /* Inline functions definition */
 /*******************************/

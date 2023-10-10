@@ -825,6 +825,17 @@ QPushButton:pressed {
                   </property>
                   <widget class="QWidget" name="page_connection">
                    <layout class="QVBoxLayout" name="page_connection_vlayout">
+                    <item alignment="Qt::AlignRight">
+                     <widget class="QFrame" name="frame_log_file_options">
+                      <property name="frameShape">
+                       <enum>QFrame::StyledPanel</enum>
+                      </property>
+                      <property name="frameShadow">
+                       <enum>QFrame::Raised</enum>
+                      </property>
+                      <layout class="QHBoxLayout" name="horizontalLayout_4"/>
+                     </widget>
+                    </item>
                     <item>
                      <spacer name="verticalSpacer">
                       <property name="orientation">
@@ -1091,7 +1102,7 @@ QPushButton:pressed {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>580</width>
+                             <width>448</width>
                              <height>609</height>
                             </rect>
                            </property>

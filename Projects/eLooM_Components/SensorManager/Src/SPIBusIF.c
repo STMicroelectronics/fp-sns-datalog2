@@ -29,7 +29,7 @@
 // Public API implementation.
 // **************************
 
-ABusIF *SPIBusIFAlloc(uint8_t who_am_i, GPIO_TypeDef *p_port, uint16_t pin, uint8_t auto_inc)
+ABusIF *SPIBusIFAlloc(uint16_t who_am_i, GPIO_TypeDef *p_port, uint16_t pin, uint8_t auto_inc)
 {
   SPIBusIF *_this = NULL;
 

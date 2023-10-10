@@ -39,17 +39,9 @@ extern "C" {
 
 /* Exported Defines --------------------------------------------------------*/
 
-/* Select the used hardware platform
- * For example:
- * #define BLE_MANAGER_USED_PLATFORM  BLE_MANAGER_NUCLEO_PLATFORM
- *
-*/
-
-/* Used platform */
-#define BLE_MANAGER_USED_PLATFORM   BOARD_ID
 
 /* Firmware Package Name */
-#define BLE_FW_PACKAGENAME          "HSD2v12"
+#define BLE_FW_PACKAGENAME          "HSD2v20"
 
 /* Max Stream ID dedicated to custom data, utility stream (like advertise option byte) could be added after this */
 #define MAX_CUSTOM_DATA_STREAM_ID          (SM_MAX_SENSORS)

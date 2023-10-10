@@ -30,8 +30,11 @@ tBleStatus aci_hal_get_fw_build_number(uint16_t *Build_Number)
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *Build_Number = btoh(resp.Build_Number, 2);
@@ -58,8 +61,11 @@ tBleStatus aci_hal_get_firmware_details(uint8_t *DTM_version_major,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *DTM_version_major = btoh(resp.DTM_version_major, 1);
@@ -81,7 +87,7 @@ tBleStatus aci_hal_write_config_data(uint8_t Offset,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_write_config_data_cp0 *cp0 = (aci_hal_write_config_data_cp0*)(cmd_buffer);
+  aci_hal_write_config_data_cp0 *cp0 = (aci_hal_write_config_data_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Offset = htob(Offset, 1);
@@ -90,8 +96,8 @@ tBleStatus aci_hal_write_config_data(uint8_t Offset,
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Value, (const void *) Value, Length*sizeof(uint8_t));
-    index_input += Length*sizeof(uint8_t);
+    BLUENRG_memcpy((void *) &cp0->Value, (const void *) Value, Length * sizeof(uint8_t));
+    index_input += Length * sizeof(uint8_t);
   }
   BLUENRG_memset(&rq, 0, sizeof(rq));
   rq.ogf = 0x3f;
@@ -101,8 +107,11 @@ tBleStatus aci_hal_write_config_data(uint8_t Offset,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -113,7 +122,7 @@ tBleStatus aci_hal_read_config_data(uint8_t Offset,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_read_config_data_cp0 *cp0 = (aci_hal_read_config_data_cp0*)(cmd_buffer);
+  aci_hal_read_config_data_cp0 *cp0 = (aci_hal_read_config_data_cp0 *)(cmd_buffer);
   aci_hal_read_config_data_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -127,12 +136,15 @@ tBleStatus aci_hal_read_config_data(uint8_t Offset,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *Data_Length = btoh(resp.Data_Length, 1);
-  BLUENRG_memcpy((void *) Data, (const void *) resp.Data, *Data_Length*sizeof(uint8_t));
+  BLUENRG_memcpy((void *) Data, (const void *) resp.Data, *Data_Length * sizeof(uint8_t));
   return BLE_STATUS_SUCCESS;
 }
 tBleStatus aci_hal_set_tx_power_level(uint8_t En_High_Power,
@@ -140,7 +152,7 @@ tBleStatus aci_hal_set_tx_power_level(uint8_t En_High_Power,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_set_tx_power_level_cp0 *cp0 = (aci_hal_set_tx_power_level_cp0*)(cmd_buffer);
+  aci_hal_set_tx_power_level_cp0 *cp0 = (aci_hal_set_tx_power_level_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->En_High_Power = htob(En_High_Power, 1);
@@ -155,8 +167,11 @@ tBleStatus aci_hal_set_tx_power_level(uint8_t En_High_Power,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -172,8 +187,11 @@ tBleStatus aci_hal_le_tx_test_packet_number(uint32_t *Number_Of_Packets)
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *Number_Of_Packets = btoh(resp.Number_Of_Packets, 4);
@@ -184,7 +202,7 @@ tBleStatus aci_hal_tone_start(uint8_t RF_Channel,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_tone_start_cp0 *cp0 = (aci_hal_tone_start_cp0*)(cmd_buffer);
+  aci_hal_tone_start_cp0 *cp0 = (aci_hal_tone_start_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->RF_Channel = htob(RF_Channel, 1);
@@ -199,8 +217,11 @@ tBleStatus aci_hal_tone_start(uint8_t RF_Channel,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -215,8 +236,11 @@ tBleStatus aci_hal_tone_stop(void)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -233,8 +257,11 @@ tBleStatus aci_hal_get_link_status(uint8_t Link_Status[8],
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   BLUENRG_memcpy((void *) Link_Status, (const void *) resp.Link_Status, 8);
@@ -245,7 +272,7 @@ tBleStatus aci_hal_set_radio_activity_mask(uint16_t Radio_Activity_Mask)
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_set_radio_activity_mask_cp0 *cp0 = (aci_hal_set_radio_activity_mask_cp0*)(cmd_buffer);
+  aci_hal_set_radio_activity_mask_cp0 *cp0 = (aci_hal_set_radio_activity_mask_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Radio_Activity_Mask = htob(Radio_Activity_Mask, 2);
@@ -258,8 +285,11 @@ tBleStatus aci_hal_set_radio_activity_mask(uint16_t Radio_Activity_Mask)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -276,8 +306,11 @@ tBleStatus aci_hal_get_anchor_period(uint32_t *Anchor_Period,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *Anchor_Period = btoh(resp.Anchor_Period, 4);
@@ -288,7 +321,7 @@ tBleStatus aci_hal_set_event_mask(uint32_t Event_Mask)
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_set_event_mask_cp0 *cp0 = (aci_hal_set_event_mask_cp0*)(cmd_buffer);
+  aci_hal_set_event_mask_cp0 *cp0 = (aci_hal_set_event_mask_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Event_Mask = htob(Event_Mask, 4);
@@ -301,8 +334,11 @@ tBleStatus aci_hal_set_event_mask(uint32_t Event_Mask)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -317,8 +353,11 @@ tBleStatus aci_hal_updater_start(void)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -333,8 +372,11 @@ tBleStatus aci_hal_updater_reboot(void)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -350,8 +392,11 @@ tBleStatus aci_hal_get_updater_version(uint8_t *Version)
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *Version = btoh(resp.Version, 1);
@@ -368,8 +413,11 @@ tBleStatus aci_hal_get_updater_bufsize(uint8_t *Buffer_Size)
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *Buffer_Size = btoh(resp.Buffer_Size, 1);
@@ -385,8 +433,11 @@ tBleStatus aci_hal_updater_erase_blue_flag(void)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -401,8 +452,11 @@ tBleStatus aci_hal_updater_reset_blue_flag(void)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -411,7 +465,7 @@ tBleStatus aci_hal_updater_erase_sector(uint32_t Address)
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_updater_erase_sector_cp0 *cp0 = (aci_hal_updater_erase_sector_cp0*)(cmd_buffer);
+  aci_hal_updater_erase_sector_cp0 *cp0 = (aci_hal_updater_erase_sector_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Address = htob(Address, 4);
@@ -424,8 +478,11 @@ tBleStatus aci_hal_updater_erase_sector(uint32_t Address)
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -436,7 +493,7 @@ tBleStatus aci_hal_updater_prog_data_blk(uint32_t Address,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_updater_prog_data_blk_cp0 *cp0 = (aci_hal_updater_prog_data_blk_cp0*)(cmd_buffer);
+  aci_hal_updater_prog_data_blk_cp0 *cp0 = (aci_hal_updater_prog_data_blk_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->Address = htob(Address, 4);
@@ -445,8 +502,8 @@ tBleStatus aci_hal_updater_prog_data_blk(uint32_t Address,
   index_input += 2;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Data, (const void *) Data, Data_Length*sizeof(uint8_t));
-    index_input += Data_Length*sizeof(uint8_t);
+    BLUENRG_memcpy((void *) &cp0->Data, (const void *) Data, Data_Length * sizeof(uint8_t));
+    index_input += Data_Length * sizeof(uint8_t);
   }
   BLUENRG_memset(&rq, 0, sizeof(rq));
   rq.ogf = 0x3f;
@@ -456,8 +513,11 @@ tBleStatus aci_hal_updater_prog_data_blk(uint32_t Address,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;
@@ -468,7 +528,7 @@ tBleStatus aci_hal_updater_read_data_blk(uint32_t Address,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_updater_read_data_blk_cp0 *cp0 = (aci_hal_updater_read_data_blk_cp0*)(cmd_buffer);
+  aci_hal_updater_read_data_blk_cp0 *cp0 = (aci_hal_updater_read_data_blk_cp0 *)(cmd_buffer);
   aci_hal_updater_read_data_blk_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -484,11 +544,14 @@ tBleStatus aci_hal_updater_read_data_blk(uint32_t Address,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
-  BLUENRG_memcpy((void *) Data, (const void *) resp.Data, (rq.rlen-1)*sizeof(uint8_t));
+  BLUENRG_memcpy((void *) Data, (const void *) resp.Data, (rq.rlen - 1)*sizeof(uint8_t));
   return BLE_STATUS_SUCCESS;
 }
 tBleStatus aci_hal_updater_calc_crc(uint32_t Address,
@@ -497,7 +560,7 @@ tBleStatus aci_hal_updater_calc_crc(uint32_t Address,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_updater_calc_crc_cp0 *cp0 = (aci_hal_updater_calc_crc_cp0*)(cmd_buffer);
+  aci_hal_updater_calc_crc_cp0 *cp0 = (aci_hal_updater_calc_crc_cp0 *)(cmd_buffer);
   aci_hal_updater_calc_crc_rp0 resp;
   BLUENRG_memset(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
@@ -513,8 +576,11 @@ tBleStatus aci_hal_updater_calc_crc(uint32_t Address,
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *crc = btoh(resp.crc, 4);
@@ -531,8 +597,11 @@ tBleStatus aci_hal_updater_hw_version(uint8_t *HW_Version)
   rq.rparam = &resp;
   rq.rlen = sizeof(resp);
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (resp.Status) {
+  }
+  if (resp.Status)
+  {
     return resp.Status;
   }
   *HW_Version = btoh(resp.HW_Version, 1);
@@ -545,7 +614,7 @@ tBleStatus aci_hal_transmitter_test_packets(uint8_t TX_Frequency,
 {
   struct hci_request rq;
   uint8_t cmd_buffer[258];
-  aci_hal_transmitter_test_packets_cp0 *cp0 = (aci_hal_transmitter_test_packets_cp0*)(cmd_buffer);
+  aci_hal_transmitter_test_packets_cp0 *cp0 = (aci_hal_transmitter_test_packets_cp0 *)(cmd_buffer);
   tBleStatus status = 0;
   uint8_t index_input = 0;
   cp0->TX_Frequency = htob(TX_Frequency, 1);
@@ -564,8 +633,11 @@ tBleStatus aci_hal_transmitter_test_packets(uint8_t TX_Frequency,
   rq.rparam = &status;
   rq.rlen = 1;
   if (hci_send_req(&rq, FALSE) < 0)
+  {
     return BLE_STATUS_TIMEOUT;
-  if (status) {
+  }
+  if (status)
+  {
     return status;
   }
   return BLE_STATUS_SUCCESS;

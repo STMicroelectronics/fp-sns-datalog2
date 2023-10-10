@@ -1,22 +1,22 @@
 
 /**
- ******************************************************************************
- * @file    UtilTask.c
- * @author  SRA
- * @brief  UtilTask_t definition.
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *                             
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    UtilTask.c
+  * @author  SRA
+  * @brief  UtilTask_t definition.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *
+  ******************************************************************************
+  */
 
 #include "UtilTask.h"
 #include "UtilTask_vtbl.h"
@@ -56,22 +56,22 @@
 
 
 /**
- * Class object declaration. The class object encapsulates members that are shared between
- * all instance of the class.
- */
+  * Class object declaration. The class object encapsulates members that are shared between
+  * all instance of the class.
+  */
 typedef struct _UtilTaskClass_t
 {
   /**
-   * UtilTask class virtual table.
-   */
+    * UtilTask class virtual table.
+    */
   AManagedTaskEx_vtbl vtbl;
 
   /**
-   * UtilTask class (PM_STATE, ExecuteStepFunc) map. The map is implemente with an array and
-   * the key is the index. Number of items of this array must be equal to the number of PM state
-   * of the application. If the managed task does nothing in a PM state, then set to NULL the
-   * relative entry in the map.
-   */
+    * UtilTask class (PM_STATE, ExecuteStepFunc) map. The map is implemente with an array and
+    * the key is the index. Number of items of this array must be equal to the number of PM state
+    * of the application. If the managed task does nothing in a PM state, then set to NULL the
+    * relative entry in the map.
+    */
   pExecuteStepFunc_t p_pm_state2func_map[];
 } UtilTaskClass_t;
 
@@ -80,26 +80,26 @@ typedef struct _UtilTaskClass_t
 /***************************************/
 
 /**
- * Execute one step of the task control loop while the system is in STATE1.
- *
- * @param _this [IN] specifies a pointer to a task object.
- * @return SYS_NO_EROR_CODE if success, a task specific error code otherwise.
- */
+  * Execute one step of the task control loop while the system is in STATE1.
+  *
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return SYS_NO_EROR_CODE if success, a task specific error code otherwise.
+  */
 static sys_error_code_t UtilTaskExecuteStepState1(AManagedTask *_this);
 
 /**
- * Execute one step of the task control loop while the system is in SENSORS_ACTIVE.
- *
- * @param _this [IN] specifies a pointer to a task object.
- * @return SYS_NO_EROR_CODE if success, a task specific error code otherwise.
- */
+  * Execute one step of the task control loop while the system is in SENSORS_ACTIVE.
+  *
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return SYS_NO_EROR_CODE if success, a task specific error code otherwise.
+  */
 static sys_error_code_t UtilTaskExecuteStepSensorsActive(AManagedTask *_this);
 
 /**
- * Callback function called when the User Led software timer expires.
- *
- * @param xTimer [IN] specifies the handle of the expired timer.
- */
+  * Callback function called when the User Led software timer expires.
+  *
+  * @param xTimer [IN] specifies the handle of the expired timer.
+  */
 static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer);
 
 /**
@@ -115,35 +115,39 @@ static void RND_Init(void);
 
 
 /**
- * The only instance of the task object.
- */
+  * The only instance of the task object.
+  */
 static UtilTask_t sTaskObj;
 
 /**
- * The class object.
- */
+  * The class object.
+  */
 static const UtilTaskClass_t sTheClass =
 {
-    /* Class virtual table */
-    {
-        UtilTask_vtblHardwareInit,
-        UtilTask_vtblOnCreateTask,
-        UtilTask_vtblDoEnterPowerMode,
-        UtilTask_vtblHandleError,
-        UtilTask_vtblOnEnterTaskControlLoop,
-        UtilTask_vtblForceExecuteStep,
-        UtilTask_vtblOnEnterPowerMode },
+  /* Class virtual table */
+  {
+    UtilTask_vtblHardwareInit,
+    UtilTask_vtblOnCreateTask,
+    UtilTask_vtblDoEnterPowerMode,
+    UtilTask_vtblHandleError,
+    UtilTask_vtblOnEnterTaskControlLoop,
+    UtilTask_vtblForceExecuteStep,
+    UtilTask_vtblOnEnterPowerMode
+  },
 
-    /* class (PM_STATE, ExecuteStepFunc) map */
-    {
-        UtilTaskExecuteStepState1,
-        NULL,
-        UtilTaskExecuteStepSensorsActive } };
+  /* class (PM_STATE, ExecuteStepFunc) map */
+  {
+    UtilTaskExecuteStepState1,
+    NULL,
+    UtilTaskExecuteStepSensorsActive
+  }
+};
 
 /* Public API definition */
 /*************************/
 
-AManagedTaskEx *UtilTaskAlloc(const void *p_mx_sw1_drv_cfg, const void *p_mx_led1_drv_cfg, const void *p_mx_led2_drv_cfg, const void *p_mx_led3_drv_cfg)
+AManagedTaskEx *UtilTaskAlloc(const void *p_mx_sw1_drv_cfg, const void *p_mx_led1_drv_cfg,
+                              const void *p_mx_led2_drv_cfg, const void *p_mx_led3_drv_cfg)
 {
   /* In this application there is only one Keyboard task,
    * so this allocator implement the singleton design pattern.
@@ -160,7 +164,7 @@ AManagedTaskEx *UtilTaskAlloc(const void *p_mx_sw1_drv_cfg, const void *p_mx_led
   sTaskObj.p_mx_led2_drv_cfg = p_mx_led2_drv_cfg;
   sTaskObj.p_mx_led3_drv_cfg = p_mx_led3_drv_cfg;
 
-  return (AManagedTaskEx*)&sTaskObj;
+  return (AManagedTaskEx *)&sTaskObj;
 }
 
 
@@ -171,7 +175,7 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  UtilTask_t *p_obj = (UtilTask_t*)_this;
+  UtilTask_t *p_obj = (UtilTask_t *)_this;
 
   if (!SYS_IS_ERROR_CODE(res))
   {
@@ -179,22 +183,28 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
     // configure User Button 1
     if (p_obj->p_mx_sw1_drv_cfg != NULL)
     {
-      ((MX_GPIOParams_t*)p_obj->p_mx_sw1_drv_cfg)->p_mx_init_f();
+      ((MX_GPIOParams_t *)p_obj->p_mx_sw1_drv_cfg)->p_mx_init_f();
     }
     // configure Led 1
     if (p_obj->p_mx_led1_drv_cfg != NULL)
     {
-      ((MX_GPIOParams_t*)p_obj->p_mx_led1_drv_cfg)->p_mx_init_f();
+      MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t *)p_obj->p_mx_led1_drv_cfg;
+      p_ld1_params->p_mx_init_f();
+      HAL_GPIO_WritePin(p_ld1_params->port, p_ld1_params->pin, GPIO_PIN_RESET);
     }
     // configure Led 2
     if (p_obj->p_mx_led2_drv_cfg != NULL)
     {
-      ((MX_GPIOParams_t*)p_obj->p_mx_led2_drv_cfg)->p_mx_init_f();
+      MX_GPIOParams_t *p_ld2_params = (MX_GPIOParams_t *)p_obj->p_mx_led2_drv_cfg;
+      p_ld2_params->p_mx_init_f();
+      HAL_GPIO_WritePin(p_ld2_params->port, p_ld2_params->pin, GPIO_PIN_RESET);
     }
     // configure Led 3
     if (p_obj->p_mx_led3_drv_cfg != NULL)
     {
-      ((MX_GPIOParams_t*)p_obj->p_mx_led3_drv_cfg)->p_mx_init_f();
+      MX_GPIOParams_t *p_ld3_params = (MX_GPIOParams_t *)p_obj->p_mx_led3_drv_cfg;
+      p_ld3_params->p_mx_init_f();
+      HAL_GPIO_WritePin(p_ld3_params->port, p_ld3_params->pin, GPIO_PIN_RESET);
     }
   }
 
@@ -205,17 +215,18 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
   return res;
 }
 
-sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName, VOID **pvStackStart, ULONG *pStackDepth,
+sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName,
+                                           VOID **pvStackStart, ULONG *pStackDepth,
                                            UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart, ULONG *pParams)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  UtilTask_t *p_obj = (UtilTask_t*)_this;
+  UtilTask_t *p_obj = (UtilTask_t *)_this;
 
   /* initialize the object software resource here. */
   uint16_t nItemSize = UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE;
   VOID *pvQueueItemsBuff = SysAlloc(UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT * nItemSize);
-  if(pvQueueItemsBuff == NULL)
+  if (pvQueueItemsBuff == NULL)
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
@@ -223,7 +234,8 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
   }
 
   /* create the input queue */
-  if(TX_SUCCESS != tx_queue_create(&p_obj->in_queue, "UTIL_Q", nItemSize / 4, pvQueueItemsBuff, UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT * nItemSize))
+  if (TX_SUCCESS != tx_queue_create(&p_obj->in_queue, "UTIL_Q", nItemSize / 4, pvQueueItemsBuff,
+                                    UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT * nItemSize))
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
@@ -232,8 +244,8 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
 
   /* Software timer for user led management */
   if (TX_SUCCESS != tx_timer_create(&p_obj->user_led_timer, "USER_LED_T", UtilTaskSwTimerCallbackUserLed, (ULONG)TX_NULL,
-                         AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS),
-                         TX_AUTO_ACTIVATE))
+                                    AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS),
+                                    TX_AUTO_ACTIVATE))
   {
     res = SYS_APP_TASK_INIT_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
@@ -256,38 +268,39 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
   return res;
 }
 
-sys_error_code_t UtilTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPowerMode active_power_mode, const EPowerMode new_power_mode)
+sys_error_code_t UtilTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPowerMode active_power_mode,
+                                               const EPowerMode new_power_mode)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  UtilTask_t *p_obj = (UtilTask_t*)_this;
+  UtilTask_t *p_obj = (UtilTask_t *)_this;
 
-  if(new_power_mode == E_POWER_MODE_STATE1)
+  if (new_power_mode == E_POWER_MODE_STATE1)
   {
 
   }
-  else if(new_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
+  else if (new_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
   {
 
   }
-  else if(new_power_mode == E_POWER_MODE_SLEEP_1)
+  else if (new_power_mode == E_POWER_MODE_SLEEP_1)
   {
     /* turn off the USER LED1 */
     if (p_obj->p_mx_led1_drv_cfg != NULL)
     {
-      MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t*)p_obj->p_mx_led1_drv_cfg;
+      MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t *)p_obj->p_mx_led1_drv_cfg;
       HAL_GPIO_WritePin(p_ld1_params->port, p_ld1_params->pin, GPIO_PIN_RESET);
     }
     /* turn off the USER LED2 */
     if (p_obj->p_mx_led2_drv_cfg != NULL)
     {
-      MX_GPIOParams_t *p_ld2_params = (MX_GPIOParams_t*)p_obj->p_mx_led2_drv_cfg;
+      MX_GPIOParams_t *p_ld2_params = (MX_GPIOParams_t *)p_obj->p_mx_led2_drv_cfg;
       HAL_GPIO_WritePin(p_ld2_params->port, p_ld2_params->pin, GPIO_PIN_RESET);
     }
     /* turn off the USER LED3 */
     if (p_obj->p_mx_led3_drv_cfg != NULL)
     {
-      MX_GPIOParams_t *p_ld3_params = (MX_GPIOParams_t*)p_obj->p_mx_led3_drv_cfg;
+      MX_GPIOParams_t *p_ld3_params = (MX_GPIOParams_t *)p_obj->p_mx_led3_drv_cfg;
       HAL_GPIO_WritePin(p_ld3_params->port, p_ld3_params->pin, GPIO_PIN_RESET);
     }
 
@@ -302,7 +315,7 @@ sys_error_code_t UtilTask_vtblHandleError(AManagedTask *_this, SysEvent error)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-/*  UtilTask_t *p_obj = (UtilTask_t*)_this; */
+  /*  UtilTask_t *p_obj = (UtilTask_t*)_this; */
 
   return res;
 }
@@ -311,12 +324,12 @@ sys_error_code_t UtilTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 {
   assert_param(_this);
   sys_error_code_t xRes = SYS_NO_ERROR_CODE;
-  UtilTask_t *p_obj = (UtilTask_t*)_this;
+  UtilTask_t *p_obj = (UtilTask_t *)_this;
 
   /* Enable User button SW1 interrupt */
   if (p_obj->p_mx_sw1_drv_cfg != NULL)
   {
-    MX_GPIOParams_t *p_sw1_params = (MX_GPIOParams_t*)p_obj->p_mx_sw1_drv_cfg;
+    MX_GPIOParams_t *p_sw1_params = (MX_GPIOParams_t *)p_obj->p_mx_sw1_drv_cfg;
     HAL_NVIC_EnableIRQ(p_sw1_params->irq_n);
   }
 
@@ -333,21 +346,22 @@ sys_error_code_t UtilTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowerMode
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  UtilTask_t *p_obj = (UtilTask_t*)_this;
+  UtilTask_t *p_obj = (UtilTask_t *)_this;
 
-  struct utilMessage_t msg = {
-      .msgId = APP_REPORT_ID_FORCE_STEP
+  struct utilMessage_t msg =
+  {
+    .msgId = APP_REPORT_ID_FORCE_STEP
   };
 
-  if(active_power_mode == E_POWER_MODE_STATE1)
+  if (active_power_mode == E_POWER_MODE_STATE1)
   {
     /* the task is waiting for a message */
-    if(TX_SUCCESS != tx_queue_front_send(&p_obj->in_queue, &msg, AMT_MS_TO_TICKS(100)))
+    if (TX_SUCCESS != tx_queue_front_send(&p_obj->in_queue, &msg, AMT_MS_TO_TICKS(100)))
     {
       res = SYS_TASK_QUEUE_FULL_ERROR_CODE;
     }
   }
-  else if(active_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
+  else if (active_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
   {
     /* the task is ready again */
     tx_thread_wait_abort(&_this->m_xTaskHandle);
@@ -360,11 +374,12 @@ sys_error_code_t UtilTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowerMode
   return res;
 }
 
-sys_error_code_t UtilTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPowerMode active_power_mode, const EPowerMode new_power_mode)
+sys_error_code_t UtilTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPowerMode active_power_mode,
+                                               const EPowerMode new_power_mode)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-/*  UtilTask_t *p_obj = (UtilTask_t*)_this; */
+  /*  UtilTask_t *p_obj = (UtilTask_t*)_this; */
 
   return res;
 }
@@ -377,30 +392,30 @@ static sys_error_code_t UtilTaskExecuteStepState1(AManagedTask *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  UtilTask_t *p_obj = (UtilTask_t*)_this;
+  UtilTask_t *p_obj = (UtilTask_t *)_this;
   static uint8_t led_count_state1 = 0;
 
   struct utilMessage_t msg = {0};
 
-  AMTExSetInactiveState((AManagedTaskEx*) _this, TRUE);
-  if(TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &msg, TX_WAIT_FOREVER))
+  AMTExSetInactiveState((AManagedTaskEx *) _this, TRUE);
+  if (TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &msg, TX_WAIT_FOREVER))
   {
-    AMTExSetInactiveState((AManagedTaskEx*) _this, FALSE);
-    if(msg.msgId == APP_REPORT_ID_FORCE_STEP)
+    AMTExSetInactiveState((AManagedTaskEx *) _this, FALSE);
+    if (msg.msgId == APP_REPORT_ID_FORCE_STEP)
     {
       __NOP();
     }
-    else if(msg.msgId == APP_MESSAGE_ID_UTIL)
+    else if (msg.msgId == APP_MESSAGE_ID_UTIL)
     {
-      if(msg.nCmdID == UTIL_CMD_ID_DATALOG_LED)
+      if (msg.nCmdID == UTIL_CMD_ID_DATALOG_LED)
       {
         led_count_state1++;
-        if(led_count_state1 == 4)
+        if (led_count_state1 == 4)
         {
           led_count_state1 = 0;
           if (p_obj->p_mx_led1_drv_cfg != NULL)
           {
-            MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t*)p_obj->p_mx_led1_drv_cfg;
+            MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t *)p_obj->p_mx_led1_drv_cfg;
             HAL_GPIO_TogglePin(p_ld1_params->port, p_ld1_params->pin);
           }
         }
@@ -415,25 +430,25 @@ static sys_error_code_t UtilTaskExecuteStepSensorsActive(AManagedTask *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  UtilTask_t *p_obj = (UtilTask_t*) _this;
+  UtilTask_t *p_obj = (UtilTask_t *) _this;
 
   struct utilMessage_t msg =
   {
     0
   };
 
-  AMTExSetInactiveState((AManagedTaskEx*) _this, TRUE);
+  AMTExSetInactiveState((AManagedTaskEx *) _this, TRUE);
 
-  if(TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &msg, TX_WAIT_FOREVER))
+  if (TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &msg, TX_WAIT_FOREVER))
   {
-    AMTExSetInactiveState((AManagedTaskEx*) _this, FALSE);
-    if(msg.msgId == APP_MESSAGE_ID_UTIL)
+    AMTExSetInactiveState((AManagedTaskEx *) _this, FALSE);
+    if (msg.msgId == APP_MESSAGE_ID_UTIL)
     {
-      if(msg.nCmdID == UTIL_CMD_ID_DATALOG_LED)
+      if (msg.nCmdID == UTIL_CMD_ID_DATALOG_LED)
       {
         if (p_obj->p_mx_led1_drv_cfg != NULL)
         {
-          MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t*)p_obj->p_mx_led1_drv_cfg;
+          MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t *)p_obj->p_mx_led1_drv_cfg;
           HAL_GPIO_TogglePin(p_ld1_params->port, p_ld1_params->pin);
         }
       }
@@ -445,15 +460,15 @@ static sys_error_code_t UtilTaskExecuteStepSensorsActive(AManagedTask *_this)
 
 static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer)
 {
-  UtilTask_t *p_obj = (UtilTask_t*) &sTaskObj;
+  UtilTask_t *p_obj = (UtilTask_t *) &sTaskObj;
 
   struct utilMessage_t msg =
   {
-      .msgId = APP_MESSAGE_ID_UTIL,
-      .nCmdID = UTIL_CMD_ID_DATALOG_LED
+    .msgId = APP_MESSAGE_ID_UTIL,
+    .nCmdID = UTIL_CMD_ID_DATALOG_LED
   };
 
-  if(TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &msg, TX_NO_WAIT))
+  if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &msg, TX_NO_WAIT))
   {
     // unable to send the report. Signal the error
     sys_error_handler();
@@ -462,11 +477,11 @@ static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer)
   bool sd_detected;
   log_controller_get_sd_mounted(&sd_detected);
 
-  if(sd_detected)
+  if (sd_detected)
   {
     if (p_obj->p_mx_led3_drv_cfg != NULL)
     {
-      MX_GPIOParams_t *p_ld3_params = (MX_GPIOParams_t*)p_obj->p_mx_led3_drv_cfg;
+      MX_GPIOParams_t *p_ld3_params = (MX_GPIOParams_t *)p_obj->p_mx_led3_drv_cfg;
       HAL_GPIO_WritePin(p_ld3_params->port, p_ld3_params->pin, GPIO_PIN_SET);
     }
   }
@@ -474,7 +489,7 @@ static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer)
   {
     if (p_obj->p_mx_led3_drv_cfg != NULL)
     {
-      MX_GPIOParams_t *p_ld3_params = (MX_GPIOParams_t*)p_obj->p_mx_led3_drv_cfg;
+      MX_GPIOParams_t *p_ld3_params = (MX_GPIOParams_t *)p_obj->p_mx_led3_drv_cfg;
       HAL_GPIO_WritePin(p_ld3_params->port, p_ld3_params->pin, GPIO_PIN_RESET);
     }
   }
@@ -525,53 +540,58 @@ static void RND_Init(void)
 }
 
 /**
- * @brief  Enable Disable the jump to second flash bank and reboot board
- * @param  None
- * @retval None
- */
+  * @brief  Enable Disable the jump to second flash bank and reboot board
+  * @param  None
+  * @retval None
+  */
 void SwitchBank(void)
 {
-    FLASH_OBProgramInitTypeDef    OBInit;
-    /* Set BFB2 bit to enable boot from Flash Bank2 */
-    /* Allow Access to Flash control registers and user Flash */
-    HAL_FLASH_Unlock();
+  FLASH_OBProgramInitTypeDef    OBInit;
+  /* Set BFB2 bit to enable boot from Flash Bank2 */
+  /* Allow Access to Flash control registers and user Flash */
+  HAL_FLASH_Unlock();
 
-    /* Allow Access to option bytes sector */
-    HAL_FLASH_OB_Unlock();
+  /* Allow Access to option bytes sector */
+  HAL_FLASH_OB_Unlock();
 
-    /* Get the Dual boot configuration status */
-    HAL_FLASHEx_OBGetConfig(&OBInit);
+  /* Get the Dual boot configuration status */
+  HAL_FLASHEx_OBGetConfig(&OBInit);
 
-    /* Enable/Disable dual boot feature */
-    OBInit.OptionType = OPTIONBYTE_USER;
-    OBInit.USERType   = OB_USER_SWAP_BANK;
+  /* Enable/Disable dual boot feature */
+  OBInit.OptionType = OPTIONBYTE_USER;
+  OBInit.USERType   = OB_USER_SWAP_BANK;
 
-    if (((OBInit.USERConfig) & (FLASH_OPTR_SWAP_BANK)) == FLASH_OPTR_SWAP_BANK) {
-      OBInit.USERConfig &= ~FLASH_OPTR_SWAP_BANK;
-      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("->Disable DualBoot\r\n"));
-    } else {
-      OBInit.USERConfig = FLASH_OPTR_SWAP_BANK;
-      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("->Enable DualBoot\r\n"));
-    }
+  if (((OBInit.USERConfig) & (FLASH_OPTR_SWAP_BANK)) == FLASH_OPTR_SWAP_BANK)
+  {
+    OBInit.USERConfig &= ~FLASH_OPTR_SWAP_BANK;
+    SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("->Disable DualBoot\r\n"));
+  }
+  else
+  {
+    OBInit.USERConfig = FLASH_OPTR_SWAP_BANK;
+    SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("->Enable DualBoot\r\n"));
+  }
 
-    if(HAL_FLASHEx_OBProgram (&OBInit) != HAL_OK) {
-      /*
-      Error occurred while setting option bytes configuration.
-      User can add here some code to deal with this error.
-      To know the code error, user can call function 'HAL_FLASH_GetError()'
-      */
-  //    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
-    }
+  if (HAL_FLASHEx_OBProgram(&OBInit) != HAL_OK)
+  {
+    /*
+    Error occurred while setting option bytes configuration.
+    User can add here some code to deal with this error.
+    To know the code error, user can call function 'HAL_FLASH_GetError()'
+    */
+    //    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
+  }
 
-    /* Start the Option Bytes programming process */
-    if (HAL_FLASH_OB_Launch() != HAL_OK) {
-      /*
-      Error occurred while reloading option bytes configuration.
-      User can add here some code to deal with this error.
-      To know the code error, user can call function 'HAL_FLASH_GetError()'
-      */
-  //    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
-    }
-    HAL_FLASH_OB_Lock();
-    HAL_FLASH_Lock();
+  /* Start the Option Bytes programming process */
+  if (HAL_FLASH_OB_Launch() != HAL_OK)
+  {
+    /*
+    Error occurred while reloading option bytes configuration.
+    User can add here some code to deal with this error.
+    To know the code error, user can call function 'HAL_FLASH_GetError()'
+    */
+    //    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
+  }
+  HAL_FLASH_OB_Lock();
+  HAL_FLASH_Lock();
 }

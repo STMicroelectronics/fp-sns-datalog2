@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_ObjectsDetection.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Object detection info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,14 +18,14 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_OBJECTS_DETECTION_H_
 #define _BLE_OBJECTS_DETECTION_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
-   
+
 /* Exported typedef --------------------------------------------------------- */
 typedef void (*CustomWriteRequestObjectsDetection_t)(void);
 typedef void (*CustomNotifyEventObjectsDetection_t)(BLE_NotifyEvent_t Event);
@@ -37,18 +37,18 @@ extern CustomNotifyEventObjectsDetection_t CustomNotifyEventObjectsDetection;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Object Detection info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for led info service
- */
-extern BleCharTypeDef* BLE_InitObjectsDetectionService(void);
+  * @brief  Init Object Detection info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for led info service
+  */
+extern BleCharTypeDef *BLE_InitObjectsDetectionService(void);
 
 /**
- * @brief  Update number of the objects and related distance value detection (by ToF sensor)
- * @param  uint16_t Distance Distance of the detected objects
- * @param  uint8_t  HumanPresence Detected object inside fixed distance range
- * @retval tBleStatus   Status
- */
+  * @brief  Update number of the objects and related distance value detection (by ToF sensor)
+  * @param  uint16_t Distance Distance of the detected objects
+  * @param  uint8_t  HumanPresence Detected object inside fixed distance range
+  * @retval tBleStatus   Status
+  */
 tBleStatus BLE_ObjectsDetectionStatusUpdate(uint16_t *Distances, uint8_t HumanPresence);
 
 #ifdef __cplusplus

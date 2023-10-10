@@ -28,29 +28,129 @@ extern "C" {
 #include "ABusIF.h"
 #include "events/DataEventSrc.h"
 #include "events/DataEventSrc_vtbl.h"
-#include "ISensor.h"
-#include "ISensor_vtbl.h"
+#include "ISensorMems.h"
+#include "ISensorMems_vtbl.h"
+#include "mx.h"
 
+#define LPS22DF_MAX_DRDY_PERIOD           (1.0) /* seconds */
 
-#define LPS22DF_MAX_DRDY_PERIOD           (1.0)
 #ifndef LPS22DF_MAX_WTM_LEVEL
-#define LPS22DF_MAX_WTM_LEVEL             (128)
+#define LPS22DF_MAX_WTM_LEVEL             (128) /* samples */
 #endif
+
 #define LPS22DF_MIN_WTM_LEVEL             (16)
 #define LPS22DF_MAX_SAMPLES_PER_IT        (LPS22DF_MAX_WTM_LEVEL)
+
 
 #define LPS22DF_CFG_MAX_LISTENERS         2
 
 /**
-  * Create a type name for _LPS22DFTask.
+  * Create  type name for _LPS22DFTask.
   */
 typedef struct _LPS22DFTask LPS22DFTask;
+
+/**
+  *  LPS22DFTask internal structure.
+  */
+struct _LPS22DFTask
+{
+  /**
+    * Base class object.
+    */
+  AManagedTaskEx super;
+
+  // Task variables should be added here.
+
+  /**
+    * IRQ GPIO configuration parameters.
+    */
+  const MX_GPIOParams_t *pIRQConfig;
+
+  /**
+    * SPI CS GPIO configuration parameters.
+    */
+  const MX_GPIOParams_t *pCSConfig;
+
+  /**
+    * Bus IF object used to connect the sensor task to the specific bus.
+    */
+  ABusIF *p_sensor_bus_if;
+
+  /**
+    * Implements the pressure ISensorMems interface.
+    */
+  ISensorMems_t sensor_if;
+
+  /**
+    * Specifies pressure sensor capabilities.
+    */
+  const SensorDescriptor_t *sensor_descriptor;
+
+  /**
+    * Specifies pressure sensor configuration.
+    */
+  SensorStatus_t sensor_status;
+
+  /**
+    * Data
+    */
+  EMData_t data;
+  /**
+    * Specifies the sensor ID for the pressure subsensor.
+    */
+  uint8_t press_id;
+
+  /**
+    * Synchronization object used to send command to the task.
+    */
+  TX_QUEUE in_queue;
+
+  /**
+    * Pressure data
+    */
+  float p_press_data_buff[LPS22DF_MAX_WTM_LEVEL];
+
+  /**
+    * Sensor data from FIFO
+    */
+  uint8_t p_fifo_data_buff[LPS22DF_MAX_WTM_LEVEL * 3];
+
+  /**
+    * ::IEventSrc interface implementation for this class.
+    */
+  IEventSrc *p_press_event_src;
+
+  /**
+    * Specifies the FIFO level
+    */
+  uint8_t fifo_level;
+
+  /**
+    * Specifies the FIFO watermark level (it depends from odr)
+    */
+  uint8_t samples_per_it;
+
+  /**
+    * Specifies the ms delay between 2 consecutive read (it depends from odr)
+    */
+  uint16_t task_delay;
+
+  /**
+    * Software timer used to generate the read command
+    */
+  TX_TIMER read_fifo_timer;
+
+  /**
+    * Used to update the instantaneous odr.
+    */
+  double prev_timestamp;
+};
 
 // Public API declaration
 //***********************
 
 /**
-  * Get the ISourceObservable interface for the gyroscope.
+  * Get the ISourceObservable interface for the pressure.
   * @param _this [IN] specifies a pointer to a task object.
   * @return a pointer to the generic object ::ISourceObservable if success,
   * or NULL if out of memory error occurs.
@@ -58,7 +158,7 @@ typedef struct _LPS22DFTask LPS22DFTask;
 ISourceObservable *LPS22DFTaskGetPressSensorIF(LPS22DFTask *_this);
 
 /**
-  * Allocate an instance of LPS22DFTask.
+  * Allocate an instance of LPS22DFTask in the system heap.
   *
   * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO connected to the LPS22DF sensor and configured in EXTI mode.
@@ -69,6 +169,62 @@ ISourceObservable *LPS22DFTaskGetPressSensorIF(LPS22DFTask *_this);
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *LPS22DFTaskAlloc(const void *pIRQConfig, const void *pCSConfig);
+
+/**
+  * Call the default ::LIS2MDLTaskAlloc and then it overwrite sensor name
+  *
+  * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO connected to the LIS2MDL sensor and configured in EXTI mode.
+  *        If it is NULL then the sensor is configured in polling mode.
+  * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the SPI CS Pin.
+  * @return a pointer to the generic object ::AManagedTaskEx if success,
+  * or NULL if out of memory error occurs.
+  */
+AManagedTaskEx *LIS2MDLTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name);
+
+/**
+  * Allocate an instance of ::LIS2MDLTask in a memory block specified by the application.
+  * The size of the memory block must be greater or equal to `sizeof(LIS2MDLTask)`.
+  * This allocator allows the application to avoid the dynamic allocation.
+  *
+  * \code
+  * LIS2MDLTask sensor_task;
+  * LIS2MDLTaskStaticAlloc(&sensor_task);
+  * \endcode
+  *
+  * @param p_mem_block [IN] specify a memory block allocated by the application.
+  *        The size of the memory block must be greater or equal to `sizeof(LIS2MDLTask)`.
+  * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO connected to the LIS2MDL sensor and configured in EXTI mode.
+  *        If it is NULL then the sensor is configured in polling mode.
+  * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the SPI CS Pin.
+  * @return a pointer to the generic object ::AManagedTaskEx_t if success,
+  * or NULL if out of memory error occurs.
+  */
+AManagedTaskEx *LIS2MDLTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig);
+
+/**
+  * Call the default ::LIS2MDLTaskAlloc and then it overwrite sensor name
+  *
+  * \code
+  * LIS2MDLTask sensor_task;
+  * LIS2MDLTaskStaticAlloc(&sensor_task);
+  * \endcode
+  *
+  * @param p_mem_block [IN] specify a memory block allocated by the application.
+  *        The size of the memory block must be greater or equal to `sizeof(LIS2MDLTask)`.
+  * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO connected to the LIS2MDL sensor and configured in EXTI mode.
+  *        If it is NULL then the sensor is configured in polling mode.
+  * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the SPI CS Pin.
+  * @return a pointer to the generic object ::AManagedTaskEx_t if success,
+  * or NULL if out of memory error occurs.
+  */
+AManagedTaskEx *LIS2MDLTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                              const char *p_name);
 
 /**
   * Get the Bus interface for the sensor task.
@@ -84,6 +240,11 @@ ABusIF *LPS22DFTaskGetSensorIF(LPS22DFTask *_this);
   * @return a pointer to the ::IEventSrc interface of the sensor.
   */
 IEventSrc *LPS22DFTaskGetPressEventSrcIF(LPS22DFTask *_this);
+
+/**
+  * IRQ callback
+  */
+void LPS22DFTask_EXTI_Callback(uint16_t nPin);
 
 // Inline functions definition
 // ***************************

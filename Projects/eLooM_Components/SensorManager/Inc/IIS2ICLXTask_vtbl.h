@@ -44,19 +44,18 @@ sys_error_code_t IIS2ICLXTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const 
 
 uint8_t IIS2ICLXTask_vtblAccGetId(ISourceObservable *_this);
 IEventSrc *IIS2ICLXTask_vtblGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t IIS2ICLXTask_vtblAccGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-float IIS2ICLXTask_vtblAccGetFS(ISourceObservable *_this);
-float IIS2ICLXTask_vtblAccGetSensitivity(ISourceObservable *_this);
 EMData_t IIS2ICLXTask_vtblAccGetDataInfo(ISourceObservable *_this);
-
-sys_error_code_t IIS2ICLXTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
-sys_error_code_t IIS2ICLXTask_vtblSensorSetFS(ISensor_t *_this, float FS);
-sys_error_code_t IIS2ICLXTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t IIS2ICLXTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t IIS2ICLXTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t IIS2ICLXTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t IIS2ICLXTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t IIS2ICLXTask_vtblSensorGetStatus(ISensor_t *_this);
+sys_error_code_t IIS2ICLXTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
+float IIS2ICLXTask_vtblAccGetFS(ISensorMems_t *_this);
+float IIS2ICLXTask_vtblAccGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t IIS2ICLXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
+sys_error_code_t IIS2ICLXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t IIS2ICLXTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 
 #ifdef __cplusplus
 }

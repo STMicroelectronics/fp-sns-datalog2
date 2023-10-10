@@ -1,69 +1,69 @@
 /**
- ******************************************************************************
- * @file    App.c
- * @author  SRA
- *
- * @brief   Define the Application main entry points
- *
- * ## Introduction
- *
- * This file is the main entry point for the user code.
- *
- * The framework `weak` functions are redefined in this file and they link
- * the application specific code with the framework:
- * - SysLoadApplicationContext(): it is the first application defined function
- *   called by the framework. Here we define all managed tasks. A managed task
- *   implements one or more application specific feature.
- * - SysOnStartApplication(): this function is called by the framework
- *   when the system is initialized (all managed task objects have been
- *   initialized), and before the INIT task release the control. Here we
- *   link the application objects according to the application design.
- *
- * The execution time  between the two above functions is called
- * *system initialization*. During this period only the INIT task is running.
- *
- * Each managed task will be activated in turn to initialize its hardware
- * resources, if any - MyTask_vtblHardwareInit() - and its software
- * resources - MyTask_vtblOnCreateTask().
- *
- * ## About this demo
- *
- * This demo add processing capability to the SensorManager demo by using
- * the Digital Processing Unit (DPU) eLooM component. In the entry point
- * SysOnStartApplication() a DPU is allocated, initialized and connect to the
- * selected sensor. An instance of DProcessTask1 allow to process teh data coming
- * from the sensor in a concurrent thread.
- *
- * ## How to use the demo
- *
- * connect the board through the ST-Link. Open a terminal
- * like [Tera Term](http://www.teraterm.org) to display the debug log using these parameters:
- * - Speed       : 115200
- * - Data        : 8 bit
- * - Parity      : none
- * - Stop bits   : 1
- * - Flow control: none
- *
- * Build the project and program the board.
- * At the beginning the application is in power mode E_PM_MODE_STATE1 and a
- * greetings message is displayed in the log.
- * To change state to E_POWER_MODE_SENSOR_ACTIVE press the user button. Now the
- * selected sensor start to produce data and feed the DPU. When there are
- * enough data the processing functoin is triggered and the result is displaied
- * in the log.
- *
- *********************************************************************************
- * @attention
- *
- * Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- *********************************************************************************
- */
+  ******************************************************************************
+  * @file    App.c
+  * @author  SRA
+  *
+  * @brief   Define the Application main entry points
+  *
+  * ## Introduction
+  *
+  * This file is the main entry point for the user code.
+  *
+  * The framework `weak` functions are redefined in this file and they link
+  * the application specific code with the framework:
+  * - SysLoadApplicationContext(): it is the first application defined function
+  *   called by the framework. Here we define all managed tasks. A managed task
+  *   implements one or more application specific feature.
+  * - SysOnStartApplication(): this function is called by the framework
+  *   when the system is initialized (all managed task objects have been
+  *   initialized), and before the INIT task release the control. Here we
+  *   link the application objects according to the application design.
+  *
+  * The execution time  between the two above functions is called
+  * *system initialization*. During this period only the INIT task is running.
+  *
+  * Each managed task will be activated in turn to initialize its hardware
+  * resources, if any - MyTask_vtblHardwareInit() - and its software
+  * resources - MyTask_vtblOnCreateTask().
+  *
+  * ## About this demo
+  *
+  * This demo add processing capability to the SensorManager demo by using
+  * the Digital Processing Unit (DPU) eLooM component. In the entry point
+  * SysOnStartApplication() a DPU is allocated, initialized and connect to the
+  * selected sensor. An instance of DProcessTask1 allow to process teh data coming
+  * from the sensor in a concurrent thread.
+  *
+  * ## How to use the demo
+  *
+  * connect the board through the ST-Link. Open a terminal
+  * like [Tera Term](http://www.teraterm.org) to display the debug log using these parameters:
+  * - Speed       : 115200
+  * - Data        : 8 bit
+  * - Parity      : none
+  * - Stop bits   : 1
+  * - Flow control: none
+  *
+  * Build the project and program the board.
+  * At the beginning the application is in power mode E_PM_MODE_STATE1 and a
+  * greetings message is displayed in the log.
+  * To change state to E_POWER_MODE_SENSOR_ACTIVE press the user button. Now the
+  * selected sensor start to produce data and feed the DPU. When there are
+  * enough data the processing functoin is triggered and the result is displaied
+  * in the log.
+  *
+  *********************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *********************************************************************************
+  */
 
 #include "services/sysdebug.h"
 #include "services/ApplicationContext.h"
@@ -86,38 +86,38 @@
 
 
 /**
- * Application managed task.
- */
+  * Application managed task.
+  */
 static AManagedTask *spHelloWorldObj = NULL;
 
 /**
- * USB_CDC task object.
- */
+  * USB_CDC task object.
+  */
 static AManagedTaskEx *spUsbCdcObj = NULL;
 
 /**
- * I2C bus task object.
- */
+  * I2C bus task object.
+  */
 static AManagedTaskEx *spI2C2BusObj = NULL;
 
 /**
- * Sensor task object: 3-axis accelerometer and 3-axis gyroscope
- */
+  * Sensor task object: 3-axis accelerometer and 3-axis gyroscope
+  */
 static AManagedTaskEx *spISM330DHCXObj = NULL;
 
 /**
- * Sensor task object: 3-axis accelerometer.
- */
+  * Sensor task object: 3-axis accelerometer.
+  */
 static AManagedTaskEx *spIIS2DLPCObj = NULL;
 
 /**
- * Sensor task object: 3-axis magnetometer
- */
+  * Sensor task object: 3-axis magnetometer
+  */
 static AManagedTaskEx *spIIS2MDCObj = NULL;
 
 /**
- * Processing task. It provides an execution flow for the DPU used in this example.
- */
+  * Processing task. It provides an execution flow for the DPU used in this example.
+  */
 static DProcessTask1_t sProcessTask;
 
 
@@ -144,12 +144,12 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 
   /* Add the task object to the context. */
   res = ACAddTask(pAppContext, spHelloWorldObj);
-  res = ACAddTask(pAppContext, (AManagedTask*) spUsbCdcObj);
-  res = ACAddTask(pAppContext, (AManagedTask*) spI2C2BusObj);
-  res = ACAddTask(pAppContext, (AManagedTask*) spISM330DHCXObj);
-  res = ACAddTask(pAppContext, (AManagedTask*) spIIS2DLPCObj);
-  res = ACAddTask(pAppContext, (AManagedTask*) spIIS2MDCObj);
-  res = ACAddTask(pAppContext, (AManagedTask*) &sProcessTask);
+  res = ACAddTask(pAppContext, (AManagedTask *) spUsbCdcObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) spI2C2BusObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) spISM330DHCXObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) spIIS2DLPCObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) spIIS2MDCObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) &sProcessTask);
 
   return res;
 }
@@ -160,12 +160,15 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* connect the sensor tasks to the bus. */
-  (void) I2CBusTaskConnectDevice((I2CBusTask*) spI2C2BusObj, (I2CBusIF*)ISM330DHCXTaskGetSensorIF((ISM330DHCXTask*) spISM330DHCXObj));
-  (void) I2CBusTaskConnectDevice((I2CBusTask*) spI2C2BusObj, (I2CBusIF*)IIS2DLPCTaskGetSensorIF((IIS2DLPCTask*) spIIS2DLPCObj));
-  (void) I2CBusTaskConnectDevice((I2CBusTask*) spI2C2BusObj, (I2CBusIF*)IIS2MDCTaskGetSensorIF((IIS2MDCTask*) spIIS2MDCObj));
+  (void) I2CBusTaskConnectDevice((I2CBusTask *) spI2C2BusObj,
+                                 (I2CBusIF *)ISM330DHCXTaskGetSensorIF((ISM330DHCXTask *) spISM330DHCXObj));
+  (void) I2CBusTaskConnectDevice((I2CBusTask *) spI2C2BusObj,
+                                 (I2CBusIF *)IIS2DLPCTaskGetSensorIF((IIS2DLPCTask *) spIIS2DLPCObj));
+  (void) I2CBusTaskConnectDevice((I2CBusTask *) spI2C2BusObj,
+                                 (I2CBusIF *)IIS2MDCTaskGetSensorIF((IIS2MDCTask *) spIIS2MDCObj));
 
   /*Select a sensor for the demo*/
-  uint16_t sensor_id = HelloWorldTaskSelectSensor((HelloWorldTask_t*)spHelloWorldObj);
+  uint16_t sensor_id = HelloWorldTaskSelectSensor((HelloWorldTask_t *)spHelloWorldObj);
   /*The sensor is configured by the HelloWorkdTask::ConfigureSensors() before entering the task control loop*/
 
   /*get the ISourceObservable IF of the sensor*/
@@ -173,8 +176,8 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
 
   /*Step 1: allocate and initialize the DPU.*/
   /*this is a test DPU */
-  ADPU2_t *p_dpu = (ADPU2_t*) Dummy_DPU2Alloc();
-  (void)Dummy_DPU2Init((Dummy_DPU2_t*)p_dpu, 512, 3);
+  ADPU2_t *p_dpu = (ADPU2_t *) Dummy_DPU2Alloc();
+  (void)Dummy_DPU2Init((Dummy_DPU2_t *)p_dpu, 512, 3);
   (void)ADPU2_SetTag(p_dpu, 0x12); /* optional. A tag is useful to identify a DPU along the process*/
 
   /*Step 2 (optional): register the DPU with the processing task*/
@@ -233,7 +236,8 @@ IAppPowerModeHelper *SysGetPowerModeHelper(void)
 {
   /* Install the application power mode helper. */
   static IAppPowerModeHelper *s_pxPowerModeHelper = NULL;
-  if (s_pxPowerModeHelper == NULL) {
+  if (s_pxPowerModeHelper == NULL)
+  {
     s_pxPowerModeHelper = AppPowerModeHelperAlloc();
   }
 

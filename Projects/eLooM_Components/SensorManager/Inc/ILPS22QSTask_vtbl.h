@@ -54,19 +54,18 @@ sys_error_code_t ILPS22QSTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const 
 
 uint8_t ILPS22QSTask_vtblPressGetId(ISourceObservable *_this);
 IEventSrc *ILPS22QSTask_vtblPressGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t ILPS22QSTask_vtblPressGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-float ILPS22QSTask_vtblPressGetFS(ISourceObservable *_this);
-float ILPS22QSTask_vtblPressGetSensitivity(ISourceObservable *_this);
 EMData_t ILPS22QSTask_vtblPressGetDataInfo(ISourceObservable *_this);
-
-sys_error_code_t ILPS22QSTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
-sys_error_code_t ILPS22QSTask_vtblSensorSetFS(ISensor_t *_this, float FS);
-sys_error_code_t ILPS22QSTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t ILPS22QSTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t ILPS22QSTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t ILPS22QSTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t ILPS22QSTask_vtblPressGetDescription(ISensor_t *_this);
 SensorStatus_t ILPS22QSTask_vtblPressGetStatus(ISensor_t *_this);
+sys_error_code_t ILPS22QSTask_vtblPressGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
+float ILPS22QSTask_vtblPressGetFS(ISensorMems_t *_this);
+float ILPS22QSTask_vtblPressGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t ILPS22QSTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
+sys_error_code_t ILPS22QSTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t ILPS22QSTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 
 #ifdef __cplusplus
 }

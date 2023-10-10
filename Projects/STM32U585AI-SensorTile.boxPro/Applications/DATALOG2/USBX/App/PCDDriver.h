@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -85,15 +85,16 @@ struct _PCDDriver_t
 IDriver *PCDDriverAlloc(void);
 
 /**
- * Set the buffer that will be filled by the driver with audio data from the sensor.
- * The application must provide a data buffer before starting the driver.
- *
- * @param _this [IN] specifies an instance of the driver.
- * @param p_buffer [IN] specifies a pointer to the data buffer.
- * @param buffer_size [IN] specifies the size in word of the data buffer.
- * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
- */
-sys_error_code_t PCDDrvSetFIFO(PCDDriver_t *_this, uint16_t total_fifo_size, uint16_t rx_fifo_size, uint16_t ctrl_fifo_size, uint8_t n_in_ep);
+  * Set the buffer that will be filled by the driver with audio data from the sensor.
+  * The application must provide a data buffer before starting the driver.
+  *
+  * @param _this [IN] specifies an instance of the driver.
+  * @param p_buffer [IN] specifies a pointer to the data buffer.
+  * @param buffer_size [IN] specifies the size in word of the data buffer.
+  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
+  */
+sys_error_code_t PCDDrvSetFIFO(PCDDriver_t *_this, uint16_t total_fifo_size, uint16_t rx_fifo_size,
+                               uint16_t ctrl_fifo_size, uint8_t n_in_ep);
 
 sys_error_code_t PCDDrvSetExtDCD(PCDDriver_t *_this, DeviceControlDriver_t fun);
 

@@ -75,33 +75,6 @@ static inline IEventSrc * ISourceGetEventSrcIF(ISourceObservable *_this);
  */
 static inline EMData_t ISourceGetDataInfo(ISourceObservable *_this);
 
-/**
- * Get the Output Date Rate of the stream data source. The method get both the nominal and the measured
- * output data rate.
- *
- * @param _this  [IN] specifies a pointer to an object that implements the ::ISourceObservable interface.
- * @param p_measured [OUT] specifies the last measured data rate, or zero if the object has never produced data.
- * @param p_nominal [OUT] specifies the nominal data rate that is the ODR set during the object configuration.
- * @return SYS_NO_ERROR_CODE if success, an application specific error code otherwise.
- */
-static inline sys_error_code_t ISourceGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-
-/**
- * Get the Full Scale (FS) of the stream data source.
- *
- * @param _this  [IN] specifies a pointer to an object that implements the ::ISourceObservable interface.
- * @return the full scale of the stream data source.
- */
-static inline float ISourceGetFS(ISourceObservable *_this);
-
-/**
- * Get the sensitivity of the of the stream data source.
- *
- * @param _this  [IN] specifies a pointer to an object that implements the ::ISourceObservable interface.
- * @return the sensitivity of the of the stream data source.
- */
-static inline float ISourceGetSensitivity(ISourceObservable *_this);
-
 
 #ifdef __cplusplus
 }

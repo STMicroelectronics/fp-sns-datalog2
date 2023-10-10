@@ -99,7 +99,8 @@ char *Deviceinformation_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t 
   return "";
 }
 
-uint8_t Deviceinformation_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Deviceinformation_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                             uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;

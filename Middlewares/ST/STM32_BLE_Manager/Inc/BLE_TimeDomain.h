@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_TimeDomain.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Time Domain info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,23 +18,23 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_TIME_DOMAIN_H_
 #define _BLE_TIME_DOMAIN_H_
 
 #ifdef __cplusplus
- extern "C" {
-#endif 
+extern "C" {
+#endif
 
 /* Exported Types ----------------------------------------------------------- */
- /**
-* @brief  X-Y-Z Generic Value in float
-*/
+/**
+  * @brief  X-Y-Z Generic Value in float
+  */
 typedef struct
 {
-  float x;         //!< Generic X Value in float
-  float y;         //!< Generic Y Value in float
-  float z;         //!< Generic Z Value in float
+  float x;         /* !< Generic X Value in float */
+  float y;         /* !< Generic Y Value in float */
+  float z;         /* !< Generic Z Value in float */
 } BLE_MANAGER_TimeDomainGenericValue_t;
 
 typedef void (*CustomNotifyEventTimeDomain_t)(BLE_NotifyEvent_t Event);
@@ -45,11 +45,11 @@ extern CustomNotifyEventTimeDomain_t CustomNotifyEventTimeDomain;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Time Domain info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Time Domain info service
- */
-BleCharTypeDef* BLE_InitTimeDomainService(void);
+  * @brief  Init Time Domain info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Time Domain info service
+  */
+BleCharTypeDef *BLE_InitTimeDomainService(void);
 
 /*
  * @brief  Update Time Domain characteristic value
@@ -57,7 +57,8 @@ BleCharTypeDef* BLE_InitTimeDomainService(void);
  * @param  BLE_MANAGER_TimeDomainGenericValue_t SpeedRmsValue
  * @retval tBleStatus   Status
  */
-tBleStatus BLE_TimeDomainUpdate(BLE_MANAGER_TimeDomainGenericValue_t PeakValue, BLE_MANAGER_TimeDomainGenericValue_t SpeedRmsValue);
+tBleStatus BLE_TimeDomainUpdate(BLE_MANAGER_TimeDomainGenericValue_t PeakValue,
+                                BLE_MANAGER_TimeDomainGenericValue_t SpeedRmsValue);
 
 #ifdef __cplusplus
 }

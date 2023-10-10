@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -42,7 +42,7 @@ typedef struct _IIsm330dhcx_Mlc_vtbl IIsm330dhcx_Mlc_vtbl;
 
 struct _IIsm330dhcx_Mlc_vtbl
 {
-  uint8_t (*ism330dhcx_mlc_load_file)(IIsm330dhcx_Mlc_t * _this, const char *data, uint32_t size);
+  uint8_t (*ism330dhcx_mlc_load_file)(IIsm330dhcx_Mlc_t *_this, const char *data, uint32_t size);
 };
 
 struct _IIsm330dhcx_Mlc_t

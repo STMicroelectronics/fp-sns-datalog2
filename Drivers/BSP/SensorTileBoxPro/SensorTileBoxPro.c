@@ -100,6 +100,47 @@ int32_t BSP_GetVersion(void)
 }
 
 /**
+ * @brief  This method the Finish Good type
+ * @retval FinishGood value
+ */
+FinishGood_TypeDef BSP_CheckFinishGood(void) {
+  
+  #define ST25_ADDR_DATA_I2C                ((uint8_t)0xAE)
+  #define ST25_ICREF_REG                    ((uint16_t)0x0017)
+  /* ST25DVxxKC 4Kbits ICref */
+  #define IAM_ST25DV04KC                        0x50U
+  /* ST25DVxxKC 16/64Kbits ICref */
+  #define IAM_ST25DV64KC                        0x51U
+  /* @brief ST25DV 4Kbits ICref */
+  #define IAM_ST25DV04                        0x24
+  /* @brief ST25DV 16/64Kbits ICref */
+  #define IAM_ST25DV64                        0x26
+  
+  FinishGood_TypeDef FinishGood = FINISH_ERROR;
+  uint8_t nfctag_id;
+  BSP_I2C2_Init();
+  
+  BSP_I2C2_ReadReg16(ST25_ADDR_DATA_I2C, ST25_ICREF_REG, &nfctag_id, 1);
+  
+  if((nfctag_id == IAM_ST25DV04KC) | (nfctag_id == IAM_ST25DV64KC)) {
+    FinishGood = FINISHB;
+  } else if((nfctag_id == IAM_ST25DV04) | (nfctag_id == IAM_ST25DV64)) {
+    FinishGood = FINISHA;
+  }
+     
+  BSP_I2C2_DeInit();
+  
+  #undef ST25_ADDR_DATA_I2C
+  #undef ST25_ICREF_REG
+  #undef IAM_ST25DV04KC
+  #undef IAM_ST25DV64KC
+  #undef IAM_ST25DV04
+  #undef IAM_ST25DV64
+  
+  return FinishGood;
+}
+
+/**
  * @brief  Configures LED on GPIO and/or on MFX.
  * @param  Led: LED to be configured.
  *              This parameter can be one of the following values:

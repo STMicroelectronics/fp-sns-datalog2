@@ -31,8 +31,13 @@
 // Board and FW ID
 // *********************
 
-#define BOARD_ID              0x0D
-#define FW_ID_DATALOG2        0x0A
+#define BOARD_ID_PROA           0x0D
+#define BLE_FW_ID_DATALOG2_PROA 0x0B
+#define USB_FW_ID_DATALOG2_PROA 0x04
+
+#define BOARD_ID_PROB           0x11
+#define BLE_FW_ID_DATALOG2_PROB 0x09
+#define USB_FW_ID_DATALOG2_PROB 0x01
 
 // Other hardware configuration
 // ****************************
@@ -67,7 +72,7 @@
 
 
 /* SensorManager configuration */
-#define SM_MAX_SENSORS                            8U
+#define SM_MAX_SENSORS                            11U
 
 
 

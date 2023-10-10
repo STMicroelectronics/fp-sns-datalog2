@@ -17,6 +17,7 @@
   ******************************************************************************
   */
 
+/* Includes ------------------------------------------------------------------*/
 #include "IIS2MDCTask.h"
 #include "IIS2MDCTask_vtbl.h"
 #include "SMMessageParser.h"
@@ -26,10 +27,12 @@
 #include "events/IDataEventListener.h"
 #include "events/IDataEventListener_vtbl.h"
 #include "services/SysTimestamp.h"
+#include "services/ManagedTaskMap.h"
 #include "iis2mdc_reg.h"
 #include <string.h>
 #include "services/sysdebug.h"
-#include "mx.h"
+
+/* Private includes ----------------------------------------------------------*/
 
 #ifndef IIS2MDC_TASK_CFG_STACK_DEPTH
 #define IIS2MDC_TASK_CFG_STACK_DEPTH        (TX_MINIMUM_STACK*8)
@@ -49,11 +52,11 @@
 #define IIS2MDC_TASK_CFG_TIMER_PERIOD_MS          500
 #endif
 
-#define SYS_DEBUGF(level, message)      SYS_DEBUGF3(SYS_DBG_IIS2MDC, level, message)
-
-#if defined(DEBUG) || defined (SYS_DEBUG)
-#define sTaskObj                                  sIIS2MDCTaskObj
+#ifndef IIS2MDC_TASK_CFG_MAX_INSTANCES_COUNT
+#define IIS2MDC_TASK_CFG_MAX_INSTANCES_COUNT      1
 #endif
+
+#define SYS_DEBUGF(level, message)      SYS_DEBUGF3(SYS_DBG_IIS2MDC, level, message)
 
 #ifndef HSD_USE_DUMMY_DATA
 #define HSD_USE_DUMMY_DATA 0
@@ -63,84 +66,6 @@
 static uint16_t dummyDataCounter = 0;
 #endif
 
-/**
-  *  IIS2MDCTask internal structure.
-  */
-struct _IIS2MDCTask
-{
-  /**
-    * Base class object.
-    */
-  AManagedTaskEx super;
-
-  // Task variables should be added here.
-
-  /**
-    * IRQ GPIO configuration parameters.
-    */
-  const MX_GPIOParams_t *pIRQConfig;
-
-  /**
-    * SPI CS GPIO configuration parameters.
-    */
-  const MX_GPIOParams_t *pCSConfig;
-
-  /**
-    * Bus IF object used to connect the sensor task to the specific bus.
-    */
-  ABusIF *p_sensor_bus_if;
-
-  /**
-    * Implements the magnetometer ISensor interface.
-    */
-  ISensor_t sensor_if;
-
-  /**
-    * Specifies sensor capabilities.
-    */
-  const SensorDescriptor_t *sensor_descriptor;
-
-  /**
-    * Specifies sensor configuration.
-    */
-  SensorStatus_t sensor_status;
-
-  EMData_t data;
-  /**
-    * Specifies the sensor ID for the magnetometer.
-    */
-  uint8_t mag_id;
-
-  /**
-    * Synchronization object used to send command to the task.
-    */
-  TX_QUEUE in_queue;
-
-  /**
-    * Buffer to store the data read.
-    */
-  uint8_t p_sensor_data_buff[6];
-
-  /**
-    * ::IEventSrc interface implementation for this class.
-    */
-  IEventSrc *p_mag_event_src;
-
-  /**
-    * Software timer used to generate the read command
-    */
-  TX_TIMER read_timer;
-
-  /**
-    * Timer period used to schedule the read command
-    */
-  ULONG iis2mdc_task_cfg_timer_period_ms;
-
-  /**
-    * Used to update the instantaneous ODR.
-    */
-  double prev_timestamp;
-};
 
 /**
   * Class object declaration
@@ -150,23 +75,34 @@ typedef struct _IIS2MDCTaskClass
   /**
     * IIS2MDCTask class virtual table.
     */
-  AManagedTaskEx_vtbl vtbl;
+  const AManagedTaskEx_vtbl vtbl;
 
   /**
     * Magnetometer IF virtual table.
     */
-  ISensor_vtbl sensor_if_vtbl;
+  const ISensorMems_vtbl sensor_if_vtbl;
 
   /**
     * Specifies sensor capabilities.
     */
-  SensorDescriptor_t class_descriptor;
+  const SensorDescriptor_t class_descriptor;
 
   /**
     * IIS2MDCTask (PM_STATE, ExecuteStepFunc) map.
     */
-  pExecuteStepFunc_t p_pm_state2func_map[3];
+  const pExecuteStepFunc_t p_pm_state2func_map[3];
+
+  /**
+    * Memory buffer used to allocate the map (key, value).
+    */
+  MTMapElement_t task_map_elements[IIS2MDC_TASK_CFG_MAX_INSTANCES_COUNT];
+
+  /**
+    * This map is used to link Cube HAL callback with an instance of the sensor task object. The key of the map is the address of the task instance.   */
+  MTMap_t task_map;
+
 } IIS2MDCTaskClass_t;
+
 
 /* Private member function declaration */ // ***********************************
 /**
@@ -239,17 +175,14 @@ static sys_error_code_t IIS2MDCTaskConfigureIrqPin(const IIS2MDCTask *_this, boo
 /**
   * Callback function called when the software timer expires.
   *
-  * @param timer [IN] specifies the handle of the expired timer.
+  * @param param [IN] specifies an application defined parameter.
   */
-static void IIS2MDCTaskTimerCallbackFunction(ULONG timer);
+static void IIS2MDCTaskTimerCallbackFunction(ULONG param);
 
-/**
-  * IRQ callback
-  */
-void IIS2MDCTask_EXTI_Callback(uint16_t Pin);
 
 /* Inline function forward declaration */
-// ***********************************
+/***************************************/
+
 /**
   * Private function used to post a report into the front of the task queue.
   * Used to resume the task when the required by the INIT task.
@@ -277,14 +210,14 @@ static inline sys_error_code_t IIS2MDCTaskPostReportToBack(IIS2MDCTask *_this, S
 /**
   * The only instance of the task object.
   */
-static IIS2MDCTask sTaskObj;
+//static IIS2MDCTask sTaskObj;
 
 /**
   * The class object.
   */
-static const IIS2MDCTaskClass_t sTheClass =
+static IIS2MDCTaskClass_t sTheClass =
 {
-  /* Class virtual table */
+  /* class virtual table */
   {
     IIS2MDCTask_vtblHardwareInit,
     IIS2MDCTask_vtblOnCreateTask,
@@ -297,20 +230,24 @@ static const IIS2MDCTaskClass_t sTheClass =
 
   /* class::sensor_if_vtbl virtual table */
   {
-    IIS2MDCTask_vtblMagGetId,
-    IIS2MDCTask_vtblMagGetEventSourceIF,
-    IIS2MDCTask_vtblMagGetDataInfo,
+    {
+      {
+        IIS2MDCTask_vtblMagGetId,
+        IIS2MDCTask_vtblMagGetEventSourceIF,
+        IIS2MDCTask_vtblMagGetDataInfo
+      },
+      IIS2MDCTask_vtblSensorEnable,
+      IIS2MDCTask_vtblSensorDisable,
+      IIS2MDCTask_vtblSensorIsEnabled,
+      IIS2MDCTask_vtblSensorGetDescription,
+      IIS2MDCTask_vtblSensorGetStatus
+    },
     IIS2MDCTask_vtblMagGetODR,
     IIS2MDCTask_vtblMagGetFS,
     IIS2MDCTask_vtblMagGetSensitivity,
     IIS2MDCTask_vtblSensorSetODR,
     IIS2MDCTask_vtblSensorSetFS,
-    IIS2MDCTask_vtblSensorSetFifoWM,
-    IIS2MDCTask_vtblSensorEnable,
-    IIS2MDCTask_vtblSensorDisable,
-    IIS2MDCTask_vtblSensorIsEnabled,
-    IIS2MDCTask_vtblSensorGetDescription,
-    IIS2MDCTask_vtblSensorGetStatus
+    IIS2MDCTask_vtblSensorSetFifoWM
   },
 
   /* MAGNETOMETER DESCRIPTOR */
@@ -345,7 +282,10 @@ static const IIS2MDCTaskClass_t sTheClass =
     IIS2MDCTaskExecuteStepState1,
     NULL,
     IIS2MDCTaskExecuteStepDatalog,
-  }
+  },
+
+  {{0}}, /* task_map_elements */
+  {0}  /* task_map */
 };
 
 /* Public API definition */
@@ -357,21 +297,66 @@ ISourceObservable *IIS2MDCTaskGetMagSensorIF(IIS2MDCTask *_this)
 
 AManagedTaskEx *IIS2MDCTaskAlloc(const void *pIRQConfig, const void *pCSConfig)
 {
-  // This allocator implements the singleton design pattern.
+  IIS2MDCTask *p_new_obj = SysAlloc(sizeof(IIS2MDCTask));
 
-  // Initialize the super class
-  AMTInitEx(&sTaskObj.super);
+  if (p_new_obj != NULL)
+  {
+    /* Initialize the super class */
+    AMTInitEx(&p_new_obj->super);
 
-  sTaskObj.super.vptr = &sTheClass.vtbl;
-  sTaskObj.sensor_if.vptr = &sTheClass.sensor_if_vtbl;
-  sTaskObj.sensor_descriptor = &sTheClass.class_descriptor;
+    p_new_obj->super.vptr = &sTheClass.vtbl;
+    p_new_obj->sensor_if.vptr = &sTheClass.sensor_if_vtbl;
+    p_new_obj->sensor_descriptor = &sTheClass.class_descriptor;
 
-  sTaskObj.pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
-  sTaskObj.pCSConfig = (MX_GPIOParams_t *) pCSConfig;
+    p_new_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
+    p_new_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
 
-  strcpy(sTaskObj.sensor_status.Name, sTheClass.class_descriptor.Name);
+    strcpy(p_new_obj->sensor_status.p_name, sTheClass.class_descriptor.p_name);
+  }
 
-  return (AManagedTaskEx *) &sTaskObj;
+  return (AManagedTaskEx *) p_new_obj;
+}
+
+AManagedTaskEx *IIS2MDCTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name)
+{
+  IIS2MDCTask *p_new_obj = (IIS2MDCTask *)IIS2MDCTaskAlloc(pIRQConfig, pCSConfig);
+
+  /* Overwrite default name with the one selected by the application */
+  strcpy(p_new_obj->sensor_status.p_name, p_name);
+
+  return (AManagedTaskEx *) p_new_obj;
+}
+
+AManagedTaskEx *IIS2MDCTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig)
+{
+  IIS2MDCTask *p_obj = (IIS2MDCTask *)p_mem_block;
+
+  if (p_obj != NULL)
+  {
+    /* Initialize the super class */
+    AMTInitEx(&p_obj->super);
+    p_obj->super.vptr = &sTheClass.vtbl;
+
+    p_obj->super.vptr = &sTheClass.vtbl;
+    p_obj->sensor_if.vptr = &sTheClass.sensor_if_vtbl;
+    p_obj->sensor_descriptor = &sTheClass.class_descriptor;
+
+    p_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
+    p_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
+  }
+
+  return (AManagedTaskEx *)p_obj;
+}
+
+AManagedTaskEx *IIS2MDCTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                              const char *p_name)
+{
+  IIS2MDCTask *p_obj = (IIS2MDCTask *)IIS2MDCTaskStaticAlloc(p_mem_block, pIRQConfig, pCSConfig);
+
+  /* Overwrite default name with the one selected by the application */
+  strcpy(p_obj->sensor_status.p_name, p_name);
+
+  return (AManagedTaskEx *) p_obj;
 }
 
 ABusIF *IIS2MDCTaskGetSensorIF(IIS2MDCTask *_this)
@@ -389,7 +374,7 @@ IEventSrc *IIS2MDCTaskGetMagEventSrcIF(IIS2MDCTask *_this)
 }
 
 // AManagedTask virtual functions definition
-// *******************************************
+// ***********************************************
 
 sys_error_code_t IIS2MDCTask_vtblHardwareInit(AManagedTask *_this, void *pParams)
 {
@@ -436,7 +421,7 @@ sys_error_code_t IIS2MDCTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
 
   /* create the software timer*/
   if (TX_SUCCESS
-      != tx_timer_create(&p_obj->read_timer, "IIS2MDC_T", IIS2MDCTaskTimerCallbackFunction, (ULONG)TX_NULL,
+      != tx_timer_create(&p_obj->read_timer, "IIS2MDC_T", IIS2MDCTaskTimerCallbackFunction, (ULONG)_this,
                          AMT_MS_TO_TICKS(IIS2MDC_TASK_CFG_TIMER_PERIOD_MS),
                          0, TX_NO_ACTIVATE))
   {
@@ -473,11 +458,31 @@ sys_error_code_t IIS2MDCTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
   p_obj->p_mag_event_src = DataEventSrcAlloc();
   if (p_obj->p_mag_event_src == NULL)
   {
-    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
-    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+    res = SYS_OUT_OF_MEMORY_ERROR_CODE;
     return res;
   }
   IEventSrcInit(p_obj->p_mag_event_src);
+
+  if (!MTMap_IsInitialized(&sTheClass.task_map))
+  {
+    (void) MTMap_Init(&sTheClass.task_map, sTheClass.task_map_elements, IIS2MDC_TASK_CFG_MAX_INSTANCES_COUNT);
+  }
+
+  /* Add the managed task to the map.*/
+  if (p_obj->pIRQConfig != NULL)
+  {
+    /* Use the PIN as unique key for the map. */
+    MTMapElement_t *p_element = NULL;
+    uint32_t key = (uint32_t) p_obj->pIRQConfig->pin;
+    p_element = MTMap_AddElement(&sTheClass.task_map, key, _this);
+    if (p_element == NULL)
+    {
+      SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+      res = SYS_INVALID_PARAMETER_ERROR_CODE;
+      return res;
+    }
+  }
 
   memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
   p_obj->mag_id = 0;
@@ -536,7 +541,7 @@ sys_error_code_t IIS2MDCTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE);
       }
 
-      // reset the variables for the time stamp computation.
+      // reset the variables for the actual odr computation.
       p_obj->prev_timestamp = 0.0f;
     }
 
@@ -691,7 +696,7 @@ IEventSrc *IIS2MDCTask_vtblMagGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_mag_event_src;
 }
 
-sys_error_code_t IIS2MDCTask_vtblMagGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal)
+sys_error_code_t IIS2MDCTask_vtblMagGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -706,27 +711,27 @@ sys_error_code_t IIS2MDCTask_vtblMagGetODR(ISourceObservable *_this, float *p_me
   }
   else
   {
-    *p_measured = p_if_owner->sensor_status.MeasuredODR;
-    *p_nominal = p_if_owner->sensor_status.ODR;
+    *p_measured = p_if_owner->sensor_status.type.mems.measured_odr;
+    *p_nominal = p_if_owner->sensor_status.type.mems.odr;
   }
 
   return res;
 }
 
-float IIS2MDCTask_vtblMagGetFS(ISourceObservable *_this)
+float IIS2MDCTask_vtblMagGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   IIS2MDCTask *p_if_owner = (IIS2MDCTask *)((uint32_t) _this - offsetof(IIS2MDCTask, sensor_if));
-  float res = p_if_owner->sensor_status.FS;
+  float res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float IIS2MDCTask_vtblMagGetSensitivity(ISourceObservable *_this)
+float IIS2MDCTask_vtblMagGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   IIS2MDCTask *p_if_owner = (IIS2MDCTask *)((uint32_t) _this - offsetof(IIS2MDCTask, sensor_if));
-  float res = p_if_owner->sensor_status.Sensitivity;
+  float res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -740,7 +745,7 @@ EMData_t IIS2MDCTask_vtblMagGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t IIS2MDCTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
+sys_error_code_t IIS2MDCTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -749,7 +754,7 @@ sys_error_code_t IIS2MDCTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -761,7 +766,7 @@ sys_error_code_t IIS2MDCTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) ODR
+      .sensorMessage.nParam = (float) odr
     };
     res = IIS2MDCTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -769,7 +774,7 @@ sys_error_code_t IIS2MDCTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
   return res;
 }
 
-sys_error_code_t IIS2MDCTask_vtblSensorSetFS(ISensor_t *_this, float FS)
+sys_error_code_t IIS2MDCTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -778,7 +783,7 @@ sys_error_code_t IIS2MDCTask_vtblSensorSetFS(ISensor_t *_this, float FS)
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -790,7 +795,7 @@ sys_error_code_t IIS2MDCTask_vtblSensorSetFS(ISensor_t *_this, float FS)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) FS
+      .sensorMessage.nParam = (uint32_t) fs
     };
     res = IIS2MDCTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -799,7 +804,7 @@ sys_error_code_t IIS2MDCTask_vtblSensorSetFS(ISensor_t *_this, float FS)
 
 }
 
-sys_error_code_t IIS2MDCTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+sys_error_code_t IIS2MDCTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM)
 {
   assert_param(_this != NULL);
   /* Does not support this virtual function.*/
@@ -872,7 +877,11 @@ boolean_t IIS2MDCTask_vtblSensorIsEnabled(ISensor_t *_this)
 
   if (ISourceGetId((ISourceObservable *) _this) == p_if_owner->mag_id)
   {
-    res = p_if_owner->sensor_status.IsActive;
+    res = p_if_owner->sensor_status.is_active;
+  }
+  else
+  {
+    res = SYS_INVALID_PARAMETER_ERROR_CODE;
   }
 
   return res;
@@ -938,8 +947,7 @@ static sys_error_code_t IIS2MDCTaskExecuteStepState1(AManagedTask *_this)
           default:
             /* unwanted report */
             res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
-            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
-            ;
+            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
 
             SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS2MDC: unexpected report in Run: %i\r\n", report.messageID));
             break;
@@ -1006,7 +1014,7 @@ static sys_error_code_t IIS2MDCTaskExecuteStepDatalog(AManagedTask *_this)
           p_obj->prev_timestamp = timestamp;
 
           /* update measuredODR: one sample in delta_timestamp time */
-          p_obj->sensor_status.MeasuredODR = 1.0f / (float) delta_timestamp;
+          p_obj->sensor_status.type.mems.measured_odr = 1.0f / (float) delta_timestamp;
 
           /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (1):
            * [X0, Y0, Z0]
@@ -1040,7 +1048,7 @@ static sys_error_code_t IIS2MDCTaskExecuteStepDatalog(AManagedTask *_this)
             res = IIS2MDCTaskSensorInit(p_obj);
             if (!SYS_IS_ERROR_CODE(res))
             {
-              if (p_obj->sensor_status.IsActive == true)
+              if (p_obj->sensor_status.is_active == true)
               {
                 if (p_obj->pIRQConfig == NULL)
                 {
@@ -1197,25 +1205,25 @@ static sys_error_code_t IIS2MDCTaskSensorInit(IIS2MDCTask *_this)
   iis2mdc_mag_user_offset_set(p_sensor_drv, buff);
   iis2mdc_operating_mode_set(p_sensor_drv, IIS2MDC_CONTINUOUS_MODE);
 
-  if (_this->sensor_status.ODR < 11.0f)
+  if (_this->sensor_status.type.mems.odr < 11.0f)
   {
     iis2mdc_odr = IIS2MDC_ODR_10Hz;
   }
-  else if (_this->sensor_status.ODR < 21.0f)
+  else if (_this->sensor_status.type.mems.odr < 21.0f)
   {
     iis2mdc_odr = IIS2MDC_ODR_20Hz;
   }
-  else if (_this->sensor_status.ODR < 51.0f)
+  else if (_this->sensor_status.type.mems.odr < 51.0f)
   {
     iis2mdc_odr = IIS2MDC_ODR_50Hz;
   }
-  else if (_this->sensor_status.ODR < 101.0f)
+  else if (_this->sensor_status.type.mems.odr < 101.0f)
   {
     iis2mdc_odr = IIS2MDC_ODR_100Hz;
   }
-  _this->iis2mdc_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.ODR);
+  _this->iis2mdc_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 
-  if (_this->sensor_status.IsActive)
+  if (_this->sensor_status.is_active)
   {
     iis2mdc_data_rate_set(p_sensor_drv, iis2mdc_odr);
   }
@@ -1223,7 +1231,7 @@ static sys_error_code_t IIS2MDCTaskSensorInit(IIS2MDCTask *_this)
   {
     iis2mdc_power_mode_set(p_sensor_drv, IIS2MDC_HIGH_RESOLUTION);
     iis2mdc_operating_mode_set(p_sensor_drv, IIS2MDC_POWER_DOWN);
-    _this->sensor_status.IsActive = false;
+    _this->sensor_status.is_active = false;
   }
 
   return res;
@@ -1268,11 +1276,12 @@ static sys_error_code_t IIS2MDCTaskSensorInitTaskParams(IIS2MDCTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* MAGNETOMETER SENSOR STATUS */
-  _this->sensor_status.IsActive = TRUE;
-  _this->sensor_status.FS = 50.0f;
-  _this->sensor_status.Sensitivity = 0.0015f;
-  _this->sensor_status.ODR = 100.0f;
-  _this->sensor_status.MeasuredODR = 0.0f;
+  _this->sensor_status.isensor_class = ISENSOR_CLASS_MEMS;
+  _this->sensor_status.is_active = TRUE;
+  _this->sensor_status.type.mems.fs = 50.0f;
+  _this->sensor_status.type.mems.sensitivity = 0.0015f;
+  _this->sensor_status.type.mems.odr = 100.0f;
+  _this->sensor_status.type.mems.measured_odr = 0.0f;
   EMD_Init(&_this->data, _this->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 3);
 
   return res;
@@ -1284,41 +1293,41 @@ static sys_error_code_t IIS2MDCTaskSensorSetODR(IIS2MDCTask *_this, SMMessage re
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float ODR = (float) report.sensorMessage.nParam;
+  float odr = (float) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->mag_id)
   {
-    if (ODR < 1.0f)
+    if (odr < 1.0f)
     {
       iis2mdc_power_mode_set(p_sensor_drv, IIS2MDC_HIGH_RESOLUTION);
       iis2mdc_operating_mode_set(p_sensor_drv, IIS2MDC_POWER_DOWN);
-      /* Do not update the model in case of ODR = 0 */
-      ODR = _this->sensor_status.ODR;
+      /* Do not update the model in case of odr = 0 */
+      odr = _this->sensor_status.type.mems.odr;
     }
-    else if (ODR < 11.0f)
+    else if (odr < 11.0f)
     {
-      ODR = 10.0f;
+      odr = 10.0f;
     }
-    else if (ODR < 21.0f)
+    else if (odr < 21.0f)
     {
-      ODR = 20.0f;
+      odr = 20.0f;
     }
-    else if (ODR < 51.0f)
+    else if (odr < 51.0f)
     {
-      ODR = 50.0f;
+      odr = 50.0f;
     }
-    else if (ODR < 101.0f)
+    else if (odr < 101.0f)
     {
-      ODR = 100.0f;
+      odr = 100.0f;
     }
     else
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-      _this->sensor_status.ODR = ODR;
-      _this->sensor_status.MeasuredODR = 0.0f;
+      _this->sensor_status.type.mems.odr = odr;
+      _this->sensor_status.type.mems.measured_odr = 0.0f;
     }
   }
   else
@@ -1334,19 +1343,19 @@ static sys_error_code_t IIS2MDCTaskSensorSetFS(IIS2MDCTask *_this, SMMessage rep
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float FS = (float) report.sensorMessage.nParam;
+  float fs = (float) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->mag_id)
   {
-    if (FS != 50.0f)
+    if (fs != 50.0f)
     {
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-      _this->sensor_status.FS = FS;
+      _this->sensor_status.type.mems.fs = fs;
     }
   }
   else
@@ -1366,7 +1375,7 @@ static sys_error_code_t IIS2MDCTaskSensorEnable(IIS2MDCTask *_this, SMMessage re
 
   if (id == _this->mag_id)
   {
-    _this->sensor_status.IsActive = TRUE;
+    _this->sensor_status.is_active = TRUE;
   }
   else
   {
@@ -1386,7 +1395,7 @@ static sys_error_code_t IIS2MDCTaskSensorDisable(IIS2MDCTask *_this, SMMessage r
 
   if (id == _this->mag_id)
   {
-    _this->sensor_status.IsActive = FALSE;
+    _this->sensor_status.is_active = FALSE;
     iis2mdc_power_mode_set(p_sensor_drv, IIS2MDC_HIGH_RESOLUTION);
     iis2mdc_operating_mode_set(p_sensor_drv, IIS2MDC_POWER_DOWN);
   }
@@ -1401,7 +1410,7 @@ static sys_error_code_t IIS2MDCTaskSensorDisable(IIS2MDCTask *_this, SMMessage r
 static boolean_t IIS2MDCTaskSensorIsActive(const IIS2MDCTask *_this)
 {
   assert_param(_this != NULL);
-  return _this->sensor_status.IsActive;
+  return _this->sensor_status.is_active;
 }
 
 static sys_error_code_t IIS2MDCTaskEnterLowPowerMode(const IIS2MDCTask *_this)
@@ -1449,14 +1458,15 @@ static sys_error_code_t IIS2MDCTaskConfigureIrqPin(const IIS2MDCTask *_this, boo
   return res;
 }
 
-static void IIS2MDCTaskTimerCallbackFunction(ULONG timer)
+static void IIS2MDCTaskTimerCallbackFunction(ULONG param)
 {
+  IIS2MDCTask *p_obj = (IIS2MDCTask *) param;
   SMMessage report;
   report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY;
   report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
 
   // if (sTaskObj.in_queue != NULL ) {//TODO: STF.Port - how to check if the queue has been initialized ??
-  if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &report, TX_NO_WAIT))
+  if (TX_SUCCESS != tx_queue_send(&p_obj->in_queue, &report, TX_NO_WAIT))
   {
     // unable to send the message. Signal the error
     sys_error_handler();
@@ -1465,18 +1475,23 @@ static void IIS2MDCTaskTimerCallbackFunction(ULONG timer)
 }
 
 /* CubeMX integration */
-// ******************
-void IIS2MDCTask_EXTI_Callback(uint16_t Pin)
+
+void IIS2MDCTask_EXTI_Callback(uint16_t nPin)
 {
+  MTMapValue_t *p_val;
+  TX_QUEUE *p_queue;
   SMMessage report;
   report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY;
   report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
 
-//  if (sTaskObj.in_queue != NULL) { //TODO: STF.Port - how to check if the queue has been initialized ??
-  if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &report, TX_NO_WAIT))
+  p_val = MTMap_FindByKey(&sTheClass.task_map, (uint32_t) nPin);
+  if (p_val != NULL)
   {
-    /* unable to send the report. Signal the error */
-    sys_error_handler();
+    p_queue = &((IIS2MDCTask *)p_val->p_mtask_obj)->in_queue;
+    if (TX_SUCCESS != tx_queue_send(p_queue, &report, TX_NO_WAIT))
+    {
+      /* unable to send the report. Signal the error */
+      sys_error_handler();
+    }
   }
-//  }
 }

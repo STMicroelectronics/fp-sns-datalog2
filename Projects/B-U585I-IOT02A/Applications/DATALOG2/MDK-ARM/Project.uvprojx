@@ -340,7 +340,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE,STM32U585xx,USE_HAL_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\eLooM_Components\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\eLooM_Components\DPU\Inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/ism330dhcx;..\..\..\..\..\Drivers\BSP\Components\lps22hh</IncludePath>
+              <IncludePath>../Core/Inc;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\eLooM_Components\DPU\Inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/ism330dhcx;..\..\..\..\..\Drivers\BSP\Components\lps22hh</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -457,7 +457,7 @@
             <File>
               <FileName>stm32u5xx_hal_timebase_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
+              <FilePath>..\mx\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_it.c</FileName>
@@ -633,21 +633,6 @@
               <FileName>ux_device_descriptors.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USBX\App\ux_device_descriptors.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>eLooM_Components/PnPLCompManager</GroupName>
-          <Files>
-            <File>
-              <FileName>IPnPLComponent.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\eLooM_Components\PnPLCompManager\Src\IPnPLComponent.c</FilePath>
-            </File>
-            <File>
-              <FileName>PnPLCompManager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\eLooM_Components\PnPLCompManager\Src\PnPLCompManager.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1053,6 +1038,21 @@
               <FileName>SysTimestamp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\eLooM\Src\services\SysTimestamp.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/ST/PnPLCompManager</GroupName>
+          <Files>
+            <File>
+              <FileName>IPnPLComponent.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\IPnPLComponent.c</FilePath>
+            </File>
+            <File>
+              <FileName>PnPLCompManager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\PnPLCompManager.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2608,6 +2608,9 @@
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>
+        </Group>
+        <Group>
+          <GroupName>::Compiler</GroupName>
         </Group>
       </Groups>
     </Target>
@@ -2945,7 +2948,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>DEBUG,SYS_DEBUG,SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE,STM32U585xx,USE_HAL_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\eLooM_Components\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\eLooM_Components\DPU\Inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/ism330dhcx;..\..\..\..\..\Drivers\BSP\Components\lps22hh</IncludePath>
+              <IncludePath>../Core/Inc;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\eLooM_Components\DPU\Inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/ism330dhcx;..\..\..\..\..\Drivers\BSP\Components\lps22hh</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -3062,7 +3065,7 @@
             <File>
               <FileName>stm32u5xx_hal_timebase_tim.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
+              <FilePath>..\mx\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
             </File>
             <File>
               <FileName>stm32u5xx_it.c</FileName>
@@ -3238,21 +3241,6 @@
               <FileName>ux_device_descriptors.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\USBX\App\ux_device_descriptors.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>eLooM_Components/PnPLCompManager</GroupName>
-          <Files>
-            <File>
-              <FileName>IPnPLComponent.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\eLooM_Components\PnPLCompManager\Src\IPnPLComponent.c</FilePath>
-            </File>
-            <File>
-              <FileName>PnPLCompManager.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\eLooM_Components\PnPLCompManager\Src\PnPLCompManager.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3658,6 +3646,21 @@
               <FileName>SysTimestamp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\eLooM\Src\services\SysTimestamp.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/ST/PnPLCompManager</GroupName>
+          <Files>
+            <File>
+              <FileName>IPnPLComponent.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\IPnPLComponent.c</FilePath>
+            </File>
+            <File>
+              <FileName>PnPLCompManager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\PnPLCompManager.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5214,6 +5217,9 @@
         <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
+        <Group>
+          <GroupName>::Compiler</GroupName>
+        </Group>
       </Groups>
     </Target>
   </Targets>
@@ -5221,8 +5227,15 @@
   <RTE>
     <apis/>
     <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="4.3.0" condition="CMSIS Core">
-        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="4.5.0"/>
+      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="5.6.0" condition="ARMv6_7_8-M Device">
+        <package name="CMSIS" schemaVersion="1.7.7" url="http://www.keil.com/pack/" vendor="ARM" version="5.9.0"/>
+        <targetInfos>
+          <targetInfo name="Datalog2_Debug"/>
+          <targetInfo name="Datalog2_Release"/>
+        </targetInfos>
+      </component>
+      <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDERR" Cvariant="ITM" Cvendor="Keil" Cversion="1.2.0" condition="ARMCC Cortex-M with ITM">
+        <package name="ARM_Compiler" schemaVersion="1.7.7" url="https://www.keil.com/pack/" vendor="Keil" version="1.7.2"/>
         <targetInfos>
           <targetInfo name="Datalog2_Debug"/>
           <targetInfo name="Datalog2_Release"/>

@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_Piano.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   BLE_Pianoinfo services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,16 +18,16 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_PIANO_H_
 #define _BLE_PIANO_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
-   
+
 /* Exported typedef --------------------------------------------------------- */
-typedef void (*CustomWriteRequestPiano_t)(uint8_t * att_data, uint8_t data_length);
+typedef void (*CustomWriteRequestPiano_t)(uint8_t *att_data, uint8_t data_length);
 typedef void (*CustomNotifyEventPiano_t)(BLE_NotifyEvent_t Event);
 
 /* Exported Variables ------------------------------------------------------- */
@@ -41,11 +41,11 @@ extern CustomWriteRequestPiano_t CustomWriteRequestPiano;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Piano info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for High Speed Data Log info service
- */
-extern BleCharTypeDef* BLE_InitPianoService(void);
+  * @brief  Init Piano info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for High Speed Data Log info service
+  */
+extern BleCharTypeDef *BLE_InitPianoService(void);
 
 #ifdef __cplusplus
 }

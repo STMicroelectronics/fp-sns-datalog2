@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_Ota.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Add OTA characteristic using vendor specific profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -37,57 +37,59 @@ CustomWriteRequestOta_t CustomWriteRequestOta = NULL;
 static BleCharTypeDef BleCharOta;
 
 /* Private functions ---------------------------------------------------------*/
-static void Write_Request_Ota(void *BleCharPointer,uint16_t attr_handle, uint16_t Offset, uint8_t data_length, uint8_t *att_data);
+static void Write_Request_Ota(void *BleCharPointer, uint16_t attr_handle, uint16_t Offset, uint8_t data_length,
+                              uint8_t *att_data);
 
 /**
- * @brief  Init OTA characteristic 
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for OTA characteristic 
- */
-BleCharTypeDef* BLE_InitOtaService(void)
+  * @brief  Init OTA characteristic
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for OTA characteristic
+  */
+BleCharTypeDef *BLE_InitOtaService(void)
 {
   /* Data structure pointer for BLE service */
   BleCharTypeDef *BleCharPointer;
 
   /* Init data structure pointer for OTA characteristic  */
   BleCharPointer = &BleCharOta;
-  memset(BleCharPointer,0,sizeof(BleCharTypeDef));  
+  memset(BleCharPointer, 0, sizeof(BleCharTypeDef));
   BleCharPointer->Write_Request_CB = Write_Request_Ota;
   COPY_OTA_CHAR_UUID((BleCharPointer->uuid));
-  BleCharPointer->Char_UUID_Type =UUID_TYPE_128;
-  BleCharPointer->Char_Value_Length=3;
-  BleCharPointer->Char_Properties=CHAR_PROP_WRITE_WITHOUT_RESP;
-  BleCharPointer->Security_Permissions=ATTR_PERMISSION_NONE;
-  BleCharPointer->GATT_Evt_Mask=GATT_NOTIFY_ATTRIBUTE_WRITE;
-  BleCharPointer->Enc_Key_Size=10;
-  BleCharPointer->Is_Variable=0;
-  
-  if(CustomWriteRequestOta == NULL)
+  BleCharPointer->Char_UUID_Type = UUID_TYPE_128;
+  BleCharPointer->Char_Value_Length = 3;
+  BleCharPointer->Char_Properties = CHAR_PROP_WRITE_WITHOUT_RESP;
+  BleCharPointer->Security_Permissions = ATTR_PERMISSION_NONE;
+  BleCharPointer->GATT_Evt_Mask = GATT_NOTIFY_ATTRIBUTE_WRITE;
+  BleCharPointer->Enc_Key_Size = 10;
+  BleCharPointer->Is_Variable = 0;
+
+  if (CustomWriteRequestOta == NULL)
   {
     BLE_MANAGER_PRINTF("Warning: Write request Ota function not defined\r\n");
   }
 
   BLE_MANAGER_PRINTF("BLE Ota features ok\r\n");
-  
+
   return BleCharPointer;
 }
 
 /**
- * @brief  This function is called when there is a change on the gatt attribute
- *         With this function it's possible to understand if OTA is subscribed or not to the one service
- * @param  void *VoidCharPointer
- * @param  uint16_t attr_handle Handle of the attribute
- * @param  uint16_t Offset: (SoC mode) the offset is never used and it is always 0. Network coprocessor mode: 
- *                          - Bits 0-14: offset of the reported value inside the attribute.
- *                          - Bit 15: if the entire value of the attribute does not fit inside a single ACI_GATT_ATTRIBUTE_MODIFIED_EVENT event,
- *                            this bit is set to 1 to notify that other ACI_GATT_ATTRIBUTE_MODIFIED_EVENT events will follow to report the remaining value.                  
- * @param  uint8_t data_length length of the data
- * @param  uint8_t *att_data attribute data
- * @retval None
- */
-static void Write_Request_Ota(void *VoidCharPointer, uint16_t attr_handle, uint16_t Offset, uint8_t data_length, uint8_t *att_data)
+  * @brief  This function is called when there is a change on the gatt attribute
+  *         With this function it's possible to understand if OTA is subscribed or not to the one service
+  * @param  void *VoidCharPointer
+  * @param  uint16_t attr_handle Handle of the attribute
+  * @param  uint16_t Offset: (SoC mode) the offset is never used and it is always 0. Network coprocessor mode:
+  *                          - Bits 0-14: offset of the reported value inside the attribute.
+  *                          - Bit 15: if the entire value of the attribute does not fit inside a single ACI_GATT_ATTRIBUTE_MODIFIED_EVENT event,
+  *                            this bit is set to 1 to notify that other ACI_GATT_ATTRIBUTE_MODIFIED_EVENT events will follow to report the remaining value.
+  * @param  uint8_t data_length length of the data
+  * @param  uint8_t *att_data attribute data
+  * @retval None
+  */
+static void Write_Request_Ota(void *VoidCharPointer, uint16_t attr_handle, uint16_t Offset, uint8_t data_length,
+                              uint8_t *att_data)
 {
-  if(CustomWriteRequestOta != NULL)
+  if (CustomWriteRequestOta != NULL)
   {
     CustomWriteRequestOta(att_data, data_length);
   }

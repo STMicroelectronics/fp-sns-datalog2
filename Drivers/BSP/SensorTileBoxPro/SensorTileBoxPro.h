@@ -28,7 +28,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "SensorTileBoxPro_conf.h"
 #include "SensorTileBoxPro_errno.h"
-#include "main.h"
 
 #if (USE_BSP_COM_FEATURE > 0)
   #if (USE_COM_LOG > 0)
@@ -57,7 +56,7 @@
  */
 #define __SENSORTILEBOXPRO_BSP_VERSION_MAIN   (uint32_t)(0x01) /*!< [31:24] main version */
 #define __SENSORTILEBOXPRO_BSP_VERSION_SUB1   (uint32_t)(0x00) /*!< [23:16] sub1 version */
-#define __SENSORTILEBOXPRO_BSP_VERSION_SUB2   (uint32_t)(0x00) /*!< [15:8]  sub2 version */
+#define __SENSORTILEBOXPRO_BSP_VERSION_SUB2   (uint32_t)(0x01) /*!< [15:8]  sub2 version */
 #define __SENSORTILEBOXPRO_BSP_VERSION_RC     (uint32_t)(0x00) /*!< [7:0]  release candidate */
 #define __SENSORTILEBOXPRO_BSP_VERSION        ((__SENSORTILEBOXPRO_BSP_VERSION_MAIN << 24)\
                                                     |(__SENSORTILEBOXPRO_BSP_VERSION_SUB1 << 16)\
@@ -188,6 +187,13 @@ typedef enum
 
 typedef enum
 {
+  FINISHA = 0,
+  FINISHB = 1,
+  FINISH_ERROR =2
+}FinishGood_TypeDef;
+
+typedef enum
+{
   BUTTON_USER = 0U,
 }Button_TypeDef;
 
@@ -305,6 +311,7 @@ int32_t  BSP_PB_DeInit(Button_TypeDef Button);
 int32_t  BSP_PB_GetState(Button_TypeDef Button);
 void     BSP_PB_Callback(Button_TypeDef Button);
 void     BSP_PB_IRQHandler (Button_TypeDef Button);
+FinishGood_TypeDef BSP_CheckFinishGood(void);
 
 #if (USE_BSP_COM_FEATURE > 0)
 int32_t  BSP_COM_Init(COM_TypeDef COM);

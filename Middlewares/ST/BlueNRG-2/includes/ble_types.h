@@ -50,7 +50,7 @@
 
 typedef uint8_t BOOL;
 
-#ifndef TRUE 
+#ifndef TRUE
 #define TRUE (1)
 #endif
 

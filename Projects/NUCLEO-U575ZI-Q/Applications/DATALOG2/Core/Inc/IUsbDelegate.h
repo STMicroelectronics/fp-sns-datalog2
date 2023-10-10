@@ -33,8 +33,8 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /**
- * Create  type name for _IUsbDelegate.
- */
+  * Create  type name for _IUsbDelegate.
+  */
 typedef struct _IUsbDelegate IUsbDelegate;
 
 /* Exported functions --------------------------------------------------------*/
@@ -43,21 +43,21 @@ typedef struct _IUsbDelegate IUsbDelegate;
 //***********************
 
 /**
- * Initialize the interface IUsbDelegate. It should be called after the object allocation and before using the object.
- * 
- * @param _this [IN] specifies a pointer to the object.
- * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
- */
+  * Initialize the interface IUsbDelegate. It should be called after the object allocation and before using the object.
+  *
+  * @param _this [IN] specifies a pointer to the object.
+  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
+  */
 //inline sys_error_code_t IUsbDelegateInit(IUsbDelegate *_this);
 
 /**
- * Initialize the interface IUsbDelegate. It should be called after the object allocation and before using the object.
- *
- * @param _this [IN] specifies a pointer to the object.
- * @param _this [IN] specifies a pointer to the object.
- * @param _this [IN] specifies a pointer to the object.
- * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
- */
+  * Initialize the interface IUsbDelegate. It should be called after the object allocation and before using the object.
+  *
+  * @param _this [IN] specifies a pointer to the object.
+  * @param _this [IN] specifies a pointer to the object.
+  * @param _this [IN] specifies a pointer to the object.
+  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
+  */
 static inline sys_error_code_t IUsbDelegateOnNewData(IUsbDelegate *_this, const uint8_t *buffer, uint32_t length);
 
 

@@ -99,7 +99,8 @@ char *Ism330dhcx_Gyro_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id
   return "";
 }
 
-uint8_t Ism330dhcx_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Ism330dhcx_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                           uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -110,70 +111,70 @@ uint8_t Ism330dhcx_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seria
   float temp_f = 0;
   ism330dhcx_gyro_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == ism330dhcx_gyro_odr_hz12_5)
+  if (temp_f == ism330dhcx_gyro_odr_hz12_5)
   {
     enum_id = 0;
   }
-  else if(temp_f == ism330dhcx_gyro_odr_hz26)
+  else if (temp_f == ism330dhcx_gyro_odr_hz26)
   {
     enum_id = 1;
   }
-  else if(temp_f == ism330dhcx_gyro_odr_hz52)
+  else if (temp_f == ism330dhcx_gyro_odr_hz52)
   {
     enum_id = 2;
   }
-  else if(temp_f == ism330dhcx_gyro_odr_hz104)
+  else if (temp_f == ism330dhcx_gyro_odr_hz104)
   {
     enum_id = 3;
   }
-  else if(temp_f == ism330dhcx_gyro_odr_hz208)
+  else if (temp_f == ism330dhcx_gyro_odr_hz208)
   {
     enum_id = 4;
   }
-  else if(temp_f == ism330dhcx_gyro_odr_hz416)
+  else if (temp_f == ism330dhcx_gyro_odr_hz416)
   {
     enum_id = 5;
   }
-  else if(temp_f == ism330dhcx_gyro_odr_hz833)
+  else if (temp_f == ism330dhcx_gyro_odr_hz833)
   {
     enum_id = 6;
   }
-  else if(temp_f == ism330dhcx_gyro_odr_hz1666)
+  else if (temp_f == ism330dhcx_gyro_odr_hz1666)
   {
     enum_id = 7;
   }
-  else if(temp_f == ism330dhcx_gyro_odr_hz3332)
+  else if (temp_f == ism330dhcx_gyro_odr_hz3332)
   {
     enum_id = 8;
   }
-  else if(temp_f == ism330dhcx_gyro_odr_hz6667)
+  else if (temp_f == ism330dhcx_gyro_odr_hz6667)
   {
     enum_id = 9;
   }
   json_object_dotset_number(JSON_Status, "ism330dhcx_gyro.odr", enum_id);
   ism330dhcx_gyro_get_fs(&temp_f);
   enum_id = 0;
-  if(temp_f == ism330dhcx_gyro_fs_dps125)
+  if (temp_f == ism330dhcx_gyro_fs_dps125)
   {
     enum_id = 0;
   }
-  else if(temp_f == ism330dhcx_gyro_fs_dps250)
+  else if (temp_f == ism330dhcx_gyro_fs_dps250)
   {
     enum_id = 1;
   }
-  else if(temp_f == ism330dhcx_gyro_fs_dps500)
+  else if (temp_f == ism330dhcx_gyro_fs_dps500)
   {
     enum_id = 2;
   }
-  else if(temp_f == ism330dhcx_gyro_fs_dps1000)
+  else if (temp_f == ism330dhcx_gyro_fs_dps1000)
   {
     enum_id = 3;
   }
-  else if(temp_f == ism330dhcx_gyro_fs_dps2000)
+  else if (temp_f == ism330dhcx_gyro_fs_dps2000)
   {
     enum_id = 4;
   }
-  else if(temp_f == ism330dhcx_gyro_fs_dps4000)
+  else if (temp_f == ism330dhcx_gyro_fs_dps4000)
   {
     enum_id = 5;
   }
@@ -235,66 +236,66 @@ uint8_t Ism330dhcx_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
 
   uint8_t ret = 0;
-  if(json_object_dothas_value(tempJSONObject, "ism330dhcx_gyro.odr"))
+  if (json_object_dothas_value(tempJSONObject, "ism330dhcx_gyro.odr"))
   {
     int odr = (int)json_object_dotget_number(tempJSONObject, "ism330dhcx_gyro.odr");
-    switch(odr)
+    switch (odr)
     {
-    case 0:
-      ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz12_5);
-      break;
-    case 1:
-      ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz26);
-      break;
-    case 2:
-      ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz52);
-      break;
-    case 3:
-      ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz104);
-      break;
-    case 4:
-      ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz208);
-      break;
-    case 5:
-      ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz416);
-      break;
-    case 6:
-      ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz833);
-      break;
-    case 7:
-      ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz1666);
-      break;
-    case 8:
-      ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz3332);
-      break;
-    case 9:
-      ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz6667);
-      break;
+      case 0:
+        ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz12_5);
+        break;
+      case 1:
+        ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz26);
+        break;
+      case 2:
+        ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz52);
+        break;
+      case 3:
+        ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz104);
+        break;
+      case 4:
+        ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz208);
+        break;
+      case 5:
+        ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz416);
+        break;
+      case 6:
+        ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz833);
+        break;
+      case 7:
+        ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz1666);
+        break;
+      case 8:
+        ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz3332);
+        break;
+      case 9:
+        ism330dhcx_gyro_set_odr(ism330dhcx_gyro_odr_hz6667);
+        break;
     }
   }
-  if(json_object_dothas_value(tempJSONObject, "ism330dhcx_gyro.fs"))
+  if (json_object_dothas_value(tempJSONObject, "ism330dhcx_gyro.fs"))
   {
     int fs = (int)json_object_dotget_number(tempJSONObject, "ism330dhcx_gyro.fs");
-    switch(fs)
+    switch (fs)
     {
-    case 0:
-      ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps125);
-      break;
-    case 1:
-      ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps250);
-      break;
-    case 2:
-      ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps500);
-      break;
-    case 3:
-      ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps1000);
-      break;
-    case 4:
-      ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps2000);
-      break;
-    case 5:
-      ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps4000);
-      break;
+      case 0:
+        ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps125);
+        break;
+      case 1:
+        ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps250);
+        break;
+      case 2:
+        ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps500);
+        break;
+      case 3:
+        ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps1000);
+        break;
+      case 4:
+        ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps2000);
+        break;
+      case 5:
+        ism330dhcx_gyro_set_fs(ism330dhcx_gyro_fs_dps4000);
+        break;
     }
   }
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_gyro.enable"))
@@ -304,7 +305,7 @@ uint8_t Ism330dhcx_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   }
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_gyro.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "ism330dhcx_gyro.samples_per_ts");
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "ism330dhcx_gyro.samples_per_ts");
     ism330dhcx_gyro_set_samples_per_ts(samples_per_ts);
   }
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_gyro.sensor_annotation"))

@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    DoxyfileALLMEMS1_STM32F401RE-Nucleo.h
   * @author  System Research & Applications Team - Catania Lab.
-  * @version 1.3.0
-  * @date    7-Mar-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   This file contains definitions needed only for Doxygen documents
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -23,20 +23,22 @@
 #define DOXYGEN_TEMPLATE_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
-   
+
 /**
- * @mainpage STM32_BLE_Manager Library
- *
- * @image html st_logo.png
- *
- * <b>Purpose</b>
- *
- * The BLE Manager Library is an STM32 middleware providing an APIs to manage the BLE service according to the BlueNRG-MS, BlueNRG-1/2, BlueNRG-LP and WB middleware APIs.
- * Parson (lighweight json library written in C) must been included to parse the extended configuration characteristic commands.
- *
- */
+  * @mainpage STM32_BLE_Manager Library
+  *
+  * @image html st_logo.png
+  *
+  * <b>Purpose</b>
+  *
+  * The BLE Manager Library is an STM32 middleware providing an APIs to manage the BLE service according to
+  * the BlueNRG-MS, BlueNRG-1/2, BlueNRG-LP and WB middleware APIs.
+  * Parson (lighweight json library written in C) must been included to parse the extended configuration
+  * characteristic commands.
+  *
+  */
 
 #ifdef __cplusplus
 }
@@ -44,4 +46,3 @@
 
 
 #endif /* DOXYGEN_TEMPLATE_H_ */
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

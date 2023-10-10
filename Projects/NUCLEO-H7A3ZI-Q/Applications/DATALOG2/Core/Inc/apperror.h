@@ -1,17 +1,17 @@
 /**
- ******************************************************************************
- * @file    apperror.h
- * @author  SRA
- *
- * @brief Application specific error code
- *
- * Application defines its own error code in this file starting form the
- * constant APP_BASE_ERROR_CODE.
- * It is recommended to group the error code in the following groups:
- * - Low Level API error code
- * - Service Level error code
- * - Task Level error code
- *
+  ******************************************************************************
+  * @file    apperror.h
+  * @author  SRA
+  *
+  * @brief Application specific error code
+  *
+  * Application defines its own error code in this file starting form the
+  * constant APP_BASE_ERROR_CODE.
+  * It is recommended to group the error code in the following groups:
+  * - Low Level API error code
+  * - Service Level error code
+  * - Task Level error code
+  *
   ******************************************************************************
   * @attention
   *
@@ -24,7 +24,7 @@
   *
   *
   ******************************************************************************
- */
+  */
 #ifndef APPERROR_H_
 #define APPERROR_H_
 

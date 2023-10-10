@@ -52,8 +52,8 @@ extern "C" {
 
 
 /**
- * This type allows managed tasks to communicate with each other by posting messages in a task input queue.
- */
+  * This type allows managed tasks to communicate with each other by posting messages in a task input queue.
+  */
 typedef union _AppMsg
 {
   uint8_t msg_id;
@@ -83,7 +83,7 @@ typedef union _AppMsg
     {
       uint32_t n_param;                             /* command parameter */
       float f_param;
-    }param;
+    } param;
   } neai_msg;
 
   //--------------------------------------------------------------------------------
@@ -100,7 +100,7 @@ typedef union _AppMsg
     {
       ISourceObservable *p_data_source;             /* data source */
       IDPU2_t *p_next_dpu;                          /* next DPU in the DPU chain */
-    }p_data_obj;
+    } p_data_obj;
   } dpu_msg_attach;
 
   //--------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ typedef union _AppMsg
     uint8_t reserved[3];                           /* reserved. */
     uint8_t *p_buffer;                             /* data buffer. */
     uint32_t buffer_size;                          /* size in byte of the buffer. */
-  }dpu_msg_set_buff;
+  } dpu_msg_set_buff;
 
   //--------------------------------------------------------------------------------
   //  DPU_MESSAGE_ID_CMD 0xA0
@@ -145,7 +145,7 @@ typedef union _AppMsg
     uint8_t msg_id;                                /* Message ID = 0xA0 */
     uint8_t cmd_id;                                /* command ID. */
     uint8_t reserved[2];                           /* reserved. */
-  }dpu_msg_cmd;
+  } dpu_msg_cmd;
 
   //--------------------------------------------------------------------------------
   //  internalReport (MCU)
@@ -157,15 +157,15 @@ typedef union _AppMsg
     uint8_t  data;                                   /* reserved. It can be ignored */
   } internalReportFE;
 
-}AppMsg_t;
+} AppMsg_t;
 
 
 /**
- * Get the size of the report with a specified ID
- *
- * @param message_id [IN] specifies a the id of the message
- * @return the size of the message with the specified ID or 0 if the message ID is not valid.
- */
+  * Get the size of the report with a specified ID
+  *
+  * @param message_id [IN] specifies a the id of the message
+  * @return the size of the message with the specified ID or 0 if the message ID is not valid.
+  */
 uint16_t AppMsgGetSize(uint8_t message_id);
 
 

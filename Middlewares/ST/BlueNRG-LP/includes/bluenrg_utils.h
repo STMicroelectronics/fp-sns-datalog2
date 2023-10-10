@@ -1,17 +1,22 @@
-/******************** (C) COPYRIGHT 2020 STMicroelectronics ********************
-* File Name          : bluenrg_utils.h
-* Author             : AMS - RF Application Team
-* Version            : V1.0.0
-* Date               : 03-February-2020
-* Description        : Header file for BlueNRG-1,2 utility functions 
-********************************************************************************
-* THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
-* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
-* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
-* CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
-* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
-*******************************************************************************/
+/**
+  ******************************************************************************
+  * @file    bluenrg_utils.h
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.3.0
+  * @date    20-July-2023
+  * @brief   Header file for BlueNRG-1,2 utility functions 
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __BLUENRG_UTILS_H
@@ -114,4 +119,3 @@ uint8_t getBlueNRGVersion(uint8_t *hw_version, uint16_t *fw_version);
 
 #endif /*__BLUENRG_UTILS_H */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

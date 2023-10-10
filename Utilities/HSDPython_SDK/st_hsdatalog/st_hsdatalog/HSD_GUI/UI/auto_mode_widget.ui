@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>286</width>
+    <width>340</width>
     <height>120</height>
    </rect>
   </property>
@@ -97,24 +97,21 @@ border-radius: 5px;
          <cursorShape>ArrowCursor</cursorShape>
         </property>
         <property name="styleSheet">
-         <string notr="true">QComboBox{
-	background-color: rgb(27, 29, 35);
-	border-radius: 5px;
-	border: 2px solid rgb(27, 29, 35);
-	padding: 5px;
-	padding-left: 10px;
+         <string notr="true">QSpinBox {
+    color: rgb(255,255,255);
+    background-color: rgb(27, 29, 35);
+    border-radius: 5px;
+    border: 2px solid rgb(27, 29, 35);
+    padding-left: 10px;
 }
-QComboBox:hover{
-	border: 2px solid rgb(64, 71, 88);
+QSpinBox:hover {
+    border: 2px solid rgb(58, 66, 81);
 }
-QComboBox QAbstractItemView {
-	color: rgb(85, 170, 255);	
-	background-color: rgb(27, 29, 35);
-	padding: 10px;
-	selection-background-color: rgb(39, 44, 54);
+QSpinBox:focus {
+    border: 2px solid rgb(91, 101, 124);
 }
-QComboBox:disabled{
-	color: rgb(60,60,60);
+QSpinBox:disabled {
+    color: rgb(60,60,60);
 	border: 2px solid rgb(32, 32, 32);
 }</string>
         </property>
@@ -218,6 +215,16 @@ QComboBox:disabled{
                 </widget>
                </item>
                <item>
+                <widget class="QLabel" name="nof_acq_info">
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="pixmap">
+                  <pixmap resource="../../../st_dtdl_gui/UI/resources.qrc">:/icons/icons/outline_info_white_18dp.png</pixmap>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QSpinBox" name="nof_acq_value">
                  <property name="enabled">
                   <bool>true</bool>
@@ -235,24 +242,7 @@ QComboBox:disabled{
                   </size>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">QSpinBox {
-    color: rgb(255,255,255);
-    background-color: rgb(27, 29, 35);
-    border-radius: 5px;
-    border: 2px solid rgb(27, 29, 35);
-    padding-left: 10px;
-}
-QSpinBox:hover {
-    border: 2px solid rgb(58, 66, 81);
-}
-QSpinBox:focus {
-    border: 2px solid rgb(91, 101, 124);
-}
-QSpinBox:disabled {
-    color: rgb(60,60,60);
-	border: 2px solid rgb(32, 32, 32);
-}
-</string>
+                  <string notr="true"/>
                  </property>
                  <property name="maximum">
                   <number>10000</number>
@@ -326,6 +316,16 @@ QSpinBox:disabled {
                  </property>
                 </widget>
                </item>
+               <item alignment="Qt::AlignRight">
+                <widget class="QLabel" name="start_delay_info">
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="pixmap">
+                  <pixmap resource="../../../st_dtdl_gui/UI/resources.qrc">:/icons/icons/outline_info_white_18dp.png</pixmap>
+                 </property>
+                </widget>
+               </item>
                <item>
                 <widget class="QSpinBox" name="start_delay_value">
                  <property name="enabled">
@@ -344,24 +344,7 @@ QSpinBox:disabled {
                   </size>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">QSpinBox {
-    color: rgb(255,255,255);
-    background-color: rgb(27, 29, 35);
-    border-radius: 5px;
-    border: 2px solid rgb(27, 29, 35);
-    padding-left: 10px;
-}
-QSpinBox:hover {
-    border: 2px solid rgb(58, 66, 81);
-}
-QSpinBox:focus {
-    border: 2px solid rgb(91, 101, 124);
-}
-QSpinBox:disabled {
-    color: rgb(60,60,60);
-	border: 2px solid rgb(32, 32, 32);
-}
-</string>
+                  <string notr="true"/>
                  </property>
                  <property name="maximum">
                   <number>10000</number>
@@ -399,12 +382,22 @@ QSpinBox:disabled {
                 <number>0</number>
                </property>
                <item>
-                <widget class="QLabel" name="log_perio_label">
+                <widget class="QLabel" name="log_period_label">
                  <property name="text">
                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Logging&lt;br/&gt;Period &lt;span style=&quot; font-size:7pt;&quot;&gt;[s]&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="textFormat">
                   <enum>Qt::MarkdownText</enum>
+                 </property>
+                </widget>
+               </item>
+               <item alignment="Qt::AlignRight">
+                <widget class="QLabel" name="log_period_info">
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="pixmap">
+                  <pixmap resource="../../../st_dtdl_gui/UI/resources.qrc">:/icons/icons/outline_info_white_18dp.png</pixmap>
                  </property>
                 </widget>
                </item>
@@ -426,24 +419,7 @@ QSpinBox:disabled {
                   </size>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">QSpinBox {
-    color: rgb(255,255,255);
-    background-color: rgb(27, 29, 35);
-    border-radius: 5px;
-    border: 2px solid rgb(27, 29, 35);
-    padding-left: 10px;
-}
-QSpinBox:hover {
-    border: 2px solid rgb(58, 66, 81);
-}
-QSpinBox:focus {
-    border: 2px solid rgb(91, 101, 124);
-}
-QSpinBox:disabled {
-    color: rgb(60,60,60);
-	border: 2px solid rgb(32, 32, 32);
-}
-</string>
+                  <string notr="true"/>
                  </property>
                  <property name="maximum">
                   <number>10000</number>
@@ -491,6 +467,16 @@ QSpinBox:disabled {
                 </widget>
                </item>
                <item>
+                <widget class="QLabel" name="idle_period_info">
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="pixmap">
+                  <pixmap resource="../../../st_dtdl_gui/UI/resources.qrc">:/icons/icons/outline_info_white_18dp.png</pixmap>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <widget class="QSpinBox" name="idle_period_value">
                  <property name="enabled">
                   <bool>true</bool>
@@ -508,24 +494,7 @@ QSpinBox:disabled {
                   </size>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">QSpinBox {
-    color: rgb(255,255,255);
-    background-color: rgb(27, 29, 35);
-    border-radius: 5px;
-    border: 2px solid rgb(27, 29, 35);
-    padding-left: 10px;
-}
-QSpinBox:hover {
-    border: 2px solid rgb(58, 66, 81);
-}
-QSpinBox:focus {
-    border: 2px solid rgb(91, 101, 124);
-}
-QSpinBox:disabled {
-    color: rgb(60,60,60);
-	border: 2px solid rgb(32, 32, 32);
-}
-</string>
+                  <string notr="true"/>
                  </property>
                  <property name="maximum">
                   <number>10000</number>

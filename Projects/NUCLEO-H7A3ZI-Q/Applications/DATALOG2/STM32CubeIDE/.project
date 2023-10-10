@@ -52,16 +52,6 @@
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/EMData/Src</locationURI>
 		</link>
 		<link>
-			<name>eLooM_Components/PnPLCompManager/Inc</name>
-			<type>2</type>
-			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/PnPLCompManager/Inc</locationURI>
-		</link>
-		<link>
-			<name>eLooM_Components/PnPLCompManager/Src</name>
-			<type>2</type>
-			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/PnPLCompManager/Src</locationURI>
-		</link>
-		<link>
 			<name>Drivers/CMSIS/Include/cmsis_armcc.h</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/CMSIS/Include/cmsis_armcc.h</locationURI>
@@ -702,11 +692,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/stm32h7xx_hal_msp.c</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Src/stm32h7xx_hal_timebase_tim.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/stm32h7xx_hal_timebase_tim.c</locationURI>
-		</link>
-		<link>
 			<name>User/Core/Src/stm32h7xx_it.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/stm32h7xx_it.c</locationURI>
@@ -1017,6 +1002,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/rtc.c</locationURI>
 		</link>
 		<link>
+			<name>User/mx/Src/stm32h7xx_hal_timebase_tim.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/stm32h7xx_hal_timebase_tim.c</locationURI>
+		</link>
+		<link>
 			<name>User/mx/Src/tim.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/tim.c</locationURI>
@@ -1115,6 +1105,16 @@
 			<name>eLooM_Components/SensorManager/Inc/ISensorLL_vtbl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ISensorLL_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>eLooM_Components/SensorManager/Inc/ISensorMems.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ISensorMems.h</locationURI>
+		</link>
+		<link>
+			<name>eLooM_Components/SensorManager/Inc/ISensorMems_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ISensorMems_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>eLooM_Components/SensorManager/Inc/ISensor_vtbl.h</name>
@@ -1245,6 +1245,36 @@
 			<name>Drivers/BSP/Components/ism330dhcx/ism330dhcx_reg.h</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/ism330dhcx/ism330dhcx_reg.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Inc/PnPLCompManager.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/PnPLCompManager.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Inc/PnPLDef.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/PnPLDef.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Src/IPnPLComponent.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Src/IPnPLComponent.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Src/PnPLCompManager.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Src/PnPLCompManager.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/usbx/UX Device Controllers/ux_dcd_stm32.h</name>

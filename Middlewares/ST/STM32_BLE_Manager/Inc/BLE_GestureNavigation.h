@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_GestureNavigation.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Gesture Recognition info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,12 +18,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_GESTURE_NAVIGATION_H_
 #define _BLE_GESTURE_NAVIGATION_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported defines ---------------------------------------------------------*/
@@ -59,20 +59,21 @@ extern CustomNotifyEventGestureNavigation_t CustomNotifyEventGestureNavigation;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Gesture Navigation info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Gesture Navigation info service
- */
-extern BleCharTypeDef* BLE_InitGestureNavigationService(void);
+  * @brief  Init Gesture Navigation info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Gesture Navigation info service
+  */
+extern BleCharTypeDef *BLE_InitGestureNavigationService(void);
 
 
 /**
- * @brief  Update Gesture Navigation characteristic
- * @param  BLE_GestureNavigation_t GestureNavigation Gesture Navigation Code
- * @param  BLE_ButtonNavigation_t ButtonNavigation Button Navigation Code
- * @retval tBleStatus   Status
- */
-extern tBleStatus BLE_GestureNavigationUpdate(BLE_GestureNavigation_t GestureNavigation,BLE_ButtonNavigation_t ButtonNavigation);
+  * @brief  Update Gesture Navigation characteristic
+  * @param  BLE_GestureNavigation_t GestureNavigation Gesture Navigation Code
+  * @param  BLE_ButtonNavigation_t ButtonNavigation Button Navigation Code
+  * @retval tBleStatus   Status
+  */
+extern tBleStatus BLE_GestureNavigationUpdate(BLE_GestureNavigation_t GestureNavigation,
+                                              BLE_ButtonNavigation_t ButtonNavigation);
 
 #ifdef __cplusplus
 }

@@ -55,7 +55,7 @@ struct _SPIBusIF
   /**
     * Address auto-increment (Multi-byte read/write).
     */
-  uint8_t auto_inc;
+  uint16_t auto_inc;
 
   /**
     * Synchronization object used to synchronize the sensor with the bus.
@@ -77,7 +77,7 @@ struct _SPIBusIF
   * @param nAutoInc [IN] specifies the SPI address auto-increment to allow multiple data read/write (see sensor datasheet: if needed set 0x40, else 0)
   * @return SYS_NO_EROR_CODE if success, an error code otherwise.
   */
-ABusIF *SPIBusIFAlloc(uint8_t who_am_i, GPIO_TypeDef *p_port, uint16_t pin, uint8_t auto_inc);
+ABusIF *SPIBusIFAlloc(uint16_t who_am_i, GPIO_TypeDef *p_port, uint16_t pin, uint8_t auto_inc);
 
 sys_error_code_t SPIBusIFWaitIOComplete(SPIBusIF *_this);
 sys_error_code_t SPIBusIFNotifyIOComplete(SPIBusIF *_this);

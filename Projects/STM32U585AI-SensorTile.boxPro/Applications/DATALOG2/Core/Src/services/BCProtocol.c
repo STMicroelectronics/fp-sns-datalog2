@@ -1,28 +1,28 @@
 /**
- ******************************************************************************
- * @file    BCProtocol.c
- * @author  STMicroelectronics
- * @version 2.0.0
- * @date    July 25, 2022
- *
- * @brief STBC02 Battery Charger service.
- *
- * @description
- * This file implements the needed logic to support the STBC02 Battery Charger.
- *
- * For more information look at the BCProtocol.h file.
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    BCProtocol.c
+  * @author  STMicroelectronics
+  * @version 2.0.0
+  * @date    July 25, 2022
+  *
+  * @brief STBC02 Battery Charger service.
+  *
+  * @description
+  * This file implements the needed logic to support the STBC02 Battery Charger.
+  *
+  * For more information look at the BCProtocol.h file.
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  ******************************************************************************
+  */
 
 #include "services/BCProtocol.h"
 #include "drivers/BCTimerDriver.h"
@@ -44,8 +44,8 @@
 
 
 /**
- * This is a why to link a HAL TIM callback to the protocol object that is using the timer.
- */
+  * This is a why to link a HAL TIM callback to the protocol object that is using the timer.
+  */
 typedef struct _TimCallbakcMapEntry_t
 {
 //  TIM_TypeDef *tim_instance;
@@ -54,7 +54,7 @@ typedef struct _TimCallbakcMapEntry_t
 
 static TimCallbackMapEntry_t sTimCallbackMap[1U] =
 {
-    {NULL}
+  {NULL}
 };
 
 /**
@@ -68,20 +68,21 @@ typedef struct
 } _STBC02_ChgStateInfo_t;
 
 /**
-* @brief STBC02 status name and related toggling frequency (in Hz) of the nCHG pin
-* @note  The sequence must respect the order of ESTBC02_STATE_t
-*/
-static const _STBC02_ChgStateInfo_t sSTBC02_ChgStateInfo[] = {
- {NOT_VALID_INPUT, "Not Valid Input", 0.0},
- {VALID_INPUT, "Valid Input", 0.0},
- {VBAT_LOW, "Vbat Low", 0.0},
- {END_OF_CHARGE, "End Of Charge", 4.1},
- {CHARGING_PHASE, "Charging Phase", 6.2},
- {OVERCHARGE_FAULT, "Overcharge Fault", 8.2},
- {CHARGING_TIMEOUT, "Charging Timeout", 10.2},
- {BATTERY_VOLTAGE_BE_LOW_VPRE, "Battery Voltage Below Vpre", 12.8},
- {CHARGING_THERMAL_LIMITATION, "Charging Thermal Limitation", 14.2},
- {BATTERY_TEMPERATURE_FAULT, "Battery Temperature Fault", 16.2},
+  * @brief STBC02 status name and related toggling frequency (in Hz) of the nCHG pin
+  * @note  The sequence must respect the order of ESTBC02_STATE_t
+  */
+static const _STBC02_ChgStateInfo_t sSTBC02_ChgStateInfo[] =
+{
+  {NOT_VALID_INPUT, "Not Valid Input", 0.0},
+  {VALID_INPUT, "Valid Input", 0.0},
+  {VBAT_LOW, "Vbat Low", 0.0},
+  {END_OF_CHARGE, "End Of Charge", 4.1},
+  {CHARGING_PHASE, "Charging Phase", 6.2},
+  {OVERCHARGE_FAULT, "Overcharge Fault", 8.2},
+  {CHARGING_TIMEOUT, "Charging Timeout", 10.2},
+  {BATTERY_VOLTAGE_BE_LOW_VPRE, "Battery Voltage Below Vpre", 12.8},
+  {CHARGING_THERMAL_LIMITATION, "Charging Thermal Limitation", 14.2},
+  {BATTERY_TEMPERATURE_FAULT, "Battery Temperature Fault", 16.2},
 };
 
 
@@ -89,35 +90,35 @@ static const _STBC02_ChgStateInfo_t sSTBC02_ChgStateInfo[] = {
 /***************************************/
 
 /**
- * TIM Elapsed Callback function.
- * State Machine for Single Wire protocol implementation (STBC02)
- *
- * \code
- *
- *   Start  ...... N Pulses .......    Stop
- *    ____    __    __    __    __    ______
- *   |    |  |  |  |  |  |  |  |  |  |      |
- *   |    |  |  |  |  |  |  |  |  |  |      |
- * __|    |__|  |__|  |__|  |__|  |__|      |__
- *
- * \endcode
- *
- * @param htim [IN] specifies the hardware timer that has triggered the ISR.
- */
+  * TIM Elapsed Callback function.
+  * State Machine for Single Wire protocol implementation (STBC02)
+  *
+  * \code
+  *
+  *   Start  ...... N Pulses .......    Stop
+  *    ____    __    __    __    __    ______
+  *   |    |  |  |  |  |  |  |  |  |  |      |
+  *   |    |  |  |  |  |  |  |  |  |  |      |
+  * __|    |__|  |__|  |__|  |__|  |__|      |__
+  *
+  * \endcode
+  *
+  * @param htim [IN] specifies the hardware timer that has triggered the ISR.
+  */
 static void BCP1WStateMachine(TIM_HandleTypeDef *htim);
 
 /**
- * TIM Capture Callback function.
- *
- * @param htim [IN] specifies the hardware timer that has triggered the ISR.
- */
+  * TIM Capture Callback function.
+  *
+  * @param htim [IN] specifies the hardware timer that has triggered the ISR.
+  */
 static void BCPComputeFrequency(TIM_HandleTypeDef *htim);
 
 /**
- * Compute the Status from the frequency.
- *
- * @param freq [IN] CHG pin toggling frequency.
- */
+  * Compute the Status from the frequency.
+  *
+  * @param freq [IN] CHG pin toggling frequency.
+  */
 static void BCPFreq2Status(float freq);
 
 /* Public API definition */
@@ -125,7 +126,7 @@ static void BCPFreq2Status(float freq);
 
 BCProtocol_t *BCPAlloc(void)
 {
-  BCProtocol_t *p_new_obj = (BCProtocol_t*)SysAlloc(sizeof(BCProtocol_t));
+  BCProtocol_t *p_new_obj = (BCProtocol_t *)SysAlloc(sizeof(BCProtocol_t));
 
   if (p_new_obj == NULL)
   {
@@ -136,12 +137,13 @@ BCProtocol_t *BCPAlloc(void)
   return p_new_obj;
 }
 
-sys_error_code_t BCPInit(BCProtocol_t *_this, IDriver *p_bc_tim_sw_driver, IDriver *p_bc_tim_chg_driver, IDriver *p_bc_adc_driver)
+sys_error_code_t BCPInit(BCProtocol_t *_this, IDriver *p_bc_tim_sw_driver, IDriver *p_bc_tim_chg_driver,
+                         IDriver *p_bc_adc_driver)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  if ( (p_bc_tim_sw_driver == NULL) || (p_bc_adc_driver == NULL) || (p_bc_tim_chg_driver == NULL) )
+  if ((p_bc_tim_sw_driver == NULL) || (p_bc_adc_driver == NULL) || (p_bc_tim_chg_driver == NULL))
   {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
@@ -157,9 +159,9 @@ sys_error_code_t BCPInit(BCProtocol_t *_this, IDriver *p_bc_tim_sw_driver, IDriv
     _this->chg_irq_counter = 0;
     _this->chg_irq_counter_prev = 0;
 
-    BCTimerDriverRegisterElapsedCallback((BCTimerDriver_t*)_this->p_bc_tim_sw_driver, BCP1WStateMachine);
+    BCTimerDriverRegisterElapsedCallback((BCTimerDriver_t *)_this->p_bc_tim_sw_driver, BCP1WStateMachine);
 
-    BCTimChgDriverRegisterCaptureCallback((BCTimChgDriver_t*)_this->p_bc_tim_chg_driver, BCPComputeFrequency);
+    BCTimChgDriverRegisterCaptureCallback((BCTimChgDriver_t *)_this->p_bc_tim_chg_driver, BCPComputeFrequency);
 
     /* for the moment I assume there is only one instance of this protocol in the system*/
     if (sTimCallbackMap[0].p_owner == NULL)
@@ -188,7 +190,7 @@ sys_error_code_t BCPSendCmd(BCProtocol_t *_this, ESTBC02_SW_CMD_t cmd)
   _this->cmd = cmd;
   _this->sw_state = E_BC_START;
 
-  p_driver = (BCTimerDriver_t*) _this->p_bc_tim_sw_driver;
+  p_driver = (BCTimerDriver_t *) _this->p_bc_tim_sw_driver;
   BCDriverSetTimARR(p_driver, BC_STBC02_SW_START_PULSE_US - 1U);
 
   /* The timer should start immediately after the pin is SET --> Critical Section */
@@ -235,7 +237,8 @@ sys_error_code_t BCPPowerOff(BCProtocol_t *_this)
   return res;
 }
 
-sys_error_code_t BCPAcquireBatteryVoltage(BCProtocol_t *_this, uint16_t *voltage){
+sys_error_code_t BCPAcquireBatteryVoltage(BCProtocol_t *_this, uint16_t *voltage)
+{
 
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -267,12 +270,12 @@ sys_error_code_t BCPAcquireState(BCProtocol_t *_this, uint16_t *voltage, ESTBC02
   /* Enable Li-Ion battery measurement */
   BCPSendCmd(_this, E_BATMS_OFF);
 
-  if(p_owner->chg_irq_counter == p_owner->chg_irq_counter_prev)
+  if (p_owner->chg_irq_counter == p_owner->chg_irq_counter_prev)
   {
     /* CHG pin not toggling */
     *state = DISCHARGING;
   }
-  else if(*voltage < 100U)
+  else if (*voltage < 100U)
   {
     /* Battery not connected */
     *voltage = 0U;
@@ -281,7 +284,7 @@ sys_error_code_t BCPAcquireState(BCProtocol_t *_this, uint16_t *voltage, ESTBC02
   else
   {
     /* All other cases */
-    switch(_this->chg_state)
+    switch (_this->chg_state)
     {
       case NOT_VALID_INPUT:
         *state = DISCHARGING;
@@ -333,9 +336,9 @@ static void BCP1WStateMachine(TIM_HandleTypeDef *htim)
   assert_param(htim != NULL);
 
   BCProtocol_t *p_owner = sTimCallbackMap[0].p_owner;
-  BCTimerDriver_t *p_driver = (BCTimerDriver_t*) p_owner->p_bc_tim_sw_driver;
+  BCTimerDriver_t *p_driver = (BCTimerDriver_t *) p_owner->p_bc_tim_sw_driver;
 
-  switch(p_owner->sw_state)
+  switch (p_owner->sw_state)
   {
     case E_BC_IDLE:
       break;
@@ -348,7 +351,7 @@ static void BCP1WStateMachine(TIM_HandleTypeDef *htim)
     case E_BC_PULSE_L: /* Beginning of short-low pulse (except first one) */
       BCDriverSetTimARR(p_driver, BC_STBC02_SW_SHORT_PULSE_US - 1U);
       BCDriverResetLine1W(p_driver);
-      if(p_owner->pulse < (uint8_t) p_owner->cmd)
+      if (p_owner->pulse < (uint8_t) p_owner->cmd)
       {
         p_owner->sw_state = E_BC_PULSE_H;
       }
@@ -387,13 +390,13 @@ static void BCPComputeFrequency(TIM_HandleTypeDef *htim)
   float uwFrequency = 0; /* Frequency Value [Hz] */
 
   p_owner->chg_irq_counter++;
-  if(p_owner->ic_flag == 0)
+  if (p_owner->ic_flag == 0)
   {
     /* Get the 1st Input Capture value */
     p_owner->ic_value1 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
     p_owner->ic_flag = 1;
   }
-  else if(p_owner->ic_flag == 1)
+  else if (p_owner->ic_flag == 1)
   {
     uint32_t uwDiffCapture;
 
@@ -401,11 +404,11 @@ static void BCPComputeFrequency(TIM_HandleTypeDef *htim)
     p_owner->ic_value2 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
 
     /* Capture computation */
-    if(p_owner->ic_value2 > p_owner->ic_value1)
+    if (p_owner->ic_value2 > p_owner->ic_value1)
     {
       uwDiffCapture = (p_owner->ic_value2 - p_owner->ic_value1);
     }
-    else if(p_owner->ic_value2 < p_owner->ic_value1)
+    else if (p_owner->ic_value2 < p_owner->ic_value1)
     {
       /* 0xFFFF is max TIM1_CCRx value */
       uwDiffCapture = ((0xFFFFU - p_owner->ic_value1) + p_owner->ic_value2) + 1U;
@@ -426,28 +429,28 @@ static void BCPComputeFrequency(TIM_HandleTypeDef *htim)
 
 
 /**
- * @brief Get the status of the STBC02 checking the toggling frequency of the charging pin of the STBC02
- * @retval None
- */
+  * @brief Get the status of the STBC02 checking the toggling frequency of the charging pin of the STBC02
+  * @retval None
+  */
 static void BCPFreq2Status(float freq)
 {
   BCProtocol_t *p_owner = sTimCallbackMap[0].p_owner;
   ESTBC02_CHG_STATE_t ChgState;
   float half_step;
 
-  if(freq > (float) 0)
+  if (freq > (float) 0)
   {
-    for(ChgState = END_OF_CHARGE; ChgState < BATTERY_TEMPERATURE_FAULT; ChgState++)
+    for (ChgState = END_OF_CHARGE; ChgState < BATTERY_TEMPERATURE_FAULT; ChgState++)
     {
       half_step = (sSTBC02_ChgStateInfo[ChgState].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState + 1U].freq) / (float) 2;
-      if(freq < half_step)
+      if (freq < half_step)
       {
         p_owner->chg_state = ChgState;
         break;
       }
     }
     half_step = (sSTBC02_ChgStateInfo[ChgState - 1U].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState].freq) / (float) 2;
-    if(freq > half_step)
+    if (freq > half_step)
     {
       p_owner->chg_state = ChgState;
     }

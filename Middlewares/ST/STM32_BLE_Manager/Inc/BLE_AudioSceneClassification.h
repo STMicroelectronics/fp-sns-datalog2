@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_AudioSceneClassification.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Audio Scene Classification info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,12 +18,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_AUDIO_SCENE_CALSSIFICATION_H_
 #define _BLE_AUDIO_SCENE_CALSSIFICATION_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported defines ---------------------------------------------------------*/
@@ -34,8 +34,8 @@ typedef enum
   BLE_ASC_HOME      = 0x00,
   BLE_ASC_OUTDOOR   = 0x01,
   BLE_ASC_CAR       = 0x02,
-  BLE_ASC_OFF       = 0xF0, //Off
-  BLE_ASC_ON        = 0xF1, //On
+  BLE_ASC_OFF       = 0xF0, /* Off */
+  BLE_ASC_ON        = 0xF1, /* On */
   BLE_ASC_UNDEFINED = 0xFF
 } BLE_ASC_output_t;
 
@@ -56,19 +56,19 @@ extern CustomNotifyEventAudioSceneClass_t CustomNotifyEventAudioSceneClass;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Audio Scene Classification info service
- * @param  uint8_t SendAlgorithmCode 0/1 -> Send also the Audio Scene Classificatio algorithm code
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Activity Classification info service
- */
-extern BleCharTypeDef* BLE_InitAudioSceneClassService(uint8_t SendAlgorithmCode);
+  * @brief  Init Audio Scene Classification info service
+  * @param  uint8_t SendAlgorithmCode 0/1 -> Send also the Audio Scene Classificatio algorithm code
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Activity Classification info service
+  */
+extern BleCharTypeDef *BLE_InitAudioSceneClassService(uint8_t SendAlgorithmCode);
 
 /**
- * @brief  Update Audio Scene Classification characteristic
- * @param  BLE_ASC_output_t ASC_Code Audio Scene Classification Code
- * @param BLE_ASC_Algorithm_t ASC_AlgId Algorithm Id
- * @retval tBleStatus   Status
- */
-extern tBleStatus BLE_AudioSceneClassUpdate(BLE_ASC_output_t ASC_Code,BLE_ASC_Algorithm_t ASC_AlgId);
+  * @brief  Update Audio Scene Classification characteristic
+  * @param  BLE_ASC_output_t ASC_Code Audio Scene Classification Code
+  * @param BLE_ASC_Algorithm_t ASC_AlgId Algorithm Id
+  * @retval tBleStatus   Status
+  */
+extern tBleStatus BLE_AudioSceneClassUpdate(BLE_ASC_output_t ASC_Code, BLE_ASC_Algorithm_t ASC_AlgId);
 
 #ifdef __cplusplus
 }

@@ -19,7 +19,8 @@ from enum import Enum
 from PySide6.QtCore import QObject, Signal
 
 from st_pnpl.DTDL.device_template_manager import DeviceTemplateManager
-from st_pnpl.DTDL.device_template_model import InterfaceElement           
+from st_pnpl.DTDL.device_template_model import InterfaceElement
+from st_pnpl.DTDL.dtdl_utils import DTDL_ACTUATORS_ID_COMP_KEY, DTDL_ALGORITHMS_ID_COMP_KEY, DTDL_SENSORS_ID_COMP_KEY           
 
 class ComponentType(Enum):
     SENSOR = 0
@@ -86,11 +87,11 @@ class STDTDL_Controller(QObject):
         self.__dt_manager = DeviceTemplateManager(dev_template_json)
         self.components_dtdl = self.__dt_manager.get_components()
         for comp_name in self.components_dtdl.keys():
-            if self.components_dtdl[comp_name].id.split(":")[-2] == "sensors":
+            if ":"+DTDL_SENSORS_ID_COMP_KEY+":" in self.components_dtdl[comp_name].id:
                 self.sig_sensor_component_found.emit(comp_name, self.components_dtdl[comp_name])
-            elif self.components_dtdl[comp_name].id.split(":")[-2] == "algorithms":
+            elif ":"+DTDL_ALGORITHMS_ID_COMP_KEY+":" in self.components_dtdl[comp_name].id:
                 self.sig_algorithm_component_found.emit(comp_name, self.components_dtdl[comp_name])
-            elif  self.components_dtdl[comp_name].id.split(":")[-2] == "actuators":
+            elif ":"+DTDL_ACTUATORS_ID_COMP_KEY+":" in self.components_dtdl[comp_name].id:
                 self.sig_actuator_component_found.emit(comp_name, self.components_dtdl[comp_name])
             else:
                 self.sig_component_found.emit(comp_name, self.components_dtdl[comp_name])

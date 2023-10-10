@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_gyro;2
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_gyro;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.1.0
+  * Created by: DTDL2PnPL_cGen version 1.2.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -99,7 +99,8 @@ char *Lsm6dsv16x_Gyro_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id
   return "";
 }
 
-uint8_t Lsm6dsv16x_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Lsm6dsv16x_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                           uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -203,6 +204,8 @@ uint8_t Lsm6dsv16x_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seria
   char *temp_s = "";
   lsm6dsv16x_gyro_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "lsm6dsv16x_gyro.data_type", temp_s);
+  lsm6dsv16x_gyro_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "lsm6dsv16x_gyro.sensor_annotation", temp_s);
   lsm6dsv16x_gyro_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "lsm6dsv16x_gyro.sensor_category", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
@@ -231,10 +234,12 @@ uint8_t Lsm6dsv16x_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seria
   return 0;
 }
 
-uint8_t Lsm6dsv16x_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Lsm6dsv16x_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
   if(json_object_dothas_value(tempJSONObject, "lsm6dsv16x_gyro.odr"))
@@ -243,39 +248,44 @@ uint8_t Lsm6dsv16x_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
     switch(odr)
     {
     case 0:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz7_5);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz7_5);
       break;
     case 1:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz15);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz15);
       break;
     case 2:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz30);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz30);
       break;
     case 3:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz60);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz60);
       break;
     case 4:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz120);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz120);
       break;
     case 5:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz240);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz240);
       break;
     case 6:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz480);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz480);
       break;
     case 7:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz960);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz960);
       break;
     case 8:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz1920);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz1920);
       break;
     case 9:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz3840);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz3840);
       break;
     case 10:
-      lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz7680);
+      ret = lsm6dsv16x_gyro_set_odr(lsm6dsv16x_gyro_odr_hz7680);
       break;
     }
+  if(ret == 0){
+    json_object_dotset_number(respJSONObject, "lsm6dsv16x_gyro.odr.value", odr);
+  } else {
+    json_object_dotset_string(respJSONObject, "lsm6dsv16x_gyro.odr.value", "PNPL_SET_ERROR");
+  }
   }
   if(json_object_dothas_value(tempJSONObject, "lsm6dsv16x_gyro.fs"))
   {
@@ -283,40 +293,75 @@ uint8_t Lsm6dsv16x_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
     switch(fs)
     {
     case 0:
-      lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps125);
+      ret = lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps125);
       break;
     case 1:
-      lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps250);
+      ret = lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps250);
       break;
     case 2:
-      lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps500);
+      ret = lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps500);
       break;
     case 3:
-      lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps1000);
+      ret = lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps1000);
       break;
     case 4:
-      lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps2000);
+      ret = lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps2000);
       break;
     case 5:
-      lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps4000);
+      ret = lsm6dsv16x_gyro_set_fs(lsm6dsv16x_gyro_fs_dps4000);
       break;
     }
+  if(ret == 0){
+    json_object_dotset_number(respJSONObject, "lsm6dsv16x_gyro.fs.value", fs);
+  } else {
+    json_object_dotset_string(respJSONObject, "ism330is_acc.odr.value", "PNPL_SET_ERROR");
+  }
   }
   if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_gyro.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "lsm6dsv16x_gyro.enable");
-    lsm6dsv16x_gyro_set_enable(enable);
+    ret = lsm6dsv16x_gyro_set_enable(enable);
+  if(ret == 0){
+    json_object_dotset_boolean(respJSONObject, "lsm6dsv16x_gyro.enable.value", enable);
+  } else {
+    json_object_dotset_string(respJSONObject, "lsm6dsv16x_gyro.enable.value", "PNPL_SET_ERROR");
+  }
   }
   if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_gyro.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "lsm6dsv16x_gyro.samples_per_ts");
-    lsm6dsv16x_gyro_set_samples_per_ts(samples_per_ts);
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "lsm6dsv16x_gyro.samples_per_ts");
+    ret = lsm6dsv16x_gyro_set_samples_per_ts(samples_per_ts);
+  if(ret == 0){
+    json_object_dotset_number(respJSONObject, "lsm6dsv16x_gyro.samples_per_ts.value", samples_per_ts);
+  } else {
+    json_object_dotset_string(respJSONObject, "lsm6dsv16x_gyro.samples_per_ts.value", "PNPL_SET_ERROR");
+  }
+  }
+  if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_gyro.sensor_annotation"))
+  {
+    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "lsm6dsv16x_gyro.sensor_annotation");
+    ret = lsm6dsv16x_gyro_set_sensor_annotation(sensor_annotation);
+  if(ret == 0){
+    json_object_dotset_string(respJSONObject, "lsm6dsv16x_gyro.sensor_annotation.value", sensor_annotation);
+  } else {
+    json_object_dotset_string(respJSONObject, "lsm6dsv16x_gyro.sensor_annotation.value", "PNPL_SET_ERROR");
+  }
   }
   json_value_free(tempJSON);
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
   return ret;
 }
 
-uint8_t Lsm6dsv16x_Gyro_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Lsm6dsv16x_Gyro_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   return 1;
 }

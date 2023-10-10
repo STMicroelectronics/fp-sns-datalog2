@@ -36,6 +36,11 @@ extern "C" {
 #endif
 
 #include "stm32h7xx_hal.h"
+#include "services/sysmem.h"
+
+/****************** Malloc/Free **************************/
+#define pnpl_malloc SysAlloc
+#define pnpl_free SysFree
 
 #ifdef __cplusplus
 }

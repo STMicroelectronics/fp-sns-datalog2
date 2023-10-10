@@ -1,8 +1,9 @@
 /**
   ******************************************************************************
   * @file    ble_status.h
-  * @author  AMS - RF Application team
-  * @version V3.1.0
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.3.0
+  * @date    20-July-2023
   * @brief   Header file which contains definition of Bluetooth status and error codes.
   * @note    Error Codes are defined according to Bluetooth Specifications 
   *              Vol.2 Part D.
@@ -15,16 +16,16 @@
   ******************************************************************************
   * @attention
   *
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
   *
-  * <h2><center>&copy; COPYRIGHT 2020 STMicroelectronics</center></h2>
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   ******************************************************************************
   */
+
 #ifndef __BLE_STATUS_H__
 #define __BLE_STATUS_H__
 

@@ -150,7 +150,7 @@ sys_error_code_t AnalogMicDriver_vtblDoEnterPowerMode(IDriver *_this, const EPow
     {
       if (active_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
       {
-        HAL_ADC_Stop(p_obj->p_mx_adc_cfg->p_adc); //TODO: STF - shall I implement this in the start/stop ??
+        HAL_ADC_Stop(p_obj->p_mx_adc_cfg->p_adc);
       }
     }
   }

@@ -41,21 +41,19 @@ typedef struct _ISourceObservable_vtbl ISourceObservable_vtbl;
 /**
  * Specifies the virtual table for the interface.
  */
-struct _ISourceObservable_vtbl {
+struct _ISourceObservable_vtbl
+{
 
   uint8_t             (*GetId)(ISourceObservable *_this); /** @sa ISourceGetId() */
   IEventSrc*          (*GetEventSourceIF)(ISourceObservable *_this); /** @sa ISourceGetEventSrcIF() */
   EMData_t            (*GetDataInfo)(ISourceObservable *_this); /** @sa ISourceGetDataInfo() */
-
-  sys_error_code_t    (*GetODR)(ISourceObservable *_this, float *p_measured, float *p_nominal); /** @sa ISourceGetODR() */
-  float               (*GetFS)(ISourceObservable *_this); /** @sa ISourceGetFS() */
-  float               (*GetSensitivity)(ISourceObservable *_this); /** @sa ISourceGetSensitivity() */
 };
 
 /**
  * Internal state of the Source Observable IF.
  */
-struct _ISourceObservable {
+struct _ISourceObservable
+{
   /**
    * Pointer to the virtual table for the class.
    */
@@ -88,30 +86,6 @@ static inline IEventSrc * ISourceGetEventSrcIF(ISourceObservable *_this)
 static inline EMData_t ISourceGetDataInfo(ISourceObservable *_this)
 {
   return _this->vptr->GetDataInfo(_this);
-}
-
-/**
- * @sa ISourceGetODR()
- */
-static inline sys_error_code_t ISourceGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal)
-{
-  return _this->vptr->GetODR(_this, p_measured, p_nominal );
-}
-
-/**
- * @sa ISourceGetFS()
- */
-static inline float ISourceGetFS(ISourceObservable *_this)
-{
-  return _this->vptr->GetFS(_this );
-}
-
-/**
- * @sa ISourceGetSensitivity()
- */
-static inline float ISourceGetSensitivity(ISourceObservable *_this)
-{
-  return _this->vptr->GetSensitivity(_this );
 }
 
 

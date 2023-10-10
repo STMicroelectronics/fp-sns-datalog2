@@ -16,8 +16,20 @@
 import os
 import sys
 import json
+from datetime import datetime
 # import requests #NOTE for next version
 from st_pnpl.DTDL import device_template_model as DTM
+
+def generate_datetime_string():
+    now = datetime.now()
+    datetime_string = now.strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
+    return datetime_string
+
+def print_error(text):
+    print("\033[31m{}\033[0m".format(text))
+
+def print_warning(text):
+    print("\033[33m{}\033[0m".format(text))
 
 class DeviceTemplateManager:
 
@@ -59,7 +71,8 @@ class DeviceTemplateManager:
             res = self.get_components()[comp_name]
             return res
         except:
-            print("DeviceTemplateManager - ERROR - Component \'{}\' doesn't exist in your selected Device Template".format(comp_name))
+            print_error("{} - HSDatalogApp.{} - ERROR - Component \'{}\' doesn't exist in your selected Device Template.".format(generate_datetime_string(), __name__, comp_name))
+            # print("DeviceTemplateManager - ERROR - Component \'{}\' doesn't exist in your selected Device Template".format(comp_name))
 
     @staticmethod
     def remove_custom_dtdl_model(board_id, fw_id):
@@ -77,7 +90,9 @@ class DeviceTemplateManager:
             json.dump(catalog_dict, catalog, indent=4)
 
     @staticmethod
-    def add_dtdl_model(board_id, fw_id, dtdl_model_name, dtdl_model_json):
+    def add_dtdl_model(board_id:int, fw_id:int, dtdl_model_name, dtdl_model_json):
+        board_id = hex(board_id)
+        fw_id = hex(fw_id)    
         new_dtdl = {}
         usb_device_catalog_path = os.path.join(os.path.dirname(sys.modules[__name__].__file__),"usb_device_catalog.json")
         with open(usb_device_catalog_path, "r") as catalog:
@@ -89,7 +104,8 @@ class DeviceTemplateManager:
                 if entry["board_id"] == board_id and entry["fw_id"] == fw_id:
                     # entry["local_dtmi"] = target_file_path
                     entry["custom_dtmi"] = target_file_path
-                    print("Local version of exixting Device Template Updated [{},{}]".format(board_id, fw_id))
+                    # print("Local version of exixting Device Template Updated [{},{}]".format(board_id, fw_id))
+                    print("{} - HSDatalogApp.{} - INFO - Local version of exixting Device Template Updated [{},{}]".format(generate_datetime_string(), __name__, board_id, fw_id))
                     dtm_updated = True
                     break
             if dtm_updated == False:
@@ -99,7 +115,8 @@ class DeviceTemplateManager:
                 # new_dtdl["st_cloud_dtmi"] = "" #NOTE for next version
                 new_dtdl["custom_dtmi"] = target_file_path
                 catalog_dict.append(new_dtdl)
-                print("Added new Device Template [{},{}]".format(board_id, fw_id))
+                # print("Added new Device Template [{},{}]".format(board_id, fw_id))
+                print("{} - HSDatalogApp.{} - INFO - Added new Device Template [{},{}]".format(generate_datetime_string(), __name__, board_id, fw_id))
 
         if not os.path.exists(target_folder):
             os.makedirs(target_folder)
@@ -118,15 +135,19 @@ class DeviceTemplateManager:
             for entry in temp:
                 if entry["board_id"] == board_id and entry["fw_id"] == fw_id:
                     if "custom_dtmi" in entry and entry["custom_dtmi"] != "":
-                        print("DeviceTemplateManager - ALERT - CUSTOM User dtmi Overwrites the base supported model. Call remove_custom_dtdl_model(...) to restore the original one.")
+                        # print("DeviceTemplateManager - ALERT - CUSTOM User dtmi Overwrites the base supported model. Call remove_custom_dtdl_model(...) to restore the original one.")
+                        print_warning("{} - HSDatalogApp.{} - WARNING - CUSTOM User dtmi Overwrites the base supported model. Call remove_custom_dtdl_model(...) to restore the original one.".format(generate_datetime_string(), __name__))
                         dtdl_model_id = entry["custom_dtmi"]
                         dtdl_model_ids.append(dtdl_model_id)
-                        print("dtmi: {}".format(dtdl_model_id))
+                        # print("dtmi: {}".format(dtdl_model_id))
+                        print("{} - HSDatalogApp.{} - INFO - dtmi: {}".format(generate_datetime_string(), __name__, dtdl_model_id))
                     elif "local_dtmi" in entry and entry["local_dtmi"] != "":
-                        print("dtmi found in locally in base supported models")
+                        # print("dtmi found in locally in base supported models")
+                        print("{} - HSDatalogApp.{} - INFO - dtmi found in locally in base supported models".format(generate_datetime_string(), __name__))
                         dtdl_model_id = entry["local_dtmi"]
                         dtdl_model_ids.append(dtdl_model_id)
-                        print("dtmi: {}".format(dtdl_model_id))
+                        # print("dtmi: {}".format(dtdl_model_id))
+                        print("{} - HSDatalogApp.{} - INFO - dtmi: {}".format(generate_datetime_string(), __name__, dtdl_model_id))
                     #NOTE for the next version
                     # print("Searching the corresponding Device Template model in Azure Device Models repository...")
                     # dtdl_model_id = ""

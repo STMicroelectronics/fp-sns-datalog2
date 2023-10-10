@@ -71,34 +71,34 @@ extern "C" {
 #define BLUENRG_memcpy              memcpy
 #define BLUENRG_memset              memset
 #define BLUENRG_memcmp              memcmp
-  
+
 #if (BLE2_DEBUG == 1)
-  #include <stdio.h>
-  #define PRINT_DBG(...)        printf(__VA_ARGS__)
+#include <stdio.h>
+#define PRINT_DBG(...)        printf(__VA_ARGS__)
 #else
-  #define PRINT_DBG(...)
+#define PRINT_DBG(...)
 #endif
 
 #if PRINT_CSV_FORMAT
-  #include <stdio.h>
-  #define PRINT_CSV(...)        printf(__VA_ARGS__)
-  void print_csv_time(void);
+#include <stdio.h>
+#define PRINT_CSV(...)        printf(__VA_ARGS__)
+void print_csv_time(void);
 #else
-  #define PRINT_CSV(...)
+#define PRINT_CSV(...)
 #endif
 
 #if BLUENRG2_DEBUG
-  /** 
-   * User can change here printf with a custom implementation.
-   * For example:
-   * #define BLUENRG_PRINTF(...)   STBOX1_PRINTF(__VA_ARGS__)
-   */
-  #include <stdio.h>
-  #define BLUENRG_PRINTF(...)   printf(__VA_ARGS__)
+/**
+  * User can change here printf with a custom implementation.
+  * For example:
+  * #define BLUENRG_PRINTF(...)   STBOX1_PRINTF(__VA_ARGS__)
+  */
+#include <stdio.h>
+#define BLUENRG_PRINTF(...)   printf(__VA_ARGS__)
 #else
-  #define BLUENRG_PRINTF(...)
+#define BLUENRG_PRINTF(...)
 #endif
-  
+
 #ifdef __cplusplus
 }
 #endif

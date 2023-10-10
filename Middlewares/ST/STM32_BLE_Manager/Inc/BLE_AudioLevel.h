@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    BLE_AudioLevel.h 
+  * @file    BLE_AudioLevel.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Audio level info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,15 +17,15 @@
   *
   ******************************************************************************
   */
-  
-/* Define to prevent recursive inclusion -------------------------------------*/  
+
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_AUDIO_LEVEL_H_
 #define _BLE_AUDIO_LEVEL_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
-   
+
 /* Exported Typedef --------------------------------------------------------- */
 typedef void (*CustomNotifyEventAudioLevel_t)(BLE_NotifyEvent_t Event);
 
@@ -35,27 +35,27 @@ extern CustomNotifyEventAudioLevel_t CustomNotifyEventAudioLevel;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init audio level info service
- * @param  uint8_t AudioLevelNumber: Number of audio level features (up to 4 audio level are supported) 
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for audio level info service
- */
-extern BleCharTypeDef* BLE_InitAudioLevelService(uint8_t AudioLevelNumber);
+  * @brief  Init audio level info service
+  * @param  uint8_t AudioLevelNumber: Number of audio level features (up to 4 audio level are supported)
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for audio level info service
+  */
+extern BleCharTypeDef *BLE_InitAudioLevelService(uint8_t AudioLevelNumber);
 
 #ifndef BLE_MANAGER_SDKV2
 /**
- * @brief  Setting Environmental Advertise Data
- * @param  uint8_t *manuf_data: Advertise Data
- * @retval None
- */
+  * @brief  Setting Environmental Advertise Data
+  * @param  uint8_t *manuf_data: Advertise Data
+  * @retval None
+  */
 extern void BLE_SetAudioLevelAdvertiseData(uint8_t *manuf_data);
 #endif /* BLE_MANAGER_SDKV2 */
 
 /**
- * @brief  Update audio level characteristic values
- * @param  uint16_t *AudioLevelData:    SNR dB audio level array
- * @param  uint8_t AudioLevelNumber:    Number of audio level features (up to 4 audio level are supported)
- * @retval tBleStatus   Status
- */
+  * @brief  Update audio level characteristic values
+  * @param  uint16_t *AudioLevelData:    SNR dB audio level array
+  * @param  uint8_t AudioLevelNumber:    Number of audio level features (up to 4 audio level are supported)
+  * @retval tBleStatus   Status
+  */
 tBleStatus BLE_AudioLevelUpdate(uint16_t *AudioLevelData, uint8_t AudioLevelNumber);
 
 #ifdef __cplusplus

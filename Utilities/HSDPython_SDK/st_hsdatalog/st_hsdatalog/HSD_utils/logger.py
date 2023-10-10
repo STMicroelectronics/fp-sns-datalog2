@@ -17,6 +17,7 @@
 
 import logging
 import sys
+from datetime import datetime
 
 LOGGER_NAME = "HSDatalogApp"
 
@@ -62,6 +63,10 @@ def setup_applevel_logger( is_debug=True,
 
     return logger
 
-
 def get_logger(module_name):
     return logging.getLogger(LOGGER_NAME).getChild(module_name)
+
+def get_datetime():
+    now = datetime.now()
+    datetime_string = now.strftime("%Y-%m-%d %H:%M:%S,%f")[:-3]
+    return datetime_string

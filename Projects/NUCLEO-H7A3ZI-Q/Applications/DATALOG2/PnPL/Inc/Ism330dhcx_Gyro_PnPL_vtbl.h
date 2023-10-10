@@ -39,7 +39,8 @@ extern "C" {
 char *Ism330dhcx_Gyro_PnPL_vtblGetKey(IPnPLComponent_t *_this);
 uint8_t Ism330dhcx_Gyro_PnPL_vtblGetNCommands(IPnPLComponent_t *_this);
 char *Ism330dhcx_Gyro_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id);
-uint8_t Ism330dhcx_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,uint8_t pretty);
+uint8_t Ism330dhcx_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                           uint8_t pretty);
 uint8_t Ism330dhcx_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON);
 uint8_t Ism330dhcx_Gyro_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON);
 

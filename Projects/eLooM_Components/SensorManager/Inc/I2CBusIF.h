@@ -46,17 +46,19 @@ struct _I2CBusIF
   /**
     * Slave address.
     */
-  uint8_t address;
+  uint16_t address;
 
   /**
     * Address auto-increment (Multi-byte read/write).
     */
-  uint8_t auto_inc;
+  uint16_t auto_inc;
 
   /**
     * Synchronization object used to synchronize the sensor with the bus.
     */
   TX_SEMAPHORE sync_obj;
+
+  uint8_t address_size;
 };
 
 
@@ -68,16 +70,16 @@ struct _I2CBusIF
   *
   * @param _this [IN] specifies a sensor object.
   * @param nWhoAmI [IN] specifies the sensor ID. It can be zero.
-  * @param nAddress [IN] specifies the I2C address of the device.
   * @param nAutoInc [IN] specifies the I2C address auto-increment to allow multiple data read/write (see sensor datasheet: if needed set 0x80, else 0)
   * @return SYS_NO_EROR_CODE if success, an error code otherwise.
   */
-ABusIF *I2CBusIFAlloc(uint8_t who_am_i, uint8_t address, uint8_t auto_inc);
+ABusIF *I2CBusIFAlloc(uint16_t who_am_i, uint8_t address, uint8_t auto_inc);
+ABusIF *I2CBusIFAlloc16(uint16_t who_am_i, uint16_t address, uint8_t auto_inc);
 
 sys_error_code_t I2CBusIFWaitIOComplete(I2CBusIF *_this);
 sys_error_code_t I2CBusIFNotifyIOComplete(I2CBusIF *_this);
 
-int32_t I2CBusNullRW(void *p_sensor, uint8_t reg, uint8_t *p_data, uint16_t size);
+int32_t I2CBusNullRW(void *p_sensor, uint16_t reg, uint8_t *p_data, uint16_t size);
 
 // Inline function definition
 // **************************

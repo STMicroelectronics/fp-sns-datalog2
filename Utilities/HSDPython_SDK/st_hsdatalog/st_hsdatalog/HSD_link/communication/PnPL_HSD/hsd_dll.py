@@ -19,6 +19,8 @@ import ctypes
 import platform
 from ctypes import util, cdll
 
+import st_hsdatalog.HSD_utils.logger as logger
+
 ST_HS_DATALOG_OK = 0
 ST_HS_DATALOG_ERROR = -1
 ptrs = []
@@ -44,7 +46,7 @@ class HSD_Dll_Wrapper:
 
     def __init__(self):
         
-        print(platform.architecture()[0])
+        print("{} - HSDatalogApp.{} - INFO - Platform Architecture: {}".format(logger.get_datetime(), __name__, platform.architecture()[0]))
         dll_name = ""
         if platform.system() == 'Linux':
             if platform.machine() == 'armv7l' or platform.machine() == 'aarch64':
@@ -156,7 +158,7 @@ class HSD_Dll_Wrapper:
             [ctypes.c_int, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int)]
         )
 
-        ## WP2 [TODO]
+        ## WP2 [OK]
         self.hs_datalog_get_device_alias = wrap_hsd_function(
             self._hsd_dll,
             'hs_datalog_get_device_alias',
@@ -164,7 +166,7 @@ class HSD_Dll_Wrapper:
             [ctypes.c_int, ctypes.POINTER(ctypes.c_char_p)]
         )
 
-        ## WP2 [TODO]
+        ## WP2 [OK]
         self.hs_datalog_set_device_alias = wrap_hsd_function(
             self._hsd_dll,
             'hs_datalog_set_device_alias',
@@ -177,7 +179,7 @@ class HSD_Dll_Wrapper:
             self._hsd_dll,
             'hs_datalog_start_log',
             ctypes.c_int,
-            [ctypes.c_int, ctypes.c_int]
+            [ctypes.c_int, ctypes.c_int, ctypes.POINTER(ctypes.c_char_p)]
         )
 
         ## WP2 [OK]
@@ -185,7 +187,15 @@ class HSD_Dll_Wrapper:
             self._hsd_dll,
             'hs_datalog_stop_log',
             ctypes.c_int,
-            [ctypes.c_int]
+            [ctypes.c_int, ctypes.POINTER(ctypes.c_char_p)]
+        )
+
+        ## WP2 [OK]
+        self.hs_datalog_set_rtc_time = wrap_hsd_function(
+            self._hsd_dll,
+            'hs_datalog_set_rtc_time',
+            ctypes.c_int,
+            [ctypes.c_int, ctypes.POINTER(ctypes.c_char_p)]
         )
 
         ## WP2 [OK]
@@ -265,7 +275,7 @@ class HSD_Dll_Wrapper:
             self._hsd_dll,
             'hs_datalog_set_boolean_property',
             ctypes.c_int,
-            [ctypes.c_int, ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
+            [ctypes.c_int, ctypes.c_bool, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p)]
         )
 
         ## WP2 [TODO]
@@ -281,7 +291,7 @@ class HSD_Dll_Wrapper:
             self._hsd_dll,
             'hs_datalog_set_integer_property',
             ctypes.c_int,
-            [ctypes.c_int, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
+            [ctypes.c_int, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p)]
         )
         
         ## WP2 [TODO]
@@ -297,7 +307,7 @@ class HSD_Dll_Wrapper:
             self._hsd_dll,
             'hs_datalog_set_float_property',
             ctypes.c_int,
-            [ctypes.c_int, ctypes.c_float, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
+            [ctypes.c_int, ctypes.c_float, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p)]
         )
 
         ## WP2 [TODO]
@@ -313,7 +323,7 @@ class HSD_Dll_Wrapper:
             self._hsd_dll,
             'hs_datalog_set_string_property',
             ctypes.c_int,
-            [ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
+            [ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.POINTER(ctypes.c_char_p)]
         )
         
         ## WP2 [TODO] missing implementation
@@ -377,7 +387,9 @@ class HSD_Dll:
         res = self.hsd_wrapper.hs_datalog_send_message(dIdC, msgC, msg_lenC, ctypes.byref(data_lenC), ctypes.byref(dataC))
         if res != ST_HS_DATALOG_ERROR:
             if dataC.value is not None:
+                # data = dataC.value[:msg_len].decode('UTF-8')
                 data = dataC.value.decode('UTF-8')
+                print("{} - HSDatalogApp.{} - INFO - PnPL Response: {}".format(logger.get_datetime(), __name__, data))
             else:
                 data = "Command sent successfully!"
         else:
@@ -433,13 +445,41 @@ class HSD_Dll:
         return (self.hsd_wrapper.hs_datalog_set_device_alias(dIdC, aliasC) == ST_HS_DATALOG_OK)
 
     def hs_datalog_start_log(self, dId : int, interface : int) -> bool:
+        cmd_response = ctypes.c_char_p()
         dIdC = ctypes.c_int(dId)
         interfaceC = ctypes.c_int(interface)
-        return (self.hsd_wrapper.hs_datalog_start_log(dIdC, interfaceC) == ST_HS_DATALOG_OK)
+        res = self.hsd_wrapper.hs_datalog_start_log(dIdC, interfaceC, ctypes.byref(cmd_response))
+        if res != ST_HS_DATALOG_ERROR:
+            if cmd_response.value is not None:
+                cmd_res = cmd_response.value.decode('UTF-8')
+                print("{} - HSDatalogApp.{} - INFO - PnPL Response: {}".format(logger.get_datetime(), __name__, cmd_res))
+            else:
+                cmd_res = "Command sent successfully!"
+        return (res == ST_HS_DATALOG_OK, cmd_res)
 
     def hs_datalog_stop_log(self, dId : int) -> bool:
+        cmd_response = ctypes.c_char_p()
         dIdC = ctypes.c_int(dId)
-        return (self.hsd_wrapper.hs_datalog_stop_log(dIdC) == ST_HS_DATALOG_OK)
+        res = self.hsd_wrapper.hs_datalog_stop_log(dIdC, ctypes.byref(cmd_response))
+        if res != ST_HS_DATALOG_ERROR:
+            if cmd_response.value is not None:
+                cmd_res = cmd_response.value.decode('UTF-8')
+                print("{} - HSDatalogApp.{} - INFO - PnPL Response: {}".format(logger.get_datetime(), __name__, cmd_res))
+            else:
+                cmd_res = "Command sent successfully!"
+        return (res == ST_HS_DATALOG_OK, cmd_res)
+    
+    def hs_datalog_set_rtc_time(self, dId : int) -> bool:
+        cmd_response = ctypes.c_char_p()
+        dIdC = ctypes.c_int(dId)
+        res = self.hsd_wrapper.hs_datalog_set_rtc_time(dIdC, ctypes.byref(cmd_response))
+        if res != ST_HS_DATALOG_ERROR:
+            if cmd_response.value is not None:
+                cmd_res = cmd_response.value.decode('UTF-8')
+                print("{} - HSDatalogApp.{} - INFO - PnPL Response: {}".format(logger.get_datetime(), __name__, cmd_res))
+            else:
+                cmd_res = "Command sent successfully!"
+        return (res == ST_HS_DATALOG_OK, cmd_res)
 
     def hs_datalog_get_device_status(self, dId : int) -> [bool, str]:
         device = ctypes.c_char_p()
@@ -539,11 +579,22 @@ class HSD_Dll:
         valueC = ctypes.c_bool(value)
         comp_nameC = ctypes.c_char_p(comp_name.encode('UTF-8'))
         prop_nameC = ctypes.c_char_p(prop_name.encode('UTF-8'))
+        cmd_response = ctypes.c_char_p()
         if sub_prop_name is None:
             sub_prop_nameC = None
         else:
             sub_prop_nameC = ctypes.c_char_p(sub_prop_name.encode('UTF-8'))
-        return (self.hsd_wrapper.hs_datalog_set_boolean_property(dIdC, valueC, comp_nameC, prop_nameC, sub_prop_nameC) == ST_HS_DATALOG_OK)
+        res = self.hsd_wrapper.hs_datalog_set_boolean_property(dIdC, valueC, comp_nameC, prop_nameC, sub_prop_nameC, ctypes.byref(cmd_response))
+        if res != ST_HS_DATALOG_ERROR:
+            if cmd_response.value is not None:
+                cmd_res = cmd_response.value.decode('UTF-8')
+                print("{} - HSDatalogApp.{} - INFO - PnPL Response: {}".format(logger.get_datetime(), __name__, cmd_res))
+            else:
+                cmd_res = "Command sent successfully!"
+        else:
+            return (False, 0, "[ERROR] - Command not sent correctly!")
+
+        return (res == ST_HS_DATALOG_OK, cmd_res)
 
     def hs_datalog_get_integer_property(self, dId : int, comp_name : str, prop_name : str,  sub_prop_name : str = None) -> [bool, int]:
         dIdC = ctypes.c_int(dId)
@@ -561,11 +612,19 @@ class HSD_Dll:
         valueC = ctypes.c_int(value)
         comp_nameC = ctypes.c_char_p(comp_name.encode('UTF-8'))
         prop_nameC = ctypes.c_char_p(prop_name.encode('UTF-8'))
+        cmd_response = ctypes.c_char_p()
         if sub_prop_name is None:
             sub_prop_nameC = None
         else:
             sub_prop_nameC = ctypes.c_char_p(sub_prop_name.encode('UTF-8'))
-        return (self.hsd_wrapper.hs_datalog_set_integer_property(dIdC, valueC, comp_nameC, prop_nameC, sub_prop_nameC) == ST_HS_DATALOG_OK)
+        res = self.hsd_wrapper.hs_datalog_set_integer_property(dIdC, valueC, comp_nameC, prop_nameC, sub_prop_nameC, ctypes.byref(cmd_response))
+        if res != ST_HS_DATALOG_ERROR:
+            if cmd_response.value is not None:
+                cmd_res = cmd_response.value.decode('UTF-8')
+                print("{} - HSDatalogApp.{} - INFO - PnPL Response: {}".format(logger.get_datetime(), __name__, cmd_res))
+            else:
+                cmd_res = "Command sent successfully!"
+        return (res == ST_HS_DATALOG_OK, cmd_res)
 
     def hs_datalog_get_float_property(self, dId : int, comp_name : str, prop_name : str, sub_prop_name : str = None) -> [bool, float]:
         dIdC = ctypes.c_int(dId)
@@ -583,11 +642,19 @@ class HSD_Dll:
         valueC = ctypes.c_float(value)
         comp_nameC = ctypes.c_char_p(comp_name.encode('UTF-8'))
         prop_nameC = ctypes.c_char_p(prop_name.encode('UTF-8'))
+        cmd_response = ctypes.c_char_p()
         if sub_prop_name is None:
             sub_prop_nameC = None
         else:
             sub_prop_nameC = ctypes.c_char_p(sub_prop_name.encode('UTF-8'))
-        return (self.hsd_wrapper.hs_datalog_set_float_property(dIdC, valueC, comp_nameC, prop_nameC, sub_prop_nameC) == ST_HS_DATALOG_OK)
+        res = self.hsd_wrapper.hs_datalog_set_float_property(dIdC, valueC, comp_nameC, prop_nameC, sub_prop_nameC, ctypes.byref(cmd_response))
+        if res != ST_HS_DATALOG_ERROR:
+            if cmd_response.value is not None:
+                cmd_res = cmd_response.value.decode('UTF-8')
+                print("{} - HSDatalogApp.{} - INFO - PnPL Response: {}".format(logger.get_datetime(), __name__, cmd_res))
+            else:
+                cmd_res = "Command sent successfully!"
+        return (res == ST_HS_DATALOG_OK, cmd_res)
     
     def hs_datalog_get_string_property(self, dId : int, comp_name : str, prop_name : str, sub_prop_name : str) -> [bool, str]:
         dIdC = ctypes.c_int(dId)
@@ -608,10 +675,18 @@ class HSD_Dll:
         valueC = ctypes.c_char_p(value.encode('UTF-8'))
         comp_nameC = ctypes.c_char_p(comp_name.encode('UTF-8'))
         prop_nameC = ctypes.c_char_p(prop_name.encode('UTF-8'))
+        cmd_response = ctypes.c_char_p()
         if sub_prop_name is None:
             sub_prop_nameC = None
         else:
             sub_prop_nameC = ctypes.c_char_p(sub_prop_name.encode('UTF-8'))
-        return (self.hsd_wrapper.hs_datalog_set_string_property(dIdC, valueC, comp_nameC, prop_nameC, sub_prop_nameC) == ST_HS_DATALOG_OK)
+        res = self.hsd_wrapper.hs_datalog_set_string_property(dIdC, valueC, comp_nameC, prop_nameC, sub_prop_nameC, ctypes.byref(cmd_response))
+        if res != ST_HS_DATALOG_ERROR:
+            if cmd_response.value is not None:
+                cmd_res = cmd_response.value.decode('UTF-8')
+                print("{} - HSDatalogApp.{} - INFO - PnPL Response: {}".format(logger.get_datetime(), __name__, cmd_res))
+            else:
+                cmd_res = "Command sent successfully!"
+        return (res == ST_HS_DATALOG_OK, cmd_res)
         
     #TODO hs_datalog_set_data_ready_callback missing implementation

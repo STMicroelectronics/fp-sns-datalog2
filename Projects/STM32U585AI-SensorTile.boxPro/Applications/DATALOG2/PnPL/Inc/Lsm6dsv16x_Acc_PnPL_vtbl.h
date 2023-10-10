@@ -20,17 +20,17 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_acc;2
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_acc;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.1.0
+  * Created by: DTDL2PnPL_cGen version 1.2.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef _PNPL__H_
-#define _PNPL__H_
+#ifndef _PNPL_LSM6DSV16X_ACC_VTBL_H_
+#define _PNPL_LSM6DSV16X_ACC_VTBL_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,12 +39,13 @@ extern "C" {
 char *Lsm6dsv16x_Acc_PnPL_vtblGetKey(IPnPLComponent_t *_this);
 uint8_t Lsm6dsv16x_Acc_PnPL_vtblGetNCommands(IPnPLComponent_t *_this);
 char *Lsm6dsv16x_Acc_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id);
-uint8_t Lsm6dsv16x_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,uint8_t pretty);
-uint8_t Lsm6dsv16x_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON);
-uint8_t Lsm6dsv16x_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON);
+uint8_t Lsm6dsv16x_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                          uint8_t pretty);
+uint8_t Lsm6dsv16x_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
+uint8_t Lsm6dsv16x_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _PNPL__H_ */
+#endif /* _PNPL_LSM6DSV16X_ACC_VTBL_H_ */

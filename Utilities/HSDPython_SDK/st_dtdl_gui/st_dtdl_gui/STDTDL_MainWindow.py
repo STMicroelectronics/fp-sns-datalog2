@@ -17,6 +17,7 @@
 
 import sys
 import os
+from datetime import datetime
 
 from PySide6.QtWidgets import QMainWindow, QStackedWidget, QTextEdit, QLabel, QPushButton, QWidget, QFrame
 from PySide6.QtCore import Slot
@@ -26,6 +27,7 @@ from st_dtdl_gui.UI.Ui_MainWindow import Ui_MainWindow
 from st_dtdl_gui.Widgets.LoadingWindow import LoadingWindow
 from st_dtdl_gui.Widgets.ConnectionWidget import ConnectionWidget
 from st_dtdl_gui.Widgets.AboutDialog import AboutDialog
+from st_dtdl_gui.Widgets.ToggleButton import ToggleButton
 
 import st_hsdatalog.HSD_utils.logger as logger
 log = logger.get_logger(__name__)
@@ -62,6 +64,14 @@ class STDTDL_MainWindow(QMainWindow):
         
         # Connection page
         self.connection_page = self.findChild(QWidget, "page_connection")
+        frame_log_file_options = self.findChild(QFrame, "frame_log_file_options")
+        app_log_file_label = QLabel("Enable application log file")
+        app_log_file_label.setStyleSheet("font: 700 10pt \"Segoe UI\";")
+        frame_log_file_options.layout().addWidget(app_log_file_label)
+        app_log_file_toggle_button = ToggleButton()
+        frame_log_file_options.layout().addWidget(app_log_file_toggle_button)
+        app_log_file_toggle_button.toggled.connect(self.app_log_file_button_toggled)
+
         self.connection_widget = ConnectionWidget(self.controller,self)
         self.connection_page.layout().addWidget(self.connection_widget)
 
@@ -99,6 +109,8 @@ class STDTDL_MainWindow(QMainWindow):
 
         # Hide Configuration menu button (it will be unhided when a device will be connected) 
         self.menu_btn_device_conf.setVisible(False)
+        # Hide Application file viewer menu button (it will be unhided if The user wants to save the application log file) 
+        self.menu_btn_show_log_file.setVisible(False)
     
     def quit(self):
         sys.exit(0)
@@ -173,5 +185,8 @@ class STDTDL_MainWindow(QMainWindow):
     @Slot()
     def s_dtm_loaded(self):
         self.clicked_menu_device_conf()
-        
 
+    @Slot()
+    def app_log_file_button_toggled(self, status):
+        self.menu_btn_show_log_file.setVisible(status)
+        logger.setup_applevel_logger(is_debug=status, file_name= "{}_app_debug.log".format(datetime.today().strftime('%Y%m%d_%H_%M_%S')))

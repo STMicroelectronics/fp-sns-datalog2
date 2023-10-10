@@ -54,40 +54,39 @@ sys_error_code_t ISM330DHCXTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, cons
 
 uint8_t ISM330DHCXTask_vtblAccGetId(ISourceObservable *_this);
 IEventSrc *ISM330DHCXTask_vtblAccGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t ISM330DHCXTask_vtblAccGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-float ISM330DHCXTask_vtblAccGetFS(ISourceObservable *_this);
-float ISM330DHCXTask_vtblAccGetSensitivity(ISourceObservable *_this);
 EMData_t ISM330DHCXTask_vtblAccGetDataInfo(ISourceObservable *_this);
 uint8_t ISM330DHCXTask_vtblGyroGetId(ISourceObservable *_this);
 IEventSrc *ISM330DHCXTask_vtblGyroGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t ISM330DHCXTask_vtblGyroGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-float ISM330DHCXTask_vtblGyroGetFS(ISourceObservable *_this);
-float ISM330DHCXTask_vtblGyroGetSensitivity(ISourceObservable *_this);
 EMData_t ISM330DHCXTask_vtblGyroGetDataInfo(ISourceObservable *_this);
-
-sys_error_code_t ISM330DHCXTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
-sys_error_code_t ISM330DHCXTask_vtblSensorSetFS(ISensor_t *_this, float FS);
-sys_error_code_t ISM330DHCXTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
+uint8_t ISM330DHCXTask_vtblMlcGetId(ISourceObservable *_this);
+IEventSrc *ISM330DHCXTask_vtblMlcGetEventSourceIF(ISourceObservable *_this);
+EMData_t ISM330DHCXTask_vtblMlcGetDataInfo(ISourceObservable *_this);
 sys_error_code_t ISM330DHCXTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t ISM330DHCXTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t ISM330DHCXTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t ISM330DHCXTask_vtblAccGetDescription(ISensor_t *_this);
-SensorDescriptor_t ISM330DHCXTask_vtblGyroGetDescription(ISensor_t *_this);
 SensorStatus_t ISM330DHCXTask_vtblAccGetStatus(ISensor_t *_this);
+SensorDescriptor_t ISM330DHCXTask_vtblGyroGetDescription(ISensor_t *_this);
 SensorStatus_t ISM330DHCXTask_vtblGyroGetStatus(ISensor_t *_this);
+SensorDescriptor_t ISM330DHCXTask_vtblMlcGetDescription(ISensor_t *_this);
+SensorStatus_t ISM330DHCXTask_vtblMlcGetStatus(ISensor_t *_this);
+sys_error_code_t ISM330DHCXTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
+float ISM330DHCXTask_vtblAccGetFS(ISensorMems_t *_this);
+float ISM330DHCXTask_vtblAccGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t ISM330DHCXTask_vtblGyroGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
+float ISM330DHCXTask_vtblGyroGetFS(ISensorMems_t *_this);
+float ISM330DHCXTask_vtblGyroGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t ISM330DHCXTask_vtblMlcGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
+float ISM330DHCXTask_vtblMlcGetFS(ISensorMems_t *_this);
+float ISM330DHCXTask_vtblMlcGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t ISM330DHCXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
+sys_error_code_t ISM330DHCXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t ISM330DHCXTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 
 sys_error_code_t ISM330DHCXTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len);
 sys_error_code_t ISM330DHCXTask_vtblSensorWriteReg(ISensorLL_t *_this, uint16_t reg, const uint8_t *data, uint16_t len);
 sys_error_code_t ISM330DHCXTask_vtblSensorSyncModel(ISensorLL_t *_this);
 
-uint8_t ISM330DHCXTask_vtblMlcGetId(ISourceObservable *_this);
-IEventSrc *ISM330DHCXTask_vtblMlcGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t ISM330DHCXTask_vtblMlcGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-float ISM330DHCXTask_vtblMlcGetFS(ISourceObservable *_this);
-float ISM330DHCXTask_vtblMlcGetSensitivity(ISourceObservable *_this);
-EMData_t ISM330DHCXTask_vtblMlcGetDataInfo(ISourceObservable *_this);
-SensorDescriptor_t ISM330DHCXTask_vtblMlcGetDescription(ISensor_t *_this);
-SensorStatus_t ISM330DHCXTask_vtblMlcGetStatus(ISensor_t *_this);
 
 #ifdef __cplusplus
 }

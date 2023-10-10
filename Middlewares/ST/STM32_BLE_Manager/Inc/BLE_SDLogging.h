@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    BLE_SDLogging.h 
+  * @file    BLE_SDLogging.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   SD Logging info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,15 +17,15 @@
   *
   ******************************************************************************
   */
-  
-/* Define to prevent recursive inclusion -------------------------------------*/  
+
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_SDLOGGING_H_
 #define _BLE_SDLOGGING_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
-   
+
 /* Exported typedef --------------------------------------------------------- */
 typedef enum
 {
@@ -36,7 +36,7 @@ typedef enum
 
 typedef void (*CustomNotifyEventSDLog_t)(BLE_NotifyEvent_t Event);
 typedef void (*CustomWriteRequestSDLog_t)(uint8_t *att_data, uint8_t data_length);
-typedef void (*CustomReadRequestSDLog_t)(BLE_SDLog_Status_t *Status, uint32_t *FeatureMask,uint32_t *TimeStep);
+typedef void (*CustomReadRequestSDLog_t)(BLE_SDLog_Status_t *Status, uint32_t *FeatureMask, uint32_t *TimeStep);
 
 /* Exported Variables ------------------------------------------------------- */
 extern CustomNotifyEventSDLog_t CustomNotifyEventSDLog;
@@ -46,29 +46,29 @@ extern CustomReadRequestSDLog_t CustomReadRequestSDLog;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init SDLogging info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for environmental info service
- */
-extern BleCharTypeDef* BLE_InitSDLogService(void);
+  * @brief  Init SDLogging info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for environmental info service
+  */
+extern BleCharTypeDef *BLE_InitSDLogService(void);
 
 #ifndef BLE_MANAGER_SDKV2
 /**
- * @brief  Setting SDLog Advertise Data
- * @param  uint8_t *manuf_data: Advertise Data
- * @retval None
- */
+  * @brief  Setting SDLog Advertise Data
+  * @param  uint8_t *manuf_data: Advertise Data
+  * @retval None
+  */
 extern void BLE_SetSDLogAdvertiseData(uint8_t *manuf_data);
 #endif /* BLE_MANAGER_SDKV2 */
 
 /**
- * @brief  Update SDLog characteristic value
- * @param  BLE_SDLog_Status_t Status: SD Log Status
- * @param  uint32_t FeatureMask: Feature Mask
- * @param  uint32_t TimeStep:    Time Step
- * @retval tBleStatus:          Status
- */
-extern tBleStatus BLE_SDLoggingUpdate(BLE_SDLog_Status_t Status, uint32_t FeatureMask,uint32_t TimeStep);
+  * @brief  Update SDLog characteristic value
+  * @param  BLE_SDLog_Status_t Status: SD Log Status
+  * @param  uint32_t FeatureMask: Feature Mask
+  * @param  uint32_t TimeStep:    Time Step
+  * @retval tBleStatus:          Status
+  */
+extern tBleStatus BLE_SDLoggingUpdate(BLE_SDLog_Status_t Status, uint32_t FeatureMask, uint32_t TimeStep);
 
 #ifdef __cplusplus
 }

@@ -51,7 +51,7 @@ typedef struct _ABusIF ABusIF;
   * @param nSize [IN] specifies the size in byte of the data to write.
   * @return 0 if success, an error code otherwise.
   */
-typedef int32_t (*ABusWriteF)(void *pxSensor, uint8_t nRegAddr, uint8_t *pnData, uint16_t nSize);
+typedef int32_t (*ABusWriteF)(void *pxSensor, uint16_t nRegAddr, uint8_t *pnData, uint16_t nSize);
 
 /**
   * Create a type name for the function to read in the SPI bus.
@@ -62,7 +62,7 @@ typedef int32_t (*ABusWriteF)(void *pxSensor, uint8_t nRegAddr, uint8_t *pnData,
   * @param nSize [IN] specifies the size in byte of the data to read.
   * @return 0 if success, an error code otherwise.
   */
-typedef int32_t (*ABusReadF)(void *pxSensor, uint8_t nRegAddr, uint8_t *pnData, uint16_t nSize);
+typedef int32_t (*ABusReadF)(void *pxSensor, uint16_t nRegAddr, uint8_t *pnData, uint16_t nSize);
 
 /**
   * Create a type name for the function to handle delay in the SPI bus.
@@ -113,7 +113,7 @@ struct _ABusIF
   /**
     * Sensor ID.
     */
-  uint8_t m_nWhoAmI;
+  uint16_t m_nWhoAmI;
 
   /**
     * TODO: STF - do I need this ?
@@ -139,14 +139,14 @@ struct _ABusIF
 // Public API declaration
 // **********************
 
-static inline sys_error_code_t ABusIFInit(ABusIF *_this, uint8_t nWhoAmI);
+static inline sys_error_code_t ABusIFInit(ABusIF *_this, uint16_t nWhoAmI);
 
 static inline sys_error_code_t ABusIFSetHandle(ABusIF *_this, void *pxHandle);
 static inline void *ABusIFGetHandle(const ABusIF *_this);
-static inline sys_error_code_t ABusIFSetWhoAmI(ABusIF *_this, uint8_t nWhoAmI);
+static inline sys_error_code_t ABusIFSetWhoAmI(ABusIF *_this, uint16_t nWhoAmI);
 static inline uint8_t ABusIFGetWhoAmI(const ABusIF *_this);
 
-int32_t ABusIFNullRW(void *pxSensor, uint8_t nRegAddr, uint8_t *pnData, uint16_t nSize);
+int32_t ABusIFNullRW(void *pxSensor, uint16_t nRegAddr, uint8_t *pnData, uint16_t nSize);
 
 
 // Inline functions definition
@@ -171,7 +171,7 @@ void *ABusIFGetHandle(const ABusIF *_this)
 }
 
 SYS_DEFINE_INLINE
-sys_error_code_t ABusIFInit(ABusIF *_this, uint8_t nWhoAmI)
+sys_error_code_t ABusIFInit(ABusIF *_this, uint16_t nWhoAmI)
 {
   assert_param(_this);
 
@@ -186,7 +186,7 @@ sys_error_code_t ABusIFInit(ABusIF *_this, uint8_t nWhoAmI)
 }
 
 SYS_DEFINE_INLINE
-sys_error_code_t ABusIFSetWhoAmI(ABusIF *_this, uint8_t nWhoAmI)
+sys_error_code_t ABusIFSetWhoAmI(ABusIF *_this, uint16_t nWhoAmI)
 {
   assert_param(_this);
 

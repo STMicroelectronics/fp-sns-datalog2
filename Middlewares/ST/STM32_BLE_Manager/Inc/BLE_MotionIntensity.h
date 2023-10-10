@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_MotionIntensity.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Motion Intensity info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,12 +18,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_MOTION_INTENSITY_H_
 #define _BLE_MOTION_INTENSITY_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported defines ---------------------------------------------------------*/
@@ -54,26 +54,26 @@ extern CustomNotifyEventMotionIntensity_t CustomNotifyEventMotionIntensity;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Motion Intensity info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Motion Intensity info service
- */
-extern BleCharTypeDef* BLE_InitMotionIntensityService(void);
+  * @brief  Init Motion Intensity info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Motion Intensity info service
+  */
+extern BleCharTypeDef *BLE_InitMotionIntensityService(void);
 
 #ifndef BLE_MANAGER_SDKV2
 /**
- * @brief  Setting Motion Intensity Advertise Data
- * @param  uint8_t *manuf_data: Advertise Data
- * @retval None
- */
+  * @brief  Setting Motion Intensity Advertise Data
+  * @param  uint8_t *manuf_data: Advertise Data
+  * @retval None
+  */
 extern void BLE_SetMotionIntensityAdvertiseData(uint8_t *manuf_data);
 #endif /* BLE_MANAGER_SDKV2 */
 
 /**
- * @brief  Update Motion Intensity characteristic
- * @param  BLE_ID_output_t MotionIntensityCode Motion Intensity Recognized
- * @retval tBleStatus   Status
- */
+  * @brief  Update Motion Intensity characteristic
+  * @param  BLE_ID_output_t MotionIntensityCode Motion Intensity Recognized
+  * @retval tBleStatus   Status
+  */
 extern tBleStatus BLE_MotionIntensityUpdate(BLE_ID_output_t MotionIntensityCode);
 
 #ifdef __cplusplus

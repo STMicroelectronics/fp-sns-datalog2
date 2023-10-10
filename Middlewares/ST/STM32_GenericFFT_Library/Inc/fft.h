@@ -1,21 +1,21 @@
 /**
- ******************************************************************************
- * @file    fft.h
- * @author  SRA
- * @brief   header for fft.c file .
-******************************************************************************
-* @attention
-*
-* Copyright (c) 2022 STMicroelectronics.
-* All rights reserved.
-*
-* This software is licensed under terms that can be found in the LICENSE file in
-* the root directory of this software component.
-* If no LICENSE file comes with this software, it is provided AS-IS.
-*                        
-*
-******************************************************************************
-*/
+  ******************************************************************************
+  * @file    fft.h
+  * @author  SRA
+  * @brief   header for fft.c file .
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *
+  ******************************************************************************
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __FFT_H
@@ -38,16 +38,16 @@
 //#define FFT_STATIC_ALLOCATION
 
 /** @addtogroup X_CUBE_MEMSMIC1_Applications
- * @{
- */
+  * @{
+  */
 
 /** @addtogroup Microphones_Acquisition
- * @{
- */
+  * @{
+  */
 
-/** @defgroup AUDIO_APPLICATION 
- * @{
- */
+/** @defgroup AUDIO_APPLICATION
+  * @{
+  */
 
 /* Exported constants --------------------------------------------------------*/
 /* Exported typedef --------------------------------------------------------*/
@@ -78,9 +78,9 @@ typedef enum
   DIRECT_PROCESS_DISABLED = 0, DIRECT_PROCESS_ENABLED
 } FFT_direct_process_t;
 
-typedef void* (*FFT_Malloc_Function)(size_t);
-typedef void* (*FFT_Calloc_Function)(size_t, size_t);
-typedef void (*FFT_Free_Function)(void*);
+typedef void *(*FFT_Malloc_Function)(size_t);
+typedef void *(*FFT_Calloc_Function)(size_t, size_t);
+typedef void (*FFT_Free_Function)(void *);
 
 typedef struct
 {
@@ -106,7 +106,7 @@ typedef struct
   FFT_data_type_t data_type;
   FFT_output_type_t output_type;
 #ifdef FFT_STATIC
-  float32_t * userBuffer;  /*   used to refer the context buffer pointers, in the follow order:
+  float32_t *userBuffer;  /*   used to refer the context buffer pointers, in the follow order:
                             - dataIn
                             - fftIn
                             - win
@@ -122,13 +122,13 @@ typedef struct
 } FFT_instance_t;
 
 /* Exported macro ------------------------------------------------------------*/
-/** @defgroup AUDIO_APPLICATION_Exported_Defines 
- * @{
- */
+/** @defgroup AUDIO_APPLICATION_Exported_Defines
+  * @{
+  */
 
 /**
- * @}
- */
+  * @}
+  */
 /* Exported functions ------------------------------------------------------- */
 FFT_error_t FFT_Init(FFT_instance_t *instance);
 FFT_error_t FFT_DeInit(FFT_instance_t *instance);
@@ -141,16 +141,16 @@ FFT_error_t FFT_Direct_Process(FFT_instance_t *instance, void *input, float32_t 
 void FFT_set_allocation_functions(FFT_Malloc_Function malloc_fun, FFT_Free_Function free_fun);
 
 /**
- * @}
- */
+  * @}
+  */
 
 /**
- * @}
- */
+  * @}
+  */
 
 /**
- * @}
- */
+  * @}
+  */
 
 #endif /* __FFT_H */
 

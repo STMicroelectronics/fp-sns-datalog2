@@ -110,42 +110,42 @@ uint8_t Lps22hh_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   float temp_f = 0;
   lps22hh_temp_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == lps22hh_temp_odr_hz1)
+  if (temp_f == lps22hh_temp_odr_hz1)
   {
     enum_id = 0;
   }
-  else if(temp_f == lps22hh_temp_odr_hz4)
+  else if (temp_f == lps22hh_temp_odr_hz4)
   {
     enum_id = 1;
   }
-  else if(temp_f == lps22hh_temp_odr_hz10)
+  else if (temp_f == lps22hh_temp_odr_hz10)
   {
     enum_id = 2;
   }
-  else if(temp_f == lps22hh_temp_odr_hz25)
+  else if (temp_f == lps22hh_temp_odr_hz25)
   {
     enum_id = 3;
   }
-  else if(temp_f == lps22hh_temp_odr_hz50)
+  else if (temp_f == lps22hh_temp_odr_hz50)
   {
     enum_id = 4;
   }
-  else if(temp_f == lps22hh_temp_odr_hz75)
+  else if (temp_f == lps22hh_temp_odr_hz75)
   {
     enum_id = 5;
   }
-  else if(temp_f == lps22hh_temp_odr_hz100)
+  else if (temp_f == lps22hh_temp_odr_hz100)
   {
     enum_id = 6;
   }
-  else if(temp_f == lps22hh_temp_odr_hz200)
+  else if (temp_f == lps22hh_temp_odr_hz200)
   {
     enum_id = 7;
   }
   json_object_dotset_number(JSON_Status, "lps22hh_temp.odr", enum_id);
   lps22hh_temp_get_fs(&temp_f);
   enum_id = 0;
-  if(temp_f == lps22hh_temp_fs_cdeg85)
+  if (temp_f == lps22hh_temp_fs_cdeg85)
   {
     enum_id = 0;
   }
@@ -207,35 +207,35 @@ uint8_t Lps22hh_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
 
   uint8_t ret = 0;
-  if(json_object_dothas_value(tempJSONObject, "lps22hh_temp.odr"))
+  if (json_object_dothas_value(tempJSONObject, "lps22hh_temp.odr"))
   {
     int odr = (int)json_object_dotget_number(tempJSONObject, "lps22hh_temp.odr");
-    switch(odr)
+    switch (odr)
     {
-    case 0:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz1);
-      break;
-    case 1:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz4);
-      break;
-    case 2:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz10);
-      break;
-    case 3:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz25);
-      break;
-    case 4:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz50);
-      break;
-    case 5:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz75);
-      break;
-    case 6:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz100);
-      break;
-    case 7:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz200);
-      break;
+      case 0:
+        lps22hh_temp_set_odr(lps22hh_temp_odr_hz1);
+        break;
+      case 1:
+        lps22hh_temp_set_odr(lps22hh_temp_odr_hz4);
+        break;
+      case 2:
+        lps22hh_temp_set_odr(lps22hh_temp_odr_hz10);
+        break;
+      case 3:
+        lps22hh_temp_set_odr(lps22hh_temp_odr_hz25);
+        break;
+      case 4:
+        lps22hh_temp_set_odr(lps22hh_temp_odr_hz50);
+        break;
+      case 5:
+        lps22hh_temp_set_odr(lps22hh_temp_odr_hz75);
+        break;
+      case 6:
+        lps22hh_temp_set_odr(lps22hh_temp_odr_hz100);
+        break;
+      case 7:
+        lps22hh_temp_set_odr(lps22hh_temp_odr_hz200);
+        break;
     }
   }
   if (json_object_dothas_value(tempJSONObject, "lps22hh_temp.enable"))
@@ -245,7 +245,7 @@ uint8_t Lps22hh_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   }
   if (json_object_dothas_value(tempJSONObject, "lps22hh_temp.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "lps22hh_temp.samples_per_ts");
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "lps22hh_temp.samples_per_ts");
     lps22hh_temp_set_samples_per_ts(samples_per_ts);
   }
   if (json_object_dothas_value(tempJSONObject, "lps22hh_temp.sensor_annotation"))

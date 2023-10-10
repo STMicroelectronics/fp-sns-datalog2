@@ -1,52 +1,54 @@
 /**
- ******************************************************************************
- * @file    em_data_fortmat.c
- * @author  STMicroelectronics - AIS - MCD Team
- * @version M.m.b
- * @date    Apr 4, 2022
- *
- * @brief
- *
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    em_data_fortmat.c
+  * @author  STMicroelectronics - AIS - MCD Team
+  * @version M.m.b
+  * @date    Apr 4, 2022
+  *
+  * @brief
+  *
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  ******************************************************************************
+  */
 
 #include "services/em_data_format.h"
 #include <stdbool.h>
 
 #define EM_IS_SUPPORTED_DATA_TYPE(_dt)     (((_dt) <= E_EM_FLOAT))
-#define EM_IS_SUPPORTED_DATA_MODE(_dm)     (((_dm) == E_EM_MODE_LINEAR) || ((_dm) == E_EM_MODE_INTERLEAVED) || ((_dm) == E_EM_MODE_NONE))
+#define EM_IS_SUPPORTED_DATA_MODE(_dm)     (((_dm) == E_EM_MODE_LINEAR) ||\
+                                            ((_dm) == E_EM_MODE_INTERLEAVED) || ((_dm) == E_EM_MODE_NONE))
 
 typedef struct _EMDataClass
 {
   size_t platform_data_size[EM_N_KNOWN_DATA_TYPE];
-}EMDataClass;
+} EMDataClass;
 
 
-static const EMDataClass s_TheClass = {
-    {
-        sizeof(uint8_t),
-        sizeof(int8_t),
-        sizeof(uint16_t),
-        sizeof(int16_t),
-        sizeof(uint32_t),
-        sizeof(int32_t),
-        sizeof(float),
+static const EMDataClass s_TheClass =
+{
+  {
+    sizeof(uint8_t),
+    sizeof(int8_t),
+    sizeof(uint16_t),
+    sizeof(int16_t),
+    sizeof(uint32_t),
+    sizeof(int32_t),
+    sizeof(float),
 #if 0
-        sizeof(uint64_t),
-        sizeof(int64_t),
-        sizeof(double)
+    sizeof(uint64_t),
+    sizeof(int64_t),
+    sizeof(double)
 #endif
-    }
+  }
 };
 
 
@@ -75,13 +77,13 @@ sys_error_code_t EMD_Init(EMData_t *p_data, uint8_t *p_payload, uint16_t type, u
   p_data->element_size = s_TheClass.platform_data_size[type];
 
 
-  if((dimensions > 0) && (dimensions <= EM_DATA_CFG_MAX_SHAPE))
+  if ((dimensions > 0) && (dimensions <= EM_DATA_CFG_MAX_SHAPE))
   {
     p_data->dimensions = dimensions;
     va_list valist;
     /* initialize valist for dimensions number of arguments */
     va_start(valist, dimensions);
-    for(uint8_t i=0; i<dimensions; ++i)
+    for (uint8_t i = 0; i < dimensions; ++i)
     {
       p_data->shapes[i] = (uint16_t)va_arg(valist, int);
       if (p_data->shapes[i] == 0)
@@ -103,7 +105,8 @@ sys_error_code_t EMD_Init(EMData_t *p_data, uint8_t *p_payload, uint16_t type, u
   return res;
 }
 
-sys_error_code_t EMD_InitWithCustomType(EMData_t *p_data, uint8_t *p_payload, uint16_t type, uint16_t element_size, uint8_t mode, uint32_t dimensions, ...)
+sys_error_code_t EMD_InitWithCustomType(EMData_t *p_data, uint8_t *p_payload, uint16_t type, uint16_t element_size,
+                                        uint8_t mode, uint32_t dimensions, ...)
 {
   assert_param(p_data != NULL);
   assert_param((dimensions > 0) && (dimensions <= EM_DATA_CFG_MAX_SHAPE));
@@ -124,13 +127,13 @@ sys_error_code_t EMD_InitWithCustomType(EMData_t *p_data, uint8_t *p_payload, ui
   p_data->element_size = element_size;
 
 
-  if((dimensions > 0) && (dimensions <= EM_DATA_CFG_MAX_SHAPE))
+  if ((dimensions > 0) && (dimensions <= EM_DATA_CFG_MAX_SHAPE))
   {
     p_data->dimensions = dimensions;
     va_list valist;
     /* initialize valist for dimensions number of arguments */
     va_start(valist, dimensions);
-    for(uint8_t i=0; i<dimensions; ++i)
+    for (uint8_t i = 0; i < dimensions; ++i)
     {
       p_data->shapes[i] = (uint16_t)va_arg(valist, int);
       if (p_data->shapes[i] == 0)
@@ -156,7 +159,7 @@ size_t EMD_GetPayloadSize(const EMData_t *p_data)
 {
   assert_param(p_data != NULL);
   size_t payload_size = 1;
-  for (uint8_t i=0; i<p_data->dimensions; ++i)
+  for (uint8_t i = 0; i < p_data->dimensions; ++i)
   {
     payload_size *= p_data->shapes[i];
   }
@@ -175,13 +178,13 @@ sys_error_code_t EMD_GetValueAt(const EMData_t *p_data, void *p_val, uint32_t di
   uint16_t index[EM_DATA_CFG_MAX_SHAPE];
   bool valid_params = true;
 
-  if(dimensions == p_data->dimensions)
+  if (dimensions == p_data->dimensions)
   {
     /* parameter validation*/
     va_list valist;
     /* initialize valist for dimensions number of arguments */
     va_start(valist, dimensions);
-    for(uint8_t i=0; i<dimensions; ++i)
+    for (uint8_t i = 0; i < dimensions; ++i)
     {
       index[i] = (uint16_t)va_arg(valist, int);
       /* validate the argument */
@@ -196,10 +199,10 @@ sys_error_code_t EMD_GetValueAt(const EMData_t *p_data, void *p_val, uint32_t di
     if (valid_params)
     {
       /* find the data position */
-      for (uint8_t i=0; i<dimensions; ++i)
+      for (uint8_t i = 0; i < dimensions; ++i)
       {
         register uint32_t stride = 1U;
-        for (uint8_t j=i+1; j<dimensions; ++j)
+        for (uint8_t j = i + 1; j < dimensions; ++j)
         {
           stride *= p_data->shapes[j];
         }
@@ -207,7 +210,7 @@ sys_error_code_t EMD_GetValueAt(const EMData_t *p_data, void *p_val, uint32_t di
       }
       uintptr_t val_addr = ((uintptr_t)p_data->p_payload) + (val_pos * p_data->element_size);
 
-      memcpy(p_val, (void*)val_addr, p_data->element_size);
+      memcpy(p_val, (void *)val_addr, p_data->element_size);
     }
   }
 
@@ -223,13 +226,13 @@ uint8_t *EMD_DataAt(EMData_t *p_data, uint32_t dimensions, ...)
   bool valid_params = true;
   uintptr_t val_addr = 0U;
 
-  if(dimensions == p_data->dimensions)
+  if (dimensions == p_data->dimensions)
   {
     /* parameter validation*/
     va_list valist;
     /* initialize valist for dimensions number of arguments */
     va_start(valist, dimensions);
-    for(uint8_t i=0; i<dimensions; ++i)
+    for (uint8_t i = 0; i < dimensions; ++i)
     {
       index[i] = (uint16_t)va_arg(valist, int);
       /* validate the argument */
@@ -244,10 +247,10 @@ uint8_t *EMD_DataAt(EMData_t *p_data, uint32_t dimensions, ...)
     if (valid_params)
     {
       /* find the data position */
-      for (uint8_t i=0; i<dimensions; ++i)
+      for (uint8_t i = 0; i < dimensions; ++i)
       {
         register uint32_t stride = 1U;
-        for (uint8_t j=i+1; j<dimensions; ++j)
+        for (uint8_t j = i + 1; j < dimensions; ++j)
         {
           stride *= p_data->shapes[j];
         }
@@ -259,7 +262,7 @@ uint8_t *EMD_DataAt(EMData_t *p_data, uint32_t dimensions, ...)
     val_addr = ((uintptr_t)p_data->p_payload) + (val_pos * EMD_GetElementSize(p_data));
   }
 
-  return (uint8_t*)val_addr;
+  return (uint8_t *)val_addr;
 }
 
 EMCompare_t EMD_Compare(const EMData_t *p_data1, const EMData_t *p_data2)
@@ -276,7 +279,7 @@ EMCompare_t EMD_Compare(const EMData_t *p_data1, const EMData_t *p_data2)
     /* data are of the same kind but they can have different shapes*/
     int8_t diff_p = 0;
     int8_t diff_m = 0;
-    for (uint8_t i=0; i<p_data1->dimensions; ++i)
+    for (uint8_t i = 0; i < p_data1->dimensions; ++i)
     {
       diff_m += (p_data1->shapes[i] < p_data2->shapes[i] ? 1 : 0);
       diff_p += (p_data1->shapes[i] > p_data2->shapes[i] ? 1 : 0);
@@ -286,15 +289,16 @@ EMCompare_t EMD_Compare(const EMData_t *p_data1, const EMData_t *p_data2)
     {
       res = E_EM_DATA_SAME_KIND;
     }
-    else if((diff_m > 0) && (diff_p == 0))
+    else if ((diff_m > 0) && (diff_p == 0))
     {
       res = E_EM_DATA_SMALLER_SHAPE;
     }
-    else if((diff_m == 0) && (diff_p > 0))
+    else if ((diff_m == 0) && (diff_p > 0))
     {
       res = E_EM_DATA_BIGGER_SHAPE;
     }
-    else {
+    else
+    {
       res = E_EM_DATA_NOT_SAME_KIND;
     }
   }
@@ -305,9 +309,9 @@ EMCompare_t EMD_Compare(const EMData_t *p_data1, const EMData_t *p_data2)
   {
     /* check the case E_EM_DATA_SAME_KIND_BUT_TYPE*/
     res = E_EM_DATA_SAME_KIND_BUT_TYPE;
-    for (uint8_t i=0; i<p_data1->dimensions; ++i)
+    for (uint8_t i = 0; i < p_data1->dimensions; ++i)
     {
-      if(p_data1->shapes[i] != p_data2->shapes[i])
+      if (p_data1->shapes[i] != p_data2->shapes[i])
       {
         res = E_EM_DATA_NOT_SAME_KIND;
         break;
@@ -334,7 +338,8 @@ sys_error_code_t EMD_1dInit(EMData_t *p_data, uint8_t *p_payload, uint16_t type,
   return res;
 }
 
-sys_error_code_t EMD_1dInitWithCustomType(EMData_t *p_data, uint8_t *p_payload, uint16_t type, uint16_t element_size, uint16_t elements)
+sys_error_code_t EMD_1dInitWithCustomType(EMData_t *p_data, uint8_t *p_payload, uint16_t type, uint16_t element_size,
+                                          uint16_t elements)
 {
   assert_param(p_data != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;

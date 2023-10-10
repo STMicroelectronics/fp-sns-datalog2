@@ -49,8 +49,8 @@
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
 /**
- * Map one EXTI to n callback based on the GPIO PIN.
- */
+  * Map one EXTI to n callback based on the GPIO PIN.
+  */
 static inline void ExtiDefISR(uint16_t exti_pin);
 /* USER CODE END PFP */
 
@@ -365,9 +365,9 @@ void UCPD1_IRQHandler(void)
 void ExtiDefISR(uint16_t exti_pin)
 {
   EXTIPin2CallbckMap xMap = EXTI_GET_P2F_MAP();
-  for(int i = 0; xMap[i].pfCallback != NULL; i++)
+  for (int i = 0; xMap[i].pfCallback != NULL; i++)
   {
-    if(__HAL_GPIO_EXTI_GET_IT(xMap[i].nPin) && (xMap[i].nPin == exti_pin))
+    if (__HAL_GPIO_EXTI_GET_IT(xMap[i].nPin) && (xMap[i].nPin == exti_pin))
     {
       /* EXTI line interrupt detected */
       __HAL_GPIO_EXTI_CLEAR_IT(xMap[i].nPin);

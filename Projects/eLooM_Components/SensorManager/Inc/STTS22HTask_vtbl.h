@@ -42,19 +42,18 @@ sys_error_code_t STTS22HTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const E
 
 uint8_t STTS22HTask_vtblTempGetId(ISourceObservable *_this);
 IEventSrc *STTS22HTask_vtblTempGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t STTS22HTask_vtblTempGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-float STTS22HTask_vtblTempGetFS(ISourceObservable *_this);
-float STTS22HTask_vtblTempGetSensitivity(ISourceObservable *_this);
 EMData_t STTS22HTask_vtblTempGetDataInfo(ISourceObservable *_this);
-
-sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
-sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensor_t *_this, float FS);
-sys_error_code_t STTS22HTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t STTS22HTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t STTS22HTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t STTS22HTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t STTS22HTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t STTS22HTask_vtblSensorGetStatus(ISensor_t *_this);
+sys_error_code_t STTS22HTask_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
+float STTS22HTask_vtblTempGetFS(ISensorMems_t *_this);
+float STTS22HTask_vtblTempGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
+sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t STTS22HTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 
 #ifdef __cplusplus
 }

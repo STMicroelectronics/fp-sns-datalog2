@@ -17,6 +17,7 @@
   ******************************************************************************
   */
 
+/* Includes ------------------------------------------------------------------*/
 #include "STTS22HTask.h"
 #include "STTS22HTask_vtbl.h"
 #include "SMMessageParser.h"
@@ -30,8 +31,8 @@
 #include "stts22h_reg.h"
 #include <string.h>
 #include "services/sysdebug.h"
-#include "mx.h"
 
+/* Private includes ----------------------------------------------------------*/
 #ifndef STTS22H_TASK_CFG_STACK_DEPTH
 #define STTS22H_TASK_CFG_STACK_DEPTH        (TX_MINIMUM_STACK*8)
 #endif
@@ -44,15 +45,11 @@
 #define STTS22H_TASK_CFG_IN_QUEUE_LENGTH          20u
 #endif
 
+#define STTS22H_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(SMMessage)
+
 #ifndef STTS22H_TASK_CFG_TIMER_PERIOD_MS
 #define STTS22H_TASK_CFG_TIMER_PERIOD_MS          250
 #endif
-
-#ifndef STTS22H_TASK_CFG_I2C_ADDRESS
-#define STTS22H_TASK_CFG_I2C_ADDRESS              STTS22H_I2C_ADD_L
-#endif
-
-#define STTS22H_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(SMMessage)
 
 #ifndef STTS22H_TASK_CFG_MAX_INSTANCES_COUNT
 #define STTS22H_TASK_CFG_MAX_INSTANCES_COUNT      1
@@ -60,8 +57,8 @@
 
 #define SYS_DEBUGF(level, message)      SYS_DEBUGF3(SYS_DBG_STTS22H, level, message)
 
-#if defined(DEBUG) || defined (SYS_DEBUG)
-#define sTaskObj                                  sSTTS22HTaskObj
+#ifndef STTS22H_TASK_CFG_I2C_ADDRESS
+#define STTS22H_TASK_CFG_I2C_ADDRESS              STTS22H_I2C_ADD_L
 #endif
 
 #ifndef HSD_USE_DUMMY_DATA
@@ -72,93 +69,6 @@
 static uint16_t dummyDataCounter = 0;
 #endif
 
-/**
-  *  STTS22HTask internal structure.
-  */
-struct _STTS22HTask
-{
-  /**
-    * Base class object.
-    */
-  AManagedTaskEx super;
-
-  // Task variables should be added here.
-
-  /**
-    * IRQ GPIO configuration parameters.
-    */
-  const MX_GPIOParams_t *pIRQConfig;
-
-  /**
-    * SPI CS GPIO configuration parameters.
-    */
-  const MX_GPIOParams_t *pCSConfig;
-
-  /**
-    * I2C Device Address
-    */
-  uint8_t i2c_addr;
-
-  /**
-    * Bus IF object used to connect the sensor task to the specific bus.
-    */
-  ABusIF *p_sensor_bus_if;
-
-  /**
-    * Implements the temperature ISensor interface.
-    */
-  ISensor_t sensor_if;
-
-  /**
-    * Specifies sensor capabilities.
-    */
-  const SensorDescriptor_t *sensor_descriptor;
-
-  /**
-    * Specifies sensor configuration.
-    */
-  SensorStatus_t sensor_status;
-
-  /**
-    * Data
-    */
-  EMData_t data;
-
-  /**
-    * Specifies the sensor ID for the temperature sensor.
-    */
-  uint8_t temp_id;
-
-  /**
-    * Synchronization object used to send command to the task.
-    */
-  TX_QUEUE in_queue;
-
-  /**
-    * Buffer to store the data read from the sensor FIFO.
-    */
-  float temperature;
-
-  /**
-    * ::IEventSrc interface implementation for this class.
-    */
-  IEventSrc *p_temp_event_src;
-
-  /**
-    * Used to update the instantaneous ODR.
-    */
-  double prev_timestamp;
-
-  /**
-    * Software timer used to generate the read command
-    */
-  TX_TIMER read_fifo_timer;
-
-  /**
-    * Specifies the ms delay between 2 consecutive read (it depends from ODR)
-    */
-  uint16_t task_delay;
-};
 
 /**
   * Class object declaration
@@ -173,7 +83,7 @@ typedef struct _STTS22HTaskClass
   /**
     * Temperature IF virtual table.
     */
-  const ISensor_vtbl sensor_if_vtbl;
+  const ISensorMems_vtbl sensor_if_vtbl;
 
   /**
     * Specifies temperature sensor capabilities.
@@ -191,13 +101,13 @@ typedef struct _STTS22HTaskClass
   MTMapElement_t task_map_elements[STTS22H_TASK_CFG_MAX_INSTANCES_COUNT];
 
   /**
-    * This map is used to link Cube HAL callback with an instance of the sensor task object. The key of the map is the address of the task instance.
-    */
+    * This map is used to link Cube HAL callback with an instance of the sensor task object. The key of the map is the address of the task instance.   */
   MTMap_t task_map;
+
 } STTS22HTaskClass_t;
 
-/* Private member function declaration */// ***********************************
 
+/* Private member function declaration */ // ***********************************
 /**
   * Execute one step of the task control loop while the system is in RUN mode.
   *
@@ -249,7 +159,6 @@ static sys_error_code_t STTS22HTaskSensorInitTaskParams(STTS22HTask *_this);
 /**
   * Private implementation of sensor interface methods for STTS22H sensor
   */
-
 static sys_error_code_t STTS22HTaskSensorSetODR(STTS22HTask *_this, SMMessage report);
 static sys_error_code_t STTS22HTaskSensorSetFS(STTS22HTask *_this, SMMessage report);
 static sys_error_code_t STTS22HTaskSensorEnable(STTS22HTask *_this, SMMessage report);
@@ -273,13 +182,10 @@ static sys_error_code_t STTS22HTaskConfigureIrqPin(const STTS22HTask *_this, boo
   */
 static void STTS22HTaskTimerCallbackFunction(ULONG param);
 
-/**
-  * IRQ callback
-  */
-void STT22HTask_EXTI_Callback(uint16_t nPin);
+
 
 /* Inline function forward declaration */
-// ***********************************
+/***************************************/
 
 /**
   * Private function used to post a report into the front of the task queue.
@@ -315,7 +221,7 @@ static inline sys_error_code_t STTS22HTaskPostReportToBack(STTS22HTask *_this, S
   */
 static STTS22HTaskClass_t sTheClass =
 {
-  /* Class virtual table */
+  /* class virtual table */
   {
     STTS22HTask_vtblHardwareInit,
     STTS22HTask_vtblOnCreateTask,
@@ -328,20 +234,24 @@ static STTS22HTaskClass_t sTheClass =
 
   /* class::sensor_if_vtbl virtual table */
   {
-    STTS22HTask_vtblTempGetId,
-    STTS22HTask_vtblTempGetEventSourceIF,
-    STTS22HTask_vtblTempGetDataInfo,
+    {
+      {
+        STTS22HTask_vtblTempGetId,
+        STTS22HTask_vtblTempGetEventSourceIF,
+        STTS22HTask_vtblTempGetDataInfo
+      },
+      STTS22HTask_vtblSensorEnable,
+      STTS22HTask_vtblSensorDisable,
+      STTS22HTask_vtblSensorIsEnabled,
+      STTS22HTask_vtblSensorGetDescription,
+      STTS22HTask_vtblSensorGetStatus
+    },
     STTS22HTask_vtblTempGetODR,
     STTS22HTask_vtblTempGetFS,
     STTS22HTask_vtblTempGetSensitivity,
     STTS22HTask_vtblSensorSetODR,
     STTS22HTask_vtblSensorSetFS,
-    STTS22HTask_vtblSensorSetFifoWM,
-    STTS22HTask_vtblSensorEnable,
-    STTS22HTask_vtblSensorDisable,
-    STTS22HTask_vtblSensorIsEnabled,
-    STTS22HTask_vtblSensorGetDescription,
-    STTS22HTask_vtblSensorGetStatus
+    STTS22HTask_vtblSensorSetFifoWM
   },
 
   /* TEMPERATURE DESCRIPTOR */
@@ -382,7 +292,6 @@ static STTS22HTaskClass_t sTheClass =
 
 /* Public API definition */
 // *********************
-
 ISourceObservable *STTS22HTaskGetTempSensorIF(STTS22HTask *_this)
 {
   return (ISourceObservable *) & (_this->sensor_if);
@@ -405,20 +314,52 @@ AManagedTaskEx *STTS22HTaskAlloc(const void *pIRQConfig, const void *pCSConfig, 
     p_new_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
     p_new_obj->i2c_addr = i2c_addr;
 
-    strcpy(p_new_obj->sensor_status.Name, sTheClass.class_descriptor.Name);
+    strcpy(p_new_obj->sensor_status.p_name, sTheClass.class_descriptor.p_name);
   }
   return (AManagedTaskEx *) p_new_obj;
 }
 
 AManagedTaskEx *STTS22HTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const uint8_t i2c_addr,
-                                        const char *Name)
+                                        const char *p_name)
 {
   STTS22HTask *p_new_obj = (STTS22HTask *)STTS22HTaskAlloc(pIRQConfig, pCSConfig, i2c_addr);
 
   /* Overwrite default name with the one selected by the application */
-  strcpy(p_new_obj->sensor_status.Name, Name);
+  strcpy(p_new_obj->sensor_status.p_name, p_name);
 
   return (AManagedTaskEx *) p_new_obj;
+}
+
+AManagedTaskEx *STTS22HTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig)
+{
+  STTS22HTask *p_obj = (STTS22HTask *)p_mem_block;
+
+  if (p_obj != NULL)
+  {
+    /* Initialize the super class */
+    AMTInitEx(&p_obj->super);
+    p_obj->super.vptr = &sTheClass.vtbl;
+
+    p_obj->super.vptr = &sTheClass.vtbl;
+    p_obj->sensor_if.vptr = &sTheClass.sensor_if_vtbl;
+    p_obj->sensor_descriptor = &sTheClass.class_descriptor;
+
+    p_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
+    p_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
+  }
+
+  return (AManagedTaskEx *)p_obj;
+}
+
+AManagedTaskEx *STTS22HTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                              const char *p_name)
+{
+  STTS22HTask *p_obj = (STTS22HTask *)STTS22HTaskStaticAlloc(p_mem_block, pIRQConfig, pCSConfig);
+
+  /* Overwrite default name with the one selected by the application */
+  strcpy(p_obj->sensor_status.p_name, p_name);
+
+  return (AManagedTaskEx *) p_obj;
 }
 
 ABusIF *STTS22HTaskGetSensorIF(STTS22HTask *_this)
@@ -435,8 +376,8 @@ IEventSrc *STTS22HTaskGetTempEventSrcIF(STTS22HTask *_this)
   return (IEventSrc *) _this->p_temp_event_src;
 }
 
-/* AManagedTaskEx virtual functions definition */
-// *******************************************
+// AManagedTask virtual functions definition
+// ***********************************************
 
 sys_error_code_t STTS22HTask_vtblHardwareInit(AManagedTask *_this, void *pParams)
 {
@@ -528,13 +469,12 @@ sys_error_code_t STTS22HTask_vtblOnCreateTask(
   {
     return res;
   }
-
-  /* Initialize the EventSrc interface, take the ownership of the interface. */
+  /* Initialize the EventSrc interface */
   p_obj->p_temp_event_src = DataEventSrcAlloc();
   if (p_obj->p_temp_event_src == NULL)
   {
-    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
-    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+    res = SYS_OUT_OF_MEMORY_ERROR_CODE;
     return res;
   }
   IEventSrcInit(p_obj->p_temp_event_src);
@@ -559,8 +499,6 @@ sys_error_code_t STTS22HTask_vtblOnCreateTask(
     }
   }
 
-  //TODO: I don't have data buffer
-  //memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
   p_obj->temp_id = 0;
   p_obj->prev_timestamp = 0.0f;
   p_obj->temperature = 0.0f;
@@ -618,7 +556,7 @@ sys_error_code_t STTS22HTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE);
       }
 
-      // reset the variables for the time stamp computation.
+      // reset the variables for the actual odr computation.
       p_obj->prev_timestamp = 0.0f;
     }
 
@@ -651,7 +589,7 @@ sys_error_code_t STTS22HTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
     res = STTS22HTaskEnterLowPowerMode(p_obj);
     if (SYS_IS_ERROR_CODE(res))
     {
-      sys_error_handler();
+      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("STTS22H - Enter Low Power Mode failed.\r\n"));
     }
     if (p_obj->pIRQConfig != NULL)
     {
@@ -769,7 +707,7 @@ IEventSrc *STTS22HTask_vtblTempGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_temp_event_src;
 }
 
-sys_error_code_t STTS22HTask_vtblTempGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal)
+sys_error_code_t STTS22HTask_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -784,27 +722,27 @@ sys_error_code_t STTS22HTask_vtblTempGetODR(ISourceObservable *_this, float *p_m
   }
   else
   {
-    *p_measured = p_if_owner->sensor_status.MeasuredODR;
-    *p_nominal = p_if_owner->sensor_status.ODR;
+    *p_measured = p_if_owner->sensor_status.type.mems.measured_odr;
+    *p_nominal = p_if_owner->sensor_status.type.mems.odr;
   }
 
   return res;
 }
 
-float STTS22HTask_vtblTempGetFS(ISourceObservable *_this)
+float STTS22HTask_vtblTempGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   STTS22HTask *p_if_owner = (STTS22HTask *)((uint32_t) _this - offsetof(STTS22HTask, sensor_if));
-  float res = p_if_owner->sensor_status.FS;
+  float res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float STTS22HTask_vtblTempGetSensitivity(ISourceObservable *_this)
+float STTS22HTask_vtblTempGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   STTS22HTask *p_if_owner = (STTS22HTask *)((uint32_t) _this - offsetof(STTS22HTask, sensor_if));
-  float res = p_if_owner->sensor_status.Sensitivity;
+  float res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -818,7 +756,7 @@ EMData_t STTS22HTask_vtblTempGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
+sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -827,7 +765,7 @@ sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -839,7 +777,7 @@ sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) ODR
+      .sensorMessage.nParam = (float) odr
     };
     res = STTS22HTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -847,7 +785,7 @@ sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
   return res;
 }
 
-sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensor_t *_this, float FS)
+sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -856,7 +794,7 @@ sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensor_t *_this, float FS)
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -868,7 +806,7 @@ sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensor_t *_this, float FS)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) FS
+      .sensorMessage.nParam = (uint32_t) fs
     };
     res = STTS22HTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -877,7 +815,7 @@ sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensor_t *_this, float FS)
 
 }
 
-sys_error_code_t STTS22HTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+sys_error_code_t STTS22HTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM)
 {
   assert_param(_this != NULL);
   /* Does not support this virtual function.*/
@@ -946,12 +884,15 @@ boolean_t STTS22HTask_vtblSensorIsEnabled(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   boolean_t res = FALSE;
-
   STTS22HTask *p_if_owner = (STTS22HTask *)((uint32_t) _this - offsetof(STTS22HTask, sensor_if));
 
   if (ISourceGetId((ISourceObservable *) _this) == p_if_owner->temp_id)
   {
-    res = p_if_owner->sensor_status.IsActive;
+    res = p_if_owner->sensor_status.is_active;
+  }
+  else
+  {
+    res = SYS_INVALID_PARAMETER_ERROR_CODE;
   }
 
   return res;
@@ -969,13 +910,12 @@ SensorStatus_t STTS22HTask_vtblSensorGetStatus(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   STTS22HTask *p_if_owner = (STTS22HTask *)((uint32_t) _this - offsetof(STTS22HTask, sensor_if));
-  return p_if_owner->sensor_status;
 
+  return p_if_owner->sensor_status;
 }
 
 /* Private function definition */
 // ***************************
-
 static sys_error_code_t STTS22HTaskExecuteStepState1(AManagedTask *_this)
 {
   assert_param(_this != NULL);
@@ -1030,7 +970,6 @@ static sys_error_code_t STTS22HTaskExecuteStepState1(AManagedTask *_this)
         /* unwanted report */
         res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
-
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("STTS22H: unexpected report in Run: %i\r\n", report.messageID));
         break;
       }
@@ -1085,7 +1024,7 @@ static sys_error_code_t STTS22HTaskExecuteStepDatalog(AManagedTask *_this)
           p_obj->prev_timestamp = timestamp;
 
           /* update measuredODR */
-          p_obj->sensor_status.MeasuredODR = 1.0f / (float) delta_timestamp;
+          p_obj->sensor_status.type.mems.measured_odr = 1.0f / (float) delta_timestamp;
 
           EMD_1dInit(&p_obj->data, (uint8_t *)&p_obj->temperature, E_EM_FLOAT, 1);
 
@@ -1114,7 +1053,7 @@ static sys_error_code_t STTS22HTaskExecuteStepDatalog(AManagedTask *_this)
             res = STTS22HTaskSensorInit(p_obj);
             if (!SYS_IS_ERROR_CODE(res))
             {
-              if (p_obj->sensor_status.IsActive == true)
+              if (p_obj->sensor_status.is_active == true)
               {
                 if (p_obj->pIRQConfig == NULL)
                 {
@@ -1263,19 +1202,19 @@ static sys_error_code_t STTS22HTaskSensorInit(STTS22HTask *_this)
     stts22h_temp_trshld_high_set(p_sensor_drv, 0);
   }
 
-  if (_this->sensor_status.ODR < 2.0f)
+  if (_this->sensor_status.type.mems.odr < 2.0f)
   {
     stts22h_odr_temp = STTS22H_1Hz;
   }
-  else if (_this->sensor_status.ODR < 26.0f)
+  else if (_this->sensor_status.type.mems.odr < 26.0f)
   {
     stts22h_odr_temp = STTS22H_25Hz;
   }
-  else if (_this->sensor_status.ODR < 51.0f)
+  else if (_this->sensor_status.type.mems.odr < 51.0f)
   {
     stts22h_odr_temp = STTS22H_50Hz;
   }
-  else if (_this->sensor_status.ODR < 101.0f)
+  else if (_this->sensor_status.type.mems.odr < 101.0f)
   {
     stts22h_odr_temp = STTS22H_100Hz;
   }
@@ -1284,17 +1223,17 @@ static sys_error_code_t STTS22HTaskSensorInit(STTS22HTask *_this)
     stts22h_odr_temp = STTS22H_200Hz;
   }
 
-  if (_this->sensor_status.IsActive)
+  if (_this->sensor_status.is_active)
   {
     stts22h_temp_data_rate_set(p_sensor_drv, stts22h_odr_temp);
   }
   else
   {
     stts22h_temp_data_rate_set(p_sensor_drv, STTS22H_POWER_DOWN);
-    _this->sensor_status.IsActive = false;
+    _this->sensor_status.is_active = false;
   }
 
-  _this->task_delay = (uint16_t)(1000.0f / _this->sensor_status.ODR);
+  _this->task_delay = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 
   return res;
 }
@@ -1339,11 +1278,12 @@ static sys_error_code_t STTS22HTaskSensorInitTaskParams(STTS22HTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* TEMPERATURE SENSOR STATUS */
-  _this->sensor_status.IsActive = TRUE;
-  _this->sensor_status.FS = 100.0f;
-  _this->sensor_status.Sensitivity = 1.0f;
-  _this->sensor_status.ODR = 200.0f;
-  _this->sensor_status.MeasuredODR = 0.0f;
+  _this->sensor_status.isensor_class = ISENSOR_CLASS_MEMS;
+  _this->sensor_status.is_active = TRUE;
+  _this->sensor_status.type.mems.fs = 100.0f;
+  _this->sensor_status.type.mems.sensitivity = 1.0f;
+  _this->sensor_status.type.mems.odr = 200.0f;
+  _this->sensor_status.type.mems.measured_odr = 0.0f;
   EMD_1dInit(&_this->data, (uint8_t *)&_this->temperature, E_EM_FLOAT, 1);
 
   return res;
@@ -1355,42 +1295,42 @@ static sys_error_code_t STTS22HTaskSensorSetODR(STTS22HTask *_this, SMMessage re
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float ODR = (float) report.sensorMessage.nParam;
+  float odr = (float) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->temp_id)
   {
-    if (ODR < 1.0f)
+    if (odr < 1.0f)
     {
       stts22h_temp_data_rate_set(p_sensor_drv, STTS22H_POWER_DOWN);
-      /* Do not update the model in case of ODR = 0 */
-      ODR = _this->sensor_status.ODR;
+      /* Do not update the model in case of odr = 0 */
+      odr = _this->sensor_status.type.mems.odr;
     }
-    else if (ODR < 2.0f)
+    else if (odr < 2.0f)
     {
-      ODR = 1.0f;
+      odr = 1.0f;
     }
-    else if (ODR < 26.0f)
+    else if (odr < 26.0f)
     {
-      ODR = 25.0f;
+      odr = 25.0f;
     }
-    else if (ODR < 51.0f)
+    else if (odr < 51.0f)
     {
-      ODR = 50.0f;
+      odr = 50.0f;
     }
-    else if (ODR < 101.0f)
+    else if (odr < 101.0f)
     {
-      ODR = 100.0f;
+      odr = 100.0f;
     }
     else
     {
-      ODR = 200.0f;
+      odr = 200.0f;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-      _this->sensor_status.ODR = ODR;
-      _this->sensor_status.MeasuredODR = 0.0f;
+      _this->sensor_status.type.mems.odr = odr;
+      _this->sensor_status.type.mems.measured_odr = 0.0f;
     }
   }
   else
@@ -1406,19 +1346,19 @@ static sys_error_code_t STTS22HTaskSensorSetFS(STTS22HTask *_this, SMMessage rep
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float FS = (float) report.sensorMessage.nParam;
+  float fs = (float) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->temp_id)
   {
-    if (FS != 100.0f)
+    if (fs != 100.0f)
     {
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-      _this->sensor_status.FS = FS;
+      _this->sensor_status.type.mems.fs = fs;
     }
   }
   else
@@ -1438,7 +1378,7 @@ static sys_error_code_t STTS22HTaskSensorEnable(STTS22HTask *_this, SMMessage re
 
   if (id == _this->temp_id)
   {
-    _this->sensor_status.IsActive = TRUE;
+    _this->sensor_status.is_active = TRUE;
   }
   else
   {
@@ -1458,7 +1398,7 @@ static sys_error_code_t STTS22HTaskSensorDisable(STTS22HTask *_this, SMMessage r
 
   if (id == _this->temp_id)
   {
-    _this->sensor_status.IsActive = FALSE;
+    _this->sensor_status.is_active = FALSE;
     stts22h_temp_data_rate_set(p_sensor_drv, STTS22H_POWER_DOWN);
   }
   else
@@ -1472,7 +1412,7 @@ static sys_error_code_t STTS22HTaskSensorDisable(STTS22HTask *_this, SMMessage r
 static boolean_t STTS22HTaskSensorIsActive(const STTS22HTask *_this)
 {
   assert_param(_this != NULL);
-  return _this->sensor_status.IsActive;
+  return _this->sensor_status.is_active;
 }
 
 static sys_error_code_t STTS22HTaskEnterLowPowerMode(const STTS22HTask *_this)
@@ -1481,7 +1421,11 @@ static sys_error_code_t STTS22HTaskEnterLowPowerMode(const STTS22HTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  stts22h_temp_data_rate_set(p_sensor_drv, STTS22H_POWER_DOWN);
+  if (stts22h_temp_data_rate_set(p_sensor_drv, STTS22H_POWER_DOWN))
+  {
+    res = SYS_SENSOR_TASK_OP_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_OP_ERROR_CODE);
+  }
   return res;
 }
 
@@ -1497,7 +1441,10 @@ static sys_error_code_t STTS22HTaskConfigureIrqPin(const STTS22HTask *_this, boo
   }
   else
   {
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
+    GPIO_InitTypeDef GPIO_InitStruct =
+    {
+      0
+    };
 
     // first disable the IRQ to avoid spurious interrupt to wake the MCU up.
     HAL_NVIC_DisableIRQ(_this->pIRQConfig->irq_n);
@@ -1512,8 +1459,6 @@ static sys_error_code_t STTS22HTaskConfigureIrqPin(const STTS22HTask *_this, boo
   return res;
 }
 
-/* CubeMX integration */
-
 static void STTS22HTaskTimerCallbackFunction(ULONG param)
 {
   STTS22HTask *p_obj = (STTS22HTask *) param;
@@ -1527,6 +1472,8 @@ static void STTS22HTaskTimerCallbackFunction(ULONG param)
     sys_error_handler();
   }
 }
+
+/* CubeMX integration */
 
 void STTS22HTask_EXTI_Callback(uint16_t nPin)
 {

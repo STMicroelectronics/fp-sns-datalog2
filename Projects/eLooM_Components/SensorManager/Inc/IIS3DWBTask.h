@@ -29,18 +29,19 @@ extern "C" {
 #include "ABusIF.h"
 #include "events/DataEventSrc.h"
 #include "events/DataEventSrc_vtbl.h"
-#include "ISensor.h"
-#include "ISensor_vtbl.h"
+#include "ISensorMems.h"
+#include "ISensorMems_vtbl.h"
 #include "mx.h"
 
-//TODO: STF.Begin - where should these be defined ?
-#define IIS3DWB_MAX_DRDY_PERIOD           (1.0)
+#define IIS3DWB_MAX_DRDY_PERIOD           (1.0) /* seconds */
+
 #ifndef IIS3DWB_MAX_WTM_LEVEL
-#define IIS3DWB_MAX_WTM_LEVEL             (256)
+#define IIS3DWB_MAX_WTM_LEVEL             (256) /* samples */
 #endif
+
 #define IIS3DWB_MIN_WTM_LEVEL             (16)
 #define IIS3DWB_MAX_SAMPLES_PER_IT        (IIS3DWB_MAX_WTM_LEVEL)
-//STF.End
+
 
 #define IIS3DWB_CFG_MAX_LISTENERS           2
 
@@ -79,15 +80,15 @@ struct _IIS3DWBTask
   /**
     * Implements the accelerometer ISensor interface.
     */
-  ISensor_t sensor_if;
+  ISensorMems_t sensor_if;
 
   /**
-    * Specifies accelerometer sensor capabilities.
+    * Specifies sensor capabilities.
     */
   const SensorDescriptor_t *sensor_descriptor;
 
   /**
-    * Specifies accelerometer sensor configuration.
+    * Specifies sensor configuration.
     */
   SensorStatus_t sensor_status;
 
@@ -112,7 +113,7 @@ struct _IIS3DWBTask
   uint8_t p_sensor_data_buff[IIS3DWB_MAX_SAMPLES_PER_IT * 7];
 
   /**
-    * Specifies the FIFO watermark level (it depends from ODR)
+    * Specifies the FIFO watermark level (it depends from odr)
     */
   uint16_t samples_per_it;
 
@@ -127,7 +128,7 @@ struct _IIS3DWBTask
   TX_TIMER read_timer;
 
   /**
-    * Used to update the instantaneous ODR.
+    * Used to update the instantaneous odr.
     */
   double prev_timestamp;
 };
@@ -168,7 +169,7 @@ AManagedTaskEx *IIS3DWBTaskAlloc(const void *pIRQConfig, const void *pCSConfig);
   * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *IIS3DWBTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *Name);
+AManagedTaskEx *IIS3DWBTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name);
 
 /**
   * Allocate an instance of ::IIS3DWBTask in a memory block specified by the application.
@@ -211,7 +212,7 @@ AManagedTaskEx *IIS3DWBTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *IIS3DWBTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
-                                              const char *Name);
+                                              const char *p_name);
 
 /**
   * Get the SPI interface for the sensor task.

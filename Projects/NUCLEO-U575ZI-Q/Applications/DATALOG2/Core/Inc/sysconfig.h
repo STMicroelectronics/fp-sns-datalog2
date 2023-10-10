@@ -1,26 +1,26 @@
 /**
- ******************************************************************************
- * @file    sysconfig.h
- * @author  SRA
- * @brief   Global System configuration file
- *
- * This file include some configuration parameters grouped here for user
- * convenience. This file override the default configuration value, and it is
- * used in the "Preinclude file" section of the "compiler > prepocessor"
- * options.
- *
- *********************************************************************************
- * @attention
- *
- * Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- *********************************************************************************
- */
+  ******************************************************************************
+  * @file    sysconfig.h
+  * @author  SRA
+  * @brief   Global System configuration file
+  *
+  * This file include some configuration parameters grouped here for user
+  * convenience. This file override the default configuration value, and it is
+  * used in the "Preinclude file" section of the "compiler > prepocessor"
+  * options.
+  *
+  *********************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *********************************************************************************
+  */
 
 #ifndef SYSCONFIG_H_
 #define SYSCONFIG_H_
@@ -44,11 +44,11 @@
 // file SysTimestamp.c
 #define SYS_TS_CFG_ENABLE_SERVICE                 1
 /**
- * Configuration parameter for the timer used for the eLooM timestamp service.
- * Valid value are:
- * - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
- * - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
- */
+  * Configuration parameter for the timer used for the eLooM timestamp service.
+  * Valid value are:
+  * - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
+  * - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
+  */
 #define SYS_TS_CFG_TSDRIVER_PARAMS                &MX_TIM7InitParams
 //#define SYS_TS_CFG_TSDRIVER_PARAMS                SYS_TS_USE_SW_TSDRIVER
 
@@ -104,6 +104,6 @@
 /*******************/
 
 #define BOARD_ID                                  0x10
-#define FW_ID                                     0x01
+#define FW_ID                                     0x02
 
 #endif /* SYSCONFIG_H_ */

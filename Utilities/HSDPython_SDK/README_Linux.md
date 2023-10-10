@@ -16,7 +16,15 @@ To properly use it, Python 3.10 or above must be already installed on the machin
 
 	- If you are behind a proxy server you must launch the installer script in this way: **./HSDPython_SDK_install.sh http://usr_name:password@proxyserver_name:port**
 	- If you have special characters in your password you will have to replace them with their correspondent hex representation. E.g. '&' --> %26
+
+- **cd linux_setup**
 	
+- **dos2unix 30-hsdatalog.rules linux_USB_config_setup.sh linux_USB_config_removal.sh**
+
+- **chmod 777 linux_USB_config_setup.sh linux_USB_config_removal.sh**
+
+- Launch **./linux_USB_config_setup.sh**
+
 - Reboot to be sure to reload USB udev rules
 
 - Reopen a terminal from HSDPython_SDK folder

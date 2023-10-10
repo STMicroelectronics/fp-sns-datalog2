@@ -43,6 +43,10 @@ extern "C" {
 #define COM_TYPE_MIC    7
 #define COM_TYPE_MLC    8
 #define COM_TYPE_ISPU   9
+#define COM_TYPE_TOF   10
+#define COM_TYPE_CAM   11
+#define COM_TYPE_TMOS  12
+#define COM_TYPE_ALS   13
 
 #define DATA_TYPE_UINT8     (uint8_t)(0x00)
 #define DATA_TYPE_INT8      (uint8_t)(0x01)
@@ -57,7 +61,6 @@ extern "C" {
 
 #define COM_LIST_SEPARATOR_INT        -2
 #define COM_LIST_SEPARATOR_FLOAT      -2.0f
-
 
 #ifndef SM_MAX_SENSOR_COMBO
 #define SM_MAX_SENSOR_COMBO           4
@@ -75,6 +78,15 @@ extern "C" {
 #define SM_DIM_LABELS_LENGTH          4U
 #endif
 
+#define ISENSOR_CLASS_MEMS    0U
+#define ISENSOR_CLASS_AUDIO   1U
+#define ISENSOR_CLASS_RANGING 2U
+#define ISENSOR_CLASS_LIGHT   3U
+#define ISENSOR_CLASS_CAMERA  4U
+#define ISENSOR_CLASS_PRESENCE  5U
+#define ISENSOR_CLASS_UNKNOW  255U
+
+#define ALS_NUM_CHANNELS      6U
 
 /**
   * Create  type name for _SensorDescriptor_t.
@@ -90,27 +102,27 @@ struct _SensorDescriptor_t
   /**
     * Specifies the sensor name.
     */
-  char Name[SM_MAX_DIM_LABELS];
+  char p_name[SM_MAX_DIM_LABELS];
 
   /**
     * Specifies the sensor type (ACC, GYRO, TEMP, ...).
     */
-  uint8_t SensorType;
+  uint8_t sensor_type;
 
   /**
     * Specifies the supported data rates.
     */
-  float pODR[SM_MAX_SUPPORTED_ODR];
+  float p_odr[SM_MAX_SUPPORTED_ODR];
 
   /**
     * Specifies the supported full scales.
     */
-  float pFS[SM_MAX_SUPPORTED_FS];
+  float p_fs[SM_MAX_SUPPORTED_FS];
 
   /**
     * Specifies a label for each axes.
     */
-  char DimensionsLabel[SM_MAX_DIM_LABELS][SM_DIM_LABELS_LENGTH];
+  char p_dimensions_label[SM_MAX_DIM_LABELS][SM_DIM_LABELS_LENGTH];
 
   /**
     * Specifies the unit of measurement for each axes.
@@ -120,59 +132,280 @@ struct _SensorDescriptor_t
   /**
     * Specifies the supported values for SamplesPerTimestamp variable.
     */
-  uint16_t pSamplesPerTimestamp[2];
+  uint16_t p_samples_per_timestamp[2];
 };
 
-/**
-  * Create  type name for _SensorManager_t.
- */
-typedef struct _SensorStatus_t SensorStatus_t;
 
 /**
-  *  SensorStatus_t internal structure.
- */
-struct _SensorStatus_t
+  * ranging Profile Config parameters
+  */
+typedef struct
 {
-  /**
-    * Specifies the sensor name.
-    */
-  char Name[SM_MAX_DIM_LABELS];
+  uint32_t ranging_profile;
+  uint32_t timing_budget; /*!< Expressed in milliseconds */
+  uint32_t frequency; /*!< Expressed in Hz */
+  boolean_t enable_ambient; /*<! Enable: 1, Disable: 0 */
+  boolean_t enable_signal; /*<! Enable: 1, Disable: 0 */
+  uint32_t mode;
+} ProfileConfig_t;
 
+/**
+  * ranging IT Config parameters
+  */
+typedef struct
+{
+  uint32_t criteria; /*!< interrupt generation criteria */
+  uint32_t low_threshold; /*!< expressed in millimeters */
+  uint32_t high_threshold; /*!< expressed in millimeters */
+} ITConfig_t;
+
+/**
+ * SW Compensation Algorithm Config parameters
+ */
+typedef struct
+{
+  uint8_t comp_type; /*<! None: 0, Linear: 1, Non-linear: 2 */
+  uint8_t comp_filter_flag; /*<! Enable: 1, Disable: 0 */
+  uint16_t mot_ths; /*!< Expressed in LSB */
+  uint16_t pres_ths; /*!< Expressed in LSB */
+  uint8_t abs_static_flag; /*<! Enable: 1, Disable: 0 */
+} CompensationAlgorithmConfig_t;
+
+typedef struct SensorStatusMems_t
+{
   /**
     * Specifies the full scale.
     */
-  float FS;
+  float fs;
 
   /**
     * Specifies the sensitivity.
     */
-  float Sensitivity;
+  float sensitivity;
 
   /**
     * Specifies the nominal data rate.
     */
-  float ODR;
+  float odr;
 
   /**
     * Specifies the effective data rate.
     */
-  float MeasuredODR;
+  float measured_odr;
+} SensorStatusMems;
+
+typedef struct SensorStatusAudio_t
+{
+  /**
+     * Specifies the sampling frequency.
+     */
+  uint32_t frequency;
 
   /**
-    * Specifies if the subsensor is active or not.
+    * Specifies the volume.
     */
-  boolean_t IsActive;
-};
+  uint8_t volume;
+
+  /**
+    * Specifies the bit depth.
+    */
+  uint8_t resolution;
+} SensorStatusAudio;
+
+typedef struct SensorStatusRanging_t
+{
+  /**
+    * ranging Profile Config parameters
+    */
+  ProfileConfig_t profile_config;
+
+  /**
+    * ranging IT Config parameters
+    */
+  ITConfig_t it_config;
+
+  /**
+    * ranging sensor address
+    */
+  uint32_t address;
+
+  /*
+    * ranging sensor Power mode
+    * */
+  uint32_t power_mode;
+} SensorStatusRanging;
+
+typedef struct SensorStatusCamera_t
+{
+  /**
+     * camera Config parameters, specifies the the mode to retrieve image frame
+     */
+  uint8_t mode;
+  boolean_t suspend;
+  uint32_t resolution;
+  uint32_t pixelFormat;
+  uint32_t lightMode;
+  uint32_t colorEffect;
+  int32_t brightness;
+  int32_t saturation;
+  int32_t contrast;
+  int32_t hueDegree;
+  uint32_t mirrorFlip;
+  uint32_t zoom;
+  boolean_t nightMode;
+  uint16_t with;
+  uint16_t height;
+  uint32_t clockValue;
+  uint32_t address;
+} SensorStatusCamera;
+
+typedef struct SensorStatusPresence_t
+{
+  /**
+    * Specifies the nominal data rate.
+    */
+  float data_frequency;
+
+  /**
+    * Specifies the effective data rate.
+    */
+  float measured_data_frequency;
+
+  /**
+   * Specifies the transmittance of the lens.
+   */
+  float Transmittance;
+
+  /**
+    * Specifies the average T object.
+    */
+  uint16_t average_tobject;
+
+  /**
+    * Specifies the average T ambient.
+    */
+  uint16_t average_tambient;
+
+  /**
+    * Specifies the presence threshold.
+    */
+  uint16_t presence_threshold;
+
+  /**
+    * Specifies the motion threshold.
+    */
+  uint16_t motion_threshold;
+
+  /**
+    * Specifies the T ambient threshold.
+    */
+  uint16_t tambient_shock_threshold;
+
+  /**
+    * Specifies the LPF_P_M Bandwidth.
+    */
+  uint16_t lpf_p_m_bandwidth;
+
+  /**
+    * Specifies the LPF_P Bandwidth.
+    */
+  uint16_t lpf_p_bandwidth;
+
+  /**
+    * Specifies the LPF_M Bandwidth.
+    */
+  uint16_t lpf_m_bandwidth;
+
+  /**
+    * Specifies the presence hysteresis.
+    */
+  uint8_t presence_hysteresis;
+
+  /**
+    * Specifies the motion hysteresis.
+    */
+  uint8_t motion_hysteresis;
+
+  /**
+    * Specifies the T ambient hysteresis.
+    */
+  uint8_t tambient_shock_hysteresis;
+
+  /**
+    * Specifies whether embedded compensation is active or not.
+    */
+  uint8_t embedded_compensation;
+
+  /**
+    * Specifies whether software compensation is active or not..
+    */
+  uint8_t software_compensation;
+
+  /**
+   * Specifies software compensation algorithm parameters.
+   */
+  CompensationAlgorithmConfig_t AlgorithmConfig;
+  
+} SensorStatusPresence;
 
 
+typedef struct SensorStatusLight_t
+{
+  /**
+    * Specifies the nominal data rate.
+    */
+  uint32_t intermeasurement_time;
+
+  /**
+    * Specifies the exposure time.
+    */
+  float exposure_time;
+
+  /**
+    * Specifies the gain.
+    */
+  uint16_t gain[ ALS_NUM_CHANNELS ];
+
+  /**
+    * Specifies the effective data rate.
+    */
+  uint32_t measured_intermeasurement_time;
+} SensorStatusLight;
+
+typedef struct _SensorStatus_t
+{
+  /**
+    * Specifies the ISensor Class (ISENSOR_CLASS_MEMS, ISENSOR_CLASS_AUDIO, ...)
+    */
+  uint8_t isensor_class;
+
+  /**
+    * Specifies the sensor name.
+    */
+  char p_name[SM_MAX_DIM_LABELS];
+
+  /**
+    * Specifies if is active or not.
+    */
+  boolean_t is_active;
+
+  union Type_t
+  {
+    SensorStatusMems mems;
+    SensorStatusAudio audio;
+    SensorStatusRanging ranging;
+    SensorStatusCamera camera;
+    SensorStatusPresence presence;
+    SensorStatusLight light;
+  } type;
+
+} SensorStatus_t;
 
 /* Public API declaration */
 /**************************/
 
-
 /* Inline functions definition */
 /*******************************/
-
 
 #ifdef __cplusplus
 }

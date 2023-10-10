@@ -32,26 +32,28 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /**
- * Create  type name for _IUsbDelegate_vtbl.
- */
+  * Create  type name for _IUsbDelegate_vtbl.
+  */
 typedef struct _IUsbDelegate_vtbl IUsbDelegate_vtbl;
 
 /**
- * Specifies the virtual table for the  class.
- */
-struct _IUsbDelegate_vtbl {
+  * Specifies the virtual table for the  class.
+  */
+struct _IUsbDelegate_vtbl
+{
 //  sys_error_code_t (*Init)(IUsbDelegate *_this);
   sys_error_code_t (*OnNewData)(IUsbDelegate *_this, const uint8_t *buffer, uint32_t length);
 };
 
 /**
- * IUsbDelegate interface internal state.
- * It declares only the virtual table used to implement the inheritance.
- */
-struct _IUsbDelegate {
+  * IUsbDelegate interface internal state.
+  * It declares only the virtual table used to implement the inheritance.
+  */
+struct _IUsbDelegate
+{
   /**
-   * Pointer to the virtual table for the class.
-   */
+    * Pointer to the virtual table for the class.
+    */
   const IUsbDelegate_vtbl *vptr;
 };
 
@@ -65,7 +67,8 @@ struct _IUsbDelegate {
 //}
 
 static inline
-sys_error_code_t IUsbDelegateOnNewData(IUsbDelegate *_this, const uint8_t *buffer, uint32_t length) {
+sys_error_code_t IUsbDelegateOnNewData(IUsbDelegate *_this, const uint8_t *buffer, uint32_t length)
+{
   return _this->vptr->OnNewData(_this, buffer, length);
 }
 

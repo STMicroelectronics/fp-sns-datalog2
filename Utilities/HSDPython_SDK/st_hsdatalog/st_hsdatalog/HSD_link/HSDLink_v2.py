@@ -351,6 +351,10 @@ class HSDLink_v2:
         if not os.path.exists(self.__acquisition_folder):
             os.makedirs(self.__acquisition_folder)
         return self.__com_manager.start_log(d_id, interface)
+    
+    def switch_bank(self, d_id:int):
+        message = PnPLCMDManager.create_command_cmd("log_controller","switch_bank")
+        return self.send_command(d_id, message)
 
     def stop_log(self, d_id:int):
         log.info("Log Stopped")
@@ -403,28 +407,31 @@ class HSDLink_v2:
             raise
 
     def update_device(self, d_id:int, device_json_file_path): #device_config.json
-        if self.__dt_manager is not None:
-            return self.__com_manager.update_device(d_id, device_json_file_path, self.__dt_manager.get_components())
-        else:
-            print("HSD_link does not have an associated Device Template")
-            pres_res = self.get_device_presentation_string(d_id)
-            if pres_res is not None:
-                board_id = hex(pres_res["board_id"])
-                fw_id = hex(pres_res["fw_id"])
-                
-                dev_template_json = DeviceTemplateManager.query_dtdl_model(board_id, fw_id)
-                fw_name = self.get_firmware_info(d_id).get("fw_name")
-                if fw_name is not None:
-                    if isinstance(dev_template_json,list):
-                        for dt in dev_template_json:
-                            print(dt)
-                
-                self.__dt_manager = DeviceTemplateManager(dev_template_json)
-                self.__com_manager.update_device(d_id, device_json_file_path, self.__dt_manager.get_components())
-                log.info("Device Template automatically loaded")
+        try:
+            if self.__dt_manager is not None:
+                return self.__com_manager.update_device(d_id, device_json_file_path, self.__dt_manager.get_components())
             else:
-                log.error("No Device Template loaded")
-                raise MissingDeviceModelError
+                print("HSD_link does not have an associated Device Template")
+                pres_res = self.get_device_presentation_string(d_id)
+                if pres_res is not None:
+                    board_id = hex(pres_res["board_id"])
+                    fw_id = hex(pres_res["fw_id"])
+                    
+                    dev_template_json = DeviceTemplateManager.query_dtdl_model(board_id, fw_id)
+                    fw_name = self.get_firmware_info(d_id).get("fw_name")
+                    if fw_name is not None:
+                        if isinstance(dev_template_json,list):
+                            for dt in dev_template_json:
+                                print(dt)
+                    
+                    self.__dt_manager = DeviceTemplateManager(dev_template_json)
+                    self.__com_manager.update_device(d_id, device_json_file_path, self.__dt_manager.get_components())
+                    log.info("Device Template automatically loaded")
+                else:
+                    log.error("No Device Template loaded")
+                    raise MissingDeviceModelError
+        except WrongDeviceConfigFile:
+            raise
 
     def upload_mlc_ucf_file(self, d_id:int, comp_name:str, ucf_file_path):
         with open(ucf_file_path, "r") as f:

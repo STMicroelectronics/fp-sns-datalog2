@@ -12,11 +12,11 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
-  
+
 #include "fx_stm32_sd_driver.h"
 
 /* USER CODE BEGIN  0 */
@@ -127,6 +127,41 @@ INT fx_stm32_sd_write_blocks(UINT instance, UINT *buffer, UINT start_block, UINT
 }
 
 /* USER CODE BEGIN  1 */
+
+/**
+  * @brief  Initializes SD Detect pin.
+  */
+void SD_DetectInit(void)
+{
+  /* GPIO Detect pin configuration */
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+}
+
+/**
+  * @brief  Detects if SD card is correctly plugged in the memory slot or not.
+  * @retval Returns if SD is detected or not
+  */
+bool SD_IsDetected(void)
+{
+  bool res = true;
+
+  /* Check SD card detect pin */
+  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5) == GPIO_PIN_SET)
+  {
+    res = false;
+  }
+
+  return res;
+}
+
 void BSP_SD_WriteCpltCallback(uint32_t instance)
 {
   tx_semaphore_put(&transfer_semaphore);

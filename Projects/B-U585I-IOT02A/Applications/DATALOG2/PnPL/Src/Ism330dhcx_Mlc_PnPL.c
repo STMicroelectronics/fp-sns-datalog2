@@ -103,14 +103,15 @@ char *Ism330dhcx_Mlc_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
 {
   switch (id)
   {
-  case 0:
-    return "ism330dhcx_mlc*load_file";
-    break;
+    case 0:
+      return "ism330dhcx_mlc*load_file";
+      break;
   }
   return 0;
 }
 
-uint8_t Ism330dhcx_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Ism330dhcx_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                          uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -202,8 +203,8 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *s
       data = json_object_dotget_string(tempJSONObject, "ism330dhcx_mlc*load_file.ucf_data.data");
       if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc*load_file.ucf_data.size"))
       {
-        size =(int32_t) json_object_dotget_number(tempJSONObject, "ism330dhcx_mlc*load_file.ucf_data.size");
-        ism330dhcx_mlc_load_file(p_if_owner->cmdIF, (char*) data, size);
+        size = (int32_t) json_object_dotget_number(tempJSONObject, "ism330dhcx_mlc*load_file.ucf_data.size");
+        ism330dhcx_mlc_load_file(p_if_owner->cmdIF, (char *) data, size);
       }
     }
   }

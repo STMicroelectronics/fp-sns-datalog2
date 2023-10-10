@@ -1,12 +1,12 @@
 /**
- ******************************************************************************
- * @file    sysdebug_config.h
- * @author  SRA
- * @brief   Configure the debug log functionality
- *
- * Each logic module of the application should define a DEBUG control byte
- * used to turn on/off the log for the module.
- *
+  ******************************************************************************
+  * @file    sysdebug_config.h
+  * @author  SRA
+  * @brief   Configure the debug log functionality
+  *
+  * Each logic module of the application should define a DEBUG control byte
+  * used to turn on/off the log for the module.
+  *
   ******************************************************************************
   * @attention
   *
@@ -19,7 +19,7 @@
   *
   *
   ******************************************************************************
- */
+  */
 
 #ifndef SYSDEBUG_CONFIG_H_
 #define SYSDEBUG_CONFIG_H_

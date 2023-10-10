@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_NeaiNClassClassification.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   NEAI Classification info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -28,23 +28,23 @@
   *
   *  If selector == 2, so you're using N-Class Classification library
   *
-  *  Byte    |    0    |    1    |    2    |    3    |                 4              |    5    |    6    |       7             |     8 - 12
-  *  Field   |      ********  NOT USED  ********     |  CLASSIFICATION TYPE SELECTOR  |  PHASE  |  STATE  | MOST PROBABLE CLASS | PROBABILITIES
+  *  Byte    | 0 | 1 | 2 | 3 |                4             |   5   |   6   |       7             |    8 - 12
+  *  Field   |  * NOT USED * | CLASSIFICATION TYPE SELECTOR | PHASE | STATE | MOST PROBABLE CLASS | PROBABILITIES
   *
   */
 
-  /* Define to prevent recursive inclusion -------------------------------------*/
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_NEAI_CLASSIFICATION_H_
 #define _BLE_NEAI_CLASSIFICATION_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported Defines ---------------------------------------------------------*/
 #ifndef CLASS_NUMBER_NCC
 #define CLASS_NUMBER_NCC 2U
-#endif
+#endif /* CLASS_NUMBER_NCC */
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdbool.h>
@@ -100,7 +100,7 @@ typedef enum
 
 
 typedef void (*CustomNotifyEventNeaiClassification_t)(BLE_NotifyEvent_t Event);
-typedef void (*CustomWriteRequestClassification_t)(uint8_t * att_data, uint8_t data_length);
+typedef void (*CustomWriteRequestClassification_t)(uint8_t *att_data, uint8_t data_length);
 
 /* Exported Variables ------------------------------------------------------- */
 extern CustomNotifyEventNeaiClassification_t CustomNotifyEventNCC;
@@ -109,23 +109,23 @@ extern CustomWriteRequestClassification_t CustomWriteRequestNCC;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init classification info service
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for N-Class Classification info service
- */
-extern BleCharTypeDef* BLE_InitNeaiClassificationService(void);
+  * @brief  Init classification info service
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for N-Class Classification info service
+  */
+extern BleCharTypeDef *BLE_InitNeaiClassificationService(void);
 
 /**
- * @brief  Update classification characteristic value with 1-Class library output
- * @param  BLE_NCC_output_t    output:
- * @retval tBleStatus:         Status
- */
+  * @brief  Update classification characteristic value with 1-Class library output
+  * @param  BLE_NCC_output_t    output:
+  * @retval tBleStatus:         Status
+  */
 extern tBleStatus BLE_Neai1ClassClassificationUpdate(BLE_1CC_output_t output);
 
 /**
- * @brief  Update classification characteristic value with N-Class library output
- * @param  BLE_NCC_output_t    output:
- * @retval tBleStatus:         Status
- */
+  * @brief  Update classification characteristic value with N-Class library output
+  * @param  BLE_NCC_output_t    output:
+  * @retval tBleStatus:         Status
+  */
 extern tBleStatus BLE_NeaiNClassClassificationUpdate(BLE_NCC_output_t output);
 
 #ifdef __cplusplus

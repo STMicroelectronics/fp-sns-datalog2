@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_SensorFusion.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Sensor Fusion info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,12 +18,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_SENSOR_FUSION_H_
 #define _BLE_SENSOR_FUSION_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported defines ---------------------------------------------------------*/
@@ -44,27 +44,27 @@ extern CustomNotifyEventSensorFusion_t CustomNotifyEventSensorFusion;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Sensor Fusion info service
- * @param  uint8_t NumberQuaternionsToSend  Number of quaternions send (1,2,3)
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Sensor Fusion info service
- */
-extern BleCharTypeDef* BLE_InitSensorFusionService(uint8_t NumberQuaternionsToSend);
+  * @brief  Init Sensor Fusion info service
+  * @param  uint8_t NumberQuaternionsToSend  Number of quaternions send (1,2,3)
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Sensor Fusion info service
+  */
+extern BleCharTypeDef *BLE_InitSensorFusionService(uint8_t NumberQuaternionsToSend);
 
 #ifndef BLE_MANAGER_SDKV2
 /**
- * @brief  Setting Sensor Fusion Advertise Data
- * @param  uint8_t *manuf_data: Advertise Data
- * @retval None
- */
+  * @brief  Setting Sensor Fusion Advertise Data
+  * @param  uint8_t *manuf_data: Advertise Data
+  * @retval None
+  */
 extern void BLE_SetSensorFusionAdvertiseData(uint8_t *manuf_data);
 #endif /* BLE_MANAGER_SDKV2 */
 
 /**
- * @brief  Update quaternions characteristic value
- * @param  BLE_MOTION_SENSOR_Axes_t *data Structure containing the quaterions
- * @param  uint8_t NumberQuaternionsToSend  Number of quaternions send (1,2,3)
- * @retval tBleStatus      Status
- */
+  * @brief  Update quaternions characteristic value
+  * @param  BLE_MOTION_SENSOR_Axes_t *data Structure containing the quaterions
+  * @param  uint8_t NumberQuaternionsToSend  Number of quaternions send (1,2,3)
+  * @retval tBleStatus      Status
+  */
 extern tBleStatus BLE_SensorFusionUpdate(BLE_MOTION_SENSOR_Axes_t *data, uint8_t NumberQuaternionsToSend);
 
 #ifdef __cplusplus

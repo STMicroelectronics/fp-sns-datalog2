@@ -27,11 +27,11 @@
 #include "events/IDataEventListener.h"
 #include "events/IDataEventListener_vtbl.h"
 #include "services/SysTimestamp.h"
+#include "services/ManagedTaskMap.h"
 #include "lps22hh_reg.h"
 #include <string.h>
 #include <stdlib.h>
 #include "services/sysdebug.h"
-#include "mx.h"
 
 /* Private includes ----------------------------------------------------------*/
 
@@ -47,20 +47,20 @@
 #define LPS22HH_TASK_CFG_IN_QUEUE_LENGTH          20u
 #endif
 
+#define LPS22HH_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(SMMessage)
+
 #ifndef LPS22HH_TASK_CFG_TIMER_PERIOD_MS
 #define LPS22HH_TASK_CFG_TIMER_PERIOD_MS          1000
 #endif
 
-#ifndef LPS22HH_TASK_CFG_I2C_ADDRESS
-#define LPS22HH_TASK_CFG_I2C_ADDRESS              LPS22HH_I2C_ADD_H
+#ifndef LPS22HH_TASK_CFG_MAX_INSTANCES_COUNT
+#define LPS22HH_TASK_CFG_MAX_INSTANCES_COUNT      1
 #endif
-
-#define LPS22HH_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(SMMessage)
 
 #define SYS_DEBUGF(level, report)                SYS_DEBUGF3(SYS_DBG_LPS22HH, level, report)
 
-#if defined(DEBUG) || defined (SYS_DEBUG)
-#define sTaskObj                                  sLPS22HHTaskObj
+#ifndef LPS22HH_TASK_CFG_I2C_ADDRESS
+#define LPS22HH_TASK_CFG_I2C_ADDRESS              LPS22HH_I2C_ADD_H
 #endif
 
 #ifndef HSD_USE_DUMMY_DATA
@@ -69,136 +69,12 @@
 
 #if (HSD_USE_DUMMY_DATA == 1)
 static uint16_t dummyDataCounter_press = 0;
+static uint16_t dummyDataCounter_temp = 0;
 #endif
 
 #ifndef FIFO_WATERMARK
 #define FIFO_WATERMARK 5
 #endif
-
-/**
-  *  LPS22HHTask internal structure.
-  */
-struct _LPS22HHTask
-{
-  /**
-    * Base class object.
-    */
-  AManagedTaskEx super;
-
-  // Task variables should be added here.
-
-  /**
-    * IRQ GPIO configuration parameters.
-    */
-  const MX_GPIOParams_t *pIRQConfig;
-
-  /**
-    * SPI CS GPIO configuration parameters.
-    */
-  const MX_GPIOParams_t *pCSConfig;
-
-  /**
-    * Bus IF object used to connect the sensor task to the specific bus.
-    */
-  ABusIF *p_sensor_bus_if;
-
-  /**
-    * Implements the temperature ISensor interface.
-    */
-  ISensor_t temp_sensor_if;
-
-  /**
-    * Implements the pressure ISensor interface.
-    */
-  ISensor_t press_sensor_if;
-
-  /**
-    * Specifies temperature sensor capabilities.
-    */
-  const SensorDescriptor_t *temp_sensor_descriptor;
-
-  /**
-    * Specifies temperature sensor configuration.
-    */
-  SensorStatus_t temp_sensor_status;
-
-  /**
-    * Specifies pressure sensor capabilities.
-    */
-  const SensorDescriptor_t *press_sensor_descriptor;
-
-  /**
-    * Specifies pressure sensor configuration.
-    */
-  SensorStatus_t press_sensor_status;
-
-  EMData_t data;
-
-  /**
-    * Specifies the sensor ID for the temperature subsensor.
-    */
-  uint8_t temp_id;
-
-  /**
-    * Specifies the sensor ID for the pressure subsensor.
-    */
-  uint8_t press_id;
-
-  /**
-    * Synchronization object used to send command to the task.
-    */
-  TX_QUEUE in_queue;
-
-  /**
-    * Buffer to store the data read from the sensor FIFO
-    */
-  uint8_t p_sensor_data_buff[256 * 5];
-
-  /**
-    * Temperature data
-    */
-  float p_temp_data_buff[128 * 2];
-
-  /**
-    * Pressure data
-    */
-  float p_press_data_buff[128 * 2];
-
-  /**
-    * ::IEventSrc interface implementation for this class.
-    */
-  IEventSrc *p_temp_event_src;
-
-  /**
-    * ::IEventSrc interface implementation for this class.
-    */
-  IEventSrc *p_press_event_src;
-
-  /**
-    * Specifies the FIFO level
-    */
-  uint8_t fifo_level;
-
-  /**
-    * Specifies the FIFO watermark level (it depends from ODR)
-    */
-  uint8_t samples_per_it;
-
-  /**
-    * Specifies the ms delay between 2 consecutive read (it depends from ODR)
-    */
-  uint16_t task_delay;
-
-  /**
-    * Software timer used to generate the read command
-    */
-  TX_TIMER read_fifo_timer;
-
-  /**
-    * Used to update the instantaneous ODR.
-    */
-  double prev_timestamp;
-};
 
 /**
   * Class object declaration
@@ -208,32 +84,42 @@ typedef struct _LPS22HHTaskClass
   /**
     * LPS22HHTask class virtual table.
     */
-  AManagedTaskEx_vtbl vtbl;
+  const AManagedTaskEx_vtbl vtbl;
 
   /**
     * Temperature IF virtual table.
     */
-  ISensor_vtbl temp_sensor_if_vtbl;
+  const ISensorMems_vtbl temp_sensor_if_vtbl;
 
   /**
     * Pressure IF virtual table.
     */
-  ISensor_vtbl press_sensor_if_vtbl;
+  const ISensorMems_vtbl press_sensor_if_vtbl;
 
   /**
     * Specifies temperature sensor capabilities.
     */
-  SensorDescriptor_t temp_class_descriptor;
+  const SensorDescriptor_t temp_class_descriptor;
 
   /**
     * Specifies pressure sensor capabilities.
     */
-  SensorDescriptor_t press_class_descriptor;
+  const SensorDescriptor_t press_class_descriptor;
 
   /**
     * LPS22HHTask (PM_STATE, ExecuteStepFunc) map.
     */
-  pExecuteStepFunc_t p_pm_state2func_map[3];
+  const pExecuteStepFunc_t p_pm_state2func_map[3];
+
+  /**
+    * Memory buffer used to allocate the map (key, value).
+    */
+  MTMapElement_t task_map_elements[LPS22HH_TASK_CFG_MAX_INSTANCES_COUNT];
+
+  /**
+    * This map is used to link Cube HAL callback with an instance of the sensor task object. The key of the map is the address of the task instance.   */
+  MTMap_t task_map;
+
 } LPS22HHTaskClass_t;
 
 /* Private member function declaration */ // ***********************************
@@ -308,9 +194,9 @@ static sys_error_code_t LPS22HHTaskConfigureIrqPin(const LPS22HHTask *_this, boo
 /**
   * Callback function called when the software timer expires.
   *
-  * @param xTimer [IN] specifies the handle of the expired timer.
+  * @param param [IN] specifies an application defined parameter.
   */
-static void LPS22HHTaskTimerCallbackFunction(ULONG timer);
+static void LPS22HHTaskTimerCallbackFunction(ULONG param);
 
 /**
   * Given a interface pointer it return the instance of the object that implement the interface.
@@ -320,13 +206,10 @@ static void LPS22HHTaskTimerCallbackFunction(ULONG timer);
   */
 static inline LPS22HHTask *LPS22HHTaskGetOwnerFromISensorIF(ISensor_t *p_if);
 
-/**
-  * IRQ callback
-  */
-void LPS22HHTask_EXTI_Callback(uint16_t nPin);
 
 /* Inline function forward declaration */
-// ***********************************
+/***************************************/
+
 /**
   * Private function used to post a report into the front of the task queue.
   * Used to resume the task when the required by the INIT task.
@@ -347,21 +230,20 @@ static inline sys_error_code_t LPS22HHTaskPostReportToFront(LPS22HHTask *_this, 
   */
 static inline sys_error_code_t LPS22HHTaskPostReportToBack(LPS22HHTask *_this, SMMessage *pReport);
 
-
 /* Objects instance */
 /********************/
 
 /**
   * The only instance of the task object.
   */
-static LPS22HHTask *sTaskObj = NULL;
+//static LPS22HHTask *sTaskObj = NULL;
 
 /**
   * The class object.
   */
-static const LPS22HHTaskClass_t sTheClass =
+static LPS22HHTaskClass_t sTheClass =
 {
-  /* Class virtual table */
+  /* class virtual table */
   {
     LPS22HHTask_vtblHardwareInit,
     LPS22HHTask_vtblOnCreateTask,
@@ -373,40 +255,42 @@ static const LPS22HHTaskClass_t sTheClass =
   },
 
   /* class::temp_sensor_if_vtbl virtual table */
-  {
-    LPS22HHTask_vtblTempGetId,
-    LPS22HHTask_vtblTempGetEventSourceIF,
-    LPS22HHTask_vtblTempGetDataInfo,
-    LPS22HHTask_vtblTempGetODR,
-    LPS22HHTask_vtblTempGetFS,
-    LPS22HHTask_vtblTempGetSensitivity,
-    LPS22HHTask_vtblSensorSetODR,
-    LPS22HHTask_vtblSensorSetFS,
-    LPS22HHTask_vtblSensorSetFifoWM,
-    LPS22HHTask_vtblSensorEnable,
-    LPS22HHTask_vtblSensorDisable,
-    LPS22HHTask_vtblSensorIsEnabled,
-    LPS22HHTask_vtblTempGetDescription,
-    LPS22HHTask_vtblTempGetStatus
-  },
+    {
+        {
+            {
+                LPS22HHTask_vtblTempGetId,
+                LPS22HHTask_vtblTempGetEventSourceIF,
+                LPS22HHTask_vtblTempGetDataInfo },
+            LPS22HHTask_vtblSensorEnable,
+            LPS22HHTask_vtblSensorDisable,
+            LPS22HHTask_vtblSensorIsEnabled,
+            LPS22HHTask_vtblTempGetDescription,
+            LPS22HHTask_vtblTempGetStatus },
+        LPS22HHTask_vtblTempGetODR,
+        LPS22HHTask_vtblTempGetFS,
+        LPS22HHTask_vtblTempGetSensitivity,
+        LPS22HHTask_vtblSensorSetODR,
+        LPS22HHTask_vtblSensorSetFS,
+        LPS22HHTask_vtblSensorSetFifoWM, },
 
   /* class::press_sensor_if_vtbl virtual table */
-  {
-    LPS22HHTask_vtblPressGetId,
-    LPS22HHTask_vtblPressGetEventSourceIF,
-    LPS22HHTask_vtblPressGetDataInfo,
-    LPS22HHTask_vtblPressGetODR,
-    LPS22HHTask_vtblPressGetFS,
-    LPS22HHTask_vtblPressGetSensitivity,
-    LPS22HHTask_vtblSensorSetODR,
-    LPS22HHTask_vtblSensorSetFS,
-    LPS22HHTask_vtblSensorSetFifoWM,
-    LPS22HHTask_vtblSensorEnable,
-    LPS22HHTask_vtblSensorDisable,
-    LPS22HHTask_vtblSensorIsEnabled,
-    LPS22HHTask_vtblPressGetDescription,
-    LPS22HHTask_vtblPressGetStatus
-  },
+    {
+        {
+            {
+                LPS22HHTask_vtblPressGetId,
+                LPS22HHTask_vtblPressGetEventSourceIF,
+                LPS22HHTask_vtblPressGetDataInfo },
+            LPS22HHTask_vtblSensorEnable,
+            LPS22HHTask_vtblSensorDisable,
+            LPS22HHTask_vtblSensorIsEnabled,
+            LPS22HHTask_vtblPressGetDescription,
+            LPS22HHTask_vtblPressGetStatus },
+        LPS22HHTask_vtblPressGetODR,
+        LPS22HHTask_vtblPressGetFS,
+        LPS22HHTask_vtblPressGetSensitivity,
+        LPS22HHTask_vtblSensorSetODR,
+        LPS22HHTask_vtblSensorSetFS,
+        LPS22HHTask_vtblSensorSetFifoWM, },
 
   /* TEMPERATURE DESCRIPTOR */
   {
@@ -429,7 +313,11 @@ static const LPS22HHTaskClass_t sTheClass =
     {
       "temp",
     },
-    "Celsius"
+    "Celsius",
+    {
+      0,
+      1000,
+    }
   },
   /* PRESSURE DESCRIPTOR */
   {
@@ -452,7 +340,11 @@ static const LPS22HHTaskClass_t sTheClass =
     {
       "prs",
     },
-    "hPa"
+    "hPa",
+    {
+      0,
+      1000,
+    }
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -460,49 +352,92 @@ static const LPS22HHTaskClass_t sTheClass =
     LPS22HHTaskExecuteStepState1,
     NULL,
     LPS22HHTaskExecuteStepDatalog,
-  }
+  },
+
+  {{0}}, /* task_map_elements */
+  {0}  /* task_map */
 };
 
 /* Public API definition */
 // *********************
 ISourceObservable *LPS22HHTaskGetTempSensorIF(LPS22HHTask *_this)
 {
-  assert_param(_this != NULL);
-
   return (ISourceObservable *) & (_this->temp_sensor_if);
 }
 
 ISourceObservable *LPS22HHTaskGetPressSensorIF(LPS22HHTask *_this)
 {
-  assert_param(_this != NULL);
-
   return (ISourceObservable *) & (_this->press_sensor_if);
 }
 
 AManagedTaskEx *LPS22HHTaskAlloc(const void *pIRQConfig, const void *pCSConfig)
 {
-  /* This allocator implements the singleton design pattern. */
-  if (sTaskObj == NULL)
+  LPS22HHTask *p_new_obj = SysAlloc(sizeof(LPS22HHTask));
+
+  if (p_new_obj != NULL)
   {
-    sTaskObj = SysAlloc(sizeof(LPS22HHTask));
-
     /* Initialize the super class */
-    AMTInitEx(&sTaskObj->super);
+    AMTInitEx(&p_new_obj->super);
 
-    sTaskObj->super.vptr = &sTheClass.vtbl;
-    sTaskObj->temp_sensor_if.vptr = &sTheClass.temp_sensor_if_vtbl;
-    sTaskObj->press_sensor_if.vptr = &sTheClass.press_sensor_if_vtbl;
-    sTaskObj->temp_sensor_descriptor = &sTheClass.temp_class_descriptor;
-    sTaskObj->press_sensor_descriptor = &sTheClass.press_class_descriptor;
+    p_new_obj->super.vptr = &sTheClass.vtbl;
+    p_new_obj->temp_sensor_if.vptr = &sTheClass.temp_sensor_if_vtbl;
+    p_new_obj->press_sensor_if.vptr = &sTheClass.press_sensor_if_vtbl;
+    p_new_obj->temp_sensor_descriptor = &sTheClass.temp_class_descriptor;
+    p_new_obj->press_sensor_descriptor = &sTheClass.press_class_descriptor;
 
-    sTaskObj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
-    sTaskObj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
+    p_new_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
+    p_new_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
 
-    strcpy(sTaskObj->temp_sensor_status.Name, sTheClass.temp_class_descriptor.Name);
-    strcpy(sTaskObj->press_sensor_status.Name, sTheClass.press_class_descriptor.Name);
+    strcpy(p_new_obj->temp_sensor_status.p_name, sTheClass.temp_class_descriptor.p_name);
+    strcpy(p_new_obj->press_sensor_status.p_name, sTheClass.press_class_descriptor.p_name);
   }
 
-  return (AManagedTaskEx *) sTaskObj;
+  return (AManagedTaskEx *) p_new_obj;
+}
+
+AManagedTaskEx *LPS22HHTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name)
+{
+  LPS22HHTask *p_new_obj = (LPS22HHTask *)LPS22HHTaskAlloc(pIRQConfig, pCSConfig);
+
+  /* Overwrite default name with the one selected by the application */
+  strcpy(p_new_obj->temp_sensor_status.p_name, p_name);
+  strcpy(p_new_obj->press_sensor_status.p_name, p_name);
+
+  return (AManagedTaskEx *) p_new_obj;
+}
+
+AManagedTaskEx *LPS22HHTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig)
+{
+  LPS22HHTask *p_obj = (LPS22HHTask *) p_mem_block;
+
+  if (p_obj != NULL)
+  {
+    /* Initialize the super class */
+    AMTInitEx(&p_obj->super);
+
+    p_obj->super.vptr = &sTheClass.vtbl;
+    p_obj->temp_sensor_if.vptr = &sTheClass.temp_sensor_if_vtbl;
+    p_obj->press_sensor_if.vptr = &sTheClass.press_sensor_if_vtbl;
+    p_obj->temp_sensor_descriptor = &sTheClass.temp_class_descriptor;
+    p_obj->press_sensor_descriptor = &sTheClass.press_class_descriptor;
+
+    p_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
+    p_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
+  }
+
+  return (AManagedTaskEx *) p_obj;
+}
+
+AManagedTaskEx *LPS22HHTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                              const char *p_name)
+{
+  LPS22HHTask *p_obj = (LPS22HHTask *) LPS22HHTaskStaticAlloc(p_mem_block, pIRQConfig, pCSConfig);
+
+  /* Overwrite default name with the one selected by the application */
+  strcpy(p_obj->temp_sensor_status.p_name, p_name);
+  strcpy(p_obj->press_sensor_status.p_name, p_name);
+
+  return (AManagedTaskEx *) p_obj;
 }
 
 ABusIF *LPS22HHTaskGetSensorIF(LPS22HHTask *_this)
@@ -516,14 +451,14 @@ IEventSrc *LPS22HHTaskGetTempEventSrcIF(LPS22HHTask *_this)
 {
   assert_param(_this != NULL);
 
-  return _this->p_temp_event_src;
+  return (IEventSrc *)_this->p_temp_event_src;
 }
 
 IEventSrc *LPS22HHTaskGetPressEventSrcIF(LPS22HHTask *_this)
 {
   assert_param(_this != NULL);
 
-  return _this->p_press_event_src;
+  return (IEventSrc *)_this->p_press_event_src;
 }
 
 // AManagedTask virtual functions definition
@@ -574,7 +509,7 @@ sys_error_code_t LPS22HHTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
 
   /* create the software timer*/
   if (TX_SUCCESS
-      != tx_timer_create(&p_obj->read_fifo_timer, "LPS22HH_T", LPS22HHTaskTimerCallbackFunction, (ULONG)p_obj,
+      != tx_timer_create(&p_obj->read_fifo_timer, "LPS22HH_T", LPS22HHTaskTimerCallbackFunction, (ULONG)_this,
                          AMT_MS_TO_TICKS(LPS22HH_TASK_CFG_TIMER_PERIOD_MS), 0, TX_NO_ACTIVATE))
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
@@ -620,11 +555,31 @@ sys_error_code_t LPS22HHTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
   p_obj->p_press_event_src = DataEventSrcAlloc();
   if (p_obj->p_press_event_src == NULL)
   {
-    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
-    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+    res = SYS_OUT_OF_MEMORY_ERROR_CODE;
     return res;
   }
   IEventSrcInit(p_obj->p_press_event_src);
+
+  if (!MTMap_IsInitialized(&sTheClass.task_map))
+  {
+    (void) MTMap_Init(&sTheClass.task_map, sTheClass.task_map_elements, LPS22HH_TASK_CFG_MAX_INSTANCES_COUNT);
+  }
+
+  /* Add the managed task to the map.*/
+  if (p_obj->pIRQConfig != NULL)
+  {
+    /* Use the PIN as unique key for the map. */
+    MTMapElement_t *p_element = NULL;
+    uint32_t key = (uint32_t) p_obj->pIRQConfig->pin;
+    p_element = MTMap_AddElement(&sTheClass.task_map, key, _this);
+    if (p_element == NULL)
+    {
+      SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+      res = SYS_INVALID_PARAMETER_ERROR_CODE;
+      return res;
+    }
+  }
 
   memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
   memset(p_obj->p_temp_data_buff, 0, sizeof(p_obj->p_temp_data_buff));
@@ -650,8 +605,8 @@ sys_error_code_t LPS22HHTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
   res = LPS22HHTaskSensorInitTaskParams(p_obj);
   if (SYS_IS_ERROR_CODE(res))
   {
-    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
-    res = SYS_OUT_OF_MEMORY_ERROR_CODE;
+    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
     return res;
   }
 
@@ -689,7 +644,7 @@ sys_error_code_t LPS22HHTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE);
       }
 
-      // reset the variables for the time stamp computation.
+      // reset the variables for the actual odr computation.
       p_obj->prev_timestamp = 0.0f;
     }
 
@@ -699,9 +654,10 @@ sys_error_code_t LPS22HHTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
   {
     if (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
     {
-
-      /* SM_SENSOR_STATE_SUSPENDING */
+      /* Deactivate the sensor */
       lps22hh_data_rate_set(p_sensor_drv, (lps22hh_odr_t)(LPS22HH_POWER_DOWN | 0x10));
+
+      /* Empty the task queue and disable INT or timer */
       tx_queue_flush(&p_obj->in_queue);
       if (p_obj->pIRQConfig == NULL)
       {
@@ -722,7 +678,7 @@ sys_error_code_t LPS22HHTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
     res = LPS22HHTaskEnterLowPowerMode(p_obj);
     if (SYS_IS_ERROR_CODE(res))
     {
-      sys_error_handler();
+      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("LPS22HH - Enter Low Power Mode failed.\r\n"));
     }
     if (p_obj->pIRQConfig != NULL)
     {
@@ -760,7 +716,7 @@ sys_error_code_t LPS22HHTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("LPS22HH: start.\r\n"));
 
-#ifdef ENABLE_THREADX_DBG_PIN
+#if defined(ENABLE_THREADX_DBG_PIN) && defined (LPS22HH_TASK_CFG_TAG)
   LPS22HHTask *p_obj = (LPS22HHTask *) _this;
   p_obj->super.m_xTaskHandle.pxTaskTag = LPS22HH_TASK_CFG_TAG;
 #endif
@@ -859,7 +815,7 @@ IEventSrc *LPS22HHTask_vtblPressGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_press_event_src;
 }
 
-sys_error_code_t LPS22HHTask_vtblPressGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal)
+sys_error_code_t LPS22HHTask_vtblPressGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -874,27 +830,27 @@ sys_error_code_t LPS22HHTask_vtblPressGetODR(ISourceObservable *_this, float *p_
   }
   else
   {
-    *p_measured = p_if_owner->press_sensor_status.MeasuredODR;
-    *p_nominal = p_if_owner->press_sensor_status.ODR;
+    *p_measured = p_if_owner->press_sensor_status.type.mems.measured_odr;
+    *p_nominal = p_if_owner->press_sensor_status.type.mems.odr;
   }
 
   return res;
 }
 
-float LPS22HHTask_vtblPressGetFS(ISourceObservable *_this)
+float LPS22HHTask_vtblPressGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LPS22HHTask *p_if_owner = (LPS22HHTask *)((uint32_t) _this - offsetof(LPS22HHTask, press_sensor_if));
-  float res = p_if_owner->press_sensor_status.FS;
+  float res = p_if_owner->press_sensor_status.type.mems.fs;
 
   return res;
 }
 
-float LPS22HHTask_vtblPressGetSensitivity(ISourceObservable *_this)
+float LPS22HHTask_vtblPressGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LPS22HHTask *p_if_owner = (LPS22HHTask *)((uint32_t) _this - offsetof(LPS22HHTask, press_sensor_if));
-  float res = p_if_owner->press_sensor_status.Sensitivity;
+  float res = p_if_owner->press_sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -908,7 +864,7 @@ EMData_t LPS22HHTask_vtblPressGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t LPS22HHTask_vtblTempGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal)
+sys_error_code_t LPS22HHTask_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -916,34 +872,34 @@ sys_error_code_t LPS22HHTask_vtblTempGetODR(ISourceObservable *_this, float *p_m
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* parameter validation */
-  if ((p_measured) == NULL || (p_nominal == NULL))
+  if ((p_measured == NULL) || (p_nominal == NULL))
   {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
   }
   else
   {
-    *p_measured = p_if_owner->temp_sensor_status.MeasuredODR;
-    *p_nominal = p_if_owner->temp_sensor_status.ODR;
+    *p_measured = p_if_owner->temp_sensor_status.type.mems.measured_odr;
+    *p_nominal = p_if_owner->temp_sensor_status.type.mems.odr;
   }
 
   return res;
 }
 
-float LPS22HHTask_vtblTempGetFS(ISourceObservable *_this)
+float LPS22HHTask_vtblTempGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LPS22HHTask *p_if_owner = (LPS22HHTask *)((uint32_t) _this - offsetof(LPS22HHTask, temp_sensor_if));
-  float res = p_if_owner->temp_sensor_status.FS;
+  float res = p_if_owner->temp_sensor_status.type.mems.fs;
 
   return res;
 }
 
-float LPS22HHTask_vtblTempGetSensitivity(ISourceObservable *_this)
+float LPS22HHTask_vtblTempGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LPS22HHTask *p_if_owner = (LPS22HHTask *)((uint32_t) _this - offsetof(LPS22HHTask, temp_sensor_if));
-  float res = p_if_owner->temp_sensor_status.Sensitivity;
+  float res = p_if_owner->temp_sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -957,81 +913,81 @@ EMData_t LPS22HHTask_vtblTempGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t LPS22HHTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
+sys_error_code_t LPS22HHTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  LPS22HHTask *p_if_owner = LPS22HHTaskGetOwnerFromISensorIF(_this);
+  LPS22HHTask *p_if_owner = LPS22HHTaskGetOwnerFromISensorIF((ISensor_t *)_this);
 
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
-  {
-    res = SYS_INVALID_PARAMETER_ERROR_CODE;
-  }
-  else
-  {
-    /* Set a new command report in the queue */
-    SMMessage report =
-    {
-      .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
-      .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
-      .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) ODR
-    };
-    res = LPS22HHTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
-  }
-
-  return res;
-}
-
-sys_error_code_t LPS22HHTask_vtblSensorSetFS(ISensor_t *_this, float FS)
-{
-  assert_param(_this != NULL);
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
-  LPS22HHTask *p_if_owner = LPS22HHTaskGetOwnerFromISensorIF(_this);
-
-  EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
-  uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
-
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
-  {
-    res = SYS_INVALID_PARAMETER_ERROR_CODE;
-  }
-  else
-  {
-    /* Set a new command report in the queue */
-    SMMessage report =
-    {
-      .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
-      .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
-      .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) FS
-    };
-    res = LPS22HHTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
-  }
-
-  return res;
-
-}
-
-sys_error_code_t LPS22HHTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
-{
-  assert_param(_this != NULL);
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
-  LPS22HHTask *p_if_owner = LPS22HHTaskGetOwnerFromISensorIF(_this);
-
-  EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
-  uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
-
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
   else
   {
-    /* Set a new command report in the queue */
+    /* Set a new command message in the queue */
+    SMMessage report =
+    {
+      .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
+      .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
+      .sensorMessage.nSensorId = sensor_id,
+      .sensorMessage.nParam = (float) odr
+    };
+    res = LPS22HHTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
+  }
+
+  return res;
+}
+
+sys_error_code_t LPS22HHTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  LPS22HHTask *p_if_owner = LPS22HHTaskGetOwnerFromISensorIF((ISensor_t *)_this);
+
+  EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
+  uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
+
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
+  {
+    res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
+  }
+  else
+  {
+    /* Set a new command message in the queue */
+    SMMessage report =
+    {
+      .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
+      .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
+      .sensorMessage.nSensorId = sensor_id,
+      .sensorMessage.nParam = (uint32_t) fs
+    };
+    res = LPS22HHTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
+  }
+
+  return res;
+
+}
+
+sys_error_code_t LPS22HHTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  LPS22HHTask *p_if_owner = LPS22HHTaskGetOwnerFromISensorIF((ISensor_t *)_this);
+
+  EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
+  uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
+
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
+  {
+    res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
+  }
+  else
+  {
+    /* Set a new command message in the queue */
     SMMessage report =
     {
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
@@ -1055,13 +1011,13 @@ sys_error_code_t LPS22HHTask_vtblSensorEnable(ISensor_t *_this)
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
-    res = SYS_INVALID_PARAMETER_ERROR_CODE;
+    res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
   else
   {
-    /* Set a new command report in the queue */
+    /* Set a new command message in the queue */
     SMMessage report =
     {
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
@@ -1083,13 +1039,13 @@ sys_error_code_t LPS22HHTask_vtblSensorDisable(ISensor_t *_this)
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
-    res = SYS_INVALID_PARAMETER_ERROR_CODE;
+    res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
   else
   {
-    /* Set a new command report in the queue */
+    /* Set a new command message in the queue */
     SMMessage report =
     {
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
@@ -1110,11 +1066,11 @@ boolean_t LPS22HHTask_vtblSensorIsEnabled(ISensor_t *_this)
 
   if (ISourceGetId((ISourceObservable *) _this) == p_if_owner->press_id)
   {
-    res = p_if_owner->press_sensor_status.IsActive;
+    res = p_if_owner->press_sensor_status.is_active;
   }
   else if (ISourceGetId((ISourceObservable *) _this) == p_if_owner->temp_id)
   {
-    res = p_if_owner->temp_sensor_status.IsActive;
+    res = p_if_owner->temp_sensor_status.is_active;
   }
   return res;
 }
@@ -1192,23 +1148,22 @@ static sys_error_code_t LPS22HHTaskExecuteStepState1(AManagedTask *_this)
             res = LPS22HHTaskSensorDisable(p_obj, report);
             break;
           default:
-            // unwanted report
+            /* unwanted report */
             res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
-            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
-            ;
+            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
 
-            SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("LPS22HH: unexpected report in State1: %i\r\n", report.messageID));
+            SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("LPS22HH: unexpected report in Run: %i\r\n", report.messageID));
             break;
         }
         break;
       }
       default:
       {
-        // unwanted report
+        /* unwanted report */
         res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
 
-        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("LPS22HH: unexpected report in State1: %i\r\n", report.messageID));
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("LPS22HH: unexpected report in Run: %i\r\n", report.messageID));
         break;
       }
     }
@@ -1266,19 +1221,19 @@ static sys_error_code_t LPS22HHTaskExecuteStepDatalog(AManagedTask *_this)
 
             DataEvent_t evt;
 
-            if (p_obj->press_sensor_status.IsActive)
+            if (p_obj->press_sensor_status.is_active)
             {
               /* update measuredODR */
-              p_obj->press_sensor_status.MeasuredODR = (float) p_obj->samples_per_it / (float) delta_timestamp;
+              p_obj->press_sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
 
               EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_press_data_buff[0], E_EM_FLOAT, p_obj->samples_per_it);
               DataEventInit((IEvent *) &evt, p_obj->p_press_event_src, &p_obj->data, timestamp, p_obj->press_id);
               IEventSrcSendEvent(p_obj->p_press_event_src, (IEvent *) &evt, NULL);
             }
-            if (p_obj->temp_sensor_status.IsActive)
+            if (p_obj->temp_sensor_status.is_active)
             {
               /* update measuredODR */
-              p_obj->temp_sensor_status.MeasuredODR = (float) p_obj->samples_per_it / (float) delta_timestamp;
+              p_obj->temp_sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
 
               EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_temp_data_buff[0], E_EM_FLOAT, p_obj->samples_per_it);
               DataEventInit((IEvent *) &evt, p_obj->p_temp_event_src, &p_obj->data, timestamp, p_obj->temp_id);
@@ -1306,7 +1261,7 @@ static sys_error_code_t LPS22HHTaskExecuteStepDatalog(AManagedTask *_this)
             res = LPS22HHTaskSensorInit(p_obj);
             if (!SYS_IS_ERROR_CODE(res))
             {
-              if (p_obj->press_sensor_status.IsActive == true || p_obj->temp_sensor_status.IsActive == true)
+              if (p_obj->press_sensor_status.is_active == true || p_obj->temp_sensor_status.is_active == true)
               {
                 if (p_obj->pIRQConfig == NULL)
                 {
@@ -1343,7 +1298,7 @@ static sys_error_code_t LPS22HHTaskExecuteStepDatalog(AManagedTask *_this)
             res = LPS22HHTaskSensorDisable(p_obj, report);
             break;
           default:
-            // unwanted report
+            /* unwanted report */
             res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
             SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
             ;
@@ -1354,7 +1309,7 @@ static sys_error_code_t LPS22HHTaskExecuteStepDatalog(AManagedTask *_this)
         break;
       }
       default:
-        // unwanted report
+        /* unwanted report */
         res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
         ;
@@ -1461,44 +1416,96 @@ static sys_error_code_t LPS22HHTaskSensorInit(LPS22HHTask *_this)
   } while (rst);
 
 #if LPS22HH_FIFO_ENABLED
+
+  /* Set fifo mode */
+  uint16_t lps22hh_wtm_level = 0;
+  uint16_t lps22hh_wtm_level_press;
+  uint16_t lps22hh_wtm_level_temp;
+
+  if (_this->samples_per_it == 0)
+  {
+    /* Calculation of watermark and samples per int*/
+    lps22hh_wtm_level_press = ((uint16_t) _this->press_sensor_status.type.mems.odr * (uint16_t) LPS22HH_MAX_DRDY_PERIOD);
+    lps22hh_wtm_level_temp = ((uint16_t) _this->temp_sensor_status.type.mems.odr * (uint16_t) LPS22HH_MAX_DRDY_PERIOD);
+
+    if (_this->press_sensor_status.is_active && _this->temp_sensor_status.is_active) /* Both subSensor is active */
+    {
+      if (lps22hh_wtm_level_press > lps22hh_wtm_level_temp)
+      {
+        lps22hh_wtm_level = lps22hh_wtm_level_press;
+      }
+      else
+      {
+        lps22hh_wtm_level = lps22hh_wtm_level_temp;
+      }
+    }
+    else /* Only one subSensor is active */
+    {
+      if (_this->press_sensor_status.is_active)
+      {
+        lps22hh_wtm_level = lps22hh_wtm_level_press;
+      }
+      else
+      {
+        lps22hh_wtm_level = lps22hh_wtm_level_temp;
+      }
+    }
+
+    if (lps22hh_wtm_level > LPS22HH_MAX_WTM_LEVEL)
+    {
+      lps22hh_wtm_level = LPS22HH_MAX_WTM_LEVEL;
+    }
+    else if (lps22hh_wtm_level < LPS22HH_MIN_WTM_LEVEL)
+    {
+      lps22hh_wtm_level = LPS22HH_MIN_WTM_LEVEL;
+    }
+    _this->samples_per_it = lps22hh_wtm_level;
+  }
+
   /* Set fifo mode */
   lps22hh_fifo_mode_set(p_sensor_drv, LPS22HH_STREAM_MODE);
+  /* Set FIFO wm */
+  lps22hh_fifo_watermark_set(p_sensor_drv, _this->samples_per_it);
+  /* Enable FIFO stop on watermark */
+  lps22hh_fifo_stop_on_wtm_set(p_sensor_drv, PROPERTY_ENABLE);
 
   if (_this->pIRQConfig != NULL)
   {
-    /* Set FIFO wm */
-    lps22hh_fifo_watermark_set(p_sensor_drv, FIFO_WATERMARK);
+    lps22hh_ctrl_reg3_t int_route;
 
-    /* Enable FIFO stop on watermark */
-    lps22hh_fifo_stop_on_wtm_set(p_sensor_drv, PROPERTY_ENABLE);
+    lps22hh_int_notification_set(p_sensor_drv, LPS22HH_INT_LATCHED);
 
+    lps22hh_pin_int_route_get(p_sensor_drv, &int_route);
+    int_route.int_f_wtm = PROPERTY_ENABLE;
+    lps22hh_pin_int_route_set(p_sensor_drv, &int_route);
   }
 
-  lps22hh_ctrl_reg3_t int_route;
-
-  lps22hh_int_notification_set(p_sensor_drv, LPS22HH_INT_LATCHED);
-
-  lps22hh_pin_int_route_get(p_sensor_drv, &int_route);
-  int_route.int_f_wtm = PROPERTY_ENABLE;
-  lps22hh_pin_int_route_set(p_sensor_drv, &int_route);
-
-  _this->samples_per_it = FIFO_WATERMARK;
-
 #else
+  if (_this->pIRQConfig != NULL)
+  {
+    lps22hh_ctrl_reg3_t int_route;
+
+    lps22hh_int_notification_set(p_sensor_drv, LPS22HH_INT_LATCHED);
+
+    lps22hh_pin_int_route_get(p_sensor_drv, &int_route);
+    int_route.drdy = PROPERTY_ENABLE;
+    lps22hh_pin_int_route_set(p_sensor_drv, &int_route);
+  }
+
   _this->samples_per_it = 1;
 #endif
 
-  /* Set ODR */
+  /* Set odr */
 
-  if (_this->temp_sensor_status.IsActive == TRUE)
+  if (_this->temp_sensor_status.is_active == TRUE)
   {
-    lps22hh_odr = _this->temp_sensor_status.ODR;
-    _this->press_sensor_status.ODR = _this->temp_sensor_status.ODR;
+    lps22hh_odr = _this->temp_sensor_status.type.mems.odr;
+    _this->press_sensor_status.type.mems.odr = _this->temp_sensor_status.type.mems.odr;
   }
   else
   {
-    lps22hh_odr = _this->press_sensor_status.ODR;
-    _this->temp_sensor_status.ODR = _this->press_sensor_status.ODR;
+    lps22hh_odr = _this->press_sensor_status.type.mems.odr;
+    _this->temp_sensor_status.type.mems.odr = _this->press_sensor_status.type.mems.odr;
   }
 
   if (lps22hh_odr < 2.0f)
@@ -1530,10 +1537,11 @@ static sys_error_code_t LPS22HHTaskSensorInit(LPS22HHTask *_this)
     lps22hh_data_rate_set(p_sensor_drv, LPS22HH_200_Hz);
   }
 
+  _this->task_delay = (uint16_t)(_this->press_sensor_status.type.mems.odr < _this->temp_sensor_status.type.mems.odr ? _this->press_sensor_status.type.mems.odr : _this->temp_sensor_status.type.mems.odr);
 #if LPS22HH_FIFO_ENABLED
-  _this->task_delay = (uint16_t)((1000.0f / lps22hh_odr) * (((float)(_this->samples_per_it)) / 2.0f));
+  _this->task_delay = (uint16_t)((1000.0f / _this->task_delay) * (((float)(_this->samples_per_it)) / 2.0f));
 #else
-  _this->task_delay = (uint16_t)(1000.0f / lps22hh_odr);
+  _this->task_delay = (uint16_t)(1000.0f / _this->task_delay);
 #endif
 
   return res;
@@ -1544,39 +1552,50 @@ static sys_error_code_t LPS22HHTaskSensorReadData(LPS22HHTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
+  uint16_t samples_per_it = _this->samples_per_it;
 
 #if LPS22HH_FIFO_ENABLED
   lps22hh_fifo_data_level_get(p_sensor_drv, (uint8_t *)&_this->fifo_level);
-  lps22hh_read_reg(p_sensor_drv, LPS22HH_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_sensor_data_buff,
-                   5 * _this->fifo_level);
 
-  uint16_t i = 0;
-
-  for (i = 0; i < _this->fifo_level; i++)
+  if (_this->fifo_level >= samples_per_it)
   {
-    uint32_t press = (((uint32_t)_this->p_sensor_data_buff[5 * i + 0])) | (((uint32_t)_this->p_sensor_data_buff[5 * i + 1]) << (8 * 1)) | (((uint32_t)_this->p_sensor_data_buff[5 * i + 2]) << (8 * 2));
+    lps22hh_read_reg(p_sensor_drv, LPS22HH_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_sensor_data_buff,
+                     5 * _this->fifo_level);
 
-    /* convert the 2's complement 24 bit to 2's complement 32 bit */
-    if (press & 0x00800000)
-    {
-      press |= 0xFF000000;
-    }
+    uint16_t i = 0;
 
-    uint16_t temp = *((uint16_t *)(&_this->p_sensor_data_buff[5 * i + 3]));
+    for (i = 0; i < samples_per_it; i++)
+    {
+      uint32_t press = (((uint32_t) _this->p_sensor_data_buff[5 * i + 0])) | (((uint32_t) _this->p_sensor_data_buff[5 * i + 1]) << (8 * 1))
+                       | (((uint32_t) _this->p_sensor_data_buff[5 * i + 2]) << (8 * 2));
 
-    if (_this->press_sensor_status.IsActive && !_this->temp_sensor_status.IsActive) /* Only Pressure */
-    {
-      _this->p_press_data_buff[i] = (float)press / 4096.0f; /* Pressure */
+      /* convert the 2's complement 24 bit to 2's complement 32 bit */
+      if (press & 0x00800000)
+      {
+        press |= 0xFF000000;
+      }
+
+      uint16_t temp = *((uint16_t *)(&_this->p_sensor_data_buff[5 * i + 3]));
+
+      if (_this->press_sensor_status.is_active && !_this->temp_sensor_status.is_active) /* Only Pressure */
+      {
+        _this->p_press_data_buff[i] = (float) press / 4096.0f; /* Pressure */
+      }
+      else if (!_this->press_sensor_status.is_active && _this->temp_sensor_status.is_active) /* Only Temperature */
+      {
+        _this->p_temp_data_buff[i] = (float) temp / 100.0f; /* Temperature */
+      }
+      else if (_this->press_sensor_status.is_active && _this->temp_sensor_status.is_active) /* Both Sub Sensors */
+      {
+        _this->p_press_data_buff[i] = (float) press / 4096.0f; /* Pressure */
+        _this->p_temp_data_buff[i] = (float) temp / 100.0f; /* Temperature */
+      }
     }
-    else if (!_this->press_sensor_status.IsActive && _this->temp_sensor_status.IsActive) /* Only Temperature */
-    {
-      _this->p_temp_data_buff[i] = (float)temp / 100.0f; /* Temperature */
-    }
-    else if (_this->press_sensor_status.IsActive && _this->temp_sensor_status.IsActive) /* Both Sub Sensors */
-    {
-      _this->p_press_data_buff[i] = (float)press / 4096.0f; /* Pressure */
-      _this->p_temp_data_buff[i] = (float)temp / 100.0f; /* Temperature */
-    }
+  }
+  else
+  {
+    _this->fifo_level = 0;
+    res = SYS_BASE_ERROR_CODE;
   }
 #else
   lps22hh_reg_t reg;
@@ -1602,9 +1621,11 @@ static sys_error_code_t LPS22HHTaskSensorReadData(LPS22HHTask *_this)
 #endif
 
 #if (HSD_USE_DUMMY_DATA == 1)
+  uint16_t i = 0;
   for (i = 0; i < _this->samples_per_it ; i++)
   {
     _this->p_press_data_buff[i]  = (float)(dummyDataCounter_press++);
+    _this->p_temp_data_buff[i]  = (float)(dummyDataCounter_temp++);
   }
 
 #endif
@@ -1632,17 +1653,19 @@ static sys_error_code_t LPS22HHTaskSensorInitTaskParams(LPS22HHTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* PRESSURE STATUS */
-  _this->press_sensor_status.IsActive = TRUE;
-  _this->press_sensor_status.FS = 1260.0f;
-  _this->press_sensor_status.Sensitivity = 1.0f;
-  _this->press_sensor_status.ODR = 200.0f;
-  _this->press_sensor_status.MeasuredODR = 0.0f;
+  _this->press_sensor_status.isensor_class = ISENSOR_CLASS_MEMS;
+  _this->press_sensor_status.is_active = TRUE;
+  _this->press_sensor_status.type.mems.fs = 1260.0f;
+  _this->press_sensor_status.type.mems.sensitivity = 1.0f;
+  _this->press_sensor_status.type.mems.odr = 200.0f;
+  _this->press_sensor_status.type.mems.measured_odr = 0.0f;
 
-  _this->temp_sensor_status.IsActive = TRUE;
-  _this->temp_sensor_status.FS = 85.0f;
-  _this->temp_sensor_status.Sensitivity = 1.0f;
-  _this->temp_sensor_status.ODR = 200.0f;
-  _this->temp_sensor_status.MeasuredODR = 0.0f;
+  _this->temp_sensor_status.isensor_class = ISENSOR_CLASS_MEMS;
+  _this->temp_sensor_status.is_active = TRUE;
+  _this->temp_sensor_status.type.mems.fs = 85.0f;
+  _this->temp_sensor_status.type.mems.sensitivity = 1.0f;
+  _this->temp_sensor_status.type.mems.odr = 200.0f;
+  _this->temp_sensor_status.type.mems.measured_odr = 0.0f;
 
   EMD_1dInit(&_this->data, (uint8_t *) &_this->p_press_data_buff[0], E_EM_FLOAT, 1);
 
@@ -1655,60 +1678,54 @@ static sys_error_code_t LPS22HHTaskSensorSetODR(LPS22HHTask *_this, SMMessage re
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float ODR = (float) report.sensorMessage.nParam;
+  float odr = (float) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->temp_id || id == _this->press_id)
   {
-    if (ODR < 1.0f)
+    if (odr < 1.0f)
     {
       /* Power down the device, set Low Noise Enable (bit 5), clear One Shot (bit 4) */
       lps22hh_data_rate_set(p_sensor_drv, (lps22hh_odr_t)(LPS22HH_POWER_DOWN | 0x10));
-      /* Do not update the model in case of ODR = 0 */
-      ODR = _this->temp_sensor_status.ODR;
-      ODR = _this->press_sensor_status.ODR;
+      /* Do not update the model in case of odr = 0 */
+      odr = _this->temp_sensor_status.type.mems.odr;
+      odr = _this->press_sensor_status.type.mems.odr;
     }
-    else if (ODR < 2.0f)
+    else if (odr < 2.0f)
     {
-      ODR = 1.0f;
+      odr = 1.0f;
     }
-    else if (ODR < 11.0f)
+    else if (odr < 11.0f)
     {
-      ODR = 10.0f;
+      odr = 10.0f;
     }
-    else if (ODR < 26.0f)
+    else if (odr < 26.0f)
     {
-      ODR = 25.0f;
+      odr = 25.0f;
     }
-    else if (ODR < 51.0f)
+    else if (odr < 51.0f)
     {
-      ODR = 50.0f;
+      odr = 50.0f;
     }
-    else if (ODR < 76.0f)
+    else if (odr < 76.0f)
     {
-      ODR = 75.0f;
+      odr = 75.0f;
     }
-    else if (ODR < 101.0f)
+    else if (odr < 101.0f)
     {
-      ODR = 100.0f;
+      odr = 100.0f;
     }
     else
     {
-      ODR = 200.0f;
+      odr = 200.0f;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-      if (id == _this->press_id)
-      {
-        _this->press_sensor_status.ODR = ODR;
-        _this->press_sensor_status.MeasuredODR = 0.0f;
-      }
-      else
-      {
-        _this->temp_sensor_status.ODR = ODR;
-        _this->temp_sensor_status.MeasuredODR = 0.0f;
-      }
+      _this->press_sensor_status.type.mems.odr = odr;
+      _this->press_sensor_status.type.mems.measured_odr = 0.0f;
+      _this->temp_sensor_status.type.mems.odr = odr;
+      _this->temp_sensor_status.type.mems.measured_odr = 0.0f;
     }
   }
   else
@@ -1731,8 +1748,30 @@ static sys_error_code_t LPS22HHTaskSensorSetFS(LPS22HHTask *_this, SMMessage rep
 static sys_error_code_t LPS22HHTaskSensorSetFifoWM(LPS22HHTask *_this, SMMessage report)
 {
   assert_param(_this != NULL);
-  sys_error_code_t res = SYS_NOT_IMPLEMENTED_ERROR_CODE;
-  _this->samples_per_it = 0;
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
+  uint16_t lps22hh_wtm_level = (uint16_t)report.sensorMessage.nParam;
+  uint8_t id = report.sensorMessage.nSensorId;
+
+  if ((id == _this->press_id) || (id == _this->temp_id))
+  {
+    if (lps22hh_wtm_level > LPS22HH_MAX_WTM_LEVEL)
+    {
+      lps22hh_wtm_level = LPS22HH_MAX_WTM_LEVEL;
+    }
+    _this->samples_per_it = lps22hh_wtm_level;
+
+    /* Set fifo in continuous / stream mode*/
+    lps22hh_fifo_mode_set(p_sensor_drv, LPS22HH_STREAM_MODE);
+
+    /* Setup int for FIFO */
+    lps22hh_fifo_watermark_set(p_sensor_drv, _this->samples_per_it);
+  }
+  else
+  {
+    res = SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
   return res;
 }
 
@@ -1745,14 +1784,16 @@ static sys_error_code_t LPS22HHTaskSensorEnable(LPS22HHTask *_this, SMMessage re
 
   if (id == _this->temp_id)
   {
-    _this->temp_sensor_status.IsActive = TRUE;
+    _this->temp_sensor_status.is_active = TRUE;
   }
   else if (id == _this->press_id)
   {
-    _this->press_sensor_status.IsActive = TRUE;
+    _this->press_sensor_status.is_active = TRUE;
   }
   else
+  {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
 
   return res;
 }
@@ -1766,11 +1807,11 @@ static sys_error_code_t LPS22HHTaskSensorDisable(LPS22HHTask *_this, SMMessage r
 
   if (id == _this->temp_id)
   {
-    _this->temp_sensor_status.IsActive = FALSE;
+    _this->temp_sensor_status.is_active = FALSE;
   }
   else if (id == _this->press_id)
   {
-    _this->press_sensor_status.IsActive = FALSE;
+    _this->press_sensor_status.is_active = FALSE;
   }
   else
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
@@ -1781,7 +1822,7 @@ static sys_error_code_t LPS22HHTaskSensorDisable(LPS22HHTask *_this, SMMessage r
 static boolean_t LPS22HHTaskSensorIsActive(const LPS22HHTask *_this)
 {
   assert_param(_this != NULL);
-  return (_this->temp_sensor_status.IsActive || _this->press_sensor_status.IsActive);
+  return (_this->temp_sensor_status.is_active || _this->press_sensor_status.is_active);
 }
 
 static sys_error_code_t LPS22HHTaskEnterLowPowerMode(const LPS22HHTask *_this)
@@ -1829,35 +1870,43 @@ static sys_error_code_t LPS22HHTaskConfigureIrqPin(const LPS22HHTask *_this, boo
   return res;
 }
 
-static void LPS22HHTaskTimerCallbackFunction(ULONG owner)
+static void LPS22HHTaskTimerCallbackFunction(ULONG param)
 {
+
+  LPS22HHTask *p_obj = (LPS22HHTask *) param;
   SMMessage report;
-  LPS22HHTask *p_obj = (LPS22HHTask *) owner;
   report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY;
   report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
 
   // if (sTaskObj.in_queue != NULL ) {//TODO: STF.Port - how to check if the queue has been initialized ??
   if (TX_SUCCESS != tx_queue_send(&p_obj->in_queue, &report, TX_NO_WAIT))
   {
-    // unable to send the report. Signal the error
+    // unable to send the message. Signal the error
     sys_error_handler();
   }
   //}
 }
 
+/* CubeMX integration */
+
 void LPS22HHTask_EXTI_Callback(uint16_t nPin)
 {
+  MTMapValue_t *p_val;
+  TX_QUEUE *p_queue;
   SMMessage report;
   report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY;
   report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
 
-  //  if (sTaskObj.in_queue != NULL) { //TODO: STF.Port - how to check if the queue has been initialized ??
-  if (TX_SUCCESS != tx_queue_send(&sTaskObj->in_queue, &report, TX_NO_WAIT))
+  p_val = MTMap_FindByKey(&sTheClass.task_map, (uint32_t) nPin);
+  if (p_val != NULL)
   {
-    /* unable to send the report. Signal the error */
-    sys_error_handler();
+    p_queue = &((LPS22HHTask *)p_val->p_mtask_obj)->in_queue;
+    if (TX_SUCCESS != tx_queue_send(p_queue, &report, TX_NO_WAIT))
+    {
+      /* unable to send the report. Signal the error */
+      sys_error_handler();
+    }
   }
-//  }
 }
 
 static inline LPS22HHTask *LPS22HHTaskGetOwnerFromISensorIF(ISensor_t *p_if)

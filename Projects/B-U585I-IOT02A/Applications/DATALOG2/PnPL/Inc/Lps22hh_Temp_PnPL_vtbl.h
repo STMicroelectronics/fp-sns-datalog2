@@ -39,7 +39,7 @@ extern "C" {
 char *Lps22hh_Temp_PnPL_vtblGetKey(IPnPLComponent_t *_this);
 uint8_t Lps22hh_Temp_PnPL_vtblGetNCommands(IPnPLComponent_t *_this);
 char *Lps22hh_Temp_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id);
-uint8_t Lps22hh_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,uint8_t pretty);
+uint8_t Lps22hh_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty);
 uint8_t Lps22hh_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON);
 uint8_t Lps22hh_Temp_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON);
 

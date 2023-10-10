@@ -49,8 +49,8 @@
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
 /**
- * Map one EXTI to n callback based on the GPIO PIN.
- */
+  * Map one EXTI to n callback based on the GPIO PIN.
+  */
 static inline void ExtiDefISR(uint16_t exti_pin);
 /* USER CODE END PFP */
 
@@ -277,7 +277,7 @@ void EXTI11_IRQHandler(void)
   /* USER CODE BEGIN EXTI11_IRQn 0 */
 
   /* USER CODE END EXTI11_IRQn 0 */
-	ExtiDefISR(GPIO_PIN_11);
+  ExtiDefISR(GPIO_PIN_11);
   /* USER CODE BEGIN EXTI11_IRQn 1 */
 
   /* USER CODE END EXTI11_IRQn 1 */
@@ -292,7 +292,7 @@ void EXTI10_IRQHandler(void)
   /* USER CODE BEGIN EXTI10_IRQn 0 */
 
   /* USER CODE END EXTI10_IRQn 0 */
-	ExtiDefISR(GPIO_PIN_10);
+  ExtiDefISR(GPIO_PIN_10);
   /* USER CODE BEGIN EXTI10_IRQn 1 */
 
   /* USER CODE END EXTI10_IRQn 1 */
@@ -307,7 +307,7 @@ void EXTI2_IRQHandler(void)
   /* USER CODE BEGIN EXTI2_IRQn 0 */
 
   /* USER CODE END EXTI2_IRQn 0 */
-	ExtiDefISR(GPIO_PIN_2);
+  ExtiDefISR(GPIO_PIN_2);
   /* USER CODE BEGIN EXTI2_IRQn 1 */
 
   /* USER CODE END EXTI2_IRQn 1 */
@@ -321,7 +321,7 @@ void EXTI13_IRQHandler(void)
   /* USER CODE BEGIN EXTI13_IRQn 0 */
 
   /* USER CODE END EXTI13_IRQn 0 */
-	ExtiDefISR(GPIO_PIN_13);
+  ExtiDefISR(GPIO_PIN_13);
   /* USER CODE BEGIN EXTI13_IRQn 1 */
 
   /* USER CODE END EXTI13_IRQn 1 */
@@ -348,9 +348,9 @@ void OTG_FS_IRQHandler(void)
 void ExtiDefISR(uint16_t exti_pin)
 {
   EXTIPin2CallbckMap xMap = EXTI_GET_P2F_MAP();
-  for(int i = 0; xMap[i].pfCallback != NULL; i++)
+  for (int i = 0; xMap[i].pfCallback != NULL; i++)
   {
-    if(__HAL_GPIO_EXTI_GET_IT(xMap[i].nPin) && (xMap[i].nPin == exti_pin))
+    if (__HAL_GPIO_EXTI_GET_IT(xMap[i].nPin) && (xMap[i].nPin == exti_pin))
     {
       /* EXTI line interrupt detected */
       __HAL_GPIO_EXTI_CLEAR_IT(xMap[i].nPin);

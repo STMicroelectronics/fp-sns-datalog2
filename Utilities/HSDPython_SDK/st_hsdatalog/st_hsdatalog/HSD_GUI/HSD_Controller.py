@@ -23,6 +23,8 @@ import json
 from datetime import datetime
 from threading import Thread, Event
 
+from enum import Enum
+
 from PySide6.QtCore import Signal, QThread, QObject
 from PySide6.QtWidgets import QFileDialog
 
@@ -48,10 +50,17 @@ for handler in log.parent.handlers:
     if hasattr(handler, "baseFilename"):
         log_file_name = os.path.basename(getattr(handler, 'baseFilename'))
 
+class AutomodeStatus(Enum):
+    AUTOMODE_UNSTARTED = -1
+    AUTOMODE_IDLE = 1
+    AUTOMODE_LOGGING = 2
+
 class HSD_Controller(STDTDL_Controller):
 
     MAX_HSD_BANDWIDTH = 6000000
     # Signals
+    sig_is_waiting_auto_start = Signal(bool)
+    sig_is_waiting_idle = Signal(bool)
     sig_is_auto_started = Signal(bool)
     sig_tag_done = Signal(bool, str) #(on|off),tag_label
     sig_hsd_bandwidth_exceeded = Signal(bool)
@@ -148,7 +157,8 @@ class HSD_Controller(STDTDL_Controller):
         self.is_hsd_link_up = False
         self.is_logging = False
         self.is_detecting = False
-        self.is_automode_enabled = False
+        self.automode_enabled = False #False:DISABLED, True:ENABLED
+        self.automode_status = AutomodeStatus.AUTOMODE_UNSTARTED
         self.curr_bandwidth = 0
 
         # TODO: Next version --> Hotplug events notification support
@@ -439,15 +449,15 @@ class HSD_Controller(STDTDL_Controller):
             else:
                 log.warning("The component [{}] defined in DeviceTemplate has not a Twin in Device Status from the FW".format(comp_name))
                 self.sig_component_updated.emit(comp_name, None)
-                has_cmd_or_tele_contents = False
-                contents = self.components_dtdl[comp_name].contents 
-                for c in contents:
-                    if isinstance(c.type, list):
-                        has_cmd_or_tele_contents = len([cc for cc in c.type if cc == DTM.ContentType.COMMAND or cc == DTM.ContentType.TELEMETRY]) > 0
-                    else:
-                        has_cmd_or_tele_contents = len([c for c in contents if c.type == DTM.ContentType.COMMAND or c.type == DTM.ContentType.TELEMETRY]) > 0
-                    if has_cmd_or_tele_contents == True:
-                        return
+                # has_cmd_or_tele_contents = False
+                # contents = self.components_dtdl[comp_name].contents 
+                # for c in contents:
+                #     if isinstance(c.type, list):
+                #         has_cmd_or_tele_contents = len([cc for cc in c.type if cc == DTM.ContentType.COMMAND or cc == DTM.ContentType.TELEMETRY]) > 0
+                #     else:
+                #         has_cmd_or_tele_contents = len([c for c in contents if c.type == DTM.ContentType.COMMAND or c.type == DTM.ContentType.TELEMETRY]) > 0
+                #     if has_cmd_or_tele_contents == True:
+                #         return
                 self.remove_component_config_widget(comp_name)
         except:
             log.warning("The component [{}] defined in DeviceTemplate has not a Twin in Device Status from the FW".format(comp_name))
@@ -495,19 +505,31 @@ class HSD_Controller(STDTDL_Controller):
             elif c_type == DTDLUtils.ComponentTypeEnum.OTHER.value:
                 c_type = ComponentType.OTHER
             self.update_component_status(c_name, c_type)
-
-    def start_log(self, interface=1):
+    
+    def start_log(self, interface=1, acq_folder = None, sub_folder=True):
         if type(self.hsd_link) == HSDLink_v1:
             res = self.hsd_link.start_log(self.device_id)
         else:
-            res = self.hsd_link.start_log(self.device_id, interface)
+            res = self.hsd_link.start_log(self.device_id, interface, acq_folder=acq_folder, sub_folder=sub_folder)
         if res:
             self.sig_logging.emit(True,interface)
             self.sig_streaming_error.emit(False, "")
             self.is_logging = True
     
-    def start_auto_log(self, interface=1):
-        self.start_log(interface)
+    def start_waiting_auto_log(self):
+        self.sig_is_waiting_auto_start.emit(True)
+
+    def stop_waiting_auto_log(self):
+        self.sig_is_waiting_auto_start.emit(False)
+
+    def start_idle_auto_log(self):
+        self.sig_is_waiting_idle.emit(True)
+
+    def stop_idle_auto_log(self):
+        self.sig_is_waiting_idle.emit(False)
+    
+    def start_auto_log(self, interface=1, acq_folder = None, sub_folder=True):
+        self.start_log(interface, acq_folder, sub_folder)
         self.sig_is_auto_started.emit(True)
             
     def start_detect(self):
@@ -638,8 +660,9 @@ class HSD_Controller(STDTDL_Controller):
                     shutil.copyfile(self.ispu_ucf_file_path, os.path.join(self.hsd_link.get_acquisition_folder(),ucf_filename))
                     log.info("{} File correctly saved".format(ucf_filename))
                 self.sig_logging.emit(False, interface)
-                self.sig_is_auto_started.emit(False)
-                self.is_logging = False
+        self.sig_is_auto_started.emit(False)
+        self.is_logging = False
+
     
     def stop_detect(self):
         if self.is_detecting == True:
@@ -731,8 +754,8 @@ class HSD_Controller(STDTDL_Controller):
         self.components_status.clear() #From FW
 
     def send_command(self, json_command):
-        self.hsd_link.send_command(self.device_id, json_command)
-        log.info("Command sent: {}".format(json_command))
+        response = self.hsd_link.send_command(self.device_id, json_command)
+        return response
     
     def get_device_status(self):
         return self.hsd_link.get_device_status(self.device_id)
@@ -878,11 +901,17 @@ class HSD_Controller(STDTDL_Controller):
         wav_file_name = HSDatalog.get_wav_file_name(hsd, comp_name, None, output_folder)
         self.sig_wav_conversion_completed.emit(comp_name, wav_file_name)
 
-    def set_automode_status(self, status):
-        self.is_automode_enabled = status
+    def set_automode_enabled(self, status):
+        self.automode_enabled = status
 
-    def get_automode_status(self):
-        return self.is_automode_enabled
+    def is_automode_enabled(self): #False:DISABLED, True:ENABLED
+        return self.automode_enabled
+    
+    def set_automode_status(self, status:AutomodeStatus):
+        self.automode_status = status
+
+    def get_automode_status(self): #False:IDLE, True:LOGGING
+        return self.automode_status
     
     def get_automode_settings(self):
         automode_status = self.get_component_status("automode")["automode"]

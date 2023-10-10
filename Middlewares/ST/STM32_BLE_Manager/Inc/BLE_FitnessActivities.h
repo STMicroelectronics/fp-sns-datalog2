@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_FitnessActivities.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Fitness Activities info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,12 +18,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_FITNESS_ACTIVITIES_H_
 #define _BLE_FITNESS_ACTIVITIES_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported defines ---------------------------------------------------------*/
@@ -48,17 +48,17 @@ extern CustomNotifyEventFitnessActivities_t CustomNotifyEventFitnessActivities;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Fitness Activities info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Fitness Activities info service
- */
-extern BleCharTypeDef* BLE_InitFitnessActivitiesService(void);
+  * @brief  Init Fitness Activities info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Fitness Activities info service
+  */
+extern BleCharTypeDef *BLE_InitFitnessActivitiesService(void);
 
 /**
- * @brief  Update Fitness Activities characteristic
- * @param  uint8_t MotionCode Detected Motion
- * @retval tBleStatus   Status
- */
+  * @brief  Update Fitness Activities characteristic
+  * @param  uint8_t MotionCode Detected Motion
+  * @retval tBleStatus   Status
+  */
 extern tBleStatus BLE_FitnessActivitiesUpdate(uint8_t Activity, uint32_t Counter);
 
 #ifdef __cplusplus

@@ -29,7 +29,7 @@
 // Public API implementation.
 // **************************
 
-ABusIF *I2CBusIFAlloc(uint8_t who_am_i, uint8_t address, uint8_t auto_inc)
+ABusIF *I2CBusIFAlloc(uint16_t who_am_i, uint8_t address, uint8_t auto_inc)
 {
   I2CBusIF *_this = NULL;
 
@@ -40,6 +40,34 @@ ABusIF *I2CBusIFAlloc(uint8_t who_am_i, uint8_t address, uint8_t auto_inc)
 
     _this->address = address;
     _this->auto_inc = auto_inc;
+    _this->address_size = I2C_MEMADD_SIZE_8BIT;
+
+    // initialize the software resources
+    if (TX_SUCCESS != tx_semaphore_create(&_this->sync_obj, "I2C_IP_S", 0))
+    {
+      SysFree(_this);
+      _this = NULL;
+    }
+    else
+    {
+      ABusIFSetHandle(&_this->super, _this);
+    }
+  }
+  return (ABusIF *)_this;
+}
+
+ABusIF *I2CBusIFAlloc16(uint16_t who_am_i, uint16_t address, uint8_t auto_inc)
+{
+  I2CBusIF *_this = NULL;
+
+  _this = (I2CBusIF *)SysAlloc(sizeof(I2CBusIF));
+  if (_this != NULL)
+  {
+    ABusIFInit(&_this->super, who_am_i);
+
+    _this->address = address;
+    _this->auto_inc = auto_inc;
+    _this->address_size = I2C_MEMADD_SIZE_16BIT;
 
     // initialize the software resources
     if (TX_SUCCESS != tx_semaphore_create(&_this->sync_obj, "I2C_IP_S", 0))
@@ -90,7 +118,7 @@ sys_error_code_t I2CBusIFNotifyIOComplete(I2CBusIF *_this)
 // Private functions definition
 // ****************************
 
-int32_t I2CBusNullRW(void *p_sensor, uint8_t reg, uint8_t *p_data, uint16_t size)
+int32_t I2CBusNullRW(void *p_sensor, uint16_t reg, uint8_t *p_data, uint16_t size)
 {
   UNUSED(p_sensor);
   UNUSED(reg);

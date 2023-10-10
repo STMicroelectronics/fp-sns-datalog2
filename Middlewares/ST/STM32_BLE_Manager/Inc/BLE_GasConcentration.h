@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_GasConcentration.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Gas concentration info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,14 +18,14 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_GAS_CONCENTRATION_H_
 #define _BLE_GAS_CONCENTRATION_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
-   
+
 /* Exported typedef --------------------------------------------------------- */
 typedef void (*CustomReadRequestGasConcentration_t)(uint32_t *Gas);
 typedef void (*CustomNotifyEventGasConcentration_t)(BLE_NotifyEvent_t Event);
@@ -37,26 +37,26 @@ extern CustomNotifyEventGasConcentration_t CustomNotifyEventGasConcentration;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init gas concentration info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for gas concentration info service
- */
-extern BleCharTypeDef* BLE_InitGasConcentrationService(void);
+  * @brief  Init gas concentration info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for gas concentration info service
+  */
+extern BleCharTypeDef *BLE_InitGasConcentrationService(void);
 
 #ifndef BLE_MANAGER_SDKV2
 /**
- * @brief  Setting Gas Concentration Advertise Data
- * @param  uint8_t *manuf_data: Advertise Data
- * @retval None
- */
+  * @brief  Setting Gas Concentration Advertise Data
+  * @param  uint8_t *manuf_data: Advertise Data
+  * @retval None
+  */
 extern void BLE_SetGasConcentrationAdvertiseData(uint8_t *manuf_data);
 #endif /* BLE_MANAGER_SDKV2 */
 
 /**
- * @brief  Update Gas Concentration Value
- * @param  uint16_t Measured Gas Concentration value
- * @retval tBleStatus   Status
- */
+  * @brief  Update Gas Concentration Value
+  * @param  uint16_t Measured Gas Concentration value
+  * @retval tBleStatus   Status
+  */
 tBleStatus BLE_GasConcentrationStatusUpdate(uint32_t Gas);
 
 #ifdef __cplusplus

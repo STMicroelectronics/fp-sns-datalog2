@@ -110,54 +110,54 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   float temp_f = 0;
   iis2dlpc_acc_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == iis2dlpc_acc_odr_hz12_5)
+  if (temp_f == iis2dlpc_acc_odr_hz12_5)
   {
     enum_id = 0;
   }
-  else if(temp_f == iis2dlpc_acc_odr_hz25)
+  else if (temp_f == iis2dlpc_acc_odr_hz25)
   {
     enum_id = 1;
   }
-  else if(temp_f == iis2dlpc_acc_odr_hz50)
+  else if (temp_f == iis2dlpc_acc_odr_hz50)
   {
     enum_id = 2;
   }
-  else if(temp_f == iis2dlpc_acc_odr_hz100)
+  else if (temp_f == iis2dlpc_acc_odr_hz100)
   {
     enum_id = 3;
   }
-  else if(temp_f == iis2dlpc_acc_odr_hz200)
+  else if (temp_f == iis2dlpc_acc_odr_hz200)
   {
     enum_id = 4;
   }
-  else if(temp_f == iis2dlpc_acc_odr_hz400)
+  else if (temp_f == iis2dlpc_acc_odr_hz400)
   {
     enum_id = 5;
   }
-  else if(temp_f == iis2dlpc_acc_odr_hz800)
+  else if (temp_f == iis2dlpc_acc_odr_hz800)
   {
     enum_id = 6;
   }
-  else if(temp_f == iis2dlpc_acc_odr_hz1600)
+  else if (temp_f == iis2dlpc_acc_odr_hz1600)
   {
     enum_id = 7;
   }
   json_object_dotset_number(JSON_Status, "iis2dlpc_acc.odr", enum_id);
   iis2dlpc_acc_get_fs(&temp_f);
   enum_id = 0;
-  if(temp_f == iis2dlpc_acc_fs_g2)
+  if (temp_f == iis2dlpc_acc_fs_g2)
   {
     enum_id = 0;
   }
-  else if(temp_f == iis2dlpc_acc_fs_g4)
+  else if (temp_f == iis2dlpc_acc_fs_g4)
   {
     enum_id = 1;
   }
-  else if(temp_f == iis2dlpc_acc_fs_g8)
+  else if (temp_f == iis2dlpc_acc_fs_g8)
   {
     enum_id = 2;
   }
-  else if(temp_f == iis2dlpc_acc_fs_g16)
+  else if (temp_f == iis2dlpc_acc_fs_g16)
   {
     enum_id = 3;
   }
@@ -219,54 +219,54 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
 
   uint8_t ret = 0;
-  if(json_object_dothas_value(tempJSONObject, "iis2dlpc_acc.odr"))
+  if (json_object_dothas_value(tempJSONObject, "iis2dlpc_acc.odr"))
   {
     int odr = (int)json_object_dotget_number(tempJSONObject, "iis2dlpc_acc.odr");
-    switch(odr)
+    switch (odr)
     {
-    case 0:
-      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz12_5);
-      break;
-    case 1:
-      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz25);
-      break;
-    case 2:
-      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz50);
-      break;
-    case 3:
-      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz100);
-      break;
-    case 4:
-      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz200);
-      break;
-    case 5:
-      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz400);
-      break;
-    case 6:
-      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz800);
-      break;
-    case 7:
-      iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz1600);
-      break;
+      case 0:
+        iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz12_5);
+        break;
+      case 1:
+        iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz25);
+        break;
+      case 2:
+        iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz50);
+        break;
+      case 3:
+        iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz100);
+        break;
+      case 4:
+        iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz200);
+        break;
+      case 5:
+        iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz400);
+        break;
+      case 6:
+        iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz800);
+        break;
+      case 7:
+        iis2dlpc_acc_set_odr(iis2dlpc_acc_odr_hz1600);
+        break;
     }
   }
-  if(json_object_dothas_value(tempJSONObject, "iis2dlpc_acc.fs"))
+  if (json_object_dothas_value(tempJSONObject, "iis2dlpc_acc.fs"))
   {
     int fs = (int)json_object_dotget_number(tempJSONObject, "iis2dlpc_acc.fs");
-    switch(fs)
+    switch (fs)
     {
-    case 0:
-      iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g2);
-      break;
-    case 1:
-      iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g4);
-      break;
-    case 2:
-      iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g8);
-      break;
-    case 3:
-      iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g16);
-      break;
+      case 0:
+        iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g2);
+        break;
+      case 1:
+        iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g4);
+        break;
+      case 2:
+        iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g8);
+        break;
+      case 3:
+        iis2dlpc_acc_set_fs(iis2dlpc_acc_fs_g16);
+        break;
     }
   }
   if (json_object_dothas_value(tempJSONObject, "iis2dlpc_acc.enable"))
@@ -276,7 +276,7 @@ uint8_t Iis2dlpc_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   }
   if (json_object_dothas_value(tempJSONObject, "iis2dlpc_acc.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "iis2dlpc_acc.samples_per_ts");
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "iis2dlpc_acc.samples_per_ts");
     iis2dlpc_acc_set_samples_per_ts(samples_per_ts);
   }
   if (json_object_dothas_value(tempJSONObject, "iis2dlpc_acc.sensor_annotation"))

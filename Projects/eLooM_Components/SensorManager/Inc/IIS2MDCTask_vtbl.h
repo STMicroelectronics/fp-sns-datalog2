@@ -2,13 +2,7 @@
   ******************************************************************************
   * @file    IIS2MDCTask_vtbl.h
   * @author  SRA - MCD
-  *
-  * @date    30-Jul-2021
-  *
   * @brief
-  *
-  *
-  *
   ******************************************************************************
   * @attention
   *
@@ -50,19 +44,18 @@ sys_error_code_t IIS2MDCTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const E
 
 uint8_t IIS2MDCTask_vtblMagGetId(ISourceObservable *_this);
 IEventSrc *IIS2MDCTask_vtblMagGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t IIS2MDCTask_vtblMagGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-float IIS2MDCTask_vtblMagGetFS(ISourceObservable *_this);
-float IIS2MDCTask_vtblMagGetSensitivity(ISourceObservable *_this);
 EMData_t IIS2MDCTask_vtblMagGetDataInfo(ISourceObservable *_this);
-
-sys_error_code_t IIS2MDCTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
-sys_error_code_t IIS2MDCTask_vtblSensorSetFS(ISensor_t *_this, float FS);
-sys_error_code_t IIS2MDCTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t IIS2MDCTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t IIS2MDCTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t IIS2MDCTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t IIS2MDCTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t IIS2MDCTask_vtblSensorGetStatus(ISensor_t *_this);
+sys_error_code_t IIS2MDCTask_vtblMagGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
+float IIS2MDCTask_vtblMagGetFS(ISensorMems_t *_this);
+float IIS2MDCTask_vtblMagGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t IIS2MDCTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
+sys_error_code_t IIS2MDCTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t IIS2MDCTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 
 #ifdef __cplusplus
 }

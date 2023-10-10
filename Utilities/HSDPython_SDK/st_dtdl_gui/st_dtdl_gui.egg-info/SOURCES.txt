@@ -23,6 +23,7 @@ st_dtdl_gui/UI/component_config_widget.ui
 st_dtdl_gui/UI/connection_widget.ui
 st_dtdl_gui/UI/device_template_load_widget.ui
 st_dtdl_gui/UI/graph_widget.ui
+st_dtdl_gui/UI/mc_classifier_output_widget.ui
 st_dtdl_gui/UI/output_class_widget.ui
 st_dtdl_gui/UI/plot_label_widget.ui
 st_dtdl_gui/UI/plot_widget.ui
@@ -48,6 +49,7 @@ st_dtdl_gui/UI/icons/outline_autorenew_white_18dp.png
 st_dtdl_gui/UI/icons/outline_backup_table_white_18dp.png
 st_dtdl_gui/UI/icons/outline_check_white_18dp.png
 st_dtdl_gui/UI/icons/outline_close_white_36dp.png
+st_dtdl_gui/UI/icons/outline_data_thresholding_white_18dp.png
 st_dtdl_gui/UI/icons/outline_description_white_18dp.png
 st_dtdl_gui/UI/icons/outline_done_outline_white_18dp.png
 st_dtdl_gui/UI/icons/outline_edit_white_18dp.png
@@ -73,11 +75,13 @@ st_dtdl_gui/UI/icons/outline_zoom_in_white_18dp.png
 st_dtdl_gui/UI/images/AI_Output.png
 st_dtdl_gui/UI/images/ISPU.png
 st_dtdl_gui/UI/images/Motor_Anomaly_Class.png
+st_dtdl_gui/UI/images/Motor_Belt_Class.png
 st_dtdl_gui/UI/images/Motor_Magnet_Class.png
 st_dtdl_gui/UI/images/Motor_Normal_Class.png
 st_dtdl_gui/UI/images/Motor_Vibration_Class.png
 st_dtdl_gui/UI/images/Nanoedge_ISPU.png
 st_dtdl_gui/UI/images/Nanoedge_STM32.png
+st_dtdl_gui/UI/images/Recovery_Status.png
 st_dtdl_gui/UI/images/__init__.py
 st_dtdl_gui/UI/images/st_logo.png
 st_dtdl_gui/Utils/DataClass.py

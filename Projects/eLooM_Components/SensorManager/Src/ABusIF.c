@@ -19,7 +19,7 @@
 
 #include "ABusIF.h"
 
-int32_t ABusIFNullRW(void *pxSensor, uint8_t nRegAddr, uint8_t *pnData, uint16_t nSize)
+int32_t ABusIFNullRW(void *pxSensor, uint16_t nRegAddr, uint8_t *pnData, uint16_t nSize)
 {
   UNUSED(pxSensor);
   UNUSED(nRegAddr);

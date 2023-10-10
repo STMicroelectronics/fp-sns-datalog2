@@ -9,7 +9,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -30,19 +30,19 @@ __weak void BLE_SetCustomAdvertiseData(uint8_t *manuf_data);
 __weak void DisconnectionCompletedFunction(void);
 __weak void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t addr[6]);
 
-__weak void AttrModConfigFunction(uint8_t * att_data, uint8_t data_length);
+__weak void AttrModConfigFunction(uint8_t *att_data, uint8_t data_length);
 __weak void PairingCompletedFunction(uint8_t PairingStatus);
 __weak void SetConnectableFunction(uint8_t *ManufData);
 __weak void AciGattTxPoolAvailableEventFunction(void);
 __weak void HardwareErrorEventHandlerFunction(uint8_t Hardware_Code);
 
-__weak uint32_t DebugConsoleParsing(uint8_t * att_data, uint8_t data_length);
-__weak void WriteRequestConfigFunction(uint8_t * att_data, uint8_t data_length);
+__weak uint32_t DebugConsoleParsing(uint8_t *att_data, uint8_t data_length);
+__weak void WriteRequestConfigFunction(uint8_t *att_data, uint8_t data_length);
 
 #ifdef BLE_MANAGER_USE_PARSON
-/**********************************************************************************************
- * Callback functions prototypes to manage the extended configuration characteristic commands *
- **********************************************************************************************/
+/***********************************************************************************************
+  * Callback functions prototypes to manage the extended configuration characteristic commands *
+  **********************************************************************************************/
 __weak void ExtExtConfigUidCommandCallback(uint8_t **UID);
 __weak void ExtConfigVersionFwCommandCallback(uint8_t *Answer);
 __weak void ExtConfigInfoCommandCallback(uint8_t *Answer);
@@ -56,7 +56,7 @@ __weak void ExtConfigSetCertCommandCallback(uint8_t *Certificate);
 
 __weak void ExtConfigRebootOnDFUModeCommandCallback(void);
 __weak void ExtConfigPowerOffCommandCallback(void);
-__weak void ExtConfigReadBanksFwIdCommandCallback (uint8_t *CurBank,uint16_t *FwId1,uint16_t *FwId2);
+__weak void ExtConfigReadBanksFwIdCommandCallback(uint8_t *CurBank, uint16_t *FwId1, uint16_t *FwId2);
 __weak void ExtConfigBanksSwapCommandCallback(void);
 
 __weak void ExtConfigSetNameCommandCallback(uint8_t *NewName);
@@ -69,9 +69,9 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
 __weak void ExtConfigSetSensorConfigCommandCallback(uint8_t *configuration);
 #endif /* BLE_MANAGER_USE_PARSON */
 
-/*************************************************************
- * Callback functions prototypes to manage the notify events *
- *************************************************************/
+/**************************************************************
+  * Callback functions prototypes to manage the notify events *
+  *************************************************************/
 
 __weak void NotifyEventAudioSceneClassification(BLE_NotifyEvent_t Event);
 
@@ -140,26 +140,26 @@ __weak void WriteRequestSDLog(uint8_t *att_data, uint8_t data_length);
 
 #ifdef BLE_MANAGER_USE_PARSON
 __weak void NotifyEventPnpLike(BLE_NotifyEvent_t Event);
-__weak void WriteRequestPnPLike(uint8_t* received_msg, uint8_t msg_length);
+__weak void WriteRequestPnPLike(uint8_t *received_msg, uint8_t msg_length);
 #endif /* BLE_MANAGER_USE_PARSON */
 
 __weak void NotifyEventEventCounter(BLE_NotifyEvent_t Event);
 
 #ifdef BLE_MANAGER_USE_PARSON
 __weak void NotifyEventJson(BLE_NotifyEvent_t Event);
-__weak void WriteRequestJson(uint8_t* received_msg, uint8_t msg_length);
+__weak void WriteRequestJson(uint8_t *received_msg, uint8_t msg_length);
 #endif /* BLE_MANAGER_USE_PARSON */
 
 __weak void NotifyEventNeaiAnomalyDetection(BLE_NotifyEvent_t Event);
-__weak void WriteRequestNeaiAnomalyDetection(uint8_t * att_data, uint8_t data_length);
+__weak void WriteRequestNeaiAnomalyDetection(uint8_t *att_data, uint8_t data_length);
 
 __weak void NotifyEventNeaiNClassClassification(BLE_NotifyEvent_t Event);
-__weak void WriteRequestNeaiNClassClassification(uint8_t * att_data, uint8_t data_length);
+__weak void WriteRequestNeaiNClassClassification(uint8_t *att_data, uint8_t data_length);
 
-__weak void ReadRequestEnvFunction(int32_t *Press,uint16_t *Hum,int16_t *Temp1,int16_t *Temp2);
+__weak void ReadRequestEnvFunction(int32_t *Press, uint16_t *Hum, int16_t *Temp1, int16_t *Temp2);
 
 /* Private variables ------------------------------------------------------------*/
-static uint16_t CustomCommandPageLevel=0;
+static uint16_t CustomCommandPageLevel = 0;
 
 /* USER CODE BEGIN PV */
 
@@ -187,7 +187,7 @@ void BluetoothInit(void)
   BLE_StackValue.OwnAddressType = ADDRESS_TYPE;
 
   /* Set the BLE Board Name */
-  sprintf(BLE_StackValue.BoardName,"%s%c%c%c","BLEM",
+  sprintf(BLE_StackValue.BoardName, "%s%c%c%c", "BLEM",
           BLE_VERSION_FW_MAJOR,
           BLE_VERSION_FW_MINOR,
           BLE_VERSION_FW_PATCH);
@@ -197,7 +197,7 @@ void BluetoothInit(void)
      Values:
      - 0x00: Normal Power
      - 0x01: High Power */
-  BLE_StackValue.EnableHighPowerMode= ENABLE_HIGH_POWER_MODE;
+  BLE_StackValue.EnableHighPowerMode = ENABLE_HIGH_POWER_MODE;
 
   /* Values: 0x00 ... 0x31 - The value depends on the device */
   BLE_StackValue.PowerAmplifierOutputLevel = POWER_AMPLIFIER_OUTPUT_LEVEL;
@@ -219,22 +219,26 @@ void BluetoothInit(void)
   /* Advertising policy for filtering (white list related) */
   BLE_StackValue.AdvertisingFilter = ADVERTISING_FILTER;
 
-  if(BLE_StackValue.EnableSecureConnection) {
+  if (BLE_StackValue.EnableSecureConnection)
+  {
     /* Using the Secure Connection, the Rescan should be done by BLE chip */
-    BLE_StackValue.ForceRescan =0;
-  } else {
-    BLE_StackValue.ForceRescan =1;
+    BLE_StackValue.ForceRescan = 0;
+  }
+  else
+  {
+    BLE_StackValue.ForceRescan = 1;
   }
 
   InitBleManager();
 }
 
 /**
- * @brief  Custom Service Initialization.
- * @param  None
- * @retval None
- */
-void BLE_InitCustomService(void) {
+  * @brief  Custom Service Initialization.
+  * @param  None
+  * @retval None
+  */
+void BLE_InitCustomService(void)
+{
 
   /* Define Custom Function for Connection Completed */
   CustomConnectionCompleted = ConnectionCompletedFunction;
@@ -263,96 +267,96 @@ void BLE_InitCustomService(void) {
   /* Define Custom Command for Parsing Write on Config Char */
   CustomWriteRequestConfigCallback = WriteRequestConfigFunction;
 
-  /**************************************************************************************
-   * Callback functions to manage the notify events and write request for each features *
-   **************************************************************************************/
+  /***************************************************************************************
+    * Callback functions to manage the notify events and write request for each features *
+    **************************************************************************************/
 
-  CustomNotifyEventAudioSceneClass=             NotifyEventAudioSceneClassification;
+  CustomNotifyEventAudioSceneClass =             NotifyEventAudioSceneClassification;
 
-  CustomNotifyEventHighSpeedDataLog=            NotifyEventHighSpeedDataLog;
+  CustomNotifyEventHighSpeedDataLog =            NotifyEventHighSpeedDataLog;
 
-  CustomNotifyEventAccEvent=                    NotifyEventAccEvent;
+  CustomNotifyEventAccEvent =                    NotifyEventAccEvent;
 
-  CustomNotifyEventAudioLevel=                  NotifyEventAudioLevel;
+  CustomNotifyEventAudioLevel =                  NotifyEventAudioLevel;
 
-  CustomNotifyEventBattery=                     NotifyEventBattery;
+  CustomNotifyEventBattery =                     NotifyEventBattery;
 
-  CustomNotifyEventEnv=                         NotifyEventEnv;
+  CustomNotifyEventEnv =                         NotifyEventEnv;
 
-  CustomNotifyEventFiniteStateMachine=          NotifyEventFiniteStateMachine;
+  CustomNotifyEventFiniteStateMachine =          NotifyEventFiniteStateMachine;
 
-  CustomNotifyEventGasConcentration=            NotifyEventGasConcentration;
+  CustomNotifyEventGasConcentration =            NotifyEventGasConcentration;
 
- CustomNotifyEventGnss=                         NotifyEventGnss;
+  CustomNotifyEventGnss =                         NotifyEventGnss;
 
-  CustomNotifyEventInertial=                    NotifyEventInertial;
+  CustomNotifyEventInertial =                    NotifyEventInertial;
 
-  CustomNotifyEventLed=                         NotifyEventLed;
+  CustomNotifyEventLed =                         NotifyEventLed;
 
-  CustomNotifyEventMachineLearningCore=         NotifyEventMachineLearningCore;
+  CustomNotifyEventMachineLearningCore =         NotifyEventMachineLearningCore;
 
-  CustomNotifyEventObjectsDetection=            NotifyEventObjectsDetection;
+  CustomNotifyEventObjectsDetection =            NotifyEventObjectsDetection;
 
-  CustomNotifyEventPiano=                       NotifyEventPiano;
+  CustomNotifyEventPiano =                       NotifyEventPiano;
 
-  CustomNotifyEventActRec=                      NotifyEventActRec;
+  CustomNotifyEventActRec =                      NotifyEventActRec;
 
-  CustomNotifyEventAudioSourceLocalization=     NotifyEventAudioSourceLocalization;
+  CustomNotifyEventAudioSourceLocalization =     NotifyEventAudioSourceLocalization;
 
-  CustomNotifyEventCarryPosition=               NotifyEventCarryPosition;
+  CustomNotifyEventCarryPosition =               NotifyEventCarryPosition;
 
-  CustomNotifyECompass=                         NotifyEventECompass;
+  CustomNotifyECompass =                         NotifyEventECompass;
 
-  CustomNotifyEventFitnessActivities=           NotifyEventFitnessActivities;
+  CustomNotifyEventFitnessActivities =           NotifyEventFitnessActivities;
 
-  CustomNotifyEventGestureRecognition=          NotifyEventGestureRecognition;
+  CustomNotifyEventGestureRecognition =          NotifyEventGestureRecognition;
 
-  CustomNotifyEventMotionAlgorithms=            NotifyEventMotionAlgorithms;
+  CustomNotifyEventMotionAlgorithms =            NotifyEventMotionAlgorithms;
 
-  CustomNotifyEventMotionIntensity=             NotifyEventMotionIntensity;
+  CustomNotifyEventMotionIntensity =             NotifyEventMotionIntensity;
 
-  CustomNotifyEventPedometerAlgorithm=          NotifyEventPedometerAlgorithm;
+  CustomNotifyEventPedometerAlgorithm =          NotifyEventPedometerAlgorithm;
 
-  CustomNotifyEventSensorFusion=                NotifyEventSensorFusion;
+  CustomNotifyEventSensorFusion =                NotifyEventSensorFusion;
 
-  CustomNotifyEventTiltSensing=                 NotifyEventTiltSensing;
+  CustomNotifyEventTiltSensing =                 NotifyEventTiltSensing;
 
-  CustomNotifyEventFFT_AlarmSubrangeStatus=     NotifyEventFFT_AlarmSubrangeStatus;
+  CustomNotifyEventFFT_AlarmSubrangeStatus =     NotifyEventFFT_AlarmSubrangeStatus;
 
-  CustomNotifyEventFFT_Amplitude=               NotifyEventFFT_Amplitude;
+  CustomNotifyEventFFT_Amplitude =               NotifyEventFFT_Amplitude;
 
-  CustomNotifyEventTimeDomain=                  NotifyEventTimeDomain;
+  CustomNotifyEventTimeDomain =                  NotifyEventTimeDomain;
 
-  CustomNotifyEventTD_AlarmAccPeakStatus=       NotifyEventTimeDomainAlarmAccPeakStatus;
+  CustomNotifyEventTD_AlarmAccPeakStatus =       NotifyEventTimeDomainAlarmAccPeakStatus;
 
-  CustomNotifyEventTD_AlarmSpeed_RMS_Status=    NotifyEventTimeDomainAlarmSpeed_RMS_Status;
+  CustomNotifyEventTD_AlarmSpeed_RMS_Status =    NotifyEventTimeDomainAlarmSpeed_RMS_Status;
 
-  CustomNotifyEventGeneralPurpose=              NotifyEventGeneralPurpose;
+  CustomNotifyEventGeneralPurpose =              NotifyEventGeneralPurpose;
 
-  CustomNotifyEventSDLog=                       NotifyEventSDLog;
-  CustomWriteSDLog=                             WriteRequestSDLog;
-
-#ifdef BLE_MANAGER_USE_PARSON
-  CustomNotifyEventPnPLike=                     NotifyEventPnpLike;
-  CustomWriteRequestPnPLike=                    WriteRequestPnPLike;
-#endif /* BLE_MANAGER_USE_PARSON */
-
-  CustomNotifyEventCounter=                     NotifyEventEventCounter;
+  CustomNotifyEventSDLog =                       NotifyEventSDLog;
+  CustomWriteSDLog =                             WriteRequestSDLog;
 
 #ifdef BLE_MANAGER_USE_PARSON
-  CustomNotifyEventJson=                        NotifyEventJson;
-  CustomWriteRequestJson=                       WriteRequestJson;
+  CustomNotifyEventPnPLike =                     NotifyEventPnpLike;
+  CustomWriteRequestPnPLike =                    WriteRequestPnPLike;
 #endif /* BLE_MANAGER_USE_PARSON */
 
-  CustomNotifyEventAD=                          NotifyEventNeaiAnomalyDetection;
-  CustomWriteRequestAD=                         WriteRequestNeaiAnomalyDetection;
+  CustomNotifyEventCounter =                     NotifyEventEventCounter;
 
-  CustomNotifyEventNCC=                         NotifyEventNeaiNClassClassification;
-  CustomWriteRequestNCC=                        WriteRequestNeaiNClassClassification;
+#ifdef BLE_MANAGER_USE_PARSON
+  CustomNotifyEventJson =                        NotifyEventJson;
+  CustomWriteRequestJson =                       WriteRequestJson;
+#endif /* BLE_MANAGER_USE_PARSON */
 
-  /***********************************************************************************
-   * Callback functions to manage the extended configuration characteristic commands *
-   ***********************************************************************************/
+  CustomNotifyEventAD =                          NotifyEventNeaiAnomalyDetection;
+  CustomWriteRequestAD =                         WriteRequestNeaiAnomalyDetection;
+
+  CustomNotifyEventNCC =                         NotifyEventNeaiNClassClassification;
+  CustomWriteRequestNCC =                        WriteRequestNeaiNClassClassification;
+
+  /************************************************************************************
+    * Callback functions to manage the extended configuration characteristic commands *
+    ***********************************************************************************/
 #ifdef BLE_MANAGER_USE_PARSON
   CustomExtConfigUidCommandCallback  = ExtExtConfigUidCommandCallback;
   CustomExtConfigVersionFwCommandCallback = ExtConfigVersionFwCommandCallback;
@@ -381,25 +385,25 @@ void BLE_InitCustomService(void) {
 #endif /* BLE_MANAGER_USE_PARSON */
 
   /**
-  * For each features, user can assign here the pointer at the function for the read request data.
-  * For example for the environmental features:
-  *
-  * CustomReadRequestEnv = ReadRequestEnvFunction;
-  *
-  * User can define and insert in the BLE_Implementation.c source code the functions for the read request data
-  * ReadRequestEnvFunction function is already defined.
-  *
+    * For each features, user can assign here the pointer at the function for the read request data.
+    * For example for the environmental features:
+    *
+    * CustomReadRequestEnv = ReadRequestEnvFunction;
+    *
+    * User can define and insert in the BLE_Implementation.c source code the functions for the read request data
+    * ReadRequestEnvFunction function is already defined.
+    *
   */
 
   /* Define Custom Function for Read Request Environmental Data */
   CustomReadRequestEnv = ReadRequestEnvFunction;
 
   /**
-  * User can added here the custom service initialization for the selected BLE features.
-  * For example for the environmental features:
-  *
-  * //BLE_InitEnvService(PressEnable,HumEnable,NumTempEnabled)
-  * BleManagerAddChar(BleCharPointer= BLE_InitEnvService(1, 1, 1));
+    * User can added here the custom service initialization for the selected BLE features.
+    * For example for the environmental features:
+    *
+    * BLE_InitEnvService(PressEnable,HumEnable,NumTempEnabled)
+    * BleManagerAddChar(BleCharPointer= BLE_InitEnvService(1, 1, 1));
   */
 
   /* Characteristc allocation for audio scene classification features */
@@ -432,7 +436,7 @@ void BLE_InitCustomService(void) {
 
   /* Characteristc allocation for inertial features */
   /* BLE_InitInertialService(AccEnable,GyroEnable,MagEnabled) */
-  BleManagerAddChar(BLE_InitInertialService(ENABLE_ACC_DATA,ENABLE_GYRO_DATA,ENABLE_MAG_DATA));
+  BleManagerAddChar(BLE_InitInertialService(ENABLE_ACC_DATA, ENABLE_GYRO_DATA, ENABLE_MAG_DATA));
 
   /* Characteristc allocation for the led features */
   BleManagerAddChar(BLE_InitLedService());
@@ -518,92 +522,92 @@ void BLE_InitCustomService(void) {
 }
 
 /**
- * @brief  Set Custom Advertize Data.
- * @param  uint8_t *manuf_data: Advertize Data
- * @retval None
- */
+  * @brief  Set Custom Advertize Data.
+  * @param  uint8_t *manuf_data: Advertize Data
+  * @retval None
+  */
 __weak void BLE_SetCustomAdvertiseData(uint8_t *manuf_data)
 {
 #ifndef BLE_MANAGER_SDKV2
   /**
-  * For only SDKV1, user can add here the custom advertize data setting for the selected BLE features.
-  * For example for the environmental features:
-  *
-  * BLE_SetCustomEnvAdvertizeData(manuf_data);
+    * For only SDKV1, user can add here the custom advertize data setting for the selected BLE features.
+    * For example for the environmental features:
+    *
+    * BLE_SetCustomEnvAdvertizeData(manuf_data);
   */
 
 #else /* BLE_MANAGER_SDKV2 */
-  manuf_data[BLE_MANAGER_CUSTOM_FIELD1]=0xFF; /* Custom Firmware */
-  manuf_data[BLE_MANAGER_CUSTOM_FIELD2]=0x00;
-  manuf_data[BLE_MANAGER_CUSTOM_FIELD3]=0x00;
-  manuf_data[BLE_MANAGER_CUSTOM_FIELD4]=0x00;
+  manuf_data[BLE_MANAGER_CUSTOM_FIELD1] = 0xFF; /* Custom Firmware */
+  manuf_data[BLE_MANAGER_CUSTOM_FIELD2] = 0x00;
+  manuf_data[BLE_MANAGER_CUSTOM_FIELD3] = 0x00;
+  manuf_data[BLE_MANAGER_CUSTOM_FIELD4] = 0x00;
 #endif /* BLE_MANAGER_SDKV2 */
 }
 
 /**
-* @brief  This function makes the parsing of the Debug Console
-* @param  uint8_t *att_data attribute data
-* @param  uint8_t data_length length of the data
-* @retval uint32_t SendBackData true/false
-*/
-__weak uint32_t DebugConsoleParsing(uint8_t * att_data, uint8_t data_length)
+  * @brief  This function makes the parsing of the Debug Console
+  * @param  uint8_t *att_data attribute data
+  * @param  uint8_t data_length length of the data
+  * @retval uint32_t SendBackData true/false
+  */
+__weak uint32_t DebugConsoleParsing(uint8_t *att_data, uint8_t data_length)
 {
   /* By default Answer with the same message received */
-  uint32_t SendBackData =1;
+  uint32_t SendBackData = 1;
 
   /* Help Command */
-  if(!strncmp("help",(char *)(att_data),4))
+  if (!strncmp("help", (char *)(att_data), 4))
   {
     /* Print Legend */
-    SendBackData=0;
+    SendBackData = 0;
 
-    BytesToWrite =sprintf((char *)BufferToWrite,"Command:\r\n"
-      "info-> System Info\r\n"
-      "uid-> STM32 UID value\r\n");
-    Term_Update(BufferToWrite,BytesToWrite);
+    BytesToWrite = sprintf((char *)BufferToWrite, "Command:\r\n"
+                           "info-> System Info\r\n"
+                           "uid-> STM32 UID value\r\n");
+    Term_Update(BufferToWrite, BytesToWrite);
   }
-  else if(!strncmp("info",(char *)(att_data),4))
+  else if (!strncmp("info", (char *)(att_data), 4))
   {
-    SendBackData=0;
+    SendBackData = 0;
 
-    BytesToWrite =sprintf((char *)BufferToWrite,"\r\nSTMicroelectronics %s:\r\n"
-        "\tVersion %c.%c.%c\r\n"
-        "\tSTM32L4xx MCU Family Name"
-         "\r\n",
-         BLE_FW_PACKAGENAME,
-         BLE_VERSION_FW_MAJOR,BLE_VERSION_FW_MINOR,BLE_VERSION_FW_PATCH);
+    BytesToWrite = sprintf((char *)BufferToWrite, "\r\nSTMicroelectronics %s:\r\n"
+                           "\tVersion %c.%c.%c\r\n"
+                           "\tSTM32L4xx MCU Family Name"
+                           "\r\n",
+                           BLE_FW_PACKAGENAME,
+                           BLE_VERSION_FW_MAJOR, BLE_VERSION_FW_MINOR, BLE_VERSION_FW_PATCH);
 
-    Term_Update(BufferToWrite,BytesToWrite);
+    Term_Update(BufferToWrite, BytesToWrite);
 
-    BytesToWrite =sprintf((char *)BufferToWrite,"\t(HAL %ld.%ld.%ld_%ld)\r\n"
-        "\tCompiled %s %s"
+    BytesToWrite = sprintf((char *)BufferToWrite, "\t(HAL %ld.%ld.%ld_%ld)\r\n"
+                           "\tCompiled %s %s"
 #if defined (__IAR_SYSTEMS_ICC__)
-        " (IAR)\r\n",
+                           " (IAR)\r\n",
 #elif defined (__CC_ARM) || (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)) /* For ARM Compiler 5 and 6 */
-        " (KEIL)\r\n",
+                           " (KEIL)\r\n",
 #elif defined (__GNUC__)
-        " (STM32CubeIDE)\r\n",
-#endif
-        HAL_GetHalVersion() >>24,
-        (HAL_GetHalVersion() >>16)&0xFF,
-        (HAL_GetHalVersion() >> 8)&0xFF,
-        HAL_GetHalVersion()      &0xFF,
-        __DATE__,__TIME__);
+                           " (STM32CubeIDE)\r\n",
+#endif /* IDE cases */
+                           HAL_GetHalVersion() >> 24,
+                           (HAL_GetHalVersion() >> 16) & 0xFF,
+                           (HAL_GetHalVersion() >> 8) & 0xFF,
+                           HAL_GetHalVersion()      & 0xFF,
+                           __DATE__, __TIME__);
 
-    Term_Update(BufferToWrite,BytesToWrite);
+    Term_Update(BufferToWrite, BytesToWrite);
   }
-  else if((att_data[0]=='u') & (att_data[1]=='i') & (att_data[2]=='d'))
+  else if ((att_data[0] == 'u') & (att_data[1] == 'i') & (att_data[2] == 'd'))
   {
     /* Write back the STM32 UID */
     uint8_t *uid = (uint8_t *)BLE_STM32_UUID;
-    uint32_t MCU_ID = BLE_STM32_MCU_ID[0]&0xFFF;
-    BytesToWrite =sprintf((char *)BufferToWrite,"%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X_%.3lX\r\n",
-                          uid[ 3],uid[ 2],uid[ 1],uid[ 0],
-                          uid[ 7],uid[ 6],uid[ 5],uid[ 4],
-                          uid[11],uid[ 10],uid[9],uid[8],
-                          MCU_ID);
-    Term_Update(BufferToWrite,BytesToWrite);
-    SendBackData=0;
+    uint32_t MCU_ID = BLE_STM32_MCU_ID[0] & 0xFFF;
+    BytesToWrite = sprintf((char *)BufferToWrite, "%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X%.2X_%.3lX\r\n",
+                           uid[ 3], uid[ 2], uid[ 1], uid[ 0],
+                           uid[ 7], uid[ 6], uid[ 5], uid[ 4],
+                           uid[11], uid[ 10], uid[9], uid[8],
+                           MCU_ID);
+    Term_Update(BufferToWrite, BytesToWrite);
+    SendBackData = 0;
   }
 
   /* NOTE: This function Should not be modified, when the callback is needed,
@@ -614,23 +618,23 @@ __weak uint32_t DebugConsoleParsing(uint8_t * att_data, uint8_t data_length)
 }
 
 /**
- * @brief  Callback Function for Environmental read request.
- * @param  int32_t *Press Pressure Value
- * @param  uint16_t *Hum Humidity Value
- * @param  int16_t *Temp1 Temperature Number 1
- * @param  int16_t *Temp2 Temperature Number 2
- * @retval None
- */
-__weak void ReadRequestEnvFunction(int32_t *Press,uint16_t *Hum,int16_t *Temp1,int16_t *Temp2)
+  * @brief  Callback Function for Environmental read request.
+  * @param  int32_t *Press Pressure Value
+  * @param  uint16_t *Hum Humidity Value
+  * @param  int16_t *Temp1 Temperature Number 1
+  * @param  int16_t *Temp2 Temperature Number 2
+  * @retval None
+  */
+__weak void ReadRequestEnvFunction(int32_t *Press, uint16_t *Hum, int16_t *Temp1, int16_t *Temp2)
 {
   /* NOTE: Insert here the function to read the environmental data */
 }
 
 /**
- * @brief  This function is called when the peer device get disconnected.
- * @param  None
- * @retval None
- */
+  * @brief  This function is called when the peer device get disconnected.
+  * @param  None
+  * @retval None
+  */
 __weak void DisconnectionCompletedFunction(void)
 {
   BLE_MANAGER_PRINTF("Call to DisconnectionCompletedFunction\r\n");
@@ -642,18 +646,18 @@ __weak void DisconnectionCompletedFunction(void)
 }
 
 /**
- * @brief  This function is called when there is a LE Connection Complete event.
- * @param  uint16_t ConnectionHandle
- * @param  uint8_t addr[6]
- * @retval None
- */
+  * @brief  This function is called when there is a LE Connection Complete event.
+  * @param  uint16_t ConnectionHandle
+  * @param  uint8_t addr[6]
+  * @retval None
+  */
 __weak void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t addr[6])
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(ConnectionHandle);
   UNUSED(addr);
 
-  CustomCommandPageLevel=0;
+  CustomCommandPageLevel = 0;
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ConnectionCompletedFunction could be implemented in the user file
    */
@@ -663,11 +667,11 @@ __weak void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t addr[
 }
 
 /**
- * @brief  This function is called when there is a change on the gatt attribute.
- * @param  None
- * @retval None
- */
-__weak void AttrModConfigFunction(uint8_t * att_data, uint8_t data_length)
+  * @brief  This function is called when there is a change on the gatt attribute.
+  * @param  None
+  * @retval None
+  */
+__weak void AttrModConfigFunction(uint8_t *att_data, uint8_t data_length)
 {
   BLE_MANAGER_PRINTF("Call to AttrModConfigFunction\r\n");
   BLE_MANAGER_DELAY(100);
@@ -678,11 +682,11 @@ __weak void AttrModConfigFunction(uint8_t * att_data, uint8_t data_length)
 }
 
 /**
- * @brief  This function is called when the pairing process has completed successfully
- *         or a pairing procedure timeout has occurred or the pairing has failed.
- * @param  uint8_t PairingStatus
- * @retval None
- */
+  * @brief  This function is called when the pairing process has completed successfully
+  *         or a pairing procedure timeout has occurred or the pairing has failed.
+  * @param  uint8_t PairingStatus
+  * @retval None
+  */
 __weak void PairingCompletedFunction(uint8_t PairingStatus)
 {
   BLE_MANAGER_PRINTF("Call to PairingCompletedFunction\r\n");
@@ -694,10 +698,10 @@ __weak void PairingCompletedFunction(uint8_t PairingStatus)
 }
 
 /**
- * @brief  This function is called when the device is put in connectable mode.
- * @param  uint8_t *ManufData Filling Manufacter Advertise data
- * @retval None
- */
+  * @brief  This function is called when the device is put in connectable mode.
+  * @param  uint8_t *ManufData Filling Manufacter Advertise data
+  * @retval None
+  */
 __weak void SetConnectableFunction(uint8_t *ManufData)
 {
   BLE_MANAGER_PRINTF("Call to SetConnectableFunction\r\n");
@@ -709,11 +713,11 @@ __weak void SetConnectableFunction(uint8_t *ManufData)
 }
 
 /**
- * @brief  This function is called when bluetooth congestion buffer occurs
- *         or a pairing procedure timeout has occurred or the pairing has failed.
- * @param  None
- * @retval None
- */
+  * @brief  This function is called when bluetooth congestion buffer occurs
+  *         or a pairing procedure timeout has occurred or the pairing has failed.
+  * @param  None
+  * @retval None
+  */
 __weak void AciGattTxPoolAvailableEventFunction(void)
 {
   BLE_MANAGER_PRINTF("Call to AciGattTxPoolAvailableEventFunction\r\n");
@@ -725,10 +729,10 @@ __weak void AciGattTxPoolAvailableEventFunction(void)
 }
 
 /**
- * @brief  This event is used to notify the Host that a hardware failure has occurred in the Controller.
- * @param  uint8_t Hardware_Code Hardware Error Event code.
- * @retval None
- */
+  * @brief  This event is used to notify the Host that a hardware failure has occurred in the Controller.
+  * @param  uint8_t Hardware_Code Hardware Error Event code.
+  * @retval None
+  */
 __weak void HardwareErrorEventHandlerFunction(uint8_t Hardware_Code)
 {
   BLE_MANAGER_PRINTF("Call to HardwareErrorEventHandlerFunction\r\n");
@@ -740,12 +744,12 @@ __weak void HardwareErrorEventHandlerFunction(uint8_t Hardware_Code)
 }
 
 /**
-* @brief  Callback Function for Config write request.
-* @param uint8_t *att_data attribute data
-* @param uint8_t data_length length of the data
-* @retval None
-*/
-__weak void WriteRequestConfigFunction(uint8_t * att_data, uint8_t data_length)
+  * @brief  Callback Function for Config write request.
+  * @param uint8_t *att_data attribute data
+  * @param uint8_t data_length length of the data
+  * @retval None
+  */
+__weak void WriteRequestConfigFunction(uint8_t *att_data, uint8_t data_length)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(att_data);
@@ -755,15 +759,15 @@ __weak void WriteRequestConfigFunction(uint8_t * att_data, uint8_t data_length)
    */
 }
 
-/**************************************************
- * Callback functions to manage the notify events *
- **************************************************/
+/***************************************************
+  * Callback functions to manage the notify events *
+  **************************************************/
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventAudioSceneClassification(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -774,10 +778,10 @@ __weak void NotifyEventAudioSceneClassification(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventHighSpeedDataLog(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -788,10 +792,10 @@ __weak void NotifyEventHighSpeedDataLog(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventAccEvent(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -802,10 +806,10 @@ __weak void NotifyEventAccEvent(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventAudioLevel(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -816,10 +820,10 @@ __weak void NotifyEventAudioLevel(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventBattery(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -830,10 +834,10 @@ __weak void NotifyEventBattery(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventEnv(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -844,10 +848,10 @@ __weak void NotifyEventEnv(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventFiniteStateMachine(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -858,10 +862,10 @@ __weak void NotifyEventFiniteStateMachine(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventGasConcentration(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -872,10 +876,10 @@ __weak void NotifyEventGasConcentration(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventGnss(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -886,10 +890,10 @@ __weak void NotifyEventGnss(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventInertial(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -900,10 +904,10 @@ __weak void NotifyEventInertial(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventLed(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -914,10 +918,10 @@ __weak void NotifyEventLed(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventMachineLearningCore(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -928,10 +932,10 @@ __weak void NotifyEventMachineLearningCore(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventObjectsDetection(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -942,10 +946,10 @@ __weak void NotifyEventObjectsDetection(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventPiano(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -956,10 +960,10 @@ __weak void NotifyEventPiano(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventActRec(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -970,10 +974,10 @@ __weak void NotifyEventActRec(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventAudioSourceLocalization(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -984,10 +988,10 @@ __weak void NotifyEventAudioSourceLocalization(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventCarryPosition(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -998,10 +1002,10 @@ __weak void NotifyEventCarryPosition(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventECompass(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1012,10 +1016,10 @@ __weak void NotifyEventECompass(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventFitnessActivities(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1026,10 +1030,10 @@ __weak void NotifyEventFitnessActivities(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventGestureRecognition(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1040,10 +1044,10 @@ __weak void NotifyEventGestureRecognition(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventMotionAlgorithms(BLE_NotifyEvent_t Event, BLE_MotionAlgorithmsType_t Algorithm)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1054,10 +1058,10 @@ __weak void NotifyEventMotionAlgorithms(BLE_NotifyEvent_t Event, BLE_MotionAlgor
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventMotionIntensity(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1068,10 +1072,10 @@ __weak void NotifyEventMotionIntensity(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventPedometerAlgorithm(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1082,10 +1086,10 @@ __weak void NotifyEventPedometerAlgorithm(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventSensorFusion(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1096,10 +1100,10 @@ __weak void NotifyEventSensorFusion(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventTiltSensing(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1110,10 +1114,10 @@ __weak void NotifyEventTiltSensing(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventFFT_AlarmSubrangeStatus(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1124,10 +1128,10 @@ __weak void NotifyEventFFT_AlarmSubrangeStatus(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventFFT_Amplitude(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1138,10 +1142,10 @@ __weak void NotifyEventFFT_Amplitude(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventTimeDomain(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1152,10 +1156,10 @@ __weak void NotifyEventTimeDomain(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventTimeDomainAlarmAccPeakStatus(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1166,10 +1170,10 @@ __weak void NotifyEventTimeDomainAlarmAccPeakStatus(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventTimeDomainAlarmSpeed_RMS_Status(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1180,10 +1184,10 @@ __weak void NotifyEventTimeDomainAlarmSpeed_RMS_Status(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventGeneralPurpose(uint8_t GP_CharNum, BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1194,10 +1198,10 @@ __weak void NotifyEventGeneralPurpose(uint8_t GP_CharNum, BLE_NotifyEvent_t Even
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventSDLog(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1208,11 +1212,11 @@ __weak void NotifyEventSDLog(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  This event is given when a write request is received by the server from the client.
- * @param  uint8_t data_length
- * @param  uint8_t *att_data
- * @retval None
- */
+  * @brief  This event is given when a write request is received by the server from the client.
+  * @param  uint8_t data_length
+  * @param  uint8_t *att_data
+  * @retval None
+  */
 __weak void WriteRequestSDLog(uint8_t *att_data, uint8_t data_length)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1225,10 +1229,10 @@ __weak void WriteRequestSDLog(uint8_t *att_data, uint8_t data_length)
 
 #ifdef BLE_MANAGER_USE_PARSON
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventPnpLike(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1239,12 +1243,12 @@ __weak void NotifyEventPnpLike(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  This event is given when a write request is received by the server from the client.
- * @param  uint8_t *received_msg
- * @param  uint8_t msg_length
- * @retval None
- */
-__weak void WriteRequestPnPLike(uint8_t* received_msg, uint8_t msg_length)
+  * @brief  This event is given when a write request is received by the server from the client.
+  * @param  uint8_t *received_msg
+  * @param  uint8_t msg_length
+  * @retval None
+  */
+__weak void WriteRequestPnPLike(uint8_t *received_msg, uint8_t msg_length)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(received_msg);
@@ -1256,10 +1260,10 @@ __weak void WriteRequestPnPLike(uint8_t* received_msg, uint8_t msg_length)
 #endif /* BLE_MANAGER_USE_PARSON */
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventEventCounter(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1271,10 +1275,10 @@ __weak void NotifyEventEventCounter(BLE_NotifyEvent_t Event)
 
 #ifdef BLE_MANAGER_USE_PARSON
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventJson(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1285,12 +1289,12 @@ __weak void NotifyEventJson(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  This event is given when a write request is received by the server from the client.
- * @param  uint8_t *received_msg
- * @param  uint8_t msg_length
- * @retval None
- */
-__weak void WriteRequestJson(uint8_t* received_msg, uint8_t msg_length)
+  * @brief  This event is given when a write request is received by the server from the client.
+  * @param  uint8_t *received_msg
+  * @param  uint8_t msg_length
+  * @retval None
+  */
+__weak void WriteRequestJson(uint8_t *received_msg, uint8_t msg_length)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(received_msg);
@@ -1302,10 +1306,10 @@ __weak void WriteRequestJson(uint8_t* received_msg, uint8_t msg_length)
 #endif /* BLE_MANAGER_USE_PARSON */
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventNeaiAnomalyDetection(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1316,12 +1320,12 @@ __weak void NotifyEventNeaiAnomalyDetection(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  This event is given when a write request is received by the server from the client.
- * @param  uint8_t *att_data
- * @param  uint8_t data_length
- * @retval None
- */
-__weak void WriteRequestNeaiAnomalyDetection(uint8_t * att_data, uint8_t data_length)
+  * @brief  This event is given when a write request is received by the server from the client.
+  * @param  uint8_t *att_data
+  * @param  uint8_t data_length
+  * @retval None
+  */
+__weak void WriteRequestNeaiAnomalyDetection(uint8_t *att_data, uint8_t data_length)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(att_data);
@@ -1332,10 +1336,10 @@ __weak void WriteRequestNeaiAnomalyDetection(uint8_t * att_data, uint8_t data_le
 }
 
 /**
- * @brief  Callback Function for Un/Subscription Feature
- * @param  BLE_NotifyEvent_t Event Sub/Unsub
- * @retval None
- */
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
 __weak void NotifyEventNeaiNClassClassification(BLE_NotifyEvent_t Event)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1346,12 +1350,12 @@ __weak void NotifyEventNeaiNClassClassification(BLE_NotifyEvent_t Event)
 }
 
 /**
- * @brief  This event is given when a write request is received by the server from the client.
- * @param  uint8_t *att_data
- * @param  uint8_t data_length
- * @retval None
- */
-__weak void WriteRequestNeaiNClassClassification(uint8_t * att_data, uint8_t data_length)
+  * @brief  This event is given when a write request is received by the server from the client.
+  * @param  uint8_t *att_data
+  * @param  uint8_t data_length
+  * @retval None
+  */
+__weak void WriteRequestNeaiNClassClassification(uint8_t *att_data, uint8_t data_length)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(att_data);
@@ -1361,15 +1365,15 @@ __weak void WriteRequestNeaiNClassClassification(uint8_t * att_data, uint8_t dat
    */
 }
 
-/***********************************************************************************
- * Callback functions to manage the extended configuration characteristic commands *
- ***********************************************************************************/
+/************************************************************************************
+  * Callback functions to manage the extended configuration characteristic commands *
+  ***********************************************************************************/
 #ifdef BLE_MANAGER_USE_PARSON
 /**
- * @brief  Callback Function for answering to the UID command
- * @param  uint8_t **UID STM32 UID Return value
- * @retval None
- */
+  * @brief  Callback Function for answering to the UID command
+  * @param  uint8_t **UID STM32 UID Return value
+  * @retval None
+  */
 __weak void ExtExtConfigUidCommandCallback(uint8_t **UID)
 {
 #ifdef BLE_STM32_UUID
@@ -1378,89 +1382,89 @@ __weak void ExtExtConfigUidCommandCallback(uint8_t **UID)
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtExtConfigUidCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for answering to VersionFw command
- * @param  uint8_t *Answer Return String
- * @retval None
- */
+  * @brief  Callback Function for answering to VersionFw command
+  * @param  uint8_t *Answer Return String
+  * @retval None
+  */
 __weak void ExtConfigVersionFwCommandCallback(uint8_t *Answer)
 {
-  sprintf((char *)Answer,"%s_%s_%c.%c.%c",
-      BLE_STM32_MICRO,
-      BLE_FW_PACKAGENAME,
-      BLE_VERSION_FW_MAJOR,
-      BLE_VERSION_FW_MINOR,
-      BLE_VERSION_FW_PATCH);
+  sprintf((char *)Answer, "%s_%s_%c.%c.%c",
+          BLE_STM32_MICRO,
+          BLE_FW_PACKAGENAME,
+          BLE_VERSION_FW_MAJOR,
+          BLE_VERSION_FW_MINOR,
+          BLE_VERSION_FW_PATCH);
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigVersionFwCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for answering to Info command
- * @param  uint8_t *Answer Return String
- * @retval None
- */
+  * @brief  Callback Function for answering to Info command
+  * @param  uint8_t *Answer Return String
+  * @retval None
+  */
 __weak void ExtConfigInfoCommandCallback(uint8_t *Answer)
 {
-  sprintf((char *)Answer,"STMicroelectronics %s:\n"
-    "Version %c.%c.%c\n"
-    "(HAL %ld.%ld.%ld_%ld)\n"
-    "Compiled %s %s"
+  sprintf((char *)Answer, "STMicroelectronics %s:\n"
+          "Version %c.%c.%c\n"
+          "(HAL %ld.%ld.%ld_%ld)\n"
+          "Compiled %s %s"
 #if defined (__IAR_SYSTEMS_ICC__)
-    " (IAR)",
+          " (IAR)",
 #elif defined (__CC_ARM) || (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)) /* For ARM Compiler 5 and 6 */
-    " (KEIL)",
+          " (KEIL)",
 #elif defined (__GNUC__)
-    " (STM32CubeIDE)",
-#endif
-    BLE_FW_PACKAGENAME,
-    BLE_VERSION_FW_MAJOR,
-    BLE_VERSION_FW_MINOR,
-    BLE_VERSION_FW_PATCH,
-    HAL_GetHalVersion() >>24,
-    (HAL_GetHalVersion() >>16)&0xFF,
-    (HAL_GetHalVersion() >> 8)&0xFF,
-     HAL_GetHalVersion()      &0xFF,
-     __DATE__,__TIME__);
+          " (STM32CubeIDE)",
+#endif /* IDE cases */
+          BLE_FW_PACKAGENAME,
+          BLE_VERSION_FW_MAJOR,
+          BLE_VERSION_FW_MINOR,
+          BLE_VERSION_FW_PATCH,
+          HAL_GetHalVersion() >> 24,
+          (HAL_GetHalVersion() >> 16) & 0xFF,
+          (HAL_GetHalVersion() >> 8) & 0xFF,
+          HAL_GetHalVersion()      & 0xFF,
+          __DATE__, __TIME__);
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigInfoCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for answering to Help command
- * @param  uint8_t *Answer Return String
- * @retval None
- */
+  * @brief  Callback Function for answering to Help command
+  * @param  uint8_t *Answer Return String
+  * @retval None
+  */
 __weak void ExtConfigHelpCommandCallback(uint8_t *Answer)
 {
-  sprintf((char *)Answer,"List of available command:\n"
-                         "1) Board Report\n"
-                         "- STM32 UID\n"
-                         "- Version Firmware\n"
-                         "- Info\n"
-                         "- Help\n\n");
+  sprintf((char *)Answer, "List of available command:\n"
+          "1) Board Report\n"
+          "- STM32 UID\n"
+          "- Version Firmware\n"
+          "- Info\n"
+          "- Help\n\n");
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigHelpCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for answering to PowerStatus command
- * @param  uint8_t *Answer Return String
- * @retval None
- */
+  * @brief  Callback Function for answering to PowerStatus command
+  * @param  uint8_t *Answer Return String
+  * @retval None
+  */
 __weak void ExtConfigPowerStatusCommandCallback(uint8_t *Answer)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1468,46 +1472,46 @@ __weak void ExtConfigPowerStatusCommandCallback(uint8_t *Answer)
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigPowerStatusCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for managing the ChangePin command
- * @param  uint32_t NewPin
- * @retval None
- */
+  * @brief  Callback Function for managing the ChangePin command
+  * @param  uint32_t NewPin
+  * @retval None
+  */
 __weak void ExtConfigChangePinCommandCallback(uint32_t NewPin)
 {
-   BLE_MANAGER_PRINTF("New Board Pin= <%ld>\r\n", NewPin);
-   BLE_StackValue.SecurePIN=NewPin;
+  BLE_MANAGER_PRINTF("New Board Pin= <%ld>\r\n", NewPin);
+  BLE_StackValue.SecurePIN = NewPin;
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigChangePinCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for managing the ClearDB command
- * @param  None
- * @retval None
- */
+  * @brief  Callback Function for managing the ClearDB command
+  * @param  None
+  * @retval None
+  */
 __weak void ExtConfigClearDBCommandCallback(void)
 {
   BLE_MANAGER_PRINTF("ExtConfigClearDBCommandCallback\r\n");
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigClearDBCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for managing the ReadCert command
- * @param  uint8_t *Certificate to register
- * @retval None
- */
+  * @brief  Callback Function for managing the ReadCert command
+  * @param  uint8_t *Certificate to register
+  * @retval None
+  */
 __weak void ExtConfigReadCertCommandCallback(uint8_t *Certificate)
 {
   /* Prevent unused argument(s) compilation warning */
@@ -1515,63 +1519,63 @@ __weak void ExtConfigReadCertCommandCallback(uint8_t *Certificate)
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigReadCertCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for managing the SetCert command
- * @param  uint8_t *Certificate registerd certificate
- * @retval None
- */
+  * @brief  Callback Function for managing the SetCert command
+  * @param  uint8_t *Certificate registered certificate
+  * @retval None
+  */
 __weak void ExtConfigSetCertCommandCallback(uint8_t *Certificate)
 {
   BLE_MANAGER_PRINTF("Certificate From Dashboard= <%s>\r\n", Certificate);
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigSetCertCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for managing the DFU command
- * @param  None
- * @retval None
- */
+  * @brief  Callback Function for managing the DFU command
+  * @param  None
+  * @retval None
+  */
 __weak void ExtConfigRebootOnDFUModeCommandCallback(void)
 {
   BLE_MANAGER_PRINTF("RebootOnDFUModeCommandCallback\r\n");
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigRebootOnDFUModeCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for managing the PowerOff command
- * @param  None
- * @retval None
- */
+  * @brief  Callback Function for managing the PowerOff command
+  * @param  None
+  * @retval None
+  */
 __weak void ExtConfigPowerOffCommandCallback(void)
 {
   BLE_MANAGER_PRINTF("ExtConfigPowerOffCommandCallback\r\n");
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigPowerOffCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for answering to ReadBanksFwId command
- * @param  uint8_t *CurBank Number Current Bank
- * @param  uint16_t *FwId1 Bank1 Firmware Id
- * @param  uint16_t *FwId2 Bank2 Firmware Id
- * @retval None
- */
-__weak void ExtConfigReadBanksFwIdCommandCallback (uint8_t *CurBank,uint16_t *FwId1,uint16_t *FwId2)
+  * @brief  Callback Function for answering to ReadBanksFwId command
+  * @param  uint8_t *CurBank Number Current Bank
+  * @param  uint16_t *FwId1 Bank1 Firmware Id
+  * @param  uint16_t *FwId2 Bank2 Firmware Id
+  * @retval None
+  */
+__weak void ExtConfigReadBanksFwIdCommandCallback(uint8_t *CurBank, uint16_t *FwId1, uint16_t *FwId2)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(CurBank);
@@ -1580,347 +1584,395 @@ __weak void ExtConfigReadBanksFwIdCommandCallback (uint8_t *CurBank,uint16_t *Fw
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigReadBanksFwIdCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for answering to BanksSwap command
- * @param  None
- * @retval None
- */
+  * @brief  Callback Function for answering to BanksSwap command
+  * @param  None
+  * @retval None
+  */
 __weak void ExtConfigBanksSwapCommandCallback(void)
 {
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigReadBanksFwIdCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for managing the SetName command
- * @param  uint8_t *NewName
- * @retval None
- */
+  * @brief  Callback Function for managing the SetName command
+  * @param  uint8_t *NewName
+  * @retval None
+  */
 __weak void ExtConfigSetNameCommandCallback(uint8_t *NewName)
 {
   BLE_MANAGER_PRINTF("New Board Name = <%s>\r\n", NewName);
   /* Change the Board Name */
-  sprintf(BLE_StackValue.BoardName,"%s",NewName);
+  sprintf(BLE_StackValue.BoardName, "%s", NewName);
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigSetNameCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Custom commands definition
- * @param  JSON_Array *JSON_SensorArray
- * @retval None
- */
+  * @brief  Custom commands definition
+  * @param  JSON_Array *JSON_SensorArray
+  * @retval None
+  */
 __weak void ExtConfigReadCustomCommandsCallback(JSON_Array *JSON_SensorArray)
 {
   /* Clear the previous Costom Command List */
   ClearCustomCommandsList();
 
-  if(CustomCommandPageLevel==0) {
+  if (CustomCommandPageLevel == 0)
+  {
 
     /* Add all the custom Commands */
-    if(AddCustomCommand("IntValue1", //Name
-                        BLE_CUSTOM_COMMAND_INTEGER, //Type
-                        100, //Default Value
-                        -100, //MIN
-                        200,  //MAX
-                        NULL, //Enum Int
-                        NULL, //Enum String
-                        NULL, //Description
-                        JSON_SensorArray)) {
-      BLE_MANAGER_PRINTF("Added Command <%s>\r\n","IntValue1");
-    } else {
-       BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","IntValue1");
-       return;
+    if (AddCustomCommand("IntValue1", /* Name */
+                         BLE_CUSTOM_COMMAND_INTEGER, /* Type */
+                         100, /* Default Value */
+                         -100, /* MIN */
+                         200,  /* MAX */
+                         NULL, /* Enum Int */
+                         NULL, /* Enum String */
+                         NULL, /* Description */
+                         JSON_SensorArray))
+    {
+      BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "IntValue1");
     }
-
-    if(AddCustomCommand("IntValue2", //Name
-                        BLE_CUSTOM_COMMAND_INTEGER, //Type
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //Default Value not important
-                        10, //MIN
-                        3000,  //MAX
-                        NULL, //Enum Int
-                        NULL, //Enum String
-                        NULL, //Description
-                        JSON_SensorArray)) {
-      BLE_MANAGER_PRINTF("Added Command <%s>\r\n","IntValue2");
-    } else {
-       BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","IntValue2");
-       return;
-    }
-
-    if(AddCustomCommand("VoidCommand", //Name
-                        BLE_CUSTOM_COMMAND_VOID, //Type
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //Default Value
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //MIN
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  //MAX
-                        NULL, //Enum Int
-                        NULL, //Enum String
-                        "Example Void Command", //Description
-                        JSON_SensorArray)) {
-      BLE_MANAGER_PRINTF("Added Command <%s>\r\n","Command1");
-    } else {
-       BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","Command1");
-       return;
-    }
-
-    if(AddCustomCommand("StringValue1", //Name
-                        BLE_CUSTOM_COMMAND_STRING, //Type
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //Default Value
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //MIN
-                        20,  //MAX
-                        NULL, //Enum Int
-                        NULL, //Enum String
-                        NULL, //Description
-                        JSON_SensorArray)) {
-      BLE_MANAGER_PRINTF("Added Command <%s>\r\n","StringValue1");
-    } else {
-       BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","StringValue1");
-       return;
-    }
-
-    if(AddCustomCommand("BooleanValue", //Name
-                        BLE_CUSTOM_COMMAND_BOOLEAN, //Type
-                        1, //Default Value
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //MIN
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  //MAX
-                        NULL, //Enum Int
-                        NULL, //Enum String
-                        "Example for Boolean", //Description
-                        JSON_SensorArray)) {
-      BLE_MANAGER_PRINTF("Added Command <%s>\r\n","BooleanValue");
-    } else {
-       BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","BooleanValue");
-       return;
-    }
-
-    if(AddCustomCommand("StringValue2", //Name
-                        BLE_CUSTOM_COMMAND_STRING, //Type
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //Default Value
-                        4, //MIN
-                        10,  //MAX
-                        NULL, //Enum Int
-                        NULL, //Enum String
-                        "It's possible to add a  very very very very very very long description", //Description
-                        JSON_SensorArray)) {
-      BLE_MANAGER_PRINTF("Added Command <%s>\r\n","StringValue2");
-    } else {
-      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","StringValue2");
+    else
+    {
+      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "IntValue1");
       return;
     }
 
-    //Example of Enum String Custom Command
+    if (AddCustomCommand("IntValue2", /* Name */
+                         BLE_CUSTOM_COMMAND_INTEGER, /* Type */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* Default Value not important */
+                         10, /* MIN */
+                         3000,  /* MAX */
+                         NULL, /* Enum Int */
+                         NULL, /* Enum String */
+                         NULL, /* Description */
+                         JSON_SensorArray))
     {
-      //The Last value should be NULL
-      char *ValidStringValues[]={"Ciao", "Buona","Giornata",NULL};
-      if(AddCustomCommand("StringEnum", //Name
-                          BLE_CUSTOM_COMMAND_ENUM_STRING, //Type
-                          1, //Default Value
-                          BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //MIN
-                          BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  //MAX
-                          NULL, //Enum Int
-                          (void *)ValidStringValues, //Enum String
-                          "Example of Enum String", //Description
-                          JSON_SensorArray)) {
-        BLE_MANAGER_PRINTF("Added Command <%s>\r\n","StringEnum");
-      } else {
-        BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","StringEnum");
+      BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "IntValue2");
+    }
+    else
+    {
+      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "IntValue2");
+      return;
+    }
+
+    if (AddCustomCommand("VoidCommand", /* Name */
+                         BLE_CUSTOM_COMMAND_VOID, /* Type */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* Default Value */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* MIN */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  /* MAX */
+                         NULL, /* Enum Int */
+                         NULL, /* Enum String */
+                         "Example Void Command", /* Description */
+                         JSON_SensorArray))
+    {
+      BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "Command1");
+    }
+    else
+    {
+      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "Command1");
+      return;
+    }
+
+    if (AddCustomCommand("StringValue1", /* Name */
+                         BLE_CUSTOM_COMMAND_STRING, /* Type */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* Default Value */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* MIN */
+                         20,  /* MAX */
+                         NULL, /* Enum Int */
+                         NULL, /* Enum String */
+                         NULL, /* Description */
+                         JSON_SensorArray))
+    {
+      BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "StringValue1");
+    }
+    else
+    {
+      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "StringValue1");
+      return;
+    }
+
+    if (AddCustomCommand("BooleanValue", /* Name */
+                         BLE_CUSTOM_COMMAND_BOOLEAN, /* Type */
+                         1, /* Default Value */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* MIN */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  /* MAX */
+                         NULL, /* Enum Int */
+                         NULL, /* Enum String */
+                         "Example for Boolean", /* Description */
+                         JSON_SensorArray))
+    {
+      BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "BooleanValue");
+    }
+    else
+    {
+      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "BooleanValue");
+      return;
+    }
+
+    if (AddCustomCommand("StringValue2", /* Name */
+                         BLE_CUSTOM_COMMAND_STRING, /* Type */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* Default Value */
+                         4, /* MIN */
+                         10,  /* MAX */
+                         NULL, /* Enum Int */
+                         NULL, /* Enum String */
+                         "It's possible to add a  very very very very very very long description", /* Description */
+                         JSON_SensorArray))
+    {
+      BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "StringValue2");
+    }
+    else
+    {
+      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "StringValue2");
+      return;
+    }
+
+    /* Example of Enum String Custom Command */
+    {
+      /* The Last value should be NULL */
+      char *ValidStringValues[] = {"Ciao", "Buona", "Giornata", NULL};
+      if (AddCustomCommand("StringEnum", /* Name */
+                           BLE_CUSTOM_COMMAND_ENUM_STRING, /* Type */
+                           1, /* Default Value */
+                           BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* MIN */
+                           BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  /* MAX */
+                           NULL, /* Enum Int */
+                           (void *)ValidStringValues, /* Enum String */
+                           "Example of Enum String", /* Description */
+                           JSON_SensorArray))
+      {
+        BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "StringEnum");
+      }
+      else
+      {
+        BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "StringEnum");
         return;
       }
     }
 
-    //Example of Enum Int Custom Command
+    /* Example of Enum Int Custom Command */
     {
-      //The Last value should be BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN
-      int32_t ValidIntValues[]={-1,12,123,321,BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN};
-      if(AddCustomCommand("IntEnum", //Name
-                          BLE_CUSTOM_COMMAND_ENUM_INTEGER, //Type
-                          3, //Default Value
-                          BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //MIN
-                          BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  //MAX
-                          (void *) ValidIntValues, //Enum Int
-                          NULL, //Enum String
-                          "Example of Enum Integer", //Description
-                          JSON_SensorArray)) {
-        BLE_MANAGER_PRINTF("Added Command <%s>\r\n","IntEnum");
-      } else {
-        BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","IntEnum");
+      /* The Last value should be BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN */
+      int32_t ValidIntValues[] = {-1, 12, 123, 321, BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN};
+      if (AddCustomCommand("IntEnum", /* Name */
+                           BLE_CUSTOM_COMMAND_ENUM_INTEGER, /* Type */
+                           3, /* Default Value */
+                           BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* MIN */
+                           BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  /* MAX */
+                           (void *) ValidIntValues, /* Enum Int */
+                           NULL, /* Enum String */
+                           "Example of Enum Integer", /* Description */
+                           JSON_SensorArray))
+      {
+        BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "IntEnum");
+      }
+      else
+      {
+        BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "IntEnum");
         return;
       }
     }
 
-     if(AddCustomCommand("ChangeCustomCommand", //Name
-                        BLE_CUSTOM_COMMAND_VOID, //Type
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //Default Value
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //MIN
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  //MAX
-                        NULL, //Enum Int
-                        NULL, //Enum String
-                        "Change the Custom Commands", //Description
-                        JSON_SensorArray)) {
-      BLE_MANAGER_PRINTF("Added Command <%s>\r\n","Command1");
-    } else {
-       BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","Command1");
-       return;
+    if (AddCustomCommand("ChangeCustomCommand", /* Name */
+                         BLE_CUSTOM_COMMAND_VOID, /* Type */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* Default Value */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* MIN */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  /* MAX */
+                         NULL, /* Enum Int */
+                         NULL, /* Enum String */
+                         "Change the Custom Commands", /* Description */
+                         JSON_SensorArray))
+    {
+      BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "Command1");
+    }
+    else
+    {
+      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "Command1");
+      return;
     }
 
-    //Just one Example of one Invalid Command
+    /* Just one Example of one Invalid Command */
     BLE_MANAGER_PRINTF("Example of trying to add one Invalid Custom Command\r\n");
-    if(AddCustomCommand("ReadCert", //Name
-                        BLE_CUSTOM_COMMAND_STRING, //Type
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //Default Value
-                        4, //MIN
-                        10,  //MAX
-                        NULL, //Enum Int
-                        NULL, //Enum String
-                        "Invalid Command...", //Description
-                        JSON_SensorArray)) {
-      BLE_MANAGER_PRINTF("Added Command <%s>\r\n","ReadCert");
-    } else {
-      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","ReadCert");
-      return;//not mandatory... it's the last one
+    if (AddCustomCommand("ReadCert", /* Name */
+                         BLE_CUSTOM_COMMAND_STRING, /* Type */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* Default Value */
+                         4, /* MIN */
+                         10,  /* MAX */
+                         NULL, /* Enum Int */
+                         NULL, /* Enum String */
+                         "Invalid Command...", /* Description */
+                         JSON_SensorArray))
+    {
+      BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "ReadCert");
     }
-  } else if(CustomCommandPageLevel==1) {
-     if(AddCustomCommand("ComeBackCustomCommand", //Name
-                        BLE_CUSTOM_COMMAND_VOID, //Type
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //Default Value
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //MIN
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  //MAX
-                        NULL, //Enum Int
-                        NULL, //Enum String
-                        "Come back to previous Custom Commands", //Description
-                        JSON_SensorArray)) {
-      BLE_MANAGER_PRINTF("Added Command <%s>\r\n","Command1");
-    } else {
-       BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","Command1");
-       return;
+    else
+    {
+      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "ReadCert");
+      return; /* not mandatory... it's the last one  */
+    }
+  }
+  else if (CustomCommandPageLevel == 1)
+  {
+    if (AddCustomCommand("ComeBackCustomCommand", /* Name */
+                         BLE_CUSTOM_COMMAND_VOID, /* Type */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* Default Value */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* MIN */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN,  /* MAX */
+                         NULL, /* Enum Int */
+                         NULL, /* Enum String */
+                         "Come back to previous Custom Commands", /* Description */
+                         JSON_SensorArray))
+    {
+      BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "Command1");
+    }
+    else
+    {
+      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "Command1");
+      return;
     }
 
-    if(AddCustomCommand("StringValueNewLevel", //Name
-                        BLE_CUSTOM_COMMAND_STRING, //Type
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //Default Value
-                        BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, //MIN
-                        20,  //MAX
-                        NULL, //Enum Int
-                        NULL, //Enum String
-                        NULL, //Description
-                        JSON_SensorArray)) {
-      BLE_MANAGER_PRINTF("Added Command <%s>\r\n","StringValueNewLevel");
-    } else {
-       BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n","StringValue1");
-       return;
+    if (AddCustomCommand("StringValueNewLevel", /* Name */
+                         BLE_CUSTOM_COMMAND_STRING, /* Type */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* Default Value */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* MIN */
+                         20,  /* MAX */
+                         NULL, /* Enum Int */
+                         NULL, /* Enum String */
+                         NULL, /* Description */
+                         JSON_SensorArray))
+    {
+      BLE_MANAGER_PRINTF("Added Command <%s>\r\n", "StringValueNewLevel");
+    }
+    else
+    {
+      BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "StringValue1");
+      return;
     }
   }
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigReadCustomCommandsCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for managing the custom command
- * @param  BLE_CustomCommadResult_t *CustomCommand:
- * @param                            uint8_t *CommandName: Nome of the command
- * @param                            CustomCommand->CommandType: Type of the command
- * @param                            int32_t IntValue:    Integer or boolean parameter
- * @param                            uint8_t *StringValue: String parameter
- * @retval None
- */
+  * @brief  Callback Function for managing the custom command
+  * @param  BLE_CustomCommadResult_t *CustomCommand:
+  * @param                            uint8_t *CommandName: Name of the command
+  * @param                            CustomCommand->CommandType: Type of the command
+  * @param                            int32_t IntValue:    Integer or boolean parameter
+  * @param                            uint8_t *StringValue: String parameter
+  * @retval None
+  */
 __weak void  ExtConfigCustomCommandCallback(BLE_CustomCommadResult_t *CustomCommand)
 {
   BLE_MANAGER_PRINTF("Received Custom Command:\r\n");
   BLE_MANAGER_PRINTF("\tCommand Name: <%s>\r\n", CustomCommand->CommandName);
   BLE_MANAGER_PRINTF("\tCommand Type: <%d>\r\n", CustomCommand->CommandType);
 
-  switch(CustomCommand->CommandType) {
+  switch (CustomCommand->CommandType)
+  {
     case BLE_CUSTOM_COMMAND_VOID:
-      if(!strncmp((char *)CustomCommand->CommandName,"BleManagerReset",15)) {
-	  /*
-          //Sample code to reset BLE_Manager
-          aci_gap_terminate(CurrentConnectionHandle,0x13);
-          HAL_Delay(5000);
-          needToResetBLE=1;
-	  */
+      if (!strncmp((char *)CustomCommand->CommandName, "BleManagerReset", 15))
+      {
+        /* Sample code to reset BLE_Manager */
+        /*
+              aci_gap_terminate(CurrentConnectionHandle,0x13);
+              HAL_Delay(5000);
+              needToResetBLE=1;
+        */
       }
-    break;
+      break;
     case BLE_CUSTOM_COMMAND_INTEGER:
       BLE_MANAGER_PRINTF("\tInt    Value: <%ld>\r\n", CustomCommand->IntValue);
-    break;
+      break;
     case BLE_CUSTOM_COMMAND_ENUM_INTEGER:
       BLE_MANAGER_PRINTF("\tInt     Enum: <%ld>\r\n", CustomCommand->IntValue);
-    break;
+      break;
     case BLE_CUSTOM_COMMAND_BOOLEAN:
       BLE_MANAGER_PRINTF("\tInt    Value: <%ld>\r\n", CustomCommand->IntValue);
-    break;
+      break;
     case  BLE_CUSTOM_COMMAND_STRING:
       BLE_MANAGER_PRINTF("\tString Value: <%s>\r\n", CustomCommand->StringValue);
-    break;
+      break;
     case  BLE_CUSTOM_COMMAND_ENUM_STRING:
       BLE_MANAGER_PRINTF("\tString  Enum: <%s>\r\n", CustomCommand->StringValue);
-    break;
+      break;
   }
 
-   if(!strncmp((char *)CustomCommand->CommandName,"ChangeCustomCommand",20)) {
-     CustomCommandPageLevel=1;
-     SendNewCustomCommandList();
-   } else if(!strncmp((char *)CustomCommand->CommandName,"ComeBackCustomCommand",21)) {
-     CustomCommandPageLevel=0;
-     SendNewCustomCommandList();
-   } else if(!strncmp((char *)CustomCommand->CommandName,"IntValue2",9)) {
-     SendError("Example of Error");
-   } else if(!strncmp((char *)CustomCommand->CommandName,"IntValue1",9)) {
-     SendInfo("Example of Info");
-   }
+  if (!strncmp((char *)CustomCommand->CommandName, "ChangeCustomCommand", 20))
+  {
+    CustomCommandPageLevel = 1;
+    SendNewCustomCommandList();
+  }
+  else if (!strncmp((char *)CustomCommand->CommandName, "ComeBackCustomCommand", 21))
+  {
+    CustomCommandPageLevel = 0;
+    SendNewCustomCommandList();
+  }
+  else if (!strncmp((char *)CustomCommand->CommandName, "IntValue2", 9))
+  {
+    SendError("Example of Error");
+  }
+  else if (!strncmp((char *)CustomCommand->CommandName, "IntValue1", 9))
+  {
+    SendInfo("Example of Info");
+  }
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigCustomCommandCallback could be implemented in the user file
-		   for managing the received command
+           for managing the received command
    */
 }
 
 /**
- * @brief  Callback Function for managing the SetDate command
- * @param  uint8_t *NewDate
- * @retval None
- */
+  * @brief  Callback Function for managing the SetDate command
+  * @param  uint8_t *NewDate
+  * @retval None
+  */
 __weak void ExtConfigSetDateCommandCallback(uint8_t *NewDate)
 {
   BLE_MANAGER_PRINTF("New Board Date= <%s>\r\n", NewDate);
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigSetDateCommandCallback could be implemented in the user file
-		   for managing the received command (Insert the code for changing the RTC Date)
+           for managing the received command (Insert the code for changing the RTC Date)
    */
 }
 
 /**
- * @brief  Callback Function for managing the SetTime command
- * @param  uint8_t *NewTime
- * @retval None
- */
+  * @brief  Callback Function for managing the SetTime command
+  * @param  uint8_t *NewTime
+  * @retval None
+  */
 __weak void ExtConfigSetTimeCommandCallback(uint8_t *NewTime)
 {
   BLE_MANAGER_PRINTF("New Board Time= <%s>\r\n", NewTime);
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigSetTimeCommandCallback could be implemented in the user file
-		   for managing the received command (Insert the code for changing the RTC Time)
+           for managing the received command (Insert the code for changing the RTC Time)
    */
 }
 /**
- * @brief  Callback Function for managing the SetWiFi command
- * @param  BLE_WiFi_CredAcc_t NewWiFiCred
- * @retval None
- */
+  * @brief  Callback Function for managing the SetWiFi command
+  * @param  BLE_WiFi_CredAcc_t NewWiFiCred
+  * @retval None
+  */
 __weak void ExtConfigSetWiFiCommandCallback(BLE_WiFi_CredAcc_t NewWiFiCred)
 {
   BLE_MANAGER_PRINTF("NewWiFiCred=\r\n");
@@ -1930,15 +1982,15 @@ __weak void ExtConfigSetWiFiCommandCallback(BLE_WiFi_CredAcc_t NewWiFiCred)
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigSetTimeCommandCallback could be implemented in the user file
-		   for managing the received command (Insert the code for changing the Wi-Fi Credential)
+           for managing the received command (Insert the code for changing the Wi-Fi Credential)
    */
 }
 
 /**
- * @brief  Reads Sensor Config
- * @param  JSON_Array *JSON_SensorArray
- * @retval None
- */
+  * @brief  Reads Sensor Config
+  * @param  JSON_Array *JSON_SensorArray
+  * @retval None
+  */
 __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArray)
 {
 #define WRITE_BUFFER_SIZE_HTS221_H       (uint32_t)(256)
@@ -1949,14 +2001,14 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
 #define WRITE_BUFFER_SIZE_LSM6DSOX_G   (uint32_t)(16384)
 #define WRITE_BUFFER_SIZE_LSM6DSOX_MLC (uint32_t)(1024)
 
-  COM_Sensor_t SensorHTS221,SensorLPS22HH,SensorLSM6DSOX;
+  COM_Sensor_t SensorHTS221, SensorLPS22HH, SensorLSM6DSOX;
   JSON_Value *tempJSON1;
   BLE_MANAGER_PRINTF("Received the Read Sensors Config Command\r\n");
 
   /* HTS221 SENSOR DESCRIPTOR */
   strcpy(SensorHTS221.sensorDescriptor.name, "HTS221");
   SensorHTS221.sensorDescriptor.nSubSensors = 2;
-  SensorHTS221.sensorDescriptor.id=0;
+  SensorHTS221.sensorDescriptor.id = 0;
 
   /* SUBSENSOR 0 DESCRIPTOR */
   SensorHTS221.sensorDescriptor.subSensorDescriptor[0].id = 0;
@@ -2019,7 +2071,7 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   /* LPS22HH SENSOR DESCRIPTOR */
   strcpy(SensorLPS22HH.sensorDescriptor.name, "LPS22HH");
   SensorLPS22HH.sensorDescriptor.nSubSensors = 2;
-  SensorLPS22HH.sensorDescriptor.id=1;
+  SensorLPS22HH.sensorDescriptor.id = 1;
 
   /* SUBSENSOR 0 DESCRIPTOR */
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].id = 0;
@@ -2090,7 +2142,7 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   /* SENSOR DESCRIPTOR */
   strcpy(SensorLSM6DSOX.sensorDescriptor.name, "LSM6DSOX");
   SensorLSM6DSOX.sensorDescriptor.nSubSensors = 3;
-  SensorLSM6DSOX.sensorDescriptor.id=2;
+  SensorLSM6DSOX.sensorDescriptor.id = 2;
 
   /* SUBSENSOR 0 DESCRIPTOR */
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].id = 0;
@@ -2133,7 +2185,7 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorLSM6DSOX.sensorStatus.subSensorStatus[0].comChannelNumber = -1;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[0].ucfLoaded = 0;
 
-    /* SUBSENSOR 1 DESCRIPTOR */
+  /* SUBSENSOR 1 DESCRIPTOR */
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].id = 1;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].sensorType = COM_TYPE_GYRO;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].dimensions = 3;
@@ -2175,7 +2227,7 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorLSM6DSOX.sensorStatus.subSensorStatus[1].comChannelNumber = -1;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[1].ucfLoaded = 0;
 
-    /* SUBSENSOR 2 DESCRIPTOR */
+  /* SUBSENSOR 2 DESCRIPTOR */
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].id = 2;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].sensorType = COM_TYPE_MLC;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].dimensions = 8;
@@ -2210,36 +2262,36 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorLSM6DSOX.sensorStatus.subSensorStatus[2].comChannelNumber = -1;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[2].ucfLoaded = 0;
 
-  //Add the sensors to the Array
+  /* Add the sensors to the Array
   tempJSON1 = json_value_init_object();
   create_JSON_Sensor(&SensorHTS221, tempJSON1);
-  json_array_append_value(JSON_SensorArray,tempJSON1);
+  json_array_append_value(JSON_SensorArray, tempJSON1);
   tempJSON1 = json_value_init_object();
   create_JSON_Sensor(&SensorLPS22HH, tempJSON1);
-  json_array_append_value(JSON_SensorArray,tempJSON1);
+  json_array_append_value(JSON_SensorArray, tempJSON1);
   tempJSON1 = json_value_init_object();
   create_JSON_Sensor(&SensorLSM6DSOX, tempJSON1);
-  json_array_append_value(JSON_SensorArray,tempJSON1);
+  json_array_append_value(JSON_SensorArray, tempJSON1);
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigReadSensorConfigCommandCallback could be implemented in the user file
-		   for managing the received command with the used sensor
+           for managing the received command with the used sensor
    */
-}
+  }
 
-/**
- * @brief  Set Sensor Config
- * @param  uint8_t *configuration
- * @retval None
- */
-__weak void ExtConfigSetSensorConfigCommandCallback(uint8_t *configuration)
-{
+  /**
+    * @brief  Set Sensor Config
+    * @param  uint8_t *configuration
+    * @retval None
+  */
+  __weak void ExtConfigSetSensorConfigCommandCallback(uint8_t *configuration)
+  {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(configuration);
 
   /* NOTE: This function Should not be modified, when the callback is needed,
            the ExtConfigSetSensorConfigCommandCallback could be implemented in the user file
-		   for managing the received command with the used sensor
+           for managing the received command with the used sensor
    */
-}
-#endif /* BLE_MANAGER_USE_PARSON */
+  }
+  #endif /* BLE_MANAGER_USE_PARSON */

@@ -35,7 +35,7 @@
   * @brief  This is the section dedicated to IAR toolchain
   */
 #if defined(__ICCARM__) || defined(__IAR_SYSTEMS_ASM__)
-    
+
 /**
   * @brief  PACKED
   *         Use the PACKED macro for variables that needs to be packed.
@@ -43,7 +43,7 @@
   *                 PACKED(union) myStruct_s
   */
 #define PACKED(decl)                   __packed decl
-    
+
 /**
   * @brief  REQUIRED
   *         Use the REQUIRED macro for variables that must be always included.
@@ -90,9 +90,9 @@
 
 /**
   * @brief  NOLOAD
-  *         Use the NOLOAD macro to declare a not initialized variable that 
-  *             must be placed in a specific section in Flash.
-  *             Before the NOLOAD declaration, the SECTION declaration must be used.
+  *         Use the NOLOAD macro to declare a not initialized variable that
+  *         must be placed in a specific section in Flash.
+  *         Before the NOLOAD declaration, the SECTION declaration must be used.
   *
   *         SECTION(".noinit.ro_section_my_noload_var")
   *         Usage:  NOLOAD(int my_noload_var)
@@ -106,9 +106,9 @@ extern void __iar_program_start(void);
 #define RESET_HANDLER                  __iar_program_start
 
 /**
- * @}
- */
-    
+  * @}
+  */
+
 /** @addtogroup Atollic_toolchain_macros    Atollic toolchain macros
   * @{
   */
@@ -154,14 +154,14 @@ extern void __iar_program_start(void);
   *         Use the WEAK_FUNCTION macro to declare a weak function.
   *         Usage:  WEAK_FUNCTION(int my_weak_function(void))
   */
-#define WEAK_FUNCTION(function)         __attribute__((weak)) function 
+#define WEAK_FUNCTION(function)         __attribute__((weak)) function
 
 /**
   * @brief  NORETURN_FUNCTION
   *         Use the NORETURN_FUNCTION macro to declare a no return function.
   *         Usage:  NORETURN_FUNCTION(void my_noretrun_function(void))
   */
-#define NORETURN_FUNCTION(function)     __attribute__((noreturn)) function 
+#define NORETURN_FUNCTION(function)     __attribute__((noreturn)) function
 
 /**
   * @brief  NO_INIT
@@ -173,7 +173,7 @@ extern void __iar_program_start(void);
 
 /**
   * @brief  NOLOAD
-  *         Use the NOLOAD macro to declare a not initialized variable that 
+  *         Use the NOLOAD macro to declare a not initialized variable that
   *             must be placed in a specific section in Flash.
   *             Before the NOLOAD declaration, the SECTION declaration must be used.
   *             Then, this section must be placed correctly in the linker file.
@@ -195,7 +195,7 @@ extern void __iar_program_start(void);
   * @brief  This is the section dedicated to Keil toolchain
   */
 #else
-#ifdef __CC_ARM	
+#ifdef __CC_ARM
 
 /**
   * @brief  PACKED
@@ -239,7 +239,7 @@ extern void __iar_program_start(void);
   *         Use the NORETURN_FUNCTION macro to declare a no return function.
   *         Usage:  NORETURN_FUNCTION(void my_noretrun_function(void))
   */
-#define NORETURN_FUNCTION(function)     __attribute__((noreturn)) function 
+#define NORETURN_FUNCTION(function)     __attribute__((noreturn)) function
 
 /**
   * @brief  NO_INIT
@@ -251,10 +251,10 @@ extern void __iar_program_start(void);
 
 /**
   * @brief  NOLOAD
-  *         Use the NOLOAD macro to declare a not initialized variable that 
-  *             must be placed in a specific section in Flash.
-  *             Before the NOLOAD declaration, the SECTION declaration must be used.
-  *             Then, this section must be placed correctly in the linker file.
+  *         Use the NOLOAD macro to declare a not initialized variable that
+  *         must be placed in a specific section in Flash.
+  *         Before the NOLOAD declaration, the SECTION declaration must be used.
+  *         Then, this section must be placed correctly in the linker file.
   *
   *         SECTION(".noinit.ro_section_my_noload_var")
   *         Usage:  NOLOAD(int my_noload_var)
@@ -268,8 +268,8 @@ extern unsigned int Image$$ARM_LIB_STACKHEAP$$ZI$$Limit;
 #define VARIABLE_SIZE 1
 
 /**
- * @}
- */
+  * @}
+  */
 
 #else
 
@@ -280,8 +280,8 @@ extern unsigned int Image$$ARM_LIB_STACKHEAP$$ZI$$Limit;
 #endif
 
 /**
- * @}
- */
+  * @}
+  */
 
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
 #endif /* __COMPILER_H__ */

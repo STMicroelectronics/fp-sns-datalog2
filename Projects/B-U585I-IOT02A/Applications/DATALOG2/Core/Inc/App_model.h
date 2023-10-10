@@ -82,9 +82,9 @@ extern "C" {
 #define LOG_CTRL_MODE_BLE         0x02
 
 #define SENSOR_NUMBER             8U
-#define ALGORITHM_NUMBER	        0U
-#define ACTUATOR_NUMBER	          0
-#define OTHER_COMP_NUMBER	        5U
+#define ALGORITHM_NUMBER          0U
+#define ACTUATOR_NUMBER           0
+#define OTHER_COMP_NUMBER         5U
 
 #define DEVICE_ALIAS_LENGTH       16U
 #define MAC_ADDRESS_LENGTH        18U
@@ -97,9 +97,9 @@ extern "C" {
 #define SENSOR_NOTES_LEN 20U
 #define N_MAX_EP 5U
 
-#define FW_VERSION_MAJOR  '1'
-#define FW_VERSION_MINOR  '2'
-#define FW_VERSION_PATCH  '0'
+#define FW_VERSION_MAJOR  "2"
+#define FW_VERSION_MINOR  "0"
+#define FW_VERSION_PATCH  "0"
 
 typedef struct _StreamParams_t
 {
@@ -119,8 +119,8 @@ typedef struct _SensorModel_t
      so, its model has the following structure */
   uint8_t id;
   char *comp_name;
-  StreamParams_t streamParams;
-  SensorStatus_t sensorStatus;
+  StreamParams_t stream_params;
+  SensorStatus_t sensor_status;
   /* Sensor Components Model USER code */
   char annotation[SENSOR_NOTES_LEN];
 } SensorModel_t;
@@ -188,7 +188,7 @@ AppModel_t *getAppModel(void);
 
 /* IIS2MDC_MAG PnPL Component ------------------------------------------------*/
 uint8_t iis2mdc_mag_comp_init(void);
-char* iis2mdc_mag_get_key(void);
+char *iis2mdc_mag_get_key(void);
 uint8_t iis2mdc_mag_get_odr(float *value);
 uint8_t iis2mdc_mag_get_fs(float *value);
 uint8_t iis2mdc_mag_get_enable(bool *value);
@@ -211,7 +211,7 @@ uint8_t iis2mdc_mag_set_sensor_annotation(const char *value);
 
 /* ISM330DHCX_GYRO PnPL Component --------------------------------------------*/
 uint8_t ism330dhcx_gyro_comp_init(void);
-char* ism330dhcx_gyro_get_key(void);
+char *ism330dhcx_gyro_get_key(void);
 uint8_t ism330dhcx_gyro_get_odr(float *value);
 uint8_t ism330dhcx_gyro_get_fs(float *value);
 uint8_t ism330dhcx_gyro_get_enable(bool *value);
@@ -235,7 +235,7 @@ uint8_t ism330dhcx_gyro_set_sensor_annotation(const char *value);
 
 /* ISM330DHCX_ACC PnPL Component ---------------------------------------------*/
 uint8_t ism330dhcx_acc_comp_init(void);
-char* ism330dhcx_acc_get_key(void);
+char *ism330dhcx_acc_get_key(void);
 uint8_t ism330dhcx_acc_get_odr(float *value);
 uint8_t ism330dhcx_acc_get_fs(float *value);
 uint8_t ism330dhcx_acc_get_enable(bool *value);
@@ -259,7 +259,7 @@ uint8_t ism330dhcx_acc_set_sensor_annotation(const char *value);
 
 /* ISM330DHCX_MLC PnPL Component ---------------------------------------------*/
 uint8_t ism330dhcx_mlc_comp_init(void);
-char* ism330dhcx_mlc_get_key(void);
+char *ism330dhcx_mlc_get_key(void);
 uint8_t ism330dhcx_mlc_get_enable(bool *value);
 uint8_t ism330dhcx_mlc_get_samples_per_ts(int32_t *value);
 uint8_t ism330dhcx_mlc_get_ucf_status(bool *value);
@@ -278,7 +278,7 @@ uint8_t ism330dhcx_mlc_load_file(IIsm330dhcx_Mlc_t *ifn, const char *data, int32
 
 /* LPS22HH_TEMP PnPL Component -----------------------------------------------*/
 uint8_t lps22hh_temp_comp_init(void);
-char* lps22hh_temp_get_key(void);
+char *lps22hh_temp_get_key(void);
 uint8_t lps22hh_temp_get_odr(float *value);
 uint8_t lps22hh_temp_get_fs(float *value);
 uint8_t lps22hh_temp_get_enable(bool *value);
@@ -301,7 +301,7 @@ uint8_t lps22hh_temp_set_sensor_annotation(const char *value);
 
 /* LPS22HH_PRESS PnPL Component ----------------------------------------------*/
 uint8_t lps22hh_press_comp_init(void);
-char* lps22hh_press_get_key(void);
+char *lps22hh_press_get_key(void);
 uint8_t lps22hh_press_get_odr(float *value);
 uint8_t lps22hh_press_get_fs(float *value);
 uint8_t lps22hh_press_get_enable(bool *value);
@@ -325,7 +325,7 @@ uint8_t lps22hh_press_set_sensor_annotation(const char *value);
 
 /* MP23DB01HP_1_MIC PnPL Component -------------------------------------------*/
 uint8_t mp23db01hp_1_mic_comp_init(void);
-char* mp23db01hp_1_mic_get_key(void);
+char *mp23db01hp_1_mic_get_key(void);
 uint8_t mp23db01hp_1_mic_get_odr(float *value);
 uint8_t mp23db01hp_1_mic_get_aop(float *value);
 uint8_t mp23db01hp_1_mic_get_enable(bool *value);
@@ -348,7 +348,7 @@ uint8_t mp23db01hp_1_mic_set_sensor_annotation(const char *value);
 
 /* MP23DB01HP_2_MIC PnPL Component -------------------------------------------*/
 uint8_t mp23db01hp_2_mic_comp_init(void);
-char* mp23db01hp_2_mic_get_key(void);
+char *mp23db01hp_2_mic_get_key(void);
 uint8_t mp23db01hp_2_mic_get_odr(float *value);
 uint8_t mp23db01hp_2_mic_get_aop(float *value);
 uint8_t mp23db01hp_2_mic_get_enable(bool *value);
@@ -371,7 +371,7 @@ uint8_t mp23db01hp_2_mic_set_sensor_annotation(const char *value);
 
 /* AutoMode PnPL Component ---------------------------------------------------*/
 uint8_t automode_comp_init(void);
-char* automode_get_key(void);
+char *automode_get_key(void);
 uint8_t automode_get_enabled(bool *value);
 uint8_t automode_get_nof_acquisitions(int32_t *value);
 uint8_t automode_get_start_delay_s(int32_t *value);
@@ -385,7 +385,7 @@ uint8_t automode_set_idle_period_s(int32_t value);
 
 /* Log Controller PnPL Component ---------------------------------------------*/
 uint8_t log_controller_comp_init(void);
-char* log_controller_get_key(void);
+char *log_controller_get_key(void);
 uint8_t log_controller_get_log_status(bool *value);
 uint8_t log_controller_get_sd_mounted(bool *value);
 uint8_t log_controller_get_controller_type(int32_t *value);
@@ -397,7 +397,7 @@ uint8_t log_controller_switch_bank(ILog_Controller_t *ifn);
 
 /* Tags Information PnPL Component -------------------------------------------*/
 uint8_t tags_info_comp_init(void);
-char* tags_info_get_key(void);
+char *tags_info_get_key(void);
 uint8_t tags_info_get_max_tags_num(int32_t *value);
 uint8_t tags_info_get_sw_tag0__label(char **value);
 uint8_t tags_info_get_sw_tag0__enabled(bool *value);
@@ -432,7 +432,7 @@ uint8_t tags_info_set_sw_tag4__status(bool value);
 
 /* Acquisition Information PnPL Component ------------------------------------*/
 uint8_t acquisition_info_comp_init(void);
-char* acquisition_info_get_key(void);
+char *acquisition_info_get_key(void);
 uint8_t acquisition_info_get_name(char **value);
 uint8_t acquisition_info_get_description(char **value);
 uint8_t acquisition_info_get_uuid(char **value);
@@ -448,7 +448,7 @@ uint8_t acquisition_info_set_description(const char *value);
 
 /* Firmware Information PnPL Component ---------------------------------------*/
 uint8_t firmware_info_comp_init(void);
-char* firmware_info_get_key(void);
+char *firmware_info_get_key(void);
 uint8_t firmware_info_get_alias(char **value);
 uint8_t firmware_info_get_fw_name(char **value);
 uint8_t firmware_info_get_fw_version(char **value);
@@ -460,7 +460,7 @@ uint8_t firmware_info_set_alias(const char *value);
 
 /* Device Information PnPL Component -----------------------------------------*/
 uint8_t DeviceInformation_comp_init(void);
-char* DeviceInformation_get_key(void);
+char *DeviceInformation_get_key(void);
 uint8_t DeviceInformation_get_manufacturer(char **value);
 uint8_t DeviceInformation_get_model(char **value);
 uint8_t DeviceInformation_get_swVersion(char **value);

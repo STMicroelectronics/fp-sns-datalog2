@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -139,6 +139,10 @@ int8_t datalog_class_control(void *_this, uint8_t isHostToDevice, uint8_t cmd, u
         {
           USB_packet_size = *(uint32_t *) pbuf;
         }
+
+        /* adding one character to include '\0'*/
+        USB_packet_size++;
+
         serialized_cmd = SysAlloc(USB_packet_size); /* Allocate the buffer to receive next command */
         if (serialized_cmd == NULL)
         {
@@ -171,8 +175,9 @@ int8_t datalog_class_control(void *_this, uint8_t isHostToDevice, uint8_t cmd, u
           counter--;
         }
 
-        if (counter == 0) /* The complete message has been received */
+        if (counter-1 == 0) /* The complete message has been received */
         {
+          *p = '\0';
           IParseCommand(obj->cmd_parser, serialized_cmd, sObj.comm_interface_id);
         }
         break;
@@ -439,7 +444,8 @@ sys_error_code_t usbx_dctrl_vtblStream_post_data(IStream_t *_this, uint8_t id_st
 
 
 
-sys_error_code_t usbx_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t id_stream, uint32_t size, const char *stream_name)
+sys_error_code_t usbx_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t id_stream, uint32_t size,
+                                                      const char *stream_name)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -451,7 +457,8 @@ sys_error_code_t usbx_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t 
 
   if (obj->TxBuffer[id_stream] != NULL)
   {
-    ux_device_class_sensor_streaming_SetTxDataBuffer(obj->sensor_streaming_device, id_stream, obj->TxBuffer[id_stream], size + SS_HEADER_SIZE, SS_CH_QUEUE_ITEMS);
+    ux_device_class_sensor_streaming_SetTxDataBuffer(obj->sensor_streaming_device, id_stream, obj->TxBuffer[id_stream],
+                                                     size + SS_HEADER_SIZE, SS_CH_QUEUE_ITEMS);
     //ux_device_class_sensor_streaming_CleanTxDataBuffer(obj->sensor_streaming_device, id_stream);
   }
   else

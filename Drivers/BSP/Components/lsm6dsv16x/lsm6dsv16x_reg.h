@@ -3895,6 +3895,8 @@ float_t lsm6dsv16x_from_lsb_to_celsius(int16_t lsb);
 
 float_t lsm6dsv16x_from_lsb_to_nsec(uint32_t lsb);
 
+float_t lsm6dsv16x_from_lsb_to_mv(int16_t lsb);
+
 int32_t lsm6dsv16x_xl_offset_on_out_set(stmdev_ctx_t *ctx, uint8_t val);
 int32_t lsm6dsv16x_xl_offset_on_out_get(stmdev_ctx_t *ctx, uint8_t *val);
 
@@ -4035,7 +4037,7 @@ typedef enum
   LSM6DSV16X_500dps  = 0x2,
   LSM6DSV16X_1000dps = 0x3,
   LSM6DSV16X_2000dps = 0x4,
-  LSM6DSV16X_4000dps = 0x5,
+  LSM6DSV16X_4000dps = 0xc,
 } lsm6dsv16x_gy_full_scale_t;
 int32_t lsm6dsv16x_gy_full_scale_set(stmdev_ctx_t *ctx,
                                      lsm6dsv16x_gy_full_scale_t val);
@@ -4258,9 +4260,9 @@ typedef struct
   uint8_t den_z                : 1;
   enum
   {
-    LSM6DSV16X_DEN_NOT_DEFINED = 0x00,
-    LSM6DSV16X_LEVEL_TRIGGER   = 0x02,
-    LSM6DSV16X_LEVEL_LATCHED   = 0x03,
+    DEN_NOT_DEFINED = 0x00,
+    LEVEL_TRIGGER   = 0x02,
+    LEVEL_LATCHED   = 0x03,
   } mode;
 } lsm6dsv16x_den_conf_t;
 int32_t lsm6dsv16x_den_conf_set(stmdev_ctx_t *ctx, lsm6dsv16x_den_conf_t val);
@@ -4483,17 +4485,8 @@ int32_t lsm6dsv16x_fifo_mlc_batch_get(stmdev_ctx_t *ctx, uint8_t *val);
 int32_t lsm6dsv16x_fifo_mlc_filt_batch_set(stmdev_ctx_t *ctx, uint8_t val);
 int32_t lsm6dsv16x_fifo_mlc_filt_batch_get(stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t lsm6dsv16x_fifo_batch_sh_slave_0_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t lsm6dsv16x_fifo_batch_sh_slave_0_get(stmdev_ctx_t *ctx, uint8_t *val);
-
-int32_t lsm6dsv16x_fifo_batch_sh_slave_1_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t lsm6dsv16x_fifo_batch_sh_slave_1_get(stmdev_ctx_t *ctx, uint8_t *val);
-
-int32_t lsm6dsv16x_fifo_batch_sh_slave_2_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t lsm6dsv16x_fifo_batch_sh_slave_2_get(stmdev_ctx_t *ctx, uint8_t *val);
-
-int32_t lsm6dsv16x_fifo_batch_sh_slave_3_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t lsm6dsv16x_fifo_batch_sh_slave_3_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t lsm6dsv16x_fifo_sh_batch_slave_set(stmdev_ctx_t *ctx, uint8_t idx, uint8_t val);
+int32_t lsm6dsv16x_fifo_sh_batch_slave_get(stmdev_ctx_t *ctx, uint8_t idx, uint8_t *val);
 
 typedef struct
 {
@@ -4981,29 +4974,7 @@ int32_t lsm6dsv16x_sh_master_interface_pull_up_set(stmdev_ctx_t *ctx,
 int32_t lsm6dsv16x_sh_master_interface_pull_up_get(stmdev_ctx_t *ctx,
                                                    uint8_t *val);
 
-typedef struct
-{
-  lsm6dsv16x_sensor_hub_1_t   sh_byte_1;
-  lsm6dsv16x_sensor_hub_2_t   sh_byte_2;
-  lsm6dsv16x_sensor_hub_3_t   sh_byte_3;
-  lsm6dsv16x_sensor_hub_4_t   sh_byte_4;
-  lsm6dsv16x_sensor_hub_5_t   sh_byte_5;
-  lsm6dsv16x_sensor_hub_6_t   sh_byte_6;
-  lsm6dsv16x_sensor_hub_7_t   sh_byte_7;
-  lsm6dsv16x_sensor_hub_8_t   sh_byte_8;
-  lsm6dsv16x_sensor_hub_9_t   sh_byte_9;
-  lsm6dsv16x_sensor_hub_10_t  sh_byte_10;
-  lsm6dsv16x_sensor_hub_11_t  sh_byte_11;
-  lsm6dsv16x_sensor_hub_12_t  sh_byte_12;
-  lsm6dsv16x_sensor_hub_13_t  sh_byte_13;
-  lsm6dsv16x_sensor_hub_14_t  sh_byte_14;
-  lsm6dsv16x_sensor_hub_15_t  sh_byte_15;
-  lsm6dsv16x_sensor_hub_16_t  sh_byte_16;
-  lsm6dsv16x_sensor_hub_17_t  sh_byte_17;
-  lsm6dsv16x_sensor_hub_18_t  sh_byte_18;
-} lsm6dsv16x_emb_sh_read_t;
-int32_t lsm6dsv16x_sh_read_data_raw_get(stmdev_ctx_t *ctx,
-                                        lsm6dsv16x_emb_sh_read_t *val,
+int32_t lsm6dsv16x_sh_read_data_raw_get(stmdev_ctx_t *ctx, uint8_t *val,
                                         uint8_t len);
 
 typedef enum
@@ -5075,15 +5046,11 @@ typedef struct
   uint8_t   slv_subadd;
   uint8_t   slv_len;
 } lsm6dsv16x_sh_cfg_read_t;
-int32_t lsm6dsv16x_sh_slv0_cfg_read(stmdev_ctx_t *ctx,
-                                    lsm6dsv16x_sh_cfg_read_t *val);
-int32_t lsm6dsv16x_sh_slv1_cfg_read(stmdev_ctx_t *ctx,
-                                    lsm6dsv16x_sh_cfg_read_t *val);
-int32_t lsm6dsv16x_sh_slv2_cfg_read(stmdev_ctx_t *ctx,
-                                    lsm6dsv16x_sh_cfg_read_t *val);
-int32_t lsm6dsv16x_sh_slv3_cfg_read(stmdev_ctx_t *ctx,
-                                    lsm6dsv16x_sh_cfg_read_t *val);
+int32_t lsm6dsv16x_sh_slv_cfg_read(stmdev_ctx_t *ctx, uint8_t idx,
+                                   lsm6dsv16x_sh_cfg_read_t *val);
 
+int32_t lsm6dsv16x_sh_status_get(stmdev_ctx_t *ctx,
+                                 lsm6dsv16x_status_master_t *val);
 
 int32_t lsm6dsv16x_ui_sdo_pull_up_set(stmdev_ctx_t *ctx, uint8_t val);
 int32_t lsm6dsv16x_ui_sdo_pull_up_get(stmdev_ctx_t *ctx, uint8_t *val);

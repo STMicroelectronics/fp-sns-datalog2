@@ -31,7 +31,8 @@ Here is the list of references to user documents:
 
 - [DB4865](https://www.st.com/resource/en/data_brief/fp-sns-datalog2.pdf) : STM32Cube function pack for high speed datalogging and ultrasound processing
 - [UM3106](https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf) : Getting started with the STM32Cube function pack for high speed datalogging and ultrasound processing
-- [STM32Cube](https://www.st.com/stm32cube) : STM32Cube
+- [Doxygen](https://htmlpreview.github.io/?https://github.com/STMicroelectronics/fp-sns-datalog2/tree/main/Documentation/html/index.html): Doxygen documentation
+- [STM32Cube](https://www.st.com/stm32cube): STM32Cube
 
 ## Known Limitations
 
@@ -41,12 +42,13 @@ Here is the list of references to user documents:
 
 -   IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1
 -   RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37
--   STM32CubeIDE v1.12.1
+-   STM32CubeIDE v1.13.2
 
 ## Supported Devices and Boards
 
 - [STEVAL-MKBOXPRO](https://www.st.com/sensortileboxpro)
 - [STEVAL-STWINBX1](https://www.st.com/stwinbox)
+- [STEVAL-STWINKT1B](https://www.st.com/stwin)
 - [B-U585I-IOT02A](https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html)
 - [X-NUCLEO-IKS02A1](https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html) with [NUCLEO-U575ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html)
 - [X-NUCLEO-IKS02A1](https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html) with [NUCLEO-H7A3ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html)

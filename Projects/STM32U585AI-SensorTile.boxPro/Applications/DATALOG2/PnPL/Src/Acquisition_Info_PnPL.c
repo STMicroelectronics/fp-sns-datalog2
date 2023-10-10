@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:other:acquisition_info;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.1.0
+  * Created by: DTDL2PnPL_cGen version 1.2.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -99,7 +99,8 @@ char *Acquisition_Info_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t i
   return "";
 }
 
-uint8_t Acquisition_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Acquisition_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                            uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -157,27 +158,45 @@ uint8_t Acquisition_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seri
   return 0;
 }
 
-uint8_t Acquisition_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Acquisition_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
   if (json_object_dothas_value(tempJSONObject, "acquisition_info.name"))
   {
     const char *name = json_object_dotget_string(tempJSONObject, "acquisition_info.name");
-    acquisition_info_set_name(name);
+    ret = acquisition_info_set_name(name);
+    json_object_dotset_string(respJSONObject, "acquisition_info.name.value", ret == 0 ? name : "PNPL_SET_ERROR");
   }
   if (json_object_dothas_value(tempJSONObject, "acquisition_info.description"))
   {
     const char *description = json_object_dotget_string(tempJSONObject, "acquisition_info.description");
-    acquisition_info_set_description(description);
+    ret = acquisition_info_set_description(description);
+    json_object_dotset_string(respJSONObject, "acquisition_info.description.value", ret == 0 ? description : "PNPL_SET_ERROR");
   }
   json_value_free(tempJSON);
+
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
+
+  json_value_free(respJSON);
+
   return ret;
 }
 
-uint8_t Acquisition_Info_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Acquisition_Info_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   return 1;
 }

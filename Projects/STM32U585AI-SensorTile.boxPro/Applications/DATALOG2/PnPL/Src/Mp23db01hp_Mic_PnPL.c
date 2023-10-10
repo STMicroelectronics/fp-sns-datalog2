@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:mp23db01hp_mic;2
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:mp23db01hp_mic;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.1.0
+  * Created by: DTDL2PnPL_cGen version 1.2.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -99,7 +99,8 @@ char *Mp23db01hp_Mic_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
   return "";
 }
 
-uint8_t Mp23db01hp_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Mp23db01hp_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                          uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -151,6 +152,8 @@ uint8_t Mp23db01hp_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   char *temp_s = "";
   mp23db01hp_mic_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "mp23db01hp_mic.data_type", temp_s);
+  mp23db01hp_mic_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "mp23db01hp_mic.sensor_annotation", temp_s);
   mp23db01hp_mic_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "mp23db01hp_mic.sensor_category", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
@@ -179,10 +182,12 @@ uint8_t Mp23db01hp_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   return 0;
 }
 
-uint8_t Mp23db01hp_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Mp23db01hp_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
   if(json_object_dothas_value(tempJSONObject, "mp23db01hp_mic.odr"))
@@ -191,31 +196,66 @@ uint8_t Mp23db01hp_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
     switch(odr)
     {
     case 0:
-      mp23db01hp_mic_set_odr(mp23db01hp_mic_odr_hz16000);
+      ret = mp23db01hp_mic_set_odr(mp23db01hp_mic_odr_hz16000);
       break;
     case 1:
-      mp23db01hp_mic_set_odr(mp23db01hp_mic_odr_hz32000);
+      ret = mp23db01hp_mic_set_odr(mp23db01hp_mic_odr_hz32000);
       break;
     case 2:
-      mp23db01hp_mic_set_odr(mp23db01hp_mic_odr_hz48000);
+      ret = mp23db01hp_mic_set_odr(mp23db01hp_mic_odr_hz48000);
       break;
     }
+  if(ret == 0){
+    json_object_dotset_number(respJSONObject, "mp23db01hp_mic.odr.value", odr);
+  } else {
+    json_object_dotset_string(respJSONObject, "mp23db01hp_mic.odr.value", "PNPL_SET_ERROR");
+  }
   }
   if (json_object_dothas_value(tempJSONObject, "mp23db01hp_mic.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "mp23db01hp_mic.enable");
-    mp23db01hp_mic_set_enable(enable);
+    ret = mp23db01hp_mic_set_enable(enable);
+  if(ret == 0){
+    json_object_dotset_boolean(respJSONObject, "mp23db01hp_mic.enable.value", enable);
+  } else {
+    json_object_dotset_string(respJSONObject, "mp23db01hp_mic.enable.value", "PNPL_SET_ERROR");
+  }
   }
   if (json_object_dothas_value(tempJSONObject, "mp23db01hp_mic.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "mp23db01hp_mic.samples_per_ts");
-    mp23db01hp_mic_set_samples_per_ts(samples_per_ts);
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "mp23db01hp_mic.samples_per_ts");
+    ret = mp23db01hp_mic_set_samples_per_ts(samples_per_ts);
+  if(ret == 0){
+    json_object_dotset_number(respJSONObject, "mp23db01hp_mic.samples_per_ts.value", samples_per_ts);
+  } else {
+    json_object_dotset_string(respJSONObject, "mp23db01hp_mic.samples_per_ts.value", "PNPL_SET_ERROR");
+  }
+  }
+  if (json_object_dothas_value(tempJSONObject, "mp23db01hp_mic.sensor_annotation"))
+  {
+    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "mp23db01hp_mic.sensor_annotation");
+    ret = mp23db01hp_mic_set_sensor_annotation(sensor_annotation);
+  if(ret == 0){
+    json_object_dotset_string(respJSONObject, "mp23db01hp_mic.sensor_annotation.value", sensor_annotation);
+  } else {
+    json_object_dotset_string(respJSONObject, "mp23db01hp_mic.sensor_annotation.value", "PNPL_SET_ERROR");
+  }
   }
   json_value_free(tempJSON);
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
   return ret;
 }
 
-uint8_t Mp23db01hp_Mic_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Mp23db01hp_Mic_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   return 1;
 }

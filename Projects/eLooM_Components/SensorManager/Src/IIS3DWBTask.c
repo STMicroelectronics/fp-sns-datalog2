@@ -17,6 +17,7 @@
   ******************************************************************************
   */
 
+/* Includes ------------------------------------------------------------------*/
 #include "IIS3DWBTask.h"
 #include "IIS3DWBTask_vtbl.h"
 #include "SMMessageParser.h"
@@ -31,6 +32,7 @@
 #include <string.h>
 #include "services/sysdebug.h"
 
+/* Private includes ----------------------------------------------------------*/
 
 #ifndef IIS3DWB_TASK_CFG_STACK_DEPTH
 #define IIS3DWB_TASK_CFG_STACK_DEPTH              (TX_MINIMUM_STACK*8)
@@ -78,7 +80,7 @@ typedef struct _IIS3DWBTaskClass
   /**
     * Accelerometer IF virtual table.
     */
-  const ISensor_vtbl sensor_if_vtbl;
+  const ISensorMems_vtbl sensor_if_vtbl;
 
   /**
     * Specifies accelerometer sensor capabilities.
@@ -92,7 +94,7 @@ typedef struct _IIS3DWBTaskClass
 
   /**
     * Memory buffer used to allocate the map (key, value).
-    */
+   */
   MTMapElement_t task_map_elements[IIS3DWB_TASK_CFG_MAX_INSTANCES_COUNT];
 
   /**
@@ -180,7 +182,6 @@ static void IIS3DWBTaskTimerCallbackFunction(ULONG param);
 
 
 
-
 /* Inline function forward declaration */
 /***************************************/
 
@@ -231,20 +232,24 @@ static IIS3DWBTaskClass_t sTheClass =
 
   /* class::sensor_if_vtbl virtual table */
   {
-    IIS3DWBTask_vtblAccGetId,
-    IIS3DWBTask_vtblGetEventSourceIF,
-    IIS3DWBTask_vtblAccGetDataInfo,
+    {
+      {
+        IIS3DWBTask_vtblAccGetId,
+        IIS3DWBTask_vtblGetEventSourceIF,
+        IIS3DWBTask_vtblAccGetDataInfo
+      },
+      IIS3DWBTask_vtblSensorEnable,
+      IIS3DWBTask_vtblSensorDisable,
+      IIS3DWBTask_vtblSensorIsEnabled,
+      IIS3DWBTask_vtblSensorGetDescription,
+      IIS3DWBTask_vtblSensorGetStatus
+    },
     IIS3DWBTask_vtblAccGetODR,
     IIS3DWBTask_vtblAccGetFS,
     IIS3DWBTask_vtblAccGetSensitivity,
     IIS3DWBTask_vtblSensorSetODR,
     IIS3DWBTask_vtblSensorSetFS,
-    IIS3DWBTask_vtblSensorSetFifoWM,
-    IIS3DWBTask_vtblSensorEnable,
-    IIS3DWBTask_vtblSensorDisable,
-    IIS3DWBTask_vtblSensorIsEnabled,
-    IIS3DWBTask_vtblSensorGetDescription,
-    IIS3DWBTask_vtblSensorGetStatus
+    IIS3DWBTask_vtblSensorSetFifoWM
   },
 
   /* ACCELEROMETER DESCRIPTOR */
@@ -308,18 +313,18 @@ AManagedTaskEx *IIS3DWBTaskAlloc(const void *pIRQConfig, const void *pCSConfig)
     p_new_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
     p_new_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
 
-    strcpy(p_new_obj->sensor_status.Name, sTheClass.class_descriptor.Name);
+    strcpy(p_new_obj->sensor_status.p_name, sTheClass.class_descriptor.p_name);
   }
 
   return (AManagedTaskEx *) p_new_obj;
 }
 
-AManagedTaskEx *IIS3DWBTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *Name)
+AManagedTaskEx *IIS3DWBTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name)
 {
   IIS3DWBTask *p_new_obj = (IIS3DWBTask *)IIS3DWBTaskAlloc(pIRQConfig, pCSConfig);
 
   /* Overwrite default name with the one selected by the application */
-  strcpy(p_new_obj->sensor_status.Name, Name);
+  strcpy(p_new_obj->sensor_status.p_name, p_name);
 
   return (AManagedTaskEx *) p_new_obj;
 }
@@ -346,12 +351,12 @@ AManagedTaskEx *IIS3DWBTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig
 }
 
 AManagedTaskEx *IIS3DWBTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
-                                              const char *Name)
+                                              const char *p_name)
 {
   IIS3DWBTask *p_obj = (IIS3DWBTask *)IIS3DWBTaskStaticAlloc(p_mem_block, pIRQConfig, pCSConfig);
 
   /* Overwrite default name with the one selected by the application */
-  strcpy(p_obj->sensor_status.Name, Name);
+  strcpy(p_obj->sensor_status.p_name, p_name);
 
   return (AManagedTaskEx *) p_obj;
 }
@@ -407,7 +412,6 @@ sys_error_code_t IIS3DWBTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
     return res;
   }
-
   if (TX_SUCCESS != tx_queue_create(&p_obj->in_queue, "IIS3DWB_Q", item_size / 4u, p_queue_items_buff,
                                     IIS3DWB_TASK_CFG_IN_QUEUE_LENGTH * item_size))
   {
@@ -539,7 +543,7 @@ sys_error_code_t IIS3DWBTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE);
       }
 
-      // reset the variables for the actual ODR computation.
+      // reset the variables for the actual odr computation.
       p_obj->prev_timestamp = 0.0f;
     }
 
@@ -559,6 +563,10 @@ sys_error_code_t IIS3DWBTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
       if (p_obj->pIRQConfig == NULL)
       {
         tx_timer_deactivate(&p_obj->read_timer);
+      }
+      else
+      {
+        IIS3DWBTaskConfigureIrqPin(p_obj, TRUE);
       }
     }
 
@@ -687,11 +695,10 @@ IEventSrc *IIS3DWBTask_vtblGetEventSourceIF(ISourceObservable *_this)
 {
   assert_param(_this != NULL);
   IIS3DWBTask *p_if_owner = (IIS3DWBTask *)((uint32_t) _this - offsetof(IIS3DWBTask, sensor_if));
-
   return p_if_owner->p_event_src;
 }
 
-sys_error_code_t IIS3DWBTask_vtblAccGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal)
+sys_error_code_t IIS3DWBTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -706,27 +713,27 @@ sys_error_code_t IIS3DWBTask_vtblAccGetODR(ISourceObservable *_this, float *p_me
   }
   else
   {
-    *p_measured = p_if_owner->sensor_status.MeasuredODR;
-    *p_nominal = p_if_owner->sensor_status.ODR;
+    *p_measured = p_if_owner->sensor_status.type.mems.measured_odr;
+    *p_nominal = p_if_owner->sensor_status.type.mems.odr;
   }
 
   return res;
 }
 
-float IIS3DWBTask_vtblAccGetFS(ISourceObservable *_this)
+float IIS3DWBTask_vtblAccGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   IIS3DWBTask *p_if_owner = (IIS3DWBTask *)((uint32_t) _this - offsetof(IIS3DWBTask, sensor_if));
-  float res = p_if_owner->sensor_status.FS;
+  float res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float IIS3DWBTask_vtblAccGetSensitivity(ISourceObservable *_this)
+float IIS3DWBTask_vtblAccGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   IIS3DWBTask *p_if_owner = (IIS3DWBTask *)((uint32_t) _this - offsetof(IIS3DWBTask, sensor_if));
-  float res = p_if_owner->sensor_status.Sensitivity;
+  float res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -740,16 +747,15 @@ EMData_t IIS3DWBTask_vtblAccGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t IIS3DWBTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
+sys_error_code_t IIS3DWBTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IIS3DWBTask *p_if_owner = (IIS3DWBTask *)((uint32_t) _this - offsetof(IIS3DWBTask, sensor_if));
-
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -761,7 +767,7 @@ sys_error_code_t IIS3DWBTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) ODR
+      .sensorMessage.nParam = (float) odr
     };
     res = IIS3DWBTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -769,16 +775,15 @@ sys_error_code_t IIS3DWBTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
   return res;
 }
 
-sys_error_code_t IIS3DWBTask_vtblSensorSetFS(ISensor_t *_this, float FS)
+sys_error_code_t IIS3DWBTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IIS3DWBTask *p_if_owner = (IIS3DWBTask *)((uint32_t) _this - offsetof(IIS3DWBTask, sensor_if));
-
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -790,7 +795,7 @@ sys_error_code_t IIS3DWBTask_vtblSensorSetFS(ISensor_t *_this, float FS)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) FS
+      .sensorMessage.nParam = (uint32_t) fs
     };
     res = IIS3DWBTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -799,7 +804,7 @@ sys_error_code_t IIS3DWBTask_vtblSensorSetFS(ISensor_t *_this, float FS)
 
 }
 
-sys_error_code_t IIS3DWBTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+sys_error_code_t IIS3DWBTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -809,7 +814,7 @@ sys_error_code_t IIS3DWBTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifo
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -835,7 +840,6 @@ sys_error_code_t IIS3DWBTask_vtblSensorEnable(ISensor_t *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IIS3DWBTask *p_if_owner = (IIS3DWBTask *)((uint32_t) _this - offsetof(IIS3DWBTask, sensor_if));
-
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
@@ -863,7 +867,6 @@ sys_error_code_t IIS3DWBTask_vtblSensorDisable(ISensor_t *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IIS3DWBTask *p_if_owner = (IIS3DWBTask *)((uint32_t) _this - offsetof(IIS3DWBTask, sensor_if));
-
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
@@ -894,7 +897,11 @@ boolean_t IIS3DWBTask_vtblSensorIsEnabled(ISensor_t *_this)
 
   if (ISourceGetId((ISourceObservable *) _this) == p_if_owner->acc_id)
   {
-    res = p_if_owner->sensor_status.IsActive;
+    res = p_if_owner->sensor_status.is_active;
+  }
+  else
+  {
+    res = SYS_INVALID_PARAMETER_ERROR_CODE;
   }
 
   return res;
@@ -904,7 +911,6 @@ SensorDescriptor_t IIS3DWBTask_vtblSensorGetDescription(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   IIS3DWBTask *p_if_owner = (IIS3DWBTask *)((uint32_t) _this - offsetof(IIS3DWBTask, sensor_if));
-
   return *p_if_owner->sensor_descriptor;
 }
 
@@ -963,8 +969,7 @@ static sys_error_code_t IIS3DWBTaskExecuteStepState1(AManagedTask *_this)
           default:
             /* unwanted report */
             res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
-            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
-            ;
+            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
 
             SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS3DWB: unexpected report in Run: %i\r\n", report.messageID));
             break;
@@ -976,7 +981,6 @@ static sys_error_code_t IIS3DWBTaskExecuteStepState1(AManagedTask *_this)
         /* unwanted report */
         res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
-
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS3DWB: unexpected report in Run: %i\r\n", report.messageID));
         break;
       }
@@ -1030,7 +1034,7 @@ static sys_error_code_t IIS3DWBTaskExecuteStepDatalog(AManagedTask *_this)
           p_obj->prev_timestamp = timestamp;
 
           /* update measuredODR */
-          p_obj->sensor_status.MeasuredODR = (float) p_obj->samples_per_it / (float) delta_timestamp;
+          p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
 
           /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
            * [X0, Y0, Z0]
@@ -1064,7 +1068,7 @@ static sys_error_code_t IIS3DWBTaskExecuteStepDatalog(AManagedTask *_this)
             res = IIS3DWBTaskSensorInit(p_obj);
             if (!SYS_IS_ERROR_CODE(res))
             {
-              if (p_obj->sensor_status.IsActive == true)
+              if (p_obj->sensor_status.is_active == true)
               {
                 if (p_obj->pIRQConfig == NULL)
                 {
@@ -1215,15 +1219,15 @@ static sys_error_code_t IIS3DWBTaskSensorInit(IIS3DWBTask *_this)
   iis3dwb_write_reg(p_sensor_drv, IIS3DWB_CTRL1_XL, (uint8_t *) &reg0, 1);
 
   /*Set full scale*/
-  if (_this->sensor_status.FS < 3.0f)
+  if (_this->sensor_status.type.mems.fs < 3.0f)
   {
     iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_2g);
   }
-  else if (_this->sensor_status.FS < 5.0f)
+  else if (_this->sensor_status.type.mems.fs < 5.0f)
   {
     iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_4g);
   }
-  else if (_this->sensor_status.FS < 9.0f)
+  else if (_this->sensor_status.type.mems.fs < 9.0f)
   {
     iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_8g);
   }
@@ -1232,8 +1236,8 @@ static sys_error_code_t IIS3DWBTaskSensorInit(IIS3DWBTask *_this)
     iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_16g);
   }
 
-  /* Set ODR */
-  if (_this->sensor_status.IsActive)
+  /* Set odr */
+  if (_this->sensor_status.is_active)
   {
     iis3dwb_xl_data_rate_set(p_sensor_drv, IIS3DWB_XL_ODR_26k7Hz);
     /*Set 2nd stage filter*/
@@ -1242,7 +1246,7 @@ static sys_error_code_t IIS3DWBTaskSensorInit(IIS3DWBTask *_this)
   else
   {
     iis3dwb_xl_data_rate_set(p_sensor_drv, IIS3DWB_XL_ODR_OFF);
-    _this->sensor_status.IsActive = false;
+    _this->sensor_status.is_active = false;
   }
 
 #if IIS3DWB_FIFO_ENABLED
@@ -1251,7 +1255,7 @@ static sys_error_code_t IIS3DWBTaskSensorInit(IIS3DWBTask *_this)
   {
     uint16_t iis3dwb_wtm_level = 0;
     /* Calculation of watermark and samples per int*/
-    iis3dwb_wtm_level = ((uint16_t) _this->sensor_status.ODR * (uint16_t) IIS3DWB_MAX_DRDY_PERIOD);
+    iis3dwb_wtm_level = ((uint16_t) _this->sensor_status.type.mems.odr * (uint16_t) IIS3DWB_MAX_DRDY_PERIOD);
     if (iis3dwb_wtm_level > IIS3DWB_MAX_WTM_LEVEL)
     {
       iis3dwb_wtm_level = IIS3DWB_MAX_WTM_LEVEL;
@@ -1384,11 +1388,12 @@ static sys_error_code_t IIS3DWBTaskSensorInitTaskParams(IIS3DWBTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* ACCELEROMETER SENSOR STATUS */
-  _this->sensor_status.IsActive = TRUE;
-  _this->sensor_status.FS = 16.0f;
-  _this->sensor_status.Sensitivity = 0.0000305f * _this->sensor_status.FS;
-  _this->sensor_status.ODR = 26667.0f;
-  _this->sensor_status.MeasuredODR = 0.0f;
+  _this->sensor_status.isensor_class = ISENSOR_CLASS_MEMS;
+  _this->sensor_status.is_active = TRUE;
+  _this->sensor_status.type.mems.fs = 16.0f;
+  _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
+  _this->sensor_status.type.mems.odr = 26667.0f;
+  _this->sensor_status.type.mems.measured_odr = 0.0f;
   EMD_Init(&_this->data, _this->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 3);
 
   return res;
@@ -1400,26 +1405,26 @@ static sys_error_code_t IIS3DWBTaskSensorSetODR(IIS3DWBTask *_this, SMMessage re
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  float ODR = (float) report.sensorMessage.nParam;
+  float odr = (float) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
   {
-    if (ODR < 1.0f)
+    if (odr < 1.0f)
     {
       iis3dwb_xl_data_rate_set(p_sensor_drv, IIS3DWB_XL_ODR_OFF);
-      /* Do not update the model in case of ODR = 0 */
-      ODR = _this->sensor_status.ODR;
+      /* Do not update the model in case of odr = 0 */
+      odr = _this->sensor_status.type.mems.odr;
     }
     else
     {
-      ODR = 26667.0f;
+      odr = 26667.0f;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-      _this->sensor_status.ODR = ODR;
-      _this->sensor_status.MeasuredODR = 0.0f;
+      _this->sensor_status.type.mems.odr = odr;
+      _this->sensor_status.type.mems.measured_odr = 0.0f;
     }
   }
   else
@@ -1436,36 +1441,36 @@ static sys_error_code_t IIS3DWBTaskSensorSetFS(IIS3DWBTask *_this, SMMessage rep
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float FS = (float) report.sensorMessage.nParam;
+  float fs = (float) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
   {
-    if (FS < 3.0f)
+    if (fs < 3.0f)
     {
       iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_2g);
-      FS = 2.0f;
+      fs = 2.0f;
     }
-    else if (FS < 5.0f)
+    else if (fs < 5.0f)
     {
       iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_4g);
-      FS = 4.0f;
+      fs = 4.0f;
     }
-    else if (FS < 9.0f)
+    else if (fs < 9.0f)
     {
       iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_8g);
-      FS = 8.0f;
+      fs = 8.0f;
     }
     else
     {
       iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_16g);
-      FS = 16.0f;
+      fs = 16.0f;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-      _this->sensor_status.FS = FS;
-      _this->sensor_status.Sensitivity = 0.0000305f * _this->sensor_status.FS;
+      _this->sensor_status.type.mems.fs = fs;
+      _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
     }
   }
   else
@@ -1482,7 +1487,7 @@ static sys_error_code_t IIS3DWBTaskSensorSetFifoWM(IIS3DWBTask *_this, SMMessage
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  uint16_t iis3dwb_wtm_level = report.sensorMessage.nParam;
+  uint16_t iis3dwb_wtm_level = (uint16_t)report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -1518,7 +1523,7 @@ static sys_error_code_t IIS3DWBTaskSensorEnable(IIS3DWBTask *_this, SMMessage re
 
   if (id == _this->acc_id)
   {
-    _this->sensor_status.IsActive = TRUE;
+    _this->sensor_status.is_active = TRUE;
   }
   else
   {
@@ -1538,7 +1543,7 @@ static sys_error_code_t IIS3DWBTaskSensorDisable(IIS3DWBTask *_this, SMMessage r
 
   if (id == _this->acc_id)
   {
-    _this->sensor_status.IsActive = FALSE;
+    _this->sensor_status.is_active = FALSE;
     iis3dwb_xl_data_rate_set(p_sensor_drv, IIS3DWB_XL_ODR_OFF);
   }
   else
@@ -1552,7 +1557,7 @@ static sys_error_code_t IIS3DWBTaskSensorDisable(IIS3DWBTask *_this, SMMessage r
 static boolean_t IIS3DWBTaskSensorIsActive(const IIS3DWBTask *_this)
 {
   assert_param(_this != NULL);
-  return _this->sensor_status.IsActive;
+  return _this->sensor_status.is_active;
 }
 
 static sys_error_code_t IIS3DWBTaskEnterLowPowerMode(const IIS3DWBTask *_this)
@@ -1617,7 +1622,7 @@ static void IIS3DWBTaskTimerCallbackFunction(ULONG param)
 }
 
 /* CubeMX integration */
-// ******************
+
 void IIS3DWBTask_EXTI_Callback(uint16_t nPin)
 {
   MTMapValue_t *p_val;

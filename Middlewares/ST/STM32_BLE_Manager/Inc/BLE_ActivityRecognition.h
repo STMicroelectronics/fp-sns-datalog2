@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_ActivityRecognition.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Activity Recognition info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,12 +18,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_ACTIVITY_RECOGNITION_H_
 #define _BLE_ACTIVITY_RECOGNITION_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported defines ---------------------------------------------------------*/
@@ -62,27 +62,27 @@ extern CustomNotifyEventActRec_t CustomNotifyEventActRec;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Activity Recognition info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Activity Recognition info service
- */
-extern BleCharTypeDef* BLE_InitActRecService(void);
+  * @brief  Init Activity Recognition info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Activity Recognition info service
+  */
+extern BleCharTypeDef *BLE_InitActRecService(void);
 
 #ifndef BLE_MANAGER_SDKV2
 /**
- * @brief  Setting Activity Recognition Advertise Data
- * @param  uint8_t *manuf_data: Advertise Data
- * @retval None
- */
+  * @brief  Setting Activity Recognition Advertise Data
+  * @param  uint8_t *manuf_data: Advertise Data
+  * @retval None
+  */
 extern void BLE_SetActRecAdvertiseData(uint8_t *manuf_data);
 #endif /* BLE_MANAGER_SDKV2 */
 
 /**
- * @brief  Update Activity Recognition characteristic
- * @param  BLE_AR_output_t ActivityCode Activity Recognized
- * @param  BLE_AR_algoIdx_t Algorithm Code
- * @retval tBleStatus   Status
- */
+  * @brief  Update Activity Recognition characteristic
+  * @param  BLE_AR_output_t ActivityCode Activity Recognized
+  * @param  BLE_AR_algoIdx_t Algorithm Code
+  * @retval tBleStatus   Status
+  */
 extern tBleStatus BLE_ActRecUpdate(BLE_AR_output_t ActivityCode, BLE_AR_algoIdx_t Algorithm);
 
 #ifdef __cplusplus

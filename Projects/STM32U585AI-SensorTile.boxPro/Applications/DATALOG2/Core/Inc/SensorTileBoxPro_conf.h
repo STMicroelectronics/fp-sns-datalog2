@@ -14,7 +14,7 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-*/
+  */
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
@@ -22,7 +22,7 @@
 #define SENSORTILEBOXPRO_CONF_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
 #include "stm32u5xx_hal.h"
@@ -63,15 +63,15 @@
 #define USE_MOTION_SENSOR_LIS2DU12_0       1U
 
 #define USE_MOTION_SENSOR_LSM6DSV16X_0     1U
-   
+
 #define BSP_NFCTAG_INSTANCE         0U
- 
+
 //For using LSM6DSV16X and LIS2DU12 with I2C
 #define ALL_SENSORS_I2C
 
-#include "SensorTileBoxPro_bus.h"   
+#include "SensorTileBoxPro_bus.h"
 
-  
+
 /**
   * @}
   */

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Release Notes for STEVAL-STWINKT1B Board Drivers</title>
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="_htmresc/mini-st_2020.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <link rel="icon" type="image/x-icon" href="_htmresc/favicon.png" />
+</head>
+<body>
+<div class="row">
+<div class="col-sm-12 col-lg-4">
+<center>
+<h1 id="release-notes-for-steval-stwinkt1b-board-drivers">Release Notes for <mark>STEVAL-STWINKT1B</mark> Board Drivers</h1>
+<p>Copyright © 2022 STMicroelectronics<br />
+</p>
+<a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
+</center>
+<h1 id="purpose">Purpose</h1>
+<p>The BSP (Board Specific Package) STEVAL-STWINKT1B Board Drivers are based on the HAL drivers and provide a set of high level APIs relative to the hardware components and features in the evaluation board for a given STM32 processor</p>
+<p>The BSP drivers allow a quick access to the boards’ services using high level APIs and without any specific configuration as the link with the HAL and the external components is done in intrinsic within the drivers.</p>
+<p>Here is the list of references to user documents:</p>
+<ul>
+<li><a href="https://www.st.com/resource/en/user_manual/dm00643532.pdf">UM2621</a> : How to use the software package for the SensorTile Wireless Industrial Node based on STM32Cube</li>
+<li><a href="https://www.st.com/stm32cube">STM32Cube</a> : STM32Cube</li>
+</ul>
+</div>
+<div class="col-sm-12 col-lg-8">
+<h1 id="update-history">Update History</h1>
+<div class="collapse">
+<input type="checkbox" id="collapse-section15" checked aria-hidden="true"> <label for="collapse-section15" aria-hidden="true"><strong>v1.5.0 / 18-May-2022</strong></label>
+<div>
+<h2 id="main-changes">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
+<ul>
+<li>Added header license neutral</li>
+<li>Added licence files</li>
+<li>Increased default EXTI IRQ priority in conf_template</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section14" aria-hidden="true"> <label for="collapse-section14" aria-hidden="true"><strong>v1.4.6 / 22-Oct-2021</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<h3 id="patch-release">Patch release</h3>
+<ul>
+<li>Aligned license in hci_tl_interface_template</li>
+<li>Aligned signatures in headers and BSP version in STWIN.h</li>
+<li>Updated release note template</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section13" aria-hidden="true"> <label for="collapse-section13" aria-hidden="true"><strong>v1.4.5 / 25-Jun-2021</strong></label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<h3 id="patch-release-1">Patch release</h3>
+<ul>
+<li>Bug fixed in SPI_WIFI_DelayUs function</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section12" aria-hidden="true"> <label for="collapse-section12" aria-hidden="true"><strong>v1.4.4 / 18-Dec-2020</strong></label>
+<div>
+<h2 id="main-changes-3">Main Changes</h2>
+<h3 id="patch-release-2">Patch release</h3>
+<ul>
+<li>Updated STWIN_conf_template.h</li>
+<li>Typo solved in BSP_SD_Detect_Init</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true"><strong>v1.4.3 / 02-Dec-2020</strong></label>
+<div>
+<h2 id="main-changes-4">Main Changes</h2>
+<h3 id="patch-release-3">Patch release</h3>
+<ul>
+<li>Bug fixed in BC_CmdMng function in STWIN_bc</li>
+<li>Minor in STWIN_wifi</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section10" aria-hidden="true"> <label for="collapse-section10" aria-hidden="true"><strong>v1.4.2 / 13-Nov-2020</strong></label>
+<div>
+<h2 id="main-changes-5">Main Changes</h2>
+<h3 id="patch-release-4">Patch release</h3>
+<ul>
+<li>Support for ISM330DHCX: added event-related functions and Set_INT1_FIFO_Full</li>
+<li>Solved some MISRA compliancy issues</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true"><strong>v1.4.1 / 09-Oct-2020</strong></label>
+<div>
+<h2 id="main-changes-6">Main Changes</h2>
+<h3 id="patch-release-5">Patch release</h3>
+<ul>
+<li>Warning solved for I2C3 in STWIN_bus when USE_HAL_I2C_REGISTER_CALLBACKS is 1</li>
+<li>Enabled ISM330DHCX INT2</li>
+<li>Made STBC02 Timer Interrupt Priority available in STWIN_conf</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>v1.4.0 / 11-Sep-2020</strong></label>
+<div>
+<h2 id="main-changes-7">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
+<ul>
+<li>Added support for I2C3 in STWIN_bus</li>
+<li>Updated STWIN and STWIN_bc to avoid including “arm_math.h”</li>
+<li>Minor in hci_tl_interface_template</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true"><strong>v1.3.2 / 19-Jun-2020</strong></label>
+<div>
+<h2 id="main-changes-8">Main Changes</h2>
+<h3 id="patch-release-6">Patch release</h3>
+<ul>
+<li>Added Chip Select Init all function in STWIN.c</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true"><strong>v1.3.1 / 03-Apr-2020</strong></label>
+<div>
+<h2 id="main-changes-9">Main Changes</h2>
+<h3 id="maintenance-and-patch-release">Maintenance and patch release</h3>
+<ul>
+<li>Solved MISRA compliancy issues in STWIN_audio and STWIN_bc</li>
+<li>General code cleaning</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true"><strong>v1.3.0 / 17-Jan-2020</strong></label>
+<div>
+<h2 id="main-changes-10">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
+<ul>
+<li>Issue solved in hci_tl_interface_template.c</li>
+<li>Added new defines for POWER_BUTTON and code cleaning in STWIN.c/.h</li>
+<li>General code cleaning in STWIN_audio.c</li>
+<li>Added support for IIS3DWB and ISM330DHCX in some FIFO related functions in STWIN_motion_sensor_ex.c</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>v1.2.1 / 21-Nov-2019</strong></label>
+<div>
+<h2 id="main-changes-11">Main Changes</h2>
+<h3 id="patch-release-7">Patch release</h3>
+<ul>
+<li>Bug fixed in STWIN_bus</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section3"  aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>v1.2.0 / 31-Oct-2019</strong></label>
+<div>
+<h2 id="main-changes-12">Main Changes</h2>
+<h3 id="maintenance-release">Maintenance release</h3>
+<ul>
+<li>Bug fixed in STWIN_bc, STWIN_bus and hci_tl_interface_template</li>
+<li>Added STWIN_debug_pins to easily use STMOD+ connector as debug pins</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section2"  aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>v1.1.0 / 12-Sep-2019</strong></label>
+<div>
+<h2 id="main-changes-13">Main Changes</h2>
+<h3 id="maintenance-release-1">Maintenance release</h3>
+<ul>
+<li>Updated STWIN_audio and STWIN_conf_template</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1"  aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>v1.0.0 / 05-Jul-2019</strong></label>
+<div>
+<h2 id="main-changes-14">Main Changes</h2>
+<h3 id="first-official-release">First official release</h3>
+<ul>
+<li>First official release</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<footer class="sticky">
+<div class="columns">
+<div class="column" style="width:95%;">
+<p>For complete documentation on <strong>STEVAL-STWINKT1B</strong> , visit: <a href="https://www.st.com/content/st_com/en/products/evaluation-tools/solution-evaluation-tools/sensor-solution-eval-boards/steval-stwinkt1b.html">www.st.com</a></p>
+</div><div class="column" style="width:5%;">
+<p><abbr title="Based on template cx566953 version 2.0">Info</abbr></p>
+</div>
+</div>
+</footer>
+</body>
+</html>

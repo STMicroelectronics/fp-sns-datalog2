@@ -32,10 +32,72 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section12" checked aria-hidden="true"> <label for="collapse-section12" aria-hidden="true">v2.2.1 / 11-Aug-23</label>
+<input type="checkbox" id="collapse-section13" checked aria-hidden="true"> <label for="collapse-section13" aria-hidden="true">v3.0.0 / 29-Sep-23</label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
-<h3 id="patch-release">Patch Release</h3>
+<h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
+<ul>
+<li>Redesigned Linux Setup files and README</li>
+<li>Examples updated catching MissingISPUOutputDescriptorException exception</li>
+<li>set_rtc function defined</li>
+<li>Examples updated with: -v –&gt; script version, -cdm –&gt; custom device template upload</li>
+<li>Manage WrongDeviceConfigFile in Python CLI example. (Issue #4 on GitHub)</li>
+<li>Removed app_debug_log file generation by default (enable/disable selection moved in Connection page)</li>
+<li>Bug fixed and updates in st_dtdl_gui
+<ul>
+<li>Added new widgets</li>
+<li>ComponentWidget and CommandWidget updated to manage responses</li>
+<li>Added application log file toggle button</li>
+<li>dtmi component identifier key parse method updated</li>
+<li>Fixed Waveform unit</li>
+</ul></li>
+<li>Bug fixed and updates in st_hsdatalog
+<ul>
+<li>HSD
+<ul>
+<li>Dataframes extraction for all sensor categories management</li>
+<li>Enum in values conversion for non MEMS sensors</li>
+<li>Measured ODR used instead of nominal ODR if available</li>
+<li>Fixed acquisitions chunk processing when spts == 0</li>
+<li>Updated “sensors” key parse method and sensitivity value retrieve</li>
+<li>Fixed plot for ISPU when output description file is not loaded and added missing time arg in __get_mems_columns_names</li>
+</ul></li>
+<li>HSD_GUI
+<ul>
+<li>Selectable Acquisition folder in HSDLogControlWidget</li>
+<li>Redesigned AutoMode management</li>
+<li>Hide Component Widget hidden when no status received.</li>
+</ul></li>
+<li>HSD_link
+<ul>
+<li>Updated DLL</li>
+<li>Add PnPL response management for SET and COMMANDS</li>
+<li>Add switch_bank API</li>
+<li>Manage WrongDeviceConfigFile in Python CLI example. (Issue #4 on GitHub)</li>
+<li>Debug prints aligned with application log messages</li>
+</ul></li>
+<li>HSD utils
+<ul>
+<li>Add WrongDeviceConfigFile exception. (Issue #4 on GitHub)</li>
+<li>Added new dtm.py file with function to upload a custom DTM</li>
+<li>Updated MissingDeviceModelError, added get_datetime, MissingISPUOutputDescriptorException and UnsupportedSensorCategoryError exception class</li>
+</ul></li>
+</ul></li>
+<li>Buf fixed and updates in st_pnpl
+<ul>
+<li>Updated local USB catalog with new supported devices</li>
+<li>Upgraded DTMs and updated FW ID supported</li>
+<li>Added response field management for Commands in device_template_model.py</li>
+<li>Added Mounted Property for external sensors</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section12" aria-hidden="true"> <label for="collapse-section12" aria-hidden="true">v2.2.1 / 11-Aug-23</label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<h3 id="patch-release">Patch release</h3>
 <ul>
 <li>Included DATALOG2 v1.2.1 patch in local USB catalog</li>
 <li>Rebuilt st_hsdatalog and st_pnpl wheels to handle DATALOG2 patch</li>
@@ -43,10 +105,10 @@
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section11" checked aria-hidden="true"> <label for="collapse-section11" aria-hidden="true">v2.2.0 / 7-Jul-23</label>
+<input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true">v2.2.0 / 7-Jul-23</label>
 <div>
-<h2 id="main-changes">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
+<h2 id="main-changes-2">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
 <ul>
 <li>Reshaped hsdatalog_to_unico script to convert any kind of sensor</li>
 <li>Fixed hsdatalog_cli
@@ -111,8 +173,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section10" aria-hidden="true"> <label for="collapse-section10" aria-hidden="true">v2.1.0 / 24-Mar-23</label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
+<h2 id="main-changes-3">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
 <ul>
 <li>Refactored HSDPython_SDK Install/uninstall batch scripts</li>
 <li>Fixed setup issues in Linux environment</li>
@@ -140,8 +202,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true">v2.0.1 / 14-Feb-23</label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
-<h3 id="patch-release">Patch release</h3>
+<h2 id="main-changes-4">Main Changes</h2>
+<h3 id="patch-release-1">Patch release</h3>
 <ul>
 <li>Fixed toNanoedge converter and offline plot data for dummy data</li>
 <li>Updated device models</li>
@@ -151,8 +213,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">v2.0.0 / 30-Sep-22</label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
+<h2 id="main-changes-5">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
 <ul>
 <li>Added support for both DATALOG1 and DATALOG2</li>
 </ul>
@@ -161,8 +223,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true">v1.4.0 / 8-Jul-2022</label>
 <div>
-<h2 id="main-changes-4">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
+<h2 id="main-changes-6">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
 <ul>
 <li>Added support to SensorTile.box and LSM6DSOX</li>
 <li>Bug fixed in plot function:
@@ -201,7 +263,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true">v1.3.0 / 5-Nov-2021</label>
 <div>
-<h2 id="main-changes-5">Main Changes</h2>
+<h2 id="main-changes-7">Main Changes</h2>
 <h3 id="maintenance-release">Maintenance release</h3>
 <ul>
 <li><strong>Updated requirements.txt for Linux and Raspberry pi 3B compatibility</strong></li>
@@ -236,8 +298,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true">v1.2.0 / 25-Jun-2021</label>
 <div>
-<h2 id="main-changes-6">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
+<h2 id="main-changes-8">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-5">Maintenance release and product update</h3>
 <ul>
 <li><strong>Updated requirements.txt - import missing</strong></li>
 <li><strong>Hotfix in nb_hsdatalog_communication notebook</strong></li>
@@ -253,8 +315,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true">v1.1.0 / 29-Jan-2021</label>
 <div>
-<h2 id="main-changes-7">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-5">Maintenance release and product update</h3>
+<h2 id="main-changes-9">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-6">Maintenance release and product update</h3>
 <ul>
 <li><strong>Updated core module and code cleaning</strong></li>
 <li>Add BSD 3 Clause license disclaimer</li>
@@ -268,7 +330,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">v1.0.0 / 13-Nov-2020</label>
 <div>
-<h2 id="main-changes-8">Main Changes</h2>
+<h2 id="main-changes-10">Main Changes</h2>
 <h3 id="first-official-release">First official release</h3>
 </div>
 </div>

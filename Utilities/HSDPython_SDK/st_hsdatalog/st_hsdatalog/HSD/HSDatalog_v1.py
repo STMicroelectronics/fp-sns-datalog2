@@ -83,7 +83,7 @@ class HSDatalog_v1:
             device_dict = json.loads(device_json_str)
             self.device_model = Device.from_dict(device_dict['device'])
         except:
-            raise MissingDeviceModelError
+            raise
 
     def __load_acquisition_info(self, acq_info_json_file_path):
         try:

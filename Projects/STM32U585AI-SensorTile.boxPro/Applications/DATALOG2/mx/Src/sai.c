@@ -72,7 +72,6 @@ void MX_SAI1_Init(void)
   {
     Error_Handler();
   }
-
   /* USER CODE BEGIN SAI1_Init 2 */
 
   /* USER CODE END SAI1_Init 2 */

@@ -36,15 +36,7 @@ typedef struct _ISensor_vtbl ISensor_vtbl;
 
 struct _ISensor_vtbl
 {
-  uint8_t (*GetId)(ISourceObservable *_this);
-  IEventSrc *(*GetEventSourceIF)(ISourceObservable *_this);
-  EMData_t (*GetDataInfo)(ISourceObservable *_this);
-  sys_error_code_t (*SensorGetODR)(ISourceObservable *_this, float *p_measured, float *p_nominal);
-  float (*SensorGetFS)(ISourceObservable *_this);
-  float (*SensorGetSensitivity)(ISourceObservable *_this);
-  sys_error_code_t (*SensorSetODR)(ISensor_t *_this, float ODR);
-  sys_error_code_t (*SensorSetFS)(ISensor_t *_this, float FS);
-  sys_error_code_t (*SensorSetFifoWM)(ISensor_t *_this, uint16_t fifoWM);
+  ISourceObservable_vtbl vtbl;
   sys_error_code_t (*SensorEnable)(ISensor_t *_this);
   sys_error_code_t (*SensorDisable)(ISensor_t *_this);
   boolean_t (*SensorIsEnabled)(ISensor_t *_this);
@@ -64,25 +56,6 @@ struct _ISensor_t
 
 // Inline functions definition
 // ***************************
-
-static inline sys_error_code_t ISensorSetODR(ISensor_t *_this, float ODR)
-{
-  return _this->vptr->SensorSetODR(_this, ODR);
-}
-
-static inline sys_error_code_t ISensorSetFS(ISensor_t *_this, float FS)
-{
-  return _this->vptr->SensorSetFS(_this, FS);
-}
-
-static inline sys_error_code_t ISensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
-{
-  if (_this->vptr->SensorSetFifoWM != NULL)
-  {
-    return  _this->vptr->SensorSetFifoWM(_this, fifoWM);
-  }
-  return SYS_INVALID_FUNC_CALL_ERROR_CODE;
-}
 
 static inline sys_error_code_t ISensorEnable(ISensor_t *_this)
 {

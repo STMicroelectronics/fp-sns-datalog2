@@ -9,13 +9,13 @@
   * Copyright (c) 2022 STMicroelectronics.
   * All rights reserved.
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   *
   ******************************************************************************
   */
-
 #ifndef IMP34DT05TASK_VTBL_H_
 #define IMP34DT05TASK_VTBL_H_
 
@@ -43,19 +43,18 @@ sys_error_code_t IMP34DT05Task_vtblOnEnterPowerMode(AManagedTaskEx *_this, const
 
 uint8_t IMP34DT05Task_vtblMicGetId(ISourceObservable *_this);
 IEventSrc *IMP34DT05Task_vtblGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t IMP34DT05Task_vtblMicGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-float IMP34DT05Task_vtblMicGetFS(ISourceObservable *_this);
-float IMP34DT05Task_vtblMicGetSensitivity(ISourceObservable *_this);
 EMData_t IMP34DT05Task_vtblMicGetDataInfo(ISourceObservable *_this);
-
-sys_error_code_t IMP34DT05Task_vtblSensorSetODR(ISensor_t *_this, float ODR);
-sys_error_code_t IMP34DT05Task_vtblSensorSetFS(ISensor_t *_this, float FS);
-sys_error_code_t IMP34DT05Task_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 sys_error_code_t IMP34DT05Task_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t IMP34DT05Task_vtblSensorDisable(ISensor_t *_this);
 boolean_t IMP34DT05Task_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t IMP34DT05Task_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t IMP34DT05Task_vtblSensorGetStatus(ISensor_t *_this);
+uint32_t IMP34DT05Task_vtblMicGetFrequency(ISensorAudio_t *_this);
+uint8_t IMP34DT05Task_vtblMicGetVolume(ISensorAudio_t *_this);
+uint8_t IMP34DT05Task_vtblMicGetResolution(ISensorAudio_t *_this);
+sys_error_code_t IMP34DT05Task_vtblSensorSetFrequency(ISensorAudio_t *_this, uint32_t frequency);
+sys_error_code_t IMP34DT05Task_vtblSensorSetVolume(ISensorAudio_t *_this, uint8_t volume);
+sys_error_code_t IMP34DT05Task_vtblSensorSetResolution(ISensorAudio_t *_this, uint8_t bit_depth);
 
 #ifdef __cplusplus
 }

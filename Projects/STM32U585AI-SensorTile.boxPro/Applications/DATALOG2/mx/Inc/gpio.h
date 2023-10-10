@@ -54,6 +54,8 @@ void MX_GPIO_PH11_Init(void);
 void MX_GPIO_PH12_Init(void);
 void MX_GPIO_PI6_Init(void);
 void MX_GPIO_PB1_Init(void);
+void MX_GPIO_PG1_Init(void);
+void MX_GPIO_PG2_Init(void);
 void MX_GPIO_PG6_Init(void);
 void MX_GPIO_PF3_Init(void);
 void MX_GPIO_PH6_Init(void);

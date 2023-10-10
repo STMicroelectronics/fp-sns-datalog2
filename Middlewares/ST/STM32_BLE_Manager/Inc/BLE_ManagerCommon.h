@@ -2,14 +2,14 @@
   ******************************************************************************
   * @file    BLE_ManagerCommon.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Macros used for exporting the BLE Characteristics
   *          and Services
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,24 +18,24 @@
   *
   ******************************************************************************
   */
-  
-/* Define to prevent recursive inclusion -------------------------------------*/  
+
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _UUID_BLE_MANGER_COMMON_H_
 #define _UUID_BLE_MANGER_COMMON_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported Defines ----------------------------------------------------------*/
- 
+
 #define COPY_UUID_128(uuid_struct, uuid_15, uuid_14, uuid_13, uuid_12, uuid_11, uuid_10, uuid_9, uuid_8, uuid_7, uuid_6, uuid_5, uuid_4, uuid_3, uuid_2, uuid_1, uuid_0) \
-{\
-  (uuid_struct[0 ] = uuid_0) ; (uuid_struct[1 ] = uuid_1) ; (uuid_struct[2 ] = uuid_2) ; (uuid_struct[3 ] = uuid_3) ; \
-  (uuid_struct[4 ] = uuid_4) ; (uuid_struct[5 ] = uuid_5) ; (uuid_struct[6 ] = uuid_6) ; (uuid_struct[7 ] = uuid_7) ; \
-  (uuid_struct[8 ] = uuid_8) ; (uuid_struct[9 ] = uuid_9) ; (uuid_struct[10] = uuid_10); (uuid_struct[11] = uuid_11); \
-  (uuid_struct[12] = uuid_12); (uuid_struct[13] = uuid_13); (uuid_struct[14] = uuid_14); (uuid_struct[15] = uuid_15); \
-}
+  {\
+    (uuid_struct[0 ] = uuid_0) ; (uuid_struct[1 ] = uuid_1) ; (uuid_struct[2 ] = uuid_2) ; (uuid_struct[3 ] = uuid_3) ; \
+    (uuid_struct[4 ] = uuid_4) ; (uuid_struct[5 ] = uuid_5) ; (uuid_struct[6 ] = uuid_6) ; (uuid_struct[7 ] = uuid_7) ; \
+    (uuid_struct[8 ] = uuid_8) ; (uuid_struct[9 ] = uuid_9) ; (uuid_struct[10] = uuid_10); (uuid_struct[11] = uuid_11); \
+    (uuid_struct[12] = uuid_12); (uuid_struct[13] = uuid_13); (uuid_struct[14] = uuid_14); (uuid_struct[15] = uuid_15); \
+  }
 
 /* Store Value into a buffer in Little Endian Format */
 #if 0

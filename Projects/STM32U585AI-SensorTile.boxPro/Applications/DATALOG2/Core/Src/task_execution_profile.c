@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -34,11 +34,11 @@ static uint8_t pxTaskTag;
 /* Public function definition */
 /******************************/
 /**
-* @brief  _tx_execution_thread_enter definition.
-*         This function will be called in the PendSV during context switch
-* @param  None
-* @retval None
-*/
+  * @brief  _tx_execution_thread_enter definition.
+  *         This function will be called in the PendSV during context switch
+  * @param  None
+  * @retval None
+  */
 void _tx_execution_thread_enter(void)
 {
   TX_THREAD_GET_CURRENT(thread_ptr);
@@ -49,16 +49,16 @@ void _tx_execution_thread_enter(void)
 }
 
 /**
-* @brief  _tx_execution_thread_exit definition.
-*         This function will be called in the PendSV during context switch
-* @param  None
-* @retval None
-*/
+  * @brief  _tx_execution_thread_exit definition.
+  *         This function will be called in the PendSV during context switch
+  * @param  None
+  * @retval None
+  */
 void _tx_execution_thread_exit(void)
 {
   TX_THREAD_GET_CURRENT(thread_ptr);
 
-  if(thread_ptr)
+  if (thread_ptr)
   {
     pxTaskTag = thread_ptr->pxTaskTag;
 

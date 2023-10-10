@@ -3,7 +3,6 @@
 # NOTE: unplug the board before running the script
 echo "NOTE: unplug the board before running the script"
 
-sudo rm /usr/lib/libhs_datalog_v1.so
 sudo rm /usr/lib/libhs_datalog_v2.so
 echo "libhs_datalog.so library removed from /usr/lib"
 

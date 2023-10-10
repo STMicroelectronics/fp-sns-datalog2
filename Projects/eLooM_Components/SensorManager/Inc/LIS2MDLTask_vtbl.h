@@ -2,13 +2,7 @@
   ******************************************************************************
   * @file    LIS2MDLTask_vtbl.h
   * @author  SRA - MCD
-  *
-  * @date    30-Jul-2021
-  *
   * @brief
-  *
-  *
-  *
   ******************************************************************************
   * @attention
   *
@@ -50,14 +44,14 @@ sys_error_code_t LIS2MDLTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const E
 
 uint8_t LIS2MDLTask_vtblMagGetId(ISourceObservable *_this);
 IEventSrc *LIS2MDLTask_vtblMagGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t LIS2MDLTask_vtblMagGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal);
-float LIS2MDLTask_vtblMagGetFS(ISourceObservable *_this);
-float LIS2MDLTask_vtblMagGetSensitivity(ISourceObservable *_this);
+sys_error_code_t LIS2MDLTask_vtblMagGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
+float LIS2MDLTask_vtblMagGetFS(ISensorMems_t *_this);
+float LIS2MDLTask_vtblMagGetSensitivity(ISensorMems_t *_this);
 EMData_t LIS2MDLTask_vtblMagGetDataInfo(ISourceObservable *_this);
 
-sys_error_code_t LIS2MDLTask_vtblSensorSetODR(ISensor_t *_this, float ODR);
-sys_error_code_t LIS2MDLTask_vtblSensorSetFS(ISensor_t *_this, float FS);
-sys_error_code_t LIS2MDLTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
+sys_error_code_t LIS2MDLTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
+sys_error_code_t LIS2MDLTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t LIS2MDLTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 sys_error_code_t LIS2MDLTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t LIS2MDLTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t LIS2MDLTask_vtblSensorIsEnabled(ISensor_t *_this);

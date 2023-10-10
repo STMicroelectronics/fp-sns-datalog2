@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_FFT_Amplitude.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   FFT Amplitude info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,14 +18,14 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_FFT_AMPLITUDE_H_
 #define _BLE_FFT_AMPLITUDE_H_
 
 #ifdef __cplusplus
- extern "C" {
-#endif 
-   
+extern "C" {
+#endif
+
 /* Exported typedef --------------------------------------------------------- */
 typedef void (*CustomNotifyEventFFT_Amplitude_t)(BLE_NotifyEvent_t Event);
 
@@ -35,11 +35,11 @@ extern CustomNotifyEventFFT_Amplitude_t CustomNotifyEventFFT_Amplitude;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init FFT Amplitude info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for FFT Amplitude info service
- */
-extern BleCharTypeDef* BLE_InitFFTAmplitudeService(void);
+  * @brief  Init FFT Amplitude info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for FFT Amplitude info service
+  */
+extern BleCharTypeDef *BLE_InitFFTAmplitudeService(void);
 
 /*
  * @brief  Update FFT Amplitude characteristic value
@@ -48,13 +48,15 @@ extern BleCharTypeDef* BLE_InitFFTAmplitudeService(void);
  *                  - 1 byte for number of components (up to 3 components)
  *                  - 4 bytes for frequency steps
  *                  - 4 bytes for each component
- *                     (if number of components is more 1, for example 3, send the data in this format: X1,X2,X3,...Xn,Y1,Y2,Y3,...Yn,X1,Z2,Z3,...Zn)
+ *                     (if number of components is more 1, for example 3, send the data in this format:
+ *                      X1,X2,X3,...Xn,Y1,Y2,Y3,...Yn,X1,Z2,Z3,...Zn)
  * @param  uint16_t DataNumber Number of samples
  * @param  uint8_t *SendingFFT
  * @param  uint16_t *CountSendData
  * @retval tBleStatus   Status
  */
-tBleStatus BLE_FFTAmplitudeUpdate(uint8_t *DataToSend, uint16_t DataNumber, uint8_t *SendingFFT, uint16_t *CountSendData);
+tBleStatus BLE_FFTAmplitudeUpdate(uint8_t *DataToSend, uint16_t DataNumber, uint8_t *SendingFFT,
+                                  uint16_t *CountSendData);
 
 #ifdef __cplusplus
 }

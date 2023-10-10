@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file    BLE_QVAR.h 
+  * @file    BLE_QVAR.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   QVAR info services APIs.
   ******************************************************************************
   * @attention
@@ -17,13 +17,13 @@
   *
   ******************************************************************************
   */
-  
-/* Define to prevent recursive inclusion -------------------------------------*/  
+
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_QVAR_H_
 #define _BLE_QVAR_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported typedef --------------------------------------------------------- */
@@ -35,22 +35,22 @@ extern CustomNotifyEventQVAR_t CustomNotifyEventQVAR;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init QVAR info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for QVAR info service
- */
-extern BleCharTypeDef* BLE_InitQVARService(void);
+  * @brief  Init QVAR info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for QVAR info service
+  */
+extern BleCharTypeDef *BLE_InitQVARService(void);
 
 /**
- * @brief  Update The QVAR Char
- * @param  int32_t QVAR Value [LSB]
- * @param  uint8_t Flag (to be defined)
- * @param  int32_t DQVAR Value [LSB]
- * @param  uint32_t Parameter (to be defined)
- * @param  int32_t NumberElement Number of elements to send
- * @retval tBleStatus      Status
- */
-extern tBleStatus BLE_QVARUpdate(int32_t QVAR, uint8_t Flag, int32_t DQVAR, uint32_t Param,int32_t NumberElement);
+  * @brief  Update The QVAR Char
+  * @param  int32_t QVAR Value [LSB]
+  * @param  uint8_t Flag (to be defined)
+  * @param  int32_t DQVAR Value [LSB]
+  * @param  uint32_t Parameter (to be defined)
+  * @param  int32_t NumberElement Number of elements to send
+  * @retval tBleStatus      Status
+  */
+extern tBleStatus BLE_QVARUpdate(int32_t QVAR, uint8_t Flag, int32_t DQVAR, uint32_t Param, int32_t NumberElement);
 
 #ifdef __cplusplus
 }

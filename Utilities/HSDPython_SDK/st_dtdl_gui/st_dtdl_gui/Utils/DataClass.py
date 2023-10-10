@@ -27,7 +27,8 @@ class UnitMap():
             "degreeCelsius":"°C",
             "hertz":"Hz",
             "second":"s",
-            "Waveform":"dBSPL"
+            "Waveform":"dBFS",
+            "percent":"%"
         }
 
 class TypeEnum(Enum):

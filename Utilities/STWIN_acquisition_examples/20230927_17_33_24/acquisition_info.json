@@ -1,0 +1,39 @@
+{
+    "tags": [
+        {
+            "l": "SW_TAG_0",
+            "e": false,
+            "ta": "2000-01-01T00:00:33.927Z"
+        },
+        {
+            "l": "SW_TAG_1",
+            "e": false,
+            "ta": "2000-01-01T00:00:33.927Z"
+        },
+        {
+            "l": "SW_TAG_2",
+            "e": false,
+            "ta": "2000-01-01T00:00:33.928Z"
+        },
+        {
+            "l": "SW_TAG_3",
+            "e": false,
+            "ta": "2000-01-01T00:00:33.928Z"
+        },
+        {
+            "l": "SW_TAG_4",
+            "e": false,
+            "ta": "2000-01-01T00:00:33.929Z"
+        }
+    ],
+    "name": "STEVAL-STWINKT1B_acquisition",
+    "description": "",
+    "uuid": "52a725a7-2f77-44de-893e-a88f27f34a69",
+    "start_time": "2000-01-01T00:00:23.000Z",
+    "end_time": "2000-01-01T00:00:33.931Z",
+    "data_ext": ".dat",
+    "data_fmt": "HSD_2.0.0",
+    "interface": 1,
+    "schema_version": "2.0.0",
+    "c_type": 2
+}

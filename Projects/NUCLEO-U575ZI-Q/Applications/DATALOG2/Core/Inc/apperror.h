@@ -1,29 +1,29 @@
 /**
- ******************************************************************************
- * @file    apperror.h
- * @author  SRA
- *
- * @brief Application specific error code
- *
- * Application defines its own error code in this file starting form the
- * constant APP_BASE_ERROR_CODE.
- * It is recommended to group the error code in the following groups:
- * - Low Level API error code
- * - Service Level error code
- * - Task Level error code
- *
- *********************************************************************************
- * @attention
- *
- * Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- *********************************************************************************
- */
+  ******************************************************************************
+  * @file    apperror.h
+  * @author  SRA
+  *
+  * @brief Application specific error code
+  *
+  * Application defines its own error code in this file starting form the
+  * constant APP_BASE_ERROR_CODE.
+  * It is recommended to group the error code in the following groups:
+  * - Low Level API error code
+  * - Service Level error code
+  * - Task Level error code
+  *
+  *********************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *********************************************************************************
+  */
 #ifndef APPERROR_H_
 #define APPERROR_H_
 

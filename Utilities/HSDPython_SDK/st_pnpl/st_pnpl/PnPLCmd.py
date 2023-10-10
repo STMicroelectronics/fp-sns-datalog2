@@ -56,8 +56,8 @@ class PnPLCMDManager:
         message = {
             comp_name: {
                 prop_name : prop_value
-                }
             }
+        }
         return json.dumps(message)
     
     @staticmethod
@@ -65,16 +65,21 @@ class PnPLCMDManager:
         if req_name is None:
             message = {
                 comp_name + "*" + command_name: ""
-                }
+            }
         elif req_name is None and req_value is not None:
             message = {
                 comp_name + "*" + command_name: req_value
-                }
-        elif req_name is not None and req_value is not None:
-            message = {
-            comp_name + "*" + command_name: {
-                    req_name: req_value
-                }
             }
+        elif req_name is not None and req_value is not None:
+            if len(req_value) == 1:
+                message = {
+                    comp_name + "*" + command_name: req_value
+                }
+            else:    
+                message = {
+                    comp_name + "*" + command_name: {
+                        req_name: req_value
+                    }
+                }
         return json.dumps(message)
         

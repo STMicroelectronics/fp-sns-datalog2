@@ -58,10 +58,10 @@ typedef union _SMMessage
 
   struct sensorDataReadyMessage_t
   {
-    uint8_t  messageId;                                // Report ID = 0x01 (1)
-    uint8_t  half;                                     // used only by the microphone
-    uint8_t  nReserved[2];                             // Reserved
-    double   fTimestamp;                               // timestamp in s.
+    uint8_t messageId;                                // Report ID = 0x01 (1)
+    uint8_t half;                                     // used only by the microphone
+    uint8_t nReserved[2];                             // Reserved
+    double fTimestamp;                               // timestamp in s.
   } sensorDataReadyMessage;
 
   //--------------------------------------------------------------------------------
@@ -70,10 +70,10 @@ typedef union _SMMessage
 
   struct sensorMessage_t
   {
-    uint8_t   messageId;                                // Report ID = 0x04 (4)
-    uint8_t   nSensorId;                               // Specify the sensor ID
-    uint16_t  nCmdID;                                  // Specify the command ID
-    uint32_t  nParam;                                  // Specify an optional parameter.
+    uint8_t messageId;                                // Report ID = 0x04 (4)
+    uint8_t nSensorId;                               // Specify the sensor ID
+    uint16_t nCmdID;                                  // Specify the command ID
+    float nParam;                                  // Specify an optional parameter.
   } sensorMessage;
 
   //--------------------------------------------------------------------------------
@@ -82,10 +82,10 @@ typedef union _SMMessage
 
   struct sdMessage_t
   {
-    uint8_t   messageId;                                // Report ID = 0x05 (5)
-    uint8_t   nPadding;                                // Padding byte
-    uint16_t  nCmdID;                                  // Specify the command ID
-    uint32_t  nParam;                                  // Specify an optional parameter.
+    uint8_t messageId;                                // Report ID = 0x05 (5)
+    uint8_t nPadding;                                // Padding byte
+    uint16_t nCmdID;                                  // Specify the command ID
+    uint32_t nParam;                                  // Specify an optional parameter.
   } sdMessage;
 
   //--------------------------------------------------------------------------------
@@ -94,10 +94,10 @@ typedef union _SMMessage
 
   struct spiIOMessage_t
   {
-    uint8_t   messageId;                                // Report ID = 0x06 / 0x07 (6 / 7)
-    uint8_t   nRegAddr;
-    uint16_t  nDataSize;
-    uint8_t  *pnData;
+    uint8_t messageId;                                // Report ID = 0x06 / 0x07 (6 / 7)
+    uint16_t nRegAddr;
+    uint16_t nDataSize;
+    uint8_t *pnData;
     SPIBusIF *pxSensor;
   } spiIOMessage;
 
@@ -107,10 +107,11 @@ typedef union _SMMessage
 
   struct i2cIOMessage_t
   {
-    uint8_t   messageId;                                // Report ID = 0x08 / 0x09 (8 / 9)
-    uint8_t   nRegAddr;
-    uint16_t  nDataSize;
-    uint8_t  *pnData;
+    uint8_t messageId;                                // Report ID = 0x08 / 0x09 (8 / 9)
+    uint8_t nAddrSize;
+    uint16_t nRegAddr;
+    uint16_t nDataSize;
+    uint8_t *pnData;
     I2CBusIF *pxSensor;
   } i2cIOMessage;
 
@@ -120,8 +121,8 @@ typedef union _SMMessage
 
   struct internalMessageFE_t
   {
-    uint8_t  messageId;                                 // Report ID = 0xFE
-    uint8_t  nData;                                    // reserved. It can be ignored
+    uint8_t messageId;                                 // Report ID = 0xFE
+    uint8_t nData;                                    // reserved. It can be ignored
   } internalMessageFE;
 
 } SMMessage;

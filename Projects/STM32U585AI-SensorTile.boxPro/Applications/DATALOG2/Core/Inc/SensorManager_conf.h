@@ -18,7 +18,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -26,13 +26,14 @@
 #ifndef SENSORMANAGERCONF_H_
 #define SENSORMANAGERCONF_H_
 
-#define LPS22DF_FIFO_ENABLED	1
-#define LIS2DU12_FIFO_ENABLED	1
-#define LSM6DSV16X_FIFO_ENABLED	1
+#define SPIDRV_CFG_HARDWARE_PERIPHERALS_COUNT   2
+
+#define LPS22DF_FIFO_ENABLED  1
+#define LIS2DU12_FIFO_ENABLED 1
+#define LSM6DSV16X_FIFO_ENABLED 1
 
 //#define HSD_USE_DUMMY_DATA 1
 
-//#define EXTERNAL_IIS3DWB 1
 
 // file LSM6DSV16XTask.c
 #define LSM6DSV16X_TASK_CFG_STACK_DEPTH           (TX_MINIMUM_STACK*8)
@@ -61,6 +62,10 @@
 #define STTS22H_TASK_CFG_STACK_DEPTH              (TX_MINIMUM_STACK*7)
 #define STTS22H_TASK_CFG_PRIORITY                 (8)
 #define STTS22H_TASK_CFG_I2C_ADDRESS              STTS22H_I2C_ADD_H
+
+// file STTS22HTask.c
+#define ISM330IS_TASK_CFG_STACK_DEPTH             (TX_MINIMUM_STACK*7)
+#define ISM330IS_TASK_CFG_PRIORITY                (8)
 
 // file MP23DB01HPTask.c
 #define MP23DB01HP_TASK_CFG_STACK_DEPTH            (TX_MINIMUM_STACK*7)

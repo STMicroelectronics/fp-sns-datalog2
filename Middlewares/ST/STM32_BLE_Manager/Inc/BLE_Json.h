@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_Json.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   BLE_Json info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,26 +18,26 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_JSON_H_
 #define _BLE_JSON_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
-   
+
 /* Exported typedef --------------------------------------------------------- */
 typedef enum
 {
-  BLE_JSON_READ_MODES     = 0,//This should be the First One
+  BLE_JSON_READ_MODES     = 0,/* This should be the First One */
   BLE_JSON_NFC_WIFI       = 1,
   BLE_JSON_NFC_VCARD      = 2,
   BLE_JSON_GENERIC_TEXT   = 3,
   BLE_JSON_NFC_URL        = 4,
-  BLE_JSON_TOTAL_NUMBER   = 5 //This should be the last One
+  BLE_JSON_TOTAL_NUMBER   = 5 /* This should be the last One */
 } BLE_JSON_MODE_t;
 
-typedef void (*CustomWriteRequestJson_t)(uint8_t* received_msg, uint8_t msg_length);
+typedef void (*CustomWriteRequestJson_t)(uint8_t *received_msg, uint8_t msg_length);
 typedef void (*CustomNotifyEventJson_t)(BLE_NotifyEvent_t Event);
 
 /* Exported Variables ------------------------------------------------------- */
@@ -51,19 +51,19 @@ extern uint8_t *JsonAnswer;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Json info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Json info service
- */
-extern BleCharTypeDef* BLE_InitJsonService(void);
+  * @brief  Init Json info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Json info service
+  */
+extern BleCharTypeDef *BLE_InitJsonService(void);
 
 /**
- * @brief  Json send buffer
- * @param  uint8_t* buffer
- * @param  uint32_t len
- * @retval tBleStatus Status
- */
-extern tBleStatus BLE_JsonUpdate(uint8_t* buffer, uint32_t len);
+  * @brief  Json send buffer
+  * @param  uint8_t* buffer
+  * @param  uint32_t len
+  * @retval tBleStatus Status
+  */
+extern tBleStatus BLE_JsonUpdate(uint8_t *buffer, uint32_t len);
 
 #ifdef __cplusplus
 }

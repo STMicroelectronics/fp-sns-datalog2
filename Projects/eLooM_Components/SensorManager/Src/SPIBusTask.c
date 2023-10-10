@@ -73,8 +73,8 @@ typedef struct _SPIBusTaskClass
   */
 static sys_error_code_t SPIBusTaskExecuteStep(AManagedTask *_this);
 
-static int32_t SPIBusTaskWrite(void *p_sensor, uint8_t reg, uint8_t *p_data, uint16_t size);
-static int32_t SPIBusTaskRead(void *p_sensor, uint8_t reg, uint8_t *p_data, uint16_t size);
+static int32_t SPIBusTaskWrite(void *p_sensor, uint16_t reg, uint8_t *p_data, uint16_t size);
+static int32_t SPIBusTaskRead(void *p_sensor, uint16_t reg, uint8_t *p_data, uint16_t size);
 
 static sys_error_code_t SPIBusTaskCtrl(ABusIF *_this, EBusCtrlCmd eCtrlCmd, uint32_t nParams);
 
@@ -475,12 +475,12 @@ static sys_error_code_t SPIBusTaskExecuteStep(AManagedTask *_this)
   return res;
 }
 
-static int32_t SPIBusTaskWrite(void *p_sensor, uint8_t reg, uint8_t *p_data, uint16_t size)
+static int32_t SPIBusTaskWrite(void *p_sensor, uint16_t reg, uint8_t *p_data, uint16_t size)
 {
   assert_param(p_sensor);
   SPIBusIF *p_spi_sensor = (SPIBusIF *) p_sensor;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  uint8_t auto_inc = p_spi_sensor->auto_inc;
+  uint16_t auto_inc = p_spi_sensor->auto_inc;
 
   struct spiIOMessage_t msg =
   {
@@ -517,12 +517,12 @@ static int32_t SPIBusTaskWrite(void *p_sensor, uint8_t reg, uint8_t *p_data, uin
   return res;
 }
 
-static int32_t SPIBusTaskRead(void *p_sensor, uint8_t reg, uint8_t *p_data, uint16_t size)
+static int32_t SPIBusTaskRead(void *p_sensor, uint16_t reg, uint8_t *p_data, uint16_t size)
 {
   assert_param(p_sensor);
   SPIBusIF *p_spi_sensor = (SPIBusIF *) p_sensor;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  uint8_t auto_inc = p_spi_sensor->auto_inc;
+  uint16_t auto_inc = p_spi_sensor->auto_inc;
 
   struct spiIOMessage_t msg =
   {

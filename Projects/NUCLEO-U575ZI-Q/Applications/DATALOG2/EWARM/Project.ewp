@@ -369,7 +369,7 @@
                     <state>$PROJ_DIR$/../mx/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/SensorManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/TagManager/Inc</state>
-                    <state>$PROJ_DIR$/../../../../eLooM_Components/PnPLCompManager/Inc</state>
+                    <state>$PROJ_DIR$/../../../../../Middlewares/ST/PnPLCompManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/EMData/Inc</state>
                 </option>
                 <option>
@@ -1466,7 +1466,7 @@
                     <state>$PROJ_DIR$/../mx/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/SensorManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/TagManager/Inc</state>
-                    <state>$PROJ_DIR$/../../../../eLooM_Components/PnPLCompManager/Inc</state>
+                    <state>$PROJ_DIR$/../../../../../Middlewares/ST/PnPLCompManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/EMData/Inc</state>
                     <state>$PROJ_DIR$\..\..\..\..\eLooM_Components\DPU\Inc</state>
                 </option>
@@ -2257,33 +2257,6 @@
                 </group>
             </group>
             <group>
-                <name>PnPLCompManager</name>
-                <group>
-                    <name>Inc</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Inc\IPnPLComponent.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Inc\IPnPLComponent_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Inc\PnPLCompManager.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Inc\PnPLDef.h</name>
-                    </file>
-                </group>
-                <group>
-                    <name>Src</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Src\IPnPLComponent.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\PnPLCompManager\Src\PnPLCompManager.c</name>
-                    </file>
-                </group>
-            </group>
-            <group>
                 <name>SensorManager</name>
                 <group>
                     <name>Inc</name>
@@ -2576,9 +2549,6 @@
                         <name>$PROJ_DIR$\..\Core\Src\stm32u5xx_hal_msp.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Src\stm32u5xx_hal_timebase_tim.c</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\Core\Src\stm32u5xx_it.c</name>
                     </file>
                     <file>
@@ -2652,6 +2622,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\mx\Src\rtc.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\mx\Src\stm32u5xx_hal_timebase_tim.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\mx\Src\tim.c</name>
@@ -3187,6 +3160,33 @@
                             <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\eLooM\Src\services\SysTimestamp.c</name>
                         </file>
                     </group>
+                </group>
+            </group>
+            <group>
+                <name>PnPLCompManager</name>
+                <group>
+                    <name>Inc</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc\IPnPLComponent.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc\IPnPLComponent_vtbl.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc\PnPLCompManager.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc\PnPLDef.h</name>
+                    </file>
+                </group>
+                <group>
+                    <name>Src</name>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\IPnPLComponent.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\PnPLCompManager.c</name>
+                    </file>
                 </group>
             </group>
             <group>

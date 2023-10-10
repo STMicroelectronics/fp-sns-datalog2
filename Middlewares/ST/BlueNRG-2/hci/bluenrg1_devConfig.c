@@ -77,7 +77,8 @@
 #endif
 
 
-const devConfig_t deviceConfig = {
+const devConfig_t deviceConfig =
+{
   HS_SPEED_XTAL,
   LS_SOURCE,
   SMPS_INDUCTOR,
@@ -85,6 +86,6 @@ const devConfig_t deviceConfig = {
   htob(FROM_US_TO_SYS_TIME(HS_STARTUP_TIME_US), 2),
   htob(SLAVE_SCA_PPM, 0),
   MASTER_SCA,
-  htob(FROM_US_TO_SYS_TIME((MAX_CONN_EVT_LEN*1000)), 4),
+  htob(FROM_US_TO_SYS_TIME((MAX_CONN_EVT_LEN * 1000)), 4),
   TEST_MODE
 };

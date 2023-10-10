@@ -15,7 +15,6 @@
 
 from datetime import datetime
 import os
-from functools import partial
 import math
 import threading
 import time
@@ -25,14 +24,15 @@ from st_dtdl_gui.Widgets.LoadingWindow import StaticLoadingWindow
 
 import matplotlib.pyplot as plt
 
-from PySide6.QtCore import Slot, QTimer
-from PySide6.QtWidgets import QFrame, QSpinBox, QComboBox, QPushButton, QCheckBox, QFileDialog, QGroupBox, QRadioButton, QLabel
+from PySide6.QtCore import Slot, Qt
+from PySide6.QtWidgets import QFrame, QSpinBox, QComboBox, QPushButton, QCheckBox, QFileDialog, QGroupBox, QRadioButton, QLabel, QLineEdit
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 
 from st_dtdl_gui.Widgets.ComponentWidget import ComponentWidget
 import st_hsdatalog
 from st_hsdatalog.HSD.HSDatalog import HSDatalog
+from st_hsdatalog.HSD_GUI.HSD_Controller import AutomodeStatus
 import st_hsdatalog.HSD_utils.logger as logger
 log = logger.get_logger(__name__)
 
@@ -44,6 +44,7 @@ class HSDLogControlWidget(ComponentWidget):
         self.controller.sig_offline_plots_completed.connect(self.s_offline_plots_completed)
         
         self.app = self.controller.qt_app
+        self.is_waiting_to_start = False
         self.is_logging = False
         self.parent_widget = parent
 
@@ -101,15 +102,36 @@ class HSDLogControlWidget(ComponentWidget):
         # self.interface_combobox.setCurrentIndex(self.interface_combobox.count() - 1)
         # self.interface_combobox.addItem("USB")
         # ==============================================================================================================
-        
+
         # Save Config PushButton
         self.save_config_button = log_control_widget.frame_log_control.findChild(QPushButton,"save_conf_button")
         self.save_config_button.clicked.connect(self.clicked_save_config_button)
         # Load Config PushButton
         self.load_config_button = log_control_widget.frame_log_control.findChild(QPushButton,"load_conf_button")
         self.load_config_button.clicked.connect(self.clicked_load_config_button)
-        # Offline Plot Frame
-        self.frame_offline_plot = frame_contents.findChild(QGroupBox, "groupBox_offline_plot")
+        # Offline plot settings GroupBox
+        self.groupBox_offline_plot = frame_contents.findChild(QGroupBox, "groupBox_offline_plot")
+        self.groupBox_offline_plot.setVisible(False)
+        # Online plot settings GroupBox
+        self.groupBox_online_plot = frame_contents.findChild(QGroupBox, "groupBox_online_plot")
+        self.groupBox_online_plot.setVisible(True)
+        # Offline plot settings GroupBox
+        self.checkBox_offline = frame_contents.findChild(QCheckBox, "checkBox_offline")
+        self.checkBox_offline.stateChanged.connect(self.checkBox_offline_checked)
+        # Online plot settings GroupBox
+        self.checkBox_online = frame_contents.findChild(QCheckBox, "checkBox_online")
+        self.checkBox_online.stateChanged.connect(self.checkBox_online_checked)
+        
+        self.acq_folder_button = frame_contents.findChild(QPushButton, "acq_folder_button")
+        self.acq_folder_button.clicked.connect(self.browse_acq_folder_clicked)
+        self.acq_folder_lineEdit = frame_contents.findChild(QLineEdit, "acq_folder_lineEdit")
+        self.acq_folder = os.getcwd()
+        self.acq_folder_lineEdit.setText(self.acq_folder)
+        self.subfolder_checkbox = frame_contents.findChild(QCheckBox,"subfolder_checkbox")
+        self.subfolder_checkbox.stateChanged.connect(self.checkBox_subfolder_checked)
+        self.sub_folder = True
+        self.subfolder_checkbox.setChecked(True)
+
         self.ds_component_names_combo = frame_contents.findChild(QComboBox,"sensor_names_combo")
         
         self.debug_radio = frame_contents.findChild(QRadioButton,"debug_radio")
@@ -247,6 +269,37 @@ class HSDLogControlWidget(ComponentWidget):
     def clicked_load_config_button(self):
         fname = QFileDialog.getOpenFileName(None, "Load a Device Configuration file", "device_config", "JSON (*.json)")
         self.controller.load_config(fname[0])
+
+    @Slot()
+    def checkBox_offline_checked(self, state):
+        if state == Qt.Unchecked.value:
+            self.groupBox_offline_plot.setVisible(False)
+        elif state == Qt.Checked.value:
+            self.groupBox_offline_plot.setVisible(True)
+
+    @Slot()
+    def checkBox_online_checked(self, state):
+        if state == Qt.Unchecked.value:
+            self.groupBox_online_plot.setVisible(False)
+        elif state == Qt.Checked.value:
+            self.groupBox_online_plot.setVisible(True)
+    
+    @Slot()
+    def browse_acq_folder_clicked(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.Option.ShowDirsOnly
+        folder = QFileDialog.getExistingDirectory(self, "Select Folder", options=options)
+        if folder:
+            self.acq_folder_lineEdit.setText(folder)
+            self.acq_folder = folder
+
+    @Slot()
+    def checkBox_subfolder_checked(self, state):
+        if state == Qt.Unchecked.value:
+            self.sub_folder = False
+        elif state == Qt.Checked.value:
+            self.sub_folder = True
+
             
     @Slot()
     def clicked_start_log_button(self):
@@ -259,20 +312,47 @@ class HSDLogControlWidget(ComponentWidget):
         interface = 1
         # ============================================================================================================== 
         if not self.is_logging:
-            if self.controller.get_automode_status():
-                auto_settings = self.controller.get_automode_settings()
-                n = auto_settings[0] # Number of times to execute the timer
-                m = auto_settings[1] # Wait M seconds before the first start
-                x = auto_settings[2] # Execute for X seconds
-                y = auto_settings[3] # Wait Y seconds before the next execution
-                self.automode_timer, self.stop_automode_timer = self.run_timer(n, m, x, y)
+            if not self.is_waiting_to_start:
+                if self.controller.is_automode_enabled():
+                    automode_status = self.controller.get_automode_status()
+                    if automode_status == AutomodeStatus.AUTOMODE_UNSTARTED:
+                        auto_settings = self.controller.get_automode_settings()
+                        n = auto_settings[0] # Number of times to execute the timer
+                        m = auto_settings[1] # Wait M seconds before the first start
+                        x = auto_settings[2] # Execute for X seconds
+                        y = auto_settings[3] # Wait Y seconds before the next execution
+                        if m != 0:
+                            self.log_start_button.setText("Stop Log")
+                            self.log_start_button.setStyleSheet(STDTDL_PushButton.red)
+                        self.automode_timer, self.stop_automode_timer = self.run_timer(n, m, x, y)
+                    elif automode_status == AutomodeStatus.AUTOMODE_IDLE:
+                        self.log_start_button.setText("Start Log")
+                        self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
+                        self.stop_automode_timer()
+                        self.controller.stop_idle_auto_log()
+                        self.controller.set_automode_status(AutomodeStatus.AUTOMODE_UNSTARTED)
+                    else: #automode_status == AutomodeStatus.AUTOMODE_LOGGING:
+                        self.log_start_button.setText("Start Log")
+                        self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
+                        self.stop_automode_timer()
+                        self.controller.set_automode_status(AutomodeStatus.AUTOMODE_UNSTARTED)
+                else:
+                    self.acq_folder = self.acq_folder_lineEdit.text()
+                    self.controller.start_log(interface, self.acq_folder, self.sub_folder)
             else:
-                self.controller.start_log(interface)
+                if self.controller.is_automode_enabled():
+                    self.stop_automode_timer()
+                    self.controller.stop_auto_log(1)
+                    self.controller.stop_waiting_auto_log()
+                    self.log_start_button.setText("Start Log")
+                    self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
+                    self.is_waiting_to_start = False
         else:
             self.controller.update_component_status("acquisition_info")
-            self.controller.stop_log(interface)
-            if self.controller.get_automode_status():
+            if self.controller.is_automode_enabled():
                 self.stop_automode_timer()
+                self.controller.set_automode_status(AutomodeStatus.AUTOMODE_UNSTARTED)
+            self.controller.stop_log(interface)
 
     @Slot(bool)
     def s_is_logging(self, status:bool, interface:int):        
@@ -283,23 +363,26 @@ class HSDLogControlWidget(ComponentWidget):
             if interface == 1:
                 self.controller.start_plots()
                 
-            self.frame_offline_plot.setEnabled(False)
+            self.groupBox_offline_plot.setEnabled(False)
             self.offline_plot_button.setEnabled(False)
             self.st_spinbox.setEnabled(False)
             self.et_spinbox.setEnabled(False)
             self.time_spinbox.setEnabled(True)
         else:
-            self.log_start_button.setText("Start Log")
-            self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
             self.is_logging = False
             if interface == 1:
                 self.controller.stop_plots()
-        
-            self.frame_offline_plot.setEnabled(True)
+            
+            automode_status = self.controller.get_automode_status()
+            if automode_status == AutomodeStatus.AUTOMODE_UNSTARTED:
+                self.log_start_button.setText("Start Log")
+                self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
+
+            self.groupBox_offline_plot.setEnabled(True)
             self.offline_plot_button.setEnabled(True)
             self.st_spinbox.setEnabled(True)
             self.et_spinbox.setEnabled(True)
-            
+
             acquisition_folder = self.controller.hsd_link.get_acquisition_folder()
             hsd_factory = HSDatalog()
             self.hsd= hsd_factory.create_hsd(acquisition_folder)
@@ -329,6 +412,7 @@ class HSDLogControlWidget(ComponentWidget):
             et_date = datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S.%fZ")
             acq_duration_in_sec = (et_date - st_date).total_seconds()
             self.et_spinbox.setMaximum(math.ceil(acq_duration_in_sec))
+            
     
     @Slot()
     def plot_window_time_change(self):
@@ -342,37 +426,58 @@ class HSDLogControlWidget(ComponentWidget):
              self.time_spinbox.setValue(int(settings.value("logcontrolwidget/timewindow")))
          except:
              pass
-
+    
+    # import threading
     def run_timer(self, n, m, x, y):
+        # tim = threading.Event()
         def timer_thread():
             nonlocal stop_flag
+            self.is_waiting_to_start = True
+            self.controller.start_waiting_auto_log()
+            # tim.wait(m)
             time.sleep(m)  # Wait M seconds before the first start
+            self.is_waiting_to_start = False
+            self.controller.stop_waiting_auto_log()
             if n != 0:
                 for i in range(n):
                     if stop_flag:
                         break
-                    self.controller.start_auto_log(1)
+                    self.controller.set_automode_status(AutomodeStatus.AUTOMODE_LOGGING)
+                    self.controller.start_auto_log(1, self.acq_folder, True)
                     time.sleep(x)  # Wait X seconds
                     if stop_flag:
                         break
                     if i < n-1:
+                        self.controller.set_automode_status(AutomodeStatus.AUTOMODE_IDLE)
                         self.controller.stop_auto_log(1)
+                        self.log_start_button.setText("Stop Log")
+                        self.log_start_button.setStyleSheet(STDTDL_PushButton.red)
                         self.controller.update_component_status("acquisition_info")
+                        self.controller.start_idle_auto_log()
                         time.sleep(y)  # Wait Y seconds before the next execution
+                        self.controller.stop_idle_auto_log()
                     else:
+                        self.controller.set_automode_status(AutomodeStatus.AUTOMODE_UNSTARTED)
+                        # self.controller.set_automode_enabled(False)
                         self.controller.stop_log(1)
                         self.controller.update_component_status("acquisition_info")
             else:
                 while True:
                     if stop_flag:
                         break
-                    self.controller.start_auto_log(1)
+                    self.controller.set_automode_status(AutomodeStatus.AUTOMODE_LOGGING)
+                    self.controller.start_auto_log(1, self.acq_folder, True)
                     time.sleep(x)  # Wait X seconds
                     if stop_flag:
                         break
+                    self.controller.set_automode_status(AutomodeStatus.AUTOMODE_IDLE)
                     self.controller.stop_auto_log(1)
+                    self.log_start_button.setText("Stop Log")
+                    self.log_start_button.setStyleSheet(STDTDL_PushButton.red)
                     self.controller.update_component_status("acquisition_info")
+                    self.controller.start_idle_auto_log()
                     time.sleep(y)  # Wait Y seconds before the next execution
+                    self.controller.stop_idle_auto_log()
                     
         stop_flag = False
         

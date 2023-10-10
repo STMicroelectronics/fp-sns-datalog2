@@ -20,6 +20,7 @@
 #include "drivers/SPIMasterDriver.h"
 #include "drivers/SPIMasterDriver_vtbl.h"
 #include "services/sysdebug.h"
+#include "SensorManager.h"
 #include "drivers/HWDriverMap.h"
 
 #ifndef SPIDRV_CFG_HARDWARE_PERIPHERALS_COUNT

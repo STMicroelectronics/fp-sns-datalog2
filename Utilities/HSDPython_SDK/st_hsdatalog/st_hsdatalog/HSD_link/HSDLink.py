@@ -96,7 +96,7 @@ class HSDLink:
                 log.warning("No HSDatalog_v1 devices connected!")
                 self.is_datalog2 = True
             else:
-                print("Commmunication Opened correctly")
+                print("{} - HSDatalogApp.{} - INFO - Commmunication Opened correctly".format(logger.get_datetime(), __name__))
         except CommunicationEngineOpenError:
             log.error("Error opening communication using libhs_datalog_v1...")
             self.is_datalog2 = True
@@ -104,7 +104,7 @@ class HSDLink:
         time.sleep(2)
 
         if self.is_datalog2:
-            print("Trying to open communication using libhs_datalog_v2...")
+            print("{} - HSDatalogApp.{} - INFO - Trying to open communication using libhs_datalog_v2...".format(logger.get_datetime(), __name__))
             if self.dev_com_type == "stwin_hsd":
                 self.dev_com_type = "pnpl"
             try:
@@ -114,7 +114,7 @@ class HSDLink:
                     self.is_datalog2 = False
                     return None
                 else:
-                    print("Commmunication Opened correctly")
+                    print("{} - HSDatalogApp.{} - INFO - Commmunication Opened correctly".format(logger.get_datetime(), __name__))
             except CommunicationEngineOpenError:
                 log.error("Error opening communication using libhs_datalog_v2...")
                 self.is_datalog2 = False
@@ -487,6 +487,13 @@ class HSDLink:
             return hsd_link.start_log(device_id)
         else:
             return hsd_link.start_log(device_id, sub_folder=sub_folder)
+        
+    @staticmethod
+    def switch_bank(hsd_link, device_id):
+        if isinstance(hsd_link, HSDLink_v2):
+            return hsd_link.switch_bank(device_id)
+        else:
+            return None
    
     @staticmethod
     def set_sw_tag_on(hsd_link, device_id, tag_id):

@@ -39,7 +39,7 @@ extern "C" {
 char *Iis2dlpc_Acc_PnPL_vtblGetKey(IPnPLComponent_t *_this);
 uint8_t Iis2dlpc_Acc_PnPL_vtblGetNCommands(IPnPLComponent_t *_this);
 char *Iis2dlpc_Acc_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id);
-uint8_t Iis2dlpc_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,uint8_t pretty);
+uint8_t Iis2dlpc_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty);
 uint8_t Iis2dlpc_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON);
 uint8_t Iis2dlpc_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON);
 

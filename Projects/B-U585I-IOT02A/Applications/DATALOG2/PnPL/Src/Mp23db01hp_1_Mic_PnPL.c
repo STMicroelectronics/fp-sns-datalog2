@@ -99,7 +99,8 @@ char *Mp23db01hp_1_Mic_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t i
   return "";
 }
 
-uint8_t Mp23db01hp_1_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Mp23db01hp_1_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                            uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -110,22 +111,22 @@ uint8_t Mp23db01hp_1_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seri
   float temp_f = 0;
   mp23db01hp_1_mic_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == mp23db01hp_1_mic_odr_hz16000)
+  if (temp_f == mp23db01hp_1_mic_odr_hz16000)
   {
     enum_id = 0;
   }
-  else if(temp_f == mp23db01hp_1_mic_odr_hz32000)
+  else if (temp_f == mp23db01hp_1_mic_odr_hz32000)
   {
     enum_id = 1;
   }
-  else if(temp_f == mp23db01hp_1_mic_odr_hz48000)
+  else if (temp_f == mp23db01hp_1_mic_odr_hz48000)
   {
     enum_id = 2;
   }
   json_object_dotset_number(JSON_Status, "mp23db01hp_1_mic.odr", enum_id);
   mp23db01hp_1_mic_get_aop(&temp_f);
   enum_id = 0;
-  if(temp_f == mp23db01hp_1_mic_aop_dbspl130)
+  if (temp_f == mp23db01hp_1_mic_aop_dbspl130)
   {
     enum_id = 0;
   }
@@ -187,20 +188,20 @@ uint8_t Mp23db01hp_1_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *ser
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
 
   uint8_t ret = 0;
-  if(json_object_dothas_value(tempJSONObject, "mp23db01hp_1_mic.odr"))
+  if (json_object_dothas_value(tempJSONObject, "mp23db01hp_1_mic.odr"))
   {
     int odr = (int)json_object_dotget_number(tempJSONObject, "mp23db01hp_1_mic.odr");
-    switch(odr)
+    switch (odr)
     {
-    case 0:
-      mp23db01hp_1_mic_set_odr(mp23db01hp_1_mic_odr_hz16000);
-      break;
-    case 1:
-      mp23db01hp_1_mic_set_odr(mp23db01hp_1_mic_odr_hz32000);
-      break;
-    case 2:
-      mp23db01hp_1_mic_set_odr(mp23db01hp_1_mic_odr_hz48000);
-      break;
+      case 0:
+        mp23db01hp_1_mic_set_odr(mp23db01hp_1_mic_odr_hz16000);
+        break;
+      case 1:
+        mp23db01hp_1_mic_set_odr(mp23db01hp_1_mic_odr_hz32000);
+        break;
+      case 2:
+        mp23db01hp_1_mic_set_odr(mp23db01hp_1_mic_odr_hz48000);
+        break;
     }
   }
   if (json_object_dothas_value(tempJSONObject, "mp23db01hp_1_mic.enable"))
@@ -210,7 +211,7 @@ uint8_t Mp23db01hp_1_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *ser
   }
   if (json_object_dothas_value(tempJSONObject, "mp23db01hp_1_mic.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "mp23db01hp_1_mic.samples_per_ts");
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "mp23db01hp_1_mic.samples_per_ts");
     mp23db01hp_1_mic_set_samples_per_ts(samples_per_ts);
   }
   if (json_object_dothas_value(tempJSONObject, "mp23db01hp_1_mic.sensor_annotation"))

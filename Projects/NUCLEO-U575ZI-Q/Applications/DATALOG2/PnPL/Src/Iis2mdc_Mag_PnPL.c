@@ -110,26 +110,26 @@ uint8_t Iis2mdc_Mag_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   float temp_f = 0;
   iis2mdc_mag_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == iis2mdc_mag_odr_hz10)
+  if (temp_f == iis2mdc_mag_odr_hz10)
   {
     enum_id = 0;
   }
-  else if(temp_f == iis2mdc_mag_odr_hz20)
+  else if (temp_f == iis2mdc_mag_odr_hz20)
   {
     enum_id = 1;
   }
-  else if(temp_f == iis2mdc_mag_odr_hz50)
+  else if (temp_f == iis2mdc_mag_odr_hz50)
   {
     enum_id = 2;
   }
-  else if(temp_f == iis2mdc_mag_odr_hz100)
+  else if (temp_f == iis2mdc_mag_odr_hz100)
   {
     enum_id = 3;
   }
   json_object_dotset_number(JSON_Status, "iis2mdc_mag.odr", enum_id);
   iis2mdc_mag_get_fs(&temp_f);
   enum_id = 0;
-  if(temp_f == iis2mdc_mag_fs_g50)
+  if (temp_f == iis2mdc_mag_fs_g50)
   {
     enum_id = 0;
   }
@@ -191,23 +191,23 @@ uint8_t Iis2mdc_Mag_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
 
   uint8_t ret = 0;
-  if(json_object_dothas_value(tempJSONObject, "iis2mdc_mag.odr"))
+  if (json_object_dothas_value(tempJSONObject, "iis2mdc_mag.odr"))
   {
     int odr = (int)json_object_dotget_number(tempJSONObject, "iis2mdc_mag.odr");
-    switch(odr)
+    switch (odr)
     {
-    case 0:
-      iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz10);
-      break;
-    case 1:
-      iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz20);
-      break;
-    case 2:
-      iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz50);
-      break;
-    case 3:
-      iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz100);
-      break;
+      case 0:
+        iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz10);
+        break;
+      case 1:
+        iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz20);
+        break;
+      case 2:
+        iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz50);
+        break;
+      case 3:
+        iis2mdc_mag_set_odr(iis2mdc_mag_odr_hz100);
+        break;
     }
   }
   if (json_object_dothas_value(tempJSONObject, "iis2mdc_mag.enable"))
@@ -217,7 +217,7 @@ uint8_t Iis2mdc_Mag_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   }
   if (json_object_dothas_value(tempJSONObject, "iis2mdc_mag.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "iis2mdc_mag.samples_per_ts");
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "iis2mdc_mag.samples_per_ts");
     iis2mdc_mag_set_samples_per_ts(samples_per_ts);
   }
   if (json_object_dothas_value(tempJSONObject, "iis2mdc_mag.sensor_annotation"))

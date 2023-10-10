@@ -38,9 +38,6 @@ typedef struct _ISensor_t ISensor_t;
 // Public API declaration
 //***********************
 /** Public interface **/
-static inline sys_error_code_t ISensorSetODR(ISensor_t *_this, float ODR);
-static inline sys_error_code_t ISensorSetFS(ISensor_t *_this, float FS);
-static inline sys_error_code_t ISensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM);
 static inline sys_error_code_t ISensorEnable(ISensor_t *_this);
 static inline sys_error_code_t ISensorDisable(ISensor_t *_this);
 static inline boolean_t ISensorIsEnabled(ISensor_t *_this);

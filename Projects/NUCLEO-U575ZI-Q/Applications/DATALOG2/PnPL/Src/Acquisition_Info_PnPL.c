@@ -99,7 +99,8 @@ char *Acquisition_Info_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t i
   return "";
 }
 
-uint8_t Acquisition_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Acquisition_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                            uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -127,11 +128,11 @@ uint8_t Acquisition_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seri
   json_object_dotset_string(JSON_Status, "acquisition_info.data_fmt", temp_s);
   acquisition_info_get_interface(&temp_s);
   uint8_t enum_id = 0;
-  if(strcmp(temp_s, acquisition_info_interface_sd) == 0)
+  if (strcmp(temp_s, acquisition_info_interface_sd) == 0)
   {
     enum_id = 0;
   }
-  else if(strcmp(temp_s, acquisition_info_interface_usb) == 0)
+  else if (strcmp(temp_s, acquisition_info_interface_usb) == 0)
   {
     enum_id = 1;
   }

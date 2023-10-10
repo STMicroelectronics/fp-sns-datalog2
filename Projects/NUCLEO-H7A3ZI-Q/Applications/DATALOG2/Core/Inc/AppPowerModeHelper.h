@@ -1,26 +1,26 @@
 /**
- ******************************************************************************
- * @file    AppPowerModeHelper.h
- * @author  SRA
- *
- * @brief It implements the Power Mode State Machine.
- *
- * This object implements the IAppPowerModeHelper IF. The state machine has
- * two states as described in the section \ref tab_s4_power_management
- * "Power Management"
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    AppPowerModeHelper.h
+  * @author  SRA
+  *
+  * @brief It implements the Power Mode State Machine.
+  *
+  * This object implements the IAppPowerModeHelper IF. The state machine has
+  * two states as described in the section \ref tab_s4_power_management
+  * "Power Management"
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 #ifndef APPPOWERMODEHELPER_H_
 #define APPPOWERMODEHELPER_H_
 
@@ -33,8 +33,8 @@ extern "C" {
 
 
 /**
- * Create  type name for _AppPowermodeHelper.
- */
+  * Create  type name for _AppPowermodeHelper.
+  */
 typedef struct _AppPowerModeHelper AppPowerModeHelper_t;
 
 
@@ -42,11 +42,11 @@ typedef struct _AppPowerModeHelper AppPowerModeHelper_t;
 /**************************/
 
 /**
- * Allocate an instance of AppPowerModeHelper. It is allocated in the framework heap.
- *
- * @return a pointer to the generic interface ::IApplicationErrorDelegate if success,
- * or SYS_OUT_OF_MEMORY_ERROR_CODE otherwise.
- */
+  * Allocate an instance of AppPowerModeHelper. It is allocated in the framework heap.
+  *
+  * @return a pointer to the generic interface ::IApplicationErrorDelegate if success,
+  * or SYS_OUT_OF_MEMORY_ERROR_CODE otherwise.
+  */
 IAppPowerModeHelper *AppPowerModeHelperAlloc();
 
 

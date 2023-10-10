@@ -240,7 +240,26 @@ sys_error_code_t MDFDriver_vtblDoEnterPowerMode(IDriver *_this, const EPowerMode
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  /*  MDFDriver_t *p_obj = (MDFDriver_t*)_this; */
+  MDFDriver_t *p_obj = (MDFDriver_t*)_this;
+
+  if (!SYS_IS_ERROR_CODE(res))
+  {
+    if (new_power_mode == E_POWER_MODE_STATE1)
+    {
+      if (active_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
+      {
+        if (HAL_OK != HAL_MDF_AcqStop_DMA(p_obj->mx_handle.p_mx_mdf_cfg->p_mdf))
+        {
+          res = SYS_MDF_DRV_GENERIC_ERROR_CODE;
+          SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_MDF_DRV_GENERIC_ERROR_CODE);
+        }
+        else
+        {
+          HAL_NVIC_DisableIRQ(p_obj->mx_handle.p_mx_mdf_cfg->irq_n);
+        }
+      }
+    }
+  }
 
   return res;
 }

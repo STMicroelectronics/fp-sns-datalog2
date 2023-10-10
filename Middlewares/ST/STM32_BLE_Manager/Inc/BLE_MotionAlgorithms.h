@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_MotionAlgorithms.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Motion Algorithms info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,12 +18,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_MOTION_ALGORITHMS_H_
 #define _BLE_MOTION_ALGORITHMS_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported defines ---------------------------------------------------------*/
@@ -48,17 +48,17 @@ extern CustomNotifyEventMotionAlgorithms_t CustomNotifyEventMotionAlgorithms;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Motion Algorithms info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Motion Algorithms info service
- */
-extern BleCharTypeDef* BLE_InitMotionAlgorithmsService(void);
+  * @brief  Init Motion Algorithms info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Motion Algorithms info service
+  */
+extern BleCharTypeDef *BLE_InitMotionAlgorithmsService(void);
 
 /**
- * @brief  Update Motion Algorithms characteristic
- * @param  uint8_t MotionCode Detected Motion
- * @retval tBleStatus   Status
- */
+  * @brief  Update Motion Algorithms characteristic
+  * @param  uint8_t MotionCode Detected Motion
+  * @retval tBleStatus   Status
+  */
 extern tBleStatus BLE_MotionAlgorithmsUpdate(uint8_t MotionCode);
 
 #ifdef __cplusplus

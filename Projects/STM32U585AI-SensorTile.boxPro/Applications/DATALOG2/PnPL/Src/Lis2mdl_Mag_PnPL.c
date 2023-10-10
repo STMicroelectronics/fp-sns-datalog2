@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lis2mdl_mag;2
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lis2mdl_mag;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.1.0
+  * Created by: DTDL2PnPL_cGen version 1.2.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -155,6 +155,8 @@ uint8_t Lis2mdl_Mag_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   char *temp_s = "";
   lis2mdl_mag_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "lis2mdl_mag.data_type", temp_s);
+  lis2mdl_mag_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "lis2mdl_mag.sensor_annotation", temp_s);
   lis2mdl_mag_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "lis2mdl_mag.sensor_category", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
@@ -183,10 +185,12 @@ uint8_t Lis2mdl_Mag_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   return 0;
 }
 
-uint8_t Lis2mdl_Mag_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Lis2mdl_Mag_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
   if(json_object_dothas_value(tempJSONObject, "lis2mdl_mag.odr"))
@@ -195,34 +199,69 @@ uint8_t Lis2mdl_Mag_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
     switch(odr)
     {
     case 0:
-      lis2mdl_mag_set_odr(lis2mdl_mag_odr_hz10);
+      ret = lis2mdl_mag_set_odr(lis2mdl_mag_odr_hz10);
       break;
     case 1:
-      lis2mdl_mag_set_odr(lis2mdl_mag_odr_hz20);
+      ret = lis2mdl_mag_set_odr(lis2mdl_mag_odr_hz20);
       break;
     case 2:
-      lis2mdl_mag_set_odr(lis2mdl_mag_odr_hz50);
+      ret = lis2mdl_mag_set_odr(lis2mdl_mag_odr_hz50);
       break;
     case 3:
-      lis2mdl_mag_set_odr(lis2mdl_mag_odr_hz100);
+      ret = lis2mdl_mag_set_odr(lis2mdl_mag_odr_hz100);
       break;
     }
+  if(ret == 0){
+    json_object_dotset_number(respJSONObject, "lis2mdl_mag.odr.value", odr);
+  } else {
+    json_object_dotset_string(respJSONObject, "lis2mdl_mag.odr.value", "PNPL_SET_ERROR");
+  }
   }
   if (json_object_dothas_value(tempJSONObject, "lis2mdl_mag.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "lis2mdl_mag.enable");
-    lis2mdl_mag_set_enable(enable);
+    ret = lis2mdl_mag_set_enable(enable);
+  if(ret == 0){
+    json_object_dotset_boolean(respJSONObject, "lis2mdl_mag.enable.value", enable);
+  } else {
+    json_object_dotset_string(respJSONObject, "lis2mdl_mag.enable.value", "PNPL_SET_ERROR");
+  }
   }
   if (json_object_dothas_value(tempJSONObject, "lis2mdl_mag.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "lis2mdl_mag.samples_per_ts");
-    lis2mdl_mag_set_samples_per_ts(samples_per_ts);
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "lis2mdl_mag.samples_per_ts");
+    ret = lis2mdl_mag_set_samples_per_ts(samples_per_ts);
+  if(ret == 0){
+    json_object_dotset_number(respJSONObject, "lis2mdl_mag.samples_per_ts.value", samples_per_ts);
+  } else {
+    json_object_dotset_string(respJSONObject, "lis2mdl_mag.samples_per_ts.value", "PNPL_SET_ERROR");
+  }
+  }
+  if (json_object_dothas_value(tempJSONObject, "lis2mdl_mag.sensor_annotation"))
+  {
+    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "lis2mdl_mag.sensor_annotation");
+    ret = lis2mdl_mag_set_sensor_annotation(sensor_annotation);
+  if(ret == 0){
+    json_object_dotset_string(respJSONObject, "lis2mdl_mag.sensor_annotation.value", sensor_annotation);
+  } else {
+    json_object_dotset_string(respJSONObject, "ism330is_acc.odr.value", "PNPL_SET_ERROR");
+  }
   }
   json_value_free(tempJSON);
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
   return ret;
 }
 
-uint8_t Lis2mdl_Mag_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Lis2mdl_Mag_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
 {
   return 1;
 }

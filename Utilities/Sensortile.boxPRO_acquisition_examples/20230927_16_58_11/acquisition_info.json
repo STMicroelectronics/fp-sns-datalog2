@@ -1,0 +1,13 @@
+{
+    "tags": [],
+    "name": "Sensortile.Box_PRO_acquisition",
+    "description": "",
+    "uuid": "4838bca1-7567-4a9a-8522-cdbc32b96c75",
+    "start_time": "2023-09-27T16:58:10.000Z",
+    "end_time": "2023-09-27T16:58:23.227Z",
+    "data_ext": ".dat",
+    "data_fmt": "HSD_2.0.0",
+    "interface": 1,
+    "schema_version": "2.0.0",
+    "c_type": 2
+}

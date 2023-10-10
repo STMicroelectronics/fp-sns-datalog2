@@ -1,0 +1,198 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>12</zoom_level><help_text></help_text><element><id>UMLClass</id><coordinates><x>504</x><y>216</y><w>492</w><h>96</h></coordinates><panel_attributes>/ISourceObservable/
+--
+/+ISourceGetId(): uint8_t/
+/+ISourceGetEventSrcIF(): IEventSrc */
+/+IGetDataInfo(): EMData_t/
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1092</x><y>132</y><w>648</w><h>480</h></coordinates><panel_attributes>SensorManager
+--
+Sensors : ISensor_t vector
+n_sensors : uint16_t
+--
++SMGetSensorObserver(uint8_t id): ISourceObservable *
++SMGetNsensor(): uint16_t
++SMSensorEnable(uint8_t id): sys_error_code_t
++SMSensorDisable(uint8_t id): sys_error_code_t
++SMSensorGetDescription(uint8_t id): SensorDescriptor_t
++SMSensorGetStatus(uint8_t id): SensorStatus_t
++SMDeviceGetDescription(SensorDescriptor_t *device_description):  sys_error_code_t
++SMGetSensorManager(): SensorManager_t
++GetnBytesPerSample(uint8_t id): uint32_t
+/* Specialized for ISensorMems class */
++SMSensorSetODR(uint8_t id, float ODR): sys_error_code_t
++SMSensorSetFS(uint8_t id, float FS): sys_error_code_t
++SMSensorSetFifoWM(uint8_t id, uint16_t fifoWM): sys_error_code_t
+/* Specialized for ISensorAudio class */
+/* Specialized for ISensor... class */
+...
+--
+Responsibilities
+--Store the information about the sensors in the device(through ISensor interface).
+--Give an abstract layer to interact with sensors (by the "id")
+--Give the descriptions of the device
+--Perform part of configuration (i.e BUS registration)
+--Note: The sensor registers itself to the SensorManager</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>744</x><y>300</y><w>36</w><h>108</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>984</x><y>468</y><w>132</w><h>48</h></coordinates><panel_attributes>lt=-
+m1=   0..n</panel_attributes><additional_attributes>90;10;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1212</x><y>1248</y><w>576</w><h>180</h></coordinates><panel_attributes>/SIterator/
+--
+sensor_idx: uint16_t
+sensors_count: uint16_t
+p_sm: SensorManager_t *
+--
++SIInit(SensorManager_t *p_sm): sys_error_code_t
++SIHasNext(): bool
++SINext(): uint16_t
+--
+Allow to iterate through a sensors collection managed by a ::SensorManager_t.</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1152</x><y>1548</y><w>144</w><h>312</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+
+</panel_attributes><additional_attributes>10;10;100;240</additional_attributes></element><element><id>Relation</id><coordinates><x>1152</x><y>1644</y><w>144</w><h>312</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+</panel_attributes><additional_attributes>10;10;100;240</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1272</x><y>1704</y><w>384</w><h>168</h></coordinates><panel_attributes>SensorDescriptor_t
+--
++Name: char*
++SensorType: uint8_t
++pODR: float*
++pFS: float*
++DimensionsLabel: char**
++unit: char*
++pSamplesPerTimestamp: uint16_t*
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1272</x><y>1884</y><w>384</w><h>132</h></coordinates><panel_attributes>SensorStatus_t
+--
++FS: float
++Sensitivity: float
++IsActive: bool
++ODR: float
++MeasuredODR: float</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>600</x><y>1404</y><w>564</w><h>708</h></coordinates><panel_attributes>&lt;&lt;Sensor&gt;&gt;
+xxx_Task
+--
+-pIRQConfig: MX_GPIOParams_t*
+-pCSConfig: MX_GPIOParams_t*
+-p_sensor_bus_if: ABusIF
+-sensor_if: ISensor_t
+-sensor_descriptor: const SensorDescriptor_t*
+-sensor_status: SensorStatus_t
+-data: EMData_t
+-id: uint8_t
+-p_sensor_data_buff: uint8_t*
+-p_event_src: IEventSrc
+-in_queue: TX_QUEUE
+-read_timer: TX_TIMER
+-timer_period_ms: ULONG
+-prev_timestamp: double
+--
++Alloc(void *pIRQConfig, void *pCSConfig): AManagedTaskEx*
++GetSensorIF(): ABusIF*
++GetEventSrcIF(): IEventSrc*
++GetxxxSensorIF(): ISourceObservable*
+--
+-ExecuteStepState1(): sys_error_code_t
+-ExecuteStepDatalog(): sys_error_code_t
+-SensorInit(): sys_error_code_t
+-SensorReadData(): sys_error_code_t
+-SensorRegister(): sys_error_code_t
+-SensorInitTaskParams(): sys_error_code_t
+-EnterLowPowerMode(): sys_error_code_t
+-ConfigureIrqPin(bool LowPower): sys_error_code_t
+-TimerCallbackFunction(ULONG): void
+-EXTI_Callback(uint16_t n_pin): void
+-GetOwnerFromISensorIF(ISensor_t *p_if): xxx_Task
+-PostReportToFront(SMMessage *pReport): sys_error_code_t
+-PostReportToBack(SMMessage *pReport): sys_error_code_t
+--
+Responsibilities
+--Read data from the sensor
+--Store the sensor Description and Status
+--Handle the sensor features (i.e ucf loaded)</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>468</x><y>1272</y><w>168</w><h>36</h></coordinates><panel_attributes>/AManagedTaskEx/
+bg=#b4bcde</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>540</x><y>1296</y><w>84</w><h>216</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;160;50;160</additional_attributes></element><element><id>UMLInterface</id><coordinates><x>1164</x><y>1980</y><w>168</w><h>180</h></coordinates><panel_attributes>IEventSrc
+--
+Init
+AddEventListener
+RemoveEventListener
+GetMaxListenerCount
+SendEvent</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>324</x><y>1296</y><w>300</w><h>240</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m2=InQueue</panel_attributes><additional_attributes>230;180;10;180;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>252</x><y>1272</y><w>168</w><h>36</h></coordinates><panel_attributes>QueueHandle_t
+fg=green</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>696</x><y>888</y><w>36</w><h>540</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;10;430</additional_attributes></element><element><id>UMLClass</id><coordinates><x>504</x><y>384</y><w>492</w><h>168</h></coordinates><panel_attributes>/ISensor/
+--
+/+ISensorEnable(): sys_error_code_t/
+/+ISensorDisable(): sys_error_code_t/
+/+ISensorIsEnabled(): boolean_t/
+/+ISensorGetDescription(): SensorDescriptor_t/
+/+ISensorGetStatus(): SensorStatus_t/
+--
+One specialized ISensor for each sensor
+See Common Cube Drivers???</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>756</x><y>1248</y><w>408</w><h>96</h></coordinates><panel_attributes>/SensorRegister/
+--
++SMAddSensor(ISensor_t *pSensor): uint8_t
++SMRemoveSensor(ISensor_t *pSensor): sys_error_code_t
+--
+Register/Remove a sensor to/from ::SensorManager_t
+
+
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>948</x><y>1332</y><w>36</w><h>96</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;10;10;60</additional_attributes></element><element><id>Relation</id><coordinates><x>1596</x><y>600</y><w>36</w><h>672</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;540;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1212</x><y>1464</y><w>576</w><h>180</h></coordinates><panel_attributes>/SQuery/
+--
+iterator: SIterator_t
+--
++SQInit(SensorManager_t *p_sm): sys_error_code_t
++SQNextByName(const char *sensor_name): uint16_t
++SQNextByType(uint8_t sensor_type): uint16_t
++SQNextByNameAndType(const char *sensor_name, uint8_t sensor_type): uint16_t
++SQNextByStatusEnable(bool sensor_enable): uint16_t
+--
+Allow to query SensorManager through a ::SIterator_t obj</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1488</x><y>1416</y><w>36</w><h>72</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;40;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>504</x><y>660</y><w>492</w><h>240</h></coordinates><panel_attributes>/ISensorMems/
+--
+/+ISensorGetODR(float *p_measured, float *p_nominal): sys_error_code_t/
+/+ISensorGetFS(): float/
+/+ISensorGetSensitivity(): float/
+
+/+ISensorSetODR(float odr): sys_error_code_t/
+/+ISensorSetFS(float fs): sys_error_code_t/
+/+ISensorSetFifoWTM(uint16_t fifo_wtm): sys_error_code_t/
+--
+See motion_sensor.h - env_sensor.h</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>228</x><y>540</y><w>552</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>440;10;10;100</additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>660</y><w>492</w><h>240</h></coordinates><panel_attributes>/ISensorAudio/
+--
+/+ISensorGetFrequency(): unit32_t/
+/+ISensorGetVolume(): uint8_t/
+/+ISensorGetResolution(): unit8_t/
+
+/+ISensorSetFrequency(uint32_t frequency): sys_error_code_t/
+/+ISensorSetVolume(uint8_t volume): sys_error_code_t/
+/+ISensorSetResolution(uint8_t bit_depth): sys_error_code_t/
+--
+See audio.h</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1008</x><y>924</y><w>516</w><h>240</h></coordinates><panel_attributes>/ISensorLight/
+--
+/+ISensorGetExposureTime(): unit32_t/
+/+ISensorGetGain(): uint32_t/
+/+ISensorGetInterMeasurementTime(): unit32_t/
+/+ISensorGetFlicker(): unit8_t/
+
+/+ISensorSetExposureTime(uint32_t exp_time): sys_error_code_t/
+/+ISensorSetGain(uint32_t gain): sys_error_code_t/
+/+ISensorSetInterMeasurementTime(uint32_t inter_meas_time): sys_error_code_t/
+/+ISensorSetFlicker(uint8_t flicker_mode): sys_error_code_t/
+/+ISensorSetControlMode(uint32_t control_mode): sys_error_code_t/
+--
+See light_sensor.h</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1032</x><y>600</y><w>540</w><h>672</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;540;10;500;430;500;430;10</additional_attributes></element><element><id>Relation</id><coordinates><x>744</x><y>540</y><w>36</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>744</x><y>540</y><w>528</w><h>408</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;420;320</additional_attributes></element><element><id>UMLClass</id><coordinates><x>0</x><y>924</y><w>492</w><h>252</h></coordinates><panel_attributes>/ISensorCamera/
+--
+/+ISensorGetResolution: uint32_t*/
+/+ISensorGetPixelFormat(): uint32_t */
+
+/+ISensorSetLightMode(uint32_t light_mode): sys_error_code_t/
+/+ISensorSetColorEffect(uint32_t color_effect): sys_error_code_t/
+/+ISensorSetBrightness(int32_t brightness): sys_error_code_t/
+/+ISensorSetSaturation(int32_t saturation): sys_error_code_t/
+/+ISensorSetContrast(int32_t contrast): sys_error_code_t/
+/+ISensorSetHueDegree(int32_t hue_degree): sys_error_code_t/
+/+ISensorSetResolution(uint32_t resolution): sys_error_code_t/
+/+ISensorSetPixelFormat(uint32_t pixel_format): sys_error_code_t/
+--
+See camera.h</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1008</x><y>660</y><w>516</w><h>252</h></coordinates><panel_attributes>/ISensorRanging/
+--
+/+ISensorGetProfile: ranging_profile_config_t */
+/+ISensorGetIT(): ranging_it_config_t */
+/+ISensorGetAddress(): uint32_t/
+/+ISensorGetPowerMode(): uint32_t/
+
+/+ISensorConfigProfile(ranging_profile_config_t *p_config): sys_error_code_t/
+/+ISensorConfigIT(ranging_it_config_t *p_it_config): sys_error_code_t/
+/+ISensorSetAddress(uint32_t address): sys_error_code_t/
+/+ISensorSetPowerMode(uint32_t power_mode): sys_error_code_t/
+--
+See ranging_sensor.h</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>240</x><y>540</y><w>540</w><h>408</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>430;10;10;320</additional_attributes></element><element><id>Relation</id><coordinates><x>744</x><y>540</y><w>528</w><h>144</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;420;100</additional_attributes></element></diagram>

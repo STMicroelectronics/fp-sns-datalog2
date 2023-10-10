@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -42,11 +42,11 @@ typedef struct _ILog_Controller_vtbl ILog_Controller_vtbl;
 
 struct _ILog_Controller_vtbl
 {
-  uint8_t (*log_controller_save_config)(ILog_Controller_t * _this);
-  uint8_t (*log_controller_start_log)(ILog_Controller_t * _this, uint32_t interface);
-  uint8_t (*log_controller_stop_log)(ILog_Controller_t * _this);
-  uint8_t (*log_controller_set_time)(ILog_Controller_t * _this, const char *datetime);
-  uint8_t (*log_controller_switch_bank)(ILog_Controller_t * _this);
+  uint8_t (*log_controller_save_config)(ILog_Controller_t *_this);
+  uint8_t (*log_controller_start_log)(ILog_Controller_t *_this, uint32_t interface);
+  uint8_t (*log_controller_stop_log)(ILog_Controller_t *_this);
+  uint8_t (*log_controller_set_time)(ILog_Controller_t *_this, const char *datetime);
+  uint8_t (*log_controller_switch_bank)(ILog_Controller_t *_this);
 };
 
 struct _ILog_Controller_t

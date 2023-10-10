@@ -9,7 +9,7 @@
   * used in the "Preinclude file" section of the "compiler > prepocessor"
   * options.
   * This file must be moved in the application folder by the user
-  * and renamed 'SensorManager_conf'
+  *  and renamed 'SensorManager_conf'
   *
   ******************************************************************************
   * @attention

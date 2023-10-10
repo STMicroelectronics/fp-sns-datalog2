@@ -103,26 +103,27 @@ char *Log_Controller_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
 {
   switch (id)
   {
-  case 0:
-    return "log_controller*save_config";
-    break;
-  case 1:
-    return "log_controller*start_log";
-    break;
-  case 2:
-    return "log_controller*stop_log";
-    break;
-  case 3:
-    return "log_controller*set_time";
-    break;
-  case 4:
-    return "log_controller*switch_bank";
-    break;
+    case 0:
+      return "log_controller*save_config";
+      break;
+    case 1:
+      return "log_controller*start_log";
+      break;
+    case 2:
+      return "log_controller*stop_log";
+      break;
+    case 3:
+      return "log_controller*set_time";
+      break;
+    case 4:
+      return "log_controller*switch_bank";
+      break;
   }
   return 0;
 }
 
-uint8_t Log_Controller_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Log_Controller_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                          uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -173,7 +174,7 @@ uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *s
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*start_log.interface"))
   {
-    int32_t interface =(int32_t) json_object_dotget_number(tempJSONObject, "log_controller*start_log.interface");
+    int32_t interface = (int32_t) json_object_dotget_number(tempJSONObject, "log_controller*start_log.interface");
     log_controller_start_log(p_if_owner->cmdIF, interface);
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*stop_log"))

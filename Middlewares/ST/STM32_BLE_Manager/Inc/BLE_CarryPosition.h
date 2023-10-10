@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_CarryPosition.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.8.0
-  * @date    02-December-2022
+  * @version 1.9.0
+  * @date    25-July-2023
   * @brief   Carry Position info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,12 +18,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/  
+/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _BLE_CARRY_POSITION_H_
 #define _BLE_CARRY_POSITION_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Exported defines ---------------------------------------------------------*/
@@ -51,26 +51,26 @@ extern CustomNotifyEventCarryPosition_t CustomNotifyEventCarryPosition;
 /* Exported functions ------------------------------------------------------- */
 
 /**
- * @brief  Init Carry Position info service
- * @param  None
- * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Carry Position info service
- */
-extern BleCharTypeDef* BLE_InitCarryPositionService(void);
+  * @brief  Init Carry Position info service
+  * @param  None
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Carry Position info service
+  */
+extern BleCharTypeDef *BLE_InitCarryPositionService(void);
 
 #ifndef BLE_MANAGER_SDKV2
 /**
- * @brief  Setting Carry Position Advertise Data
- * @param  uint8_t *manuf_data: Advertise Data
- * @retval None
- */
+  * @brief  Setting Carry Position Advertise Data
+  * @param  uint8_t *manuf_data: Advertise Data
+  * @retval None
+  */
 extern void BLE_SetCarryPositionAdvertiseData(uint8_t *manuf_data);
 #endif /* BLE_MANAGER_SDKV2 */
 
 /**
- * @brief  Update Carry Position characteristic
- * @param  BLE_CP_output_t CarryPositionCode Carry Position Recognized
- * @retval tBleStatus   Status
- */
+  * @brief  Update Carry Position characteristic
+  * @param  BLE_CP_output_t CarryPositionCode Carry Position Recognized
+  * @retval tBleStatus   Status
+  */
 extern tBleStatus BLE_CarryPositionUpdate(BLE_CP_output_t CarryPositionCode);
 
 #ifdef __cplusplus

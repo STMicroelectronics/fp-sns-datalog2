@@ -17,19 +17,21 @@
   ******************************************************************************
   */
 
+/* Includes ------------------------------------------------------------------*/
 #include "IMP23ABSUTask.h"
 #include "IMP23ABSUTask_vtbl.h"
-#include "drivers/AnalogMicDriver.h"
-#include "drivers/AnalogMicDriver_vtbl.h"
+#include "SMMessageParser.h"
 #include "SensorCommands.h"
 #include "SensorManager.h"
 #include "SensorRegister.h"
 #include "events/IDataEventListener.h"
 #include "events/IDataEventListener_vtbl.h"
 #include "services/SysTimestamp.h"
-#include "SMMessageParser.h"
-#include "services/sysdebug.h"
+#include "services/ManagedTaskMap.h"
 #include <string.h>
+#include "services/sysdebug.h"
+
+/* Private includes ----------------------------------------------------------*/
 
 #ifndef IMP23ABSU_TASK_CFG_STACK_DEPTH
 #define IMP23ABSU_TASK_CFG_STACK_DEPTH           (TX_MINIMUM_STACK*2)
@@ -45,13 +47,11 @@
 
 #define IMP23ABSU_TASK_CFG_IN_QUEUE_ITEM_SIZE   sizeof(SMMessage)
 
-#define MAX_AMIC_SAMPLING_FREQUENCY             (uint32_t)(192000)
+#ifndef IMP23ABSU_TASK_CFG_MAX_INSTANCES_COUNT
+#define IMP23ABSU_TASK_CFG_MAX_INSTANCES_COUNT      1
+#endif
 
 #define SYS_DEBUGF(level, message)               SYS_DEBUGF3(SYS_DBG_IMP23ABSU, level, message)
-
-#if defined(DEBUG) || defined (SYS_DEBUG)
-#define sTaskObj                                 sIMP23ABSUTaskObj
-#endif
 
 #ifndef HSD_USE_DUMMY_DATA
 #define HSD_USE_DUMMY_DATA 0
@@ -62,83 +62,6 @@ static int16_t dummyDataCounter = 0;
 #endif
 
 /**
-  *  IMP23ABSUTask internal structure.
-  */
-struct _IMP23ABSUTask
-{
-  /**
-    * Base class object.
-    */
-  AManagedTaskEx super;
-
-  /**
-    * Driver object.
-    */
-  IDriver *p_driver;
-
-  /**
-    * HAL MDF driver configuration parameters.
-    */
-  const void *p_mx_mdf_cfg;
-
-  /**
-    *
-    */
-  const void *p_mx_adc_cfg;
-
-  /**
-    * Implements the mic ISensor interface.
-    */
-  ISensor_t sensor_if;
-
-  /**
-    * Specifies mic sensor capabilities.
-    */
-  const SensorDescriptor_t *sensor_descriptor;
-
-  /**
-    * Specifies mic sensor configuration.
-    */
-  SensorStatus_t sensor_status;
-
-  EMData_t data;
-  /**
-    * Specifies the sensor ID for the microphone subsensor.
-    */
-  uint8_t mic_id;
-
-  /**
-    * Synchronization object used to send command to the task.
-    */
-  TX_QUEUE in_queue;
-
-  /**
-    * ::IEventSrc interface implementation for this class.
-    */
-  IEventSrc *p_event_src;
-
-  /**
-    * Buffer to store the data read from the sensor
-    */
-  int16_t p_sensor_data_buff[((MAX_AMIC_SAMPLING_FREQUENCY / 1000) * 2)];
-
-#if (HSD_USE_DUMMY_DATA == 1)
-  /**
-    * Buffer to store dummy data buffer
-    */
-  int16_t p_dummy_data_buff[((MAX_AMIC_SAMPLING_FREQUENCY / 1000))];
-#endif
-
-  /**
-    * Used to update the instantaneous ODR.
-    */
-  double prev_timestamp;
-
-  uint8_t half;
-
-};
-
-/**
   * Class object declaration
   */
 typedef struct _IMP23ABSUTaskClass
@@ -146,37 +69,34 @@ typedef struct _IMP23ABSUTaskClass
   /**
     * IMP23ABSUTask class virtual table.
     */
-  AManagedTaskEx_vtbl vtbl;
+  const AManagedTaskEx_vtbl vtbl;
 
   /**
     * Microphone IF virtual table.
     */
-  ISensor_vtbl sensor_if_vtbl;
+  const ISensorAudio_vtbl sensor_if_vtbl;
 
   /**
     * Specifies mic sensor capabilities.
     */
-  SensorDescriptor_t class_descriptor;
+  const SensorDescriptor_t class_descriptor;
 
   /**
     * IMP23ABSUTask (PM_STATE, ExecuteStepFunc) map.
     */
-  pExecuteStepFunc_t p_pm_state2func_map[3];
+  const pExecuteStepFunc_t p_pm_state2func_map[3];
+
+  /**
+      * Memory buffer used to allocate the map (key, value).
+   */
+  MTMapElement_t task_map_elements[IMP23ABSU_TASK_CFG_MAX_INSTANCES_COUNT];
+
+  /**
+      * This map is used to link Cube HAL callback with an instance of the sensor task object. The key of the map is the address of the task instance.   */
+  MTMap_t task_map;
+
 } IMP23ABSUTaskClass_t;
 
-/**
-  * STM32 HAL callback function.
-  *
-  * @param hmdf [IN] specifies a MDF instance.
-  */
-void MDF_Filter_1_Complete_Callback(MDF_HandleTypeDef *hmdf);
-
-/**
-  * STM32 HAL callback function.
-  *
-  * @param hmdf  [IN] specifies a MDF instance.
-  */
-void MDF_Filter_1_HalfComplete_Callback(MDF_HandleTypeDef *hmdf);
 
 /* Private member function declaration */ // ***********************************
 /**
@@ -185,7 +105,7 @@ void MDF_Filter_1_HalfComplete_Callback(MDF_HandleTypeDef *hmdf);
   * @param _this [IN] specifies a pointer to a task object.
   * @return SYS_NO_EROR_CODE if success, a task specific error code otherwise.
   */
-static sys_error_code_t IMP23ABSUTaskExecuteStepRun(AManagedTask *_this);
+static sys_error_code_t IMP23ABSUTaskExecuteStepState1(AManagedTask *_this);
 
 /**
   * Execute one step of the task control loop while the system is in SENSORS_ACTIVE mode.
@@ -224,8 +144,8 @@ static sys_error_code_t IMP23ABSUTaskSensorInitTaskParams(IMP23ABSUTask *_this);
 /**
   * Private implementation of sensor interface methods for IMP23ABSU sensor
   */
-static sys_error_code_t IMP23ABSUTaskSensorSetODR(IMP23ABSUTask *_this, SMMessage report);
-static sys_error_code_t IMP23ABSUTaskSensorSetFS(IMP23ABSUTask *_this, SMMessage report);
+static sys_error_code_t IMP23ABSUTaskSensorSetFrequency(IMP23ABSUTask *_this, SMMessage report);
+static sys_error_code_t IMP23ABSUTaskSensorSetVolume(IMP23ABSUTask *_this, SMMessage report);
 static sys_error_code_t IMP23ABSUTaskSensorEnable(IMP23ABSUTask *_this, SMMessage report);
 static sys_error_code_t IMP23ABSUTaskSensorDisable(IMP23ABSUTask *_this, SMMessage report);
 
@@ -237,7 +157,8 @@ static sys_error_code_t IMP23ABSUTaskSensorDisable(IMP23ABSUTask *_this, SMMessa
 static boolean_t IMP23ABSUTaskSensorIsActive(const IMP23ABSUTask *_this);
 
 /* Inline function forward declaration */
-// ***********************************
+/***************************************/
+
 /**
   * Private function used to post a report into the front of the task queue.
   * Used to resume the task when the required by the INIT task.
@@ -265,14 +186,14 @@ static inline sys_error_code_t IMP23ABSUTaskPostReportToBack(IMP23ABSUTask *_thi
 /**
   * The only instance of the task object.
   */
-static IMP23ABSUTask sTaskObj;
+//static IMP23ABSUTask sTaskObj;
 
 /**
   * The class object.
   */
-static const IMP23ABSUTaskClass_t sTheClass =
+static IMP23ABSUTaskClass_t sTheClass =
 {
-  /* Class virtual table */
+  /* class virtual table */
   {
     IMP23ABSUTask_vtblHardwareInit,
     IMP23ABSUTask_vtblOnCreateTask,
@@ -285,20 +206,24 @@ static const IMP23ABSUTaskClass_t sTheClass =
 
   /* class::sensor_if_vtbl virtual table */
   {
-    IMP23ABSUTask_vtblMicGetId,
-    IMP23ABSUTask_vtblGetEventSourceIF,
-    IMP23ABSUTask_vtblMicGetDataInfo,
-    IMP23ABSUTask_vtblMicGetODR,
-    IMP23ABSUTask_vtblMicGetFS,
-    IMP23ABSUTask_vtblMicGetSensitivity,
-    IMP23ABSUTask_vtblSensorSetODR,
-    IMP23ABSUTask_vtblSensorSetFS,
-    IMP23ABSUTask_vtblSensorSetFifoWM,
-    IMP23ABSUTask_vtblSensorEnable,
-    IMP23ABSUTask_vtblSensorDisable,
-    IMP23ABSUTask_vtblSensorIsEnabled,
-    IMP23ABSUTask_vtblSensorGetDescription,
-    IMP23ABSUTask_vtblSensorGetStatus
+    {
+      {
+        IMP23ABSUTask_vtblMicGetId,
+        IMP23ABSUTask_vtblGetEventSourceIF,
+        IMP23ABSUTask_vtblMicGetDataInfo
+      },
+      IMP23ABSUTask_vtblSensorEnable,
+      IMP23ABSUTask_vtblSensorDisable,
+      IMP23ABSUTask_vtblSensorIsEnabled,
+      IMP23ABSUTask_vtblSensorGetDescription,
+      IMP23ABSUTask_vtblSensorGetStatus
+    },
+    IMP23ABSUTask_vtblMicGetFrequency,
+    IMP23ABSUTask_vtblMicGetVolume,
+    IMP23ABSUTask_vtblMicGetResolution,
+    IMP23ABSUTask_vtblSensorSetFrequency,
+    IMP23ABSUTask_vtblSensorSetVolume,
+    IMP23ABSUTask_vtblSensorSetResolution
   },
 
   /* MIC DESCRIPTOR */
@@ -329,10 +254,13 @@ static const IMP23ABSUTaskClass_t sTheClass =
 
   /* class (PM_STATE, ExecuteStepFunc) map */
   {
-    IMP23ABSUTaskExecuteStepRun,
+    IMP23ABSUTaskExecuteStepState1,
     NULL,
     IMP23ABSUTaskExecuteStepDatalog,
-  }
+  },
+
+  {{0}}, /* task_map_elements */
+  {0}  /* task_map */
 };
 
 /* Public API definition */
@@ -344,31 +272,78 @@ ISourceObservable *IMP23ABSUTaskGetMicSensorIF(IMP23ABSUTask *_this)
 
 AManagedTaskEx *IMP23ABSUTaskAlloc(const void *p_mx_mdf_cfg, const void *p_mx_adc_cfg)
 {
-  /* This allocator implements the singleton design pattern. */
+  IMP23ABSUTask *p_new_obj = SysAlloc(sizeof(IMP23ABSUTask));
 
-  /* Initialize the super class */
-  AMTInitEx(&sTaskObj.super);
+  if (p_new_obj != NULL)
+  {
+    /* Initialize the super class */
+    AMTInitEx(&p_new_obj->super);
 
-  sTaskObj.super.vptr = &sTheClass.vtbl;
-  sTaskObj.p_mx_adc_cfg = p_mx_adc_cfg;
-  sTaskObj.p_mx_mdf_cfg = p_mx_mdf_cfg;
-  sTaskObj.sensor_if.vptr = &sTheClass.sensor_if_vtbl;
-  sTaskObj.sensor_descriptor = &sTheClass.class_descriptor;
+    p_new_obj->super.vptr = &sTheClass.vtbl;
+    p_new_obj->sensor_if.vptr = &sTheClass.sensor_if_vtbl;
+    p_new_obj->sensor_descriptor = &sTheClass.class_descriptor;
 
-  strcpy(sTaskObj.sensor_status.Name, sTheClass.class_descriptor.Name);
+    p_new_obj->p_mx_mdf_cfg = (MX_GPIOParams_t *) p_mx_mdf_cfg;
+    p_new_obj->p_mx_adc_cfg = (MX_GPIOParams_t *) p_mx_adc_cfg;
 
-  return (AManagedTaskEx *) &sTaskObj;
+    strcpy(p_new_obj->sensor_status.p_name, sTheClass.class_descriptor.p_name);
+  }
+
+  return (AManagedTaskEx *) p_new_obj;
 }
+
+AManagedTaskEx *IMP23ABSUTaskAllocSetName(const void *p_mx_mdf_cfg, const void *p_mx_adc_cfg, const char *p_name)
+{
+  IMP23ABSUTask *p_new_obj = (IMP23ABSUTask *)IMP23ABSUTaskAlloc(p_mx_mdf_cfg, p_mx_adc_cfg);
+
+  /* Overwrite default name with the one selected by the application */
+  strcpy(p_new_obj->sensor_status.p_name, p_name);
+
+  return (AManagedTaskEx *) p_new_obj;
+}
+
+AManagedTaskEx *IMP23ABSUTaskStaticAlloc(void *p_mem_block, const void *p_mx_mdf_cfg, const void *p_mx_adc_cfg)
+{
+  IMP23ABSUTask *p_obj = (IMP23ABSUTask *)p_mem_block;
+
+  if (p_obj != NULL)
+  {
+    /* Initialize the super class */
+    AMTInitEx(&p_obj->super);
+    p_obj->super.vptr = &sTheClass.vtbl;
+
+    p_obj->super.vptr = &sTheClass.vtbl;
+    p_obj->sensor_if.vptr = &sTheClass.sensor_if_vtbl;
+    p_obj->sensor_descriptor = &sTheClass.class_descriptor;
+
+    p_obj->p_mx_mdf_cfg = (MX_GPIOParams_t *) p_mx_mdf_cfg;
+    p_obj->p_mx_adc_cfg = (MX_GPIOParams_t *) p_mx_adc_cfg;
+  }
+
+  return (AManagedTaskEx *)p_obj;
+}
+
+AManagedTaskEx *IMP23ABSUTaskStaticAllocSetName(void *p_mem_block, const void *p_mx_mdf_cfg, const void *p_mx_adc_cfg,
+                                                const char *p_name)
+{
+  IMP23ABSUTask *p_obj = (IMP23ABSUTask *)IMP23ABSUTaskStaticAlloc(p_mem_block, p_mx_mdf_cfg, p_mx_adc_cfg);
+
+  /* Overwrite default name with the one selected by the application */
+  strcpy(p_obj->sensor_status.p_name, p_name);
+
+  return (AManagedTaskEx *) p_obj;
+}
+
 
 IEventSrc *IMP23ABSUTaskGetEventSrcIF(IMP23ABSUTask *_this)
 {
   assert_param(_this != NULL);
 
-  return _this->p_event_src;
+  return (IEventSrc *) _this->p_event_src;
 }
 
 // AManagedTask virtual functions definition
-// *****************************************
+// ***********************************************
 
 sys_error_code_t IMP23ABSUTask_vtblHardwareInit(AManagedTask *_this, void *pParams)
 {
@@ -398,6 +373,24 @@ sys_error_code_t IMP23ABSUTask_vtblHardwareInit(AManagedTask *_this, void *pPara
       MDFDriverFilterRegisterCallback((MDFDriver_t *) p_obj->p_driver, HAL_MDF_ACQ_COMPLETE_CB_ID,
                                       MDF_Filter_1_Complete_Callback);
     }
+
+    if (!MTMap_IsInitialized(&sTheClass.task_map))
+    {
+      (void) MTMap_Init(&sTheClass.task_map, sTheClass.task_map_elements, IMP23ABSU_TASK_CFG_MAX_INSTANCES_COUNT);
+    }
+
+    /* Add the managed task to the map.*/
+    /* Use the PIN as unique key for the map. */
+    MTMapElement_t *p_element = NULL;
+//    uint32_t key = (uint32_t) p_obj->pIRQConfig->pin;
+    uint32_t key = (uint32_t)((MDFDriver_t *) p_obj->p_driver)->mx_handle.p_mx_mdf_cfg->p_mdf;
+    p_element = MTMap_AddElement(&sTheClass.task_map, key, _this);
+    if (p_element == NULL)
+    {
+      SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+      res = SYS_INVALID_PARAMETER_ERROR_CODE;
+      return res;
+    }
   }
 
   return res;
@@ -412,17 +405,8 @@ sys_error_code_t IMP23ABSUTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fu
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IMP23ABSUTask *p_obj = (IMP23ABSUTask *) _this;
 
-  *pTaskCode = AMTExRun;
-  *pName = "IMP23ABSU";
-  *pvStackStart = NULL; // allocate the task stack in the system memory pool.
-  *pStackDepth = IMP23ABSU_TASK_CFG_STACK_DEPTH;
-  *pParams = (ULONG) _this;
-  *pPriority = IMP23ABSU_TASK_CFG_PRIORITY;
-  *pPreemptThreshold = IMP23ABSU_TASK_CFG_PRIORITY;
-  *pTimeSlice = TX_NO_TIME_SLICE;
-  *pAutoStart = TX_AUTO_START;
-
   /* Create task specific sw resources. */
+
   uint32_t item_size = (uint32_t) IMP23ABSU_TASK_CFG_IN_QUEUE_ITEM_SIZE;
   VOID *p_queue_items_buff = SysAlloc(IMP23ABSU_TASK_CFG_IN_QUEUE_LENGTH * item_size);
   if (p_queue_items_buff == NULL)
@@ -440,7 +424,8 @@ sys_error_code_t IMP23ABSUTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fu
     return res;
   }
 
-  p_obj->p_event_src = (IEventSrc *) DataEventSrcAlloc();
+  /* Initialize the EventSrc interface */
+  p_obj->p_event_src = DataEventSrcAlloc();
   if (p_obj->p_event_src == NULL)
   {
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
@@ -455,11 +440,22 @@ sys_error_code_t IMP23ABSUTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fu
   p_obj->half = 0;
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
 
+
+  *pTaskCode = AMTExRun;
+  *pName = "IMP23ABSU";
+  *pvStackStart = NULL; // allocate the task stack in the system memory pool.
+  *pStackDepth = IMP23ABSU_TASK_CFG_STACK_DEPTH;
+  *pParams = (ULONG) _this;
+  *pPriority = IMP23ABSU_TASK_CFG_PRIORITY;
+  *pPreemptThreshold = IMP23ABSU_TASK_CFG_PRIORITY;
+  *pTimeSlice = TX_NO_TIME_SLICE;
+  *pAutoStart = TX_AUTO_START;
+
   res = IMP23ABSUTaskSensorInitTaskParams(p_obj);
   if (SYS_IS_ERROR_CODE(res))
   {
-    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
-    res = SYS_OUT_OF_MEMORY_ERROR_CODE;
+    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
     return res;
   }
 
@@ -497,12 +493,11 @@ sys_error_code_t IMP23ABSUTask_vtblDoEnterPowerMode(AManagedTask *_this, const E
 
       if (tx_queue_send(&p_obj->in_queue, &xReport, AMT_MS_TO_TICKS(50)) != TX_SUCCESS)
       {
-        //TD FF pdMS_TO_TICKS(100)
         res = SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE;
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE);
       }
 
-      // reset the variables for the time stamp computation.
+      // reset the variables for the actual ODR computation.
       p_obj->prev_timestamp = 0.0f;
     }
 
@@ -512,6 +507,7 @@ sys_error_code_t IMP23ABSUTask_vtblDoEnterPowerMode(AManagedTask *_this, const E
   {
     if (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
     {
+      /* Empty the task queue and disable INT or timer */
       tx_queue_flush(&p_obj->in_queue);
     }
 
@@ -553,8 +549,6 @@ sys_error_code_t IMP23ABSUTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
   return res;
 }
 
-/* AManagedTaskEx virtual functions definition */
-// *******************************************
 sys_error_code_t IMP23ABSUTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowerMode ActivePowerMode)
 {
   assert_param(_this != NULL);
@@ -572,6 +566,11 @@ sys_error_code_t IMP23ABSUTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowe
     if (AMTExIsTaskInactive(_this))
     {
       res = IMP23ABSUTaskPostReportToFront(p_obj, (SMMessage *) &xReport);
+    }
+    else
+    {
+      // do nothing and wait for the step to complete.
+      //      _this->m_xStatus.nDelayPowerModeSwitch = 0;
     }
   }
   else
@@ -601,7 +600,7 @@ sys_error_code_t IMP23ABSUTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const
   {
     if (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
     {
-      if (p_obj->sensor_status.IsActive)
+      if (p_obj->sensor_status.is_active)
       {
         res = IDrvStop(p_obj->p_driver);
       }
@@ -629,42 +628,30 @@ IEventSrc *IMP23ABSUTask_vtblGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_event_src;
 }
 
-sys_error_code_t IMP23ABSUTask_vtblMicGetODR(ISourceObservable *_this, float *p_measured, float *p_nominal)
+uint32_t IMP23ABSUTask_vtblMicGetFrequency(ISensorAudio_t *_this)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
   IMP23ABSUTask *p_if_owner = (IMP23ABSUTask *)((uint32_t) _this - offsetof(IMP23ABSUTask, sensor_if));
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
-
-  /* parameter validation */
-  if ((p_measured == NULL) || (p_nominal == NULL))
-  {
-    res = SYS_INVALID_PARAMETER_ERROR_CODE;
-    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
-  }
-  else
-  {
-    *p_measured = p_if_owner->sensor_status.MeasuredODR;
-    *p_nominal = p_if_owner->sensor_status.ODR;
-  }
+  sys_error_code_t res = p_if_owner->sensor_status.type.audio.frequency;
 
   return res;
 }
 
-float IMP23ABSUTask_vtblMicGetFS(ISourceObservable *_this)
+uint8_t IMP23ABSUTask_vtblMicGetResolution(ISensorAudio_t *_this)
 {
   assert_param(_this != NULL);
   IMP23ABSUTask *p_if_owner = (IMP23ABSUTask *)((uint32_t) _this - offsetof(IMP23ABSUTask, sensor_if));
-  float res = p_if_owner->sensor_status.FS;
+  uint8_t res = p_if_owner->sensor_status.type.audio.resolution;
 
   return res;
 }
 
-float IMP23ABSUTask_vtblMicGetSensitivity(ISourceObservable *_this)
+uint8_t IMP23ABSUTask_vtblMicGetVolume(ISensorAudio_t *_this)
 {
   assert_param(_this != NULL);
   IMP23ABSUTask *p_if_owner = (IMP23ABSUTask *)((uint32_t) _this - offsetof(IMP23ABSUTask, sensor_if));
-  float res = p_if_owner->sensor_status.Sensitivity;
+  uint8_t res = p_if_owner->sensor_status.type.audio.volume;
 
   return res;
 }
@@ -678,16 +665,15 @@ EMData_t IMP23ABSUTask_vtblMicGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t IMP23ABSUTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
+sys_error_code_t IMP23ABSUTask_vtblSensorSetFrequency(ISensorAudio_t *_this, uint32_t frequency)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IMP23ABSUTask *p_if_owner = (IMP23ABSUTask *)((uint32_t) _this - offsetof(IMP23ABSUTask, sensor_if));
-
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -697,9 +683,9 @@ sys_error_code_t IMP23ABSUTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
     SMMessage report =
     {
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
-      .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
+      .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FREQUENCY,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) ODR
+      .sensorMessage.nParam = frequency
     };
     res = IMP23ABSUTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -707,16 +693,15 @@ sys_error_code_t IMP23ABSUTask_vtblSensorSetODR(ISensor_t *_this, float ODR)
   return res;
 }
 
-sys_error_code_t IMP23ABSUTask_vtblSensorSetFS(ISensor_t *_this, float FS)
+sys_error_code_t IMP23ABSUTask_vtblSensorSetVolume(ISensorAudio_t *_this, uint8_t volume)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IMP23ABSUTask *p_if_owner = (IMP23ABSUTask *)((uint32_t) _this - offsetof(IMP23ABSUTask, sensor_if));
-
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
-  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled(_this))
+  if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *)_this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
   }
@@ -726,9 +711,9 @@ sys_error_code_t IMP23ABSUTask_vtblSensorSetFS(ISensor_t *_this, float FS)
     SMMessage report =
     {
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
-      .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
+      .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_VOLUME,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) FS
+      .sensorMessage.nParam = volume
     };
     res = IMP23ABSUTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -736,12 +721,12 @@ sys_error_code_t IMP23ABSUTask_vtblSensorSetFS(ISensor_t *_this, float FS)
   return res;
 }
 
-sys_error_code_t IMP23ABSUTask_vtblSensorSetFifoWM(ISensor_t *_this, uint16_t fifoWM)
+sys_error_code_t IMP23ABSUTask_vtblSensorSetResolution(ISensorAudio_t *_this, uint8_t bit_depth)
 {
   assert_param(_this != NULL);
   /* Does not support this virtual function.*/
   SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);
-  SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP23ABSU: warning - SetFifoWM() not supported.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP23ABSU: warning - SetResolution() not supported.\r\n"));
   return SYS_INVALID_FUNC_CALL_ERROR_CODE;
 }
 
@@ -750,7 +735,6 @@ sys_error_code_t IMP23ABSUTask_vtblSensorEnable(ISensor_t *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IMP23ABSUTask *p_if_owner = (IMP23ABSUTask *)((uint32_t) _this - offsetof(IMP23ABSUTask, sensor_if));
-
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
@@ -778,7 +762,6 @@ sys_error_code_t IMP23ABSUTask_vtblSensorDisable(ISensor_t *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IMP23ABSUTask *p_if_owner = (IMP23ABSUTask *)((uint32_t) _this - offsetof(IMP23ABSUTask, sensor_if));
-
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
@@ -809,7 +792,11 @@ boolean_t IMP23ABSUTask_vtblSensorIsEnabled(ISensor_t *_this)
 
   if (ISourceGetId((ISourceObservable *) _this) == p_if_owner->mic_id)
   {
-    res = p_if_owner->sensor_status.IsActive;
+    res = p_if_owner->sensor_status.is_active;
+  }
+  else
+  {
+    res = SYS_INVALID_PARAMETER_ERROR_CODE;
   }
 
   return res;
@@ -819,7 +806,6 @@ SensorDescriptor_t IMP23ABSUTask_vtblSensorGetDescription(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   IMP23ABSUTask *p_if_owner = (IMP23ABSUTask *)((uint32_t) _this - offsetof(IMP23ABSUTask, sensor_if));
-
   return *p_if_owner->sensor_descriptor;
 }
 
@@ -833,7 +819,7 @@ SensorStatus_t IMP23ABSUTask_vtblSensorGetStatus(ISensor_t *_this)
 
 /* Private function definition */
 // ***************************
-static sys_error_code_t IMP23ABSUTaskExecuteStepRun(AManagedTask *_this)
+static sys_error_code_t IMP23ABSUTaskExecuteStepState1(AManagedTask *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -860,11 +846,11 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepRun(AManagedTask *_this)
       {
         switch (report.sensorMessage.nCmdID)
         {
-          case SENSOR_CMD_ID_SET_ODR:
-            res = IMP23ABSUTaskSensorSetODR(p_obj, report);
+          case SENSOR_CMD_ID_SET_FREQUENCY:
+            res = IMP23ABSUTaskSensorSetFrequency(p_obj, report);
             break;
-          case SENSOR_CMD_ID_SET_FS:
-            res = IMP23ABSUTaskSensorSetFS(p_obj, report);
+          case SENSOR_CMD_ID_SET_VOLUME:
+            res = IMP23ABSUTaskSensorSetVolume(p_obj, report);
             break;
           case SENSOR_CMD_ID_ENABLE:
             res = IMP23ABSUTaskSensorEnable(p_obj, report);
@@ -875,11 +861,9 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepRun(AManagedTask *_this)
           default:
             /* unwanted report */
             res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
-            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
-            ;
+            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
 
             SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IMP23ABSU: unexpected report in Run: %i\r\n", report.messageID));
-            SYS_DEBUGF3(SYS_DBG_APP, SYS_DBG_LEVEL_WARNING, ("IMP23ABSU: unexpected report in Run: %i\r\n", report.messageID));
             break;
         }
         break;
@@ -889,9 +873,7 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepRun(AManagedTask *_this)
         /* unwanted report */
         res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
-
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IMP23ABSU: unexpected report in Run: %i\r\n", report.messageID));
-        SYS_DEBUGF3(SYS_DBG_APP, SYS_DBG_LEVEL_WARNING, ("IMP23ABSU: unexpected report in Run: %i\r\n", report.messageID));
         break;
       }
     }
@@ -931,12 +913,9 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
 
         // notify the listeners...
         double timestamp = report.sensorDataReadyMessage.fTimestamp;
-        double delta_timestamp = timestamp - p_obj->prev_timestamp;
         p_obj->prev_timestamp = timestamp;
 
-        /* update measuredODR */
-        p_obj->sensor_status.MeasuredODR = (float)((p_obj->sensor_status.ODR / 1000.0f)) / (float) delta_timestamp;
-        uint16_t samples = (uint16_t)(p_obj->sensor_status.ODR / 1000u);
+        uint16_t samples = (uint16_t)(p_obj->sensor_status.type.audio.frequency / 1000u);
 
 #if (HSD_USE_DUMMY_DATA == 1)
         IMP23ABSUTaskWriteDummyData(p_obj);
@@ -949,7 +928,6 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
         DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
         IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-
         SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP23ABSU: ts = %f\r\n", (float)timestamp));
         break;
       }
@@ -958,20 +936,20 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
         switch (report.sensorMessage.nCmdID)
         {
           case SENSOR_CMD_ID_INIT:
-            res = AnalogMicDrvSetDataBuffer((AnalogMicDriver_t *) p_obj->p_driver, p_obj->p_sensor_data_buff, ((uint32_t)p_obj->sensor_status.ODR / 1000) * 2);
+            res = AnalogMicDrvSetDataBuffer((AnalogMicDriver_t *) p_obj->p_driver, p_obj->p_sensor_data_buff, ((uint32_t)p_obj->sensor_status.type.audio.frequency / 1000) * 2);
             if (!SYS_IS_ERROR_CODE(res))
             {
-              if (p_obj->sensor_status.IsActive == true)
+              if (p_obj->sensor_status.is_active == true)
               {
                 res = IDrvStart(p_obj->p_driver);
               }
             }
             break;
-          case SENSOR_CMD_ID_SET_ODR:
-            res = IMP23ABSUTaskSensorSetODR(p_obj, report);
+          case SENSOR_CMD_ID_SET_FREQUENCY:
+            res = IMP23ABSUTaskSensorSetFrequency(p_obj, report);
             break;
-          case SENSOR_CMD_ID_SET_FS:
-            res = IMP23ABSUTaskSensorSetFS(p_obj, report);
+          case SENSOR_CMD_ID_SET_VOLUME:
+            res = IMP23ABSUTaskSensorSetVolume(p_obj, report);
             break;
           case SENSOR_CMD_ID_ENABLE:
             res = IMP23ABSUTaskSensorEnable(p_obj, report);
@@ -982,24 +960,22 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
           default:
             /* unwanted report */
             res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
-            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
+            SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
+            ;
 
             SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IMP23ABSU: unexpected report in Datalog: %i\r\n", report.messageID));
-            SYS_DEBUGF3(SYS_DBG_APP, SYS_DBG_LEVEL_WARNING, ("IMP23ABSU: unexpected report in Datalog: %i\r\n", report.messageID));
             break;
         }
         break;
       }
       default:
-      {
         /* unwanted report */
         res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
-        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE);
+        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE)
+        ;
 
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IMP23ABSU: unexpected report in Datalog: %i\r\n", report.messageID));
-        SYS_DEBUGF3(SYS_DBG_APP, SYS_DBG_LEVEL_WARNING, ("IMP23ABSU: unexpected report in Datalog: %i\r\n", report.messageID));
         break;
-      }
     }
   }
 
@@ -1064,7 +1040,7 @@ static void IMP23ABSUTaskWriteDummyData(IMP23ABSUTask *_this)
   assert_param(_this != NULL);
   int16_t *p16 = _this->p_dummy_data_buff;
   uint16_t idx = 0;
-  uint16_t samples = ((uint32_t)_this->sensor_status.ODR / 1000);
+  uint16_t samples = ((uint32_t)_this->sensor_status.type.audio.frequency / 1000);
 
   for (idx = 0; idx < samples; idx++)
   {
@@ -1090,53 +1066,52 @@ static sys_error_code_t IMP23ABSUTaskSensorInitTaskParams(IMP23ABSUTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* MIC STATUS */
-  _this->sensor_status.IsActive = TRUE;
-  _this->sensor_status.FS = 130.0f;
-  _this->sensor_status.Sensitivity = 1.0f;
-  _this->sensor_status.ODR = 192000.0f;
-  _this->sensor_status.MeasuredODR = 0.0f;
+  _this->sensor_status.isensor_class = ISENSOR_CLASS_AUDIO;
+  _this->sensor_status.is_active = TRUE;
+  _this->sensor_status.type.audio.volume = 100;
+  _this->sensor_status.type.audio.resolution = 16;
+  _this->sensor_status.type.audio.frequency = 192000;
   EMD_1dInit(&_this->data, (uint8_t *) _this->p_sensor_data_buff, E_EM_INT16, 1);
 
   return res;
 }
 
-static sys_error_code_t IMP23ABSUTaskSensorSetODR(IMP23ABSUTask *_this, SMMessage report)
+static sys_error_code_t IMP23ABSUTaskSensorSetFrequency(IMP23ABSUTask *_this, SMMessage report)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   IMP23ABSUTask *p_obj = (IMP23ABSUTask *) _this;
 
-  float ODR = (float) report.sensorMessage.nParam;
+  uint32_t ODR = (uint32_t) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->mic_id)
   {
-    if (ODR <= 16000.0f)
+    if (ODR <= 16000)
     {
-      ODR = 16000.0f;
+      ODR = 16000;
     }
-    else if (ODR <= 32000.0f)
+    else if (ODR <= 32000)
     {
-      ODR = 32000.0f;
+      ODR = 32000;
     }
-    else if (ODR <= 48000.0f)
+    else if (ODR <= 48000)
     {
-      ODR = 48000.0f;
+      ODR = 48000;
     }
-    else if (ODR <= 96000.0f)
+    else if (ODR <= 96000)
     {
-      ODR = 96000.0f;
+      ODR = 96000;
     }
     else
     {
-      ODR = 192000.0f;
+      ODR = 192000;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
     {
       MDFSetMDFConfig(p_obj->p_driver, ODR);
-      _this->sensor_status.ODR = ODR;
-      _this->sensor_status.MeasuredODR = 0.0f;
+      _this->sensor_status.type.audio.frequency = ODR;
     }
   }
   else
@@ -1147,24 +1122,24 @@ static sys_error_code_t IMP23ABSUTaskSensorSetODR(IMP23ABSUTask *_this, SMMessag
   return res;
 }
 
-static sys_error_code_t IMP23ABSUTaskSensorSetFS(IMP23ABSUTask *_this, SMMessage report)
+static sys_error_code_t IMP23ABSUTaskSensorSetVolume(IMP23ABSUTask *_this, SMMessage report)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float FS = (float) report.sensorMessage.nParam;
+  uint8_t FS = (uint8_t) report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->mic_id)
   {
-    if (FS != 130.0f)
+    if (FS != 100.0f)
     {
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-      _this->sensor_status.FS = FS;
+      _this->sensor_status.type.audio.volume = FS;
     }
   }
   else
@@ -1184,10 +1159,12 @@ static sys_error_code_t IMP23ABSUTaskSensorEnable(IMP23ABSUTask *_this, SMMessag
 
   if (id == _this->mic_id)
   {
-    _this->sensor_status.IsActive = TRUE;
+    _this->sensor_status.is_active = TRUE;
   }
   else
+  {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
 
   return res;
 }
@@ -1201,10 +1178,12 @@ static sys_error_code_t IMP23ABSUTaskSensorDisable(IMP23ABSUTask *_this, SMMessa
 
   if (id == _this->mic_id)
   {
-    _this->sensor_status.IsActive = FALSE;
+    _this->sensor_status.is_active = FALSE;
   }
   else
+  {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
 
   return res;
 }
@@ -1212,40 +1191,47 @@ static sys_error_code_t IMP23ABSUTaskSensorDisable(IMP23ABSUTask *_this, SMMessa
 static boolean_t IMP23ABSUTaskSensorIsActive(const IMP23ABSUTask *_this)
 {
   assert_param(_this != NULL);
-  return _this->sensor_status.IsActive;
+  return _this->sensor_status.is_active;
 }
 
 void MDF_Filter_1_Complete_Callback(MDF_HandleTypeDef *hmdf)
 {
+  MTMapValue_t *p_val;
+  TX_QUEUE *p_queue;
   SMMessage report;
   report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY;
   report.sensorDataReadyMessage.half = 2;
   report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
 
-  //  if (sTaskObj.in_queue != NULL) { //TODO: STF.Port - how to check if the queue has been initialized ??
-  if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &report, TX_NO_WAIT))
+  p_val = MTMap_FindByKey(&sTheClass.task_map, (uint32_t) hmdf);
+  if (p_val != NULL)
   {
-    /* unable to send the report. Signal the error */
-    sys_error_handler();
+    p_queue = &((IMP23ABSUTask *) p_val->p_mtask_obj)->in_queue;
+    if (TX_SUCCESS != tx_queue_send(p_queue, &report, TX_NO_WAIT))
+    {
+      /* unable to send the report. Signal the error */
+      sys_error_handler();
+    }
   }
-
-  // }
 }
 
 void MDF_Filter_1_HalfComplete_Callback(MDF_HandleTypeDef *hmdf)
 {
+  MTMapValue_t *p_val;
+  TX_QUEUE *p_queue;
   SMMessage report;
   report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY;
   report.sensorDataReadyMessage.half = 1;
   report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
 
-  //  if (sTaskObj.in_queue != NULL) { //TODO: STF.Port - how to check if the queue has been initialized ??
-  if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &report, TX_NO_WAIT))
+  p_val = MTMap_FindByKey(&sTheClass.task_map, (uint32_t) hmdf);
+  if (p_val != NULL)
   {
-    /* unable to send the report. Signal the error */
-    sys_error_handler();
+    p_queue = &((IMP23ABSUTask *) p_val->p_mtask_obj)->in_queue;
+    if (TX_SUCCESS != tx_queue_send(p_queue, &report, TX_NO_WAIT))
+    {
+      /* unable to send the report. Signal the error */
+      sys_error_handler();
+    }
   }
-
-  // }
 }
-

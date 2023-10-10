@@ -97,6 +97,15 @@ sys_error_code_t I2CMasterDriverSetDeviceAddr(I2CMasterDriver_t *_this, uint16_t
   return SYS_NO_ERROR_CODE;
 }
 
+sys_error_code_t I2CMasterDriverSetAddrSize(I2CMasterDriver_t *_this, uint8_t nAddressSize)
+{
+  assert_param(_this);
+
+  _this->address_size = nAddressSize;
+
+  return SYS_NO_ERROR_CODE;
+}
+
 /* IIODriver virtual function definition */
 /*****************************************/
 
@@ -243,7 +252,7 @@ sys_error_code_t I2CMasterDriver_vtblWrite(IIODriver *_this, uint8_t *p_data_buf
   I2CMasterDriver_t *p_obj = (I2CMasterDriver_t *) _this;
   I2C_HandleTypeDef *p_i2c = p_obj->mx_handle.p_mx_i2c_cfg->p_i2c_handle;
 
-  if (HAL_I2C_Mem_Write_DMA(p_i2c, p_obj->target_device_addr, channel, I2C_MEMADD_SIZE_8BIT, p_data_buffer,
+  if (HAL_I2C_Mem_Write_DMA(p_i2c, p_obj->target_device_addr, channel, p_obj->address_size, p_data_buffer,
                             data_size) != HAL_OK)
   {
     if (HAL_I2C_GetError(p_i2c) != (uint32_t)HAL_BUSY)
@@ -266,7 +275,7 @@ sys_error_code_t I2CMasterDriver_vtblRead(IIODriver *_this, uint8_t *p_data_buff
   I2CMasterDriver_t *p_obj = (I2CMasterDriver_t *) _this;
   I2C_HandleTypeDef *p_i2c = p_obj->mx_handle.p_mx_i2c_cfg->p_i2c_handle;
 
-  if (HAL_I2C_Mem_Read_DMA(p_i2c, p_obj->target_device_addr, channel, I2C_MEMADD_SIZE_8BIT, p_data_buffer,
+  if (HAL_I2C_Mem_Read_DMA(p_i2c, p_obj->target_device_addr, channel, p_obj->address_size, p_data_buffer,
                            data_size) != HAL_OK)
   {
     if (HAL_I2C_GetError(p_i2c) != (uint32_t)HAL_BUSY)

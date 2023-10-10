@@ -1,25 +1,25 @@
 /**
- ******************************************************************************
- * @file    systp.h
- * @author  STMicroelectronics - ST-Korea - MCD Team
- * @version 3.0.0
- * @date    Mar 22, 2017
- * @brief   Target platform definition.
- *
- * This file include definitions depending on the target platform.
- * A target platform is a tuple Hardware + Compiler.
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2016 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    systp.h
+  * @author  STMicroelectronics - ST-Korea - MCD Team
+  * @version 3.0.0
+  * @date    Mar 22, 2017
+  * @brief   Target platform definition.
+  *
+  * This file include definitions depending on the target platform.
+  * A target platform is a tuple Hardware + Compiler.
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2016 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  ******************************************************************************
+  */
 #ifndef SYSTARGETPLATFORM_H_
 #define SYSTARGETPLATFORM_H_
 
@@ -88,10 +88,10 @@
 #define SYS_DEFINE_INLINE inline
 
 /**
- * To keep the backward compatibility after changes dome to complaint with MISRA rules,
- * we keep the old SYS_DEFINE_INLINE and we define this new preprocessor define.
- * It must be used for the new development.
- */
+  * To keep the backward compatibility after changes dome to complaint with MISRA rules,
+  * we keep the old SYS_DEFINE_INLINE and we define this new preprocessor define.
+  * It must be used for the new development.
+  */
 #define SYS_DEFINE_STATIC_INLINE static inline
 
 /*

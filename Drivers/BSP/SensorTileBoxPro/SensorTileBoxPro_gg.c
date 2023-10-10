@@ -20,7 +20,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "SensorTileBoxPro_gg.h"
-#include "main.h"
 
 #define GG_MAX_NUM     1
 

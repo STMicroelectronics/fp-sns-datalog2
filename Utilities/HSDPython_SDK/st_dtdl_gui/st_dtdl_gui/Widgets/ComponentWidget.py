@@ -26,14 +26,17 @@ from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 
 import st_dtdl_gui
 from st_dtdl_gui.Widgets.ToggleButton import ToggleButton
-from st_pnpl.DTDL.device_template_model import ContentType
+from st_pnpl.DTDL.device_template_model import ContentType, RequestSchema, ResponseSchema
 from st_pnpl.PnPLCmd import PnPLCMDManager
 from st_dtdl_gui.Widgets.PropertyWidget import PropertyWidget
 from st_dtdl_gui.Widgets.CommandWidget import CommandField, CommandWidget
 from st_dtdl_gui.Widgets.TelemetryWidget import TelemetryWidget
-from st_dtdl_gui.UI.styles import STDTDL_EditLine, STDTDL_SpinBox
-from st_dtdl_gui.Utils.DataClass import TypeEnum, UnitMap
+from st_dtdl_gui.UI.styles import STDTDL_EditLine
+from st_dtdl_gui.Utils.DataClass import TypeEnum
 from st_dtdl_gui.STDTDL_Controller import ComponentType
+
+import st_hsdatalog.HSD_utils.logger as logger
+log = logger.get_logger(__name__)
 
 class ComponentWidget(QWidget):
     def __init__(self, controller, comp_name, comp_display_name, comp_sem_type, comp_contents, c_id = 0, parent=None):
@@ -90,16 +93,6 @@ class ComponentWidget(QWidget):
         for i, p in enumerate(self.comp_contents):
             pc_display_name = p.display_name if isinstance(p.display_name, str) else p.display_name.en
             
-            # unit = ""
-            # if p.unit is not None:
-            #     unit = p.unit
-            # elif p.display_unit is not None:
-            #     unit = p.display_unit if isinstance(p.display_unit, str) else p.display_unit.en
-                    
-            # unit_dict = UnitMap().unit_dict
-            # if unit in unit_dict:
-            #     unit = unit_dict[unit]
-            
             cont_type = ""
             if isinstance(p.type, ContentType):
                 cont_type = p.type.name
@@ -126,41 +119,103 @@ class ComponentWidget(QWidget):
                 self.property_widgets[p.name] = widget
             
             elif cont_type == 'COMMAND':
-                fields = []
+                req_fields = []
+                resp_fields = []
                 try: #complex object schema
-                    if p.request is not None:
-                        if p.request.schema.type.value == "Object":
-                            if "fields" in p.request.schema.to_dict(): #more than one field in command
-                                for f in p.request.schema.fields:
-                                    field_label = f.display_name if isinstance(f.display_name, str) else f.display_name.en
-                                    if f.schema is not None:
-                                        fields.append(CommandField(f.name, f.schema, field_label, ""))
+                    if p.request is not None or p.response is not None:
+                        if p.request is not None:
+                            if isinstance(p.request.schema, RequestSchema): 
+                                if p.request.schema.type.value == "Object":
+                                    if "fields" in p.request.schema.to_dict(): #more than one field in command
+                                        for f in p.request.schema.fields:
+                                            field_label = f.display_name if isinstance(f.display_name, str) else f.display_name.en
+                                            if f.schema is not None:
+                                                req_fields.append(CommandField(f.name, f.schema.value, field_label, ""))
+                                            else:
+                                                try:
+                                                    schema_type = f.dtmi_dtdl_property_schema_2.type.value.lower()
+                                                    req_fields.append(CommandField(f.name, schema_type, field_label, f.dtmi_dtdl_property_schema_2.enum_values))
+                                                except AttributeError:
+                                                    log.error("Malformed commmand field: {}".format(field_label))
+                                        widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, p.request.name, req_fields, command_label=pc_display_name)
                                     else:
-                                        try:
-                                            schema_type = f.dtmi_dtdl_property_schema_2.type.value.lower()
-                                            fields.append(CommandField(f.name, schema_type, field_label, f.dtmi_dtdl_property_schema_2.enum_values))
-                                        except AttributeError:
-                                            print("ERROR - malformed commmand field: {}".format(field_label))
-                                widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, p.request.name, fields, pc_display_name)
+                                        req_fields.append(CommandField(p.request.name, p.request.schema, pc_display_name, ""))
+                                        widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, req_fields, command_label=pc_display_name)
+                                elif p.request.schema.type.value == "Enum":
+                                    if "enumValues" in p.request.schema.to_dict():
+                                        for e in p.request.schema.enum_values:
+                                            enum_label = e.display_name if isinstance(e.display_name, str) else e.display_name.en
+                                            req_fields.append(CommandField(p.request.name, TypeEnum.ENUM.value, enum_label, e.enum_value))
+                                        widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, req_fields, command_label=pc_display_name)
                             else:
-                                fields.append(CommandField(p.request.name, p.request.schema, pc_display_name, ""))
-                                widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, fields, pc_display_name)
-                        elif p.request.schema.type.value == "Enum":
-                            if "enumValues" in p.request.schema.to_dict():
-                                for e in p.request.schema.enum_values:
-                                    enum_label = e.display_name if isinstance(e.display_name, str) else e.display_name.en
-                                    fields.append(CommandField(p.request.name, TypeEnum.ENUM.value, enum_label, e.enum_value))
-                                widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, fields, pc_display_name)
-                        # else:
-                        #     print("no Object, nor Enum!")
-                    else:
-                        widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, fields, pc_display_name)
-                except AttributeError:
-                    fields = []
-                    if p.request != None:
-                        fields.append(CommandField(p.request.name, p.request.schema, pc_display_name, ""))
-                    widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, fields, pc_display_name)
+                                # log.debug("No Object, nor Enum!", p.request.schema.value)
+                                field_label = p.request.display_name if isinstance(p.request.display_name, str) else p.request.display_name.en
+                                req_fields.append(CommandField(p.request.name, p.request.schema.value, field_label, ""))
+                                widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, req_fields, command_label=pc_display_name)
 
+                            if p.response is not None:
+                                if isinstance(p.response.schema, ResponseSchema): 
+                                    if p.response.schema.type.value == "Object":
+                                        if "fields" in p.response.schema.to_dict(): #more than one field in command
+                                            for f in p.response.schema.fields:
+                                                field_label = f.display_name if isinstance(f.display_name, str) else f.display_name.en
+                                                if f.schema is not None:
+                                                    resp_fields.append(CommandField(f.name, f.schema.value, field_label, ""))
+                                                else:
+                                                    try:
+                                                        schema_type = f.dtmi_dtdl_property_schema_2.type.value.lower()
+                                                        resp_fields.append(CommandField(f.name, schema_type, field_label, f.dtmi_dtdl_property_schema_2.enum_values))
+                                                    except AttributeError:
+                                                        log.error("Malformed commmand field: {}".format(field_label))
+                                            widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, p.request.name, req_fields, p.response.name, resp_fields, pc_display_name)
+                                        else:
+                                            resp_fields.append(CommandField(p.response.name, p.response.schema, pc_display_name, ""))
+                                            widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, req_fields, None, resp_fields, pc_display_name)
+                                    elif p.response.schema.type.value == "Enum":
+                                        if "enumValues" in p.response.schema.to_dict():
+                                            for e in p.response.schema.enum_values:
+                                                enum_label = e.display_name if isinstance(e.display_name, str) else e.display_name.en
+                                                resp_fields.append(CommandField(p.response.name, TypeEnum.ENUM.value, enum_label, e.enum_value))
+                                            widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, req_fields, None, resp_fields, pc_display_name)
+                                else:
+                                    field_label = p.response.display_name if isinstance(p.response.display_name, str) else p.response.display_name.en
+                                    resp_fields.append(CommandField(p.response.name, p.response.schema.value, field_label, ""))
+                                    widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, req_fields, None, resp_fields, pc_display_name)
+                        else:
+                            if p.response is not None: #req is None and resp is not None #TODO check this case
+                                if isinstance(p.response.schema, ResponseSchema): 
+                                    if p.response.schema.type.value == "Object":
+                                        if "fields" in p.response.schema.to_dict(): #more than one field in command
+                                            for f in p.response.schema.fields:
+                                                field_label = f.display_name if isinstance(f.display_name, str) else f.display_name.en
+                                                if f.schema is not None:
+                                                    resp_fields.append(CommandField(f.name, f.schema.value, field_label, ""))
+                                                else:
+                                                    try:
+                                                        schema_type = f.dtmi_dtdl_property_schema_2.type.value.lower()
+                                                        resp_fields.append(CommandField(f.name, schema_type, field_label, f.dtmi_dtdl_property_schema_2.enum_values))
+                                                    except AttributeError:
+                                                        log.error("Malformed commmand field: {}".format(field_label))
+                                            widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, None, p.response.name, resp_fields, pc_display_name)
+                                        else:
+                                            resp_fields.append(CommandField(p.response.name, p.response.schema, pc_display_name, ""))
+                                            widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, None, None, resp_fields, pc_display_name)
+                                    elif p.response.schema.type.value == "Enum":
+                                        if "enumValues" in p.response.schema.to_dict():
+                                            for e in p.response.schema.enum_values:
+                                                enum_label = e.display_name if isinstance(e.display_name, str) else e.display_name.en
+                                                resp_fields.append(CommandField(p.response.name, TypeEnum.ENUM.value, enum_label, e.enum_value))
+                                            widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, None, None, resp_fields, pc_display_name)
+                                else:
+                                    field_label = p.response.display_name if isinstance(p.response.display_name, str) else p.response.display_name.en
+                                    resp_fields.append(CommandField(p.response.name, p.response.schema.value, field_label, ""))
+                                    widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, None, None, resp_fields, pc_display_name)
+                    else:
+                        widget = CommandWidget(self.controller, comp_name, self.comp_sem_type, p.name, None, req_fields, pc_display_name)
+                    
+                except AttributeError:
+                    pass
+                widget.setContentsMargins(0, 0, 0, 0)
                 component_props_layout.addWidget(widget, i,0)
                 #add widget to the Property widget dictionary
                 self.command_widgets[p.name] = widget
@@ -245,23 +300,23 @@ class ComponentWidget(QWidget):
     @Slot(int, str, dict)
     def s_component_updated(self, comp_name: str, comp_status: dict):
         if comp_name == self.comp_name:
-            # print("Component:", comp_name)
+            log.debug("Component:", comp_name)
             if comp_status is not None:
                 for cont_name, cont_value in comp_status.items():
                     if type(cont_value) is dict:
-                        # print(" - Content:", cont_name)
+                        log.debug(" - Content:", cont_name)
                         for key in cont_value:
-                            # print('  -- ' + key + ':', cont_value[key])
+                            log.debug('  -- ' + key + ':', cont_value[key])
                             self.update_property_widget(comp_name, self.comp_sem_type, cont_name, key, cont_value[key])
                     elif type(cont_value) is list:
-                        print("ComponentWidget - WARNING - Property type not supported. (comp: {}, cont:{}) status not updated".format(comp_name, cont_name))
+                        log.warning("Property type not supported. (comp: {}, cont:{}) status not updated".format(comp_name, cont_name))
                     else:
-                        # print('- {}: {}'.format(cont_name, cont_value))
+                        log.debug('- {}: {}'.format(cont_name, cont_value))
                         self.update_property_widget(comp_name, self.comp_sem_type, cont_name, None, cont_value)
-                # self.controller.components_status[comp_name] = comp_status
-                print("ComponentWidget - INFO - Component {} Updated correctly".format(comp_name))                
+                # self.controller.components_status[comp_name] = comp_status 
+                log.info("Component {} Updated correctly".format(comp_name))
             else:
-                print("ComponentWidget - WARNING - No status to update for {} Component".format(comp_name))
+                log.warning("No status to update for {} Component".format(comp_name))  
                 
     @Slot(bool, int)
     @abstractmethod
@@ -333,7 +388,7 @@ class ComponentWidget(QWidget):
                 widget.value.setText(str(value))
                 widget.value.blockSignals(False)
         else:
-            print("ComponentWidget - WARNING - Unrecognized Property Type")
+            log.warning("Unrecognized Property Type")
     
     def send_string_command(self, widget: PropertyWidget):
         json_string = PnPLCMDManager.create_set_property_cmd(widget.comp_name, widget.prop_name, widget.value.text() if widget.field_name is None else { widget.field_name: widget.value.text()})
@@ -357,9 +412,7 @@ class ComponentWidget(QWidget):
         else:
             self.controller.update_component_status(widget.comp_name, widget.comp_sem_type)
 
-    def validate_value(self, widget, text_value):
-        # print("res: {}".format(widget.validator.validate(text_value,0)[0]))
-        
+    def validate_value(self, widget, text_value):        
         validation_res = widget.validator.validate(text_value,0)
         if isinstance(validation_res, tuple):
             validation_res = validation_res[0]

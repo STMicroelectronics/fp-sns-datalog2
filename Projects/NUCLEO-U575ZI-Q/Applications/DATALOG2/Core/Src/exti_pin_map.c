@@ -21,7 +21,7 @@
 #include "drivers/EXTIPinMap.h"
 
 // Forward function declaration.
-void Def_EXTI_Callback(uint16_t nPin){};
+void Def_EXTI_Callback(uint16_t nPin) {};
 
 void HelloWorld_USR_EXTI_Callback(uint16_t pin);
 void ISM330DHCXTask_EXTI_Callback(uint16_t nPin);
@@ -29,8 +29,8 @@ void IIS2DLPCTask_EXTI_Callback(uint16_t nPin);
 void IIS2MDCTask_EXTI_Callback(uint16_t nPin);
 
 EXTI_BEGIN_P2F_MAP()
-  EXTI_P2F_MAP_ENTRY(GPIO_PIN_1, IIS2DLPCTask_EXTI_Callback)
-  EXTI_P2F_MAP_ENTRY(GPIO_PIN_3, IIS2MDCTask_EXTI_Callback)
-  EXTI_P2F_MAP_ENTRY(GPIO_PIN_9, ISM330DHCXTask_EXTI_Callback)
-  EXTI_P2F_MAP_ENTRY(GPIO_PIN_13, HelloWorld_USR_EXTI_Callback)
+EXTI_P2F_MAP_ENTRY(GPIO_PIN_1, IIS2DLPCTask_EXTI_Callback)
+EXTI_P2F_MAP_ENTRY(GPIO_PIN_3, IIS2MDCTask_EXTI_Callback)
+EXTI_P2F_MAP_ENTRY(GPIO_PIN_9, ISM330DHCXTask_EXTI_Callback)
+EXTI_P2F_MAP_ENTRY(GPIO_PIN_13, HelloWorld_USR_EXTI_Callback)
 EXTI_END_P2F_MAP()

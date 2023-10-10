@@ -1,24 +1,24 @@
 /**
- ******************************************************************************
- * @file    sysdebug_config.h
- * @author  SRA
- * @brief   Configure the debug log functionality
- *
- * Each logic module of the application should define a DEBUG control byte
- * used to turn on/off the log for the module.
- *
- *********************************************************************************
- * @attention
- *
- * Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- *********************************************************************************
- */
+  ******************************************************************************
+  * @file    sysdebug_config.h
+  * @author  SRA
+  * @brief   Configure the debug log functionality
+  *
+  * Each logic module of the application should define a DEBUG control byte
+  * used to turn on/off the log for the module.
+  *
+  *********************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *********************************************************************************
+  */
 
 #ifndef SYSDEBUG_CONFIG_H_
 #define SYSDEBUG_CONFIG_H_

@@ -92,8 +92,8 @@ static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this);
   *
   * @param pParams .
   */
-static int32_t I2CBusTaskWrite(void *p_sensor, uint8_t reg, uint8_t *data, uint16_t size);
-static int32_t I2CBusTaskRead(void *p_sensor, uint8_t reg, uint8_t *data, uint16_t size);
+static int32_t I2CBusTaskWrite(void *p_sensor, uint16_t reg, uint8_t *data, uint16_t size);
+static int32_t I2CBusTaskRead(void *p_sensor, uint16_t reg, uint8_t *data, uint16_t size);
 
 static sys_error_code_t I2CBusTaskCtrl(ABusIF *_this, EBusCtrlCmd ctrl_cmd, uint32_t params);
 
@@ -456,6 +456,7 @@ static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this)
       case SM_MESSAGE_ID_I2C_BUS_READ:
 
         I2CMasterDriverSetDeviceAddr((I2CMasterDriver_t *) p_obj->p_driver, msg.pxSensor->address);
+        I2CMasterDriverSetAddrSize((I2CMasterDriver_t *) p_obj->p_driver, msg.pxSensor->address_size);
         res = IIODrvRead(p_obj->p_driver, msg.pnData, msg.nDataSize, msg.nRegAddr);
         if (!SYS_IS_ERROR_CODE(res))
         {
@@ -465,6 +466,7 @@ static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this)
 
       case SM_MESSAGE_ID_I2C_BUS_WRITE:
         I2CMasterDriverSetDeviceAddr((I2CMasterDriver_t *) p_obj->p_driver, msg.pxSensor->address);
+        I2CMasterDriverSetAddrSize((I2CMasterDriver_t *) p_obj->p_driver, msg.pxSensor->address_size);
         res = IIODrvWrite(p_obj->p_driver, msg.pnData, msg.nDataSize, msg.nRegAddr);
         if (!SYS_IS_ERROR_CODE(res))
         {
@@ -483,12 +485,13 @@ static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this)
   return res;
 }
 
-static int32_t I2CBusTaskWrite(void *p_sensor, uint8_t reg, uint8_t *data, uint16_t size)
+static int32_t I2CBusTaskWrite(void *p_sensor, uint16_t reg, uint8_t *data, uint16_t size)
 {
   assert_param(p_sensor);
   I2CBusIF *p_i2c_sensor = (I2CBusIF *) p_sensor;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  uint8_t auto_inc = p_i2c_sensor->auto_inc;
+  uint16_t auto_inc = p_i2c_sensor->auto_inc;
+  uint8_t address_size = p_i2c_sensor->address_size;
 
   struct i2cIOMessage_t msg =
   {
@@ -496,7 +499,8 @@ static int32_t I2CBusTaskWrite(void *p_sensor, uint8_t reg, uint8_t *data, uint1
     .pxSensor = p_i2c_sensor,
     .nRegAddr = reg | auto_inc,
     .pnData = data,
-    .nDataSize = size
+    .nDataSize = size,
+    .nAddrSize = address_size
   };
 
   // if (s_xI2cTaskObj.m_xInQueue != NULL) {//TODO: STF.Port - how to know if the task has been initialized ??
@@ -525,12 +529,13 @@ static int32_t I2CBusTaskWrite(void *p_sensor, uint8_t reg, uint8_t *data, uint1
   return res;
 }
 
-static int32_t I2CBusTaskRead(void *p_sensor, uint8_t reg, uint8_t *data, uint16_t size)
+static int32_t I2CBusTaskRead(void *p_sensor, uint16_t reg, uint8_t *data, uint16_t size)
 {
   assert_param(p_sensor);
   I2CBusIF *p_i2c_sensor = (I2CBusIF *) p_sensor;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  uint8_t auto_inc = p_i2c_sensor->auto_inc;
+  uint16_t auto_inc = p_i2c_sensor->auto_inc;
+  uint8_t address_size = p_i2c_sensor->address_size;
 
   struct i2cIOMessage_t msg =
   {
@@ -538,7 +543,8 @@ static int32_t I2CBusTaskRead(void *p_sensor, uint8_t reg, uint8_t *data, uint16
     .pxSensor = p_i2c_sensor,
     .nRegAddr = reg | auto_inc,
     .pnData = data,
-    .nDataSize = size
+    .nDataSize = size,
+    .nAddrSize = address_size
   };
 
   // if (s_xI2cTaskObj.m_xInQueue != NULL) { //TODO: STF.Port - how to know if the task has been initialized ??

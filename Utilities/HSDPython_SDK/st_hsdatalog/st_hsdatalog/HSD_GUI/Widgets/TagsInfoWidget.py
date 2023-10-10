@@ -184,7 +184,7 @@ class TagsInfoWidget(ComponentWidget):
                         # tag_widget.enable_tag_button.setChecked(tag_enabled)
                 self.controller.components_status[comp_name] = comp_status
                 log.debug("Component: {}".format(comp_name))
-                print("TagsInfoWidget - INFO - Component tags_info Updated correctly")
+                log.info("Component tags_info Updated correctly")
     
     @Slot()
     def plot_window_time_change(self):

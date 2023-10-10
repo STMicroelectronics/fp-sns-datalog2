@@ -29,14 +29,14 @@
   * @param  ITtime Coefficient for the Pulse duration to be written (Pulse duration = 302,06 us - ITtime * 512 / fc)
   * @retval int32_t enum status.
   */
-int32_t BSP_NFCTAG_ChangeITPulse(uint32_t MsbPasswd,uint32_t LsbPasswd,const ST25DV_PULSE_DURATION ITtime)
+int32_t BSP_NFCTAG_ChangeITPulse(uint32_t MsbPasswd,uint32_t LsbPasswd,const uint8_t ITtime)
 {
   int32_t ret;
   ST25DV_PASSWD Passwd;
   /* Present password to open session  */
   Passwd.MsbPasswd = MsbPasswd;
   Passwd.LsbPasswd = LsbPasswd;
-  ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, Passwd );
+  ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, &Passwd );
 
   /* Change the Mailbox configuration value */
   ret = BSP_NFCTAG_WriteITPulse( BSP_NFCTAG_INSTANCE, ITtime );
@@ -44,7 +44,7 @@ int32_t BSP_NFCTAG_ChangeITPulse(uint32_t MsbPasswd,uint32_t LsbPasswd,const ST2
   /* present wrong password for closing the session */
   Passwd.MsbPasswd = ~MsbPasswd;
   Passwd.LsbPasswd = ~LsbPasswd;
-  BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, Passwd );
+  BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, &Passwd );
 
   return ret;
 }
@@ -53,17 +53,17 @@ int32_t BSP_NFCTAG_ChangeITPulse(uint32_t MsbPasswd,uint32_t LsbPasswd,const ST2
   * @brief  Change MailboxConfiguration
   * @param  uint32_t MsbPasswd MSB 32-bit password
   * @param  uint32_t LsbPasswd LSB 32-bit password
-  * @param  ST25DV_EN_STATUS MB_mode Enable Disable the Mailbox
+  * @param  uint8_t MB_mode Enable Disable the Mailbox
   * @retval int32_t enum status
   */
-int32_t BSP_NFCTAG_ChangeMBMode(uint32_t MsbPasswd,uint32_t LsbPasswd,const ST25DV_EN_STATUS MB_mode)
+int32_t BSP_NFCTAG_ChangeMBMode(uint32_t MsbPasswd,uint32_t LsbPasswd,const uint8_t MB_mode)
 {
   int32_t ret;
   ST25DV_PASSWD Passwd;
   /* Present password to open session  */
   Passwd.MsbPasswd = MsbPasswd;
   Passwd.LsbPasswd = LsbPasswd;
-  ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, Passwd );
+  ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, &Passwd );
 
   /* Change the Mailbox configuration value */
   ret = BSP_NFCTAG_WriteMBMode( BSP_NFCTAG_INSTANCE, MB_mode );
@@ -71,7 +71,7 @@ int32_t BSP_NFCTAG_ChangeMBMode(uint32_t MsbPasswd,uint32_t LsbPasswd,const ST25
   /* present wrong password for closing the session */
   Passwd.MsbPasswd = ~MsbPasswd;
   Passwd.LsbPasswd = ~LsbPasswd;
-  BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, Passwd );
+  BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, &Passwd );
 
   return ret;
 }
@@ -92,17 +92,17 @@ int32_t BSP_NFCTAG_ChangeI2CPassword(uint32_t MsbPasswd,uint32_t LsbPasswd)
     /* if I2C session is closed, present default password to open session */
     Passwd.MsbPasswd = 0;
     Passwd.LsbPasswd = 0;
-    ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, Passwd );
+    ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, &Passwd );
     if(ret==NFCTAG_OK) {
       /* Ok we could Change the default Password */
       Passwd.MsbPasswd = MsbPasswd;
       Passwd.LsbPasswd = LsbPasswd;
-      ret = BSP_NFCTAG_WriteI2CPassword(BSP_NFCTAG_INSTANCE, Passwd);
+      ret = BSP_NFCTAG_WriteI2CPassword(BSP_NFCTAG_INSTANCE, &Passwd);
       if(ret==NFCTAG_OK) {
         /* Present a wrong password for closing the session we have alredy setted the new one here */
         Passwd.MsbPasswd = ~MsbPasswd;
         Passwd.LsbPasswd = ~LsbPasswd;
-        BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, Passwd );
+        BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, &Passwd );
       }
     }
   }
@@ -127,7 +127,7 @@ int32_t BSP_NFCTAG_WriteConfigIT(uint32_t MsbPasswd,uint32_t LsbPasswd,const uin
   /* Present password to open session  */
   Passwd.MsbPasswd = MsbPasswd;
   Passwd.LsbPasswd = LsbPasswd;
-  ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, Passwd );
+  ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, &Passwd );
 
   if(ret==NFCTAG_OK) {
     /* Change the GPO configuration value */
@@ -137,7 +137,7 @@ int32_t BSP_NFCTAG_WriteConfigIT(uint32_t MsbPasswd,uint32_t LsbPasswd,const uin
        /* present wrong password for closing the session */
     Passwd.MsbPasswd = ~MsbPasswd;
     Passwd.LsbPasswd = ~LsbPasswd;
-    ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, Passwd );
+    ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, &Passwd );
     }
   }
   return ret;
@@ -157,7 +157,7 @@ int32_t BSP_NFCTAG_ChangeMBWDG(uint32_t MsbPasswd,uint32_t LsbPasswd,const uint8
   /* Present password to open session  */
   Passwd.MsbPasswd = MsbPasswd;
   Passwd.LsbPasswd = LsbPasswd;
-  ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, Passwd );
+  ret = BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, &Passwd );
 
   /* Change the Mailbox configuration value */
   ret = BSP_NFCTAG_WriteMBWDG( BSP_NFCTAG_INSTANCE, WdgDelay );
@@ -165,7 +165,7 @@ int32_t BSP_NFCTAG_ChangeMBWDG(uint32_t MsbPasswd,uint32_t LsbPasswd,const uint8
   /* present wrong password for closing the session */
   Passwd.MsbPasswd = ~MsbPasswd;
   Passwd.LsbPasswd = ~LsbPasswd;
-  BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, Passwd );
+  BSP_NFCTAG_PresentI2CPassword( BSP_NFCTAG_INSTANCE, &Passwd );
 
   return ret;
 }

@@ -39,7 +39,7 @@ uint16_t SQNextByName(SQuery_t *_this, const char *sensor_name)
     SensorStatus_t status = SMSensorGetStatus((uint8_t) next_sensor_id);
     /* check if the name match the query */
 
-    if (strncmp(sensor_name, status.Name, SM_MAX_DIM_LABELS) == 0)
+    if (strncmp(sensor_name, status.p_name, SM_MAX_DIM_LABELS) == 0)
     {
       sensor_id = next_sensor_id;
       found_next_sensor = true;
@@ -61,7 +61,7 @@ uint16_t SQNextByType(SQuery_t *_this, uint8_t sensor_type)
     SensorDescriptor_t descriptor = SMSensorGetDescription((uint8_t) next_sensor_id);
     /* check if the type match the query */
 
-    if (descriptor.SensorType == sensor_type)
+    if (descriptor.sensor_type == sensor_type)
     {
       sensor_id = next_sensor_id;
       found_next_sensor = true;
@@ -84,9 +84,9 @@ uint16_t SQNextByNameAndType(SQuery_t *_this, const char *sensor_name, uint8_t s
     SensorStatus_t status = SMSensorGetStatus((uint8_t) next_sensor_id);
 
     /* check if the name match the query */
-    if (strncmp(sensor_name, status.Name, SM_MAX_DIM_LABELS) == 0)
+    if (strncmp(sensor_name, status.p_name, SM_MAX_DIM_LABELS) == 0)
     {
-      if (descriptor.SensorType == sensor_type)
+      if (descriptor.sensor_type == sensor_type)
       {
         sensor_id = next_sensor_id;
         found_next_sensor = true;
@@ -108,7 +108,7 @@ uint16_t SQNextByStatusEnable(SQuery_t *_this, bool sensor_enable)
     SensorStatus_t status = SMSensorGetStatus((uint8_t) next_sensor_id);
     /* check if the status.enable match the query */
 
-    if (status.IsActive == sensor_enable)
+    if (status.is_active == sensor_enable)
     {
       sensor_id = next_sensor_id;
       found_next_sensor = true;

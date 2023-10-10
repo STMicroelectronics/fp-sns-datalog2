@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    bluenrg1_events_cb.c
   * @author  SRA Application team
-  * @brief   Event callbacks for external uC - BlueNRG-x in network coprocessor 
-  *          mode
+  * @brief   Event callbacks for external uC - BlueNRG-x in network coprocessor
+  *              mode
   ******************************************************************************
   * @attention
   *
@@ -127,16 +127,16 @@ that didn't correspond to a connection was given.
   - 0xFB: Flash write failed
   - 0xFC: Flash erase failed
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_disconnection_complete_event(uint8_t Status,
-                                      uint16_t Connection_Handle,
-                                      uint8_t Reason))
+                            uint16_t Connection_Handle,
+                            uint8_t Reason))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
    */
   BLUENRG_PRINTF("hci_disconnection_complete_event\r\n");
-            
+
 }
 /**
   * @brief The Encryption Change event is used to indicate that the change of the encryption
@@ -162,10 +162,10 @@ only use Encryption_Enabled values 0x00 (OFF) and 0x01 (ON).
   - 0x00: Link Level Encryption OFF
   - 0x01: Link Level Encryption is ON with AES-CCM
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_encryption_change_event(uint8_t Status,
-                                 uint16_t Connection_Handle,
-                                 uint8_t Encryption_Enabled))
+                            uint16_t Connection_Handle,
+                            uint8_t Encryption_Enabled))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -198,12 +198,12 @@ event parameter shall be the SubVersNr parameter.
   * @param Manufacturer_Name Manufacturer Name of the remote Controller
   * @param Subversion Subversion of the LMP in the remote Controller
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_read_remote_version_information_complete_event(uint8_t Status,
-                                                        uint16_t Connection_Handle,
-                                                        uint8_t Version,
-                                                        uint16_t Manufacturer_Name,
-                                                        uint16_t Subversion))
+                            uint16_t Connection_Handle,
+                            uint8_t Version,
+                            uint16_t Manufacturer_Name,
+                            uint16_t Subversion))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -222,7 +222,7 @@ After this event is recommended to force device reset.
   - 0x02: Timer overrun error
   - 0x03: Internal queue overflow error
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_hardware_error_event(uint8_t Hardware_Code))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -248,9 +248,9 @@ flushed.
   * @param Number_of_Handles The number of Connection_Handles and Num_HCI_Data_Packets parameters pairs contained in this event
   * @param Handle_Packets_Pair_Entry See @ref Handle_Packets_Pair_Entry_t
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_number_of_completed_packets_event(uint8_t Number_of_Handles,
-                                           Handle_Packets_Pair_Entry_t Handle_Packets_Pair_Entry[]))
+                            Handle_Packets_Pair_Entry_t Handle_Packets_Pair_Entry[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -265,7 +265,7 @@ Link_Type parameter is used to indicate that the overflow was caused by ACL data
   * Values:
   - 0x01: ACL Buffer Overflow
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_data_buffer_overflow_event(uint8_t Link_Type))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -290,9 +290,9 @@ Role Change event.
   * Values:
   - 0x0000 ... 0x0EFF
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_encryption_key_refresh_complete_event(uint8_t Status,
-                                               uint16_t Connection_Handle))
+                            uint16_t Connection_Handle))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -327,7 +327,7 @@ device
   * @param Conn_Interval Connection interval used on this connection.
 Time = N * 1.25 msec
   * Values:
-  - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms) 
+  - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
   * @param Conn_Latency Slave latency for the connection in number of connection events.
   * Values:
   - 0x0000 ... 0x01F3
@@ -335,7 +335,7 @@ Time = N * 1.25 msec
 It shall be a multiple of 10 ms and larger than (1 + connSlaveLatency) * connInterval * 2.
 Time = N * 10 msec.
   * Values:
-  - 0x000A (100 ms)  ... 0x0C80 (32000 ms) 
+  - 0x000A (100 ms)  ... 0x0C80 (32000 ms)
   * @param Master_Clock_Accuracy Master clock accuracy. Only valid for a slave.
   * Values:
   - 0x00: 500 ppm
@@ -347,16 +347,16 @@ Time = N * 10 msec.
   - 0x06: 30 ppm
   - 0x07: 20 ppm
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_le_connection_complete_event(uint8_t Status,
-                                      uint16_t Connection_Handle,
-                                      uint8_t Role,
-                                      uint8_t Peer_Address_Type,
-                                      uint8_t Peer_Address[6],
-                                      uint16_t Conn_Interval,
-                                      uint16_t Conn_Latency,
-                                      uint16_t Supervision_Timeout,
-                                      uint8_t Master_Clock_Accuracy))
+                             uint16_t Connection_Handle,
+                             uint8_t Role,
+                             uint8_t Peer_Address_Type,
+                             uint8_t Peer_Address[6],
+                             uint16_t Conn_Interval,
+                             uint16_t Conn_Latency,
+                             uint16_t Supervision_Timeout,
+                             uint8_t Master_Clock_Accuracy))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -373,9 +373,9 @@ and send information from multiple devices in one LE Advertising Report event.
   - 0x01
   * @param Advertising_Report See @ref Advertising_Report_t
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_le_advertising_report_event(uint8_t Num_Reports,
-                                     Advertising_Report_t Advertising_Report[]))
+                            Advertising_Report_t Advertising_Report[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -394,7 +394,7 @@ On a master, this event shall be issued if the Connection_Update command was sen
   * @param Conn_Interval Connection interval used on this connection.
 Time = N * 1.25 msec
   * Values:
-  - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms) 
+  - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
   * @param Conn_Latency Slave latency for the connection in number of connection events.
   * Values:
   - 0x0000 ... 0x01F3
@@ -402,14 +402,14 @@ Time = N * 1.25 msec
 It shall be a multiple of 10 ms and larger than (1 + connSlaveLatency) * connInterval * 2.
 Time = N * 10 msec.
   * Values:
-  - 0x000A (100 ms)  ... 0x0C80 (32000 ms) 
+  - 0x000A (100 ms)  ... 0x0C80 (32000 ms)
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_le_connection_update_complete_event(uint8_t Status,
-                                             uint16_t Connection_Handle,
-                                             uint16_t Conn_Interval,
-                                             uint16_t Conn_Latency,
-                                             uint16_t Supervision_Timeout))
+                            uint16_t Connection_Handle,
+                            uint16_t Conn_Interval,
+                            uint16_t Conn_Latency,
+                            uint16_t Supervision_Timeout))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -426,10 +426,10 @@ remote Bluetooth device specified by the Connection_Handle event parameter.
   - 0x0000 ... 0x0EFF
   * @param LE_Features Bit Mask List of used LE features. For details see LE Link Layer specification.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_le_read_remote_used_features_complete_event(uint8_t Status,
-                                                     uint16_t Connection_Handle,
-                                                     uint8_t LE_Features[8]))
+                                                                   uint16_t Connection_Handle,
+                                                                   uint8_t LE_Features[8]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -446,10 +446,10 @@ Key from the Host. (See [Vol 6] Part B, Section 5.1.3).
   * @param Random_Number 64-bit random number
   * @param Encrypted_Diversifier 16-bit encrypted diversifier
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_le_long_term_key_request_event(uint16_t Connection_Handle,
-                                        uint8_t Random_Number[8],
-                                        uint16_t Encrypted_Diversifier))
+                                                      uint8_t Random_Number[8],
+                                                      uint16_t Encrypted_Diversifier))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -457,7 +457,7 @@ WEAK_FUNCTION(void hci_le_long_term_key_request_event(uint16_t Connection_Handle
   BLUENRG_PRINTF("hci_le_long_term_key_request_event\r\n");
 }
 /**
-  * @brief The LE Data Length Change event notifies the Host of a change to either the maximum Payload length or the maximum transmission time of Data Channel PDUs in either direction. The values reported are the maximum that will actually be used on the connection following the change. 
+  * @brief The LE Data Length Change event notifies the Host of a change to either the maximum Payload length or the maximum transmission time of Data Channel PDUs in either direction. The values reported are the maximum that will actually be used on the connection following the change.
   * @param Connection_Handle Connection_Handle to be used to identify a connection.
   * @param MaxTxOctets The maximum number of payload octets in a Link Layer Data Channel PDU that the local Controller will send on this connection (connEffectiveMaxTxOctets defined in [Vol 6] Part B, Section 4.5.10).
 Range 0x001B-0x00FB (0x0000 - 0x001A and 0x00FC - 0xFFFF Reserved for future use)
@@ -469,12 +469,12 @@ Range 0x001B-0x00FB (0x0000 - 0x001A and 0x00FC - 0xFFFF Reserved for future use
   * @param MaxRxTime The maximum time that the local Controller expects to take to receive a Link Layer Data Channel PDU on this connection (connEffectiveMax-RxTime defined in [Vol 6] Part B, Section 4.5.10).
 Range 0x0148-0x0848 (0x0000 - 0x0127 and 0x0849 - 0xFFFF Reserved for future use)
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_le_data_length_change_event(uint16_t Connection_Handle,
-                                     uint16_t MaxTxOctets,
-                                     uint16_t MaxTxTime,
-                                     uint16_t MaxRxOctets,
-                                     uint16_t MaxRxTime))
+                                                   uint16_t MaxTxOctets,
+                                                   uint16_t MaxTxTime,
+                                                   uint16_t MaxRxOctets,
+                                                   uint16_t MaxRxTime))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -486,9 +486,9 @@ WEAK_FUNCTION(void hci_le_data_length_change_event(uint16_t Connection_Handle,
   * @param Status For standard error codes see Bluetooth specification, Vol. 2, part D. For proprietary error code refer to Error codes section
   * @param Local_P256_Public_Key Local P-256 public key.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_le_read_local_p256_public_key_complete_event(uint8_t Status,
-                                                      uint8_t Local_P256_Public_Key[64]))
+                                                                    uint8_t Local_P256_Public_Key[64]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -501,9 +501,9 @@ by the Controller.
   * @param Status For standard error codes see Bluetooth specification, Vol. 2, part D. For proprietary error code refer to Error codes section
   * @param DHKey Diffie Hellman Key
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_le_generate_dhkey_complete_event(uint8_t Status,
-                                          uint8_t DHKey[32]))
+                                                        uint8_t DHKey[32]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -553,7 +553,7 @@ other Peer_Address_Type values, the Controller shall return all zeros.
   * @param Conn_Interval Connection interval used on this connection.
 Time = N * 1.25 msec
   * Values:
-  - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms) 
+  - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
   * @param Conn_Latency Slave latency for the connection in number of connection events.
   * Values:
   - 0x0000 ... 0x01F3
@@ -561,7 +561,7 @@ Time = N * 1.25 msec
 It shall be a multiple of 10 ms and larger than (1 + connSlaveLatency) * connInterval * 2.
 Time = N * 10 msec.
   * Values:
-  - 0x000A (100 ms)  ... 0x0C80 (32000 ms) 
+  - 0x000A (100 ms)  ... 0x0C80 (32000 ms)
   * @param Master_Clock_Accuracy Master clock accuracy. Only valid for a slave.
   * Values:
   - 0x00: 500 ppm
@@ -573,18 +573,18 @@ Time = N * 10 msec.
   - 0x06: 30 ppm
   - 0x07: 20 ppm
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_le_enhanced_connection_complete_event(uint8_t Status,
-                                               uint16_t Connection_Handle,
-                                               uint8_t Role,
-                                               uint8_t Peer_Address_Type,
-                                               uint8_t Peer_Address[6],
-                                               uint8_t Local_Resolvable_Private_Address[6],
-                                               uint8_t Peer_Resolvable_Private_Address[6],
-                                               uint16_t Conn_Interval,
-                                               uint16_t Conn_Latency,
-                                               uint16_t Supervision_Timeout,
-                                               uint8_t Master_Clock_Accuracy))
+                                                             uint16_t Connection_Handle,
+                                                             uint8_t Role,
+                                                             uint8_t Peer_Address_Type,
+                                                             uint8_t Peer_Address[6],
+                                                             uint8_t Local_Resolvable_Private_Address[6],
+                                                             uint8_t Peer_Resolvable_Private_Address[6],
+                                                             uint16_t Conn_Interval,
+                                                             uint16_t Conn_Latency,
+                                                             uint16_t Supervision_Timeout,
+                                                             uint8_t Master_Clock_Accuracy))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -604,9 +604,9 @@ address of the advertiser sending the directed advertisements.
   - 0x01
   * @param Direct_Advertising_Report See @ref Direct_Advertising_Report_t
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void hci_le_direct_advertising_report_event(uint8_t Num_Reports,
-                                            Direct_Advertising_Report_t Direct_Advertising_Report[]))
+                                                          Direct_Advertising_Report_t Direct_Advertising_Report[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -614,19 +614,19 @@ WEAK_FUNCTION(void hci_le_direct_advertising_report_event(uint8_t Num_Reports,
   BLUENRG_PRINTF("hci_le_direct_advertising_report_event\r\n");
 }
 /**
- * @}
- */
+  * @}
+  */
 /**
- *@defgroup ACI_GAP_events ACI GAP events
- *@brief ACI GAP events layer.
- *@{
- */
+  *@defgroup ACI_GAP_events ACI GAP events
+  *@brief ACI GAP events layer.
+  *@{
+  */
 /* ACI GAP events */
 /**
   * @brief This event is generated by the controller when the limited discoverable mode ends due to
 timeout. The timeout is 180 seconds.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gap_limited_discoverable_event(void))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -661,10 +661,10 @@ timeout has occurred so that the upper layer can decide to disconnect the link.
   - 0x0B: SMP_SC_DHKEY_CHECK_FAILED
   - 0x0C: SMP_SC_NUMCOMPARISON_FAILED
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gap_pairing_complete_event(uint16_t Connection_Handle,
-                                    uint8_t Status,
-                                    uint8_t Reason))
+                                                  uint8_t Status,
+                                                  uint8_t Reason))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -677,7 +677,7 @@ required for pairing. When this event is received, the application has to respon
 @ref aci_gap_pass_key_resp command.
   * @param Connection_Handle Connection handle for which the passkey has been requested.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gap_pass_key_req_event(uint16_t Connection_Handle))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -692,7 +692,7 @@ generated as soon as the pairing is complete. When this event is received,
 @ref aci_gap_authorization_resp command should be used to respond by the application.
   * @param Connection_Handle Connection handle for which authorization has been requested.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gap_authorization_req_event(uint16_t Connection_Handle))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -703,7 +703,7 @@ WEAK_FUNCTION(void aci_gap_authorization_req_event(uint16_t Connection_Handle))
 /**
   * @brief This event is generated when the slave security request is successfully sent to the master.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gap_slave_security_initiated_event(void))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -717,7 +717,7 @@ request from a master which has previously bonded with the slave. When this even
 received, the upper layer has to issue the command @ref aci_gap_allow_rebond in order to
 allow the slave to continue the pairing process with the master.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gap_bond_lost_event(void))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -743,11 +743,11 @@ been terminated by the upper layer or has completed for any other reason
   * @param Data Procedure Specific Data:
 - For Name Discovery Procedure: the name of the peer device if the procedure completed successfully.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gap_proc_complete_event(uint8_t Procedure_Code,
-                                 uint8_t Status,
-                                 uint8_t Data_Length,
-                                 uint8_t Data[]))
+                                               uint8_t Status,
+                                               uint8_t Data_Length,
+                                               uint8_t Data[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -761,7 +761,7 @@ address of the peer device after connecting to it.
   * @param Connection_Handle Connection handle for which the private address could not be
 resolved with any of the stored IRK's.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gap_addr_not_resolved_event(uint16_t Connection_Handle))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -770,14 +770,14 @@ WEAK_FUNCTION(void aci_gap_addr_not_resolved_event(uint16_t Connection_Handle))
   BLUENRG_PRINTF("aci_gap_addr_not_resolved_event\r\n");
 }
 /**
-  * @brief This event is sent only during SC v.4.2 Pairing, when Numeric Comparison Association model is selected, in order to show the Numeric Value generated, and to ask for Confirmation to the User. When this event is received, the application has to respond with the 
+  * @brief This event is sent only during SC v.4.2 Pairing, when Numeric Comparison Association model is selected, in order to show the Numeric Value generated, and to ask for Confirmation to the User. When this event is received, the application has to respond with the
 @ref aci_gap_numeric_comparison_value_confirm_yesno command
   * @param Connection_Handle Connection handle related to the underlying Pairing
-  * @param Numeric_Value 
+  * @param Numeric_Value
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gap_numeric_comparison_value_event(uint16_t Connection_Handle,
-                                            uint32_t Numeric_Value))
+                                                          uint32_t Numeric_Value))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -789,9 +789,9 @@ WEAK_FUNCTION(void aci_gap_numeric_comparison_value_event(uint16_t Connection_Ha
   * @param Connection_Handle Connection handle related to the underlying Pairing
   * @param Notification_Type Type of Keypress input notified/signaled by peer device (having Keyboard only I/O capabilities
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gap_keypress_notification_event(uint16_t Connection_Handle,
-                                         uint8_t Notification_Type))
+                                                       uint8_t Notification_Type))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -809,18 +809,18 @@ attribute on the server, as consequence of one of the following GATT procedures:
 - reliable write.
   * @param Connection_Handle The connection handle which modified the attribute.
   * @param Attr_Handle Handle of the attribute that was modified.
-  * @param Offset SoC mode: the offset is never used and it is always 0. Network coprocessor mode: 
-   - Bits 0-14: offset of the reported value inside the attribute. 
+  * @param Offset SoC mode: the offset is never used and it is always 0. Network coprocessor mode:
+   - Bits 0-14: offset of the reported value inside the attribute.
    - Bit 15: if the entire value of the attribute does not fit inside a single ACI_GATT_ATTRIBUTE_MODIFIED_EVENT event, this bit is set to 1 to notify that other ACI_GATT_ATTRIBUTE_MODIFIED_EVENT events will follow to report the remaining value.
   * @param Attr_Data_Length Length of Attr_Data in octets
   * @param Attr_Data The modified value
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_attribute_modified_event(uint16_t Connection_Handle,
-                                       uint16_t Attr_Handle,
-                                       uint16_t Offset,
-                                       uint16_t Attr_Data_Length,
-                                       uint8_t Attr_Data[]))
+                                                     uint16_t Attr_Handle,
+                                                     uint16_t Offset,
+                                                     uint16_t Attr_Data_Length,
+                                                     uint8_t Attr_Data[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -832,7 +832,7 @@ WEAK_FUNCTION(void aci_gatt_attribute_modified_event(uint16_t Connection_Handle,
 seconds). This is a critical event that should not happen during normal operating conditions. It is an indication of either a major disruption in the communication link or a mistake in the application which does not provide a reply to GATT procedures. After this event, the GATT channel is closed and no more GATT communication can be performed. The applications is exptected to issue an @ref aci_gap_terminate to disconnect from the peer device. It is important to leave an 100 ms blank window before sending the @ref aci_gap_terminate, since immediately after this event, system could save important information in non volatile memory.
   * @param Connection_Handle Connection handle on which the GATT procedure has timed out
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_proc_timeout_event(uint16_t Connection_Handle))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -846,9 +846,9 @@ WEAK_FUNCTION(void aci_gatt_proc_timeout_event(uint16_t Connection_Handle))
   * @param Connection_Handle Connection handle related to the response
   * @param Server_RX_MTU ATT_MTU value agreed between server and client
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_att_exchange_mtu_resp_event(uint16_t Connection_Handle,
-                                     uint16_t Server_RX_MTU))
+                                                   uint16_t Server_RX_MTU))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -864,11 +864,11 @@ spec.
   * @param Event_Data_Length Length of Handle_UUID_Pair in octets
   * @param Handle_UUID_Pair A sequence of handle-uuid pairs. if format=1, each pair is:[2 octets for handle, 2 octets for UUIDs], if format=2, each pair is:[2 octets for handle, 16 octets for UUIDs]
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_att_find_info_resp_event(uint16_t Connection_Handle,
-                                  uint8_t Format,
-                                  uint8_t Event_Data_Length,
-                                  uint8_t Handle_UUID_Pair[]))
+                                                uint8_t Format,
+                                                uint8_t Event_Data_Length,
+                                                uint8_t Handle_UUID_Pair[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -881,10 +881,10 @@ WEAK_FUNCTION(void aci_att_find_info_resp_event(uint16_t Connection_Handle,
   * @param Num_of_Handle_Pair Number of attribute, group handle pairs
   * @param Attribute_Group_Handle_Pair See @ref Attribute_Group_Handle_Pair_t
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_att_find_by_type_value_resp_event(uint16_t Connection_Handle,
-                                           uint8_t Num_of_Handle_Pair,
-                                           Attribute_Group_Handle_Pair_t Attribute_Group_Handle_Pair[]))
+                                                         uint8_t Num_of_Handle_Pair,
+                                                         Attribute_Group_Handle_Pair_t Attribute_Group_Handle_Pair[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -899,11 +899,11 @@ WEAK_FUNCTION(void aci_att_find_by_type_value_resp_event(uint16_t Connection_Han
   * @param Data_Length Length of Handle_Value_Pair_Data in octets
   * @param Handle_Value_Pair_Data Attribute Data List as defined in Bluetooth Core v4.1 spec. A sequence of handle-value pairs: [2 octets for Attribute Handle, (Handle_Value_Pair_Length - 2 octets) for Attribute Value]
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_att_read_by_type_resp_event(uint16_t Connection_Handle,
-                                     uint8_t Handle_Value_Pair_Length,
-                                     uint8_t Data_Length,
-                                     uint8_t Handle_Value_Pair_Data[]))
+                                                   uint8_t Handle_Value_Pair_Length,
+                                                   uint8_t Data_Length,
+                                                   uint8_t Handle_Value_Pair_Data[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -916,10 +916,10 @@ WEAK_FUNCTION(void aci_att_read_by_type_resp_event(uint16_t Connection_Handle,
   * @param Event_Data_Length Length of following data
   * @param Attribute_Value The value of the attribute.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_att_read_resp_event(uint16_t Connection_Handle,
-                             uint8_t Event_Data_Length,
-                             uint8_t Attribute_Value[]))
+                                           uint8_t Event_Data_Length,
+                                           uint8_t Attribute_Value[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -932,10 +932,10 @@ WEAK_FUNCTION(void aci_att_read_resp_event(uint16_t Connection_Handle,
   * @param Event_Data_Length Length of following data
   * @param Attribute_Value Part of the attribute value.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_att_read_blob_resp_event(uint16_t Connection_Handle,
-                                  uint8_t Event_Data_Length,
-                                  uint8_t Attribute_Value[]))
+                                                uint8_t Event_Data_Length,
+                                                uint8_t Attribute_Value[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -949,10 +949,10 @@ WEAK_FUNCTION(void aci_att_read_blob_resp_event(uint16_t Connection_Handle,
   * @param Set_Of_Values A set of two or more values.
 A concatenation of attribute values for each of the attribute handles in the request in the order that they were requested.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_att_read_multiple_resp_event(uint16_t Connection_Handle,
-                                      uint8_t Event_Data_Length,
-                                      uint8_t Set_Of_Values[]))
+                                                    uint8_t Event_Data_Length,
+                                                    uint8_t Set_Of_Values[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -967,11 +967,11 @@ WEAK_FUNCTION(void aci_att_read_multiple_resp_event(uint16_t Connection_Handle,
   * @param Data_Length Length of Attribute_Data_List in octets
   * @param Attribute_Data_List Attribute Data List as defined in Bluetooth Core v4.1 spec. A sequence of attribute handle, end group handle, attribute value tuples: [2 octets for Attribute Handle, 2 octets End Group Handle, (Attribute_Data_Length - 4 octets) for Attribute Value]
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_att_read_by_group_type_resp_event(uint16_t Connection_Handle,
-                                           uint8_t Attribute_Data_Length,
-                                           uint8_t Data_Length,
-                                           uint8_t Attribute_Data_List[]))
+                                                         uint8_t Attribute_Data_Length,
+                                                         uint8_t Data_Length,
+                                                         uint8_t Attribute_Data_List[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -986,12 +986,12 @@ WEAK_FUNCTION(void aci_att_read_by_group_type_resp_event(uint16_t Connection_Han
   * @param Part_Attribute_Value_Length Length of Part_Attribute_Value in octets
   * @param Part_Attribute_Value The value of the attribute to be written
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_att_prepare_write_resp_event(uint16_t Connection_Handle,
-                                      uint16_t Attribute_Handle,
-                                      uint16_t Offset,
-                                      uint8_t Part_Attribute_Value_Length,
-                                      uint8_t Part_Attribute_Value[]))
+                                                    uint16_t Attribute_Handle,
+                                                    uint16_t Offset,
+                                                    uint8_t Part_Attribute_Value_Length,
+                                                    uint8_t Part_Attribute_Value[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1002,7 +1002,7 @@ WEAK_FUNCTION(void aci_att_prepare_write_resp_event(uint16_t Connection_Handle,
   * @brief This event is generated in response to an Execute Write Request.
   * @param Connection_Handle Connection handle related to the response
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_att_exec_write_resp_event(uint16_t Connection_Handle))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -1017,11 +1017,11 @@ WEAK_FUNCTION(void aci_att_exec_write_resp_event(uint16_t Connection_Handle))
   * @param Attribute_Value_Length Length of Attribute_Value in octets
   * @param Attribute_Value The current value of the attribute
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_indication_event(uint16_t Connection_Handle,
-                               uint16_t Attribute_Handle,
-                               uint8_t Attribute_Value_Length,
-                               uint8_t Attribute_Value[]))
+                                             uint16_t Attribute_Handle,
+                                             uint8_t Attribute_Value_Length,
+                                             uint8_t Attribute_Value[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1035,11 +1035,11 @@ WEAK_FUNCTION(void aci_gatt_indication_event(uint16_t Connection_Handle,
   * @param Attribute_Value_Length Length of Attribute_Value in octets
   * @param Attribute_Value The current value of the attribute
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_notification_event(uint16_t Connection_Handle,
-                                 uint16_t Attribute_Handle,
-                                 uint8_t Attribute_Value_Length,
-                                 uint8_t Attribute_Value[]))
+                                               uint16_t Attribute_Handle,
+                                               uint8_t Attribute_Value_Length,
+                                               uint8_t Attribute_Value[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1144,9 +1144,9 @@ successfully.
   - 0xFB: Flash write failed
   - 0xFC: Flash erase failed
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_proc_complete_event(uint16_t Connection_Handle,
-                                  uint8_t Error_Code))
+                                                uint8_t Error_Code))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1181,11 +1181,11 @@ procedure itself.
   - 0x10: Unsupported group type
   - 0x11: Insufficient resources
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_error_resp_event(uint16_t Connection_Handle,
-                               uint8_t Req_Opcode,
-                               uint16_t Attribute_Handle,
-                               uint8_t Error_Code))
+                                             uint8_t Req_Opcode,
+                                             uint16_t Attribute_Handle,
+                                             uint8_t Error_Code))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1206,11 +1206,11 @@ performed.
  (vol.3, Part G, ch. 3.3.1), when a "Discover Characteristics By UUID" has been started.
  It will be the value of the Characteristic if a "Read using Characteristic UUID" has been performed.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_disc_read_char_by_uuid_resp_event(uint16_t Connection_Handle,
-                                                uint16_t Attribute_Handle,
-                                                uint8_t Attribute_Value_Length,
-                                                uint8_t Attribute_Value[]))
+                                                              uint16_t Attribute_Handle,
+                                                              uint8_t Attribute_Value_Length,
+                                                              uint8_t Attribute_Value[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1234,11 +1234,11 @@ not modified.
   * @param Data_Length Length of Data field
   * @param Data The data that the client has requested to write
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_write_permit_req_event(uint16_t Connection_Handle,
-                                     uint16_t Attribute_Handle,
-                                     uint8_t Data_Length,
-                                     uint8_t Data[]))
+                                                   uint16_t Attribute_Handle,
+                                                   uint8_t Data_Length,
+                                                   uint8_t Data[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1256,10 +1256,10 @@ can send the response to the client.
   * @param Attribute_Handle The handle of the attribute
   * @param Offset Contains the offset from which the read has been requested
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_read_permit_req_event(uint16_t Connection_Handle,
-                                    uint16_t Attribute_Handle,
-                                    uint16_t Offset))
+                                                  uint16_t Attribute_Handle,
+                                                  uint16_t Offset))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1274,13 +1274,13 @@ On receiving this event, the application can update the values of the handles if
 when done, it has to send the @ref aci_gatt_allow_read command to indicate to the stack that it
 can send the response to the client.
   * @param Connection_Handle Handle of the connection which requested to read the attribute
-  * @param Number_of_Handles 
+  * @param Number_of_Handles
   * @param Handle_Item See @ref Handle_Item_t
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_read_multi_permit_req_event(uint16_t Connection_Handle,
-                                          uint8_t Number_of_Handles,
-                                          Handle_Item_t Handle_Item[]))
+                                                        uint8_t Number_of_Handles,
+                                                        Handle_Item_t Handle_Item[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1289,15 +1289,15 @@ WEAK_FUNCTION(void aci_gatt_read_multi_permit_req_event(uint16_t Connection_Hand
 }
 /**
   * @brief Each time BLE FW stack raises the error code @ref ble_status_insufficient_resources (0x64),
-the @ref aci_gatt_tx_pool_available_event event is generated as soon as the available buffer size 
+the @ref aci_gatt_tx_pool_available_event event is generated as soon as the available buffer size
 is greater than maximum ATT MTU (on stack versions below v2.1 this event is generated when at least 2 packets
 with MTU of 23 bytes are available).
   * @param Connection_Handle Connection handle related to the request
   * @param Available_Buffers Not used.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_tx_pool_available_event(uint16_t Connection_Handle,
-                                      uint16_t Available_Buffers))
+                                                    uint16_t Available_Buffers))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1308,7 +1308,7 @@ WEAK_FUNCTION(void aci_gatt_tx_pool_available_event(uint16_t Connection_Handle,
   * @brief This event is generated when the client has sent the confirmation to a previously sent indication
   * @param Connection_Handle Connection handle related to the event
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_server_confirmation_event(uint16_t Connection_Handle))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -1331,12 +1331,12 @@ and an error response will be sent to the client, with the error code as specifi
   * @param Data_Length Length of Data field
   * @param Data The data that the client has requested to write
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_gatt_prepare_write_permit_req_event(uint16_t Connection_Handle,
-                                             uint16_t Attribute_Handle,
-                                             uint16_t Offset,
-                                             uint8_t Data_Length,
-                                             uint8_t Data[]))
+                                                           uint16_t Attribute_Handle,
+                                                           uint16_t Offset,
+                                                           uint8_t Data_Length,
+                                                           uint8_t Data[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1344,23 +1344,23 @@ WEAK_FUNCTION(void aci_gatt_prepare_write_permit_req_event(uint16_t Connection_H
   BLUENRG_PRINTF("aci_gatt_prepare_write_permit_req_event\r\n");
 }
 /**
- * @}
- */
+  * @}
+  */
 /**
- *@defgroup ACI_L2CAP_events ACI L2CAP events
- *@brief ACI L2CAP events layer.
- *@{
- */
+  *@defgroup ACI_L2CAP_events ACI L2CAP events
+  *@brief ACI L2CAP events layer.
+  *@{
+  */
 /* ACI L2CAP events */
 /**
   * @brief This event is generated when the master responds to the connection update request packet
 with a connection update response packet.
   * @param Connection_Handle Connection handle referring to the COS Channel where the Disconnection has been received.
-  * @param Result 
+  * @param Result
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_l2cap_connection_update_resp_event(uint16_t Connection_Handle,
-                                            uint16_t Result))
+                                                          uint16_t Result))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1374,12 +1374,12 @@ within 30 seconds.
   * @param Connection_Handle Handle of the connection related to this
 L2CAP procedure.
   * @param Data_Length Length of following data
-  * @param Data 
+  * @param Data
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_l2cap_proc_timeout_event(uint16_t Connection_Handle,
-                                  uint8_t Data_Length,
-                                  uint8_t Data[]))
+                                                uint8_t Data_Length,
+                                                uint8_t Data[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1399,25 +1399,25 @@ response.
 than or equal to Conn_Interval_Max.
 Time = N * 1.25 msec.
   * Values:
-  - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms) 
+  - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
   * @param Interval_Max Maximum value for the connection event interval. This shall be
 greater than or equal to Conn_Interval_Min.
 Time = N * 1.25 msec.
   * Values:
-  - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms) 
+  - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
   * @param Slave_Latency Slave latency for the connection in number of connection events.
   * Values:
   - 0x0000 ... 0x01F3
   * @param Timeout_Multiplier Defines connection timeout parameter in the following manner: Timeout Multiplier * 10ms.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_l2cap_connection_update_req_event(uint16_t Connection_Handle,
-                                           uint8_t Identifier,
-                                           uint16_t L2CAP_Length,
-                                           uint16_t Interval_Min,
-                                           uint16_t Interval_Max,
-                                           uint16_t Slave_Latency,
-                                           uint16_t Timeout_Multiplier))
+                                                         uint8_t Identifier,
+                                                         uint16_t L2CAP_Length,
+                                                         uint16_t Interval_Min,
+                                                         uint16_t Interval_Max,
+                                                         uint16_t Slave_Latency,
+                                                         uint16_t Timeout_Multiplier))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1434,12 +1434,12 @@ response.
   * @param Data_Length Length of following data
   * @param Data Data field associated with Reason
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_l2cap_command_reject_event(uint16_t Connection_Handle,
-                                    uint8_t Identifier,
-                                    uint16_t Reason,
-                                    uint8_t Data_Length,
-                                    uint8_t Data[]))
+                                                  uint8_t Identifier,
+                                                  uint16_t Reason,
+                                                  uint8_t Data_Length,
+                                                  uint8_t Data[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1447,13 +1447,13 @@ WEAK_FUNCTION(void aci_l2cap_command_reject_event(uint16_t Connection_Handle,
   BLUENRG_PRINTF("aci_l2cap_command_reject_event\r\n");
 }
 /**
- * @}
- */
+  * @}
+  */
 /**
- *@defgroup ACI_HAL_events ACI HAL events
- *@brief ACI HAL events layer.
- *@{
- */
+  *@defgroup ACI_HAL_events ACI HAL events
+  *@brief ACI HAL events layer.
+  *@{
+  */
 /* ACI HAL events */
 /**
   * @brief This event inform the application that the network coprocessor has been reset. If the reason code is a system crash,
@@ -1470,17 +1470,17 @@ a following event @ref aci_blue_crash_info_event will provide more information r
   - 0x08: System reset due to crash
   - 0x09: System reset due to ECC error
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_blue_initialized_event(uint8_t Reason_Code))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
    */
-  BLUENRG_PRINTF("aci_blue_initialized_event Reason_Code=%x\r\n",Reason_Code);
+  BLUENRG_PRINTF("aci_blue_initialized_event Reason_Code=%x\r\n", Reason_Code);
 }
 /**
   * @brief 'This event is generated when an overflow occurs in the event queue read by the
-external microcontroller. This is normally caused when the external microcontroller does 
+external microcontroller. This is normally caused when the external microcontroller does
 not read pending events. The returned bitmap indicates which event has been lost. Please
  note that one bit set to 1 indicates one or more occurrences of the particular events.
 The event ACI_BLUE_EVENTS_LOST_EVENT cannot be lost and it will inserted in the
@@ -1547,7 +1547,7 @@ allow application to recover situations where critical events are lost.
   - 0x0040000000000000: ACI_GAP_NUMERIC_COMPARISON_VALUE_EVENT
   - 0x0080000000000000: ACI_GAP_KEYPRESS_NOTIFICATION_EVENT
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_blue_events_lost_event(uint8_t Lost_Events[8]))
 {
   /* NOTE : This function Should not be modified, when needed,
@@ -1557,7 +1557,7 @@ WEAK_FUNCTION(void aci_blue_events_lost_event(uint8_t Lost_Events[8]))
 }
 /**
   * @brief 'This event is given to the application after the @ref aci_blue_initialized_event
-when a system crash is detected. This events returns system crash information for debugging purposes. 
+when a system crash is detected. This events returns system crash information for debugging purposes.
 Information reported are useful to understand the root cause of the crash.
   * @param Crash_Type Crash type
   * Values:
@@ -1576,19 +1576,19 @@ Information reported are useful to understand the root cause of the crash.
   * @param Debug_Data_Length Length of Debug_Data field
   * @param Debug_Data Debug data
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_blue_crash_info_event(uint8_t Crash_Type,
-                               uint32_t SP,
-                               uint32_t R0,
-                               uint32_t R1,
-                               uint32_t R2,
-                               uint32_t R3,
-                               uint32_t R12,
-                               uint32_t LR,
-                               uint32_t PC,
-                               uint32_t xPSR,
-                               uint8_t Debug_Data_Length,
-                               uint8_t Debug_Data[]))
+                                             uint32_t SP,
+                                             uint32_t R0,
+                                             uint32_t R1,
+                                             uint32_t R2,
+                                             uint32_t R3,
+                                             uint32_t R12,
+                                             uint32_t LR,
+                                             uint32_t PC,
+                                             uint32_t xPSR,
+                                             uint8_t Debug_Data_Length,
+                                             uint8_t Debug_Data[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1622,10 +1622,10 @@ Application use cases includes synchronizing notification with connection interv
   - 0x07: RX test mode
   * @param Next_State_SysTime 32bit absolute current time expressed in internal time units.
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_hal_end_of_radio_activity_event(uint8_t Last_State,
-                                         uint8_t Next_State,
-                                         uint32_t Next_State_SysTime))
+                                                       uint8_t Next_State,
+                                                       uint32_t Next_State_SysTime))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1651,10 +1651,10 @@ Units: dBm
   - 0x03: Random (Static) Identity Address
   * @param Peer_Address Public Device Address or Random Device Address of the peer device
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_hal_scan_req_report_event(int8_t RSSI,
-                                   uint8_t Peer_Address_Type,
-                                   uint8_t Peer_Address[6]))
+                                                 uint8_t Peer_Address_Type,
+                                                 uint8_t Peer_Address[6]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1669,10 +1669,10 @@ WEAK_FUNCTION(void aci_hal_scan_req_report_event(int8_t RSSI,
   * @param Data_Length Length of Data in octets
   * @param Data The error event info
   * @retval None
-*/
+  */
 WEAK_FUNCTION(void aci_hal_fw_error_event(uint8_t FW_Error_Type,
-                            uint8_t Data_Length,
-                            uint8_t Data[]))
+                                          uint8_t Data_Length,
+                                          uint8_t Data[]))
 {
   /* NOTE : This function Should not be modified, when needed,
             the callback could be implemented in the user file
@@ -1680,5 +1680,5 @@ WEAK_FUNCTION(void aci_hal_fw_error_event(uint8_t FW_Error_Type,
   BLUENRG_PRINTF("aci_hal_fw_error_event\r\n");
 }
 /**
- * @}
- */
+  * @}
+  */
