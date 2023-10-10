@@ -1,0 +1,4 @@
+var _s_t_m32_l4_r9_z_i__s_t_w_i_n_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_deviceinformation___pn_p_l__vtbl_8h =
+[
+    [ "Deviceinformation_PnPL_vtblGetKey", "_s_t_m32_l4_r9_z_i-_s_t_w_i_n_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_deviceinformation___pn_p_l__vtbl_8h.html#ac72469e55b7cbb9696ae70cb79688249", null ]
+];

@@ -1,0 +1,19 @@
+var bluenrg1__gatt__server_8h =
+[
+    [ "ATT_MTU", "group___g_a_t_t.html#ga2dc7e27106a0fa818de03afb978a10c9", null ],
+    [ "ATTR_ACCESS_WRITE_ANY", "group___g_a_t_t.html#ga003ddb463e9c0ccb2af22cea02a26a7c", null ],
+    [ "ATTR_PERMISSION_AUTHEN_READ", "group___g_a_t_t.html#gaf0683a69e940b7952593d094ba8792f7", null ],
+    [ "ATTR_PERMISSION_AUTHEN_WRITE", "group___g_a_t_t.html#ga5351d9dd578eb83317be24ad00edf68c", null ],
+    [ "ATTR_PERMISSION_AUTHOR_READ", "group___g_a_t_t.html#ga089cfa59ed93321f3623d2b59596009d", null ],
+    [ "ATTR_PERMISSION_AUTHOR_WRITE", "group___g_a_t_t.html#ga851f666960695bb40a092d1199e49932", null ],
+    [ "ATTR_PERMISSION_ENCRY_READ", "group___g_a_t_t.html#ga6d7d41cc0beda033e355b215c4a749fa", null ],
+    [ "ATTR_PERMISSION_ENCRY_WRITE", "group___g_a_t_t.html#gaf6e259c7986ffacfb483529f67c1a69f", null ],
+    [ "ATTR_PERMISSION_NONE", "group___g_a_t_t.html#ga644af42f18287cc72f9c752126eb8321", null ],
+    [ "GATT_DONT_NOTIFY_EVENTS", "group___g_a_t_t.html#ga80fb9cb0e28b2951035bc76fc96a9fa7", null ],
+    [ "GATT_NOTIFY_ATTRIBUTE_WRITE", "group___g_a_t_t.html#gaa5407860d85059761136da81bcdc356d", null ],
+    [ "GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP", "group___g_a_t_t.html#ga2c40093c4fa029e487daee08f47a591b", null ],
+    [ "GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP", "group___g_a_t_t.html#gad4a31a364f1776e4920203387eb7aacc", null ],
+    [ "MAX_ENCRY_KEY_SIZE", "group___g_a_t_t.html#ga023fcb089fefded5a35ce2d6b87e3213", null ],
+    [ "MIN_ENCRY_KEY_SIZE", "group___g_a_t_t.html#gacefe8fd6d0e9d9cb8416ab7782fa34cb", null ],
+    [ "PACKED", "group___g_a_t_t.html#ga3d1b17cb15c2a18fd55c0c98dbe1d1e3", null ]
+];

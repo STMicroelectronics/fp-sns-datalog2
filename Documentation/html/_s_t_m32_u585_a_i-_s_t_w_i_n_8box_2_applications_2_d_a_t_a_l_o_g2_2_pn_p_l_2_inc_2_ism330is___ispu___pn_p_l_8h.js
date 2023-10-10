@@ -1,0 +1,6 @@
+var _s_t_m32_u585_a_i__s_t_w_i_n_8box_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_ism330is___ispu___pn_p_l_8h =
+[
+    [ "Ism330is_Ispu_PnPL", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_ism330is___ispu___pn_p_l_8h.html#a2b33de266ad40514e0c7237bb30fbeb7", null ],
+    [ "Ism330is_Ispu_PnPLGetComponentIF", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_ism330is___ispu___pn_p_l_8h.html#adc1135a0ff7b5bd485a3bf63314e0911", null ],
+    [ "Ism330is_Ispu_PnPLInit", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_ism330is___ispu___pn_p_l_8h.html#a91e2eefce758d2b85bdd95d443c96679", null ]
+];

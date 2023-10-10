@@ -1,0 +1,4 @@
+var _n_u_c_l_e_o__h7_a3_z_i__q_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_iis2mdc___mag___pn_p_l__vtbl_8h =
+[
+    [ "Iis2mdc_Mag_PnPL_vtblGetKey", "_n_u_c_l_e_o-_h7_a3_z_i-_q_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_iis2mdc___mag___pn_p_l__vtbl_8h.html#a1d6bd0cfe35ee5f402daddc9c5d0f74b", null ]
+];

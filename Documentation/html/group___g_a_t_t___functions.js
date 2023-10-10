@@ -1,0 +1,77 @@
+var group___g_a_t_t___functions =
+[
+    [ "Service_UUID_t_s", "union_service___u_u_i_d__t__s.html", [
+      [ "Service_UUID_128", "union_service___u_u_i_d__t__s.html#a37d89e651287d17c75739d1586146004", null ],
+      [ "Service_UUID_16", "union_service___u_u_i_d__t__s.html#a6ef14a345e449804071ce029e2fbd12b", null ]
+    ] ],
+    [ "Include_UUID_t_s", "union_include___u_u_i_d__t__s.html", [
+      [ "Include_UUID_128", "union_include___u_u_i_d__t__s.html#a68a53a6c4870247b911a4d58f7adc227", null ],
+      [ "Include_UUID_16", "union_include___u_u_i_d__t__s.html#a8ad5679d43fa294cb48877d8d81ec3db", null ]
+    ] ],
+    [ "Char_UUID_t_s", "union_char___u_u_i_d__t__s.html", [
+      [ "Char_UUID_128", "union_char___u_u_i_d__t__s.html#ada690cb9440764fac2271bf57895a33a", null ],
+      [ "Char_UUID_16", "union_char___u_u_i_d__t__s.html#ac6221d96641e736e2b1b270d57ca769d", null ]
+    ] ],
+    [ "Char_Desc_Uuid_t_s", "union_char___desc___uuid__t__s.html", [
+      [ "Char_UUID_128", "union_char___desc___uuid__t__s.html#ada690cb9440764fac2271bf57895a33a", null ],
+      [ "Char_UUID_16", "union_char___desc___uuid__t__s.html#ac6221d96641e736e2b1b270d57ca769d", null ]
+    ] ],
+    [ "UUID_t_s", "union_u_u_i_d__t__s.html", [
+      [ "UUID_128", "union_u_u_i_d__t__s.html#a791e11914fbd2466b676c969e94770d3", null ],
+      [ "UUID_16", "union_u_u_i_d__t__s.html#ae5130cec686421dc068cbb8ba5df7a27", null ]
+    ] ],
+    [ "Handle_Entry_t_s", "struct_handle___entry__t__s.html", [
+      [ "Handle", "struct_handle___entry__t__s.html#ae98fd2e759d7b9544c6ff164f3858754", null ]
+    ] ],
+    [ "Char_Desc_Uuid_t", "group___g_a_t_t___functions.html#gaf4c69b762b97aa77362179c7489e6bc2", null ],
+    [ "Char_UUID_t", "group___g_a_t_t___functions.html#ga81dc6e6ffc5b44a551fbeb1d5a11942a", null ],
+    [ "Handle_Entry_t", "group___g_a_t_t___functions.html#gaae149e0a945d2dc2b8bb68a586a52c57", null ],
+    [ "Include_UUID_t", "group___g_a_t_t___functions.html#gaa64f12bacb3ea635514a6bb28bc725da", null ],
+    [ "Service_UUID_t", "group___g_a_t_t___functions.html#gaeb1e5b5197d4a2734b185f2da5d222fa", null ],
+    [ "UUID_t", "group___g_a_t_t___functions.html#ga7b8df99a8379fb456d46634116376a46", null ],
+    [ "aci_att_execute_write_req", "group___g_a_t_t___functions.html#ga4b83dcd787f181afe02debbe2c27ba76", null ],
+    [ "aci_att_find_by_type_value_req", "group___g_a_t_t___functions.html#ga5e1bde76a4d586c0461ff6881eab9bba", null ],
+    [ "aci_att_find_info_req", "group___g_a_t_t___functions.html#ga5c370a4835c2aa0caa7e0f7c7895be23", null ],
+    [ "aci_att_prepare_write_req", "group___g_a_t_t___functions.html#ga537b7754909badb3f536d286bac970fd", null ],
+    [ "aci_att_read_by_group_type_req", "group___g_a_t_t___functions.html#ga3f05ff7a0933943d516f56ad6a21227d", null ],
+    [ "aci_att_read_by_type_req", "group___g_a_t_t___functions.html#gaaaf1a025c614e23f766c7575f719475d", null ],
+    [ "aci_gatt_add_char", "group___g_a_t_t___functions.html#ga072befcb23bafec72c98e02e6caa0843", null ],
+    [ "aci_gatt_add_char_desc", "group___g_a_t_t___functions.html#gad0e9ddca48061e7a369fb3b567fb77fb", null ],
+    [ "aci_gatt_add_service", "group___g_a_t_t___functions.html#ga3232522db120650ac4f92e4ed0a390d6", null ],
+    [ "aci_gatt_allow_read", "group___g_a_t_t___functions.html#ga5661814b590763c2753b6aa177d87e00", null ],
+    [ "aci_gatt_confirm_indication", "group___g_a_t_t___functions.html#ga048bac8f8f69387d0e5463d394e279d0", null ],
+    [ "aci_gatt_del_char", "group___g_a_t_t___functions.html#ga66c8aaf0ddff722e0c1f02ed91a3f531", null ],
+    [ "aci_gatt_del_include_service", "group___g_a_t_t___functions.html#ga08285c891c49b59a6f8bd93743b2921a", null ],
+    [ "aci_gatt_del_service", "group___g_a_t_t___functions.html#ga56344efce350e7fd76da5bd15f655a69", null ],
+    [ "aci_gatt_deny_read", "group___g_a_t_t___functions.html#ga8184d509c7ac89e5b731159fd6dca817", null ],
+    [ "aci_gatt_disc_all_char_desc", "group___g_a_t_t___functions.html#ga2200e46345c7ef9f11d30028bf51b229", null ],
+    [ "aci_gatt_disc_all_char_of_service", "group___g_a_t_t___functions.html#ga7d45eb9cad7318795258008a8bbfbe26", null ],
+    [ "aci_gatt_disc_all_primary_services", "group___g_a_t_t___functions.html#gadf6202c7e05533beb408eb0f89946269", null ],
+    [ "aci_gatt_disc_char_by_uuid", "group___g_a_t_t___functions.html#gab71a146c5beb5c7dfdc921977d830c60", null ],
+    [ "aci_gatt_disc_primary_service_by_uuid", "group___g_a_t_t___functions.html#gaa1629c6e00623ad74688cd667483c3b0", null ],
+    [ "aci_gatt_exchange_config", "group___g_a_t_t___functions.html#gac0a88b448970051ddc62b190cdef4797", null ],
+    [ "aci_gatt_find_included_services", "group___g_a_t_t___functions.html#gab67180282b008b0d40cb593a6ebca7cc", null ],
+    [ "aci_gatt_include_service", "group___g_a_t_t___functions.html#ga3f076bc9cb0a1f0166fc78adf91f0755", null ],
+    [ "aci_gatt_init", "group___g_a_t_t___functions.html#gae388dcc9bf9bd52339d0b57098988173", null ],
+    [ "aci_gatt_read_char_desc", "group___g_a_t_t___functions.html#ga34c048c9cd1090368e91ba24905df342", null ],
+    [ "aci_gatt_read_char_value", "group___g_a_t_t___functions.html#gabdff31530e011daa69a42c6f37af4c25", null ],
+    [ "aci_gatt_read_handle_value", "group___g_a_t_t___functions.html#ga91b7ef371623a24f53824a863aa1b1bd", null ],
+    [ "aci_gatt_read_long_char_desc", "group___g_a_t_t___functions.html#gaadceb493f42a00c7074a2b0d6d435ab2", null ],
+    [ "aci_gatt_read_long_char_value", "group___g_a_t_t___functions.html#ga638eb79e8871f992e629f38653c2f044", null ],
+    [ "aci_gatt_read_multiple_char_value", "group___g_a_t_t___functions.html#ga97b5b2d644169562b4de494b5421d868", null ],
+    [ "aci_gatt_read_using_char_uuid", "group___g_a_t_t___functions.html#ga4f55db9808b5fead904f373b9c8bbfde", null ],
+    [ "aci_gatt_set_access_permission", "group___g_a_t_t___functions.html#gaea0a489510a903f9e9f30d50d5093601", null ],
+    [ "aci_gatt_set_desc_value", "group___g_a_t_t___functions.html#ga742bce845653cc547bc6ed163f19f499", null ],
+    [ "aci_gatt_set_event_mask", "group___g_a_t_t___functions.html#ga49669bba524f15e49a6c08234a7ee0ca", null ],
+    [ "aci_gatt_set_security_permission", "group___g_a_t_t___functions.html#gaa7a61c37303c929f3db1750318adb019", null ],
+    [ "aci_gatt_signed_write_without_resp", "group___g_a_t_t___functions.html#ga080609b72caf0b3ff1f17ea9257dfdb6", null ],
+    [ "aci_gatt_update_char_value", "group___g_a_t_t___functions.html#ga087d6b9bfd793f8eb26dd0768c912b59", null ],
+    [ "aci_gatt_update_char_value_ext", "group___g_a_t_t___functions.html#ga1fc9b80cf4d25cc72acc3000b41fc762", null ],
+    [ "aci_gatt_write_char_desc", "group___g_a_t_t___functions.html#ga647afe941a18a985bcc3f5dbf7363bcd", null ],
+    [ "aci_gatt_write_char_reliable", "group___g_a_t_t___functions.html#ga674c60e57b083c318c50e63cdcc66941", null ],
+    [ "aci_gatt_write_char_value", "group___g_a_t_t___functions.html#ga0c3cfb4b3dbed845d314adde7b4ace65", null ],
+    [ "aci_gatt_write_long_char_desc", "group___g_a_t_t___functions.html#gac9d2178e5368ffa7b0836f3fd025dde7", null ],
+    [ "aci_gatt_write_long_char_value", "group___g_a_t_t___functions.html#ga5be039b58c66f7cc5950c673ca639371", null ],
+    [ "aci_gatt_write_resp", "group___g_a_t_t___functions.html#ga602ae12a56126b7e76ae1270e9f21d64", null ],
+    [ "aci_gatt_write_without_resp", "group___g_a_t_t___functions.html#gade44edf22b4a386bcb4bf36dbb96fc78", null ]
+];

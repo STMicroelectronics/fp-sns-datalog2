@@ -1,0 +1,4 @@
+var _s_t_m32_l4_r9_z_i__s_t_w_i_n_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_log___controller___pn_p_l__vtbl_8h =
+[
+    [ "Log_Controller_PnPL_vtblGetKey", "_s_t_m32_l4_r9_z_i-_s_t_w_i_n_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_log___controller___pn_p_l__vtbl_8h.html#a53fb8b51e358c072cefb4242cf2a5e50", null ]
+];

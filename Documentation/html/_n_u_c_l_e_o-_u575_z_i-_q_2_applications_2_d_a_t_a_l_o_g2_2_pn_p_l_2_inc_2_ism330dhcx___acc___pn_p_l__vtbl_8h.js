@@ -1,0 +1,4 @@
+var _n_u_c_l_e_o__u575_z_i__q_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_ism330dhcx___acc___pn_p_l__vtbl_8h =
+[
+    [ "Ism330dhcx_Acc_PnPL_vtblGetKey", "_n_u_c_l_e_o-_u575_z_i-_q_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_ism330dhcx___acc___pn_p_l__vtbl_8h.html#ad79f5f408ca0f2b75c6a00ab67fe515c", null ]
+];

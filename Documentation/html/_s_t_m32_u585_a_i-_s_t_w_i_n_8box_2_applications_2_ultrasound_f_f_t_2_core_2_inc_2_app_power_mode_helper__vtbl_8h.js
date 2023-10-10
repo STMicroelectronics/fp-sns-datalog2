@@ -1,0 +1,10 @@
+var _s_t_m32_u585_a_i__s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_app_power_mode_helper__vtbl_8h =
+[
+    [ "AppPowerModeHelper_vtblCheckPowerModeTransaction", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_app_power_mode_helper__vtbl_8h.html#a1b51006727832e0c200ece0dd6e9e2f8", null ],
+    [ "AppPowerModeHelper_vtblComputeNewPowerMode", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_app_power_mode_helper__vtbl_8h.html#ac6c24e8cfc68f42339603b3bf0978708", null ],
+    [ "AppPowerModeHelper_vtblDidEnterPowerMode", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_app_power_mode_helper__vtbl_8h.html#a7dbd07dcb87f9b6eaabdc2f63497919b", null ],
+    [ "AppPowerModeHelper_vtblGetActivePowerMode", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_app_power_mode_helper__vtbl_8h.html#a8e0f3a1289a33937f7ca2bec7d364797", null ],
+    [ "AppPowerModeHelper_vtblGetPowerStatus", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_app_power_mode_helper__vtbl_8h.html#ac70a8632878ed699f133023ea5ec7c9f", null ],
+    [ "AppPowerModeHelper_vtblInit", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_app_power_mode_helper__vtbl_8h.html#a40ccc2afdf197a400fb6ef4d1b7a8504", null ],
+    [ "AppPowerModeHelper_vtblIsLowPowerMode", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_app_power_mode_helper__vtbl_8h.html#a5a0a652946a7bcd21067d720068284a7", null ]
+];

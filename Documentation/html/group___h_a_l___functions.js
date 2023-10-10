@@ -1,0 +1,27 @@
+var group___h_a_l___functions =
+[
+    [ "aci_hal_get_anchor_period", "group___h_a_l___functions.html#gaed24fc99bccbc81d2171ccc30d5f0e3f", null ],
+    [ "aci_hal_get_firmware_details", "group___h_a_l___functions.html#gab6fc035f51e68d04b91add0b3fe35a8d", null ],
+    [ "aci_hal_get_fw_build_number", "group___h_a_l___functions.html#ga7b3b1087da93be369db1b1297ee2cb97", null ],
+    [ "aci_hal_get_link_status", "group___h_a_l___functions.html#gade4de85fc7cc00c181c3b01e9ee72154", null ],
+    [ "aci_hal_get_updater_bufsize", "group___h_a_l___functions.html#ga1cc9df364b42a6b06026c4621ff8dc76", null ],
+    [ "aci_hal_get_updater_version", "group___h_a_l___functions.html#ga3d57b181fdc560f6dc4d1844dc70f5ba", null ],
+    [ "aci_hal_le_tx_test_packet_number", "group___h_a_l___functions.html#ga9e145d90c77f62a854d65321d99dfb5a", null ],
+    [ "aci_hal_read_config_data", "group___h_a_l___functions.html#ga525ce45a611421ae48dd43c8e32f0b67", null ],
+    [ "aci_hal_set_event_mask", "group___h_a_l___functions.html#ga4b21a27d40d972697c5b63a0f54f8829", null ],
+    [ "aci_hal_set_radio_activity_mask", "group___h_a_l___functions.html#ga120ca17ceac401485f6281f2037126b0", null ],
+    [ "aci_hal_set_tx_power_level", "group___h_a_l___functions.html#ga4d8ce6409d339fcfdad69607cf4f25d8", null ],
+    [ "aci_hal_tone_start", "group___h_a_l___functions.html#gace555eb4b9f225d874f946aa920de1f5", null ],
+    [ "aci_hal_tone_stop", "group___h_a_l___functions.html#ga77e0497ce0ec8bbb0d9e5495ff6c7027", null ],
+    [ "aci_hal_transmitter_test_packets", "group___h_a_l___functions.html#ga31302f8f0460ca94b2747a7d57617d62", null ],
+    [ "aci_hal_updater_calc_crc", "group___h_a_l___functions.html#gacd41090424b1f55b826714cbe29977db", null ],
+    [ "aci_hal_updater_erase_blue_flag", "group___h_a_l___functions.html#ga53fc514b0bb7d73aaa88824f35c65e72", null ],
+    [ "aci_hal_updater_erase_sector", "group___h_a_l___functions.html#ga790ba8a27228d8b012de8b5b729b7e51", null ],
+    [ "aci_hal_updater_hw_version", "group___h_a_l___functions.html#gaa36f16e67301024fd9a776531f42dbd0", null ],
+    [ "aci_hal_updater_prog_data_blk", "group___h_a_l___functions.html#gaf72a662e3f57d0ef5856be98e8b0e6c4", null ],
+    [ "aci_hal_updater_read_data_blk", "group___h_a_l___functions.html#ga21f371c85f32d66d56e99e4b94b0fa27", null ],
+    [ "aci_hal_updater_reboot", "group___h_a_l___functions.html#ga5a788c4977e7d18393c74b15017aee15", null ],
+    [ "aci_hal_updater_reset_blue_flag", "group___h_a_l___functions.html#gaca985d120298d57a4ef7ee1c25054d46", null ],
+    [ "aci_hal_updater_start", "group___h_a_l___functions.html#gacb362ed2e2b094b00667f8fd28092b1a", null ],
+    [ "aci_hal_write_config_data", "group___h_a_l___functions.html#gaa694cc1ba16fb65a85c50acfb0f9d028", null ]
+];

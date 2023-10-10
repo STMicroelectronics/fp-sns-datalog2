@@ -1,0 +1,4 @@
+var _s_t_m32_u585_a_i__s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_sensor_manager__conf_8h =
+[
+    [ "IMP23ABSU_TASK_CFG_STACK_DEPTH", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_sensor_manager__conf_8h.html#ae205ac5100c5283981ac937a3086d321", null ]
+];

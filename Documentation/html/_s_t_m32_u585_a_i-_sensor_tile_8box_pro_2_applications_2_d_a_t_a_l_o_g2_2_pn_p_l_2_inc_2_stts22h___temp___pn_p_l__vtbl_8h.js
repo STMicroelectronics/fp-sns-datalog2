@@ -1,0 +1,4 @@
+var _s_t_m32_u585_a_i__sensor_tile_8box_pro_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_stts22h___temp___pn_p_l__vtbl_8h =
+[
+    [ "Stts22h_Temp_PnPL_vtblGetKey", "_s_t_m32_u585_a_i-_sensor_tile_8box_pro_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_stts22h___temp___pn_p_l__vtbl_8h.html#a506014aa186b09cc9f29432b9b2b2eef", null ]
+];

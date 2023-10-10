@@ -1,0 +1,27 @@
+var _blue_n_r_g__l_p_2includes_2ble__status_8h =
+[
+    [ "BLE_INSUFFICIENT_ENC_KEYSIZE", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a1240d39dd9d3de3158844f43b671234a", null ],
+    [ "BLE_STATUS_ADDRESS_NOT_RESOLVED", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#ab9af339fb98e411e78eac4aa2a91ebdd", null ],
+    [ "BLE_STATUS_BUSY", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#ade5060be9225c4bbb6ecc39b451d0fe3", null ],
+    [ "BLE_STATUS_CSRK_NOT_FOUND", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a1bf6a2e46af30d79967cfbf68d98c18d", null ],
+    [ "BLE_STATUS_DEV_IN_BLACKLIST", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a8d7de49543f011e3a9203214c44ec444", null ],
+    [ "BLE_STATUS_DEV_NOT_BONDED", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a88f30f0f7e5c0bc83e2304c56ad7af35", null ],
+    [ "BLE_STATUS_DEV_NOT_FOUND", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a8bd36fb1c0f5fae91cbba10fc8d1889a", null ],
+    [ "BLE_STATUS_ERROR", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a958441a5ea140220371ce5dc9b6719a6", null ],
+    [ "BLE_STATUS_FAILED", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#afca8531991ccd130cc9b93c0f73b4909", null ],
+    [ "BLE_STATUS_INSUFFICIENT_RESOURCES", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a55f52881b6a2397e1670ac7f13ec2c4e", null ],
+    [ "BLE_STATUS_INVALID_ADV_CONFIGURATION", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#aee86e2f9d6da49f8fc0a45cad85d31cf", null ],
+    [ "BLE_STATUS_INVALID_ADV_FLAGS", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a2df7b469c71a36814a8352155786075e", null ],
+    [ "BLE_STATUS_INVALID_CID", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a4db1b7e61a6e0d48d7aac5b4196a09e4", null ],
+    [ "BLE_STATUS_INVALID_CONNECT_CONFIGURATION", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#ad7e833dee8651a54309d032b95736205", null ],
+    [ "BLE_STATUS_INVALID_PARAMS", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#ae87f02e37271d5fc78f2451998c479d9", null ],
+    [ "BLE_STATUS_INVALID_SCAN_CONFIGURATION", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a7b04cf7b11449e1984e3af22141e2594", null ],
+    [ "BLE_STATUS_IRK_NOT_FOUND", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a7a5a51af024a7786aea5663f88f1f733", null ],
+    [ "BLE_STATUS_NOT_ALLOWED", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a5f58cefbad2bedd5aae8e8a08e38312a", null ],
+    [ "BLE_STATUS_NULL_PARAM", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#aba2bf8e224418f8797395f6f1b50e786", null ],
+    [ "BLE_STATUS_OUT_OF_MEMORY", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a335df6580cece5e3822e1219daed299f", null ],
+    [ "BLE_STATUS_PENDING", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#ae2b0022df788b9ae11d3f5dc3af140e9", null ],
+    [ "BLE_STATUS_SEC_DB_FULL", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#aeb623dda1beaaf154caccbd0df2c186b", null ],
+    [ "BLE_STATUS_SEC_PERMISSION_ERROR", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a837cc9b93b62c19a40a03b2f97f23199", null ],
+    [ "BLE_STATUS_UNKNOWN_CONNECTION_ID", "_blue_n_r_g-_l_p_2includes_2ble__status_8h.html#a97afda5034210d57bb91a7e677f543ac", null ]
+];
