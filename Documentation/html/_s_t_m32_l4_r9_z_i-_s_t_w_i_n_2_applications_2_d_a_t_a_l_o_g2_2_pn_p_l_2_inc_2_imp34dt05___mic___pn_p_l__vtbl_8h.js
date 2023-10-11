@@ -1,4 +1,0 @@
-var _s_t_m32_l4_r9_z_i__s_t_w_i_n_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_imp34dt05___mic___pn_p_l__vtbl_8h =
-[
-    [ "Imp34dt05_Mic_PnPL_vtblGetKey", "_s_t_m32_l4_r9_z_i-_s_t_w_i_n_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_imp34dt05___mic___pn_p_l__vtbl_8h.html#ae4025b4524d35492cd0a422f75077d4c", null ]
-];

@@ -1,9 +1,0 @@
-var dir_3577793f327177ed3ee548c7d9a84f33 =
-[
-    [ "Acquisition_Info_PnPL.c", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_src_2_acquisition___info___pn_p_l_8c.html", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_src_2_acquisition___info___pn_p_l_8c" ],
-    [ "Deviceinformation_PnPL.c", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_src_2_deviceinformation___pn_p_l_8c.html", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_src_2_deviceinformation___pn_p_l_8c" ],
-    [ "Fft_Dpu_PnPL.c", "_fft___dpu___pn_p_l_8c.html", "_fft___dpu___pn_p_l_8c" ],
-    [ "Firmware_Info_PnPL.c", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_src_2_firmware___info___pn_p_l_8c.html", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_src_2_firmware___info___pn_p_l_8c" ],
-    [ "Imp23absu_Mic_PnPL.c", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_src_2_imp23absu___mic___pn_p_l_8c.html", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_src_2_imp23absu___mic___pn_p_l_8c" ],
-    [ "Log_Controller_PnPL.c", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_src_2_log___controller___pn_p_l_8c.html", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_src_2_log___controller___pn_p_l_8c" ]
-];

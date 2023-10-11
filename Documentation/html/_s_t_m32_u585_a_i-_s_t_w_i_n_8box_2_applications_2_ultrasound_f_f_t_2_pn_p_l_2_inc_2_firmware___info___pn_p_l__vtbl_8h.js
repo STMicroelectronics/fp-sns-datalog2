@@ -1,4 +1,0 @@
-var _s_t_m32_u585_a_i__s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_inc_2_firmware___info___pn_p_l__vtbl_8h =
-[
-    [ "Firmware_Info_PnPL_vtblGetKey", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_pn_p_l_2_inc_2_firmware___info___pn_p_l__vtbl_8h.html#ac89cd84bedd6b6c9e81a8b41967fa31b", null ]
-];

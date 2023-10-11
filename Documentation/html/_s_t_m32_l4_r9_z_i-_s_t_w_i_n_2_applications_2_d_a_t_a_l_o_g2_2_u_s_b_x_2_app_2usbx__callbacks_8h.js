@@ -1,4 +1,0 @@
-var _s_t_m32_l4_r9_z_i__s_t_w_i_n_2_applications_2_d_a_t_a_l_o_g2_2_u_s_b_x_2_app_2usbx__callbacks_8h =
-[
-    [ "USBD_ChangeFunction", "_s_t_m32_l4_r9_z_i-_s_t_w_i_n_2_applications_2_d_a_t_a_l_o_g2_2_u_s_b_x_2_app_2usbx__callbacks_8h.html#a4f893ce3d278938f9017081f30281dd7", null ]
-];

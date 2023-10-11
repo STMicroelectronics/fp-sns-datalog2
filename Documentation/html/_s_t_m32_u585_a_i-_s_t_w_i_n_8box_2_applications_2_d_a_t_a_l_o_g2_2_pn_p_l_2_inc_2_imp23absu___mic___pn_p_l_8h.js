@@ -1,7 +1,0 @@
-var _s_t_m32_u585_a_i__s_t_w_i_n_8box_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_imp23absu___mic___pn_p_l_8h =
-[
-    [ "imp23absu_mic_odr_hz16000", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_imp23absu___mic___pn_p_l_8h.html#a460e45a6e2a6cf3a6ce08ec5ce0bcf1f", null ],
-    [ "Imp23absu_Mic_PnPL", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_imp23absu___mic___pn_p_l_8h.html#a80c81fa5901fcc7ebd5bfea74de8d616", null ],
-    [ "Imp23absu_Mic_PnPLGetComponentIF", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_imp23absu___mic___pn_p_l_8h.html#a6c2e6b291f904602f3209dea83fd949c", null ],
-    [ "Imp23absu_Mic_PnPLInit", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_imp23absu___mic___pn_p_l_8h.html#ae72c015508e75914f18a4e343c2191aa", null ]
-];

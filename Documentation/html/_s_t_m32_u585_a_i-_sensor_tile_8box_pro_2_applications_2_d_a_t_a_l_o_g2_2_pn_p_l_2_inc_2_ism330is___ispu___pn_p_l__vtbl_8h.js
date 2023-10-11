@@ -1,4 +1,0 @@
-var _s_t_m32_u585_a_i__sensor_tile_8box_pro_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_ism330is___ispu___pn_p_l__vtbl_8h =
-[
-    [ "Ism330is_Ispu_PnPL_vtblGetKey", "_s_t_m32_u585_a_i-_sensor_tile_8box_pro_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_ism330is___ispu___pn_p_l__vtbl_8h.html#af978e843cb9b26fb0e04875f7095b3b5", null ]
-];

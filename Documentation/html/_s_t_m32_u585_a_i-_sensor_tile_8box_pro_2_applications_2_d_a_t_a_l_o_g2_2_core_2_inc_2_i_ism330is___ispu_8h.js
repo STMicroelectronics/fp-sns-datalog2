@@ -1,4 +1,0 @@
-var _s_t_m32_u585_a_i__sensor_tile_8box_pro_2_applications_2_d_a_t_a_l_o_g2_2_core_2_inc_2_i_ism330is___ispu_8h =
-[
-    [ "IIsm330is_Ispu_t", "_s_t_m32_u585_a_i-_sensor_tile_8box_pro_2_applications_2_d_a_t_a_l_o_g2_2_core_2_inc_2_i_ism330is___ispu_8h.html#a5914b6f3482876beb7afe9a33c9d4f6b", null ]
-];

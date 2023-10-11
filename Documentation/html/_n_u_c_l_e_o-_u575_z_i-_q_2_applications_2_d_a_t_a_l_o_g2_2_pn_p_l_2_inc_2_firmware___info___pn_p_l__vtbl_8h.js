@@ -1,4 +1,0 @@
-var _n_u_c_l_e_o__u575_z_i__q_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_firmware___info___pn_p_l__vtbl_8h =
-[
-    [ "Firmware_Info_PnPL_vtblGetKey", "_n_u_c_l_e_o-_u575_z_i-_q_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_firmware___info___pn_p_l__vtbl_8h.html#ac89cd84bedd6b6c9e81a8b41967fa31b", null ]
-];

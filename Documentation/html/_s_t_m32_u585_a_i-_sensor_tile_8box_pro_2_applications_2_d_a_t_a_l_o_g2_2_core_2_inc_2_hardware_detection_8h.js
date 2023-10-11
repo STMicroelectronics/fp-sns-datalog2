@@ -1,5 +1,0 @@
-var _s_t_m32_u585_a_i__sensor_tile_8box_pro_2_applications_2_d_a_t_a_l_o_g2_2_core_2_inc_2_hardware_detection_8h =
-[
-    [ "HardwareDetection_Check_Ext_ISM330IS", "_s_t_m32_u585_a_i-_sensor_tile_8box_pro_2_applications_2_d_a_t_a_l_o_g2_2_core_2_inc_2_hardware_detection_8h.html#a36c620a93426de5ca45a4f0fb16f9e8a", null ],
-    [ "HardwareDetection_Check_ST25DV", "_s_t_m32_u585_a_i-_sensor_tile_8box_pro_2_applications_2_d_a_t_a_l_o_g2_2_core_2_inc_2_hardware_detection_8h.html#a60e7836764ae119be3189a4e5a1887c3", null ]
-];

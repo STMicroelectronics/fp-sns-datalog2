@@ -1,7 +1,0 @@
-var _s_t_m32_u585_a_i__s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_i_stream__vtbl_8h =
-[
-    [ "_IStream_vtbl", "struct___i_stream__vtbl.html", null ],
-    [ "_IStream_t", "struct___i_stream__t.html", "struct___i_stream__t" ],
-    [ "IStream_vtbl", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_i_stream__vtbl_8h.html#ac65afd38380158fcc97759628ed3a26a", null ],
-    [ "IStream_init", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2_i_stream__vtbl_8h.html#adc39c7a24eb027a8f89814b07e933818", null ]
-];

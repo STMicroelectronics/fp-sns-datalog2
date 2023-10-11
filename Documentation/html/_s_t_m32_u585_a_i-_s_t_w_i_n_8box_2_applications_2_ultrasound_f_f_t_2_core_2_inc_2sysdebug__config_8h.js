@@ -1,4 +1,0 @@
-var _s_t_m32_u585_a_i__s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2sysdebug__config_8h =
-[
-    [ "SYS_DBG_LEVEL", "_s_t_m32_u585_a_i-_s_t_w_i_n_8box_2_applications_2_ultrasound_f_f_t_2_core_2_inc_2sysdebug__config_8h.html#aa44155f6e6d7924ad80e2d9ba6919f81", null ]
-];

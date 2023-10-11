@@ -1,4 +1,0 @@
-var _s_t_m32_l4_r9_z_i__s_t_w_i_n_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_iis3dwb___acc___pn_p_l__vtbl_8h =
-[
-    [ "Iis3dwb_Acc_PnPL_vtblGetKey", "_s_t_m32_l4_r9_z_i-_s_t_w_i_n_2_applications_2_d_a_t_a_l_o_g2_2_pn_p_l_2_inc_2_iis3dwb___acc___pn_p_l__vtbl_8h.html#a6636a70978781b8667ed0066e9d5ad0b", null ]
-];
