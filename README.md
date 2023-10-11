@@ -31,7 +31,6 @@ Here is the list of references to user documents:
 
 - [DB4865](https://www.st.com/resource/en/data_brief/fp-sns-datalog2.pdf) : STM32Cube function pack for high speed datalogging and ultrasound processing
 - [UM3106](https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf) : Getting started with the STM32Cube function pack for high speed datalogging and ultrasound processing
-- [Doxygen](https://htmlpreview.github.io/?https://github.com/STMicroelectronics/fp-sns-datalog2/blob/main/Documentation/html/index.html): Doxygen documentation
 - [STM32Cube](https://www.st.com/stm32cube): STM32Cube
 
 ## Known Limitations
