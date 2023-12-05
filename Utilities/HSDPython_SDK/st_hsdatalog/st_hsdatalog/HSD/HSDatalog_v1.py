@@ -217,13 +217,17 @@ class HSDatalog_v1:
         # raise MissingAcquisitionInfoError
         return None
 
-    def get_time_tags(self):
+    def get_time_tags(self, which_tags = None):
         # for each label and for each time segment:
         # time_labels: array of tag
         #   = {'label': lbl, 'time_start': t_start, 'time_end': xxx, }
         time_labels = []
         if self.acq_info_model is not None:
             tags = self.acq_info_model.tags
+
+            if which_tags is not None:
+                tags = [tag for tag in tags if tag['l'] in which_tags]
+                
             for lbl in self.get_acquisition_label_classes():
                 # start_time, end_time are vectors with the corresponding 't' entries in DataTag-json
                 start_time = np.array([t.t for t in tags if t.label == lbl and t.enable])
@@ -246,7 +250,7 @@ class HSDatalog_v1:
             log.error("Empty Acquisition Info model.")
             raise MissingAcquisitionInfoError
 
-    def get_data_stream_tags(self, sensor_name, sub_sensor_type, start_time = 0, end_time = -1):
+    def get_data_stream_tags(self, sensor_name, sub_sensor_type, start_time = 0, end_time = -1, which_tags = None):
         '''
         returns an array of dict:
         {'Label': <Label>, 'time_start': <time start: float>, 'time_end': <time end: float>,'sample_start': <sample index start: int>, 'sample_end': <sample index end: int>}
@@ -257,7 +261,7 @@ class HSDatalog_v1:
             st_tim = np.reshape(stream_time, -1)
             ind_sel = np.array(range(len(st_tim)))
             sensor_labels = []
-            for tag in self.get_time_tags():
+            for tag in self.get_time_tags(which_tags):
                 sampleTag = {}
                 tend = float(tag['time_end'])
                 if tend > st_tim[-1]: tend = st_tim[-1]
@@ -350,6 +354,7 @@ class HSDatalog_v1:
             if (ss_stat.samples_per_ts >1):
                 # initial_offset is relevant
                 timestamp = np.append(ss_stat.initial_offset, timestamp)
+
                 # sample times between timestamps are linearly interpolated
                 for ii in range(num_frames):  # For each Frame:
                     temp = np.linspace(timestamp[ii], timestamp[ii+1], ss_stat.samples_per_ts, endpoint= False)

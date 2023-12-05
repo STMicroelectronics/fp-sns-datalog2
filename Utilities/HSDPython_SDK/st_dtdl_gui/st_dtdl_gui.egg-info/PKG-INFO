@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
 Name: st-dtdl-gui
-Version: 2.0.0
-Summary: STMicroelectronics Graphical Widgets from DTDL collection python package
+Version: 2.1.0
+Summary: STMicroelectronics UI Toolkit based on DTDL and PySide6.
 Home-page: 
 Author: SRA-ASP
 Author-email: matteo.ronchi@st.com

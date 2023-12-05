@@ -97,7 +97,7 @@ struct _VL53L8CXTask
   /**
     * Buffer to store the data read from the sensor
     */
-  uint32_t p_sensor_data_buff[8][VL53L8CX_MAX_NB_ZONES];
+  uint32_t p_sensor_data_buff[VL53L8CX_MAX_NB_ZONES][8];
 
   /**
     * ::IEventSrc interface implementation for this class.

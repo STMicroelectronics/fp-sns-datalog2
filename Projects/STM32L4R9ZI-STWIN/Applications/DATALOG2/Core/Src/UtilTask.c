@@ -48,8 +48,8 @@
 #endif
 
 #define UTIL_UPDATE_BATTERY_CHAR_PERIOD_MS    2000U
-#define RCG_BAT_MIN_VOLTAGE                   3250 //! Rechargeable battery minimum voltage in mV
-#define RCG_BAT_MAX_VOLTAGE                   4160 //! Rechargeable battery maximum voltage in mV
+#define RCG_BAT_MIN_VOLTAGE                   3000 //! Rechargeable battery minimum voltage in mV
+#define RCG_BAT_MAX_VOLTAGE                   4200 //! Rechargeable battery maximum voltage in mV
 
 /* TODO: define the symbol SYS_DBG_UTIL in the file sysdebug_config.h */
 #define SYS_DEBUGF(level, message)             SYS_DEBUGF3(SYS_DBG_UTIL, level, message)
@@ -139,18 +139,22 @@ static const UtilTaskClass_t sTheClass =
         UtilTask_vtblHandleError,
         UtilTask_vtblOnEnterTaskControlLoop,
         UtilTask_vtblForceExecuteStep,
-        UtilTask_vtblOnEnterPowerMode },
+    UtilTask_vtblOnEnterPowerMode
+  },
 
     /* class (PM_STATE, ExecuteStepFunc) map */
     {
         UtilTaskExecuteStepState1,
         NULL,
-        UtilTaskExecuteStepSensorsActive } };
+    UtilTaskExecuteStepSensorsActive
+  }
+};
 
 /* Public API definition */
 /*************************/
 
-AManagedTaskEx* UtilTaskAlloc(const void *p_mx_bc_tim_drv_cfg, const void *p_mx_bc_gpio_sw_drv_cfg, const void *p_mx_bc_gpio_chg_drv_cfg,
+AManagedTaskEx *UtilTaskAlloc(const void *p_mx_bc_tim_drv_cfg, const void *p_mx_bc_gpio_sw_drv_cfg,
+                              const void *p_mx_bc_gpio_chg_drv_cfg,
                               const void *p_mx_bc_gpio_cen_drv_cfg, const void *p_mx_bc_tim_chg_drv_cfg, const void *p_mx_bc_adc_drv_cfg,
 							  const void *p_mx_ub_drv_cfg, const void *p_mx_led1_drv_cfg, const void *p_mx_led2_drv_cfg)
 {
@@ -176,44 +180,53 @@ AManagedTaskEx* UtilTaskAlloc(const void *p_mx_bc_tim_drv_cfg, const void *p_mx_
 }
 
 
-//sys_error_code_t UtilTask_GetBatteryStatus(uint8_t *batt_percentage, uint8_t *status)
-//{
-//  sys_error_code_t res = SYS_NO_ERROR_CODE;
-//  UtilTask_t *p_obj = (UtilTask_t*) &sTaskObj;
-//
-//  BCPAcquireState(&p_obj->bc_protocol, &p_obj->BattVolt, &p_obj->STBC02_state);
-//  *batt_percentage = ((p_obj->BattVolt - RCG_BAT_MIN_VOLTAGE) * 100) / (RCG_BAT_MAX_VOLTAGE - RCG_BAT_MIN_VOLTAGE);
-//
-//  if(*batt_percentage > 100)
-//  {
-//    *batt_percentage = 100;
-//  }
-//
-//  switch(p_obj->STBC02_state)
-//  {
-//    case DISCHARGING:
-//      *status = UTIL_BATTERY_STATUS_DISCHARGING;
-//	  break;
-//
-//    case CHARGING:
-//      *status = UTIL_BATTERY_STATUS_CHARGING;
-//      break;
-//
-//    case BATTERY_NOT_CONNECTED:
-//      *status = UTIL_BATTERY_STATUS_NOT_CONNECTED;
-//      break;
-//
-//    case PLUGGED_NOT_CHARGING:
-//      *status = UTIL_BATTERY_STATUS_FULL;
-//      break;
-//
-//    default:
-//      *status = UTIL_BATTERY_STATUS_UNKNOWN;
-//      break;
-//  }
-//
-//  return res;
-//}
+sys_error_code_t UtilTask_GetBatteryStatus(uint8_t *batt_percentage, uint8_t *status)
+{
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  UtilTask_t *p_obj = (UtilTask_t*) &sTaskObj;
+
+  BCPAcquireState(&p_obj->bc_protocol, &p_obj->BattVolt, &p_obj->STBC02_state);
+  if (p_obj->BattVolt > (uint16_t)RCG_BAT_MAX_VOLTAGE)
+  {
+    p_obj->BattVolt = RCG_BAT_MAX_VOLTAGE;
+  }
+  if (p_obj->BattVolt < (uint16_t)RCG_BAT_MIN_VOLTAGE)
+  {
+    p_obj->BattVolt = RCG_BAT_MIN_VOLTAGE;
+  }
+
+  *batt_percentage = ((p_obj->BattVolt - RCG_BAT_MIN_VOLTAGE) * 100) / (RCG_BAT_MAX_VOLTAGE - RCG_BAT_MIN_VOLTAGE);
+
+  if(*batt_percentage > 100)
+  {
+    *batt_percentage = 100;
+  }
+
+  switch(p_obj->STBC02_state)
+  {
+    case DISCHARGING:
+      *status = UTIL_BATTERY_STATUS_DISCHARGING;
+	  break;
+
+    case CHARGING:
+      *status = UTIL_BATTERY_STATUS_CHARGING;
+      break;
+
+    case BATTERY_NOT_CONNECTED:
+      *status = UTIL_BATTERY_STATUS_NOT_CONNECTED;
+      break;
+
+    case PLUGGED_NOT_CHARGING:
+      *status = UTIL_BATTERY_STATUS_FULL;
+      break;
+
+    default:
+      *status = UTIL_BATTERY_STATUS_UNKNOWN;
+      break;
+  }
+
+  return res;
+}
 
 
 /* AManagedTask virtual functions definition */
@@ -225,72 +238,72 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   UtilTask_t *p_obj = (UtilTask_t*) _this;
 
-//  if(!SYS_IS_ERROR_CODE(res))
-//  {
-//    p_obj->p_bc_timer_driver = BCTimerDriverAlloc();
-//    if(p_obj->p_bc_timer_driver == NULL)
-//    {
-//      SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: unable to alloc BCDriver_t object.\r\n"));
-//      res = SYS_GET_LAST_LOW_LEVEL_ERROR_CODE();
-//    }
-//    else
-//    {
-//      BCTimerDriverParams_t cfg_params =
-//      {
-//        .p_mx_tim_cfg = (void*) p_obj->p_mx_bc_tim_drv_cfg,
-//        .p_mx_gpio_sw_cfg = (void*) p_obj->p_mx_bc_gpio_sw_drv_cfg,
-//      };
-//
-//      res = IDrvInit(p_obj->p_bc_timer_driver, &cfg_params);
-//      if(SYS_IS_ERROR_CODE(res))
-//      {
-//        SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: error BC during driver initialization\r\n"));
-//      }
-//    }
-//  }
-//
-//  if(!SYS_IS_ERROR_CODE(res))
-//  {
-//    p_obj->p_bc_tim_chg_driver = BCTimChgDriverAlloc();
-//    if(p_obj->p_bc_tim_chg_driver == NULL)
-//    {
-//      SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: unable to alloc BCDriver_t object.\r\n"));
-//      res = SYS_GET_LAST_LOW_LEVEL_ERROR_CODE();
-//    }
-//    else
-//    {
-//      BCTimChgDriverParams_t cfg_params =
-//      {
-//        .p_mx_tim_cfg = (void*) p_obj->p_mx_bc_tim_chg_drv_cfg,
-//        .p_mx_gpio_chg_cfg = (void*) p_obj->p_mx_bc_gpio_chg_drv_cfg,
-//        .p_mx_gpio_cen_cfg = (void*) p_obj->p_mx_bc_gpio_cen_drv_cfg,
-//      };
-//
-//      res = IDrvInit(p_obj->p_bc_tim_chg_driver, &cfg_params);
-//      if(SYS_IS_ERROR_CODE(res))
-//      {
-//        SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: error BC during driver initialization\r\n"));
-//      }
-//    }
-//  }
-//
-//  if(!SYS_IS_ERROR_CODE(res))
-//  {
-//    p_obj->p_bc_adc_driver = BCAdcDriverAlloc();
-//    if(p_obj->p_bc_adc_driver == NULL)
-//    {
-//      SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: unable to alloc BCDriver_t object.\r\n"));
-//      res = SYS_GET_LAST_LOW_LEVEL_ERROR_CODE();
-//    }
-//    else
-//    {
-//      res = IDrvInit(p_obj->p_bc_adc_driver, (void*) p_obj->p_mx_bc_adc_drv_cfg);
-//      if(SYS_IS_ERROR_CODE(res))
-//      {
-//        SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: error BC during driver initialization\r\n"));
-//      }
-//    }
-//  }
+  if(!SYS_IS_ERROR_CODE(res))
+  {
+    p_obj->p_bc_timer_driver = BCTimerDriverAlloc();
+    if(p_obj->p_bc_timer_driver == NULL)
+    {
+      SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: unable to alloc BCDriver_t object.\r\n"));
+      res = SYS_GET_LAST_LOW_LEVEL_ERROR_CODE();
+    }
+    else
+    {
+      BCTimerDriverParams_t cfg_params =
+      {
+        .p_mx_tim_cfg = (void*) p_obj->p_mx_bc_tim_drv_cfg,
+        .p_mx_gpio_sw_cfg = (void*) p_obj->p_mx_bc_gpio_sw_drv_cfg,
+      };
+
+      res = IDrvInit(p_obj->p_bc_timer_driver, &cfg_params);
+      if(SYS_IS_ERROR_CODE(res))
+      {
+        SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: error BC during driver initialization\r\n"));
+      }
+    }
+  }
+
+  if(!SYS_IS_ERROR_CODE(res))
+  {
+    p_obj->p_bc_tim_chg_driver = BCTimChgDriverAlloc();
+    if(p_obj->p_bc_tim_chg_driver == NULL)
+    {
+      SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: unable to alloc BCDriver_t object.\r\n"));
+      res = SYS_GET_LAST_LOW_LEVEL_ERROR_CODE();
+    }
+    else
+    {
+      BCTimChgDriverParams_t cfg_params =
+      {
+        .p_mx_tim_cfg = (void*) p_obj->p_mx_bc_tim_chg_drv_cfg,
+        .p_mx_gpio_chg_cfg = (void*) p_obj->p_mx_bc_gpio_chg_drv_cfg,
+        .p_mx_gpio_cen_cfg = (void*) p_obj->p_mx_bc_gpio_cen_drv_cfg,
+      };
+
+      res = IDrvInit(p_obj->p_bc_tim_chg_driver, &cfg_params);
+      if(SYS_IS_ERROR_CODE(res))
+      {
+        SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: error BC during driver initialization\r\n"));
+      }
+    }
+  }
+
+  if(!SYS_IS_ERROR_CODE(res))
+  {
+    p_obj->p_bc_adc_driver = BCAdcDriverAlloc();
+    if(p_obj->p_bc_adc_driver == NULL)
+    {
+      SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: unable to alloc BCDriver_t object.\r\n"));
+      res = SYS_GET_LAST_LOW_LEVEL_ERROR_CODE();
+    }
+    else
+    {
+      res = IDrvInit(p_obj->p_bc_adc_driver, (void*) p_obj->p_mx_bc_adc_drv_cfg);
+      if(SYS_IS_ERROR_CODE(res))
+      {
+        SYS_DEBUGF(SYS_DBG_LEVEL_SEVERE, ("UTIL task: error BC during driver initialization\r\n"));
+      }
+    }
+  }
 
   if(!SYS_IS_ERROR_CODE(res))
   {
@@ -328,7 +341,8 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
   return res;
 }
 
-sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName, VOID **pvStackStart, ULONG *pStackDepth,
+sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName,
+                                           VOID **pvStackStart, ULONG *pStackDepth,
                                            UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart, ULONG *pParams)
 {
   assert_param(_this != NULL);
@@ -346,7 +360,8 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
     return res;
   }
 
-  if(TX_SUCCESS != tx_queue_create(&p_obj->in_queue, "UTIL_Q", item_size / 4, p_queue_items_buff, UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT * item_size))
+  if (TX_SUCCESS != tx_queue_create(&p_obj->in_queue, "UTIL_Q", item_size / 4, p_queue_items_buff,
+                                    UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT * item_size))
   {
     res = SYS_UTIL_TASK_INIT_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
@@ -363,47 +378,13 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
     return res;
   }
 
-//  /* initialize the protocol object */
-//  res = BCPInit(&p_obj->bc_protocol, p_obj->p_bc_timer_driver, p_obj->p_bc_tim_chg_driver, p_obj->p_bc_adc_driver);
-//
-//  if(SYS_IS_ERROR_CODE(res))
-//  {
-//    return res;
-//  }
-  
-  
-/*****/
-//  /* Workaround - disable and enable power supply for external add-on */
-//  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("External add-on 3.3V off\r\n"));
-//
-//  /* Switch off the power supply driven from Battery Charger */
-//  BCPSendCmd(&p_obj->bc_protocol, E_SW1_OA_OFF);
-//  BCPSendCmd(&p_obj->bc_protocol, E_SW1_OB_OFF);
-//
-//  /* Avoid spurious high signals on the SPI pins */
-//  /* Disable SPI pins */
-//  HAL_SPI_MspDeInit(&hspi2);
-//  GPIO_InitTypeDef GPIO_InitStruct = {0};
-//  GPIO_InitStruct.Pin = GPIO_PIN_3;
-//  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-//  GPIO_InitStruct.Pull = GPIO_NOPULL;
-//  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-//  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-//  /* Force low signal on SPI pins */
-//  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET);
-//  HAL_GPIO_WritePin(GPIOI, GPIO_PIN_1|GPIO_PIN_3, GPIO_PIN_RESET);
-//  HAL_Delay(100);
-//  /* Re-initialize SPI pins */
-//  HAL_SPI_MspInit(&hspi2);
-//
-//  /* Switch on the power supply newly */
-//  BCPSendCmd(&p_obj->bc_protocol, E_SW1_OA_ON);
-//  BCPSendCmd(&p_obj->bc_protocol, E_SW1_OB_ON);
-//  HAL_Delay(100);
-//  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("External add-on 3.3V on\r\n"));
-//  /* Now the external add-on is ready to be used */
-/*****/
-  
+  /* initialize the protocol object */
+  res = BCPInit(&p_obj->bc_protocol, p_obj->p_bc_timer_driver, p_obj->p_bc_tim_chg_driver, p_obj->p_bc_adc_driver);
+
+  if(SYS_IS_ERROR_CODE(res))
+  {
+    return res;
+  }
   
   /* set the (PM_STATE, ExecuteStepFunc) map from the class object.  */
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
@@ -423,7 +404,8 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
   return res;
 }
 
-sys_error_code_t UtilTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPowerMode active_power_mode, const EPowerMode new_power_mode)
+sys_error_code_t UtilTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPowerMode active_power_mode,
+                                               const EPowerMode new_power_mode)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -482,7 +464,7 @@ sys_error_code_t UtilTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
   }
 
   /* Start the driver for Single Wire communication */
-//  IDrvStart(p_obj->p_bc_tim_chg_driver);
+  IDrvStart(p_obj->p_bc_tim_chg_driver);
 
 #ifdef ENABLE_THREADX_DBG_PIN
   p_obj->super.m_xTaskHandle.pxTaskTag = UTIL_TASK_CFG_TAG;
@@ -521,7 +503,8 @@ sys_error_code_t UtilTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowerMode
   return res;
 }
 
-sys_error_code_t UtilTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPowerMode active_power_mode, const EPowerMode new_power_mode)
+sys_error_code_t UtilTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPowerMode active_power_mode,
+                                               const EPowerMode new_power_mode)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -560,7 +543,7 @@ static sys_error_code_t UtilTaskExecuteStepState1(AManagedTask *_this)
       if(msg.nCmdID == UTIL_CMD_ID_BUTTON_EVT)
       {
         /* turn-off the battery charger */
-//        res = BCPPowerOff(&p_obj->bc_protocol);
+        res = BCPPowerOff(&p_obj->bc_protocol);
       }
       else if(msg.nCmdID == UTIL_CMD_ID_DATALOG_LED)
       {
@@ -742,7 +725,8 @@ void Util_PWR_EXTI_Callback(uint16_t nPin)
       struct utilMessage_t msg =
       {
           .msgId = APP_MESSAGE_ID_UTIL,
-          .nCmdID = UTIL_CMD_ID_BUTTON_EVT };
+        .nCmdID = UTIL_CMD_ID_BUTTON_EVT
+      };
 
       if(TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &msg, TX_NO_WAIT))
       {
@@ -813,24 +797,3 @@ void SwitchBank(void)
 }
 
 
-/**
-  * @brief  Detects if SD card is correctly plugged in the memory slot or not.
-  * @param  Instance  SD Instance
-  * @retval Returns if SD is detected or not
-  */
-bool Util_SD_IsDetected(void)
-{
-  uint32_t ret;
-
-  /* Check SD card detect pin */
-  if(HAL_GPIO_ReadPin(SD_Detect_GPIO_Port, SD_Detect_Pin) == GPIO_PIN_RESET)
-  {
-    ret = false;
-  }
-  else
-  {
-    ret = true;
-  }
-
-  return (int32_t)ret;
-}

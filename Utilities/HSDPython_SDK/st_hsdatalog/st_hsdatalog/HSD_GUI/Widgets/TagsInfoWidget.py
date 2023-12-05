@@ -21,20 +21,20 @@ from PySide6.QtWidgets import QFrame, QGridLayout
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 
-
 from st_dtdl_gui.Widgets.ComponentWidget import ComponentWidget
 
 import st_hsdatalog
 import st_hsdatalog.HSD_utils.logger as logger
-# import st_hsdatalog.HSD_GUI.Widgets.TagToggleButton as TagToggleButton
 from st_dtdl_gui.Widgets.ToggleButton import ToggleButton
 log = logger.get_logger(__name__)
 
 class TagsInfoWidget(ComponentWidget):
     def __init__(self, controller, comp_contents, comp_name="tags_info", comp_display_name = "Tags Information" , comp_sem_type="other", c_id=0, parent=None):
         super().__init__(controller, comp_name, comp_display_name, comp_sem_type, comp_contents, c_id, parent)
-        self.controller = controller
+
+        self.app = self.controller.qt_app
         self.is_logging = False
+        self.parent_widget = parent
         self.comp_sem_type = comp_sem_type
         
         self.sw_tags_wgt_dict = dict()
@@ -50,7 +50,6 @@ class TagsInfoWidget(ComponentWidget):
         loader = QUiLoader()
         tags_info_widget = loader.load(os.path.join(os.path.dirname(st_hsdatalog.__file__),"HSD_GUI","UI","tags_info_widget.ui"))
         frame_contents = tags_info_widget.frame_tags_info.findChild(QFrame,"frame_contents")
-        # frame_sw_tags_title = tags_info_widget.frame_tags_info.findChild(QFrame,"frame_sw_tags_title")
         frame_sw_tags_contents = tags_info_widget.frame_tags_info.findChild(QFrame,"frame_sw_tags_contents")
         frame_hw_tags_title = tags_info_widget.frame_tags_info.findChild(QFrame,"frame_hw_tags_title")
         frame_hw_tags_title.setVisible(False)
@@ -76,22 +75,11 @@ class TagsInfoWidget(ComponentWidget):
         
         for st in sw_tags:
             sw_tag_widget = loader.load(os.path.join(os.path.dirname(st_hsdatalog.__file__),"HSD_GUI","UI","sw_tag.ui"))
-            # tag_toggle_button = TagToggleButton()
             tag_toggle_button = ToggleButton()
-            # tag_toggle_button.setObjectName("tag_toggle_button")
-            # tag_toggle_button.setCheckable(False)
             frame_tag_toggle_button = sw_tag_widget.findChild(QFrame,"frame_tag_toggle_button")
             frame_tag_toggle_button.layout().addWidget(tag_toggle_button)
-            
-            # sw_tag_widget.enable_tag_button.toggled.connect(partial(self.enable_tag_clicked, st.name))
             sw_tag_widget.tag_label.editingFinished.connect(partial(self.tag_label_changed, st.name))
-            
-            #sw_tag_widget.tag_button.clicked.connect(partial(self.tag_button_clicked, st.name))
-            #sw_tag_widget.tag_button.setStyleSheet(STDTDL_PushButton.green)
-            #sw_tag_widget.tag_button.setEnabled(False)
             tag_toggle_button.stateChanged.connect(partial(self.tag_button_toggled, st.name))
-
-            
             self.sw_tags_wgt_dict[st.name] = {"tag_label":sw_tag_widget.tag_label,"tag_button":tag_toggle_button,"tag_status":False}
             sw_tags_grid_layout.addWidget(sw_tag_widget,r_id,c_id)
             c_id += 1
@@ -104,7 +92,6 @@ class TagsInfoWidget(ComponentWidget):
                 
         for ht in hw_tags:
             hw_tag_widget = loader.load(os.path.join(os.path.dirname(st_hsdatalog.__file__),"HSD_GUI","UI","hw_tag.ui"))
-            # hw_tag_widget.enable_tag_button.toggled.connect(partial(self.enable_tag_clicked, ht.name))
             hw_tag_widget.tag_label.editingFinished.connect(partial(self.tag_label_changed, ht.name))
             self.hw_tags_wgt_dict[ht.name] = {"tag_label":hw_tag_widget.tag_label}
             hw_tags_grid_layout.addWidget(hw_tag_widget,r_id,c_id)
@@ -114,7 +101,6 @@ class TagsInfoWidget(ComponentWidget):
                 r_id += 1
         
         frame_sw_tags_contents.layout().addLayout(sw_tags_grid_layout)
-        # frame_hw_tags_contents.layout().addLayout(hw_tags_grid_layout)
         self.contents_widget.layout().addWidget(frame_contents)
     
     def tag_button_toggled(self, tag_name, a=None):
@@ -151,7 +137,6 @@ class TagsInfoWidget(ComponentWidget):
         else:
             for st in self.sw_tags_wgt_dict:
                 if self.sw_tags_wgt_dict[st]["tag_status"]:
-                    # self.toggle_tag_status(st)
                     self.send_tag_command(st, False)
                     self.sw_tags_wgt_dict[st]["tag_button"].setCheckState(Qt.CheckState.Unchecked)
                 self.sw_tags_wgt_dict[st]["tag_label"].setEnabled(True)
@@ -171,17 +156,11 @@ class TagsInfoWidget(ComponentWidget):
                 #             log.debug('  -- {} : {}'.format(key, cont_value[key]))
                 for cs in comp_status:
                     if "sw_tag" in cs:
-                        # tag_widget = self.sw_tags_wgt_dict[cs]["tag_status"]
                         tag_label = comp_status[cs]["label"]
-                        # tag_enabled = comp_status[cs]["enabled"]
                         self.sw_tags_wgt_dict[cs]["tag_label"].setText(tag_label)
-                        # tag_widget.enable_tag_button.setChecked(tag_enabled)
                     elif "hw_tag" in cs:
-                        tag_widget = self.hw_tags_wgt_dict[cs]
                         tag_label = comp_status[cs]["label"]
-                        # tag_enabled = comp_status[cs]["enabled"]
                         self.hw_tags_wgt_dict[cs]["tag_label"].setText(tag_label)
-                        # tag_widget.enable_tag_button.setChecked(tag_enabled)
                 self.controller.components_status[comp_name] = comp_status
                 log.debug("Component: {}".format(comp_name))
                 log.info("Component tags_info Updated correctly")

@@ -42,7 +42,7 @@ def show_help(ctx, param, value):
 @click.command()
 @click.argument('acq_folder', type=click.Path(exists=True))
 @click.option('-o', '--output_folder', help="Output folder (this will be created if it doesn't exist)")
-@click.option('-s', '--sensor_name', help="Sensor Name - use \"all\" to convert all active sensors data, otherwise select a specific sensor by name", default='all')
+@click.option('-s', '--sensor_name', help="Sensor Name - use \"all\" to convert all active sensors data, otherwise select a specific sensor by name", default='')
 @click.option('-st','--start_time', help="Start Time - Data conversion will start from this time (seconds)", type=int, default=0)
 @click.option('-et','--end_time', help="End Time - Data conversion will end up in this time (seconds)", type=int, default=-1)
 @click.option('-cdm','--custom_device_model', help="Upload a custom Device Template Model (DTDL)", type=(int, int, str))

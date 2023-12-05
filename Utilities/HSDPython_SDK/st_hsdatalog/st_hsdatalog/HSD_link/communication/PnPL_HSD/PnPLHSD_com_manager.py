@@ -374,7 +374,7 @@ class PnPLHSD_CommandManager:
                                 self.set_property(d_id, comp[comp_name][content.name][field.name], comp_name, content.name, field.name)
                 else:
                     print("[WARNING] - wrong property name in your Device Status --> Component: {}".format(comp_name))
-
+    
     def update_device(self, d_id: int, device_status_json_file_path, dtdl_components):
         with open(device_status_json_file_path) as f:
             device_dict = json.load(f)
@@ -383,8 +383,9 @@ class PnPLHSD_CommandManager:
         if pres_res is not None:
             board_board_id = hex(pres_res["board_id"])
             board_fw_id = hex(pres_res["fw_id"])
-            file_board_id = device_dict["devices"][0]["board_id"]
-            file_fw_id = device_dict["devices"][0]["fw_id"]
+            file_board_id = hex(device_dict["devices"][0]["board_id"])
+            file_fw_id = hex(device_dict["devices"][0]["fw_id"])
+
             if board_board_id == file_board_id and board_fw_id == file_fw_id:
                 for component in device_dict["devices"][d_id]["components"]:
                     for key in component.keys():

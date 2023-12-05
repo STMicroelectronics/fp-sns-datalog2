@@ -821,7 +821,7 @@ QPushButton:pressed {
                    <string notr="true">background: transparent;</string>
                   </property>
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>1</number>
                   </property>
                   <widget class="QWidget" name="page_connection">
                    <layout class="QVBoxLayout" name="page_connection_vlayout">
@@ -1051,13 +1051,28 @@ QPushButton:pressed {
                              <number>3</number>
                             </property>
                             <item>
-                             <widget class="QFrame" name="widget_device_config">
-                              <property name="frameShape">
-                               <enum>QFrame::StyledPanel</enum>
-                              </property>
-                              <property name="frameShadow">
-                               <enum>QFrame::Raised</enum>
-                              </property>
+                             <widget class="QWidget" name="widget_special_components" native="true">
+                              <layout class="QVBoxLayout" name="verticalLayout_13">
+                               <property name="spacing">
+                                <number>0</number>
+                               </property>
+                               <property name="leftMargin">
+                                <number>0</number>
+                               </property>
+                               <property name="topMargin">
+                                <number>0</number>
+                               </property>
+                               <property name="rightMargin">
+                                <number>0</number>
+                               </property>
+                               <property name="bottomMargin">
+                                <number>0</number>
+                               </property>
+                              </layout>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QWidget" name="widget_device_config" native="true">
                               <layout class="QVBoxLayout" name="verticalLayout_11">
                                <property name="spacing">
                                 <number>0</number>
@@ -1074,6 +1089,22 @@ QPushButton:pressed {
                                <property name="bottomMargin">
                                 <number>0</number>
                                </property>
+                               <item>
+                                <widget class="Line" name="line">
+                                 <property name="styleSheet">
+                                  <string notr="true">color: rgb(27, 29, 35);</string>
+                                 </property>
+                                 <property name="frameShadow">
+                                  <enum>QFrame::Plain</enum>
+                                 </property>
+                                 <property name="lineWidth">
+                                  <number>3</number>
+                                 </property>
+                                 <property name="orientation">
+                                  <enum>Qt::Horizontal</enum>
+                                 </property>
+                                </widget>
+                               </item>
                               </layout>
                              </widget>
                             </item>
@@ -1102,7 +1133,7 @@ QPushButton:pressed {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>448</width>
+                             <width>580</width>
                              <height>609</height>
                             </rect>
                            </property>

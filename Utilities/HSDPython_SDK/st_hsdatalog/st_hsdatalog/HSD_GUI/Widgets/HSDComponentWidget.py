@@ -20,11 +20,4 @@ class HSDComponentWidget(ComponentWidget):
             [c for c in comp_contents if c.name == "totalStorage"][0].display_name = "Total Storage [GB]"
             [c for c in comp_contents if c.name == "totalMemory"][0].display_name = "Total Memory [KB]"
         
-        super().__init__(controller, comp_name, comp_display_name, comp_sem_type, comp_contents, c_id = 0, parent=None)
-        # if comp_name == "DeviceInformation":
-        #     updt_contents = comp_contents.copy()
-        #     [c for c in updt_contents if c.name == "totalStorage"][0].display_name = "Total Storage [GB]"
-        #     [c for c in updt_contents if c.name == "totalMemory"][0].display_name = "Total Memory [KB]"
-        #     super().__init__(controller, comp_name, comp_display_name, comp_sem_type, updt_contents, c_id = 0, parent=None)
-        # else:
-        #     super().__init__(controller, comp_name, comp_display_name, comp_sem_type, comp_contents, c_id = 0, parent=None) 
+        super().__init__(controller, comp_name, comp_display_name, comp_sem_type, comp_contents, c_id, parent)

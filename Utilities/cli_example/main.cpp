@@ -456,7 +456,31 @@ int main(int argc, char *argv[])
 //        hs_datalog_set_Enable_pnpl(deviceID, true, "ism330dhcx_mlc");
         char* ism330dhcx_mlc_str = (char*)"ism330dhcx_mlc";
         char* enable_str = (char*)"enable";
-        hs_datalog_set_boolean_property(deviceID, true, ism330dhcx_mlc_str, enable_str);
+        char * pnpl_response = nullptr;
+        hs_datalog_set_boolean_property(deviceID, true, ism330dhcx_mlc_str, enable_str, nullptr, &pnpl_response);
+
+        char * deviceStatus;
+        hs_datalog_get_device_status(deviceID, &deviceStatus);
+        hs_datalog_update_components_map(deviceID, deviceStatus);
+
+        /* Free memory */
+        if(hs_datalog_free(deviceStatus) != ST_HS_DATALOG_OK)
+        {
+            cout << "Error occurred while freeing memory\n";
+            cout << "Press any key to exit \n";
+            getchar();
+            return -1;
+        }
+        if(pnpl_response != nullptr){
+            /* Free memory */
+            if(hs_datalog_free(pnpl_response) != ST_HS_DATALOG_OK)
+            {
+                cout << "Error occurred while freeing memory\n";
+                cout << "Press any key to exit \n";
+                getchar();
+                return -1;
+            }
+        }
     }
 
 
@@ -638,14 +662,15 @@ int main(int argc, char *argv[])
 
                 char* tagsInfo_str = (char*)"tags_info";
                 char* status_str = (char*)"status";
+                char * pnpl_response = nullptr;
                 if(!result->second)
                 {
-                    hs_datalog_set_boolean_property(deviceID, true, tagsInfo_str, tag_prop_name_cstr, status_str);
+                    hs_datalog_set_boolean_property(deviceID, true, tagsInfo_str, tag_prop_name_cstr, status_str, &pnpl_response);
                     result->second=true;
                 }
                 else
                 {
-                    hs_datalog_set_boolean_property(deviceID, false, tagsInfo_str, tag_prop_name_cstr, status_str);
+                    hs_datalog_set_boolean_property(deviceID, false, tagsInfo_str, tag_prop_name_cstr, status_str, &pnpl_response);
                     result->second=false;
                 }
 

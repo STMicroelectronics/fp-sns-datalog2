@@ -499,6 +499,26 @@
               <FileType>1</FileType>
               <FilePath>..\Core\Patch\BLE_Manager_patch.c</FilePath>
             </File>
+            <File>
+              <FileName>BCAdcDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\drivers\BCAdcDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>BCTimChgDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\drivers\BCTimChgDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>BCTimerDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\drivers\BCTimerDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>BCProtocol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\services\BCProtocol.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -4594,6 +4614,26 @@
               <FileName>BLE_Manager_patch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Patch\BLE_Manager_patch.c</FilePath>
+            </File>
+            <File>
+              <FileName>BCAdcDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\drivers\BCAdcDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>BCTimChgDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\drivers\BCTimChgDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>BCTimerDriver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\drivers\BCTimerDriver.c</FilePath>
+            </File>
+            <File>
+              <FileName>BCProtocol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\services\BCProtocol.c</FilePath>
             </File>
           </Files>
         </Group>

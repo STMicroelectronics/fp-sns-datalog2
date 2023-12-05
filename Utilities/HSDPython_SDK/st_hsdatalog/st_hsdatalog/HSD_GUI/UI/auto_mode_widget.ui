@@ -216,6 +216,9 @@ QSpinBox:disabled {
                </item>
                <item>
                 <widget class="QLabel" name="nof_acq_info">
+                 <property name="toolTip">
+                  <string>insert 0 for infinite number of acquisitions</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>

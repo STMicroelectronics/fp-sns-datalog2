@@ -872,6 +872,7 @@ sys_error_code_t ISM330DHCXTask_vtblDoEnterPowerMode(AManagedTask *_this, const 
       {
         ISM330DHCXTaskConfigureMLCPin(p_obj, TRUE);
       }
+      memset(p_obj->p_mlc_sensor_data_buff, 0, sizeof(p_obj->p_mlc_sensor_data_buff));
     }
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("ISM330DHCX: -> STATE1\r\n"));
   }
@@ -1216,7 +1217,7 @@ sys_error_code_t ISM330DHCXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (float) odr
+      .sensorMessage.fParam = (float) odr
     };
     res = ISM330DHCXTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1245,7 +1246,7 @@ sys_error_code_t ISM330DHCXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) fs
+      .sensorMessage.fParam = (uint32_t) fs
     };
     res = ISM330DHCXTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -2225,6 +2226,17 @@ static sys_error_code_t ISM330DHCXTaskSensorInit(ISM330DHCXTask *_this)
       int2_route.md2_cfg.int2_emb_func = 1;
       ism330dhcx_pin_int2_route_set(p_sensor_drv, &int2_route);
     }
+
+    SMMessage report;
+    report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY_MLC;
+    report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
+
+    // if (sTaskObj.in_queue != NULL ) {//TODO: STF.Port - how to check if the queue has been initialized ??
+    if (TX_SUCCESS != tx_queue_send(&_this->in_queue, &report, TX_NO_WAIT))
+    {
+      /* unable to send the report. Signal the error */
+      sys_error_handler();
+    }
   }
 
   _this->ism330dhcx_task_cfg_timer_period_ms = (uint16_t)(
@@ -2521,7 +2533,7 @@ static sys_error_code_t ISM330DHCXTaskSensorSetODR(ISM330DHCXTask *_this, SMMess
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.nParam;
+  float odr = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -2670,7 +2682,7 @@ static sys_error_code_t ISM330DHCXTaskSensorSetFS(ISM330DHCXTask *_this, SMMessa
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float fs = (float) report.sensorMessage.nParam;
+  float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   /* Changing fs must disable MLC sensor: MLC can work properly only when setup from UCF */

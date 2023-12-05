@@ -187,7 +187,7 @@ void MX_TIM5_Init(void)
   uint32_t pFLatency;
 
   /* Enable TIM clock */
-  __HAL_RCC_TIM4_CLK_ENABLE();
+  __HAL_RCC_TIM5_CLK_ENABLE();
 
   /* Get clock configuration */
   HAL_RCC_GetClockConfig(&clkconfig, &pFLatency);

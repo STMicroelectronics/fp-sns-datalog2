@@ -82,7 +82,7 @@ class TelemetryWidget(QWidget):
         self.label.setFixedWidth(150)
         if self.prop_type == TypeEnum.STRING.value:
             self.value = QLineEdit(value)
-        elif self.prop_type == TypeEnum.DOUBLE.value:
+        elif self.prop_type == TypeEnum.DOUBLE.value or self.prop_type == TypeEnum.FLOAT.value:
             self.validator = QDoubleValidator()
             self.value = QLineEdit(value)
             self.value.setValidator(self.validator)
@@ -102,7 +102,7 @@ class TelemetryWidget(QWidget):
             for v in value:
                 keys.append(v.name)
             if set(["max","min","val"]) == set(keys):
-                if value[0].schema.value == TypeEnum.DOUBLE.value:
+                if value[0].schema.value == TypeEnum.DOUBLE.value or value[0].schema.value == TypeEnum.FLOAT.value:
                     self.validator = QDoubleValidator(0,1000,self)
                     self.value = QLineEdit("0")
                     self.has_bounds = True

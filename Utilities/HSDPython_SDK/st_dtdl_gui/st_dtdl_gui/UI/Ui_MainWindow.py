@@ -599,14 +599,30 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(3, 3, 3, 3)
-        self.widget_device_config = QFrame(self.widget_device_config_main)
+        self.widget_special_components = QWidget(self.widget_device_config_main)
+        self.widget_special_components.setObjectName(u"widget_special_components")
+        self.verticalLayout_13 = QVBoxLayout(self.widget_special_components)
+        self.verticalLayout_13.setSpacing(0)
+        self.verticalLayout_13.setObjectName(u"verticalLayout_13")
+        self.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
+
+        self.verticalLayout_3.addWidget(self.widget_special_components)
+
+        self.widget_device_config = QWidget(self.widget_device_config_main)
         self.widget_device_config.setObjectName(u"widget_device_config")
-        self.widget_device_config.setFrameShape(QFrame.StyledPanel)
-        self.widget_device_config.setFrameShadow(QFrame.Raised)
         self.verticalLayout_11 = QVBoxLayout(self.widget_device_config)
         self.verticalLayout_11.setSpacing(0)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
+        self.line = QFrame(self.widget_device_config)
+        self.line.setObjectName(u"line")
+        self.line.setStyleSheet(u"color: rgb(27, 29, 35);")
+        self.line.setFrameShadow(QFrame.Plain)
+        self.line.setLineWidth(3)
+        self.line.setFrameShape(QFrame.HLine)
+
+        self.verticalLayout_11.addWidget(self.line)
+
 
         self.verticalLayout_3.addWidget(self.widget_device_config)
 
@@ -621,7 +637,7 @@ class Ui_MainWindow(object):
         self.scrollArea_plots.setWidgetResizable(True)
         self.widget_plots = QWidget()
         self.widget_plots.setObjectName(u"widget_plots")
-        self.widget_plots.setGeometry(QRect(0, 0, 448, 609))
+        self.widget_plots.setGeometry(QRect(0, 0, 580, 609))
         sizePolicy5 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         sizePolicy5.setHorizontalStretch(0)
         sizePolicy5.setVerticalStretch(0)
@@ -735,7 +751,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stacked_widget.setCurrentIndex(0)
+        self.stacked_widget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)

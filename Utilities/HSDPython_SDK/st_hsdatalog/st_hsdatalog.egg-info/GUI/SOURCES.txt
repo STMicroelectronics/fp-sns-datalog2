@@ -43,7 +43,11 @@ st_hsdatalog/HSD_GUI/Widgets/HSDAdvLogControlWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDAutoModeWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDComponentWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDLogControlWidget.py
+st_hsdatalog/HSD_GUI/Widgets/HSDPlotALSWidget.py
+st_hsdatalog/HSD_GUI/Widgets/HSDPlotLinesTMOSWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDPlotLinesWidget.py
+st_hsdatalog/HSD_GUI/Widgets/HSDPlotTMOSWidget.py
+st_hsdatalog/HSD_GUI/Widgets/HSDPlotToFWidget.py
 st_hsdatalog/HSD_GUI/Widgets/TagToggleButton.py
 st_hsdatalog/HSD_GUI/Widgets/TagsInfoWidget.py
 st_hsdatalog/HSD_GUI/Widgets/__init__.py

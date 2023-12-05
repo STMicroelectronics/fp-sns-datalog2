@@ -107,7 +107,11 @@ extern "C" {
 
 // Sensor task generic error code
 #define SYS_SENSOR_TASK_BASE_ERROR_CODE                       SYS_SD_TASK_BASE_ERROR_CODE + SYS_GROUP_ERROR_COUNT
-#define SYS_SENSOR_TASK_OP_ERROR_CODE                         SYS_SENSOR_TASK_BASE_ERROR_CODE + 1
+
+// BCProtocol error code
+#define SYS_BCP_BASE_ERROR_CODE                               SYS_SENSOR_TASK_BASE_ERROR_CODE + SYS_GROUP_ERROR_COUNT
+#define SYS_BCP_CMD_NOT_SUPPORTED_ERROR_CODE                  SYS_BCP_BASE_ERROR_CODE + 1
+#define SYS_BCP_CMD_EXECUTION_ERROR_CODE                      SYS_BCP_BASE_ERROR_CODE + 2
 
 #ifdef __cplusplus
 }

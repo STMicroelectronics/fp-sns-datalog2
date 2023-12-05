@@ -110,7 +110,10 @@ sys_error_code_t SMSensorSetVolume(uint8_t id, uint8_t volume);
 sys_error_code_t SMSensorSetResolution(uint8_t id, uint8_t bit_depth);
 
 /* Specialized for ISensorRanging class */
-sys_error_code_t SMSensorConfigProfile(uint8_t id, ProfileConfig_t *p_config);
+//sys_error_code_t SMSensorSetFrequency(uint8_t id, uint32_t frequency);  /*Declaration in common with ISensorAudio*/
+//sys_error_code_t SMSensorSetResolution(uint8_t id, uint8_t resolution); /*Declaration in common with ISensorAudio*/
+sys_error_code_t SMSensorSetRangingMode(uint8_t id, uint8_t mode);
+sys_error_code_t SMSensorSetIntegrationTime(uint8_t id, uint32_t timing_budget);
 sys_error_code_t SMSensorConfigIT(uint8_t id, ITConfig_t *p_it_config);
 sys_error_code_t SMSensorSetAddress(uint8_t id, uint32_t address);
 sys_error_code_t SMSensorSetPowerMode(uint8_t id, uint32_t power_mode);
@@ -137,7 +140,7 @@ sys_error_code_t SMSensorSetSoftwareCompensationAlgorithmConfig(uint8_t id, Comp
 /* Specialized for ISensorLight class */
 sys_error_code_t SMSensorSetIntermeasurementTime(uint8_t id, uint32_t intermeasurement_time);
 sys_error_code_t SMSensorSetExposureTime(uint8_t id, float exposure_time);
-sys_error_code_t SMSensorSetLightGain(uint8_t id, uint16_t *LightGain);
+sys_error_code_t SMSensorSetLightGain(uint8_t id, float LightGain, uint8_t channel);
 
 /* Inline functions definition */
 /*******************************/

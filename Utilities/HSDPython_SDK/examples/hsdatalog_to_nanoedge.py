@@ -79,20 +79,20 @@ def hsd_dataframe(acq_folder, output_folder, sensor_name, signal_length, signal_
         if sensor_name == '':
             component = HSDatalog.ask_for_component(hsd, only_active=True)
             if component is not None:
-                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder)
+                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder)
             else:
                 break
 
         elif sensor_name == 'all':
             component_list = HSDatalog.get_all_components(hsd, only_active=True)
             for component in component_list:
-                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder)
+                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder)
             df_flag = False
         
         else:
             component = HSDatalog.get_component(hsd, sensor_name)
             if component is not None:
-                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder)
+                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder)
             else:
                 log.exception("No \"{}\" Component found in your Device Configuration file.".format(sensor_name))
             df_flag = False

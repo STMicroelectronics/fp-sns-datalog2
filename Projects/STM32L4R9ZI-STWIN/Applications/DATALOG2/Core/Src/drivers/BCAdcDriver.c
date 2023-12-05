@@ -82,7 +82,7 @@ sys_error_code_t BCAdcDriver_vtblInit(IDriver *_this, void *p_params)
   BCAdcDriver_t *p_obj = (BCAdcDriver_t*)_this;
   p_obj->p_mx_adc_cfg = (MX_ADCParams_t*)p_params;
   /* Initialize the adc */
-  p_obj->p_mx_adc_cfg->p_mx_init_f();
+  p_obj->p_mx_adc_cfg->p_mx_init_f(ADC1_FOR_BC);
 
   return res;
 }
@@ -138,21 +138,35 @@ sys_error_code_t BCAdcDriver_GetValue(IDriver *_this, uint16_t *p_value)
   assert_param(_this != NULL);
   assert_param(p_value != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
+  uint32_t uhADCxConvertedValue = 0;
+
   BCAdcDriver_t *p_obj = (BCAdcDriver_t*) _this;
   ADC_HandleTypeDef *p_adc = p_obj->p_mx_adc_cfg->p_adc;
   uint32_t measured_voltage;
 
-  if(HAL_ADC_PollForConversion(p_adc, 10) == HAL_OK)
-  {
-    measured_voltage = __LL_ADC_CALC_DATA_TO_VOLTAGE(p_adc->Instance, ADC_VREF, HAL_ADC_GetValue(p_adc), LL_ADC_RESOLUTION_12B);
-    *p_value = (uint16_t) ((float) (measured_voltage) * ADC_BATMS_RATIO );
-  }
-  else
-  {
-    res = SYS_BASE_ERROR_CODE;
-  }
+ if (HAL_ADCEx_InjectedStart(p_adc) != HAL_OK)
+ {
+   /* Start Conversation Error */
+   res = SYS_BASE_ERROR_CODE;
+ }
 
-  return res;
+ if (HAL_ADCEx_InjectedPollForConversion(p_adc, 10) != HAL_OK)
+ {
+   /* End Of Conversion flag not set on time */
+   res = SYS_BASE_ERROR_CODE;
+ }
+
+ /* Check if the continuous conversion of regular channel is finished */
+ if ((HAL_ADC_GetState(p_adc) & HAL_ADC_STATE_INJ_EOC) == HAL_ADC_STATE_INJ_EOC)
+ {
+   /*##-5- Get the converted value of regular channel  ########################*/
+   uhADCxConvertedValue = HAL_ADCEx_InjectedGetValue(p_adc, ADC_INJECTED_RANK_1);
+ }
+
+ measured_voltage = (2700U * (uint32_t)uhADCxConvertedValue) / (4095U);  // [0-2.7V]
+ *p_value = ((56U + 100U) * measured_voltage) / 100U; // [0-4.2V]
+
+ return res;
 }
 
 

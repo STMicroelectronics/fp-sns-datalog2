@@ -34,6 +34,7 @@
 /* USER includes -------------------------------------------------------------*/
 #include "services/SQuery.h"
 #include "services/sysdebug.h"
+#include "fx_stm32_sd_driver.h"
 #include "rtc.h"
 #include "ux_user.h"
 #include "UtilTask.h"
@@ -2061,7 +2062,7 @@ uint8_t log_controller_get_log_status(bool *value)
 }
 uint8_t log_controller_get_sd_mounted(bool *value)
 {
-  app_model.log_controller_model.sd_mounted = Util_SD_IsDetected();
+  app_model.log_controller_model.sd_mounted = SD_IsDetected();
   *value = app_model.log_controller_model.sd_mounted;
   return 0;
 }

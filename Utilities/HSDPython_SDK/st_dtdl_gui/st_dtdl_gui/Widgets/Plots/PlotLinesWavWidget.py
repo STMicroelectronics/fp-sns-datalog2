@@ -20,7 +20,6 @@ from PySide6.QtCore import Slot, QObject, QThread, Signal
 from PySide6.QtWidgets import QApplication, QFrame, QPushButton, QProgressBar, QSpinBox
 
 from st_dtdl_gui.UI.styles import STDTDL_PushButton
-from st_dtdl_gui.Utils.DataClass import LinesPlotParams
 from st_dtdl_gui.Widgets.Plots.PlotLinesWidget import PlotLinesWidget
 from st_dtdl_gui.Widgets.LoadingWindow import LoadingWindow
 
@@ -79,7 +78,7 @@ class PlotLinesWavWidget(PlotLinesWidget):
     
     @Slot(bool, int)
     def s_is_logging(self, status: bool, interface: int):
-        if interface == 1:
+        if interface == 1 or interface == 3:
             print("Component {} is logging via USB: {}".format(self.comp_name,status))
             if status:
                 if "_mic" in self.comp_name:# or "_acc" in self.comp_name:

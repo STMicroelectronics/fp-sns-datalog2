@@ -116,7 +116,7 @@ class SchemaType(Enum):
 @dataclass
 class EnumValue:
     display_name: Optional[DisplayName] = None
-    enum_value: Optional[int] = None
+    enum_value: Optional[Union[int,str]] = None
     name: Optional[str] = None
     id: Optional[str] = None
     schema: Optional[SchemaEnum] = None
@@ -125,21 +125,19 @@ class EnumValue:
     def from_dict(obj: Any) -> 'EnumValue':
         assert isinstance(obj, dict)
         display_name = from_union([DisplayName.from_dict, from_none], obj.get("displayName"))
-        # enum_value = from_union([from_int, from_none], obj.get("enumValue"))
-        enum_value = from_union([from_none, from_int, lambda x: int(from_str(x))], obj.get("enumValue"))
+        enum_value = from_union([from_none, from_int, from_str], obj.get("enumValue"))
         name = from_union([from_str, from_none], obj.get("name"))
         id = from_union([from_str, from_none], obj.get("@id"))
-        schema = from_union([SchemaEnum, from_none], obj.get("schema"))
+        schema = from_union([ContentSchema.from_dict, SchemaEnum, from_none], obj.get("schema"))
         return EnumValue(display_name, enum_value, name, id, schema)
 
     def to_dict(self) -> dict:
         result: dict = {}
         result["displayName"] = from_union([lambda x: to_class(DisplayName, x), from_none], self.display_name)
-        # result["enumValue"] = from_union([from_int, from_none], self.enum_value)
-        result["enumValue"] = from_union([lambda x: from_none((lambda x: is_type(type(None), x))(x)), lambda x: from_int((lambda x: is_type(int, x))(x))], self.enum_value)
+        result["enumValue"] = from_union([lambda x: from_none((lambda x: is_type(type(None), x))(x)), lambda x: from_int((lambda x: is_type(int, x))(x)), lambda x: from_str((lambda x: is_type(str, x))(x))] , self.enum_value)
         result["name"] = from_union([from_str, from_none], self.name)
         result["@id"] = from_union([from_str, from_none], self.id)
-        result["schema"] = from_union([lambda x: to_enum(SchemaEnum, x), from_none], self.schema)
+        result["schema"] = from_union([lambda x: to_class(ContentSchema, x), lambda x: to_enum(SchemaEnum, x), from_none], self.schema)
         return result
 
 @dataclass

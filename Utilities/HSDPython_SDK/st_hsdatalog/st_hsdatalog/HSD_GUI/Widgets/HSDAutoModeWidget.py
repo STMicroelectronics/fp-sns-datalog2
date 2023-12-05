@@ -1,12 +1,25 @@
+
+# ******************************************************************************
+# * @attention
+# *
+# * Copyright (c) 2022 STMicroelectronics.
+# * All rights reserved.
+# *
+# * This software is licensed under terms that can be found in the LICENSE file
+# * in the root directory of this software component.
+# * If no LICENSE file comes with this software, it is provided AS-IS.
+# *
+# *
+# ******************************************************************************
+#
+
 import os
 from functools import partial
-from PySide6.QtGui import QValidator
-from PySide6.QtCore import Qt, QTime, QTimer, Slot
+from PySide6.QtCore import Qt, QTimer, Slot
 from PySide6.QtWidgets import QFrame, QSpinBox, QLabel
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
-from st_dtdl_gui.UI.styles import STDTDL_SpinBox
-from st_dtdl_gui.Widgets.PropertyWidget import PropertyWidget
+from st_dtdl_gui.Utils import UIUtils
 from st_dtdl_gui.Widgets.ToggleButton import ToggleButton
 
 import st_hsdatalog
@@ -74,13 +87,11 @@ class HSDAutoModeWidget(ComponentWidget):
                 self.assign_callbacks(self.property_widgets[pw], "boolean")
             elif pw == "nof_acquisitions":
                 self.property_widgets[pw].value = nof_acq_value
+                nof_acq_info.setVisible(True)
                 if min_val != None or max_val != None:
-                    nof_acq_info.setVisible(True)
                     nof_acq_info.setToolTip(range_value_str)
-                else:
-                    nof_acq_info.setVisible(False)
-                # self.assign_callbacks(self.property_widgets[pw], "integer")
-                self.property_widgets[pw].value.textChanged.connect(partial(self.validate_value, self.property_widgets[pw]))
+                self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, self.property_widgets[pw]))
+                self.assign_callbacks(self.property_widgets[pw], "integer")
             elif pw == "start_delay_s" or pw == "start_delay_ms":
                 self.property_widgets[pw].value = start_delay_value
                 if min_val != None or max_val != None:
@@ -88,7 +99,8 @@ class HSDAutoModeWidget(ComponentWidget):
                     idle_period_info.setToolTip(range_value_str)
                 else:
                     idle_period_info.setVisible(False)
-                self.property_widgets[pw].value.textChanged.connect(partial(self.validate_value, self.property_widgets[pw]))
+                self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, self.property_widgets[pw]))
+                self.assign_callbacks(self.property_widgets[pw], "integer")
             elif pw == "logging_period_s" or pw == "datalog_time_length":
                 self.property_widgets[pw].value = log_period_value
                 if min_val != None or max_val != None:
@@ -96,7 +108,8 @@ class HSDAutoModeWidget(ComponentWidget):
                     log_period_info.setToolTip(range_value_str)
                 else:
                     log_period_info.setVisible(False)
-                self.property_widgets[pw].value.textChanged.connect(partial(self.validate_value, self.property_widgets[pw]))
+                self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, self.property_widgets[pw]))
+                self.assign_callbacks(self.property_widgets[pw], "integer")
             elif pw == "idle_period_s" or pw == "idle_time_length":
                 if min_val != None or max_val != None:
                     start_delay_info.setVisible(True)
@@ -104,26 +117,15 @@ class HSDAutoModeWidget(ComponentWidget):
                 else:
                     start_delay_info.setVisible(False)
                 self.property_widgets[pw].value = idle_period_value
-                self.property_widgets[pw].value.textChanged.connect(partial(self.validate_value, self.property_widgets[pw]))
+                self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, self.property_widgets[pw]))
+                self.assign_callbacks(self.property_widgets[pw], "integer")
 
         automode_status = self.controller.get_component_status(comp_name).get(comp_name).get("enabled")
         self.controller.set_automode_enabled(automode_status if automode_status is not None else False)
         self.is_waiting_idle = False
 
-        self.layout().setContentsMargins(0,0,0,0)
-        self.contents_widget.layout().setContentsMargins(9,0,9,0)
         self.contents_widget.layout().addWidget(auto_mode_widget.frame_auto_mode)
         self.contents_widget.setVisible(True)
-    
-    def validate_value(self, widget, text_value):
-        validation_res = widget.validator.validate(text_value,0)
-        if isinstance(validation_res, tuple):
-            validation_res = validation_res[0]
-        if validation_res == QValidator.State.Acceptable:
-            widget.value.setStyleSheet(STDTDL_SpinBox.valid)
-            self.send_int_command(widget)
-        else:
-            widget.value.setStyleSheet(STDTDL_SpinBox.invalid)
 
     @Slot(bool)
     def s_is_logging(self, status:bool, interface:int):
@@ -172,9 +174,6 @@ class HSDAutoModeWidget(ComponentWidget):
         self.is_waiting_logging = status
         if status:
             self.digital_clock_timer.start(1000)
-        # else:
-        #     self.digital_clock_timer.stop()
-        #     self.title_label.setText("Automatic Mode")
 
     def is_idle_auto_start(self, status):
         self.elapsed_time = 0

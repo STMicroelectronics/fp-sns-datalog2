@@ -915,8 +915,8 @@ static sys_error_code_t IMP34DT05TaskExecuteStepDatalog(AManagedTask *_this)
         uint16_t samples = (uint16_t)(p_obj->sensor_status.type.audio.frequency / 1000u);
 
         /* Workaround: IMP34DT05 data are unstable for the first samples -> avoid sending data */
-        if (timestamp > 0.3f)
-        {
+//        if (timestamp > 0.3f)
+//        {
 #if (HSD_USE_DUMMY_DATA == 1)
           IMP34DT05TaskWriteDummyData(p_obj);
           EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
@@ -929,7 +929,7 @@ static sys_error_code_t IMP34DT05TaskExecuteStepDatalog(AManagedTask *_this)
           IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
           SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP34DT05: ts = %f\r\n", (float)timestamp));
-        }
+//        }
         break;
       }
       case SM_MESSAGE_ID_SENSOR_CMD:

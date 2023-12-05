@@ -19,9 +19,10 @@ from PySide6.QtWidgets import QLabel, QLineEdit, QComboBox, QRadioButton, QPushB
 from PySide6.QtGui import QValidator, QPixmap, QDoubleValidator, QIntValidator
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
+from st_dtdl_gui.UI.styles import STDTDL_RadioButton
 from st_dtdl_gui.Utils.DataClass import TypeEnum, UnitMap
 
-from st_pnpl.DTDL.device_template_model import Content
+from st_pnpl.DTDL.device_template_model import Content, ContentSchema
 
 import st_dtdl_gui.UI.icons #NOTE don't delete this! it is used from resource_filename (@row 35..38)
 from pkg_resources import resource_filename
@@ -50,12 +51,14 @@ class CharCounterValidator(QValidator):
                 return QValidator.State.Invalid
 
 class SubPropertyWidget(QWidget):
-    def __init__(self, comp_name, comp_sem_type, object_name, prop_name, fields, is_writable, parent=None):
+    # comp_name, self.comp_sem_type, self.prop_name, label, value, self.is_writable, self
+    def __init__(self, comp_name, comp_sem_type, prop_name, label, fields, is_writable, parent=None):
         super().__init__(parent)
         QPyDesignerCustomWidgetCollection.registerCustomWidget(SubPropertyWidget, module="SubPropertyWidget")
         loader = QUiLoader()
         self.comp_name = comp_name
-        self.object_name = object_name
+        self.prop_name = prop_name
+        self.label = label
         comp_config_widget = loader.load(os.path.join(os.path.dirname(st_dtdl_gui.__file__),"UI","component_config_widget.ui"), parent)
         frame_component_config = comp_config_widget.findChild(QFrame,"frame_component_config")
         frame_component_config.setStyleSheet("QFrame { border-radius: 5px; border: 2px solid rgb(27, 29, 35);}")
@@ -66,7 +69,7 @@ class SubPropertyWidget(QWidget):
         comp_config_widget.layout().setContentsMargins(0,0,0,0)
         
         title_label = title_frame.findChild(QLabel,"label_title")
-        title_label.setText(prop_name.upper())
+        title_label.setText(self.label.upper())
         self.annotation_label = title_frame.findChild(QLabel,"label_annotation")
         self.annotation_label.setVisible(False)
         pushButton_show = title_frame.findChild(QPushButton, "pushButton_show")
@@ -86,16 +89,19 @@ class SubPropertyWidget(QWidget):
         component_props_layout.setVerticalSpacing(3)
         sub_widgets = []
         for i,f in enumerate(fields):
-            schema_type = f.schema.value
-            field_name = f.name
-            field_dname = f.display_name if isinstance(f.display_name,str) else f.display_name.en
-            sub_p_content = Content(name=object_name, type="", schema=schema_type, display_name=field_dname, writable=is_writable)
-            # sub_widget = PropertyWidget(comp_name, "None", self.object_name, field_dname, "", schema_type, is_writable, None, field_name, parent)
-            sub_widget = PropertyWidget(comp_name, comp_sem_type, sub_p_content, field_name, parent)
-            # sub_widget.setStyleSheet("background: #AAFF00")
-            # sub_widget.layout().setContentsMargins(0,0,0,0)
-            sub_widgets.append(sub_widget)
-            component_props_layout.addWidget(sub_widget, i, 0)
+            if isinstance(f.schema, ContentSchema):
+                ssp_widget = SubPropertyWidget(comp_name, comp_sem_type, [prop_name, f.name], f.name, f.schema.fields, True, self)
+                ssp_widget.layout().setContentsMargins(0,6,0,0)
+                sub_widgets.append(ssp_widget)
+                component_props_layout.addWidget(ssp_widget, i, 0)
+            else:
+                schema_type = f.schema.value
+                field_name = f.name
+                field_dname = f.display_name if isinstance(f.display_name,str) else f.display_name.en
+                sub_p_content = Content(name=prop_name, type="", schema=schema_type, display_name=field_dname, writable=is_writable)
+                sub_widget = PropertyWidget(comp_name, comp_sem_type, sub_p_content, field_name, parent)
+                sub_widgets.append(sub_widget)
+                component_props_layout.addWidget(sub_widget, i, 0)
         self.widget = MultiPropertyWidget(sub_widgets)
 
         component_props_frame.setLayout(component_props_layout)
@@ -205,7 +211,7 @@ class PropertyWidget(QWidget):
                 self.value.setText(self.initial_value)
         
         # Double Property
-        elif self.prop_type == TypeEnum.DOUBLE.value:
+        elif self.prop_type == TypeEnum.DOUBLE.value or self.prop_type == TypeEnum.FLOAT.value:
             self.validator = QDoubleValidator()
             if self.decimal_places is not None:
                 self.validator.setDecimals(self.decimal_places)
@@ -250,6 +256,7 @@ class PropertyWidget(QWidget):
         # Boolean Property
         elif self.prop_type == TypeEnum.BOOLEAN.value:
             self.value = QRadioButton(value)
+            self.value.setStyleSheet(STDTDL_RadioButton.valid)
             true_false_description = ""
             if self.true_name is not None:
                 self.icon.setVisible(True)
@@ -278,7 +285,7 @@ class PropertyWidget(QWidget):
             for v in value:
                 keys.append(v.name)
             if set(["max","min","val"]) == set(keys) and not self.has_bounds:
-                if value[0].schema.value == TypeEnum.DOUBLE.value:
+                if value[0].schema.value == TypeEnum.DOUBLE.value or value[0].schema.value == TypeEnum.FLOAT.value:
                     self.field_name = "val"
                     self.validator = QDoubleValidator(0,1000,self)
                     self.value = QLineEdit("0")

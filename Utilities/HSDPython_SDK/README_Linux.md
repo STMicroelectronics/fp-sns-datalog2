@@ -12,7 +12,7 @@ To properly use it, Python 3.10 or above must be already installed on the machin
 	- **dos2unix HSDPython_SDK_install.sh HSDPython_SDK_install_noGUI.sh HSDPython_SDK_uninstall.sh**
 	- **chmod 777 HSDPython_SDK_install.sh HSDPython_SDK_install_noGUI.sh HSDPython_SDK_uninstall.sh**
 	
-- Install the SDK by launching **./HSDPython_SDK_install.sh**. The script will install all the wheels with the required dependencies and will create and enable a virtual environment.
+- Install the SDK by launching **./HSDPython_SDK_install.sh**. The script will install all the wheels with the required dependencies.
 
 	- If you are behind a proxy server you must launch the installer script in this way: **./HSDPython_SDK_install.sh http://usr_name:password@proxyserver_name:port**
 	- If you have special characters in your password you will have to replace them with their correspondent hex representation. E.g. '&' --> %26
@@ -28,8 +28,6 @@ To properly use it, Python 3.10 or above must be already installed on the machin
 - Reboot to be sure to reload USB udev rules
 
 - Reopen a terminal from HSDPython_SDK folder
-
-- Activate the .venv venv automatically created from the install script by executing **source .venv/bin/activate**
 
 - **cd examples**
 

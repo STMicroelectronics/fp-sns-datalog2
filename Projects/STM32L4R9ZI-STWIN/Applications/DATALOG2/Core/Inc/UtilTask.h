@@ -198,7 +198,6 @@ sys_error_code_t UtilTask_GetBatteryStatus(uint8_t *batt_percentage, uint8_t *st
  * @return error value.
  */
 void SwitchBank(void);
-bool Util_SD_IsDetected(void);
 
 /* Inline functions definition */
 /*******************************/

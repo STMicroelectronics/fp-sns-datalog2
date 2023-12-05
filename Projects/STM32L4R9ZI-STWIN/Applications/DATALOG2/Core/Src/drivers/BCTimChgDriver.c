@@ -110,7 +110,7 @@ sys_error_code_t BCTimChgDriver_vtblStart(IDriver *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   BCTimChgDriver_t *p_obj = (BCTimChgDriver_t*)_this;
 
-  if(HAL_TIM_IC_Start_IT(p_obj->mx_handle.p_mx_tim_cfg->p_tim, TIM_CHANNEL_1) != HAL_OK)
+  if(HAL_TIM_IC_Start_IT(p_obj->mx_handle.p_mx_tim_cfg->p_tim, TIM_CHANNEL_3) != HAL_OK)
   {
     sys_error_handler();
   }
@@ -124,7 +124,7 @@ sys_error_code_t BCTimChgDriver_vtblStop(IDriver *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   BCTimChgDriver_t *p_obj = (BCTimChgDriver_t*)_this;
 
-  if((HAL_TIM_IC_Stop_IT(p_obj->mx_handle.p_mx_tim_cfg->p_tim, TIM_CHANNEL_1))!=HAL_OK)
+  if((HAL_TIM_IC_Stop_IT(p_obj->mx_handle.p_mx_tim_cfg->p_tim, TIM_CHANNEL_3))!=HAL_OK)
   {
     sys_error_handler();
   }

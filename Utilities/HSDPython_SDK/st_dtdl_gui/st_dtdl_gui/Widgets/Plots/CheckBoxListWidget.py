@@ -1,10 +1,20 @@
-import math
-import random
 
+# ******************************************************************************
+# * @attention
+# *
+# * Copyright (c) 2022 STMicroelectronics.
+# * All rights reserved.
+# *
+# * This software is licensed under terms that can be found in the LICENSE file
+# * in the root directory of this software component.
+# * If no LICENSE file comes with this software, it is provided AS-IS.
+# *
+# *
+# ******************************************************************************
+#
 
-from PySide6.QtWidgets import QWidget, QCheckBox
-from PySide6.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient
-from PySide6.QtCore import Qt, QTimer, QPoint, QPointF, QRect, QSize, QObject, Signal, Slot
+from PySide6.QtWidgets import QCheckBox, QVBoxLayout
+from PySide6.QtCore import Signal, Slot
 
 from st_dtdl_gui.Widgets.Plots.PlotWidget import PlotWidget
 
@@ -19,21 +29,24 @@ class CheckBoxListWidget(PlotWidget):
         for i in reversed(range(self.layout().count())): 
             self.layout().itemAt(i).widget().setParent(None)
         
+        main_layout = QVBoxLayout()
+        self.setLayout(main_layout)
+        self.layout().setSpacing(3)
+
         self.checkBoxList = []
         self.l_data = 0
-        self.prev_data = 0
+        self.prev_data = -1
         self.labels_list = labels_list
 
-
+        main_layout = QVBoxLayout()
         for a in range(len(self.labels_list)):
             self.checkBoxList.append(QCheckBox(str(self.labels_list[a])))
             self.checkBoxList[a].setEnabled(False)
             self.layout().addWidget(self.checkBoxList[a])        
-        # self.setMinimumSize(200,200)
     
     @Slot(bool, int)
     def s_is_logging(self, status: bool, interface: int):
-        if interface == 1:
+        if interface == 1 or interface == 3:
             print("Component {} is logging via USB: {}".format(self.comp_name,status))
             if status:
                 self.buffering_timer_counter = 0
@@ -46,15 +59,16 @@ class CheckBoxListWidget(PlotWidget):
     def update_plot(self):
         if self.l_data != 0:
             if self.l_data != self.prev_data:
-                data = self.l_data -1
+                data = self.l_data
                 self.checkBoxList[int(data)].setChecked(True)
+                self.checkBoxList[0].setChecked(False)
         else:
             if self.l_data != self.prev_data:
                 for idx in range(len(self.labels_list)):
                     self.checkBoxList[int(idx)].setChecked(False)
+                self.checkBoxList[0].setChecked(True)
         self.prev_data = self.l_data
         self.update()
-        # pass #TODO
     
     def add_data(self, data):
         self.l_data = data[0]

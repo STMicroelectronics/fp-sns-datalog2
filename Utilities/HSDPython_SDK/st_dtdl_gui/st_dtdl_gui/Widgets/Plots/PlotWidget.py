@@ -16,7 +16,7 @@
 from abc import abstractmethod
 import os
 
-from PySide6.QtCore import Qt, Slot, QSize, QTimer
+from PySide6.QtCore import Qt, Slot, QTimer
 from PySide6.QtGui import QPainter, QFont, QScreen
 from PySide6.QtWidgets import QWidget, QFrame, QVBoxLayout, QPushButton, QSizePolicy
 from PySide6.QtUiTools import QUiLoader
@@ -94,6 +94,12 @@ class PlotWidget(QWidget):
         self.is_out_fmt_displayed = False
         self.pushButton_plot_settings.setVisible(False)
         self.load_output_fmt_frame.setVisible(False)
+
+        #Hide Time/Freq settings frame
+        self.time_freq_setting_frame = self.plot_widget.frame_plot.findChild(QFrame, "frame_time_freq_settings")
+        self.is_time_freq_settings_displayed = False
+        self.pushButton_plot_settings.setVisible(False)
+        self.time_freq_setting_frame.setVisible(False)
             
         #Hide FFT settings frame
         self.fft_settings_frame = self.plot_widget.frame_plot.findChild(QFrame, "frame_fft_settings")
@@ -134,8 +140,9 @@ class PlotWidget(QWidget):
         style = pg.PlotDataItem(pen='w')
         self.legend.anchor((0,0), (0,0))
         self.legend.addItem(style, 'coords')
+        self.legend.items[0][0].deleteLater()
         
-        #cross hair in signalgraph
+        #crosshair in signalgraph
         crosshair_pen=pg.mkPen(color='#484A4F', style=Qt.DashLine)
         vLine = pg.InfiniteLine(angle=90, movable=False, pen=crosshair_pen)
         hLine = pg.InfiniteLine(angle=0, movable=False, pen=crosshair_pen)

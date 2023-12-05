@@ -80,7 +80,7 @@ sys_error_code_t AnalogMicDriver_vtblInit(IDriver *_this, void *p_params)
   {
     /* initialize the ADC */
     p_obj->p_mx_adc_cfg = p_init_params->p_mx_adc_cfg;
-    p_obj->p_mx_adc_cfg->p_mx_init_f();
+    p_obj->p_mx_adc_cfg->p_mx_init_f(ADC1_FOR_AUDIO);
 
     /* Start the calibration */
     if (HAL_ADCEx_Calibration_Start(p_obj->p_mx_adc_cfg->p_adc, ADC_SINGLE_ENDED) != HAL_OK)

@@ -77,13 +77,13 @@ def hsd_toUnico(acq_folder, output_folder, sensor_name, start_time, end_time, us
             component_list = HSDatalog.get_all_components(hsd, only_active=True)
             for component in component_list:
                 sensor = __get_sensor_comp(hsd, component)
-                convert_data(hsd, sensor, start_time, end_time, use_datalog_tags, output_folder, out_format)
+                convert_data(hsd, sensor, start_time, end_time, use_datalog_tags, output_folder, out_format, acq_folder)
             df_flag = False
         else:
             component = HSDatalog.get_component(hsd, sensor_name)
             if component is not None:
                 sensor = __get_sensor_comp(hsd, component)
-                convert_data(hsd, sensor, start_time, end_time, use_datalog_tags, output_folder, out_format)
+                convert_data(hsd, sensor, start_time, end_time, use_datalog_tags, output_folder, out_format, acq_folder)
             else:
                 log.error("No \"{}\" Component found in your Device Configuration file.".format(sensor_name))
             df_flag = False

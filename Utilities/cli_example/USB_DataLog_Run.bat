@@ -25,6 +25,6 @@ REM -t <seconds>: Duration of the current acquisition (seconds)
 
 set PATH=%PATH%;.\bin_64\
 
-cli_example.exe -f ..\STWIN.box_config_examples\device_config.json -t 100
+cli_example.exe -t 100
 
 pause

@@ -782,7 +782,7 @@ sys_error_code_t LPS22DFTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (float) odr
+      .sensorMessage.fParam = (float) odr
     };
     res = LPS22DFTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -810,7 +810,7 @@ sys_error_code_t LPS22DFTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) fs
+      .sensorMessage.fParam = (float) fs
     };
     res = LPS22DFTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1444,7 +1444,7 @@ static sys_error_code_t LPS22DFTaskSensorSetODR(LPS22DFTask *_this, SMMessage re
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  float odr = (float) report.sensorMessage.nParam;
+  float odr = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   lps22df_md_t md;

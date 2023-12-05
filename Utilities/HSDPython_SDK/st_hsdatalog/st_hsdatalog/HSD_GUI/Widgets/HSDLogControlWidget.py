@@ -47,6 +47,7 @@ class HSDLogControlWidget(ComponentWidget):
         self.is_waiting_to_start = False
         self.is_logging = False
         self.parent_widget = parent
+        self.hsd = None
 
         self.sd_mounted_label = QLabel()
         # clear all widgets in contents_widget layout (contents)
@@ -76,7 +77,7 @@ class HSDLogControlWidget(ComponentWidget):
         self.frame_sub_log_info.setVisible(False)
         
         # # Available interfaces Refresh button        
-        self.sd_mounted = self.controller.hsd_link.get_boolean_property(0,"log_controller","sd_mounted")
+        self.sd_mounted = self.controller.get_sd_mounted_status()
         # # self.sd_mounted.setFixedHeight(0)
         # # self.sd_mounted_label.setText("SD Mounted") if self.sd_mounted else self.sd_mounted_label.setText("SD NOT Mounted")
         # # self.__update_sd_status_label()
@@ -186,7 +187,7 @@ class HSDLogControlWidget(ComponentWidget):
         self.contents_widget.setVisible(True)
     
     def update_sd_status_label(self):
-        self.sd_mounted = self.controller.hsd_link.get_boolean_property(0,"log_controller","sd_mounted")
+        self.sd_mounted = self.controller.get_sd_mounted_status()#hsd_link.get_boolean_property(0,"log_controller","sd_mounted")
         if self.sd_mounted:
             self.sd_mounted_label.setText("SD Mounted")
             self.sd_mounted_label.setStyleSheet("color: #99FF33;")
@@ -258,7 +259,7 @@ class HSDLogControlWidget(ComponentWidget):
         tag_label = self.tags_label_combo.currentText()
         self.s_start = self.st_spinbox.value()
         self.s_end = self.et_spinbox.value()
-        self.controller.do_offline_plots(cb_sensor_value, tag_label, self.s_start, self.s_end, self.active_sensor_list, self.active_algorithm_list, self.debug_flag, self.sub_plots_flag, self.raw_data_flag)
+        self.controller.do_offline_plots(cb_sensor_value, tag_label, self.s_start, self.s_end, self.active_sensor_list, self.active_algorithm_list, self.debug_flag, self.sub_plots_flag, self.raw_data_flag, self.active_actuator_list)
     
     @Slot()
     def s_offline_plots_completed(self):
@@ -383,18 +384,21 @@ class HSDLogControlWidget(ComponentWidget):
             self.st_spinbox.setEnabled(True)
             self.et_spinbox.setEnabled(True)
 
-            acquisition_folder = self.controller.hsd_link.get_acquisition_folder()
+            acquisition_folder = self.controller.get_acquisition_folder()
             hsd_factory = HSDatalog()
             self.hsd= hsd_factory.create_hsd(acquisition_folder)
             
             self.active_sensor_list = self.hsd.get_sensor_list(only_active=True)
             self.active_algorithm_list = self.hsd.get_algorithm_list(only_active=True)
+            self.active_actuator_list = self.hsd.get_actuator_list(only_active=True)
             self.ds_component_names_combo.clear()
             self.ds_component_names_combo.addItem("all")
             for s in self.active_sensor_list:
                 self.ds_component_names_combo.addItem(list(s.keys())[0])
             for a in self.active_algorithm_list:
-                self.ds_component_names_combo.addItem(list(a.keys())[0]) 
+                self.ds_component_names_combo.addItem(list(a.keys())[0])
+            for act in self.active_actuator_list:
+                self.ds_component_names_combo.addItem(list(act.keys())[0])
             self.ds_component_names_combo.setCurrentIndex(0)
             
             tags_label_list = self.hsd.get_acquisition_label_classes()

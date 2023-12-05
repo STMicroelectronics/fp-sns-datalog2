@@ -28,7 +28,6 @@ from enum import Enum
 from PySide6.QtCore import Signal, QThread, QObject
 from PySide6.QtWidgets import QFileDialog
 
-from st_pnpl.DTDL import device_template_model as DTM
 import st_pnpl.DTDL.dtdl_utils as DTDLUtils
 
 from st_hsdatalog.HSD.HSDatalog import HSDatalog
@@ -36,7 +35,7 @@ from st_hsdatalog.HSD_link.HSDLink import HSDLink
 from st_hsdatalog.HSD_link.HSDLink_v1 import HSDLink_v1
 
 from st_hsdatalog.HSD_GUI.Widgets.HSDPlotLinesWidget import HSDPlotLinesWidget
-from st_dtdl_gui.Utils.DataClass import AnomalyDetectorModelPlotParams, LinesPlotParams, MCTelemetriesPlotParams, PlotCheckBoxParams, PlotGaugeParams, PlotLabelParams, PlotLevelParams, SensorAudioPlotParams, SensorMemsPlotParams, SensorPlotParams, FFTAlgPlotParams, ClassificationModelPlotParams, DataClass, SensorRangingPlotParams, UnitMap
+from st_dtdl_gui.Utils.DataClass import AnomalyDetectorModelPlotParams, PlotPAmbientParams, PlotPMotionParams, PlotPObjectParams, PlotPPresenceParams, SensorAudioPlotParams, SensorLightPlotParams, SensorMemsPlotParams, FFTAlgPlotParams, ClassificationModelPlotParams, DataClass, SensorPresenscePlotParams, SensorRangingPlotParams, UnitMap
 from st_dtdl_gui.Utils.DataReader import DataReader
 from st_dtdl_gui.STDTDL_Controller import ComponentType, STDTDL_Controller
 
@@ -75,10 +74,10 @@ class HSD_Controller(STDTDL_Controller):
             class EmptyDataTimer(QObject):
                 timeout_signal = Signal()
 
-                def __init__(self):
+                def __init__(self, comp_name):
                     super().__init__()
                     self.interrupt_event = Event()
-                    self.timeout = 3                    
+                    self.timeout = 5 #if "_tof" in comp_name else 3             
 
                 def run_wait(self):
                     self.interrupt_event = Event()
@@ -101,7 +100,7 @@ class HSD_Controller(STDTDL_Controller):
             self.prev_cnt = 0
 
             self.objThread = QThread()
-            self.obj = EmptyDataTimer()
+            self.obj = EmptyDataTimer(comp_name)
             self.obj.moveToThread(self.objThread)
             self.obj.timeout_signal.connect(self.raise_empty_data_error)
             self.objThread.started.connect(self.obj.run_wait)
@@ -109,7 +108,8 @@ class HSD_Controller(STDTDL_Controller):
         def raise_empty_data_error(self):
             error_msg = "No data from {} Component.\nRestart the acquisition lowering component ODR to acquire data correctly.\nHave a look in {} log file for more detailed info.".format(self.comp_name, log_file_name if log_file_name is not None else "application")
             log.error(error_msg)
-            self.sig_streaming_error.emit(True, error_msg)
+            if self.sig_streaming_error is not None:
+                self.sig_streaming_error.emit(True, error_msg)
         
         def run(self):
             while not self.stopped.wait(0.02):
@@ -195,7 +195,7 @@ class HSD_Controller(STDTDL_Controller):
     
     def get_device_formatted_name(self, device):
         if isinstance(device, dict) and "devices" in device:
-            fw_info_tmp = [c for c in device["devices"][0]["components"] if "firmware_info" in list(c.keys())[0]]
+            fw_info_tmp = [c for c in device["devices"][0]["components"] if list(c.keys()) != [] and "firmware_info" in list(c.keys())[0]]
             if len(fw_info_tmp) == 1:
                 fw_info = fw_info_tmp[0]["firmware_info"]
                 d_alias = fw_info["alias"]
@@ -309,6 +309,18 @@ class HSD_Controller(STDTDL_Controller):
             odr_value = odr_value.replace(',','.')
             return float(odr_value)
         return 1
+    
+    def __get_ranging_sensor_odr(self, comp_status):
+        if "odr" in comp_status:
+            odr_value = comp_status["odr"]
+            return float(odr_value)
+        return None
+    
+    def __get_light_sensor_odr(self, comp_status):
+        if "intermeasurement_time" in comp_status:
+            itime_value = comp_status["intermeasurement_time"]
+            return float(1/itime_value)
+        return None
 
     def __get_audio_sensor_odr(self, comp_status, comp_interface):
         return self.__get_mems_sensor_odr(comp_status, comp_interface)
@@ -344,7 +356,6 @@ class HSD_Controller(STDTDL_Controller):
     def __get_mc_telemetry_unit(self, telemetry_status, comp_interface):
         print(telemetry_status)
         pass
-        # return self.__get_sensor_unit("aop", telemetry_status, comp_interface)
 
     def get_description_string(content):
         if content.description is not None:
@@ -369,11 +380,17 @@ class HSD_Controller(STDTDL_Controller):
                     unit = self.__get_audio_sensor_unit(comp_status_value, comp_interface)
                     return SensorAudioPlotParams(comp_name, enabled, odr, dimension, unit)
                 elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_RANGING.value:
-                    log.warning("ISENSOR_CLASS_RANGING category not supported yet")
-                    unit = self.__get_ranging_sensor_unit(comp_status_value, comp_interface)
-                    return SensorRangingPlotParams(comp_name, enabled, dimension, unit)
+                    resolution = comp_status_value.get("resolution")
+                    return SensorRangingPlotParams(comp_name, enabled, dimension, resolution)
                 elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
-                    log.warning("ISENSOR_CLASS_LIGHT category not supported yet")
+                    return SensorLightPlotParams(comp_name, enabled, dimension)
+                elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_PRESENCE.value:
+                    plots_params_dict = {}
+                    plots_params_dict["Ambient"] = PlotPAmbientParams(comp_name, enabled, 1)
+                    plots_params_dict["Object"] = PlotPObjectParams(comp_name, enabled, 4)
+                    plots_params_dict["Presence"] = PlotPPresenceParams(comp_name, enabled, 3)
+                    plots_params_dict["Motion"] = PlotPMotionParams(comp_name, enabled, 3)
+                    return SensorPresenscePlotParams(comp_name, enabled, plots_params_dict)
                 elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_CAMERA.value:
                     log.warning("ISENSOR_CLASS_CAMERA category not supported yet")
                 else: #Maintain compatibility with OLD versions (< SensorManager v3 [NO SENSOR CATEGORIES])
@@ -406,38 +423,8 @@ class HSD_Controller(STDTDL_Controller):
                                                               num_of_class= comp_status_value["dim"])
             
             elif comp_type.name == ComponentType.ACTUATOR.name:
-                
-                comp_status_value = comp_status[comp_name]
-                enabled = False #comp_status_value["enable"]
-                
-                plot_params_dict = {}
-                if comp_name == DTDLUtils.MC_SLOW_TELEMETRY_COMP_NAME:
-                    telemetry_contents = [ci for ci in comp_interface.contents if HSD_Controller.get_description_string(ci) == DTDLUtils.MC_SLOW_TELEMETRY_STRING]
-                    for t in telemetry_contents:
-                        t_display_name = t.display_name if isinstance(t.display_name, str) else t.display_name.en
-                        t_unit = comp_status_value[t.name].get("unit") #self.__get_mc_telemetry_unit(comp_status_value[t.name], comp_interface)
-                        t_enabled = comp_status_value[t.name].get("enabled")
-                        t_type = comp_status_value[t.name].get("graph_type")
-                        if t_type == DTDLUtils.GraphTypeEnum.GAUGE.value:
-                            plot_params_dict[t_display_name] = PlotGaugeParams(t.name, t_enabled, comp_status_value[t.name].get("min"), comp_status_value[t.name].get("max"), t_unit)
-                        elif t_type == DTDLUtils.GraphTypeEnum.V_LEVEL.value:
-                            plot_params_dict[t_display_name] = PlotLevelParams(t.name, t_enabled, comp_status_value[t.name].get("min"), comp_status_value[t.name].get("max"), t_unit)
-                        elif t_type == DTDLUtils.GraphTypeEnum.LABEL.value:
-                            plot_params_dict[t_display_name] = PlotLabelParams(t.name, t_enabled, comp_status_value[t.name].get("min"), comp_status_value[t.name].get("max"), t_unit)
-                        elif t_type == DTDLUtils.GraphTypeEnum.CHECKBOX.value:
-                            plot_params_dict[t_display_name] = PlotCheckBoxParams(t.name, t_enabled, ["aaa", "bbb", "ccc"])
-                        elif t_type == DTDLUtils.GraphTypeEnum.LINE.value:
-                            plot_params_dict[t_display_name] = LinesPlotParams(t.name, t_enabled, 1, t_unit)
-                elif comp_name == DTDLUtils.MC_FAST_TELEMETRY_COMP_NAME:
-                    telemetry_contents = [ci for ci in comp_interface.contents if HSD_Controller.get_description_string(ci) == DTDLUtils.MC_FAST_TELEMETRY_STRING]
-                    for t in telemetry_contents:
-                        t_display_name = t.display_name if isinstance(t.display_name, str) else t.display_name.en
-                        t_unit = comp_status_value[t.name].get("unit") #self.__get_mc_telemetry_unit(comp_status_value[t.name], comp_interface)
-                        t_enabled = comp_status_value[t.name].get("enabled")
-                        plot_params_dict[t_display_name] = LinesPlotParams(t.name, t_enabled, 1, t_unit)
-                if len([tt for tt in plot_params_dict if plot_params_dict[tt].enabled]) > 0:
-                    enabled = True
-                return MCTelemetriesPlotParams(comp_name, enabled, plot_params_dict)
+                pass
+            
         return None
     
     def fill_component_status(self, comp_name):
@@ -449,15 +436,6 @@ class HSD_Controller(STDTDL_Controller):
             else:
                 log.warning("The component [{}] defined in DeviceTemplate has not a Twin in Device Status from the FW".format(comp_name))
                 self.sig_component_updated.emit(comp_name, None)
-                # has_cmd_or_tele_contents = False
-                # contents = self.components_dtdl[comp_name].contents 
-                # for c in contents:
-                #     if isinstance(c.type, list):
-                #         has_cmd_or_tele_contents = len([cc for cc in c.type if cc == DTM.ContentType.COMMAND or cc == DTM.ContentType.TELEMETRY]) > 0
-                #     else:
-                #         has_cmd_or_tele_contents = len([c for c in contents if c.type == DTM.ContentType.COMMAND or c.type == DTM.ContentType.TELEMETRY]) > 0
-                #     if has_cmd_or_tele_contents == True:
-                #         return
                 self.remove_component_config_widget(comp_name)
         except:
             log.warning("The component [{}] defined in DeviceTemplate has not a Twin in Device Status from the FW".format(comp_name))
@@ -477,13 +455,11 @@ class HSD_Controller(STDTDL_Controller):
                 self.sig_sensor_component_updated.emit(comp_name, plot_params)
                 self.check_hsd_bandwidth()
             elif  ct == ComponentType.ALGORITHM.name:
-                # comp_status_value = comp_status[comp_name]
-                # self.components_status[comp_name] = comp_status_value
-                # plot_params = AlgorithmPlotParams(comp_name,comp_status_value["enable"], "")
                 plot_params = self.get_plot_params(comp_name, comp_type, self.components_dtdl[comp_name], comp_status)
                 self.sig_algorithm_component_updated.emit(comp_name, plot_params)
             elif ct == ComponentType.ACTUATOR.name:
                 plot_params = self.get_plot_params(comp_name, comp_type, self.components_dtdl[comp_name], comp_status)
+                comp_status = self.get_component_status(comp_name)
                 self.sig_actuator_component_updated.emit(comp_name, plot_params)
             self.sig_component_updated.emit(comp_name, comp_status[comp_name])
         else:
@@ -584,13 +560,15 @@ class HSD_Controller(STDTDL_Controller):
                     spts = c_status_value.get("samples_per_ts", 1)
                     sample_size = TypeConversion.check_type_length(c_status_value["data_type"])
                     data_format = TypeConversion.get_format_char(c_status_value["data_type"])
-                    
+                    s_category = None
+
                     interleaved_data = True
                     raw_flat_data = False
 
                     if c_type == ComponentType.SENSOR.value:
                         if not isinstance(spts, int):
                             spts = spts["val"] if spts and "val" in spts else spts
+                        s_category = c_status_value.get("sensor_category")
                         
                     elif c_type == ComponentType.ALGORITHM.value:
                         spts = 0 #spts override (no timestamps in algorithms @ the moment)
@@ -610,6 +588,10 @@ class HSD_Controller(STDTDL_Controller):
                         dimensions = 64
                         sample_size = 1
                         raw_flat_data = True
+                    
+                    if s_category is not None:
+                        if s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_RANGING.value:
+                            raw_flat_data = True
                     
                     dr = DataReader(self, s_plot.comp_name, spts, dimensions, sample_size, data_format, sensitivity, interleaved_data, raw_flat_data)
                     self.data_readers.append(dr)
@@ -708,20 +690,27 @@ class HSD_Controller(STDTDL_Controller):
             # bnd = ODR*(data_type*dim)*8
             ss_status = sensors_status[ss]
             ss_dtdl_comp = self.components_dtdl[ss]
-            odr = self.__get_mems_sensor_odr(ss_status, ss_dtdl_comp)
-            # odr_enum_id = ss_status.get("odr")
-            # odr_enum_dname = [c for c in ss_dtdl_comp.contents if c.name == "odr"][0].schema.enum_values[odr_enum_id].display_name
-            # odr_value = odr_enum_dname if isinstance(odr_enum_dname,str) else odr_enum_dname.en
-            # odr_value = odr_value.replace(',','.')
-            # odr = float(odr_value)
-            data_byte_len = TypeConversion.check_type_length(ss_status.get("data_type"))
-            dim = ss_status.get("dim")                                                             
-            self.curr_bandwidth += odr * data_byte_len * dim * 8
+            ss_category = ss_status.get("sensor_category")
+            if ss_category is not None:
+                if ss_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_MEMS.value \
+                    or ss_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_AUDIO.value \
+                    or ss_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_PRESENCE.value:
+                    odr = self.__get_mems_sensor_odr(ss_status, ss_dtdl_comp)
+                elif ss_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_RANGING.value:
+                    odr = self.__get_ranging_sensor_odr(ss_status)
+                elif ss_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
+                    odr = self.__get_light_sensor_odr(ss_status)
+                data_byte_len = TypeConversion.check_type_length(ss_status.get("data_type"))
+                dim = ss_status.get("dim")                                                             
+                self.curr_bandwidth += odr * data_byte_len * dim * 8  
     
     def check_hsd_bandwidth(self):
         self.__calculate_hsd_bandwidth()
         # print("self.curr_bandwidth", self.curr_bandwidth)
         self.sig_hsd_bandwidth_exceeded.emit(self.curr_bandwidth > HSD_Controller.MAX_HSD_BANDWIDTH)
+
+    def get_sd_mounted_status(self):
+        return self.hsd_link.get_boolean_property(0,"log_controller","sd_mounted")
 
     def update_plot_widget(self, comp_name, plot_params, visible):
         self.plot_widgets[comp_name].update_plot_characteristics(plot_params)
@@ -754,6 +743,7 @@ class HSD_Controller(STDTDL_Controller):
         self.components_status.clear() #From FW
 
     def send_command(self, json_command):
+        log.info("PnPL Message: {}".format(json_command))
         response = self.hsd_link.send_command(self.device_id, json_command)
         return response
     
@@ -856,7 +846,7 @@ class HSD_Controller(STDTDL_Controller):
     def set_rtc_time(self):
         self.hsd_link.set_rtc_time(self.device_id)
     
-    def do_offline_plots(self, cb_sensor_value, tag_label, start_time, end_time, active_sensor_list, active_algorithm_list, debug_flag, sub_plots_flag, raw_data_flag):
+    def do_offline_plots(self, cb_sensor_value, tag_label, start_time, end_time, active_sensor_list, active_algorithm_list, debug_flag, sub_plots_flag, raw_data_flag, active_actuator_list = None):
         acquisition_folder = self.hsd_link.get_acquisition_folder()
         hsd_factory = HSDatalog()
         hsd = hsd_factory.create_hsd(acquisition_folder)
@@ -871,16 +861,24 @@ class HSD_Controller(STDTDL_Controller):
             for a in active_algorithm_list:
                 a_key = list(a.keys())[0]
                 hsd.get_algorithm_plot(a_key, start_time, end_time)
+            if active_actuator_list is not None:
+                for act in active_actuator_list:
+                    act_key = list(act.keys())[0]
+                    hsd.get_sensor_plot(act_key, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
         else:
             s_list = hsd.get_sensor_list(only_active=True)
             a_list = hsd.get_algorithm_list(only_active=True)
+            act_list = hsd.get_actuator_list(only_active=True)
             sensor_comp = [s for s in s_list if cb_sensor_value in s]
             algo_comp = [a for a in a_list if cb_sensor_value in a]
+            act_comp = [act for act in act_list if cb_sensor_value in act]
             if len(sensor_comp) > 0: # == 1
                 hsd.get_sensor_plot(cb_sensor_value, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
             elif len(algo_comp) > 0: # == 1
                 a_key = list(algo_comp[0].keys())[0]
                 hsd.get_algorithm_plot(a_key, start_time, end_time)
+            elif len(act_comp) > 0: # == 1
+                 hsd.get_sensor_plot(cb_sensor_value, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
         
         self.sig_offline_plots_completed.emit()
     
@@ -923,5 +921,8 @@ class HSD_Controller(STDTDL_Controller):
         y = automode_status.get("idle_period_s")
         y = automode_status.get("idle_time_length") if y is None else y
         return (n, m, x, y)
+    
+    def get_acquisition_folder(self):
+        return self.hsd_link.get_acquisition_folder()
 
         

@@ -555,15 +555,19 @@ void MX_GPIO_PB0_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOF_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
-  /*Configure GPIO pins : PF15 */
-  GPIO_InitStruct.Pin = CHRG_Pin;
+  /*Configure GPIO pins : PB0 */
+  GPIO_InitStruct.Pin = CHRGB0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  GPIO_InitStruct.Alternate = GPIO_AF2_TIM5;
-  HAL_GPIO_Init(CHRG_GPIO_Port, &GPIO_InitStruct);
+  GPIO_InitStruct.Alternate = GPIO_AF2_TIM3;
+  HAL_GPIO_Init(CHRGB0_GPIO_Port, &GPIO_InitStruct);
+
+  /* TIM3 interrupt Init */
+  HAL_NVIC_SetPriority(TIM3_IRQn, 10, 0);
+  HAL_NVIC_EnableIRQ(TIM3_IRQn);
 }
 
 /* USER CODE END 2 */

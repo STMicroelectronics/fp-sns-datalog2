@@ -19,7 +19,7 @@ import os
 import json
 from datetime import datetime
 
-from st_hsdatalog.HSD_utils.exceptions import InvalidCommandSetError, NoDeviceConnectedError
+from st_hsdatalog.HSD_utils.exceptions import InvalidCommandSetError
 import st_hsdatalog.HSD_utils.logger as logger
 from st_pnpl.PnPLCmd import PnPLCMDManager
 from .communication.PnPL_HSD.PnPLHSD_com_manager import PnPLHSD_CommandManager, PnPLHSD_Creator

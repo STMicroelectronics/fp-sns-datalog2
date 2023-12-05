@@ -19,10 +19,9 @@ from collections import deque
 from PySide6.QtCore import Slot
 
 import pyqtgraph as pg
-from st_dtdl_gui.Utils.DataClass import LinesPlotParams, SensorCameraPlotParams, SensorLightPlotParams, SensorMemsPlotParams, SensorAudioPlotParams, SensorPlotParams, SensorRangingPlotParams
+from st_dtdl_gui.Utils.DataClass import LinesPlotParams
 
 from st_dtdl_gui.Widgets.Plots.PlotWidget import PlotWidget
-from st_pnpl.DTDL import dtdl_utils
 
 class PlotLinesWidget(PlotWidget):
     def __init__(self, controller, comp_name, comp_display_name, plot_params, p_id = 0, parent=None):
@@ -40,33 +39,17 @@ class PlotLinesWidget(PlotWidget):
         self.one_t_interval_resampled = dict()
         self._data = dict() # dict of queues
         self.y_queue = dict() # dict of queues
-        
+        self.current_x = 0
+
         self.update_plot_characteristics(plot_params)
-        # if isinstance(plot_params, SensorMemsPlotParams):
-        #     self.update_plot_characteristics(SensorMemsPlotParams(self.comp_name, True, plot_params.odr, plot_params.dimension, "", time_window))
-        # elif isinstance(plot_params, SensorAudioPlotParams):
-        #     self.update_plot_characteristics(SensorAudioPlotParams(self.comp_name, True, plot_params.odr, plot_params.dimension, "", time_window))
-        # elif isinstance(plot_params, SensorRangingPlotParams):
-        #     self.update_plot_characteristics(SensorRangingPlotParams(self.comp_name, True, plot_params.dimension, "", time_window))
-        # elif isinstance(plot_params, SensorLightPlotParams):
-        #     pass
-        # elif isinstance(plot_params, SensorCameraPlotParams):
-        #     pass
-        # else:
-        #     self.update_plot_characteristics(SensorMemsPlotParams(self.comp_name, True, plot_params.odr, plot_params.dimension, "", time_window))
 
     def update_plot_characteristics(self, plot_params:LinesPlotParams):
         self.plot_params = plot_params
-        
-        # if isinstance(plot_params, SensorMemsPlotParams) or isinstance(plot_params, SensorAudioPlotParams):
-        #     self.odr = plot_params.odr
-        # self.n_curves = plot_params.dimension
-        # self.time_window = plot_params.time_window
 
         for i in range(self.plot_params.dimension):
            self.one_t_interval_resampled[i] = np.zeros(self.plot_t_interval_size)
         
-        self.x_data = np.linspace(-(plot_params.time_window), 0, self.plot_len)
+        self.x_data = np.linspace(-(plot_params.time_window) + self.current_x, self.current_x, self.plot_len)
         for i in range(self.plot_params.dimension):
             self._data[i] = deque(maxlen=200000)
             self.y_queue[i] = deque(maxlen=self.plot_len)
@@ -82,50 +65,16 @@ class PlotLinesWidget(PlotWidget):
             
     @Slot(float)
     def s_time_window_updated(self, new_time_w):
-        # component_status = self.controller.components_status.get(self.comp_name)
-        # sensor_category = component_status.get("sensor_category")
         self.plot_params.time_window = new_time_w
         self.update_plot_characteristics(self.plot_params)
-        
-        # if sensor_category is not None:
-        #     if sensor_category == dtdl_utils.SensorCategoryEnum.ISENSOR_CLASS_MEMS.value:
-        #         odr = component_status.get("odr")
-        #         self.update_plot_characteristics(SensorMemsPlotParams(self.comp_name, True, odr, self.n_curves, "", new_time_w))
-        #     elif sensor_category == dtdl_utils.SensorCategoryEnum.ISENSOR_CLASS_AUDIO.value:
-        #         odr = component_status.get("odr")
-        #         self.update_plot_characteristics(SensorAudioPlotParams(self.comp_name, True, odr, self.n_curves, "", new_time_w))
-        #     elif sensor_category == dtdl_utils.SensorCategoryEnum.ISENSOR_CLASS_RANGING.value:
-        #         self.update_plot_characteristics(SensorRangingPlotParams(self.comp_name, True, self.n_curves, "", new_time_w))
-        #     elif sensor_category == dtdl_utils.SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
-        #         pass
-        #     elif sensor_category == dtdl_utils.SensorCategoryEnum.ISENSOR_CLASS_CAMERA.value:
-        #         pass
-        # else:
-        #     odr = component_status.get("odr", 1)
-        #     self.update_plot_characteristics(SensorMemsPlotParams(self.comp_name, True, odr, self.n_curves, "", new_time_w))
 
     @Slot(bool)
     def s_is_logging(self, status: bool, interface: int):
-        if interface == 1:
+        if interface == 1 or interface == 3:
             print("Component {} is logging via USB: {}".format(self.comp_name,status))
             if status:
+                self.current_x = 0
                 self.update_plot_characteristics(self.plot_params)
-                # component_status = self.controller.components_status.get(self.comp_name)
-                # sensor_category = component_status.get("sensor_category")
-                # if sensor_category is not None:
-                    # if sensor_category == dtdl_utils.SensorCategoryEnum.ISENSOR_CLASS_MEMS.value:
-                    #     self.update_plot_characteristics(SensorMemsPlotParams(self.comp_name, True, self.odr, self.n_curves, "", self.time_window))
-                    # elif sensor_category == dtdl_utils.SensorCategoryEnum.ISENSOR_CLASS_AUDIO.value:
-                    #     self.update_plot_characteristics(SensorAudioPlotParams(self.comp_name, True, self.odr, self.n_curves, "", self.time_window))
-                    # elif sensor_category == dtdl_utils.SensorCategoryEnum.ISENSOR_CLASS_RANGING.value:
-                    #     self.update_plot_characteristics(SensorMemsPlotParams(self.comp_name, True, self.n_curves, "", self.time_window))
-                    # elif sensor_category == dtdl_utils.SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
-                    #     pass
-                    # elif sensor_category == dtdl_utils.SensorCategoryEnum.ISENSOR_CLASS_CAMERA.value:
-                    #     pass
-                    # else:
-                    #     self.update_plot_characteristics(SensorMemsPlotParams(self.comp_name, True, self.odr, self.n_curves, "", self.time_window))
-                # self.update_plot_characteristics(LinesPlotParams(self.comp_name, True, self.odr, self.n_curves, "", self.time_window))
                 self.timer.start(self.timer_interval_ms)
             else:
                 self.timer.stop()

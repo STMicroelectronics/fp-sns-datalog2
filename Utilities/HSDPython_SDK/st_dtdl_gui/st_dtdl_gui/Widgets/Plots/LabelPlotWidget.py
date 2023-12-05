@@ -14,8 +14,7 @@
 #
 
 import os
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel
-from PySide6.QtCore import QSize
+from PySide6.QtWidgets import QLabel
 import st_dtdl_gui
 from PySide6.QtCore import Slot
 from st_dtdl_gui.Utils.DataClass import PlotLevelParams
@@ -55,7 +54,7 @@ class LabelPlotWidget(PlotWidget):
 
     @Slot(bool)
     def s_is_logging(self, status: bool, interface: int):
-        if interface == 1:
+        if interface == 1 or interface == 3:
             print("Component {} is logging via USB: {}".format(self.comp_name,status))
             if status:
                 #self.update_plot_characteristics(self.plot_params)

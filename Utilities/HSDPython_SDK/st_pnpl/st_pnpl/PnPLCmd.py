@@ -53,11 +53,33 @@ class PnPLCMDManager:
 
     @staticmethod
     def create_set_property_cmd(comp_name, prop_name, prop_value):
-        message = {
-            comp_name: {
-                prop_name : prop_value
+        if isinstance(prop_name, str):
+            message = {
+                comp_name: {
+                    prop_name : prop_value
+                }
             }
-        }
+        else:
+            # Create an empty dictionary
+            mid_dict = {}
+            # Loop through the list in reverse order
+            for item in reversed(prop_name):
+                # Create a new dictionary with the current item as the key
+                new_dict = {item: mid_dict}
+                # Update the main dictionary with the new dictionary
+                mid_dict = new_dict
+
+            # Loop through the keys and access the nested dictionary
+            inner_dict = mid_dict
+            for key in prop_name[:-1]:
+                inner_dict = inner_dict[key]
+
+            # Assign the new value to the inner key
+            inner_dict[prop_name[-1]] = prop_value
+
+            message = {
+                comp_name: mid_dict
+            }
         return json.dumps(message)
     
     @staticmethod
@@ -71,11 +93,18 @@ class PnPLCMDManager:
                 comp_name + "*" + command_name: req_value
             }
         elif req_name is not None and req_value is not None:
-            if len(req_value) == 1:
-                message = {
-                    comp_name + "*" + command_name: req_value
-                }
-            else:    
+            if isinstance(req_value,dict):
+                if len(req_value) == 1:
+                    message = {
+                        comp_name + "*" + command_name: req_value
+                    }
+                else:    
+                    message = {
+                        comp_name + "*" + command_name: {
+                            req_name: req_value
+                        }
+                    }
+            else:
                 message = {
                     comp_name + "*" + command_name: {
                         req_name: req_value

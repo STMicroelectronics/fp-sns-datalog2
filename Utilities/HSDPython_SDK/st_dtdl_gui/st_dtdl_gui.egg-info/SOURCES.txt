@@ -31,7 +31,6 @@ st_dtdl_gui/UI/plots_array_output.ui
 st_dtdl_gui/UI/resources.qrc
 st_dtdl_gui/UI/resources_rc.py
 st_dtdl_gui/UI/send_command_widget.ui
-st_dtdl_gui/UI/slow_mc_telemetries_widget.ui
 st_dtdl_gui/UI/styles.py
 st_dtdl_gui/UI/sub_plot.ui
 st_dtdl_gui/UI/icons/ST16418_ST-Logo-Ico_3.ico
@@ -46,6 +45,7 @@ st_dtdl_gui/UI/icons/outline_arrow_bottom_white_18dp.png
 st_dtdl_gui/UI/icons/outline_audio_file_white_18dp.png
 st_dtdl_gui/UI/icons/outline_audiotrack_white_18dp.png
 st_dtdl_gui/UI/icons/outline_autorenew_white_18dp.png
+st_dtdl_gui/UI/icons/outline_autorenew_white_flipped_18dp.png
 st_dtdl_gui/UI/icons/outline_backup_table_white_18dp.png
 st_dtdl_gui/UI/icons/outline_check_white_18dp.png
 st_dtdl_gui/UI/icons/outline_close_white_36dp.png
@@ -86,6 +86,7 @@ st_dtdl_gui/UI/images/__init__.py
 st_dtdl_gui/UI/images/st_logo.png
 st_dtdl_gui/Utils/DataClass.py
 st_dtdl_gui/Utils/DataReader.py
+st_dtdl_gui/Utils/UIUtils.py
 st_dtdl_gui/Utils/__init__.py
 st_dtdl_gui/Widgets/AboutDialog.py
 st_dtdl_gui/Widgets/CommandWidget.py
@@ -105,6 +106,7 @@ st_dtdl_gui/Widgets/Plots/LabelPlotWidget.py
 st_dtdl_gui/Widgets/Plots/LevelPlotWidget.py
 st_dtdl_gui/Widgets/Plots/PlotBarFFTWidget.py
 st_dtdl_gui/Widgets/Plots/PlotBarWidget.py
+st_dtdl_gui/Widgets/Plots/PlotHeatmapWidget.py
 st_dtdl_gui/Widgets/Plots/PlotLinesWavWidget.py
 st_dtdl_gui/Widgets/Plots/PlotLinesWidget.py
 st_dtdl_gui/Widgets/Plots/PlotWidget.py

@@ -223,7 +223,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
     switch (odr)
     {
       case 0:
-        ret = iis2iclx_acc_set_fs(iis2iclx_acc_odr_hz12_5);
+        ret = iis2iclx_acc_set_odr(iis2iclx_acc_odr_hz12_5);
         break;
       case 1:
         ret = iis2iclx_acc_set_odr(iis2iclx_acc_odr_hz26);

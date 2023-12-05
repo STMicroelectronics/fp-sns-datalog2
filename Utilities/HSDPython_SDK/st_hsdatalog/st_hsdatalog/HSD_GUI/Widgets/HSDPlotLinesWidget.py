@@ -35,8 +35,13 @@ from st_hsdatalog.HSD.utils.type_conversion import TypeConversion
 ispu_out_fmt_ok_status_path = resource_filename('st_dtdl_gui.UI.icons', 'outline_done_outline_white_18dp.png')
 ispu_out_fmt_ko_status_path = resource_filename('st_dtdl_gui.UI.icons', 'outline_close_white_36dp.png')
 
+import st_hsdatalog.HSD_utils.logger as logger
+log = logger.get_logger(__name__)
+
 class HSDPlotLinesWidget(PlotLinesWavWidget):    
     def __init__(self, controller, comp_name, comp_display_name, plot_params, p_id=0, parent=None):
+        self.ispu_output_format = None
+
         super().__init__(controller, comp_name, comp_display_name, plot_params, p_id, parent)
         self.controller.sig_tag_done.connect(self.s_tag_done)
         self.controller.sig_ispu_ucf_loaded.connect(self.s_ispu_ucf_loaded)
@@ -49,6 +54,7 @@ class HSDPlotLinesWidget(PlotLinesWavWidget):
 
         #Show Output format description file loading frame
         if "_ispu" in comp_name:
+            self.plot_params = SensorISPUPlotParams(comp_name, plot_params.enabled, plot_params.dimension, None, plot_params.time_window)
             self.is_out_fmt_displayed = True
             self.pushButton_plot_settings.setVisible(True)
             self.load_output_fmt_frame.setVisible(True)
@@ -62,6 +68,20 @@ class HSDPlotLinesWidget(PlotLinesWavWidget):
             self.pushButton_close_settings = self.load_output_fmt_frame.findChild(QPushButton, "pushButton_close_settings")
             self.pushButton_close_settings.clicked.connect(self.clicked_out_fmt_plot_settings_button)
             self.pushButton_plot_settings.clicked.connect(self.clicked_out_fmt_plot_settings_button)
+        
+        for gc_id in self.graph_curves:
+            if "_mic" in self.plot_params.comp_name:
+                self.legend.addItem(self.graph_curves[gc_id], "Waveform")
+            elif "_temp" in self.plot_params.comp_name:
+                self.legend.addItem(self.graph_curves[gc_id], "Temperature")
+            elif "_pres" in self.plot_params.comp_name:
+                self.legend.addItem(self.graph_curves[gc_id], "Pressure")
+            elif "_mlc" in self.plot_params.comp_name:
+                self.legend.addItem(self.graph_curves[gc_id], "reg_{}".format(gc_id))
+            elif "_ispu" in self.plot_params.comp_name:
+                pass #TODO
+            else:
+                self.legend.addItem(self.graph_curves[gc_id], "x" if gc_id == 0 else ("y" if gc_id == 1 else "z"))
         
     def __load_ispu_ucf(self, filepath):
         self.controller.load_ispu_ucf_file(filepath)
@@ -86,6 +106,14 @@ class HSDPlotLinesWidget(PlotLinesWavWidget):
         json_filter = "JSON Output format description Files (*.json *.JSON)"
         filepath = QFileDialog.getOpenFileName(filter=json_filter)
         self.__load_ispu_out_fmt(filepath[0])
+        if self.ispu_output_format is not None:
+            for id in range(len(self.legend.items)):
+                if id != 0:
+                    self.legend.removeItem(self.graph_curves[id])#
+                    self.legend.layout.removeAt(id)
+            self.legend.addItem(pg.PlotDataItem(pen=pg.mkPen(0,0,0,0)),"")
+            for i, of in enumerate(self.ispu_output_format):
+                self.legend.addItem(self.graph_curves[i], of.get("name",""))
     
     @Slot()
     def clicked_out_fmt_plot_settings_button(self):
@@ -117,11 +145,19 @@ class HSDPlotLinesWidget(PlotLinesWavWidget):
         if "_ispu" in self.comp_name:
             self.__load_ispu_ucf(ucf_path)
             self.__load_ispu_out_fmt(output_json_fpath)
+            if self.ispu_output_format is not None:
+                for id in range(len(self.legend.items)):
+                    if id != 0:
+                        self.legend.removeItem(self.graph_curves[id])#
+                        self.legend.layout.removeAt(id)
+                self.legend.addItem(pg.PlotDataItem(pen=pg.mkPen(0,0,0,0)),"")
+                for i, of in enumerate(self.ispu_output_format):
+                    self.legend.addItem(self.graph_curves[i], of.get("name",""))
+            
 
     def __clean_tag_lines(self):
         for t in self.tag_lines:
             self.graph_widget.removeItem(t)
-            self.tag_lines = []            
     
     @Slot(bool, int) #Override PlotLinesWavWidget s_is_logging
     def s_is_logging(self, status: bool, interface: int):
@@ -130,20 +166,24 @@ class HSDPlotLinesWidget(PlotLinesWavWidget):
                 print("Sensor {} is logging via USB: {}".format(self.comp_name,status))
                 if status:
                     self.__clean_tag_lines()
-
-                    if "_ispu" in self.comp_name and self.out_fmt_valid:
-                        # self.n_curves = len(self.ispu_output_format)
+                    if "_ispu" in self.comp_name:
                         enabled = self.plot_params.enabled
                         time_window = self.plot_params.time_window
-                        for iof in self.ispu_output_format:
-                            data_format = TypeConversion.get_format_char(iof["type"])
-                            data_byte_len = TypeConversion.check_type_length(iof["type"])
-                            iof["data_format"] = data_format
-                            iof["data_byte_len"] = data_byte_len
-                        self.plot_params = SensorISPUPlotParams(self.comp_name, enabled, len(self.ispu_output_format), self.ispu_output_format, time_window)
-                    
-                    self.update_plot_characteristics(self.plot_params)#LinesPlotParams(self.comp_name, True, self.odr, self.n_curves, "", self.time_window))
-                    self.timer.start(self.timer_interval_ms)
+                        if self.out_fmt_valid:
+                            for iof in self.ispu_output_format:
+                                data_format = TypeConversion.get_format_char(iof["type"])
+                                data_byte_len = TypeConversion.check_type_length(iof["type"])
+                                iof["data_format"] = data_format
+                                iof["data_byte_len"] = data_byte_len
+                            self.plot_params = SensorISPUPlotParams(self.comp_name, enabled, len(self.ispu_output_format), self.ispu_output_format, time_window)
+                            self.update_plot_characteristics(self.plot_params)
+                            self.timer.start(self.timer_interval_ms)
+                        else:
+                            log.error("Missing ISPU JSON Output format descriptor.")
+                            # self.plot_params = SensorISPUPlotParams(self.comp_name, enabled, self.plot_params.dimension, None, time_window)
+                    else:
+                        self.update_plot_characteristics(self.plot_params)
+                        self.timer.start(self.timer_interval_ms)
                 else:
                     self.timer.stop()
             else: # interface == 0
@@ -158,15 +198,23 @@ class HSDPlotLinesWidget(PlotLinesWavWidget):
     def update_plot_characteristics(self, plot_params:PlotParams):
         self.plot_params = plot_params
 
-        for i in range(self.plot_params.dimension):
-           self.one_t_interval_resampled[i] = np.zeros(self.plot_t_interval_size)
+        if isinstance(plot_params, SensorISPUPlotParams):
+            if plot_params.out_fmt is not None:
+                dimensions = len(plot_params.out_fmt)
+            else:
+                dimensions = 0
+        else:
+            dimensions = self.plot_params.dimension
+        
+        for i in range(dimensions):
+            self.one_t_interval_resampled[i] = np.zeros(self.plot_t_interval_size)
         
         self.x_data = np.linspace(-(plot_params.time_window), 0, self.plot_len)
-        for i in range(self.plot_params.dimension):
+        for i in range(dimensions):
             self._data[i] = deque(maxlen=200000)
             self.y_queue[i] = deque(maxlen=self.plot_len)
             self.y_queue[i].extend(np.zeros(self.plot_len))
-            if len(self.graph_curves) < self.plot_params.dimension:
+            if len(self.graph_curves) < dimensions:
                 self.graph_curves[i] = self.graph_widget.plot()
                 self.graph_curves[i] = pg.PlotDataItem(pen=({'color': self.lines_colors[i - (len(self.lines_colors)* int(i / len(self.lines_colors)))], 'width': 1}), skipFiniteCheck=True, ignoreBounds=True)
                 self.graph_widget.addItem(self.graph_curves[i])
@@ -181,13 +229,14 @@ class HSDPlotLinesWidget(PlotLinesWavWidget):
 
     def add_data(self, data):
         if "_ispu" in self.comp_name:
-            data_idx = 0
-            for i, of in enumerate(self.plot_params.out_fmt):
-                ax_len = of["data_byte_len"]
-                ax_value_bytes = np.array(data[0][data_idx:data_idx+ax_len],dtype='int8').tobytes()#np.concatenate(list(data.values())[data_idx:data_idx+ax_len]).tolist()
-                ax_value = struct.unpack("=" + of["data_format"], ax_value_bytes)
-                self._data[i].extend(ax_value)
-                data_idx += ax_len
+            if self.plot_params.out_fmt is not None:
+                data_idx = 0
+                for i, of in enumerate(self.plot_params.out_fmt):
+                    ax_len = of["data_byte_len"]
+                    ax_value_bytes = np.array(data[0][data_idx:data_idx+ax_len],dtype='int8').tobytes()#np.concatenate(list(data.values())[data_idx:data_idx+ax_len]).tolist()
+                    ax_value = struct.unpack("=" + of["data_format"], ax_value_bytes)
+                    self._data[i].extend(ax_value)
+                    data_idx += ax_len
         else:
             super().add_data(data)
 

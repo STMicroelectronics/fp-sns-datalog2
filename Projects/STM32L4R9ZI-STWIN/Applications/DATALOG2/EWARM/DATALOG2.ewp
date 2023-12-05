@@ -2626,6 +2626,24 @@
                 </group>
                 <group>
                     <name>Src</name>
+                    <group>
+                        <name>drivers</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\Core\Src\drivers\BCAdcDriver.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\Core\Src\drivers\BCTimChgDriver.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\Core\Src\drivers\BCTimerDriver.c</name>
+                        </file>
+                    </group>
+                    <group>
+                        <name>services</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\Core\Src\services\BCProtocol.c</name>
+                        </file>
+                    </group>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\App.c</name>
                     </file>

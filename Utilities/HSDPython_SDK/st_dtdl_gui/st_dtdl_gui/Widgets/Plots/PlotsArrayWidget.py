@@ -16,9 +16,9 @@
 from collections import deque
 import os
 
-from PySide6.QtCore import Qt, Slot, QSize
-from PySide6.QtGui import QPalette, QBrush
-from PySide6.QtWidgets import QFrame, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, QListWidget, QListView, QListWidgetItem, QAbstractItemView, QAbstractScrollArea
+from PySide6.QtCore import Qt, Slot
+from PySide6.QtGui import QPalette
+from PySide6.QtWidgets import QFrame, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QSizePolicy, QWidget, QListWidget, QListView, QListWidgetItem, QAbstractItemView
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 
@@ -28,7 +28,7 @@ from st_dtdl_gui.Widgets.Plots.LabelPlotWidget import LabelPlotWidget
 from st_dtdl_gui.Widgets.Plots.LevelPlotWidget import LevelPlotWidget
 from st_dtdl_gui.Widgets.Plots.PlotLinesWidget import PlotLinesWidget
 from st_dtdl_gui.Widgets.Plots.PlotWidget import PlotWidget, PlotLabel
-from st_dtdl_gui.Utils.DataClass import LinesPlotParams, PlotLabelParams, PlotLevelParams, PlotGaugeParams, PlotCheckBoxParams
+from st_dtdl_gui.Utils.DataClass import PlotLabelParams, PlotLevelParams, PlotGaugeParams, PlotCheckBoxParams
 from st_dtdl_gui.Widgets.Plots.CheckBoxListWidget import CheckBoxListWidget
 
 class PlotsArrayWidget(PlotWidget):

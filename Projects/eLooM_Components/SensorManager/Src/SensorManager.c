@@ -267,6 +267,11 @@ sys_error_code_t SMSensorSetFrequency(uint8_t id, uint32_t frequency)
       ISensorAudio_t *p_obj = (ISensorAudio_t *)(spSMObj.Sensors[id]);
       res = ISensorSetFrequency(p_obj, frequency);
     }
+    else if (SMSensorGetStatus(id).isensor_class == ISENSOR_CLASS_RANGING)
+    {
+      ISensorRanging_t *p_obj = (ISensorRanging_t *)(spSMObj.Sensors[id]);
+      res = ISensorSetRangingFrequency(p_obj, frequency);
+    }
     else
     {
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
@@ -319,7 +324,11 @@ sys_error_code_t SMSensorSetResolution(uint8_t id, uint8_t bit_depth)
       ISensorAudio_t *p_obj = (ISensorAudio_t *)(spSMObj.Sensors[id]);
       res = ISensorSetResolution(p_obj, bit_depth);
     }
-    else
+    else if (SMSensorGetStatus(id).isensor_class == ISENSOR_CLASS_RANGING)
+    {
+      ISensorRanging_t *p_obj = (ISensorRanging_t *)(spSMObj.Sensors[id]);
+      res = ISensorSetRangingResolution(p_obj, bit_depth);
+    }
     {
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
       SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
@@ -335,7 +344,9 @@ sys_error_code_t SMSensorSetResolution(uint8_t id, uint8_t bit_depth)
 }
 
 /* Specialized for ISensorRanging class */
-sys_error_code_t SMSensorConfigProfile(uint8_t id, ProfileConfig_t *p_config)
+//sys_error_code_t SMSensorSetFrequency(uint8_t id, uint32_t frequency);  /*Declaration in common with ISensorAudio*/
+//sys_error_code_t SMSensorSetResolution(uint8_t id, uint8_t resolution); /*Declaration in common with ISensorAudio*/
+sys_error_code_t SMSensorSetRangingMode(uint8_t id, uint8_t mode)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
@@ -344,7 +355,33 @@ sys_error_code_t SMSensorConfigProfile(uint8_t id, ProfileConfig_t *p_config)
     if (SMSensorGetStatus(id).isensor_class == ISENSOR_CLASS_RANGING)
     {
       ISensorRanging_t *p_obj = (ISensorRanging_t *)(spSMObj.Sensors[id]);
-      res = ISensorConfigProfile(p_obj, p_config);
+      res = ISensorSetRangingMode(p_obj, mode);
+    }
+    else
+    {
+      res = SYS_INVALID_PARAMETER_ERROR_CODE;
+      SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+    }
+  }
+  else
+  {
+    res = SYS_INVALID_PARAMETER_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+  }
+
+  return res;
+}
+
+sys_error_code_t SMSensorSetIntegrationTime(uint8_t id, uint32_t timing_budget)
+{
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  if (id < SMGetNsensor())
+  {
+    if (SMSensorGetStatus(id).isensor_class == ISENSOR_CLASS_RANGING)
+    {
+      ISensorRanging_t *p_obj = (ISensorRanging_t *)(spSMObj.Sensors[id]);
+      res = ISensorSetIntegrationTime(p_obj, timing_budget);
     }
     else
     {
@@ -901,7 +938,7 @@ sys_error_code_t SMSensorSetExposureTime(uint8_t id, float exposure_time)
   return res;
 }
 
-sys_error_code_t SMSensorSetLightGain(uint8_t id, uint16_t *LightGain)
+sys_error_code_t SMSensorSetLightGain(uint8_t id, float LightGain, uint8_t channel)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
@@ -910,7 +947,7 @@ sys_error_code_t SMSensorSetLightGain(uint8_t id, uint16_t *LightGain)
     if (SMSensorGetStatus(id).isensor_class == ISENSOR_CLASS_LIGHT)
     {
       ISensorLight_t *p_obj = (ISensorLight_t *)(spSMObj.Sensors[id]);
-      res = ISensorSetLightGain(p_obj, LightGain);
+      res = ISensorSetLightGain(p_obj, LightGain, channel);
     }
     else
     {

@@ -186,7 +186,7 @@ void BLE_BluetoothInit(void)
   UpdateCurrFlashBankFwIdBoardName(BLE_GetFWID(), NULL);
 
   char mac_string[18];
-  sprintf(mac_string, "%x:%x:%x:%x:%x:%x", BLE_StackValue.BleMacAddress[5], BLE_StackValue.BleMacAddress[4],
+  sprintf(mac_string, "%02x:%02x:%02x:%02x:%02x:%02x", BLE_StackValue.BleMacAddress[5], BLE_StackValue.BleMacAddress[4],
           BLE_StackValue.BleMacAddress[3],
           BLE_StackValue.BleMacAddress[2], BLE_StackValue.BleMacAddress[1], BLE_StackValue.BleMacAddress[0]);
   set_mac_address(mac_string);

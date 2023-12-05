@@ -4,7 +4,7 @@
     "devices": [
         {
             "board_id": 14,
-            "fw_id": 34,
+            "fw_id": 36,
             "protocol_id": 2,
             "sn": "003F004B4841500520363230",
             "pnpl_responses": true,

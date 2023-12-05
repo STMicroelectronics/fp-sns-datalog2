@@ -27,14 +27,16 @@ class UnitMap():
             "degreeCelsius":"°C",
             "hertz":"Hz",
             "second":"s",
-            "Waveform":"dBFS",
-            "percent":"%"
+            "Waveform":"Waveform",
+            "percent":"%",
+            "millisecond":"ms"
         }
 
 class TypeEnum(Enum):
     STRING = "string"
     INTEGER = "integer"
     DOUBLE = "double"
+    FLOAT = "float"
     BOOLEAN = "boolean"
     ENUM = "enum"
     OBJECT = "object"
@@ -92,14 +94,36 @@ class SensorAudioPlotParams(SensorPlotParams):
         self.odr = odr
 
 class SensorRangingPlotParams(SensorPlotParams):
-    def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
+    def __init__(self, comp_name, enabled, dimension, resolution, unit="", time_window=30) -> None:
         super().__init__(comp_name, enabled, dimension, unit, time_window)
+        self.resolution = resolution
 
 class SensorLightPlotParams(SensorPlotParams):
     def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
         super().__init__(comp_name, enabled, dimension, unit, time_window)
 
 class SensorCameraPlotParams(SensorPlotParams):
+    def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
+        super().__init__(comp_name, enabled, dimension, unit, time_window)
+
+class SensorPresenscePlotParams(SensorPlotParams):
+    def __init__(self, comp_name, enabled, plots_params_dict, unit="", time_window=30) -> None:
+        super().__init__(comp_name, enabled, 1, unit, time_window)
+        self.plots_params_dict = plots_params_dict
+
+class PlotPAmbientParams(SensorPlotParams):
+    def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
+        super().__init__(comp_name, enabled, dimension, unit, time_window)
+
+class PlotPObjectParams(SensorPlotParams):
+    def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
+        super().__init__(comp_name, enabled, dimension, unit, time_window)
+
+class PlotPPresenceParams(SensorPlotParams):
+    def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
+        super().__init__(comp_name, enabled, dimension, unit, time_window)
+
+class PlotPMotionParams(SensorPlotParams):
     def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
         super().__init__(comp_name, enabled, dimension, unit, time_window)
         

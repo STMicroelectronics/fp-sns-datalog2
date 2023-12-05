@@ -36,10 +36,13 @@ extern "C" {
 #define SENSOR_CMD_ID_SET_VOLUME      ((uint16_t)0x0005)              ///< SET FS command ID.
 #define SENSOR_CMD_ID_SET_RESOLUTION  ((uint16_t)0x0006)              ///< SET Fifo WM command ID.
 /* SensorRanging */
-#define SENSOR_CMD_ID_CONFIG_PROFILE  ((uint16_t)0x0004)              ///< SET ODR command ID.
-#define SENSOR_CMD_ID_CONFIG_IT       ((uint16_t)0x0005)              ///< SET FS command ID.
-#define SENSOR_CMD_ID_SET_ADDRESS     ((uint16_t)0x0006)              ///< SET Fifo WM command ID.
-#define SENSOR_CMD_ID_SET_POWERMODE   ((uint16_t)0x0007)              ///< SET Fifo WM command ID.
+//#define SENSOR_CMD_ID_SET_FREQUENCY        ((uint16_t)0x0004)              ///< SET ODR command ID.
+#define SENSOR_CMD_ID_SET_RANGING_MODE     ((uint16_t)0x0005)              ///< SET ODR command ID.
+//#define SENSOR_CMD_ID_SET_RESOLUTION       ((uint16_t)0x0006)              ///< SET ODR command ID.
+#define SENSOR_CMD_ID_SET_INTEGRATION_TIME ((uint16_t)0x0007)              ///< SET ODR command ID.
+#define SENSOR_CMD_ID_CONFIG_IT            ((uint16_t)0x0008)              ///< SET FS command ID.
+#define SENSOR_CMD_ID_SET_ADDRESS          ((uint16_t)0x0009)              ///< SET Fifo WM command ID.
+#define SENSOR_CMD_ID_SET_POWERMODE        ((uint16_t)0x000A)              ///< SET Fifo WM command ID.
 /* SensorPresence */
 #define SENSOR_CMD_ID_SET_DATA_FREQUENCY            ((uint16_t)0x0004)              ///< SET Data Frequency command ID.
 #define SENSOR_CMD_ID_SET_AVERAGE_T_OBJECT          ((uint16_t)0x0005)              ///< SET Average T Object command ID.
@@ -60,7 +63,13 @@ extern "C" {
 /* SensorLight */
 #define SENSOR_CMD_ID_SET_INTERMEASUREMENT_TIME     ((uint16_t)0x0004)              ///< SET Intermeasurement Time command ID.
 #define SENSOR_CMD_ID_SET_EXPOSURE_TIME             ((uint16_t)0x0005)              ///< SET Exposure Time ID.
-#define SENSOR_CMD_ID_SET_LIGHT_GAIN                ((uint16_t)0x0006)              ///< SET Gain command ID.
+#define SENSOR_CMD_ID_SET_LIGHT_CH1_GAIN            ((uint16_t)0x0006)              ///< SET Channel 1 Gain command ID.
+#define SENSOR_CMD_ID_SET_LIGHT_CH2_GAIN            ((uint16_t)0x0007)              ///< SET Channel 2 Gain command ID.
+#define SENSOR_CMD_ID_SET_LIGHT_CH3_GAIN            ((uint16_t)0x0008)              ///< SET Channel 3 Gain command ID.
+#define SENSOR_CMD_ID_SET_LIGHT_CH4_GAIN            ((uint16_t)0x0009)              ///< SET Channel 4 Gain command ID.
+#define SENSOR_CMD_ID_SET_LIGHT_CH5_GAIN            ((uint16_t)0x000A)              ///< SET Channel 5 Gain command ID.
+#define SENSOR_CMD_ID_SET_LIGHT_CH6_GAIN            ((uint16_t)0x000B)              ///< SET Channel 6 Gain command ID.
+
 
 
 #ifdef __cplusplus

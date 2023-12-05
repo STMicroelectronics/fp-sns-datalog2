@@ -859,6 +859,7 @@ sys_error_code_t LSM6DSV16XTask_vtblDoEnterPowerMode(AManagedTask *_this, const 
       {
         LSM6DSV16XTaskConfigureMLCPin(p_obj, TRUE);
       }
+      memset(p_obj->p_mlc_sensor_data_buff, 0, sizeof(p_obj->p_mlc_sensor_data_buff));
     }
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("LSM6DSV16X: -> STATE1\r\n"));
   }
@@ -1203,7 +1204,7 @@ sys_error_code_t LSM6DSV16XTask_vtblSensorSetODR(ISensorMems_t *_this, float odr
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (float) odr
+      .sensorMessage.fParam = (float) odr
     };
     res = LSM6DSV16XTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1232,7 +1233,7 @@ sys_error_code_t LSM6DSV16XTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) fs
+      .sensorMessage.fParam = (float) fs
     };
     res = LSM6DSV16XTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -2215,6 +2216,19 @@ static sys_error_code_t LSM6DSV16XTaskSensorInit(LSM6DSV16XTask *_this)
   {
     lsm6dsv16x_mlc_set(p_sensor_drv, LSM6DSV16X_MLC_OFF);
   }
+  else
+  {
+    SMMessage report;
+    report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY_MLC;
+    report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
+
+    // if (sTaskObj.in_queue != NULL ) {//TODO: STF.Port - how to check if the queue has been initialized ??
+    if (TX_SUCCESS != tx_queue_send(&_this->in_queue, &report, TX_NO_WAIT))
+    {
+      /* unable to send the report. Signal the error */
+      sys_error_handler();
+    }
+  }
 #if LSM6DSV16X_FIFO_ENABLED
   uint8_t reg[2];
   /* Check FIFO_WTM_IA and fifo level. We do not use PID in order to avoid reading one register twice */
@@ -2434,13 +2448,13 @@ static sys_error_code_t LSM6DSV16XTaskSensorReadData(LSM6DSV16XTask *_this)
   return res;
 }
 
+uint8_t mlc_output[4];
 static sys_error_code_t LSM6DSV16XTaskSensorReadMLC(LSM6DSV16XTask *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_BASE_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   lsm6dsv16x_mlc_status_t mlc_status;
-  uint8_t mlc_output[4];
 
   if (_this->mlc_enable)
   {
@@ -2529,7 +2543,7 @@ static sys_error_code_t LSM6DSV16XTaskSensorSetODR(LSM6DSV16XTask *_this, SMMess
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.nParam;
+  float odr = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -2688,7 +2702,7 @@ static sys_error_code_t LSM6DSV16XTaskSensorSetFS(LSM6DSV16XTask *_this, SMMessa
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float fs = (float) report.sensorMessage.nParam;
+  float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   /* Changing fs must disable MLC sensor: MLC can work properly only when setup from UCF */

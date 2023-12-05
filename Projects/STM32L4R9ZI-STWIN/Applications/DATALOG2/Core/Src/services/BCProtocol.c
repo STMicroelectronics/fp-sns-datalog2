@@ -240,8 +240,8 @@ sys_error_code_t BCPAcquireBatteryVoltage(BCProtocol_t *_this, uint16_t *voltage
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  /* start adc */
-  IDrvStart(_this->p_bc_adc_driver);
+//  /* start adc */
+//  IDrvStart(_this->p_bc_adc_driver);
 
   /* do a measure */
   BCAdcDriver_GetValue(_this->p_bc_adc_driver, voltage);
@@ -390,7 +390,7 @@ static void BCPComputeFrequency(TIM_HandleTypeDef *htim)
   if(p_owner->ic_flag == 0)
   {
     /* Get the 1st Input Capture value */
-    p_owner->ic_value1 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+    p_owner->ic_value1 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
     p_owner->ic_flag = 1;
   }
   else if(p_owner->ic_flag == 1)
@@ -398,7 +398,7 @@ static void BCPComputeFrequency(TIM_HandleTypeDef *htim)
     uint32_t uwDiffCapture;
 
     /* Get the 2nd Input Capture value */
-    p_owner->ic_value2 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+    p_owner->ic_value2 = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_3);
 
     /* Capture computation */
     if(p_owner->ic_value2 > p_owner->ic_value1)

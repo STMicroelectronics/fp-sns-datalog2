@@ -54,6 +54,7 @@ extern "C" {
 
 /* Datalog messages ID */
 #define DT_USER_BUTTON                            (0x0010)
+#define DT_SWITCH_BANK                            (0x0020)
 #define DT_FORCE_STEP                             (0x00F0)
 
 

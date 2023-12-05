@@ -641,8 +641,8 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
       p_obj->sensorContext[sId].old_time_stamp = p_evt->timestamp;
       p_obj->sensorContext[sId].n_samples_to_timestamp = p_obj->datalog_model->s_models[sId]->stream_params.spts;
     }
-    else
-    {
+//    else
+//    {
       while (samplesToSend > 0)
       {
         /* n_samples_to_timestamp = 0 if user setup spts = 0 (no timestamp needed) */
@@ -728,7 +728,7 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
           p_obj->sensorContext[sId].n_samples_to_timestamp = p_obj->datalog_model->s_models[sId]->stream_params.spts;
         }
       }
-    }
+//    }
   }
   return res;
 }
@@ -1008,8 +1008,8 @@ uint8_t DatalogAppTask_set_time_vtbl(ILog_Controller_t *_this, const char *datet
 uint8_t DatalogAppTask_switch_bank_vtbl(ILog_Controller_t *_this)
 {
   assert_param(_this != NULL);
-  SwitchBank();
-  HAL_NVIC_SystemReset();
+  /*putMessage switch */
+  DatalogAppTask_msg((ULONG) DT_SWITCH_BANK);
   return 0;
 }
 
@@ -1219,6 +1219,13 @@ static sys_error_code_t DatalogAppTaskExecuteStepState1(AManagedTask *_this)
       res = SYS_NO_ERROR_CODE;
 
       log_controller_start_log(&p_obj->pnplLogCtrl, LOG_CTRL_MODE_SD);
+    }
+    else if (message == DT_SWITCH_BANK)
+    {
+      (void)tx_thread_sleep(100);
+      SwitchBank();
+      HAL_NVIC_SystemReset();
+      res = SYS_NO_ERROR_CODE;
     }
     else if (message == DT_FORCE_STEP)
     {

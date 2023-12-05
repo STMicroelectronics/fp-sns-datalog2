@@ -21,10 +21,10 @@ with open("LICENSE.md", "r") as fh:
 
 setuptools.setup(
     name="st_dtdl_gui",
-    version="2.0.0",
+    version="2.1.0",
     author="SRA-ASP",
     author_email="matteo.ronchi@st.com",
-    description="STMicroelectronics Graphical Widgets from DTDL collection python package",
+    description="STMicroelectronics UI Toolkit based on DTDL and PySide6.",
     long_description=long_description,
     long_description_content_type="text\\markdown",
     include_package_data=True,    

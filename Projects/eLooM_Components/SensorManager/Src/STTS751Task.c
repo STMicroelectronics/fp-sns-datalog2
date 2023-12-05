@@ -770,7 +770,7 @@ sys_error_code_t STTS751Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (float) odr
+      .sensorMessage.fParam = (float) odr
     };
     res = STTS751TaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -799,7 +799,7 @@ sys_error_code_t STTS751Task_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) fs
+      .sensorMessage.fParam = (float) fs
     };
     res = STTS751TaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1258,7 +1258,7 @@ static sys_error_code_t STTS751TaskSensorSetODR(STTS751Task *_this, SMMessage re
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.nParam;
+  float odr = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->temp_id)
@@ -1305,7 +1305,7 @@ static sys_error_code_t STTS751TaskSensorSetFS(STTS751Task *_this, SMMessage rep
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float fs = (float) report.sensorMessage.nParam;
+  float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->temp_id)

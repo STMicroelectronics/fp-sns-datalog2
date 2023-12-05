@@ -59,6 +59,7 @@ class STDTDL_DeviceConfigPage():
         self.log_control_widget = None
         
         self.scrollArea_device_config = self.main_layout.findChild(QScrollArea, "scrollArea_device_config")
+        self.widget_special_componenents = self.main_layout.findChild(QWidget,"widget_special_components")
         self.device_config_widget = self.main_layout.findChild(QWidget,"widget_device_config")
         self.logging_message = QLabel(self.controller.get_log_msg())
         self.logging_message.setContentsMargins(12,6,12,6)

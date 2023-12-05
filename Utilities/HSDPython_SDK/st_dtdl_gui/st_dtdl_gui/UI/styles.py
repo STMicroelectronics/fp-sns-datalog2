@@ -86,7 +86,7 @@ class STDTDL_MenuButton():
         }
         '''
 
-class STDTDL_EditLine():
+class STDTDL_LineEdit():
 
     valid = '''
         QLineEdit {
@@ -148,7 +148,28 @@ class STDTDL_SpinBox():
             border: 2px solid rgb(32, 32, 32);
         }
     '''
+class STDTDL_Chip():
 
+    def color(color):
+        return f"""
+            QPushButton {{
+                background-color: {color.darker(300).name()};
+                color: "#1b1d23";
+                border-radius: 12px;
+                padding: 4px 8px;
+                font-size: 12px;
+                font: 700
+            }}
+            QPushButton:hover {{
+                background-color: {color.lighter(120).name()};
+            }}
+            QPushButton:checked {{
+                background-color: {color.name()};
+            }}
+            QPushButton:checked:hover {{
+                background-color: {color.lighter(120).name()};
+            }}
+        """
 class STDTDL_PushButton():
     
     valid = '''
@@ -208,3 +229,47 @@ class STDTDL_PushButton():
             border: 2px solid rgb(29,33,41);
         }
     '''
+
+class STDTDL_RadioButton():
+
+    valid = '''
+    QRadioButton::indicator {
+        border: 3px solid rgb(52, 59, 72);
+        width: 15px;
+        height: 15px;
+        border-radius: 10px;
+        background: rgb(44, 49, 60);
+    }
+    QRadioButton::indicator:hover {
+        border: 3px solid rgb(58, 66, 81);
+    }
+    QRadioButton::indicator:checked {
+        background: 3px solid rgb(94, 106, 130);
+        border: 3px solid rgb(52, 59, 72);	
+    }
+    QRadioButton::indicator:checked:hover {
+        background: 3px solid rgb(104, 116, 140);
+        border: 3px solid rgb(72, 79, 92);	
+    }
+    '''
+    def get_style(color):
+        style = "QRadioButton{ color:" + color.name() + "; font: 700;}"
+        style += "QRadioButton::indicator { \
+                border: 3px solid rgb(52, 59, 72); \
+                width: 15px; \
+                height: 15px; \
+                border-radius: 10px; \
+                background: rgb(44, 49, 60); \
+            } \
+            QRadioButton::indicator:hover { \
+                border: 3px solid rgb(58, 66, 81); \
+            } \
+            QRadioButton::indicator:checked { \
+                background: 3px solid rgb(94, 106, 130); \
+                border: 3px solid rgb(52, 59, 72);\
+            } \
+            QRadioButton::indicator:checked:hover { \
+            background: 3px solid rgb(104, 116, 140); \
+            border: 3px solid rgb(72, 79, 92); \
+            }"
+        return style

@@ -766,7 +766,7 @@ sys_error_code_t IIS2DHTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (float) odr
+      .sensorMessage.fParam = (float) odr
     };
     res = IIS2DHTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -794,7 +794,7 @@ sys_error_code_t IIS2DHTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) fs
+      .sensorMessage.fParam = (float) fs
     };
     res = IIS2DHTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1419,7 +1419,7 @@ static sys_error_code_t IIS2DHTaskSensorSetODR(IIS2DHTask *_this, SMMessage repo
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.nParam;
+  float odr = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -1486,7 +1486,7 @@ static sys_error_code_t IIS2DHTaskSensorSetFS(IIS2DHTask *_this, SMMessage repor
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float fs = (float) report.sensorMessage.nParam;
+  float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)

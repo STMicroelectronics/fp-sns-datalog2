@@ -918,18 +918,21 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
         double timestamp = report.sensorDataReadyMessage.fTimestamp;
         p_obj->prev_timestamp = timestamp;
         uint16_t samples = (uint16_t)(p_obj->sensor_status.type.audio.frequency / 1000u);
-
+//        if (timestamp > 0.3f)
+//        {
 #if (HSD_USE_DUMMY_DATA == 1)
         IMP23ABSUTaskWriteDummyData(p_obj);
         EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
 #else
+        int32_t *p32 = (int32_t *) &p_obj->p_dma_data_buff[(p_obj->half - 1) * samples];
+        int16_t *p16 = p_obj->p_sensor_data_buff;
         uint16_t idx = 0;
         for (idx = 0; idx < samples ; idx++)
         {
-          p_obj->p_sensor_data_buff[idx] = p_obj->old_out = (0xFC * (p_obj->old_out + ((p_obj->p_dma_data_buff[(p_obj->half - 1) * samples + idx]) >> 12) - p_obj->old_in)) / 0xFF;
-          p_obj->old_in = (p_obj->p_dma_data_buff[idx]) >> 12;
+          *p16++ = p_obj->old_out = (0xFC * (p_obj->old_out + ((*p32) >> 12) - p_obj->old_in)) / 0xFF;
+          p_obj->old_in = (*p32++) >> 12;
         }
-        EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[0], E_EM_INT16, samples);
+        EMD_1dInit(&p_obj->data, (uint8_t *) p_obj->p_sensor_data_buff, E_EM_INT16, samples);
 #endif
         DataEvent_t evt;
 
@@ -937,6 +940,7 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
         IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
         SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP23ABSU: ts = %f\r\n", (float)timestamp));
+//        }
         break;
       }
       case SM_MESSAGE_ID_SENSOR_CMD:

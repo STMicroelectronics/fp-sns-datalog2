@@ -52,7 +52,10 @@ sys_error_code_t VL53L8CXTask_vtblTofGetProfile(ISensorRanging_t *_this, Profile
 sys_error_code_t VL53L8CXTask_vtblTofGetIT(ISensorRanging_t *_this, ITConfig_t *p_it_config);
 uint32_t VL53L8CXTask_vtblTofGetAddress(ISensorRanging_t *_this);
 uint32_t VL53L8CXTask_vtblTofGetPowerMode(ISensorRanging_t *_this);
-sys_error_code_t VL53L8CXTask_vtblSensorConfigProfile(ISensorRanging_t *_this, ProfileConfig_t *p_config);
+sys_error_code_t VL53L8CXTask_vtblSensorSetFrequency(ISensorRanging_t *_this, uint32_t frequency);
+sys_error_code_t VL53L8CXTask_vtblSensorSetResolution(ISensorRanging_t *_this, uint8_t resolution);
+sys_error_code_t VL53L8CXTask_vtblSensorSetRangingMode(ISensorRanging_t *_this, uint8_t mode);
+sys_error_code_t VL53L8CXTask_vtblSensorSetIntegrationTime(ISensorRanging_t *_this, uint32_t timing_budget);
 sys_error_code_t VL53L8CXTask_vtblSensorConfigIT(ISensorRanging_t *_this, ITConfig_t *p_it_config);
 sys_error_code_t VL53L8CXTask_vtblSensorSetAddress(ISensorRanging_t *_this, uint32_t address);
 sys_error_code_t VL53L8CXTask_vtblSensorSetPowerMode(ISensorRanging_t *_this, uint32_t power_mode);

@@ -15,8 +15,6 @@
 # ******************************************************************************
 #
 
-from PySide6.QtCore import Slot
-
 import st_dtdl_gui.UI.images #NOTE don't delete this! it is used from resource_filename (@row 35..38)
 from st_dtdl_gui.STDTDL_MainWindow import STDTDL_MainWindow
 

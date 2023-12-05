@@ -37,10 +37,10 @@ struct _ISensorLight_vtbl
   ISensor_vtbl vtbl;
   sys_error_code_t (*SensorGetIntermeasurementTime)(ISensorLight_t *_this, uint32_t *p_measured, uint32_t *p_nominal);
   float (*SensorGetExposureTime)(ISensorLight_t *_this);
-  sys_error_code_t (*SensorGetLightGain)(ISensorLight_t *_this, uint16_t *LightGain);
+  sys_error_code_t (*SensorGetLightGain)(ISensorLight_t *_this, float *LightGain);
   sys_error_code_t (*SensorSetIntermeasurementTime)(ISensorLight_t *_this, uint32_t intermeasurement_time);
   sys_error_code_t (*SensorSetExposureTime)(ISensorLight_t *_this, float exposure_time);
-  sys_error_code_t (*SensorSetLightGain)(ISensorLight_t *_this, uint16_t *LightGain);
+  sys_error_code_t (*SensorSetLightGain)(ISensorLight_t *_this, float LightGain, uint8_t channel);
 };
 
 struct _ISensorLight_t
@@ -65,7 +65,7 @@ static inline float ISensorGetExposureTime(ISensorLight_t *_this)
   return _this->vptr->SensorGetExposureTime(_this);
 }
 
-static inline sys_error_code_t ISensorGetLightGain(ISensorLight_t *_this, uint16_t *LightGain)
+static inline sys_error_code_t ISensorGetLightGain(ISensorLight_t *_this, float *LightGain)
 {
   return _this->vptr->SensorGetLightGain(_this, LightGain);
 }
@@ -80,9 +80,9 @@ static inline sys_error_code_t ISensorSetExposureTime(ISensorLight_t *_this, flo
   return _this->vptr->SensorSetExposureTime(_this, exposure_time);
 }
 
-static inline sys_error_code_t ISensorSetLightGain(ISensorLight_t *_this, uint16_t *LightGain)
+static inline sys_error_code_t ISensorSetLightGain(ISensorLight_t *_this, float LightGain, uint8_t channel)
 {
-  return _this->vptr->SensorSetLightGain(_this, LightGain);
+  return _this->vptr->SensorSetLightGain(_this, LightGain, channel);
 }
 
 #ifdef __cplusplus

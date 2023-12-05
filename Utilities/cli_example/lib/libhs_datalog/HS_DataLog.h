@@ -77,6 +77,8 @@ int hs_datalog_set_integer_property(int dId, int value, char * comp_name, char* 
 int hs_datalog_set_float_property(int dId, float value, char * comp_name, char* prop_name, char* sub_prop_name = nullptr, char** response = nullptr);
 //TODO update comments
 int hs_datalog_set_string_property(int dId, char* value, char * comp_name, char* prop_name, char* sub_prop_name = nullptr, char** response = nullptr);
+//TODO update comments
+int hs_datalog_update_components_map(int dId, char * device_satus);
 
 /**
  * @brief to configure a device status

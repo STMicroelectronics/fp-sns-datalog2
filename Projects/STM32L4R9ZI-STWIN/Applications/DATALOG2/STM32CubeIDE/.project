@@ -1702,6 +1702,61 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_PnPLike.c</locationURI>
 		</link>
 		<link>
+			<name>User/Core/Inc/drivers/BCAdcDriver.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/drivers/BCAdcDriver.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Inc/drivers/BCAdcDriver_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/drivers/BCAdcDriver_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Inc/drivers/BCTimChgDriver.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/drivers/BCTimChgDriver.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Inc/drivers/BCTimChgDriver_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/drivers/BCTimChgDriver_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Inc/drivers/BCTimerDriver.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/drivers/BCTimerDriver.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Inc/drivers/BCTimerDriver_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/drivers/BCTimerDriver_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Inc/services/BCProtocol.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/services/BCProtocol.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Src/drivers/BCAdcDriver.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/drivers/BCAdcDriver.c</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Src/drivers/BCTimChgDriver.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/drivers/BCTimChgDriver.c</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Src/drivers/BCTimerDriver.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/drivers/BCTimerDriver.c</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Src/services/BCProtocol.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/services/BCProtocol.c</locationURI>
+		</link>
+		<link>
 			<name>User/eLooM_Components/SensorManager/Inc/ABusIF.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ABusIF.h</locationURI>

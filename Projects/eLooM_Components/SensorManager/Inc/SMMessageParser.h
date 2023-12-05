@@ -73,7 +73,8 @@ typedef union _SMMessage
     uint8_t messageId;                                // Report ID = 0x04 (4)
     uint8_t nSensorId;                               // Specify the sensor ID
     uint16_t nCmdID;                                  // Specify the command ID
-    float nParam;                                  // Specify an optional parameter.
+    uint32_t nParam;                                  // Specify an optional parameter.
+    float fParam;                                  // Specify an optional parameter.
   } sensorMessage;
 
   //--------------------------------------------------------------------------------

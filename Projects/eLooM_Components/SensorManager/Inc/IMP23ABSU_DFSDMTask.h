@@ -121,8 +121,8 @@ struct _IMP23ABSUTask
   /*
     * Calibration values, used for adjusting audio gain
     */
-  int old_in;
-  int old_out;
+  int32_t old_in;
+  int32_t old_out;
 
   /**
     * Used to update the instantaneous ODR.

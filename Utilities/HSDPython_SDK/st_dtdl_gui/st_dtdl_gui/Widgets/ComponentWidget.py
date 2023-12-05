@@ -18,20 +18,20 @@ import os
 from functools import partial
 
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QValidator, QScreen
+from PySide6.QtGui import QScreen
 from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QSpinBox, QRadioButton, QPushButton, QVBoxLayout, QWidget, QFrame, QGridLayout
 from PySide6.QtGui import QDoubleValidator, QIntValidator
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 
 import st_dtdl_gui
+from st_dtdl_gui.Utils import UIUtils
 from st_dtdl_gui.Widgets.ToggleButton import ToggleButton
-from st_pnpl.DTDL.device_template_model import ContentType, RequestSchema, ResponseSchema
+from st_pnpl.DTDL.device_template_model import ContentSchema, ContentType, RequestSchema, ResponseSchema
 from st_pnpl.PnPLCmd import PnPLCMDManager
-from st_dtdl_gui.Widgets.PropertyWidget import PropertyWidget
+from st_dtdl_gui.Widgets.PropertyWidget import PropertyWidget, SubPropertyWidget
 from st_dtdl_gui.Widgets.CommandWidget import CommandField, CommandWidget
 from st_dtdl_gui.Widgets.TelemetryWidget import TelemetryWidget
-from st_dtdl_gui.UI.styles import STDTDL_EditLine
 from st_dtdl_gui.Utils.DataClass import TypeEnum
 from st_dtdl_gui.STDTDL_Controller import ComponentType
 
@@ -103,12 +103,15 @@ class ComponentWidget(QWidget):
                 
                 widget = PropertyWidget(comp_name, comp_sem_type, p)
                 
-                try: #complex object schema
-                    if p.schema.type.value in ("Enum", "Object"):
-                        schema_type = p.schema.type.value.lower()
-                except AttributeError: #primitive type schema
+                enum_values = None
+                if isinstance(p.schema, ContentSchema):
+                    schema_type = p.schema.type.value.lower()
+                    if p.schema.type.value == "Enum":
+                        enum_values = p.schema.enum_values
+                else:
                     schema_type = p.schema
-                self.assign_callbacks(widget, schema_type, p.schema.value_schema if schema_type == TypeEnum.ENUM.value else None)
+
+                self.assign_callbacks(widget, schema_type, p.schema.value_schema if schema_type == TypeEnum.ENUM.value else None, enum_values)
                 
                 if (comp_sem_type == ComponentType.SENSOR or comp_sem_type == ComponentType.ALGORITHM or comp_sem_type == ComponentType.ACTUATOR) and p.name == "enable":
                     self.radioButton_enable.setVisible(True)
@@ -239,15 +242,15 @@ class ComponentWidget(QWidget):
         component_props_frame.setFixedHeight(component_props_layout.sizeHint().height())
         self.contents_widget.layout().addWidget(component_props_frame)
 
-    def assign_callbacks(self, widget, schema_type, schema_value=None):
+    def assign_callbacks(self, widget, schema_type, schema_value=None, enum_values=None):
         if schema_type == TypeEnum.STRING.value:
-            widget.value.textChanged.connect(partial(self.validate_value, widget))
+            widget.value.textChanged.connect(partial(UIUtils.validate_value, widget))
             widget.value.editingFinished.connect(partial(self.send_string_command, widget))
-        elif schema_type == TypeEnum.DOUBLE.value:
-            widget.value.textChanged.connect(partial(self.validate_value, widget))
+        elif schema_type == TypeEnum.DOUBLE.value or schema_type == TypeEnum.FLOAT.value:
+            widget.value.textChanged.connect(partial(UIUtils.validate_value, widget))
             widget.value.editingFinished.connect(partial(self.send_double_command, widget))
         elif  schema_type == TypeEnum.INTEGER.value:
-            widget.value.textChanged.connect(partial(self.validate_value, widget))
+            widget.value.textChanged.connect(partial(UIUtils.validate_value, widget))
             if isinstance(widget.value, QSpinBox):
                 widget.value.valueChanged.connect(partial(self.send_int_command, widget))
             else:
@@ -256,20 +259,27 @@ class ComponentWidget(QWidget):
             widget.value.toggled.connect(partial(self.boolean_prop_triggered, widget))
         elif schema_type == TypeEnum.ENUM.value:
             if schema_value.value == TypeEnum.INTEGER.value:
-                widget.value.activated.connect(partial(self.send_enum_number_command, widget))
+                widget.value.activated.connect(partial(self.send_enum_number_command, widget, enum_values))
             if schema_value.value == TypeEnum.STRING.value:
-                widget.value.activated.connect(partial(self.send_enum_string_command, widget))
+                widget.value.activated.connect(partial(self.send_enum_string_command, widget, enum_values))
         elif schema_type == TypeEnum.OBJECT.value:
-            if widget.has_bounds:
-                if type(widget.validator) == QDoubleValidator:
-                    widget.value.textChanged.connect(partial(self.validate_value, widget))
-                    widget.value.editingFinished.connect(partial(self.send_double_command, widget))
-                elif type(widget.validator) == QIntValidator:
-                    widget.value.textChanged.connect(partial(self.validate_value, widget))
-                    widget.value.editingFinished.connect(partial(self.send_int_command, widget))
-            else:
-                for w in widget.value.widget.sub_widgets:
-                    self.assign_callbacks(w, w.prop_type)
+            if isinstance(widget, PropertyWidget):
+                if widget.has_bounds:
+                    if type(widget.validator) == QDoubleValidator:
+                        widget.value.textChanged.connect(partial(UIUtils.validate_value, widget))
+                        widget.value.editingFinished.connect(partial(self.send_double_command, widget))
+                    elif type(widget.validator) == QIntValidator:
+                        widget.value.textChanged.connect(partial(UIUtils.validate_value, widget))
+                        widget.value.editingFinished.connect(partial(self.send_int_command, widget))
+                else:
+                    for w in widget.value.widget.sub_widgets:
+                        if isinstance(w, PropertyWidget):
+                            self.assign_callbacks(w, w.prop_type)
+                        else:
+                            self.assign_callbacks(w, TypeEnum.OBJECT.value)
+            elif isinstance(widget, SubPropertyWidget):
+                for sw in widget.widget.sub_widgets:
+                    self.assign_callbacks(sw, sw.prop_type)
 
     @Slot()
     def clicked_browse_dt_button(self):
@@ -303,6 +313,21 @@ class ComponentWidget(QWidget):
             log.debug("Component:", comp_name)
             if comp_status is not None:
                 for cont_name, cont_value in comp_status.items():
+                    cont_dtdl = next((c for c in self.comp_contents if c.name == cont_name), None)
+                    if cont_dtdl is not None:
+                        if isinstance(cont_dtdl.schema, ContentSchema):
+                            if cont_dtdl.schema.type.value == "Enum":
+                                value_schema = cont_dtdl.schema.value_schema
+                                if value_schema.value == "string":
+                                    cv = [ev for ev in cont_dtdl.schema.enum_values if ev.enum_value == str(cont_value)]
+                                else:
+                                    cv = [ev for ev in cont_dtdl.schema.enum_values if ev.enum_value == cont_value]
+                                if len(cv) > 0:
+                                    cv_display_name = cv[0].display_name
+                                    cont_value = cv_display_name if isinstance(cv_display_name, str) else cv_display_name.en
+                            # elif cont_dtdl.schema.type.value == "Object":
+                            #     for cont_name, cont_value in comp_status[cont_name].items():
+                            #         self.s_component_updated()
                     if type(cont_value) is dict:
                         log.debug(" - Content:", cont_name)
                         for key in cont_value:
@@ -357,20 +382,32 @@ class ComponentWidget(QWidget):
                                 self.__update_Property_widget_value(w,cont_value)
                         else:
                             for ww in w.value.widget.sub_widgets:
-                                if ww.field_name == sub_prop_name:
-                                    self.__update_Property_widget_value(ww,cont_value)
+                                if isinstance(ww, PropertyWidget):
+                                    if ww.field_name == sub_prop_name:
+                                        if isinstance(cont_value, ContentSchema):
+                                            print(sp)
+                                        else:
+                                            self.__update_Property_widget_value(ww,cont_value)
+                                else:
+                                    if ww.prop_name[-1] == sub_prop_name:
+                                        for sp in ww.widget.sub_widgets:
+                                            self.__update_Property_widget_value(sp,cont_value[sp.field_name])
 
     def __update_Property_widget_value(self, widget, value):
         if widget.prop_type == TypeEnum.STRING.value:
             widget.value.setText(value)
-        elif widget.prop_type == TypeEnum.INTEGER.value or widget.prop_type == TypeEnum.DOUBLE.value:
+        elif widget.prop_type == TypeEnum.INTEGER.value or widget.prop_type == TypeEnum.DOUBLE.value or widget.prop_type == TypeEnum.FLOAT.value:
             if isinstance(widget.value, QSpinBox):
                 widget.value.setValue(value)
             else:
                 widget.value.setText(str(value))
         elif widget.prop_type == TypeEnum.ENUM.value:
-            if value < widget.value.count():
-                widget.value.setCurrentIndex(value)
+            item_id = 0
+            for i in range(widget.value.count()):
+                if widget.value.itemText(i) == str(value):
+                    item_id = i
+            widget.value.setCurrentIndex(item_id)
+
         elif widget.prop_type == TypeEnum.BOOLEAN.value:
             try:
                 widget.value.blockSignals(True)
@@ -411,24 +448,6 @@ class ComponentWidget(QWidget):
                     self.controller.update_component_status(cn, ComponentType.SENSOR)
         else:
             self.controller.update_component_status(widget.comp_name, widget.comp_sem_type)
-
-    def validate_value(self, widget, text_value):        
-        validation_res = widget.validator.validate(text_value,0)
-        if isinstance(validation_res, tuple):
-            validation_res = validation_res[0]
-
-        if validation_res == QValidator.State.Acceptable:
-            if isinstance(widget.value, QSpinBox):
-                # widget.value.setStyleSheet(STDTDL_SpinBox.valid)#TODO build a proper css class
-                pass
-            else:
-                widget.value.setStyleSheet(STDTDL_EditLine.valid)
-        else:
-            if isinstance(widget, QSpinBox):
-                # widget.value.setStyleSheet(STDTDL_SpinBox.invalid)#TODO build a proper css class
-                pass
-            else:
-                widget.value.setStyleSheet(STDTDL_EditLine.invalid)
     
     def send_double_command(self, widget: PropertyWidget):
         json_string = PnPLCMDManager.create_set_property_cmd(widget.comp_name, widget.prop_name, float(widget.value.text()) if widget.field_name is None else { widget.field_name: float(widget.value.text())})
@@ -445,7 +464,9 @@ class ComponentWidget(QWidget):
         get_logging_status = getattr(self.controller, "get_logging_status", None)
         if get_logging_status is not None and callable(get_logging_status):
             is_logging = self.controller.get_logging_status()
-        if not is_logging:
+            if not is_logging:
+                widget.value.setChecked(status)
+        else:
             widget.value.setChecked(status)
 
     def boolean_prop_triggered(self, widget: PropertyWidget, status):
@@ -466,8 +487,9 @@ class ComponentWidget(QWidget):
         else:
             self.controller.update_component_status(widget.comp_name, widget.comp_sem_type)
 
-    def send_enum_number_command(self, widget: PropertyWidget, index):
-        json_string = PnPLCMDManager.create_set_property_cmd(widget.comp_name, widget.prop_name, index if widget.field_name is None else { widget.field_name: index})
+    def send_enum_number_command(self, widget: PropertyWidget, enum_values, index):
+        int_value = enum_values[index].enum_value
+        json_string = PnPLCMDManager.create_set_property_cmd(widget.comp_name, widget.prop_name, int_value)
         self.controller.send_command(json_string)
         if widget.comp_sem_type == ComponentType.SENSOR:
             comp_sensor_name = widget.comp_name.split('_')[0]
@@ -477,8 +499,9 @@ class ComponentWidget(QWidget):
         else:
             self.controller.update_component_status(widget.comp_name, widget.comp_sem_type)
     
-    def send_enum_string_command(self, widget: PropertyWidget, index):
-        json_string = PnPLCMDManager.create_set_property_cmd(widget.comp_name, widget.prop_name, index if widget.field_name is None else { widget.field_name: index})
+    def send_enum_string_command(self, widget: PropertyWidget, enum_values, index):
+        str_value = enum_values[index].enum_value
+        json_string = PnPLCMDManager.create_set_property_cmd(widget.comp_name, widget.prop_name, str_value)
         self.controller.send_command(json_string)
         if widget.comp_sem_type == ComponentType.SENSOR:
             comp_sensor_name = widget.comp_name.split('_')[0]

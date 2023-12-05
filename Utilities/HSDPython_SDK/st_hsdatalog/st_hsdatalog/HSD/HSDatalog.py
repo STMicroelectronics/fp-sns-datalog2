@@ -414,12 +414,12 @@ class HSDatalog:
                 HSDatalog.__convert_to_xsv(hsd, s_name, ss_type, odr, start_time, end_time, labeled, raw_data, output_folder, file_format)
                 
     @staticmethod
-    def __convert_to_txt_by_tags(hsd, comp_name, comp_type, is_active, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, hsd_dfs):
+    def __convert_to_txt_by_tags(hsd, comp_name, comp_type, is_active, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, hsd_dfs, which_tags):
         data_tags = None
         if comp_type != 'MLC' and comp_type != 'STREDL' and is_active:
             df = hsd.get_dataframe(comp_name, comp_type, start_time, end_time, labeled = not ignore_datalog_tags)
             if not ignore_datalog_tags:
-                data_tags = hsd.get_data_stream_tags(comp_name, comp_type, start_time, end_time)
+                data_tags = hsd.get_data_stream_tags(comp_name, comp_type, start_time, end_time, which_tags)
                 if ignore_datalog_tags == False and len(data_tags) == 0:
                     log.error("--> Error in format conversion. Data corrupted for {}".format(comp_name))
                     return
@@ -430,14 +430,14 @@ class HSDatalog:
         log.info("--> {} ST format conversion completed successfully".format(comp_name))
 
     @staticmethod
-    def convert_dat_to_txt_by_tags(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format):
+    def convert_dat_to_txt_by_tags(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, which_tags = None):
         hsd_dfs = []
         if isinstance(hsd, HSDatalog_v2):
             c_name = list(component.keys())[0]
             enable = None
             if "enable" in component[c_name]:
                 enable = component[c_name]["enable"] #TODO check this
-                HSDatalog.__convert_to_txt_by_tags(hsd, c_name, None, enable, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, hsd_dfs)
+                HSDatalog.__convert_to_txt_by_tags(hsd, c_name, None, enable, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, hsd_dfs, which_tags)
             else:
                 if enable is None:
                     log.exception("Missing \"enable\" Properties in your device status")
@@ -447,7 +447,7 @@ class HSDatalog:
             for ss_id, ss_desc in enumerate(component.sensor_descriptor.sub_sensor_descriptor):
                 ss_type = ss_desc.sensor_type
                 is_active = component.sensor_status.sub_sensor_status[ss_id].is_active
-                HSDatalog.__convert_to_txt_by_tags(hsd, s_name, ss_type, is_active, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, hsd_dfs)
+                HSDatalog.__convert_to_txt_by_tags(hsd, s_name, ss_type, is_active, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, hsd_dfs, which_tags)
     
     @staticmethod
     def __convert_to_nanoedge_format(hsd, comp_name, comp_type, odr, signal_length, signal_increment, start_time, end_time, raw_data, output_folder):

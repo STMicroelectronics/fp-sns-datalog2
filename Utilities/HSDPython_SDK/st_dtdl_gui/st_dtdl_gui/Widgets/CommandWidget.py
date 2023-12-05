@@ -16,7 +16,6 @@
 from dataclasses import dataclass
 from functools import partial
 import json
-import time
 import os
 
 from PySide6.QtWidgets import QLabel, QRadioButton, QPushButton, QLineEdit, QVBoxLayout, QWidget, QHBoxLayout, QComboBox, QFrame, QFileDialog, QApplication
@@ -86,7 +85,7 @@ class CommandWidget(QWidget):
                 self.req_labels[f.f_name].setFixedWidth(150)
                 if f.f_type == TypeEnum.STRING.value:
                     self.req_values[f.f_name] = QLineEdit(f.f_value)
-                elif f.f_type == TypeEnum.DOUBLE.value:
+                elif f.f_type == TypeEnum.DOUBLE.value or f.f_type == TypeEnum.FLOAT.value:
                     self.validator = QDoubleValidator()
                     self.req_values[f.f_name] = QLineEdit(f.f_value)
                     self.req_values[f.f_name].setValidator(self.validator)
@@ -110,7 +109,7 @@ class CommandWidget(QWidget):
                 self.resp_labels[f.f_name].setFixedWidth(150)
                 if f.f_type == TypeEnum.STRING.value:
                     self.resp_values[f.f_name] = QLineEdit(f.f_value)
-                elif f.f_type == TypeEnum.DOUBLE.value:
+                elif f.f_type == TypeEnum.DOUBLE.value or f.f_type == TypeEnum.FLOAT.value:
                     self.validator = QDoubleValidator()
                     self.resp_values[f.f_name] = QLineEdit(f.f_value)
                     self.resp_values[f.f_name].setValidator(self.validator)
@@ -221,7 +220,8 @@ class CommandWidget(QWidget):
                         fw = self.resp_values[0]
                         resp_value = inner_json[f.f_name]
                         if f.f_type == TypeEnum.STRING.value or \
-                            f.f_type == TypeEnum.DOUBLE.value or \
+                            f.f_type == TypeEnum.DOUBLE.value  or \
+                            f.f_type == TypeEnum.FLOAT.value or \
                             f.f_type == TypeEnum.INTEGER.value:
                             fw.setText(str(resp_value))
                         elif f.f_type == TypeEnum.BOOLEAN.value:
@@ -237,7 +237,8 @@ class CommandWidget(QWidget):
                             fw = self.resp_values[rv]
                             resp_value = inner_json[self.response_name][f.f_name]
                             if f.f_type == TypeEnum.STRING.value or \
-                                f.f_type == TypeEnum.DOUBLE.value or \
+                                f.f_type == TypeEnum.DOUBLE.value  or \
+                                f.f_type == TypeEnum.FLOAT.value or \
                                 f.f_type == TypeEnum.INTEGER.value:
                                 fw.setText(str(resp_value))
                             elif f.f_type == TypeEnum.BOOLEAN.value:
@@ -269,7 +270,7 @@ class CommandWidget(QWidget):
             for f in widget.request_fields:
                 if f.f_type == TypeEnum.STRING.value:
                     message_fields[f.f_name] = widget.req_values[f.f_name].text()
-                elif f.f_type == TypeEnum.DOUBLE.value:
+                elif f.f_type == TypeEnum.DOUBLE.value or f.f_type == TypeEnum.FLOAT.value:
                     message_fields[f.f_name] = float(widget.req_values[f.f_name].text())
                 elif  f.f_type == TypeEnum.INTEGER.value:
                     message_fields[f.f_name] = int(widget.req_values[f.f_name].text())

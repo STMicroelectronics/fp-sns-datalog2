@@ -20,7 +20,7 @@ import shutil
 import json
 from datetime import datetime
 
-from st_hsdatalog.HSD_utils.exceptions import InvalidCommandSetError, NoDeviceConnectedError
+from st_hsdatalog.HSD_utils.exceptions import InvalidCommandSetError
 import st_hsdatalog.HSD_utils.logger as logger
 from st_hsdatalog.HSD_link.communication.STWIN_HSD.STWINHSD_com_manager import STWINHSD_Creator
 from st_hsdatalog.HSD_link.communication.STWIN_HSD.STWINHSD_CMD_com_manager import STWINHSD_CMD_Creator

@@ -2,6 +2,8 @@
 
 To use it, follow the above procedure: 
 
+- on a RaspberryPi do **cd raspberryPi_setup**, else do **cd linux_setup**
+
 - **dos2unix 30-hsdatalog.rules setup.sh udev_removal.sh**
 
 - **chmod 777 setup.sh udev_removal.sh**

@@ -582,15 +582,7 @@ sys_error_code_t STHS34PF80Task_vtblDoEnterPowerMode(AManagedTask *_this, const 
     if (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
     {
       /* Deactivate the sensor */
-      sths34pf80_tmos_drdy_status_t tmos_drdy_status;
       sths34pf80_tmos_func_status_t tmos_func_status;
-
-      /* Wait for DRDY */
-      do
-      {
-        sths34pf80_tmos_drdy_status_get(p_sensor_drv, &tmos_drdy_status);
-      } while (!tmos_drdy_status.drdy);
-
       if (0 == sths34pf80_tmos_odr_set(p_sensor_drv, STHS34PF80_TMOS_ODR_OFF))
       {
         /* Clear DRDY */
@@ -954,7 +946,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetTransmittance(ISensorPresence_t *_t
         .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
         .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_TRANSMITTANCE,
         .sensorMessage.nSensorId = sensor_id,
-        .sensorMessage.nParam = (uint32_t) Transmittance };
+        .sensorMessage.nParam = (float) Transmittance };
     res = STHS34PF80TaskPostReportToBack(p_if_owner, (SMMessage*) &report);
   }
 
@@ -1365,8 +1357,10 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetSoftwareCompensationAlgorithmConfig
     {
         .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
         .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_SW_COMPENSATION_PARAMETERS,
-        .sensorMessage.nSensorId = sensor_id,
-        .sensorMessage.nParam = (uint32_t) pAlgorithmConfig };
+        .sensorMessage.nSensorId = sensor_id
+//        .sensorMessage.nParam = (uint32_t) pAlgorithmConfig
+		};
+    *(uint32_t*)&report.sensorMessage.nParam = (uint32_t) pAlgorithmConfig;
     res = STHS34PF80TaskPostReportToBack(p_if_owner, (SMMessage*) &report);
   }
 
@@ -2294,6 +2288,7 @@ static sys_error_code_t STHS34PF80TaskSensorInitTaskParams(STHS34PF80Task *_this
   _this->sensor_status.isensor_class = ISENSOR_CLASS_PRESENCE;
   _this->sensor_status.is_active = TRUE;
   _this->sensor_status.type.presence.data_frequency = 15.0f;
+  _this->sensor_status.type.presence.Transmittance = 1.0f;
   _this->sensor_status.type.presence.average_tobject = 32;
   _this->sensor_status.type.presence.average_tambient = 8;
   _this->sensor_status.type.presence.presence_threshold = 150;
@@ -2364,7 +2359,7 @@ static sys_error_code_t STHS34PF80TaskSensorSetDataFrequency(STHS34PF80Task *_th
     }
     else
     {
-      data_frequency = 31.0f;
+      data_frequency = 30.0f;
     }
 
     if (!SYS_IS_ERROR_CODE(res))
@@ -2443,6 +2438,17 @@ static sys_error_code_t STHS34PF80TaskSensorSetAverageTObject(STHS34PF80Task *_t
         _this->sensor_status.type.presence.average_tobject = 32;
       }
     }
+    else if (average_tobject < 129)
+      {
+        if (sths34pf80_avg_tobject_num_set(p_sensor_drv, STHS34PF80_AVG_TMOS_128) != 0)
+        {
+          res = SYS_INVALID_PARAMETER_ERROR_CODE;
+        }
+        else
+        {
+          _this->sensor_status.type.presence.average_tobject = 128;
+        }
+      }
     else if (average_tobject < 257)
     {
       if (sths34pf80_avg_tobject_num_set(p_sensor_drv, STHS34PF80_AVG_TMOS_256) != 0)
@@ -3014,7 +3020,7 @@ static sys_error_code_t STHS34PF80TaskSensorSetEmbeddedCompensation(STHS34PF80Ta
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  uint16_t embedded_compensation = report.sensorMessage.nParam;
+  uint8_t embedded_compensation = (uint8_t)report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->id)
@@ -3040,12 +3046,12 @@ static sys_error_code_t STHS34PF80TaskSensorSetSoftwareCompensation(STHS34PF80Ta
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  uint16_t SoftwareCompensation = report.sensorMessage.nParam;
+  uint8_t software_compensation = (uint8_t)report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->id)
   {
-    _this->sensor_status.type.presence.embedded_compensation = SoftwareCompensation;
+    _this->sensor_status.type.presence.software_compensation = software_compensation;
   }
   else
     {
@@ -3059,7 +3065,7 @@ static sys_error_code_t STHS34PF80TaskSensorConfigSoftwareCompensation(STHS34PF8
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  CompensationAlgorithmConfig_t *pConfig = (CompensationAlgorithmConfig_t*) report.sensorMessage.nParam;
+  CompensationAlgorithmConfig_t *pConfig = (CompensationAlgorithmConfig_t*) *(uint32_t*)&report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if(id == _this->id)

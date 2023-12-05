@@ -39,7 +39,10 @@ struct _ISensorRanging_vtbl
   sys_error_code_t (*SensorGetIT)(ISensorRanging_t *_this, ITConfig_t *p_it_config);
   uint32_t (*SensorGetAddress)(ISensorRanging_t *_this);
   uint32_t (*SensorGetPowerMode)(ISensorRanging_t *_this);
-  sys_error_code_t (*SensorConfigProfile)(ISensorRanging_t *_this, ProfileConfig_t *p_config);
+  sys_error_code_t (*SensorSetRangingFrequency)(ISensorRanging_t *_this, uint32_t frequency);
+  sys_error_code_t (*SensorSetRangingResolution)(ISensorRanging_t *_this, uint8_t resolution);
+  sys_error_code_t (*SensorSetRangingMode)(ISensorRanging_t *_this, uint8_t mode);
+  sys_error_code_t (*SensorSetIntegrationTime)(ISensorRanging_t *_this, uint32_t timing_budget);
   sys_error_code_t (*SensorConfigIT)(ISensorRanging_t *_this, ITConfig_t *p_it_config);
   sys_error_code_t (*SensorSetAddress)(ISensorRanging_t *_this, uint32_t address);
   sys_error_code_t (*SensorSetPowerMode)(ISensorRanging_t *_this, uint32_t power_mode);
@@ -76,9 +79,24 @@ static inline uint32_t ISensorGetPowerMode(ISensorRanging_t *_this)
   return _this->vptr->SensorGetPowerMode(_this);
 }
 
-static inline sys_error_code_t ISensorConfigProfile(ISensorRanging_t *_this, ProfileConfig_t *p_config)
+static inline sys_error_code_t ISensorSetRangingFrequency(ISensorRanging_t *_this, uint32_t frequency)
 {
-  return _this->vptr->SensorConfigProfile(_this, p_config);
+  return _this->vptr->SensorSetRangingFrequency(_this, frequency);
+}
+
+static inline sys_error_code_t ISensorSetRangingResolution(ISensorRanging_t *_this, uint8_t resolution)
+{
+  return _this->vptr->SensorSetRangingResolution(_this, resolution);
+}
+
+static inline sys_error_code_t ISensorSetRangingMode(ISensorRanging_t *_this, uint8_t mode)
+{
+  return _this->vptr->SensorSetRangingMode(_this, mode);
+}
+
+static inline sys_error_code_t ISensorSetIntegrationTime(ISensorRanging_t *_this, uint32_t timing_budget)
+{
+  return _this->vptr->SensorSetIntegrationTime(_this, timing_budget);
 }
 
 static inline sys_error_code_t ISensorConfigIT(ISensorRanging_t *_this, ITConfig_t *p_it_config)

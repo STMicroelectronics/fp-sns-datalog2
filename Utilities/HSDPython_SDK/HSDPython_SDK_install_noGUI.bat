@@ -7,23 +7,16 @@ ECHO -- e.g.: HSDPython_SDK_install.bat http://usr_name:password@proxyserver_nam
 ECHO.
 set proxy_string=%1
 
-:: Section 0: Python Virtual environment Creation and Activation
-echo "==================================================="
-echo "Create and Activate a Python Virtual Environment"
-echo "==================================================="
-python -m venv .venv
-.\.venv\Scripts\activate
-
 :: Section 1: st_pnpl
 ECHO ===========================================
 ECHO installing st_pnpl...
 ECHO ===========================================
-if "%proxy_string%"=="" (python -m pip install st_pnpl\dist\st_pnpl-2.0.0-py3-none-any.whl) else (python -m pip install st_pnpl\dist\st_pnpl-2.0.0-py3-none-any.whl --proxy %proxy_string%) 
+if "%proxy_string%"=="" (python -m pip install st_pnpl\dist\st_pnpl-2.1.0-py3-none-any.whl) else (python -m pip install st_pnpl\dist\st_pnpl-2.1.0-py3-none-any.whl --proxy %proxy_string%) 
 :: Section 2: st_hsdatalog (NO GUI version)
 ECHO ===========================================
 ECHO installing st_hsdatalog (NO GUI version)...
 ECHO ===========================================
-if "%proxy_string%"=="" (python -m pip install st_hsdatalog\dist\noGUI\st_hsdatalog-3.0.0-py3-none-any.whl) else (python -m pip install st_hsdatalog\dist\noGUI\st_hsdatalog-3.0.0-py3-none-any.whl --proxy %proxy_string%) 
+if "%proxy_string%"=="" (python -m pip install st_hsdatalog\dist\noGUI\st_hsdatalog-3.0.1-py3-none-any.whl) else (python -m pip install st_hsdatalog\dist\noGUI\st_hsdatalog-3.0.1-py3-none-any.whl --proxy %proxy_string%) 
 :: Section 3: asciimatics needed from hsdatalog_cli.py example script
 ECHO ===========================================
 ECHO installing asciimatics...

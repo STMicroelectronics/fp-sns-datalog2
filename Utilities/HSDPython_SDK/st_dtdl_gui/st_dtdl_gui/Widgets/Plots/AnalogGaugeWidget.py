@@ -14,12 +14,10 @@
 #
 
 import math
-import random
-
 
 from PySide6.QtWidgets import QLabel, QVBoxLayout
 from PySide6.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient
-from PySide6.QtCore import Qt, QTimer, QPoint, QPointF, QRect, QSize, QObject, Signal, Slot
+from PySide6.QtCore import Qt, QPoint, QPointF, Signal, Slot
 
 from st_dtdl_gui.Widgets.Plots.PlotWidget import PlotWidget
 

@@ -155,9 +155,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   json_set_allocation_functions(SysAlloc, SysFree);
 
   /* Allocate the task objects */
-//  sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams, &MX_GPIO_PA8InitParams, &MX_GPIO_PA0InitParams, &MX_GPIO_PD0InitParams, &MX_TIM5InitParams, &MX_ADC4InitParams,
-//                              &MX_GPIO_UBInitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams);
-  sUtilObj = UtilTaskAlloc(NULL, NULL, NULL, NULL, NULL, NULL,
+  sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams, &MX_GPIO_PF6InitParams, &MX_GPIO_PB0InitParams, &MX_GPIO_PF8InitParams, &MX_TIM3InitParams, &MX_ADC1InitParams,
                               &MX_GPIO_UBInitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams);
 
   sSPI3BusObj = SPIBusTaskAlloc(&MX_SPI3InitParams);

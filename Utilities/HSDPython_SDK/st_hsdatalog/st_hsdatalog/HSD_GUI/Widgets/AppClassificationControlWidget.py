@@ -19,7 +19,7 @@ from PySide6.QtCore import Qt, Slot, QTimer
 from st_pnpl.PnPLCmd import PnPLCMDManager
 
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QFrame, QComboBox, QPushButton, QProgressBar, QSpinBox
+from PySide6.QtWidgets import QFrame, QPushButton, QProgressBar, QSpinBox
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 

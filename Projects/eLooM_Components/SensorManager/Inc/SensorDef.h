@@ -364,7 +364,7 @@ typedef struct SensorStatusLight_t
   /**
     * Specifies the gain.
     */
-  uint16_t gain[ ALS_NUM_CHANNELS ];
+  float gain[ ALS_NUM_CHANNELS ];
 
   /**
     * Specifies the effective data rate.

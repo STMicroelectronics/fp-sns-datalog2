@@ -17,10 +17,12 @@
 
 import os
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QSpacerItem, QSizePolicy
 
 from st_dtdl_gui.STDTDL_DeviceConfigPage import STDTDL_DeviceConfigPage
 from st_dtdl_gui.Widgets.Plots.AnomalyDetectorWidget import AnomalyDetectorWidget
+from st_hsdatalog.HSD_GUI.Widgets.HSDPlotALSWidget import HSDPlotALSWidget
+from st_hsdatalog.HSD_GUI.Widgets.HSDPlotTMOSWidget import HSDPlotTMOSWidget
+from st_hsdatalog.HSD_GUI.Widgets.HSDPlotToFWidget import HSDPlotToFWidget
 
 from st_hsdatalog.HSD_link.HSDLink import HSDLink
 from st_hsdatalog.HSD_GUI.Widgets.AppClassificationControlWidget import AppClassificationControlWidget
@@ -32,10 +34,9 @@ from st_hsdatalog.HSD_GUI.Widgets.HSDComponentWidget import HSDComponentWidget
 from st_hsdatalog.HSD_GUI.Widgets.TagsInfoWidget import TagsInfoWidget
 from st_hsdatalog.HSD_GUI.Widgets.HSDPlotLinesWidget import HSDPlotLinesWidget
 
-# from st_dtdl_gui.Widgets.ComponentWidget import ComponentWidget
 from st_dtdl_gui.Widgets.Plots.PlotBarFFTWidget import PlotBarFFTWidget
 from st_dtdl_gui.Widgets.Plots.ClassifierOutputWidget import ClassifierOutputWidget
-from st_dtdl_gui.Utils.DataClass import ActuatorPlotParams, SensorPlotParams, AlgorithmPlotParams
+from st_dtdl_gui.Utils.DataClass import ActuatorPlotParams, PlotPAmbientParams, PlotPMotionParams, PlotPObjectParams, PlotPPresenceParams, SensorLightPlotParams, SensorPlotParams, AlgorithmPlotParams, SensorPresenscePlotParams, SensorRangingPlotParams
 
 from st_dtdl_gui.STDTDL_Controller import ComponentType
 import st_pnpl.DTDL.dtdl_utils as DTDLUtils
@@ -68,7 +69,6 @@ class HSD_DeviceConfigPage(STDTDL_DeviceConfigPage):
     @Slot(str, dict)
     def s_component_found(self, comp_name, comp_interface):
         #create a ComponentWidget
-        comp_id = list(self.controller.components_dtdl.keys()).index(comp_name)
         comp_display_name = comp_interface.display_name if isinstance(comp_interface.display_name, str) else comp_interface.display_name.en
         if comp_name == "log_controller":
             c_status = self.controller.get_component_status(comp_name)
@@ -89,23 +89,26 @@ class HSD_DeviceConfigPage(STDTDL_DeviceConfigPage):
             self.add_header_widget(self.log_control_widget)
             self.controller.fill_component_status(comp_name)
         elif comp_name == "tags_info":
-            self.tags_info_widget = TagsInfoWidget(self.controller, comp_contents=comp_interface.contents, c_id=comp_id, parent=self.device_config_widget)
+            self.tags_info_widget = TagsInfoWidget(self.controller, comp_contents=comp_interface.contents, c_id=1, parent=self.widget_special_componenents)
+            self.tags_info_widget.clicked_show_button()
             self.controller.add_component_config_widget(self.tags_info_widget)
-            self.device_config_widget.layout().addWidget(self.tags_info_widget)
+            self.widget_special_componenents.layout().addWidget(self.tags_info_widget)
             self.controller.fill_component_status(comp_name)
         elif comp_name == "applications_stblesensor":
             pass
         elif comp_name == "automode":
             fw_info = self.controller.hsd_link.get_firmware_info(self.controller.device_id)
             if(HSDLink.get_versiontuple(fw_info["firmware_info"]["fw_version"]) >= HSDLink.get_versiontuple("1.2.0")):
-                self.automode_widget = HSDAutoModeWidget(self.controller, comp_contents=comp_interface.contents, parent=self.widget_header)
-                self.add_header_widget(self.automode_widget)
+                self.automode_widget = HSDAutoModeWidget(self.controller, comp_contents=comp_interface.contents, c_id=0, parent=self.widget_special_componenents)
+                self.controller.add_component_config_widget(self.automode_widget)
+                self.widget_special_componenents.layout().addWidget(self.automode_widget)
                 self.controller.fill_component_status(comp_name)
         else:
-            comp_config_widget = HSDComponentWidget(self.controller, comp_name, comp_display_name, "", comp_interface.contents, comp_id, self.device_config_widget)
+            comp_config_widget = HSDComponentWidget(self.controller, comp_name, comp_display_name, "", comp_interface.contents, self.comp_id, self.device_config_widget)
             self.controller.add_component_config_widget(comp_config_widget)
             self.device_config_widget.layout().addWidget(comp_config_widget)
             self.controller.fill_component_status(comp_name)
+            self.comp_id += 1
 
     
     @Slot(str, dict)
@@ -122,44 +125,32 @@ class HSD_DeviceConfigPage(STDTDL_DeviceConfigPage):
         try:
             enabled = self.controller.is_sensor_enabled(comp_name)
             self.comp_id += 1
-            # #TODO check different sensor categories
-            # s_category = comp_status_value.get("sensor_category")
-            # dimension = comp_status_value.get("dim", 1)
-            # if s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_MEMS.value:
-            #     odr = self.__get_mems_sensor_odr(comp_status_value, comp_interface)
-            #     unit = self.__get_mems_sensor_unit(comp_status_value, comp_interface)
-            #     return SensorMemsPlotParams(comp_name, enabled, odr, dimension, unit)
-            # elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_AUDIO.value:
-            #     odr = self.__get_audio_sensor_odr(comp_status_value, comp_interface)
-            #     unit = self.__get_audio_sensor_unit(comp_status_value, comp_interface)
-            #     return SensorAudioPlotParams(comp_name, enabled, odr, dimension, unit)
-            # elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_RANGING.value:
-            #     log.warning("ISENSOR_CLASS_RANGING category not supported yet")
-            #     unit = self.__get_ranging_sensor_unit(comp_status_value, comp_interface)
-            #     return SensorRangingPlotParams(comp_name, enabled, dimension, unit)
-            # elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
-            #     log.warning("ISENSOR_CLASS_LIGHT category not supported yet")
-            # elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_CAMERA.value:
-            #     log.warning("ISENSOR_CLASS_CAMERA category not supported yet")
-            # else: #Maintain compatibility with OLD versions (< SensorManager v3 [NO SENSOR CATEGORIES])
-            #     odr = self.__get_mems_sensor_odr(comp_status_value, comp_interface)
-            #     unit = self.__get_mems_sensor_unit(comp_status_value, comp_interface)
-            #     if unit == "":
-            #         unit = self.__get_audio_sensor_unit(comp_status_value, comp_interface)
-            #     return SensorMemsPlotParams(comp_name, enabled, odr, dimension, unit)
-
             sensor_plot_params:SensorPlotParams = self.controller.get_plot_params(comp_name, ComponentType.SENSOR, comp_interface, comp_status)
             if sensor_plot_params is not None:
-                sensor_plot_widget = HSDPlotLinesWidget(self.controller, comp_name, comp_display_name, sensor_plot_params, self.graph_id, self.plots_widget) 
+                if isinstance(sensor_plot_params, SensorRangingPlotParams):
+                    sensor_plot_widget = HSDPlotToFWidget(self.controller, comp_name, comp_display_name, sensor_plot_params, self.graph_id, self.plots_widget) 
+                elif isinstance(sensor_plot_params, SensorPresenscePlotParams):
+                    plots_params_dict = {}
+                    s_enabled = comp_status[comp_name].get("enable")
+                    plots_params_dict["Ambient"] = PlotPAmbientParams(comp_name, s_enabled, 1)
+                    plots_params_dict["Object"] = PlotPObjectParams(comp_name, s_enabled, 4)
+                    plots_params_dict["Presence"] = PlotPPresenceParams(comp_name, s_enabled, 3)
+                    plots_params_dict["Motion"] = PlotPMotionParams(comp_name, s_enabled, 3)
+                    sensor_plot_params.plots_params_dict = plots_params_dict
+                    sensor_plot_widget = HSDPlotTMOSWidget(self.controller, comp_name, comp_display_name, sensor_plot_params, self.graph_id, self.plots_widget) 
+                elif isinstance(sensor_plot_params, SensorLightPlotParams):
+                    sensor_plot_widget = HSDPlotALSWidget(self.controller, comp_name, comp_display_name, sensor_plot_params, self.graph_id, self.plots_widget)
+                else:
+                    sensor_plot_widget = HSDPlotLinesWidget(self.controller, comp_name, comp_display_name, sensor_plot_params, self.graph_id, self.plots_widget)
                 self.graph_id +=1
                 self.controller.add_plot_widget(sensor_plot_widget)
                 self.plots_widget.layout().addWidget(sensor_plot_widget)
                 log.debug("comp_name: {} - status: {}".format(comp_name,enabled))
                 sensor_plot_widget.setVisible(enabled)
-            
-            # self.controller.fill_component_status(comp_name)
-        except:
+        except Exception as e:
+            print(e)
             log.warning("It is impossible to know the Sensor [{}] enabling status from the FW device status".format(comp_name))
+
         self.controller.fill_component_status(comp_name)
         self.controller.check_hsd_bandwidth()
 

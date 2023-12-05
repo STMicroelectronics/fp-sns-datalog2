@@ -48,8 +48,9 @@
 #define DATALOG_APP_TASK_CFG_TIMER_PERIOD_MS      5000U
 
 // BLE Advertise option byte
-#define ADV_OB_ALARM                              0
-#define ADV_OB_ICON                               1
+#define ADV_OB_BATTERY                            0U
+#define ADV_OB_ALARM                              1U
+#define ADV_OB_ICON                               2U
 
 #define COMM_ID_SDCARD                            0U
 #define COMM_ID_USB                               1U
@@ -122,7 +123,7 @@ static sys_error_code_t DatalogAppTaskExecuteStepDatalog(AManagedTask *_this);
   *
   * @param xTimer [IN] specifies the handle of the expired timer.
   */
-static VOID DatalogAppTaskAdvOBTimerCallbackFunction(ULONG timer);
+static void DatalogAppTaskAdvOBTimerCallbackFunction(ULONG timer);
 
 /**
   * Update streaming status and allocate/deallocate iStream instances
@@ -565,8 +566,8 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
       p_obj->sensorContext[sId].old_time_stamp = p_evt->timestamp;
       p_obj->sensorContext[sId].n_samples_to_timestamp = p_obj->datalog_model->s_models[sId]->stream_params.spts;
     }
-    else
-    {
+//    else
+//    {
       while (samplesToSend > 0)
       {
         /* n_samples_to_timestamp = 0 if user setup spts = 0 (no timestamp needed) */
@@ -652,7 +653,7 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
           p_obj->sensorContext[sId].n_samples_to_timestamp = p_obj->datalog_model->s_models[sId]->stream_params.spts;
         }
       }
-    }
+//    }
 #endif
   }
   return res;
@@ -1094,35 +1095,92 @@ static VOID DatalogAppTaskAdvOBTimerCallbackFunction(ULONG timer)
 
   /* update BLE advertise option bytes */
   uint8_t adv_option_bytes[3];
+  uint8_t battery_level = 0, status = 0;
   bool log_status = 0;
   bool SD_Detected;
   log_controller_get_sd_mounted(&SD_Detected);
 
+  UtilTask_GetBatteryStatus(&battery_level, &status);
   log_controller_get_log_status(&log_status);
 
-  if (!SD_Detected)
+  if (((battery_level < 10) && (status == UTIL_BATTERY_STATUS_DISCHARGING)) && log_status)
   {
-    adv_option_bytes[ADV_OB_ALARM] = 1;
-    adv_option_bytes[ADV_OB_ICON] = 1;
-  }
-  else if (log_status)
-  {
-    adv_option_bytes[ADV_OB_ALARM] = 2;
-    adv_option_bytes[ADV_OB_ICON] = 2;
+    /* Battery level is low: if SD card is logging, force stop acquisition and close files */
+    if (!(sTaskObj.datalog_model->log_controller_model.status
+          && (sTaskObj.datalog_model->log_controller_model.interface == 1)))
+    {
+      bool automode_state;
+      automode_get_enabled(&automode_state);
+      if (automode_state) /* If automode is running, force automode stopping */
+      {
+        automode_forced_stop();
+        automode_set_enabled(false);
+      }
+
+      DatalogAppTask_msg((ULONG) DT_USER_BUTTON);
+    }
   }
   else
   {
-    adv_option_bytes[ADV_OB_ALARM] = 0;
-    adv_option_bytes[ADV_OB_ICON] = 0;
+    adv_option_bytes[ADV_OB_BATTERY] = battery_level;
+
+    if (!SD_IsDetected())
+    {
+      adv_option_bytes[ADV_OB_ALARM] = 5;
+    }
+    else if (log_status)
+    {
+      adv_option_bytes[ADV_OB_ALARM] = 3;
+    }
+    else
+    {
+      adv_option_bytes[ADV_OB_ALARM] = 0;
+    }
+
+    switch (status)
+    {
+      case UTIL_BATTERY_STATUS_DISCHARGING:
+        if (battery_level <= 20)
+        {
+          adv_option_bytes[ADV_OB_ICON] = 4;
+          adv_option_bytes[ADV_OB_ALARM] = 4;
+        }
+        else if ((battery_level > 20) && (battery_level <= 60))
+        {
+          adv_option_bytes[ADV_OB_ICON] = 2;
+        }
+        else if (battery_level > 60)
+        {
+          adv_option_bytes[ADV_OB_ICON] = 7;
+        }
+        break;
+
+      case UTIL_BATTERY_STATUS_CHARGING:
+        adv_option_bytes[ADV_OB_ICON] = 1;
+        break;
+
+      case UTIL_BATTERY_STATUS_NOT_CONNECTED:
+        adv_option_bytes[ADV_OB_ICON] = 0;
+        adv_option_bytes[ADV_OB_BATTERY] = 0;
+        break;
+
+      case UTIL_BATTERY_STATUS_FULL:
+        adv_option_bytes[ADV_OB_ICON] = 7;
+        break;
+
+      case UTIL_BATTERY_STATUS_UNKNOWN:
+        adv_option_bytes[ADV_OB_ICON] = 8;
+        break;
+    }
+
+    IStream_post_data((IStream_t *) sTaskObj.ble_device, sTaskObj.ble_device->adv_id, adv_option_bytes, 3);
+
+    streamMsg_t msg;
+    msg.messageId = BLE_ISTREAM_MSG_UPDATE_ADV;
+    msg.streamID = sTaskObj.ble_device->adv_id;
+    ble_stream_msg(&msg);
   }
-  adv_option_bytes[2] = 0;
 
-  IStream_post_data((IStream_t *) sTaskObj.ble_device, sTaskObj.ble_device->adv_id, adv_option_bytes, 3);
-
-  streamMsg_t msg;
-  msg.messageId = BLE_ISTREAM_MSG_UPDATE_ADV;
-  msg.streamID = sTaskObj.ble_device->adv_id;
-  ble_stream_msg(&msg);
 
 }
 

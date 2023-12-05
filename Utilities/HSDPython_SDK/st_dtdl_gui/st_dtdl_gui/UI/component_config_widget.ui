@@ -336,13 +336,13 @@ QComboBox:disabled {
 	border: 2px solid rgb(32, 32, 32);
 }
 
+/* RADIO BUTTON */
 QRadioButton::indicator {
-    border: 3px rgb(27, 29, 35);
+    border: 3px solid rgb(52, 59, 72);
 	width: 15px;
 	height: 15px;
 	border-radius: 10px;
     background: rgb(44, 49, 60);
-	margin: 9px;
 }
 QRadioButton::indicator:hover {
     border: 3px solid rgb(58, 66, 81);
@@ -351,10 +351,7 @@ QRadioButton::indicator:checked {
     background: 3px solid rgb(94, 106, 130);
 	border: 3px solid rgb(52, 59, 72);	
 }
-QRadioButton::indicator:unchecked {
-    background: 3px solid rgb(44, 49, 60);
-	border: 3px solid rgb(52, 59, 72);
-}</string>
+</string>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>

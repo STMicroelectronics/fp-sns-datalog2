@@ -59,6 +59,12 @@ class STDTDL_Controller(QObject):
     sig_ispu_ucf_loaded = Signal(str, str)
     sig_wav_conversion_completed = Signal(str, str)
     sig_offline_plots_completed = Signal()
+
+    sig_tmos_presence_detected = Signal(bool,str)
+    sig_tmos_motion_detected = Signal(bool,str)
+
+    sig_tof_presence_detected = Signal(bool,str)
+    sig_tof_presence_detected_in_roi = Signal(bool,int,str)
     
     sig_logging = Signal(bool, int)
     sig_detecting = Signal(bool)

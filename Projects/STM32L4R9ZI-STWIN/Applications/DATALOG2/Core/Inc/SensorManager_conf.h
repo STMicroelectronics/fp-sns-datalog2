@@ -55,7 +55,7 @@
 
 // file IMP23ABSUTask.c
 #define IMP23ABSU_TASK_CFG_STACK_DEPTH            (TX_MINIMUM_STACK*7)
-#define IMP23ABSU_TASK_CFG_PRIORITY               (8)
+#define IMP23ABSU_TASK_CFG_PRIORITY               (7)
 #ifdef ENABLE_THREADX_DBG_PIN
 #define IMP23ABSU_TASK_CFG_TAG                   (CON34_PIN_16)
 #endif
@@ -78,7 +78,7 @@
 
 // file IMP34DT05Task.c
 #define IMP34DT05_TASK_CFG_STACK_DEPTH            (TX_MINIMUM_STACK*7)
-#define IMP34DT05_TASK_CFG_PRIORITY               (8)
+#define IMP34DT05_TASK_CFG_PRIORITY               (7)
 #ifdef ENABLE_THREADX_DBG_PIN
 //#define IMP34DT05_TASK_CFG_TAG                    (CON34_PIN_22)
 #define IMP34DT05_TASK_CFG_TAG                    (CON34_PIN_5)
