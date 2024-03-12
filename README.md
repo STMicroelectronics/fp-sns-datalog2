@@ -2,6 +2,8 @@
 
 ![latest tag](https://img.shields.io/github/v/tag/STMicroelectronics/fp-sns-datalog2.svg?color=brightgreen)
 
+**Please check st.com where a more recent version of the software might be available.**
+
 The **FP-SNS-DATALOG2** function pack represents an evolution of FP-SNS-DATALOG1 and provides a comprehensive solution for saving
 data from any combination of sensors and microphones configured up to the maximum sampling rate.
 
