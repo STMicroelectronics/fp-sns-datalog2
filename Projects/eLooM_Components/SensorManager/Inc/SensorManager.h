@@ -24,7 +24,6 @@ extern "C" {
 #endif
 
 
-
 #include "SensorManager_conf.h"
 #include "ISensor.h"
 #include "ISensor_vtbl.h"
@@ -90,14 +89,27 @@ struct _SensorManager_t
 /* Public API declaration */
 /**************************/
 ISourceObservable *SMGetSensorObserver(uint8_t id);
-uint16_t SMGetNsensor(void);
-sys_error_code_t SMSensorEnable(uint8_t id);
-sys_error_code_t SMSensorDisable(uint8_t id);
+SensorManager_t   *SMGetSensorManager(void);
+uint16_t           SMGetNsensor(void);
+
+sys_error_code_t   SMSensorEnable(uint8_t id);
+sys_error_code_t   SMSensorDisable(uint8_t id);
+
 SensorDescriptor_t SMSensorGetDescription(uint8_t id);
-SensorStatus_t SMSensorGetStatus(uint8_t id);
-sys_error_code_t SMDeviceGetDescription(SensorDescriptor_t *device_description);
-SensorManager_t *SMGetSensorManager(void);
+SensorStatus_t     SMSensorGetStatus(uint8_t id);
+
+sys_error_code_t   SMDeviceGetDescription(SensorDescriptor_t *device_description);  /* DEPRECATED */
+
+
 uint32_t SMGetnBytesPerSample(uint8_t id);
+
+float SMSensorGetSamplesPerSecond(uint8_t id);
+
+/*
+  * Return the sensor bandwidth [Bytes/s] with the current configuration
+  * Example for 3-axis acc: 2Bytes * 3Axis * 1333Hz = 7998 Bytes/s
+  */
+float SMSensorGetBandwidth(uint8_t id);
 
 /* Specialized for ISensorMems class */
 sys_error_code_t SMSensorSetODR(uint8_t id, float odr);
@@ -134,12 +146,13 @@ sys_error_code_t SMSensorSetLPF_P_Bandwidth(uint8_t id, uint16_t bandwidth);
 sys_error_code_t SMSensorSetLPF_M_Bandwidth(uint8_t id, uint16_t bandwidth);
 sys_error_code_t SMSensorSetEmbeddedCompensation(uint8_t id, uint8_t EmbeddedCompensation);
 sys_error_code_t SMSensorSetSoftwareCompensation(uint8_t id, uint8_t SoftwareCompensation);
-sys_error_code_t SMSensorSetSoftwareCompensationAlgorithmConfig(uint8_t id, CompensationAlgorithmConfig_t *pAlgorithmConfig);
+sys_error_code_t SMSensorSetSoftwareCompensationAlgorithmConfig(uint8_t id,
+                                                                CompensationAlgorithmConfig_t *pAlgorithmConfig);
 
 
 /* Specialized for ISensorLight class */
 sys_error_code_t SMSensorSetIntermeasurementTime(uint8_t id, uint32_t intermeasurement_time);
-sys_error_code_t SMSensorSetExposureTime(uint8_t id, float exposure_time);
+sys_error_code_t SMSensorSetExposureTime(uint8_t id, uint32_t exposure_time);
 sys_error_code_t SMSensorSetLightGain(uint8_t id, float LightGain, uint8_t channel);
 
 /* Inline functions definition */

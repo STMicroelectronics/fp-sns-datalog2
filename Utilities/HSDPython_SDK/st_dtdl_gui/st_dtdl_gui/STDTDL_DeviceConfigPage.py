@@ -102,13 +102,13 @@ class STDTDL_DeviceConfigPage():
     def s_component_found(self, comp_name, comp_interface):
         comp_id = list(self.controller.components_dtdl.keys()).index(comp_name)
         comp_display_name = comp_interface.display_name if isinstance(comp_interface.display_name, str) else comp_interface.display_name.en
-        if comp_name == "applications_stblesensor":
-            pass
-        else:
-            comp_config_widget = ComponentWidget(self.controller, comp_name, comp_display_name, "", comp_interface.contents, comp_id, self.device_config_widget)
-            self.controller.add_component_config_widget(comp_config_widget)
-            self.device_config_widget.layout().addWidget(comp_config_widget)
-            self.controller.fill_component_status(comp_name)
+        # if comp_name == "applications_stblesensor":
+        #     pass
+        # else:
+        comp_config_widget = ComponentWidget(self.controller, comp_name, comp_display_name, "", comp_interface.contents, comp_id, self.device_config_widget)
+        self.controller.add_component_config_widget(comp_config_widget)
+        self.device_config_widget.layout().addWidget(comp_config_widget)
+        self.controller.fill_component_status(comp_name)
     
     @Slot(str, dict)
     def s_sensor_component_found(self, comp_name, comp_interface):

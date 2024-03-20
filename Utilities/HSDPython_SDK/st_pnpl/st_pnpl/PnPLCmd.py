@@ -85,13 +85,14 @@ class PnPLCMDManager:
     @staticmethod
     def create_command_cmd(comp_name: str, command_name: str, req_name: str = None, req_value = None):
         if req_name is None:
-            message = {
-                comp_name + "*" + command_name: ""
-            }
-        elif req_name is None and req_value is not None:
-            message = {
-                comp_name + "*" + command_name: req_value
-            }
+            if req_value is not None:
+                message = {
+                    comp_name + "*" + command_name: req_value
+                }
+            else:
+                message = {
+                    comp_name + "*" + command_name: ""
+                }
         elif req_name is not None and req_value is not None:
             if isinstance(req_value,dict):
                 if len(req_value) == 1:

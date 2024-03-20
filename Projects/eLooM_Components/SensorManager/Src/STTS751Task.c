@@ -183,7 +183,6 @@ static sys_error_code_t STTS751TaskConfigureIrqPin(const STTS751Task *_this, boo
 static void STTS751TaskTimerCallbackFunction(ULONG param);
 
 
-
 /* Inline function forward declaration */
 /***************************************/
 
@@ -232,48 +231,32 @@ static STTS751TaskClass_t sTheClass =
     STTS751Task_vtblOnEnterPowerMode
   },
 
-    /* class::sensor_if_vtbl virtual table */
+  /* class::sensor_if_vtbl virtual table */
+  {
     {
-        {
-            {
-                STTS751Task_vtblTempGetId,
-                STTS751Task_vtblTempGetEventSourceIF,
-                STTS751Task_vtblTempGetDataInfo },
-            STTS751Task_vtblSensorEnable,
-            STTS751Task_vtblSensorDisable,
-            STTS751Task_vtblSensorIsEnabled,
-            STTS751Task_vtblSensorGetDescription,
-            STTS751Task_vtblSensorGetStatus },
-        STTS751Task_vtblTempGetODR,
-        STTS751Task_vtblTempGetFS,
-        STTS751Task_vtblTempGetSensitivity,
-        STTS751Task_vtblSensorSetODR,
-        STTS751Task_vtblSensorSetFS,
-        STTS751Task_vtblSensorSetFifoWM, },
+      {
+        STTS751Task_vtblTempGetId,
+        STTS751Task_vtblTempGetEventSourceIF,
+        STTS751Task_vtblTempGetDataInfo
+      },
+      STTS751Task_vtblSensorEnable,
+      STTS751Task_vtblSensorDisable,
+      STTS751Task_vtblSensorIsEnabled,
+      STTS751Task_vtblSensorGetDescription,
+      STTS751Task_vtblSensorGetStatus
+    },
+    STTS751Task_vtblTempGetODR,
+    STTS751Task_vtblTempGetFS,
+    STTS751Task_vtblTempGetSensitivity,
+    STTS751Task_vtblSensorSetODR,
+    STTS751Task_vtblSensorSetFS,
+    STTS751Task_vtblSensorSetFifoWM,
+  },
 
   /* TEMPERATURE DESCRIPTOR */
   {
     "stts751",
-    COM_TYPE_TEMP,
-    {
-      1.0f,
-      2.0f,
-      4.0f,
-      8.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      100.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "temp",
-    },
-    "Celsius",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_TEMP
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -1202,7 +1185,10 @@ static sys_error_code_t STTS751TaskSensorInit(STTS751Task *_this)
     _this->sensor_status.is_active = false;
   }
 
-  _this->task_delay = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
+  if (_this->sensor_status.is_active)
+  {
+    _this->task_delay = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
+  }
 
   return res;
 }

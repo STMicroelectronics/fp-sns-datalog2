@@ -238,7 +238,7 @@ uint8_t imp23absu_mic_get_sensor_annotation(char **value)
 }
 uint8_t imp23absu_mic_get_sensor_category(int32_t *value)
 {
-    *value = imp23absu_mic_model.sensor_status.isensor_class;
+  *value = imp23absu_mic_model.sensor_status.isensor_class;
   return 0;
 }
 uint8_t imp23absu_mic_get_stream_id(int8_t *value)

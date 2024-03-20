@@ -103,7 +103,7 @@ void MX_TIM4_Init(void)
   uwAPB1Prescaler = clkconfig.APB1CLKDivider;
 
   /* Compute TIM clock */
-  if(uwAPB1Prescaler == RCC_HCLK_DIV1)
+  if (uwAPB1Prescaler == RCC_HCLK_DIV1)
   {
     uwTimclock = HAL_RCC_GetPCLK1Freq();
   }
@@ -113,9 +113,9 @@ void MX_TIM4_Init(void)
   }
 
   /* Set the Tim prescaler to obtain 1MHz counting frequency (count every 1us) */
-  uwPrescalerValue = (uwTimclock / 1000000)-1;
+  uwPrescalerValue = (uwTimclock / 1000000) - 1;
 
-  period = 500-1;
+  period = 500 - 1;
 
   /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
@@ -196,7 +196,7 @@ void MX_TIM5_Init(void)
   uwAPB1Prescaler = clkconfig.APB1CLKDivider;
 
   /* Compute TIM clock */
-  if(uwAPB1Prescaler == RCC_HCLK_DIV1)
+  if (uwAPB1Prescaler == RCC_HCLK_DIV1)
   {
     uwTimclock = HAL_RCC_GetPCLK1Freq();
   }
@@ -209,7 +209,7 @@ void MX_TIM5_Init(void)
 
   /* Set the Tim prescaler to obtain 10kHz counting frequency (count every 0.1ms) */
   uwPrescalerValue = (uwTimclock / BC_CHG_TIM_COUNTING_FREQ) - 1;
-  
+
   /* USER CODE END TIM5_Init 1 */
   htim5.Instance = TIM5;
   htim5.Init.Prescaler = 0;
@@ -243,7 +243,7 @@ void MX_TIM5_Init(void)
   htim5.Init.Period = 65535;
   htim5.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim5.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if(HAL_TIM_IC_Init(&htim5) != HAL_OK)
+  if (HAL_TIM_IC_Init(&htim5) != HAL_OK)
   {
     Error_Handler();
   }
@@ -260,22 +260,22 @@ void MX_TIM5_Init(void)
 
 }
 
-void HAL_TIM_IC_MspInit(TIM_HandleTypeDef* tim_icHandle)
+void HAL_TIM_IC_MspInit(TIM_HandleTypeDef *tim_icHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  if(tim_icHandle->Instance==TIM3)
+  if (tim_icHandle->Instance == TIM3)
   {
-  /* USER CODE BEGIN TIM3_MspInit 0 */
+    /* USER CODE BEGIN TIM3_MspInit 0 */
 
-  /* USER CODE END TIM3_MspInit 0 */
+    /* USER CODE END TIM3_MspInit 0 */
     /* TIM3 clock enable */
     __HAL_RCC_TIM3_CLK_ENABLE();
 
     __HAL_RCC_GPIOC_CLK_ENABLE();
     /**TIM3 GPIO Configuration
     PC6     ------> TIM3_CH1
-    */
+      */
     GPIO_InitStruct.Pin = TIM3_PWM_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -283,22 +283,22 @@ void HAL_TIM_IC_MspInit(TIM_HandleTypeDef* tim_icHandle)
     GPIO_InitStruct.Alternate = GPIO_AF2_TIM3;
     HAL_GPIO_Init(TIM3_PWM_GPIO_Port, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN TIM3_MspInit 1 */
+    /* USER CODE BEGIN TIM3_MspInit 1 */
 
-  /* USER CODE END TIM3_MspInit 1 */
+    /* USER CODE END TIM3_MspInit 1 */
   }
-  else if(tim_icHandle->Instance==TIM4)
+  else if (tim_icHandle->Instance == TIM4)
   {
-  /* USER CODE BEGIN TIM4_MspInit 0 */
+    /* USER CODE BEGIN TIM4_MspInit 0 */
 
-  /* USER CODE END TIM4_MspInit 0 */
+    /* USER CODE END TIM4_MspInit 0 */
     /* TIM4 clock enable */
     __HAL_RCC_TIM4_CLK_ENABLE();
 
     __HAL_RCC_GPIOB_CLK_ENABLE();
     /**TIM4 GPIO Configuration
     PB7     ------> TIM4_CH2
-    */
+      */
     GPIO_InitStruct.Pin = GPIO_PIN_7;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -309,22 +309,22 @@ void HAL_TIM_IC_MspInit(TIM_HandleTypeDef* tim_icHandle)
     /* TIM4 interrupt Init */
     HAL_NVIC_SetPriority(TIM4_IRQn, 10, 0);
     HAL_NVIC_EnableIRQ(TIM4_IRQn);
-  /* USER CODE BEGIN TIM4_MspInit 1 */
+    /* USER CODE BEGIN TIM4_MspInit 1 */
 
-  /* USER CODE END TIM4_MspInit 1 */
+    /* USER CODE END TIM4_MspInit 1 */
   }
-  else if(tim_icHandle->Instance==TIM5)
+  else if (tim_icHandle->Instance == TIM5)
   {
-  /* USER CODE BEGIN TIM5_MspInit 0 */
+    /* USER CODE BEGIN TIM5_MspInit 0 */
 
-  /* USER CODE END TIM5_MspInit 0 */
+    /* USER CODE END TIM5_MspInit 0 */
     /* TIM5 clock enable */
     __HAL_RCC_TIM5_CLK_ENABLE();
 
     __HAL_RCC_GPIOA_CLK_ENABLE();
     /**TIM5 GPIO Configuration
     PA0     ------> TIM5_CH1
-    */
+      */
     GPIO_InitStruct.Pin = CHRG_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_PULLUP;
@@ -335,69 +335,69 @@ void HAL_TIM_IC_MspInit(TIM_HandleTypeDef* tim_icHandle)
     /* TIM5 interrupt Init */
     HAL_NVIC_SetPriority(TIM5_IRQn, 10, 0);
     HAL_NVIC_EnableIRQ(TIM5_IRQn);
-  /* USER CODE BEGIN TIM5_MspInit 1 */
+    /* USER CODE BEGIN TIM5_MspInit 1 */
 
-  /* USER CODE END TIM5_MspInit 1 */
+    /* USER CODE END TIM5_MspInit 1 */
   }
 }
 
-void HAL_TIM_IC_MspDeInit(TIM_HandleTypeDef* tim_icHandle)
+void HAL_TIM_IC_MspDeInit(TIM_HandleTypeDef *tim_icHandle)
 {
 
-  if(tim_icHandle->Instance==TIM3)
+  if (tim_icHandle->Instance == TIM3)
   {
-  /* USER CODE BEGIN TIM3_MspDeInit 0 */
+    /* USER CODE BEGIN TIM3_MspDeInit 0 */
 
-  /* USER CODE END TIM3_MspDeInit 0 */
+    /* USER CODE END TIM3_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_TIM3_CLK_DISABLE();
 
     /**TIM3 GPIO Configuration
     PC6     ------> TIM3_CH1
-    */
+      */
     HAL_GPIO_DeInit(TIM3_PWM_GPIO_Port, TIM3_PWM_Pin);
 
-  /* USER CODE BEGIN TIM3_MspDeInit 1 */
+    /* USER CODE BEGIN TIM3_MspDeInit 1 */
 
-  /* USER CODE END TIM3_MspDeInit 1 */
+    /* USER CODE END TIM3_MspDeInit 1 */
   }
-  else if(tim_icHandle->Instance==TIM4)
+  else if (tim_icHandle->Instance == TIM4)
   {
-  /* USER CODE BEGIN TIM4_MspDeInit 0 */
+    /* USER CODE BEGIN TIM4_MspDeInit 0 */
 
-  /* USER CODE END TIM4_MspDeInit 0 */
+    /* USER CODE END TIM4_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_TIM4_CLK_DISABLE();
 
     /**TIM4 GPIO Configuration
     PB7     ------> TIM4_CH2
-    */
+      */
     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_7);
 
     /* TIM4 interrupt Deinit */
     HAL_NVIC_DisableIRQ(TIM4_IRQn);
-  /* USER CODE BEGIN TIM4_MspDeInit 1 */
+    /* USER CODE BEGIN TIM4_MspDeInit 1 */
 
-  /* USER CODE END TIM4_MspDeInit 1 */
+    /* USER CODE END TIM4_MspDeInit 1 */
   }
-  else if(tim_icHandle->Instance==TIM5)
+  else if (tim_icHandle->Instance == TIM5)
   {
-  /* USER CODE BEGIN TIM5_MspDeInit 0 */
+    /* USER CODE BEGIN TIM5_MspDeInit 0 */
 
-  /* USER CODE END TIM5_MspDeInit 0 */
+    /* USER CODE END TIM5_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_TIM5_CLK_DISABLE();
 
     /**TIM5 GPIO Configuration
     PA0     ------> TIM5_CH1
-    */
+      */
     HAL_GPIO_DeInit(CHRG_GPIO_Port, CHRG_Pin);
 
     /* TIM5 interrupt Deinit */
     HAL_NVIC_DisableIRQ(TIM5_IRQn);
-  /* USER CODE BEGIN TIM5_MspDeInit 1 */
+    /* USER CODE BEGIN TIM5_MspDeInit 1 */
 
-  /* USER CODE END TIM5_MspDeInit 1 */
+    /* USER CODE END TIM5_MspDeInit 1 */
   }
 }
 

@@ -477,7 +477,7 @@ static void ble_send_thread_entry(ULONG thread_input)
             if (ble_stream_SendCommandCallback != NULL)
             {
               ble_stream_SendCommandCallback(obj->serialized_cmd, obj->serialized_cmd_size);
-              BLE_FreeFunction(obj->serialized_cmd);
+              BLE_FREE_FUNCTION(obj->serialized_cmd);
             }
             break;
 

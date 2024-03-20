@@ -53,7 +53,6 @@ static uint32_t NeedToRebootBoard = 0;
 static uint32_t NeedToSwapBanks = 0;
 
 
-
 /* Imported Variables --------------------------------------------------------*/
 uint8_t CurrentActiveBank = 0;
 
@@ -63,6 +62,7 @@ static void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t Addre
 static void DisconnectionCompletedFunction(void);
 static void PairingCompletedFunction(uint8_t PairingStatus);
 static uint32_t DebugConsoleCommandParsing(uint8_t *att_data, uint8_t data_length);
+static void MTUExcahngeRespEvent(int32_t MaxCharLength);
 
 static void MLCisNotificationSubscribed(BLE_NotifyEvent_t Event);
 
@@ -199,7 +199,7 @@ void BLE_BluetoothInit(void)
 void InitBLEIntForBlueNRGLP(void)
 {
   HAL_EXTI_GetHandle(&hexti11, EXTI_LINE_11);
-  HAL_NVIC_SetPriority(HCI_TL_SPI_EXTI_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(HCI_TL_SPI_EXTI_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(HCI_TL_SPI_EXTI_IRQn);
 }
 
@@ -227,6 +227,10 @@ void BLE_InitCustomService(void)
 
   /* Define Custom Function for Write Request PnPLike */
   CustomWriteRequestPnPLike = &WriteRequestCommandLikeFunction;
+
+  /* For Receiving information on Response Event for a MTU Exchange Event */
+  CustomMTUExchangeRespEvent = MTUExcahngeRespEvent;
+
 
   /***************************************/
 
@@ -272,7 +276,7 @@ void BLE_InitCustomService(void)
     }
   }
 
-  /* Init custom ble stream callbakc */
+  /* Init custom ble stream callback */
   ble_stream_SetCustomStreamIDCallback = &BLE_SetCustomStreamID;
   ble_stream_PostCustomDataCallback = &BLE_PostCustomData;
   ble_stream_SendCustomDataCallback = &BLE_SendCustomData;
@@ -350,55 +354,60 @@ static void BLE_SendCustomData(uint8_t id_stream)
 
 static void BLE_SendCommand(char *buf, uint32_t size)
 {
-  tBleStatus ret;
-  uint32_t j = 0, chunk, tot_len;
-  uint8_t *buffer_out;
-  uint32_t length_wTP;
-
-  if ((size % 19U) == 0U)
+  if (buf != NULL)
   {
-    length_wTP = (size / 19U) + size;
-  }
-  else
-  {
-    length_wTP = (size / 19U) + 1U + size;
-  }
+    tBleStatus ret;
+    uint32_t j = 0, chunk, tot_len;
+    uint8_t *buffer_out;
+    uint32_t length_wTP;
 
-  buffer_out = BLE_MallocFunction(sizeof(uint8_t) * length_wTP);
+    int32_t MaxPnPLikeUpdate = BLE_PnPLikeGetMaxCharLength();
+    int32_t MaxPnPLikeUpdateMinus1 = MaxPnPLikeUpdate - 1;
 
-  if (buffer_out == NULL)
-  {
-    BLE_MANAGER_PRINTF("Error: Mem calloc error [%ld]: %d@%s\r\n", length_wTP, __LINE__, __FILE__);
-    // TODO: manage error
-    return;
-  }
-  else
-  {
-    tot_len = BLE_Command_TP_Encapsulate(buffer_out, (uint8_t *) buf, size, 20);
-
-    j = 0;
-
-    /* Data are sent as notifications*/
-    while (j < tot_len)
+    if ((size % MaxPnPLikeUpdateMinus1) == 0U)
     {
-      /* TODO: different MTU must be managed with MaxBLECharLen */
+      length_wTP = (size / MaxPnPLikeUpdateMinus1) + size;
+    }
+    else
+    {
+      length_wTP = (size / MaxPnPLikeUpdateMinus1) + 1U + size;
+    }
 
-      chunk = MIN(20, tot_len - j);
+    buffer_out = BLE_MALLOC_FUNCTION(sizeof(uint8_t) * length_wTP);
 
-      ret = BLE_PnPLikeUpdate(&buffer_out[j], chunk);
+    if (buffer_out == NULL)
+    {
+      BLE_MANAGER_PRINTF("Error: Mem calloc error [%ld]: %d@%s\r\n", length_wTP, __LINE__, __FILE__);
+      // TODO: manage error
+      return;
+    }
+    else
+    {
+      tot_len = BLE_Command_TP_Encapsulate(buffer_out, (uint8_t *) buf, size, MaxPnPLikeUpdate);
 
-      if (ret == BLE_STATUS_INSUFFICIENT_RESOURCES)
+      j = 0;
+
+      /* Data are sent as notifications*/
+      while (j < tot_len)
       {
-        ble_sendMSG_wait();
-      }
-      else if (ret == BLE_STATUS_SUCCESS)
-      {
-        j += chunk;
+
+        chunk = MIN(MaxPnPLikeUpdate, tot_len - j);
+
+        ret = BLE_PnPLikeUpdate(&buffer_out[j], chunk);
+
+        if (ret == BLE_STATUS_INSUFFICIENT_RESOURCES)
+        {
+          ble_sendMSG_wait();
+        }
+        else if (ret == BLE_STATUS_SUCCESS)
+        {
+          j += chunk;
+        }
       }
     }
-  }
 
-  BLE_FreeFunction(buffer_out);
+    BLE_FREE_FUNCTION(buffer_out);
+  }
 }
 
 
@@ -640,7 +649,6 @@ static void DisconnectionCompletedFunction(void)
 }
 
 
-
 /**
   * @brief  This function is called when there is a Pairing Complete event.
   * @param  uint8_t PairingStatus
@@ -699,7 +707,6 @@ static void ExtConfigClearDBCommandCallback(void)
 {
   NeedToClearSecureDB = 1;
 }
-
 
 
 /**
@@ -810,3 +817,18 @@ static void ExtConfigBanksSwapCommandCallback(void)
     PRINT_DBG("\tLoad a Firmware on Bank%d\n", (CurrentActiveBank == 1) ? 0 : 1);
   }
 }
+
+/**
+  * @brief  Callback Called after a MTU Exchange Event
+  * @param  int32_t MaxCharLength
+  * @retval none
+  */
+static void MTUExcahngeRespEvent(int32_t MaxCharLength)
+{
+  if (MaxCharLength < BLE_PnPLikeGetMaxCharLength())
+  {
+    BLE_PnPLikeSetMaxCharLength(MaxCharLength);
+    PRINT_DBG("BLE_PnPLikeSetMaxCharLength ->%d\r\n", MaxCharLength);
+  }
+}
+

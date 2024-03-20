@@ -229,27 +229,7 @@ static IMP23ABSUTaskClass_t sTheClass =
   /* MIC DESCRIPTOR */
   {
     "imp23absu",
-    COM_TYPE_MIC,
-    {
-      16000.0,
-      32000.0,
-      48000.0,
-      96000.0,
-      192000.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      130.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "aud",
-    },
-    "Waveform",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_MIC
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */

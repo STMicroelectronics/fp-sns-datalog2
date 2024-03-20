@@ -257,6 +257,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rcc_ex.h</locationURI>
 		</link>
 		<link>
+			<name>Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rng.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rng.h</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rng_ex.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rng_ex.h</locationURI>
+		</link>
+		<link>
 			<name>Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rtc.h</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_rtc.h</locationURI>
@@ -385,6 +395,16 @@
 			<name>Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rng.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rng.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rng_ex.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rng_ex.c</locationURI>
 		</link>
 		<link>
 			<name>Drivers/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rtc.c</name>
@@ -957,6 +977,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/mx/Inc/mx.h</locationURI>
 		</link>
 		<link>
+			<name>User/mx/Inc/rng.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mx/Inc/rng.h</locationURI>
+		</link>
+		<link>
 			<name>User/mx/Inc/rtc.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/mx/Inc/rtc.h</locationURI>
@@ -995,6 +1020,11 @@
 			<name>User/mx/Src/mx.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/mx.c</locationURI>
+		</link>
+		<link>
+			<name>User/mx/Src/rng.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/rng.c</locationURI>
 		</link>
 		<link>
 			<name>User/mx/Src/rtc.c</name>

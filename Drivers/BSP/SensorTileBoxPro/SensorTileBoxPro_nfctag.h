@@ -1,12 +1,15 @@
 /**
   ******************************************************************************
   * @file    SensorTileBoxPro_nfctag.h
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
   * @brief   This file contains definitions for the SensorTileBoxPro_nfctag.c
   *          specific functions.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -136,4 +139,3 @@ int32_t BSP_NFCTAG_ReadMBLength_Dyn(const uint32_t Instance, uint8_t *const pMBL
 #endif
 #endif /* __SENSORTILEBOXPRO_NFCTAG_H__ */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

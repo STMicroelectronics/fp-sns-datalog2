@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:other:firmware_info;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sFirmware_Info_PnPL_CompIF_vtbl =
   */
 struct _Firmware_Info_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -141,41 +139,19 @@ uint8_t Firmware_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   return 0;
 }
 
-uint8_t Firmware_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Firmware_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                           uint32_t *size, uint8_t pretty)
 {
-  JSON_Value *tempJSON = json_parse_string(serializedJSON);
-  JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
-  JSON_Value *respJSON = json_value_init_object();
-  JSON_Object *respJSONObject = json_value_get_object(respJSON);
-
-  uint8_t ret = 0;
-
-  if (json_object_dothas_value(tempJSONObject, "firmware_info.alias"))
-  {
-    const char *alias = json_object_dotget_string(tempJSONObject, "firmware_info.alias");
-    ret = firmware_info_set_alias(alias);
-    json_object_dotset_string(respJSONObject, "firmware_info.alias.value", ret == 0 ? alias : "PNPL_SET_ERROR");
-  }
-
-  json_value_free(tempJSON);
-
-  if (pretty == 1)
-  {
-    *response = json_serialize_to_string_pretty(respJSON);
-    *size = json_serialization_size_pretty(respJSON);
-  }
-  else
-  {
-    *response = json_serialize_to_string(respJSON);
-    *size = json_serialization_size(respJSON);
-  }
-
-  json_value_free(respJSON);
-
-  return ret;
+  *size = 61;
+  *response = (char *)pnpl_malloc(*size);
+  (void)strcpy(*response, "{\"PnPL_Error\":\"No writable Properties in DeviceInformation\"}\0");
+  return 0;
 }
 
-uint8_t Firmware_Info_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+
+uint8_t Firmware_Info_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                               uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

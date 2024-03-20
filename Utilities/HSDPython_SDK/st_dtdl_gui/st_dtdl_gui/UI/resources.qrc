@@ -2,6 +2,7 @@
   <qresource prefix="icons">
     <file>resources.qrc</file>
     <file>icons/outline_arrow_back_ios_white_18dp.png</file>
+    <file>icons/outline_window_white_18dp.png</file>
     <file>icons/outline_description_white_18dp.png</file>
     <file>icons/outline_keyboard_arrow_down_white_18dp.png</file>
     <file>icons/outline_keyboard_arrow_up_white_18dp.png</file>

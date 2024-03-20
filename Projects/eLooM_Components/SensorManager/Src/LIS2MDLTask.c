@@ -179,7 +179,6 @@ static sys_error_code_t LIS2MDLTaskConfigureIrqPin(const LIS2MDLTask *_this, boo
 static void LIS2MDLTaskTimerCallbackFunction(ULONG param);
 
 
-
 /* Inline function forward declaration */
 /***************************************/
 
@@ -228,50 +227,32 @@ static LIS2MDLTaskClass_t sTheClass =
     LIS2MDLTask_vtblOnEnterPowerMode
   },
 
-    /* class::sensor_if_vtbl virtual table */
+  /* class::sensor_if_vtbl virtual table */
+  {
     {
-        {
-            {
-                LIS2MDLTask_vtblMagGetId,
-                LIS2MDLTask_vtblMagGetEventSourceIF,
-                LIS2MDLTask_vtblMagGetDataInfo },
-            LIS2MDLTask_vtblSensorEnable,
-            LIS2MDLTask_vtblSensorDisable,
-            LIS2MDLTask_vtblSensorIsEnabled,
-            LIS2MDLTask_vtblSensorGetDescription,
-            LIS2MDLTask_vtblSensorGetStatus },
-        LIS2MDLTask_vtblMagGetODR,
-        LIS2MDLTask_vtblMagGetFS,
-        LIS2MDLTask_vtblMagGetSensitivity,
-        LIS2MDLTask_vtblSensorSetODR,
-        LIS2MDLTask_vtblSensorSetFS,
-        LIS2MDLTask_vtblSensorSetFifoWM },
+      {
+        LIS2MDLTask_vtblMagGetId,
+        LIS2MDLTask_vtblMagGetEventSourceIF,
+        LIS2MDLTask_vtblMagGetDataInfo
+      },
+      LIS2MDLTask_vtblSensorEnable,
+      LIS2MDLTask_vtblSensorDisable,
+      LIS2MDLTask_vtblSensorIsEnabled,
+      LIS2MDLTask_vtblSensorGetDescription,
+      LIS2MDLTask_vtblSensorGetStatus
+    },
+    LIS2MDLTask_vtblMagGetODR,
+    LIS2MDLTask_vtblMagGetFS,
+    LIS2MDLTask_vtblMagGetSensitivity,
+    LIS2MDLTask_vtblSensorSetODR,
+    LIS2MDLTask_vtblSensorSetFS,
+    LIS2MDLTask_vtblSensorSetFifoWM
+  },
 
   /* MAGNETOMETER DESCRIPTOR */
   {
     "lis2mdl",
-    COM_TYPE_MAG,
-    {
-      10.0,
-      20.0,
-      50.0,
-      100.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      50.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "x",
-      "y",
-      "z",
-    },
-    "gauss",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_MAG
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -1221,7 +1202,10 @@ static sys_error_code_t LIS2MDLTaskSensorInit(LIS2MDLTask *_this)
     _this->sensor_status.is_active = false;
   }
 
-  _this->task_delay = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
+  if (_this->sensor_status.is_active)
+  {
+    _this->task_delay = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
+  }
 
   return res;
 }

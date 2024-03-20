@@ -33,7 +33,6 @@
 #define _PNPL_FFT_DPU_H_
 
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif

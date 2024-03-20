@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_GeneralPurpose.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   General Purpose info services APIs.
   ******************************************************************************
   * @attention
@@ -46,7 +46,7 @@ extern CustomNotifyEventGeneralPurpose_t CustomNotifyEventGeneralPurpose;
 /**
   * @brief  Init General Purpose Service
   * @param  uint8_t GP_CharNum General Purpose char number to create
-  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for led info service
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for General Purpose info service
   */
 extern BleCharTypeDef *BLE_InitGeneralPurposeService(uint8_t Size);
 

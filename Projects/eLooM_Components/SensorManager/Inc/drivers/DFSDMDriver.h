@@ -112,7 +112,8 @@ sys_error_code_t DFSDMSetDFSDMConfig(IDriver *_this, float ODR);
   * Register a callback function with the HAL driver.
   * @sa HAL_DFSDM_RegisterCallback()
   */
-static inline sys_error_code_t DFSDMDriverFilterRegisterCallback(DFSDMDriver_t *_this, HAL_DFSDM_Filter_CallbackIDTypeDef CallbackID, pDFSDM_Filter_CallbackTypeDef pCallback);
+static inline sys_error_code_t DFSDMDriverFilterRegisterCallback(DFSDMDriver_t *_this,
+                                                                 HAL_DFSDM_Filter_CallbackIDTypeDef CallbackID, pDFSDM_Filter_CallbackTypeDef pCallback);
 
 /**
   * Set the buffer that will be filled by the driver with audio data from the sensor.
@@ -129,7 +130,8 @@ sys_error_code_t DFSDMDrvSetDataBuffer(DFSDMDriver_t *_this, int32_t *p_buffer, 
 /** Inline functions definition */
 /********************************/
 SYS_DEFINE_INLINE
-sys_error_code_t DFSDMDriverFilterRegisterCallback(DFSDMDriver_t *_this, HAL_DFSDM_Filter_CallbackIDTypeDef CallbackID, pDFSDM_Filter_CallbackTypeDef pCallback)
+sys_error_code_t DFSDMDriverFilterRegisterCallback(DFSDMDriver_t *_this, HAL_DFSDM_Filter_CallbackIDTypeDef CallbackID,
+                                                   pDFSDM_Filter_CallbackTypeDef pCallback)
 {
   assert_param(_this != NULL);
 

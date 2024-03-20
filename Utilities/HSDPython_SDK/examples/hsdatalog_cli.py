@@ -235,7 +235,7 @@ def show_help(ctx, param, value):
         click.secho(ctx.get_help(), color=ctx.color)
         click.secho("\n-> Script execution examples:")
         click.secho("   python hsdatalog_cli.py", fg='cyan')
-        click.secho("   python hsdatalog_cli.py -o .\your_out_folder", fg='cyan')
+        click.secho("   python hsdatalog_cli.py -o .\\your_out_folder", fg='cyan')
         click.secho("   python hsdatalog_cli.py -t 10", fg='cyan')
         click.secho("   python hsdatalog_cli.py -i", fg='cyan')
         click.secho("   python hsdatalog_cli.py -t 20 -an your_acq_name -ad your_acq_descr", fg='cyan')
@@ -257,7 +257,7 @@ def validate_duration(ctx, param, value):
 @click.option('-iof', '--ispu_out_fmt', help="ISPU output format descrition json. If passed, this json will be saved in acquisition folder", default='')
 @click.option('-t', '--time_sec', help="Duration of the current acquisition [seconds]", callback=validate_duration, type=int, default=-1)
 @click.option('-i', '--interactive_mode', help="Interactive mode. It allows to select a connected device, get info and start the acquisition process",  is_flag=True, default=False)
-@click.version_option(script_version, '-v', '--version', prog_name="HSDatalogToUnico", is_flag=True, help="HSDatalogToUnico Converter tool version number")
+@click.version_option(script_version, '-v', '--version', prog_name="hsdatalog_cli", is_flag=True, help="hsdatalog_cli tool version number")
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
 def hsd_CLI(output_folder, sub_datetime_folder, acq_name, acq_desc, file_config, ucf_file, ispu_out_fmt, time_sec, interactive_mode):

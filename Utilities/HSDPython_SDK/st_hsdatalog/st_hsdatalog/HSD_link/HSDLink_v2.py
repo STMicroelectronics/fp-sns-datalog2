@@ -160,8 +160,8 @@ class HSDLink_v2:
     def get_sensors_status(self, d_id:int, type_filter:str="", only_active:bool = False):
         return self.__com_manager.get_sensor_components_status(d_id, type_filter, only_active)
 
-    def get_algorithms_status(self, d_id:int):
-        return self.__com_manager.get_algorithm_components_status(d_id)
+    def get_algorithms_status(self, d_id:int, only_active:bool = False):
+        return self.__com_manager.get_algorithm_components_status(d_id, only_active)
 
     def get_acquisition_info(self, d_id:int):
         return self.__com_manager.get_component_status(d_id, "acquisition_info")
@@ -207,16 +207,16 @@ class HSDLink_v2:
         ret = self.__com_manager.get_boolean_property(d_id, "tags_info", "sw_tag{}".format(tag_class_id), "status")
         return ret
     
-    def get_sw_tag_class_label(self, d_id: int, comp_name: str):
-        ret = self.__com_manager.get_string_property(d_id, "tags_info", comp_name, "label")
+    def get_sw_tag_class_label(self, d_id: int, tag_class_name: str):
+        ret = self.__com_manager.get_string_property(d_id, "tags_info", tag_class_name, "label")
         return ret
     
-    def get_sw_tag_class_enabled(self, d_id: int, comp_name: str):
-        ret = self.__com_manager.get_boolean_property(d_id, "tags_info", comp_name, "enabled")
+    def get_sw_tag_class_enabled(self, d_id: int, tag_class_name: str):
+        ret = self.__com_manager.get_boolean_property(d_id, "tags_info", tag_class_name, "enabled")
         return ret
     
-    def get_sw_tag_class_status(self, d_id: int, comp_name: str):
-        ret = self.__com_manager.get_boolean_property(d_id, "tags_info", comp_name, "status")
+    def get_sw_tag_class_status(self, d_id: int, tag_class_name: str):
+        ret = self.__com_manager.get_boolean_property(d_id, "tags_info", tag_class_name, "status")
         return ret
 
     # def get_hw_tag_classes(self, d_id: int):
@@ -293,17 +293,17 @@ class HSDLink_v2:
     def set_property(self, d_id: int, new_value, comp_name: str, prop_name: str, sub_prop_name: str = None):        
         return self.__com_manager.set_property(d_id, new_value, comp_name, prop_name, sub_prop_name)
 
-    def set_sw_tag_class_enabled(self, d_id:int, comp_name:str, new_status: bool):
-        return self.__com_manager.set_property(d_id, new_status, "tags_info", comp_name, "enabled")
+    def set_sw_tag_class_enabled(self, d_id:int, tag_class_name:str, new_status: bool):
+        return self.__com_manager.set_property(d_id, new_status, "tags_info", tag_class_name, "enabled")
     
-    def set_sw_tag_class_label(self, d_id:int, comp_name:str, new_label: str):
-        return self.__com_manager.set_property(d_id, new_label, "tags_info", comp_name, "label")
+    def set_sw_tag_class_label(self, d_id:int, tag_class_name:str, new_label: str):
+        return self.__com_manager.set_property(d_id, new_label, "tags_info", tag_class_name, "label")
 
-    def set_sw_tag_on(self, d_id:int, comp_name:str):
-        return self.__com_manager.set_property(d_id, True, "tags_info", comp_name, "status")
+    def set_sw_tag_on(self, d_id:int, tag_class_name:str):
+        return self.__com_manager.set_property(d_id, True, "tags_info", tag_class_name, "status")
     
-    def set_sw_tag_off(self, d_id:int, comp_name:str):
-        return self.__com_manager.set_property(d_id, False, "tags_info", comp_name, "status")
+    def set_sw_tag_off(self, d_id:int, tag_class_name:str):
+        return self.__com_manager.set_property(d_id, False, "tags_info", tag_class_name, "status")
     
     def set_sw_tag_class_enabled_by_id(self, d_id:int, tag_class_id:int, new_status: bool):
         return self.__com_manager.set_property(d_id, new_status, "tags_info", "sw_tag{}".format(tag_class_id), "enabled")

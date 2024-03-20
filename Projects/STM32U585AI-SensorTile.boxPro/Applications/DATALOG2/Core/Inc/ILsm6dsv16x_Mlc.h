@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_mlc;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -45,7 +45,7 @@ typedef struct _ILsm6dsv16x_Mlc_t ILsm6dsv16x_Mlc_t;
 /* Public API declarations ---------------------------------------------------*/
 
 /* Public interface */
-inline uint8_t ILsm6dsv16x_Mlc_load_file(ILsm6dsv16x_Mlc_t *_this, uint32_t size, const char *data);
+inline uint8_t ILsm6dsv16x_Mlc_load_file(ILsm6dsv16x_Mlc_t *_this, int32_t size, const char *data);
 
 #ifdef __cplusplus
 }

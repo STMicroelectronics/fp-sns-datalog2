@@ -105,7 +105,7 @@ class HSDatalogConverter:
 
     @staticmethod
     def to_xsv(df, filename, extension, separator, mode = 'w'):
-        df.to_csv(filename + extension, separator, mode = mode, compression = None, index = False, header = True if mode == 'w' else False, float_format='%14.6f')
+        df.to_csv(filename + extension, sep = separator, mode = mode, compression = None, index = False, header = True if mode == 'w' else False, float_format='%.6f')
         log.info("--> File: \"{}\" converted chunk appended successfully".format(filename + extension))
 
     @staticmethod
@@ -183,3 +183,16 @@ class HSDatalogConverter:
     @staticmethod
     def to_txt_by_tags(output_folder, sensor_name, hsd_dfs, data_tags = None, out_format = "txt", mode = 'w'):
         HSDatalogConverter.to_unico(output_folder, sensor_name, hsd_dfs, data_tags, out_format, mode, True)
+
+    @staticmethod
+    def merge_dataframes(df_list):
+        # convert non-numeric column to numeric for all data frames
+        for df in df_list:
+            df['Time'] = df['Time'].astype(float)
+
+        # merge data frames
+        merged_df = df_list[0]
+        for i in range(1, len(df_list)):
+            merged_df = pd.merge_asof(merged_df, df_list[i], on="Time", direction="nearest")
+        
+        return merged_df

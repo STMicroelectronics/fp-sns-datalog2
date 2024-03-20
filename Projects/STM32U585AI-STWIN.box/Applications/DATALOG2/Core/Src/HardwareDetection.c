@@ -170,7 +170,8 @@ hwd_st25dv_version HardwareDetection_Check_ST25DV(void)
 
   MX_I2C2_Init();
 
-  HAL_I2C_Mem_Read(&hi2c2, ST25_ADDR_DATA_I2C, ST25_ICREF_REG, I2C_MEMADD_SIZE_16BIT, &icref, 1, HW_DETECTION_I2C_TIMEOUT);
+  HAL_I2C_Mem_Read(&hi2c2, ST25_ADDR_DATA_I2C, ST25_ICREF_REG, I2C_MEMADD_SIZE_16BIT, &icref, 1,
+                   HW_DETECTION_I2C_TIMEOUT);
 
   if (icref == ICREF_ST25DV04)
   {
@@ -180,11 +181,11 @@ hwd_st25dv_version HardwareDetection_Check_ST25DV(void)
   {
     ret = ST25DV64;
   }
-  else if(icref == ICREF_ST25DV04KC)
+  else if (icref == ICREF_ST25DV04KC)
   {
     ret = ST25DV04KC;
   }
-  else if(icref == ICREF_ST25DV64KC)
+  else if (icref == ICREF_ST25DV64KC)
   {
     ret = ST25DV64KC;
   }
@@ -284,7 +285,6 @@ static int32_t ext_sensor_spi_read(void *handle, uint8_t reg, uint8_t *p_data, u
 
   return 0;
 }
-
 
 
 static int32_t ext_sensor_i2c_write(void *handle, uint8_t reg, uint8_t *p_data, uint16_t size)

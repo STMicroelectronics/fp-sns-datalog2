@@ -69,7 +69,7 @@ void MX_ADC1_Init(void)
   sConfig.SamplingTime = ADC_SAMPLETIME_5CYCLE;
   sConfig.SingleDiff = ADC_SINGLE_ENDED;
 
-  /** Trasform from unsigned to signed data
+  /** Transform from unsigned to signed data
     *  ADC is 12bits (4096). Offset is half: 11 bit (2048) */
   sConfig.OffsetNumber = ADC_OFFSET_1;
   sConfig.Offset = 2048;
@@ -96,7 +96,7 @@ void MX_ADC4_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* Enable LDO: switch on analog power supply
-   * Without LDO, ADC is switched off */
+    * Without LDO, ADC is switched off */
   __HAL_RCC_PWR_CLK_ENABLE();
   HAL_PWREx_EnableVddA();
 
@@ -116,7 +116,7 @@ void MX_ADC4_Init(void)
   /** Common config
   */
   hadc4.Instance = ADC4;
-  hadc4.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
+  hadc4.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV4;
   hadc4.Init.Resolution = ADC_RESOLUTION_12B;
   hadc4.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc4.Init.ScanConvMode = ADC_SCAN_DIRECTION_FORWARD;
@@ -160,13 +160,13 @@ void MX_ADC4_Init(void)
 
 }
 
-void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
+void HAL_ADC_MspInit(ADC_HandleTypeDef *adcHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  if(adcHandle->Instance==ADC1)
+  if (adcHandle->Instance == ADC1)
   {
-  /* USER CODE BEGIN ADC1_MspInit 0 */
+    /* USER CODE BEGIN ADC1_MspInit 0 */
 
     /* Enable LDO: switch on analog power supply
      * Without LDO, ADC is switched off */
@@ -184,7 +184,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
 
     HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /* USER CODE END ADC1_MspInit 0 */
+    /* USER CODE END ADC1_MspInit 0 */
     /* ADC1 clock enable */
     __HAL_RCC_ADC12_CLK_ENABLE();
 
@@ -192,77 +192,77 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     /**ADC1 GPIO Configuration
     PC0     ------> ADC1_IN1
     PC1     ------> ADC1_IN2
-    */
-    GPIO_InitStruct.Pin = GPIO_PIN_0|GPIO_PIN_1;
+      */
+    GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN ADC1_MspInit 1 */
+    /* USER CODE BEGIN ADC1_MspInit 1 */
 
-  /* USER CODE END ADC1_MspInit 1 */
+    /* USER CODE END ADC1_MspInit 1 */
   }
-  else if(adcHandle->Instance==ADC4)
+  else if (adcHandle->Instance == ADC4)
   {
-  /* USER CODE BEGIN ADC4_MspInit 0 */
+    /* USER CODE BEGIN ADC4_MspInit 0 */
 
-  /* USER CODE END ADC4_MspInit 0 */
+    /* USER CODE END ADC4_MspInit 0 */
     /* ADC4 clock enable */
     __HAL_RCC_ADC4_CLK_ENABLE();
 
     __HAL_RCC_GPIOC_CLK_ENABLE();
     /**ADC4 GPIO Configuration
     PC2     ------> ADC4_IN3
-    */
+      */
     GPIO_InitStruct.Pin = uC_ADC_BATT_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(uC_ADC_BATT_GPIO_Port, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN ADC4_MspInit 1 */
+    /* USER CODE BEGIN ADC4_MspInit 1 */
 
-  /* USER CODE END ADC4_MspInit 1 */
+    /* USER CODE END ADC4_MspInit 1 */
   }
 }
 
-void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
+void HAL_ADC_MspDeInit(ADC_HandleTypeDef *adcHandle)
 {
 
-  if(adcHandle->Instance==ADC1)
+  if (adcHandle->Instance == ADC1)
   {
-  /* USER CODE BEGIN ADC1_MspDeInit 0 */
+    /* USER CODE BEGIN ADC1_MspDeInit 0 */
 
-  /* USER CODE END ADC1_MspDeInit 0 */
+    /* USER CODE END ADC1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_ADC12_CLK_DISABLE();
 
     /**ADC1 GPIO Configuration
     PC0     ------> ADC1_IN1
     PC1     ------> ADC1_IN2
-    */
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_0|GPIO_PIN_1);
+      */
+    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_0 | GPIO_PIN_1);
 
-  /* USER CODE BEGIN ADC1_MspDeInit 1 */
+    /* USER CODE BEGIN ADC1_MspDeInit 1 */
 
-  /* USER CODE END ADC1_MspDeInit 1 */
+    /* USER CODE END ADC1_MspDeInit 1 */
   }
-  else if(adcHandle->Instance==ADC4)
+  else if (adcHandle->Instance == ADC4)
   {
-  /* USER CODE BEGIN ADC4_MspDeInit 0 */
+    /* USER CODE BEGIN ADC4_MspDeInit 0 */
 
-  /* USER CODE END ADC4_MspDeInit 0 */
+    /* USER CODE END ADC4_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_ADC4_CLK_DISABLE();
 
     /**ADC4 GPIO Configuration
     PC2     ------> ADC4_IN3
-    */
+      */
     HAL_GPIO_DeInit(uC_ADC_BATT_GPIO_Port, uC_ADC_BATT_Pin);
 
-  /* USER CODE BEGIN ADC4_MspDeInit 1 */
+    /* USER CODE BEGIN ADC4_MspDeInit 1 */
     /* ADC4 interrupt Deinit */
     HAL_NVIC_DisableIRQ(ADC4_IRQn);
-  /* USER CODE END ADC4_MspDeInit 1 */
+    /* USER CODE END ADC4_MspDeInit 1 */
   }
 }
 

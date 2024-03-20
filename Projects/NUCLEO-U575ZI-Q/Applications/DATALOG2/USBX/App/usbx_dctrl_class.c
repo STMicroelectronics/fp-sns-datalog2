@@ -175,7 +175,7 @@ int8_t datalog_class_control(void *_this, uint8_t isHostToDevice, uint8_t cmd, u
           counter--;
         }
 
-        if (counter-1 == 0) /* The complete message has been received */
+        if (counter - 1 == 0) /* The complete message has been received */
         {
           *p = '\0';
           IParseCommand(obj->cmd_parser, serialized_cmd, sObj.comm_interface_id);
@@ -441,7 +441,6 @@ sys_error_code_t usbx_dctrl_vtblStream_post_data(IStream_t *_this, uint8_t id_st
 
   return res;
 }
-
 
 
 sys_error_code_t usbx_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t id_stream, uint32_t size,

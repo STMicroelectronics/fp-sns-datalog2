@@ -91,20 +91,20 @@ void MX_ADF1_Init(void)
 
 }
 
-void HAL_MDF_MspInit(MDF_HandleTypeDef* mdfHandle)
+void HAL_MDF_MspInit(MDF_HandleTypeDef *mdfHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-  DMA_NodeConfTypeDef NodeConfig= {0};
+  DMA_NodeConfTypeDef NodeConfig = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-  if(IS_ADF_INSTANCE(mdfHandle->Instance))
+  if (IS_ADF_INSTANCE(mdfHandle->Instance))
   {
-  /* USER CODE BEGIN ADF1_MspInit 0 */
+    /* USER CODE BEGIN ADF1_MspInit 0 */
 
-  /* USER CODE END ADF1_MspInit 0 */
+    /* USER CODE END ADF1_MspInit 0 */
 
-  /** Initializes the peripherals clock
-  */
+    /** Initializes the peripherals clock
+    */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADF1;
     PeriphClkInit.Adf1ClockSelection = RCC_ADF1CLKSOURCE_PLL3;
     PeriphClkInit.PLL3.PLL3Source = RCC_PLLSOURCE_MSI;
@@ -130,8 +130,8 @@ void HAL_MDF_MspInit(MDF_HandleTypeDef* mdfHandle)
     /**ADF1 GPIO Configuration
     PE10     ------> ADF1_SDI0
     PE9     ------> ADF1_CCK0
-    */
-    GPIO_InitStruct.Pin = MIC_SDINx_Pin|MIC_CCK0_Pin;
+      */
+    GPIO_InitStruct.Pin = MIC_SDINx_Pin | MIC_CCK0_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -150,7 +150,7 @@ void HAL_MDF_MspInit(MDF_HandleTypeDef* mdfHandle)
     NodeConfig.Init.DestDataWidth = DMA_DEST_DATAWIDTH_HALFWORD;
     NodeConfig.Init.SrcBurstLength = 1;
     NodeConfig.Init.DestBurstLength = 1;
-    NodeConfig.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0|DMA_DEST_ALLOCATED_PORT0;
+    NodeConfig.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT0;
     NodeConfig.Init.Mode = DMA_NORMAL;
     NodeConfig.TriggerConfig.TriggerPolarity = DMA_TRIG_POLARITY_MASKED;
     NodeConfig.DataHandlingConfig.DataExchange = DMA_EXCHANGE_NONE;
@@ -193,34 +193,34 @@ void HAL_MDF_MspInit(MDF_HandleTypeDef* mdfHandle)
       Error_Handler();
     }
 
-  /* USER CODE BEGIN ADF1_MspInit 1 */
+    /* USER CODE BEGIN ADF1_MspInit 1 */
 
-  /* USER CODE END ADF1_MspInit 1 */
+    /* USER CODE END ADF1_MspInit 1 */
   }
 }
 
-void HAL_MDF_MspDeInit(MDF_HandleTypeDef* mdfHandle)
+void HAL_MDF_MspDeInit(MDF_HandleTypeDef *mdfHandle)
 {
 
-  if(IS_ADF_INSTANCE(mdfHandle->Instance))
+  if (IS_ADF_INSTANCE(mdfHandle->Instance))
   {
-  /* USER CODE BEGIN ADF1_MspDeInit 0 */
+    /* USER CODE BEGIN ADF1_MspDeInit 0 */
 
-  /* USER CODE END ADF1_MspDeInit 0 */
+    /* USER CODE END ADF1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_ADF1_CLK_DISABLE();
 
     /**ADF1 GPIO Configuration
     PE10     ------> ADF1_SDI0
     PE9     ------> ADF1_CCK0
-    */
-    HAL_GPIO_DeInit(GPIOE, MIC_SDINx_Pin|MIC_CCK0_Pin);
+      */
+    HAL_GPIO_DeInit(GPIOE, MIC_SDINx_Pin | MIC_CCK0_Pin);
 
     /* ADF1 DMA DeInit */
     HAL_DMA_DeInit(mdfHandle->hdma);
-  /* USER CODE BEGIN ADF1_MspDeInit 1 */
+    /* USER CODE BEGIN ADF1_MspDeInit 1 */
 
-  /* USER CODE END ADF1_MspDeInit 1 */
+    /* USER CODE END ADF1_MspDeInit 1 */
   }
 }
 

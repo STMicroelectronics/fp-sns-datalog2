@@ -111,7 +111,7 @@ class ComponentWidget(QWidget):
                 else:
                     schema_type = p.schema
 
-                self.assign_callbacks(widget, schema_type, p.schema.value_schema if schema_type == TypeEnum.ENUM.value else None, enum_values)
+                self.assign_callbacks(controller, widget, schema_type, p.schema.value_schema if schema_type == TypeEnum.ENUM.value else None, enum_values)
                 
                 if (comp_sem_type == ComponentType.SENSOR or comp_sem_type == ComponentType.ALGORITHM or comp_sem_type == ComponentType.ACTUATOR) and p.name == "enable":
                     self.radioButton_enable.setVisible(True)
@@ -242,15 +242,15 @@ class ComponentWidget(QWidget):
         component_props_frame.setFixedHeight(component_props_layout.sizeHint().height())
         self.contents_widget.layout().addWidget(component_props_frame)
 
-    def assign_callbacks(self, widget, schema_type, schema_value=None, enum_values=None):
+    def assign_callbacks(self, controller, widget, schema_type, schema_value=None, enum_values=None):
         if schema_type == TypeEnum.STRING.value:
-            widget.value.textChanged.connect(partial(UIUtils.validate_value, widget))
+            widget.value.textChanged.connect(partial(UIUtils.validate_value, controller, widget))
             widget.value.editingFinished.connect(partial(self.send_string_command, widget))
         elif schema_type == TypeEnum.DOUBLE.value or schema_type == TypeEnum.FLOAT.value:
-            widget.value.textChanged.connect(partial(UIUtils.validate_value, widget))
+            widget.value.textChanged.connect(partial(UIUtils.validate_value, controller, widget))
             widget.value.editingFinished.connect(partial(self.send_double_command, widget))
         elif  schema_type == TypeEnum.INTEGER.value:
-            widget.value.textChanged.connect(partial(UIUtils.validate_value, widget))
+            widget.value.textChanged.connect(partial(UIUtils.validate_value, controller, widget))
             if isinstance(widget.value, QSpinBox):
                 widget.value.valueChanged.connect(partial(self.send_int_command, widget))
             else:
@@ -266,20 +266,20 @@ class ComponentWidget(QWidget):
             if isinstance(widget, PropertyWidget):
                 if widget.has_bounds:
                     if type(widget.validator) == QDoubleValidator:
-                        widget.value.textChanged.connect(partial(UIUtils.validate_value, widget))
+                        widget.value.textChanged.connect(partial(UIUtils.validate_value, controller, widget))
                         widget.value.editingFinished.connect(partial(self.send_double_command, widget))
                     elif type(widget.validator) == QIntValidator:
-                        widget.value.textChanged.connect(partial(UIUtils.validate_value, widget))
+                        widget.value.textChanged.connect(partial(UIUtils.validate_value, controller, widget))
                         widget.value.editingFinished.connect(partial(self.send_int_command, widget))
                 else:
                     for w in widget.value.widget.sub_widgets:
                         if isinstance(w, PropertyWidget):
-                            self.assign_callbacks(w, w.prop_type)
+                            self.assign_callbacks(controller, w, w.prop_type)
                         else:
-                            self.assign_callbacks(w, TypeEnum.OBJECT.value)
+                            self.assign_callbacks(controller, w, TypeEnum.OBJECT.value)
             elif isinstance(widget, SubPropertyWidget):
                 for sw in widget.widget.sub_widgets:
-                    self.assign_callbacks(sw, sw.prop_type)
+                    self.assign_callbacks(controller, sw, sw.prop_type)
 
     @Slot()
     def clicked_browse_dt_button(self):
@@ -474,6 +474,8 @@ class ComponentWidget(QWidget):
             self.radioButton_enable.blockSignals(True)
             self.radioButton_enable.setChecked(status)
             self.radioButton_enable.blockSignals(False)
+        # else:
+        #     self.radioButton_enable.setChecked(status)
         self.send_bool_command(widget, status)
         
     def send_bool_command(self, widget: PropertyWidget, status):

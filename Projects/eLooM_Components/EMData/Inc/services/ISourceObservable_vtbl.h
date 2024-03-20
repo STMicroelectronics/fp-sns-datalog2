@@ -1,27 +1,27 @@
 /**
- ******************************************************************************
- * @file    ISourceObservable_vtbl.h
- * @author  STMicroelectronics - AIS - MCD Team
- * @version 3.0.0
- * @date    Jun 8, 2021
- *
- * @brief   Definition of the stream data source generic interface.
- *
- * This file define the virtual table for the ::ISourceObservable Interface.
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    ISourceObservable_vtbl.h
+  * @author  STMicroelectronics - AIS - MCD Team
+  * @version 3.0.0
+  * @date    Jun 8, 2021
+  *
+  * @brief   Definition of the stream data source generic interface.
+  *
+  * This file define the virtual table for the ::ISourceObservable Interface.
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *
+  ******************************************************************************
+  */
 
 #ifndef INCLUDE_ISOURCEOBSERVER_VTBL_H_
 #define INCLUDE_ISOURCEOBSERVER_VTBL_H_
@@ -34,29 +34,29 @@ extern "C" {
 
 
 /**
- * Create a type name for ::ISourceObservable_vtbl.
- */
+  * Create a type name for ::ISourceObservable_vtbl.
+  */
 typedef struct _ISourceObservable_vtbl ISourceObservable_vtbl;
 
 /**
- * Specifies the virtual table for the interface.
- */
+  * Specifies the virtual table for the interface.
+  */
 struct _ISourceObservable_vtbl
 {
 
-  uint8_t             (*GetId)(ISourceObservable *_this); /** @sa ISourceGetId() */
-  IEventSrc*          (*GetEventSourceIF)(ISourceObservable *_this); /** @sa ISourceGetEventSrcIF() */
-  EMData_t            (*GetDataInfo)(ISourceObservable *_this); /** @sa ISourceGetDataInfo() */
+  uint8_t (*GetId)(ISourceObservable *_this);             /** @sa ISourceGetId() */
+  IEventSrc          *(*GetEventSourceIF)(ISourceObservable *_this); /** @sa ISourceGetEventSrcIF() */
+  EMData_t (*GetDataInfo)(ISourceObservable *_this);            /** @sa ISourceGetDataInfo() */
 };
 
 /**
- * Internal state of the Source Observable IF.
- */
+  * Internal state of the Source Observable IF.
+  */
 struct _ISourceObservable
 {
   /**
-   * Pointer to the virtual table for the class.
-   */
+    * Pointer to the virtual table for the class.
+    */
   const ISourceObservable_vtbl *vptr;
 };
 
@@ -65,24 +65,24 @@ struct _ISourceObservable
 // ***************************
 
 /**
- * @sa ISourceGetId()
- */
+  * @sa ISourceGetId()
+  */
 static inline uint8_t ISourceGetId(ISourceObservable *_this)
 {
-  return _this->vptr->GetId(_this );
+  return _this->vptr->GetId(_this);
 }
 
 /**
- * @sa ISourceGetEventSrcIF()
- */
-static inline IEventSrc * ISourceGetEventSrcIF(ISourceObservable *_this)
+  * @sa ISourceGetEventSrcIF()
+  */
+static inline IEventSrc *ISourceGetEventSrcIF(ISourceObservable *_this)
 {
-  return _this->vptr->GetEventSourceIF(_this );
+  return _this->vptr->GetEventSourceIF(_this);
 }
 
 /**
- * @sa ISourceGetDataInfo()
- */
+  * @sa ISourceGetDataInfo()
+  */
 static inline EMData_t ISourceGetDataInfo(ISourceObservable *_this)
 {
   return _this->vptr->GetDataInfo(_this);

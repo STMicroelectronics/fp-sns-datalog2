@@ -20,17 +20,17 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:lps22hh_temp;1
+  * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:lps22hh_temp;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.1.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef _PNPL__H_
-#define _PNPL__H_
+#ifndef _PNPL_LPS22HH_TEMP_VTBL_H_
+#define _PNPL_LPS22HH_TEMP_VTBL_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -39,12 +39,14 @@ extern "C" {
 char *Lps22hh_Temp_PnPL_vtblGetKey(IPnPLComponent_t *_this);
 uint8_t Lps22hh_Temp_PnPL_vtblGetNCommands(IPnPLComponent_t *_this);
 char *Lps22hh_Temp_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id);
-uint8_t Lps22hh_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,uint8_t pretty);
-uint8_t Lps22hh_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON);
-uint8_t Lps22hh_Temp_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON);
+uint8_t Lps22hh_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty);
+uint8_t Lps22hh_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                          uint32_t *size, uint8_t pretty);
+uint8_t Lps22hh_Temp_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                              uint32_t *size, uint8_t pretty);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _PNPL__H_ */
+#endif /* _PNPL_LPS22HH_TEMP_VTBL_H_ */

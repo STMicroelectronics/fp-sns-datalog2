@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_Manager.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add bluetooth services using vendor specific profiles.
   ******************************************************************************
   * @attention
@@ -32,17 +32,24 @@
 #define BLE_MANAGER_MAX_BONDED_DEVICES 3
 
 /* Hardware & Software Characteristics Service */
-#define COPY_FEATURES_SERVICE_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x00,0x01,0x11,0xe1,0x9a,0xb4,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
-#define COPY_EXT_CONFIG_CHAR_UUID(uuid_struct)  COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x14,0x00,0x02,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_FEATURES_SERVICE_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x00,0x01,0x11,\
+                                                              0xe1,0x9a,0xb4,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_EXT_CONFIG_CHAR_UUID(uuid_struct)  COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x14,0x00,0x02,0x11,\
+                                                              0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 /* Console Service */
-#define COPY_CONSOLE_SERVICE_UUID(uuid_struct)  COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x00,0x0E,0x11,0xe1,0x9a,0xb4,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
-#define COPY_TERM_CHAR_UUID(uuid_struct)        COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x01,0x00,0x0E,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
-#define COPY_STDERR_CHAR_UUID(uuid_struct)      COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x02,0x00,0x0E,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_CONSOLE_SERVICE_UUID(uuid_struct)  COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x00,0x0E,0x11,\
+                                                              0xe1,0x9a,0xb4,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_TERM_CHAR_UUID(uuid_struct)        COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x01,0x00,0x0E,0x11,\
+                                                              0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_STDERR_CHAR_UUID(uuid_struct)      COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x02,0x00,0x0E,0x11,\
+                                                              0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 /* Configuration Service */
-#define COPY_CONFIG_SERVICE_UUID(uuid_struct)   COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x00,0x0F,0x11,0xe1,0x9a,0xb4,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
-#define COPY_CONFIG_CHAR_UUID(uuid_struct)      COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x02,0x00,0x0F,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_CONFIG_SERVICE_UUID(uuid_struct)   COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x00,0x0F,0x11,\
+                                                              0xe1,0x9a,0xb4,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_CONFIG_CHAR_UUID(uuid_struct)      COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x02,0x00,0x0F,0x11,\
+                                                              0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 /* Private Types ----------------------------------------------------------------*/
 typedef enum
@@ -77,7 +84,6 @@ typedef enum
   EXT_CONFIG_COM_SET_DFU,
   EXT_CONFIG_COM_SET_OFF,
   EXT_CONFIG_COM_CLEAR_DB,
-  EXT_CONFIG_COM_READ_SENSOR_CONFIG,
   EXT_CONFIG_COM_READ_BANKS_FW_ID,
   EXT_CONFIG_COM_BANKS_SWAP,
 
@@ -88,7 +94,6 @@ typedef enum
   EXT_CONFIG_COM_SET_NAME,
   EXT_CONFIG_COM_CHANGE_PIN,
   EXT_CONFIG_COM_SET_CERT,
-  EXT_CONFIG_COM_SET_SENSOR_CONFIG,
 
   /* Total Number of Commands */
   EXT_CONFIG_COMMAND_NUMBER
@@ -183,9 +188,6 @@ CustomExtConfigCustomCommand_t CustomExtConfigCustomCommandCallback;
 CustomExtConfigReadCertCommand_t CustomExtConfigReadCertCommandCallback;
 /* For Set Certificate Command */
 CustomExtConfigSetCertCommand_t CustomExtConfigSetCertCommandCallback;
-/* Sensor Configuration */
-CustomExtConfigReadSensorsConfigCommands_t CustomExtConfigReadSensorsConfigCommandsCallback;
-CustomExtConfigSetSensorsConfigCommands_t CustomExtConfigSetSensorsConfigCommandsCallback;
 
 /* Private variables ------------------------------------------------------------*/
 
@@ -204,7 +206,6 @@ static BLE_ExtConfigCommand_t StandardExtConfigCommands[EXT_CONFIG_COMMAND_NUMBE
   {EXT_CONFIG_COM_SET_DFU, "DFU"},
   {EXT_CONFIG_COM_SET_OFF, "Off"},
   {EXT_CONFIG_COM_CLEAR_DB, "ClearDB"},
-  {EXT_CONFIG_COM_READ_SENSOR_CONFIG, "ReadSensorsConfig"},
   {EXT_CONFIG_COM_READ_BANKS_FW_ID, "ReadBanksFwId"},
   {EXT_CONFIG_COM_BANKS_SWAP, "BanksSwap"},
   {EXT_CONFIG_COM_SET_WIFI, "SetWiFi"},
@@ -212,8 +213,7 @@ static BLE_ExtConfigCommand_t StandardExtConfigCommands[EXT_CONFIG_COMMAND_NUMBE
   {EXT_CONFIG_COM_SET_TIME, "SetTime"},
   {EXT_CONFIG_COM_SET_NAME, "SetName"},
   {EXT_CONFIG_COM_CHANGE_PIN, "ChangePIN"},
-  {EXT_CONFIG_COM_SET_CERT, "SetCert"},
-  {EXT_CONFIG_COM_SET_SENSOR_CONFIG, "SetSensorsConfig"}
+  {EXT_CONFIG_COM_SET_CERT, "SetCert"}
 };
 
 /* Table for Custom Commands: */
@@ -330,16 +330,11 @@ static void Read_Request_Term(void *VoidCharPointer,
 #ifndef BLE_MANAGER_NO_PARSON
 static BLE_ExtConfigCommandType BLE_ExtConfig_ExtractCommandType(uint8_t *hs_command_buffer);
 
-static void AttrMod_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle, uint16_t Offset, uint8_t data_length,
-                                      uint8_t *att_data);
+static void AttrMod_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle, uint16_t Offset,
+                                      uint8_t data_length, uint8_t *att_data);
 static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle, uint16_t Offset, uint8_t data_length,
                                     uint8_t *att_data);
 static void ClearSingleCommand(BLE_ExtCustomCommand_t *Command);
-
-static void create_JSON_SensorDescriptor(COM_SensorDescriptor_t *sensor_descriptor, JSON_Value *tempJSON);
-static void create_JSON_SensorStatus(COM_Sensor_t *sensor, JSON_Value *tempJSON);
-static void create_JSON_SubSensorDescriptor(COM_SubSensorDescriptor_t *sub_sensor_descriptor, JSON_Value *tempJSON);
-static void create_JSON_SubSensorStatus(COM_SubSensorStatus_t *sub_sensor_status, JSON_Value *tempJSON);
 #endif /* BLE_MANAGER_NO_PARSON */
 
 static void ResetBleManagerCallbackFunctionPointer(void);
@@ -366,11 +361,15 @@ static tBleStatus BLE_Manager_AddConfigService(void)
 #if (BLUE_CORE == BLUENRG_MS)
   ret = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, 1 + 3, &(BleCharConfig.Service_Handle));
 #else /* (BLUE_CORE == BLUENRG_MS) */
-  BLE_MemCpy(&service_uuid.Service_UUID_128, uuid, 16);
+  BLE_MEM_CPY(&service_uuid.Service_UUID_128, uuid, 16);
 #if (BLUE_CORE != BLUENRG_LP)
   ret = aci_gatt_add_service(UUID_TYPE_128,  &service_uuid, PRIMARY_SERVICE, 1 + 3, &(BleCharConfig.Service_Handle));
 #else /* (BLUE_CORE != BLUENRG_LP) */
-  ret = aci_gatt_srv_add_service_nwk(UUID_TYPE_128,  &service_uuid, PRIMARY_SERVICE, 1 + 3, &(BleCharConfig.Service_Handle));
+  ret = aci_gatt_srv_add_service_nwk(UUID_TYPE_128,
+                                     &service_uuid,
+                                     PRIMARY_SERVICE,
+                                     1 + 3,
+                                     &(BleCharConfig.Service_Handle));
 #endif /* (BLUE_CORE != BLUENRG_LP) */
 #endif /* (BLUE_CORE == BLUENRG_MS) */
 
@@ -380,7 +379,7 @@ static tBleStatus BLE_Manager_AddConfigService(void)
   }
 
 #if (BLUE_CORE != BLUENRG_MS)
-  BLE_MemCpy(&char_uuid.Char_UUID_128, BleCharConfig.uuid, 16);
+  BLE_MEM_CPY(&char_uuid.Char_UUID_128, BleCharConfig.uuid, 16);
 #endif /* (BLUE_CORE != BLUENRG_MS) */
 
 #if (BLUE_CORE != BLUENRG_LP)
@@ -428,11 +427,19 @@ static tBleStatus BLE_Manager_AddConsoleService(void)
 #if (BLUE_CORE == BLUENRG_MS)
   ret = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, 1 + (3 * 2), &(BleCharStdOut.Service_Handle));
 #else /* (BLUE_CORE == BLUENRG_MS) */
-  BLE_MemCpy(&service_uuid.Service_UUID_128, uuid, 16);
+  BLE_MEM_CPY(&service_uuid.Service_UUID_128, uuid, 16);
 #if (BLUE_CORE != BLUENRG_LP)
-  ret = aci_gatt_add_service(UUID_TYPE_128,  &service_uuid, PRIMARY_SERVICE, 1 + (3 * 2), &(BleCharStdOut.Service_Handle));
+  ret = aci_gatt_add_service(UUID_TYPE_128,
+                             &service_uuid,
+                             PRIMARY_SERVICE,
+                             1 + (3 * 2),
+                             &(BleCharStdOut.Service_Handle));
 #else /* (BLUE_CORE != BLUENRG_LP) */
-  ret = aci_gatt_srv_add_service_nwk(UUID_TYPE_128,  &service_uuid, PRIMARY_SERVICE, 1 + (3 * 2), &(BleCharStdOut.Service_Handle));
+  ret = aci_gatt_srv_add_service_nwk(UUID_TYPE_128,
+                                     &service_uuid,
+                                     PRIMARY_SERVICE,
+                                     1 + (3 * 2),
+                                     &(BleCharStdOut.Service_Handle));
 #endif /* (BLUE_CORE != BLUENRG_LP) */
 #endif /* (BLUE_CORE == BLUENRG_MS) */
 
@@ -442,7 +449,7 @@ static tBleStatus BLE_Manager_AddConsoleService(void)
   }
 
 #if (BLUE_CORE != BLUENRG_MS)
-  BLE_MemCpy(&char_uuid.Char_UUID_128, BleCharStdOut.uuid, 16);
+  BLE_MEM_CPY(&char_uuid.Char_UUID_128, BleCharStdOut.uuid, 16);
 #endif /* (BLUE_CORE != BLUENRG_MS) */
 
 #if (BLUE_CORE != BLUENRG_LP)
@@ -472,7 +479,7 @@ static tBleStatus BLE_Manager_AddConsoleService(void)
   BleCharStdErr.Service_Handle = BleCharStdOut.Service_Handle;
 
 #if (BLUE_CORE != BLUENRG_MS)
-  BLE_MemCpy(&char_uuid.Char_UUID_128, BleCharStdErr.uuid, 16);
+  BLE_MEM_CPY(&char_uuid.Char_UUID_128, BleCharStdErr.uuid, 16);
 #endif /* (BLUE_CORE != BLUENRG_MS) */
 
 
@@ -708,7 +715,9 @@ static void AttrMod_Request_Config(void *VoidCharPointer, uint16_t attr_handle, 
 #if (BLE_DEBUG_LEVEL>1)
   if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
   {
-    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "--->Conf=%s\n", (BLE_Conf_Service == BLE_SERV_ENABLE) ? "ON" : "OFF");
+    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite,
+                                    "--->Conf=%s\n",
+                                    (BLE_Conf_Service == BLE_SERV_ENABLE) ? "ON" : "OFF");
     Term_Update(BufferToWrite, BytesToWrite);
   }
   else
@@ -825,174 +834,6 @@ static void AttrMod_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handl
   }
 }
 
-
-static void create_JSON_SensorDescriptor(COM_SensorDescriptor_t *sensor_descriptor, JSON_Value *tempJSON)
-{
-  uint32_t ii = 0;
-
-  JSON_Object *JSON_SensorDescriptor = json_value_get_object(tempJSON);
-  JSON_Array *JSON_SensorArray1;
-  JSON_Value *tempJSON1;
-
-  json_object_dotset_value(JSON_SensorDescriptor, "subSensorDescriptor", json_value_init_array());
-  JSON_SensorArray1 = json_object_dotget_array(JSON_SensorDescriptor, "subSensorDescriptor");
-  for (ii = 0; ii < sensor_descriptor->nSubSensors; ii++)
-  {
-    tempJSON1 = json_value_init_object();
-    create_JSON_SubSensorDescriptor(&sensor_descriptor->subSensorDescriptor[ii], tempJSON1);
-    json_array_append_value(JSON_SensorArray1, tempJSON1);
-  }
-}
-
-static void create_JSON_SensorStatus(COM_Sensor_t *sensor, JSON_Value *tempJSON)
-{
-  uint32_t ii = 0;
-  COM_SensorStatus_t sensor_status = sensor->sensorStatus;
-  COM_SensorDescriptor_t pSensorDescriptor = sensor->sensorDescriptor;
-
-  JSON_Object *JSON_SensorStatus = json_value_get_object(tempJSON);
-  JSON_Array *JSON_SensorArray2;
-  JSON_Value *tempJSON2;
-
-  json_object_dotset_value(JSON_SensorStatus, "subSensorStatus", json_value_init_array());
-  JSON_SensorArray2 = json_object_dotget_array(JSON_SensorStatus, "subSensorStatus");
-  for (ii = 0; ii < pSensorDescriptor.nSubSensors; ii++)
-  {
-    tempJSON2 = json_value_init_object();
-    create_JSON_SubSensorStatus(&sensor_status.subSensorStatus[ii], tempJSON2);
-    json_array_append_value(JSON_SensorArray2, tempJSON2);
-  }
-}
-
-static void create_JSON_SubSensorStatus(COM_SubSensorStatus_t *sub_sensor_status, JSON_Value *tempJSON)
-{
-#define PRECISION6(n) floor(1000000.0*(n))/1000000.0
-  JSON_Object *JSON_SubSensorStatus = json_value_get_object(tempJSON);
-
-  json_object_dotset_number(JSON_SubSensorStatus, "ODR", sub_sensor_status->ODR);
-  json_object_dotset_number(JSON_SubSensorStatus, "ODRMeasured", sub_sensor_status->measuredODR);
-  json_object_dotset_number(JSON_SubSensorStatus, "initialOffset", PRECISION6((double)sub_sensor_status->initialOffset));
-  json_object_dotset_number(JSON_SubSensorStatus, "FS", sub_sensor_status->FS);
-  json_object_dotset_number(JSON_SubSensorStatus, "sensitivity", PRECISION6((double)sub_sensor_status->sensitivity));
-  json_object_dotset_boolean(JSON_SubSensorStatus, "isActive", (int)sub_sensor_status->isActive);
-  json_object_dotset_number(JSON_SubSensorStatus, "samplesPerTs", (double)(sub_sensor_status->samplesPerTimestamp));
-  json_object_dotset_number(JSON_SubSensorStatus, "usbDataPacketSize", (double)(sub_sensor_status->usbDataPacketSize));
-  json_object_dotset_number(JSON_SubSensorStatus, "sdWriteBufferSize", (double)(sub_sensor_status->sdWriteBufferSize));
-  json_object_dotset_number(JSON_SubSensorStatus, "wifiDataPacketSize", (double)(sub_sensor_status->wifiDataPacketSize));
-  json_object_dotset_number(JSON_SubSensorStatus, "comChannelNumber", (double)(sub_sensor_status->comChannelNumber));
-  json_object_dotset_boolean(JSON_SubSensorStatus, "ucfLoaded", (int)sub_sensor_status->ucfLoaded);
-#undef PRECISION6
-}
-
-static void create_JSON_SubSensorDescriptor(COM_SubSensorDescriptor_t *sub_sensor_descriptor, JSON_Value *tempJSON)
-{
-  uint32_t ii = 0;
-
-  JSON_Value *tempJSONarray = json_value_init_object();
-  JSON_Array *JSON_SensorArray = json_value_get_array(tempJSONarray);
-  JSON_Object *JSON_SubSensorDescriptor = json_value_get_object(tempJSON);
-
-  json_object_dotset_number(JSON_SubSensorDescriptor, "id", (double)(sub_sensor_descriptor->id));
-
-  switch (sub_sensor_descriptor->sensorType)
-  {
-    case COM_TYPE_ACC:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "sensorType", "ACC");
-      break;
-    case COM_TYPE_MAG:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "sensorType", "MAG");
-      break;
-    case COM_TYPE_GYRO:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "sensorType", "GYRO");
-      break;
-    case COM_TYPE_TEMP:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "sensorType", "TEMP");
-      break;
-    case COM_TYPE_PRESS:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "sensorType", "PRESS");
-      break;
-    case COM_TYPE_HUM:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "sensorType", "HUM");
-      break;
-    case COM_TYPE_MIC:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "sensorType", "MIC");
-      break;
-    case COM_TYPE_MLC:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "sensorType", "MLC");
-      break;
-    default:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "sensorType", "NA");
-      break;
-  }
-
-  json_object_dotset_number(JSON_SubSensorDescriptor, "dimensions", (double)sub_sensor_descriptor->dimensions);
-
-  json_object_dotset_value(JSON_SubSensorDescriptor, "dimensionsLabel", json_value_init_array());
-  JSON_SensorArray = json_object_dotget_array(JSON_SubSensorDescriptor, "dimensionsLabel");
-
-  for (ii = 0; ii < sub_sensor_descriptor->dimensions; ii++)
-  {
-    json_array_append_string(JSON_SensorArray, sub_sensor_descriptor->dimensionsLabel[ii]);
-  }
-
-  json_object_dotset_string(JSON_SubSensorDescriptor, "unit", sub_sensor_descriptor->unit);
-
-  switch (sub_sensor_descriptor->dataType)
-  {
-    case DATA_TYPE_UINT8:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "dataType", "uint8_t");
-      break;
-    case DATA_TYPE_INT8:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "dataType", "int8_t");
-      break;
-    case DATA_TYPE_UINT16:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "dataType", "uint16_t");
-      break;
-    case DATA_TYPE_INT16:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "dataType", "int16_t");
-      break;
-    case DATA_TYPE_UINT32:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "dataType", "uint32_t");
-      break;
-    case DATA_TYPE_INT32:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "dataType", "int32_t");
-      break;
-    case DATA_TYPE_FLOAT:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "dataType", "float");
-      break;
-    default:
-      json_object_dotset_string(JSON_SubSensorDescriptor, "dataType", "NA");
-      break;
-  }
-  ii = 0;
-
-  json_object_dotset_value(JSON_SubSensorDescriptor, "FS", json_value_init_array());
-  JSON_SensorArray = json_object_dotget_array(JSON_SubSensorDescriptor, "FS");
-  while (sub_sensor_descriptor->FS[ii] > 0.0f)
-  {
-    json_array_append_number(JSON_SensorArray, sub_sensor_descriptor->FS[ii]);
-    ii++;
-  }
-
-  ii = 0;
-
-  json_object_dotset_value(JSON_SubSensorDescriptor, "ODR", json_value_init_array());
-  JSON_SensorArray = json_object_dotget_array(JSON_SubSensorDescriptor, "ODR");
-  while (sub_sensor_descriptor->ODR[ii] > 0.0f)
-  {
-    json_array_append_number(JSON_SensorArray, sub_sensor_descriptor->ODR[ii]);
-    ii++;
-  }
-
-  json_object_dotset_number(JSON_SubSensorDescriptor, "samplesPerTs.min",
-                            (double)(sub_sensor_descriptor->samplesPerTimestamp[0]));
-  json_object_dotset_number(JSON_SubSensorDescriptor, "samplesPerTs.max",
-                            (double)(sub_sensor_descriptor->samplesPerTimestamp[1]));
-  json_object_dotset_string(JSON_SubSensorDescriptor, "samplesPerTs.dataType", "int16_t");
-
-  json_value_free(tempJSONarray);
-}
-
 /**
   * @brief  This function is called when there is a change on the gatt attribute as consequence of write request
   *         for the Extended Configuration characteristic value service
@@ -1036,11 +877,6 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
         {
           WritingPointer += sprintf((char *)LocalBufferToWrite + WritingPointer, "%s,",
                                     StandardExtConfigCommands[EXT_CONFIG_COM_READ_CUSTOM_COMMAND].CommandString);
-        }
-        if (CustomExtConfigReadSensorsConfigCommandsCallback != NULL)
-        {
-          WritingPointer += sprintf((char *)LocalBufferToWrite + WritingPointer, "%s,",
-                                    StandardExtConfigCommands[EXT_CONFIG_COM_READ_SENSOR_CONFIG].CommandString);
         }
         if (CustomExtConfigRebootOnDFUModeCommandCallback != NULL)
         {
@@ -1143,7 +979,7 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
         JSON_size = json_serialization_size(tempJSON);
 
         BLE_ExtConfiguration_Update((uint8_t *) JSON_string_command, JSON_size);
-        BLE_FreeFunction(JSON_string_command);
+        BLE_FREE_FUNCTION(JSON_string_command);
         json_value_free(tempJSON);
 
         break;
@@ -1174,34 +1010,7 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
           JSON_size = json_serialization_size(tempJSON);
 
           BLE_ExtConfiguration_Update((uint8_t *) JSON_string_command, JSON_size);
-          BLE_FreeFunction(JSON_string_command);
-          json_value_free(tempJSON);
-        }
-        break;
-
-      case EXT_CONFIG_COM_READ_SENSOR_CONFIG:
-        if (CustomExtConfigReadSensorsConfigCommandsCallback != NULL)
-        {
-          JSON_Value *tempJSON = json_value_init_object();
-          JSON_Object *tempJSON_Obj = json_value_get_object(tempJSON);
-          JSON_Array *JSON_SensorArray;
-          char *JSON_string_command = NULL;
-          uint32_t JSON_size = 0;
-
-          BLE_MANAGER_PRINTF("Command ReadSensorsConfigCommand\r\n");
-
-          json_object_dotset_value(tempJSON_Obj, "sensor", json_value_init_array());
-          JSON_SensorArray = json_object_dotget_array(tempJSON_Obj, "sensor");
-
-          /* Filling the array */
-          CustomExtConfigReadSensorsConfigCommandsCallback(JSON_SensorArray);
-
-          /* convert to a json string and write as string */
-          JSON_string_command = json_serialize_to_string(tempJSON);
-          JSON_size = json_serialization_size(tempJSON);
-
-          BLE_ExtConfiguration_Update((uint8_t *) JSON_string_command, JSON_size);
-          BLE_FreeFunction(JSON_string_command);
+          BLE_FREE_FUNCTION(JSON_string_command);
           json_value_free(tempJSON);
         }
         break;
@@ -1225,7 +1034,7 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
           JSON_size = json_serialization_size(tempJSON);
 
           BLE_ExtConfiguration_Update((uint8_t *) JSON_string_command, JSON_size);
-          BLE_FreeFunction(JSON_string_command);
+          BLE_FREE_FUNCTION(JSON_string_command);
         }
         break;
 
@@ -1249,7 +1058,7 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
           JSON_size = json_serialization_size(tempJSON);
 
           BLE_ExtConfiguration_Update((uint8_t *) JSON_string_command, JSON_size);
-          BLE_FreeFunction(JSON_string_command);
+          BLE_FREE_FUNCTION(JSON_string_command);
         }
         break;
 
@@ -1272,7 +1081,7 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
           JSON_size = json_serialization_size(tempJSON);
 
           BLE_ExtConfiguration_Update((uint8_t *) JSON_string_command, JSON_size);
-          BLE_FreeFunction(JSON_string_command);
+          BLE_FREE_FUNCTION(JSON_string_command);
         }
         break;
 
@@ -1294,7 +1103,7 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
           JSON_size = json_serialization_size(tempJSON);
 
           BLE_ExtConfiguration_Update((uint8_t *) JSON_string_command, JSON_size);
-          BLE_FreeFunction(JSON_string_command);
+          BLE_FREE_FUNCTION(JSON_string_command);
         }
         break;
 
@@ -1313,7 +1122,7 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
           char *JSON_string_command = NULL;
           uint32_t JSON_size = 0;
 
-          BLE_MANAGER_PRINTF("Command PowerStatus\r\n");
+          BLE_MANAGER_PRINTF("Command Certificate\r\n");
 
           CustomExtConfigReadCertCommandCallback(LocalBufferToWrite);
 
@@ -1511,15 +1320,6 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
           json_value_free(tempJSON);
         }
         break;
-
-      case EXT_CONFIG_COM_SET_SENSOR_CONFIG:
-        if (CustomExtConfigSetSensorsConfigCommandsCallback != NULL)
-        {
-          BLE_MANAGER_PRINTF("Command SetSensorsConfigCommand\r\n");
-          CustomExtConfigSetSensorsConfigCommandsCallback(hs_command_buffer);
-        }
-        break;
-
       default:
         /* Check if it's a custom Command or not */
         if (CustomExtConfigCustomCommandCallback != NULL)
@@ -1533,13 +1333,13 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
               CustomExtConfigCustomCommandCallback(CommandResult);
               if (CommandResult->CommandName != NULL)
               {
-                BLE_FreeFunction(CommandResult->CommandName);
+                BLE_FREE_FUNCTION(CommandResult->CommandName);
               }
               if (CommandResult->StringValue != NULL)
               {
-                BLE_FreeFunction(CommandResult->StringValue);
+                BLE_FREE_FUNCTION(CommandResult->StringValue);
               }
-              BLE_FreeFunction(CommandResult);
+              BLE_FREE_FUNCTION(CommandResult);
             }
           }
           else
@@ -1553,7 +1353,7 @@ static void Write_Request_ExtConfig(void *VoidCharPointer, uint16_t attr_handle,
         }
         break;
     }
-    BLE_FreeFunction(hs_command_buffer);
+    BLE_FREE_FUNCTION(hs_command_buffer);
     hs_command_buffer = NULL;
   }
 }
@@ -1591,17 +1391,17 @@ BLE_CustomCommadResult_t *ParseCustomCommand(BLE_ExtCustomCommand_t *LocCustomCo
   /* If we have found a valid Custom Command extract the values */
   if (ValidCustomCommand)
   {
-    CommandResult = (BLE_CustomCommadResult_t *) BLE_MallocFunction(sizeof(BLE_CustomCommadResult_t));
+    CommandResult = (BLE_CustomCommadResult_t *) BLE_MALLOC_FUNCTION(sizeof(BLE_CustomCommadResult_t));
     if (CommandResult == NULL)
     {
       BLE_MANAGER_PRINTF("Error: Mem alloc error: %d@%s\r\n", __LINE__, __FILE__);
     }
 
-    CommandResult->CommandName = (uint8_t *)BLE_MallocFunction(strlen((char *)LocLastCustomCommand->CommandName) + 1U);
+    CommandResult->CommandName = (uint8_t *)BLE_MALLOC_FUNCTION(strlen((char *)LocLastCustomCommand->CommandName) + 1U);
     if (CommandResult->CommandName == NULL)
     {
       BLE_MANAGER_PRINTF("Error: Mem alloc error: %d@%s\r\n", __LINE__, __FILE__);
-      BLE_FreeFunction(CommandResult);
+      BLE_FREE_FUNCTION(CommandResult);
     }
     else
     {
@@ -1655,11 +1455,11 @@ BLE_CustomCommadResult_t *ParseCustomCommand(BLE_ExtCustomCommand_t *LocCustomCo
         {
           uint8_t *NewString = (uint8_t *)json_object_dotget_string(JSON_ParseHandler, "argString");
           CommandResult->IntValue = 0;
-          CommandResult->StringValue = (uint8_t *)BLE_MallocFunction(strlen((char *)NewString) + 1U);
+          CommandResult->StringValue = (uint8_t *)BLE_MALLOC_FUNCTION(strlen((char *)NewString) + 1U);
           if (CommandResult->StringValue == NULL)
           {
             BLE_MANAGER_PRINTF("Error: Mem alloc error: %d@%s\r\n", __LINE__, __FILE__);
-            BLE_FreeFunction(CommandResult);
+            BLE_FREE_FUNCTION(CommandResult);
           }
           else
           {
@@ -1698,7 +1498,7 @@ void GenericClearCustomCommandsList(BLE_ExtCustomCommand_t **LocCustomCommands,
     {
       ClearSingleCommand((BLE_ExtCustomCommand_t *)(*LocCustomCommands)->NextCommand);
     }
-    BLE_FreeFunction((*LocCustomCommands));
+    BLE_FREE_FUNCTION((*LocCustomCommands));
     *LocLastCustomCommand = *LocCustomCommands = NULL;
   }
 }
@@ -1717,8 +1517,8 @@ static void ClearSingleCommand(BLE_ExtCustomCommand_t *Command)
 #if (BLE_DEBUG_LEVEL>1)
   BLE_MANAGER_PRINTF("Deleting Custom Command<%s>\r\n", Command->CommandName);
 #endif /* (BLE_DEBUG_LEVEL>1) */
-  BLE_FreeFunction(Command->CommandName);
-  BLE_FreeFunction(Command);
+  BLE_FREE_FUNCTION(Command->CommandName);
+  BLE_FREE_FUNCTION(Command);
 }
 
 /**
@@ -1727,7 +1527,8 @@ static void ClearSingleCommand(BLE_ExtCustomCommand_t *Command)
   * @param  BLE_ExtCustomCommand_t **LocLastCustomCommand Pointer to Pointer to slast Custom Command
   * @param  char *CommandName Command Name
   * @param  BLE_CustomCommandTypes_t CommandType Command Type
-  * @param  int32_t DefaultValue (for BLE_CUSTOM_COMMAND_INTEGER,BLE_CUSTOM_COMMAND_ENUM_INTEGER,BLE_CUSTOM_COMMAND_ENUM_STRING or BLE_CUSTOM_COMMAND_BOOLEAN)
+  * @param  int32_t DefaultValue (for BLE_CUSTOM_COMMAND_INTEGER, BLE_CUSTOM_COMMAND_ENUM_INTEGER,
+  *                               BLE_CUSTOM_COMMAND_ENUM_STRING or BLE_CUSTOM_COMMAND_BOOLEAN)
   * @param  int32_t Min  Optional Minim value (BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN if not needed)
   * @param  int32_t Max Max value
   * @param  int32_t *ValidValuesInt array of Valid Integer Values (NULL if not needed)
@@ -1860,11 +1661,11 @@ uint8_t GenericAddCustomCommand(BLE_ExtCustomCommand_t **LocCustomCommands,
     /* Allocate a New Custom Command entry */
     if ((*LocCustomCommands) == NULL)
     {
-      (*LocCustomCommands) = (BLE_ExtCustomCommand_t *)BLE_MallocFunction(sizeof(BLE_ExtCustomCommand_t));
+      (*LocCustomCommands) = (BLE_ExtCustomCommand_t *)BLE_MALLOC_FUNCTION(sizeof(BLE_ExtCustomCommand_t));
 
       if ((*LocCustomCommands) == NULL)
       {
-        BLE_MANAGER_PRINTF("Error: Mem calloc error: %d@%s\r\n", __LINE__, __FILE__);
+        BLE_MANAGER_PRINTF("Error: Mem alloc error: %d@%s\r\n", __LINE__, __FILE__);
         return 0;
       }
 
@@ -1872,10 +1673,10 @@ uint8_t GenericAddCustomCommand(BLE_ExtCustomCommand_t **LocCustomCommands,
     }
     else
     {
-      (*LocLastCustomCommand)->NextCommand = (void *) BLE_MallocFunction(sizeof(BLE_ExtCustomCommand_t));
+      (*LocLastCustomCommand)->NextCommand = (void *) BLE_MALLOC_FUNCTION(sizeof(BLE_ExtCustomCommand_t));
       if ((*LocCustomCommands) == NULL)
       {
-        BLE_MANAGER_PRINTF("Error: Mem calloc error %d@%s\r\n", __LINE__, __FILE__);
+        BLE_MANAGER_PRINTF("Error: Mem alloc error %d@%s\r\n", __LINE__, __FILE__);
         return 0;
       }
       (*LocLastCustomCommand) = (BLE_ExtCustomCommand_t *)(*LocLastCustomCommand)->NextCommand;
@@ -1884,10 +1685,10 @@ uint8_t GenericAddCustomCommand(BLE_ExtCustomCommand_t **LocCustomCommands,
     (*LocLastCustomCommand)->CommandType = CommandType;
 
     /* Alloc the size for commandName */
-    (*LocLastCustomCommand)->CommandName = BLE_MallocFunction(strlen(CommandName) + 1U);
+    (*LocLastCustomCommand)->CommandName = BLE_MALLOC_FUNCTION(strlen(CommandName) + 1U);
     if (((*LocLastCustomCommand)->CommandName) == NULL)
     {
-      BLE_MANAGER_PRINTF("Error: Mem calloc error %d@%s\r\n", __LINE__, __FILE__);
+      BLE_MANAGER_PRINTF("Error: Mem alloc error %d@%s\r\n", __LINE__, __FILE__);
       return 0;
     }
     sprintf((*LocLastCustomCommand)->CommandName, "%s", CommandName);
@@ -1926,7 +1727,7 @@ void SendNewCustomCommandList(void)
   JSON_size = json_serialization_size(tempJSON);
 
   BLE_ExtConfiguration_Update((uint8_t *) JSON_string_command, JSON_size);
-  BLE_FreeFunction(JSON_string_command);
+  BLE_FREE_FUNCTION(JSON_string_command);
   json_value_free(tempJSON);
 }
 
@@ -1951,7 +1752,7 @@ extern void SendError(char *message)
   JSON_size = json_serialization_size(tempJSON);
 
   BLE_ExtConfiguration_Update((uint8_t *) JSON_string_command, JSON_size);
-  BLE_FreeFunction(JSON_string_command);
+  BLE_FREE_FUNCTION(JSON_string_command);
 
 }
 
@@ -1976,26 +1777,9 @@ void SendInfo(char *message)
   JSON_size = json_serialization_size(tempJSON);
 
   BLE_ExtConfiguration_Update((uint8_t *) JSON_string_command, JSON_size);
-  BLE_FreeFunction(JSON_string_command);
+  BLE_FREE_FUNCTION(JSON_string_command);
 }
 
-void create_JSON_Sensor(COM_Sensor_t *sensor, JSON_Value *tempJSON)
-{
-  uint8_t nSensor = sensor->sensorDescriptor.id;
-
-  JSON_Object *JSON_Sensor = json_value_get_object(tempJSON);
-
-  json_object_dotset_number(JSON_Sensor, "id", (double)nSensor);
-  json_object_dotset_string(JSON_Sensor, "name", sensor->sensorDescriptor.name);
-
-  JSON_Value *DescriptorJSON = json_value_init_object();
-  json_object_set_value(JSON_Sensor, "sensorDescriptor", DescriptorJSON);
-  create_JSON_SensorDescriptor(&sensor->sensorDescriptor, DescriptorJSON);
-
-  JSON_Value *statusJSON = json_value_init_object();
-  json_object_set_value(JSON_Sensor, "sensorStatus", statusJSON);
-  create_JSON_SensorStatus(sensor, statusJSON);
-}
 #endif /* BLE_MANAGER_NO_PARSON */
 
 /**
@@ -2054,11 +1838,19 @@ static tBleStatus BLE_Manager_AddFeaturesService(void)
 #if (BLUE_CORE == BLUENRG_MS)
   ret = aci_gatt_add_serv(UUID_TYPE_128,  uuid, PRIMARY_SERVICE, (1U + (3U * NumberCustomBLEChars)), &Service_Handle);
 #else /* (BLUE_CORE == BLUENRG_MS) */
-  BLE_MemCpy(&service_uuid.Service_UUID_128, uuid, 16);
+  BLE_MEM_CPY(&service_uuid.Service_UUID_128, uuid, 16);
 #if (BLUE_CORE != BLUENRG_LP)
-  ret = aci_gatt_add_service(UUID_TYPE_128,  &service_uuid, PRIMARY_SERVICE, (1U + (3U * NumberCustomBLEChars)), &Service_Handle);
+  ret = aci_gatt_add_service(UUID_TYPE_128,
+                             &service_uuid,
+                             PRIMARY_SERVICE,
+                             (1U + (3U * NumberCustomBLEChars)),
+                             &Service_Handle);
 #else /* (BLUE_CORE != BLUENRG_LP) */
-  ret = aci_gatt_srv_add_service_nwk(UUID_TYPE_128,  &service_uuid, PRIMARY_SERVICE, (1U + (3U * NumberCustomBLEChars)), &Service_Handle);
+  ret = aci_gatt_srv_add_service_nwk(UUID_TYPE_128,
+                                     &service_uuid,
+                                     PRIMARY_SERVICE,
+                                     (1U + (3U * NumberCustomBLEChars)),
+                                     &Service_Handle);
 #endif /* (BLUE_CORE != BLUENRG_LP) */
 #endif /* (BLUE_CORE == BLUENRG_MS) */
 
@@ -2071,7 +1863,7 @@ static tBleStatus BLE_Manager_AddFeaturesService(void)
   {
     BleCharsArray[BleChar]->Service_Handle = Service_Handle;
 #if (BLUE_CORE != BLUENRG_MS)
-    BLE_MemCpy(&char_uuid.Char_UUID_128, BleCharsArray[BleChar]->uuid, 16);
+    BLE_MEM_CPY(&char_uuid.Char_UUID_128, BleCharsArray[BleChar]->uuid, 16);
 #endif /* (BLUE_CORE != BLUENRG_MS) */
 
 #if (BLUE_CORE != BLUENRG_LP)
@@ -2124,9 +1916,17 @@ tBleStatus safe_aci_gatt_update_char_value(BleCharTypeDef *BleCharPointer,
   if (breath == 0)
   {
 #if (BLUE_CORE != BLUENRG_LP)
-    ret = aci_gatt_update_char_value(BleCharPointer->Service_Handle, BleCharPointer->attr_handle, charValOffset, charValueLen, charValue);
+    ret = aci_gatt_update_char_value(BleCharPointer->Service_Handle,
+                                     BleCharPointer->attr_handle,
+                                     charValOffset,
+                                     charValueLen,
+                                     charValue);
 #else /* (BLUE_CORE != BLUENRG_LP) */
-    ret = aci_gatt_srv_notify(connection_handle, BleCharPointer->attr_handle + 1, GATT_NOTIFICATION, charValueLen, charValue);
+    ret = aci_gatt_srv_notify(connection_handle,
+                              BleCharPointer->attr_handle + 1,
+                              GATT_NOTIFICATION,
+                              charValueLen,
+                              charValue);
 #endif /* (BLUE_CORE != BLUENRG_LP) */
 
     if (ret != (tBleStatus)BLE_STATUS_SUCCESS)
@@ -2201,7 +2001,7 @@ BLE_CustomCommadResult_t *AskGenericCustomCommands(uint8_t *hs_command_buffer)
                 strlen(json_object_dotget_string(JSON_ParseHandler, "command"))) == 0)
     {
       /* The User has asked a List of Custom Command */
-      CommandResult = (BLE_CustomCommadResult_t *) BLE_MallocFunction(sizeof(BLE_CustomCommadResult_t));
+      CommandResult = (BLE_CustomCommadResult_t *) BLE_MALLOC_FUNCTION(sizeof(BLE_CustomCommadResult_t));
       if (CommandResult == NULL)
       {
         BLE_MANAGER_PRINTF("Error: Mem alloc error: %d@%s\r\n", __LINE__, __FILE__);
@@ -2210,11 +2010,11 @@ BLE_CustomCommadResult_t *AskGenericCustomCommands(uint8_t *hs_command_buffer)
       {
         CommandResult->CommandType = BLE_CUSTOM_COMMAND_VOID;
 
-        CommandResult->CommandName = BLE_MallocFunction(strlen(BLE_MANAGER_READ_CUSTOM_COMMAND) + 1U);
+        CommandResult->CommandName = BLE_MALLOC_FUNCTION(strlen(BLE_MANAGER_READ_CUSTOM_COMMAND) + 1U);
         if ((CommandResult->CommandName) == NULL)
         {
           BLE_MANAGER_PRINTF("Error: Mem alloc error: %d@%s\r\n", __LINE__, __FILE__);
-          BLE_FreeFunction(CommandResult);
+          BLE_FREE_FUNCTION(CommandResult);
           CommandResult = NULL;
         }
         else
@@ -2284,11 +2084,11 @@ tBleStatus BLE_ExtConfiguration_Update(uint8_t *data, uint32_t length)
     length_wTP = (length / 19U) + 1U + length;
   }
 
-  JSON_string_command_wTP = BLE_MallocFunction(sizeof(uint8_t) * length_wTP);
+  JSON_string_command_wTP = BLE_MALLOC_FUNCTION(sizeof(uint8_t) * length_wTP);
 
   if (JSON_string_command_wTP == NULL)
   {
-    BLE_MANAGER_PRINTF("Error: Mem calloc error [%lu]: %d@%s\r\n", length, __LINE__, __FILE__);
+    BLE_MANAGER_PRINTF("Error: Mem alloc error [%lu]: %d@%s\r\n", length, __LINE__, __FILE__);
     return BLE_STATUS_ERROR;
   }
   else
@@ -2307,7 +2107,7 @@ tBleStatus BLE_ExtConfiguration_Update(uint8_t *data, uint32_t length)
       BLE_MANAGER_DELAY(20);
       j += len;
     }
-    BLE_FreeFunction(JSON_string_command_wTP);
+    BLE_FREE_FUNCTION(JSON_string_command_wTP);
     return BLE_STATUS_SUCCESS;
   }
 }
@@ -2353,9 +2153,17 @@ tBleStatus aci_gatt_update_char_value_wrapper(BleCharTypeDef *BleCharPointer,
 {
   tBleStatus ret = BLE_STATUS_INSUFFICIENT_RESOURCES;
 #if (BLUE_CORE != BLUENRG_LP)
-  ret = aci_gatt_update_char_value(BleCharPointer->Service_Handle, BleCharPointer->attr_handle, charValOffset, charValueLen, charValue);
+  ret = aci_gatt_update_char_value(BleCharPointer->Service_Handle,
+                                   BleCharPointer->attr_handle,
+                                   charValOffset,
+                                   charValueLen,
+                                   charValue);
 #else /* (BLUE_CORE != BLUENRG_LP) */
-  ret = aci_gatt_srv_notify(connection_handle, BleCharPointer->attr_handle + 1, GATT_NOTIFICATION, charValueLen, charValue);
+  ret = aci_gatt_srv_notify(connection_handle,
+                            BleCharPointer->attr_handle + 1,
+                            GATT_NOTIFICATION,
+                            charValueLen,
+                            charValue);
 #endif /* (BLUE_CORE != BLUENRG_LP) */
 
   if (ret != (tBleStatus)BLE_STATUS_SUCCESS)
@@ -2627,7 +2435,8 @@ void setConnectable(void)
                                          (uint8_t)(sizeof(local_name)), local_name, 0, NULL, 0, 0);
     if (RetStatus != (tBleStatus)BLE_STATUS_SUCCESS)
     {
-      BLE_MANAGER_PRINTF("Error: aci_gap_set_discoverable [%x] Filter=%x\r\n", RetStatus, BLE_StackValue.AdvertisingFilter);
+      BLE_MANAGER_PRINTF("Error: aci_gap_set_discoverable [%x] Filter=%x\r\n",
+                         RetStatus, BLE_StackValue.AdvertisingFilter);
       goto EndLabel;
     }
     else
@@ -2644,7 +2453,10 @@ void setConnectable(void)
 #if (BLUE_CORE == BLUENRG_MS)
     RetStatus = aci_gap_set_undirected_connectable(BLE_StackValue.OwnAddressType, BLE_StackValue.AdvertisingFilter);
 #else /* (BLUE_CORE == BLUENRG_MS) */
-    RetStatus = aci_gap_set_undirected_connectable(0, 0, BLE_StackValue.OwnAddressType, BLE_StackValue.AdvertisingFilter);
+    RetStatus = aci_gap_set_undirected_connectable(0,
+                                                   0,
+                                                   BLE_StackValue.OwnAddressType,
+                                                   BLE_StackValue.AdvertisingFilter);
 #endif /* (BLUE_CORE == BLUENRG_MS) */
     if (RetStatus != (tBleStatus)BLE_STATUS_SUCCESS)
     {
@@ -2803,6 +2615,26 @@ void setNotConnectable(void)
 {
   aci_gap_set_non_discoverable();
 }
+#else  /* (BLUE_CORE != BLUENRG_LP) */
+void setNotConnectable(void)
+{
+  tBleStatus ret;
+  Advertising_Set_Parameters_t Advertising_Set_Parameters[1];
+  Advertising_Set_Parameters[0].Advertising_Handle = 0;
+  Advertising_Set_Parameters[0].Duration = 0;
+  Advertising_Set_Parameters[0].Max_Extended_Advertising_Events = 0;
+
+  /* Disable advertising */
+  ret = aci_gap_set_advertising_enable(DISABLE, 1, Advertising_Set_Parameters);
+  if (ret != BLE_STATUS_SUCCESS)
+  {
+    BLE_MANAGER_PRINTF("aci_gap_set_advertising_enable failed: 0x%02x\r\n", ret);
+  }
+  else
+  {
+    BLE_MANAGER_PRINTF("aci_gap_set_advertising_enable\r\n");
+  }
+}
 #endif /* (BLUE_CORE != BLUENRG_LP) */
 
 /**
@@ -2905,9 +2737,6 @@ static void ResetBleManagerCallbackFunctionPointer(void)
   CustomExtConfigReadCertCommandCallback = NULL;
   /* For Set Certificate Command */
   CustomExtConfigSetCertCommandCallback = NULL;
-  /* For Sensor Configuration */
-  CustomExtConfigReadSensorsConfigCommandsCallback = NULL;
-  CustomExtConfigSetSensorsConfigCommandsCallback = NULL;
 #endif /* BLE_MANAGER_NO_PARSON */
 }
 
@@ -3186,7 +3015,12 @@ static tBleStatus InitBleManager_BLE_Stack(void)
 
   aci_gap_clear_security_database();
 
-  ret = aci_gap_init_IDB05A1(BLE_StackValue.GAP_Roles, 0, (uint8_t) strlen(BLE_StackValue.BoardName), &service_handle, &dev_name_char_handle, &appearance_char_handle);
+  ret = aci_gap_init_IDB05A1(BLE_StackValue.GAP_Roles,
+                             0,
+                             (uint8_t) strlen(BLE_StackValue.BoardName),
+                             &service_handle,
+                             &dev_name_char_handle,
+                             &appearance_char_handle);
 
   if (ret != (tBleStatus)BLE_STATUS_SUCCESS)
   {
@@ -3447,7 +3281,11 @@ static tBleStatus InitBleManager_BLE_Stack(void)
   hci_reset();
 
   /* Wait some time for the BlueNRG to be fully operational */
+#ifndef  BLE_INITIAL_DELAY
   BLE_MANAGER_DELAY(2000);
+#else /* BLE_INITIAL_DELAY */
+  BLE_INITIAL_DELAY(2000);
+#endif /* BLE_INITIAL_DELAY */
 
   /* get the BlueNRG HW and FW versions */
   getBlueNRGVersion(&hwVersion, &fwVersion);
@@ -3514,9 +3352,19 @@ static tBleStatus InitBleManager_BLE_Stack(void)
   }
 
 #if (BLUE_CORE != BLUENRG_LP)
-  ret = aci_gap_init(BLE_StackValue.GAP_Roles, 0, (uint8_t) strlen(BLE_StackValue.BoardName), &service_handle, &dev_name_char_handle, &appearance_char_handle);
+  ret = aci_gap_init(BLE_StackValue.GAP_Roles,
+                     0,
+                     (uint8_t) strlen(BLE_StackValue.BoardName),
+                     &service_handle,
+                     &dev_name_char_handle,
+                     &appearance_char_handle);
 #else /* (BLUE_CORE != BLUENRG_LP) */
-  ret = aci_gap_init(BLE_StackValue.GAP_Roles, 0x00, (uint8_t) strlen(BLE_StackValue.BoardName), STATIC_RANDOM_ADDR, &service_handle, &dev_name_char_handle,
+  ret = aci_gap_init(BLE_StackValue.GAP_Roles,
+                     0x00,
+                     (uint8_t) strlen(BLE_StackValue.BoardName),
+                     STATIC_RANDOM_ADDR,
+                     &service_handle,
+                     &dev_name_char_handle,
                      &appearance_char_handle);
 #endif /* (BLUE_CORE != BLUENRG_LP) */
 
@@ -3537,7 +3385,10 @@ static tBleStatus InitBleManager_BLE_Stack(void)
     goto fail;
   }
 #else /* (BLUE_CORE != BLUENRG_LP) */
-  ret = aci_gatt_srv_write_handle_value_nwk(dev_name_char_handle + 1, 0, (uint8_t) strlen(BLE_StackValue.BoardName), (uint8_t *) BLE_StackValue.BoardName);
+  ret = aci_gatt_srv_write_handle_value_nwk(dev_name_char_handle + 1,
+                                            0,
+                                            (uint8_t) strlen(BLE_StackValue.BoardName),
+                                            (uint8_t *) BLE_StackValue.BoardName);
   if (ret != BLE_STATUS_SUCCESS)
   {
     BLE_MANAGER_PRINTF("\taci_gatt_srv_write_handle_value_nwk failed: 0x%02x\r\n", ret);
@@ -3712,11 +3563,6 @@ static tBleStatus InitBleManagerServices(void)
   tBleStatus Status = BLE_ERROR_UNSPECIFIED;
   BleCharTypeDef *BleCharPointer;
 
-#ifndef BLE_MANAGER_NO_PARSON
-  /* Set the Malloc/Free Functions  used inside the Json Parser */
-  json_set_allocation_functions(BLE_MallocFunction, BLE_FreeFunction);
-#endif /* BLE_MANAGER_NO_PARSON */
-
 #ifdef BLE_MANAGER_SDKV2
   BLE_MANAGER_PRINTF("BlueST-SDK V2\r\n");
 #else /* BLE_MANAGER_SDKV2 */
@@ -3861,12 +3707,15 @@ uint32_t BLE_Command_TP_Parse(uint8_t **buffer_out, uint8_t *buffer_in, uint32_t
         message_length = message_length << 8;
         message_length |= buffer_in[2];
 
-        if (*buffer_out != NULL)
-        {
-          BLE_FreeFunction(*buffer_out);
-        }
+        /*
+                To check
+                if (*buffer_out != NULL)
+                {
+                  BLE_FREE_FUNCTION(*buffer_out);
+                }
+        */
 
-        *buffer_out = (uint8_t *)BLE_MallocFunction((message_length) * sizeof(uint8_t));
+        *buffer_out = (uint8_t *)BLE_MALLOC_FUNCTION((message_length) * sizeof(uint8_t));
 
         if (*buffer_out == NULL)
         {
@@ -3888,7 +3737,7 @@ uint32_t BLE_Command_TP_Parse(uint8_t **buffer_out, uint8_t *buffer_in, uint32_t
         message_length = message_length << 8;
         message_length |= buffer_in[2];
 
-        *buffer_out = (uint8_t *)BLE_MallocFunction((message_length) * sizeof(uint8_t));
+        *buffer_out = (uint8_t *)BLE_MALLOC_FUNCTION((message_length) * sizeof(uint8_t));
         if (*buffer_out == NULL)
         {
           BLE_MANAGER_PRINTF("Error: Mem alloc error [%d]: %d@%s\r\n", message_length, __LINE__, __FILE__);
@@ -4175,8 +4024,11 @@ void aci_gatt_srv_authorize_nwk_event(uint16_t Connection_Handle,
       {
         if (Attr_Handle == (BleCharsArray[RegisteredHandle]->attr_handle + 1U))
         {
-          BleCharsArray[RegisteredHandle]->Read_Request_CB(BleCharsArray[RegisteredHandle], Attr_Handle, Connection_Handle,
-                                                           Operation_Type, Attr_Val_Offset, Data_Length, Data);
+          BleCharsArray[RegisteredHandle]->Read_Request_CB(BleCharsArray[RegisteredHandle],
+                                                           Attr_Handle, Connection_Handle,
+                                                           Operation_Type,
+                                                           Attr_Val_Offset,
+                                                           Data_Length, Data);
         }
       }
     }
@@ -4536,22 +4388,27 @@ void hci_le_data_length_change_event(uint16_t Connection_Handle,
 {
 #if (BLUE_CORE == BLUENRG_LP)
   tBleStatus RetStatus;
+  int32_t MaxRetryNumber=10;
+  int32_t RetryNumber = 0;
 #endif /* (BLUE_CORE == BLUENRG_LP) */
 #if (BLE_DEBUG_LEVEL>2)
   BLE_MANAGER_PRINTF("hci_le_data_length_change_event\r\n");
 #endif /* (BLE_DEBUG_LEVEL>2) */
 
 #if (BLUE_CORE == BLUENRG_LP)
-  BLE_MANAGER_DELAY(200);
-  RetStatus = aci_gatt_clt_exchange_config(Connection_Handle);
-  if (RetStatus != BLE_STATUS_SUCCESS)
-  {
-    BLE_MANAGER_PRINTF("Error: ACI GATT Exchange Config Failed (0x%x)\r\n", RetStatus);
-  }
-  else
-  {
-    BLE_MANAGER_PRINTF("ACI GATT Exchange Config Done\r\n");
-  }
+  do {
+    BLE_MANAGER_DELAY(200);
+    RetStatus = aci_gatt_clt_exchange_config(Connection_Handle);
+    if( RetStatus !=BLE_STATUS_SUCCESS) {
+      BLE_MANAGER_PRINTF("Error: ACI GATT Exchange Config Failed (0x%x)\r\n", RetStatus);
+      RetryNumber++;
+    } 
+    else 
+    {
+      BLE_MANAGER_PRINTF("ACI GATT Exchange Config Done\r\n");
+    }
+  } while ((RetStatus != BLE_STATUS_SUCCESS) & (RetryNumber<MaxRetryNumber));
+  
 #endif /* (BLUE_CORE == BLUENRG_LP) */
 }
 
@@ -4825,7 +4682,11 @@ void aci_gatt_clt_indication_event(uint16_t Connection_Handle,
   *        This is a critical event that should not happen during normal operating conditions.
   *        It is an indication of either a major disruption in the communication link or a mistake in the application
   *        which does not provide a reply to GATT procedures. After this event, the GATT channel is closed and no more
-  *        GATT communication can be performed. The applications is expected to issue an @ref aci_gap_terminate to disconnect from the peer device. It is important to leave an 100 ms blank window before sending the @ref aci_gap_terminate, since immediately after this event, system could save important information in non volatile memory.
+  *        GATT communication can be performed. The applications is expected to issue an
+  *        @ref aci_gap_terminate to disconnect from the peer device. It is important to leave an 100 ms blank
+  *             window before sending the
+  *        @ref aci_gap_terminate, since immediately after this event, system could save important information
+  *             in non volatile memory.
   * @param Connection_Handle Connection handle on which the GATT procedure has timed out
   * @retval None
   */
@@ -4849,16 +4710,18 @@ void aci_gatt_proc_timeout_event(uint16_t Connection_Handle)
 }
 
 /**
-  * @brief The Hardware Error event is used to indicate some implementation specific type of hardware failure for the controller. This event is used to notify the Host that a hardware failure has occurred in the Controller.
+  * @brief The Hardware Error event is used to indicate some implementation specific type of hardware failure for the
+  *        controller. This event is used to notify the Host that a hardware failure has occurred in the Controller.
   * @param Hardware_Code Hardware Error Event code.
-Error code 0x01 and 0x02 are errors generally caused by hardware issue on the PCB; another possible cause is a slow crystal startup.
-In the latter case, the HS_STARTUP_TIME in the device configuration needs to be tuned.
-Error code 0x03 indicates an internal error of the protocol stack.
-After this event is recommended to force device reset.
-  * Values:
-  - 0x01: Radio state error
-  - 0x02: Timer overrun error
-  - 0x03: Internal queue overflow error
+  *        Error code 0x01 and 0x02 are errors generally caused by hardware issue on the PCB;
+  *        another possible cause is a slow crystal startup.
+  *        In the latter case, the HS_STARTUP_TIME in the device configuration needs to be tuned.
+  *        Error code 0x03 indicates an internal error of the protocol stack.
+  *        After this event is recommended to force device reset.
+  *        Values:
+  *        - 0x01: Radio state error
+  *        - 0x02: Timer overrun error
+  *        - 0x03: Internal queue overflow error
   * @retval None
   */
 void hci_hardware_error_event(uint8_t Hardware_Code)
@@ -4878,22 +4741,22 @@ void hci_hardware_error_event(uint8_t Hardware_Code)
       /* 0x02 */ "Timer overrun error",
       /* 0x03 */ "Internal queue overflow error"
     };
-    BLE_MANAGER_PRINTF("\r\n-------->hci_hardware_error_event Hardware_Code=\r\n\t%s<--------\r\n",
+    BLE_MANAGER_PRINTF("\r\n-->hci_hardware_error_event Hardware_Code=\r\n\t%s<--\r\n",
                        HWCodeString[Hardware_Code]);
 #else /* 0 */
     switch (Hardware_Code)
     {
       case 0:
-        BLE_MANAGER_PRINTF("\r\n-------->hci_hardware_error_event Hardware_Code=\r\n\tNaN<--------\r\n");
+        BLE_MANAGER_PRINTF("\r\n-->hci_hardware_error_event Hardware_Code=\r\n\tNaN<--\r\n");
         break;
       case 1:
-        BLE_MANAGER_PRINTF("\r\n-------->hci_hardware_error_event Hardware_Code=\r\n\tRadio state error<--------\r\n");
+        BLE_MANAGER_PRINTF("\r\n-->hci_hardware_error_event Hardware_Code=\r\n\tRadio state error<--\r\n");
         break;
       case 2:
-        BLE_MANAGER_PRINTF("\r\n-------->hci_hardware_error_event Hardware_Code=\r\n\tTimer overrun error<--------\r\n");
+        BLE_MANAGER_PRINTF("\r\n-->hci_hardware_error_event Hardware_Code=\r\n\tTimer overrun error<--\r\n");
         break;
       case 3:
-        BLE_MANAGER_PRINTF("\r\n-------->hci_hardware_error_event Hardware_Code=\r\n\tInternal queue overflow error<--------\r\n");
+        BLE_MANAGER_PRINTF("\r\n-->hci_hardware_error_event Hardware_Code=\r\n\tInternal queue overflow error<--\r\n");
         break;
     }
 #endif /* 0 */
@@ -4993,7 +4856,7 @@ void hci_encryption_change_event(uint8_t Status, uint16_t Connection_Handle, uin
 {
 #if (BLE_DEBUG_LEVEL>2)
   BLE_MANAGER_PRINTF("hci_encryption_change_event\r\n");
-#endif
+#endif /* (BLE_DEBUG_LEVEL>2) */
 }
 #endif /* (BLUE_CORE != BLUENRG_MS) */
 

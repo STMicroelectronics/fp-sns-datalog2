@@ -37,29 +37,30 @@ extern "C" {
 #define AI_HAR_DPU_NAME            "har_network"
 
 /**
- * Create  type name for _AI_HAR_DPU_t
- */
+  * Create  type name for _AI_HAR_DPU_t
+  */
 typedef struct _AI_HAR_DPU_t AI_HAR_DPU_t;
 
 /**
- * AiDPU_t internal state.
- * It declares only the virtual table used to implement the inheritance.
- */
-struct _AI_HAR_DPU_t {
+  * AiDPU_t internal state.
+  * It declares only the virtual table used to implement the inheritance.
+  */
+struct _AI_HAR_DPU_t
+{
   /**
-   * Base class object.
-   */
+    * Base class object.
+    */
   ADPU2_t super;
 
   /**
-   * Specifies AI processing scale factor.
-   */
+    * Specifies AI processing scale factor.
+    */
   float scale;
 
   /**
-   * Specifies AI processing function to use in order to process the signals.
-   */
-  int (*ai_processing_f)(const char*, float *, float[2]);
+    * Specifies AI processing function to use in order to process the signals.
+    */
+  int (*ai_processing_f)(const char *, float *, float[2]);
 };
 
 
@@ -67,60 +68,60 @@ struct _AI_HAR_DPU_t {
 /**************************/
 
 /**
- * Allocate an instance of NeaiDPU_t in the heap.
- *
- * @return a pointer to the generic object ::IDPU if success,
- * or NULL if out of memory error occurs.
- */
+  * Allocate an instance of NeaiDPU_t in the heap.
+  *
+  * @return a pointer to the generic object ::IDPU if success,
+  * or NULL if out of memory error occurs.
+  */
 IDPU2_t *AI_HAR_DPU_Alloc(void);
 
 /**
- * Allocate an instance of AI_HAR_DPU_t in a memory block specified by the application.
- * The size of the memory block must be greater or equal to sizeof(AI_HAR_DPU_t).
- * This allocator allows the application to avoid the dynamic allocation.
- *
- * \code
- * AI_HAR_DPU_t dpu;
- * AI_HAR_DPU_StaticAlloc(&dpu);
- * \endcode
- *
- * @param p_mem_block [IN] specify a memory block allocated by the application.
- *        The size of the memory block must be greater or equal to sizeof(NeaiDPU_t).
- * @return a pointer to the generic object ::IDPU2_t if success,
- * or NULL if out of memory error occurs.
- */
+  * Allocate an instance of AI_HAR_DPU_t in a memory block specified by the application.
+  * The size of the memory block must be greater or equal to sizeof(AI_HAR_DPU_t).
+  * This allocator allows the application to avoid the dynamic allocation.
+  *
+  * \code
+  * AI_HAR_DPU_t dpu;
+  * AI_HAR_DPU_StaticAlloc(&dpu);
+  * \endcode
+  *
+  * @param p_mem_block [IN] specify a memory block allocated by the application.
+  *        The size of the memory block must be greater or equal to sizeof(NeaiDPU_t).
+  * @return a pointer to the generic object ::IDPU2_t if success,
+  * or NULL if out of memory error occurs.
+  */
 IDPU2_t *AI_HAR_DPU_StaticAlloc(void *p_mem_block);
 
 /**
- * Initialize the DPU. It must called before using the instance.
- * After the initialization the DPU needs two memory buffers to manage the input and output data.
- * The memory allocation is delegated to the application. The application use the following methods
- * to set the buffers needed by the DPU:
- * - ADPU2_SetInDataBuffer()
- * - ADPU2_SetOutDataBuffer()
- *
- * @param _this [IN] specifies a pointer to the object.
- * @return SYS_NO_ERROR_CODE if success, an application specific error code otherwise.
- */
+  * Initialize the DPU. It must called before using the instance.
+  * After the initialization the DPU needs two memory buffers to manage the input and output data.
+  * The memory allocation is delegated to the application. The application use the following methods
+  * to set the buffers needed by the DPU:
+  * - ADPU2_SetInDataBuffer()
+  * - ADPU2_SetOutDataBuffer()
+  *
+  * @param _this [IN] specifies a pointer to the object.
+  * @return SYS_NO_ERROR_CODE if success, an application specific error code otherwise.
+  */
 sys_error_code_t AI_HAR_DPU_Init(AI_HAR_DPU_t *_this);
 
 /**
- * Set the processing mode for the DPU. It specifies to the DPU if a new signal is used
- * to learn and improve the model, or to detect anomalies.
- *
- * @param _this [IN] specifies a pointer to the object.
- * @param sensi [IN] specifies the sensitivity of the sensor
- * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
- */
+  * Set the processing mode for the DPU. It specifies to the DPU if a new signal is used
+  * to learn and improve the model, or to detect anomalies.
+  *
+  * @param _this [IN] specifies a pointer to the object.
+  * @param sensi [IN] specifies the sensitivity of the sensor
+  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
+  */
 sys_error_code_t AI_HAR_DPU_SetSensitivity(AI_HAR_DPU_t *_this, float sensi);
 
 /**
- * Partial reset of the DPU internal state: all input and output buffers are re-initialized to prepare
- * the DPU to process a new stream of data.
- *
- * @param _this [IN] specifies a pointer to the object.
- * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
- */
+  * Partial reset of the DPU internal state: all input and output buffers are re-initialized to prepare
+  * the DPU to process a new stream of data.
+  *
+  * @param _this [IN] specifies a pointer to the object.
+  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
+  */
 sys_error_code_t AI_HAR_DPU_PrepareToProcessData(AI_HAR_DPU_t *_this);
 
 

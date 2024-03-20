@@ -1,8 +1,10 @@
 /**
   ******************************************************************************
   * @file    SensorTileBoxPro_nfctag_ex.h
-  * @brief   This file contains definitions for the SensorTileBoxPro_nfctag_ex
-  * .c
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
+  * @brief   This file contains definitions for the SensorTileBoxPro_nfctag_ex.c
   *          specific functions.
   ******************************************************************************
   * @attention
@@ -39,4 +41,3 @@ int32_t BSP_NFCTAG_ChangeMBWDG(uint32_t MsbPasswd,uint32_t LsbPasswd,const uint8
 
 #endif /* __SENSORTILEBOXPRO_NFCTAG_EX_H__ */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_TimeDomainAlarmAccPeakStatus.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add BLE Time Domain Alarm Acc Peak Status info services using vendor
   *          specific profiles.
   ******************************************************************************
@@ -25,7 +25,9 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_TD_ALARM_ACC_PEAK_STATUS_CHAR_UUID(uuid_struct)  COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x08,0x00,0x02,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_TD_ALARM_ACC_PEAK_STATUS_CHAR_UUID(uuid_struct)  COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x08,0x00,0x02,\
+                                                                            0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,\
+                                                                            0xc5,0x1b)
 
 /* Exported Variables ------------------------------------------------------- */
 CustomNotifyEventTD_AlarmAccPeakStatus_t CustomNotifyEventTD_AlarmAccPeakStatus = NULL;
@@ -112,7 +114,8 @@ tBleStatus BLE_TD_AlarmAccPeakStatusUpdate(sBLE_Manager_TD_AlarmAccPeakStatusAla
     {
       if (BLE_StdErr_Service == BLE_SERV_ENABLE)
       {
-        BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "Error Updating FFT Alarm Acc Peak Status Char\n");
+        BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite,
+                                        "Error Updating FFT Alarm Acc Peak Status Char\n");
         Stderr_Update(BufferToWrite, BytesToWrite);
       }
       else
@@ -162,12 +165,15 @@ static void AttrMod_Request_TD_AlarmAccPeakStatus(void *VoidCharPointer, uint16_
 #if (BLE_DEBUG_LEVEL>1)
   if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
   {
-    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "--->TD Alarm Acc Peak Status=%s\n", (att_data[0] == 01U) ? " ON" : " OFF");
+    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite,
+                                    "--->TD Alarm Acc Peak Status=%s\n",
+                                    (att_data[0] == 01U) ? " ON" : " OFF");
     Term_Update(BufferToWrite, BytesToWrite);
   }
   else
   {
-    BLE_MANAGER_PRINTF("--->TD Alarm Acc Peak Status=%s", (att_data[0] == 01U) ? " ON\r\n" : " OFF\r\n");
+    BLE_MANAGER_PRINTF("--->TD Alarm Acc Peak Status=%s",
+                       (att_data[0] == 01U) ? " ON\r\n" : " OFF\r\n");
   }
 #endif /* (BLE_DEBUG_LEVEL>1) */
 }

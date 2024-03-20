@@ -1,12 +1,15 @@
 /**
   ******************************************************************************
   * @file    SensorTileBoxPro_motion_sensors_ex.h
-  * @author  MEMS Application Team
-  * @brief   This file contains definitions for the BSP Motion Sensors Extended interface for SensorTileBoxPro
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
+  * @brief   This file contains definitions for the BSP Motion Sensors
+  *          Extended interface for SensorTileBoxPro
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -115,4 +118,3 @@ int32_t BSP_MOTION_SENSOR_Set_FilterMode(uint32_t Instance, uint32_t Functions, 
 
 #endif /* __SENSORTILEBOXPRO_MOTION_SENSORS_EX_H__ */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

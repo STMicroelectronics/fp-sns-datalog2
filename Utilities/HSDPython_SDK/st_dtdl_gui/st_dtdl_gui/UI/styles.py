@@ -117,6 +117,19 @@ class STDTDL_LineEdit():
             border: 2px solid rgb(32, 32, 32);
         }
     '''
+
+class STDTDL_Label():
+    valid = '''
+        QLabel {
+            color: #99FF33;
+        }
+    '''
+
+    invalid = '''
+        QLabel {
+            color: #FF5050;
+        }
+    '''
     
 class STDTDL_SpinBox():
     valid = '''
@@ -174,6 +187,7 @@ class STDTDL_PushButton():
     
     valid = '''
         QPushButton {
+            color: rgb(210,210,210);
             border: 2px solid rgb(52, 59, 72);
             border-radius: 5px;	
             background-color: rgb(52, 59, 72);
@@ -188,6 +202,15 @@ class STDTDL_PushButton():
             border: 2px solid rgb(43, 50, 61);
         }
     
+    '''
+
+    invalid = '''
+        QPushButton {
+            border: 2px solid rgb(71, 51, 51);
+            border-radius: 5px;	
+            background-color: rgb(29,33,41);
+            font: 700 9pt "Segoe UI";
+        }
     '''
     
     green = '''

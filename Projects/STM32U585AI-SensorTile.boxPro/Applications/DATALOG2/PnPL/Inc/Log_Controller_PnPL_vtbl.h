@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:other:log_controller;2
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:other:log_controller;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -41,8 +41,10 @@ uint8_t Log_Controller_PnPL_vtblGetNCommands(IPnPLComponent_t *_this);
 char *Log_Controller_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id);
 uint8_t Log_Controller_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
                                           uint8_t pretty);
-uint8_t Log_Controller_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
-uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
+uint8_t Log_Controller_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                            uint32_t *size, uint8_t pretty);
+uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                                uint32_t *size, uint8_t pretty);
 
 #ifdef __cplusplus
 }

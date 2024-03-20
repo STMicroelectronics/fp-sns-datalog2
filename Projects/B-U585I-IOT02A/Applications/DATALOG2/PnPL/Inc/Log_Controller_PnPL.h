@@ -33,7 +33,6 @@
 #define _PNPL_LOG_CONTROLLER_H_
 
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif

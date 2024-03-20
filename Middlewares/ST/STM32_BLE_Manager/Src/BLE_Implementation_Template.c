@@ -1,7 +1,7 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    BLE_Implementation.c
+  * @file    BLE_Implementation_Template.c
   * @author  System Research & Applications Team - Catania Lab.
   * @brief   BLE Implementation header template file.
   *          This file should be copied to the application folder and renamed
@@ -28,7 +28,17 @@
 
 __weak void BLE_SetCustomAdvertiseData(uint8_t *manuf_data);
 __weak void DisconnectionCompletedFunction(void);
+#ifdef BLUENRG_1_2
+__weak void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t Address_Type, uint8_t addr[6]);
+#endif /* BLUENRG_1_2 */
+#ifdef BLUENRG_MS
 __weak void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t addr[6]);
+#endif /* BLUENRG_MS */
+#ifdef BLUENRG_LP
+__weak void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t Address_Type, uint8_t addr[6]);
+#endif /* BLUENRG_LP */
+
+__weak void SetBoardName(void);
 
 __weak void AttrModConfigFunction(uint8_t *att_data, uint8_t data_length);
 __weak void PairingCompletedFunction(uint8_t PairingStatus);
@@ -84,6 +94,7 @@ __weak void NotifyEventAudioLevel(BLE_NotifyEvent_t Event);
 __weak void NotifyEventBattery(BLE_NotifyEvent_t Event);
 
 __weak void NotifyEventEnv(BLE_NotifyEvent_t Event);
+__weak void ReadRequestEnvFunction(int32_t *Press, uint16_t *Hum, int16_t *Temp1, int16_t *Temp2);
 
 __weak void NotifyEventFiniteStateMachine(BLE_NotifyEvent_t Event);
 
@@ -110,10 +121,12 @@ __weak void NotifyEventCarryPosition(BLE_NotifyEvent_t Event);
 __weak void NotifyEventECompass(BLE_NotifyEvent_t Event);
 
 __weak void NotifyEventFitnessActivities(BLE_NotifyEvent_t Event);
+__weak void WriteRequestFitnessActivities(uint8_t FitnessActivitie);
 
 __weak void NotifyEventGestureRecognition(BLE_NotifyEvent_t Event);
 
 __weak void NotifyEventMotionAlgorithms(BLE_NotifyEvent_t Event, BLE_MotionAlgorithmsType_t Algorithm);
+__weak void WriteRequestMotionAlgorithms(BLE_MotionAlgorithmsType_t Algorithm);
 
 __weak void NotifyEventMotionIntensity(BLE_NotifyEvent_t Event);
 
@@ -156,7 +169,14 @@ __weak void WriteRequestNeaiAnomalyDetection(uint8_t *att_data, uint8_t data_len
 __weak void NotifyEventNeaiNClassClassification(BLE_NotifyEvent_t Event);
 __weak void WriteRequestNeaiNClassClassification(uint8_t *att_data, uint8_t data_length);
 
-__weak void ReadRequestEnvFunction(int32_t *Press, uint16_t *Hum, int16_t *Temp1, int16_t *Temp2);
+__weak void NotifyEventNormalization(BLE_NotifyEvent_t Event);
+
+__weak void NotifyEventGestureNavigation(BLE_NotifyEvent_t Event);
+
+__weak void NotifyEventBinaryContent(BLE_NotifyEvent_t Event);
+__weak void WriteRequestBinaryContent(uint8_t *received_msg, uint32_t msg_length);
+
+__weak void NotifyEventQVAR(BLE_NotifyEvent_t Event);
 
 /* Private variables ------------------------------------------------------------*/
 static uint16_t CustomCommandPageLevel = 0;
@@ -180,17 +200,19 @@ void BluetoothInit(void)
   BLE_StackValue.IO_capabilities                      = IO_CAPABILITIES;
   BLE_StackValue.AuthenticationRequirements           = BONDING;
   BLE_StackValue.MITM_ProtectionRequirements          = AUTHENTICATION_REQUIREMENTS;
-  BLE_StackValue.Out_Of_Band_EnableData             = OOB_AUTH_DATA_ABSENT;
-  BLE_StackValue.oob_data                           = NULL;
+#ifndef BLUENRG_MS
+  BLE_StackValue.SecureConnectionSupportOptionCode    = SECURE_CONNECTION_SUPPORT_OPTION_CODE;
+  BLE_StackValue.SecureConnectionKeypressNotification = SECURE_CONNECTION_KEYPRESS_NOTIFICATION;
+#else /* BLUENRG_MS */
+  BLE_StackValue.Out_Of_Band_EnableData               = OOB_AUTH_DATA_ABSENT;
+  BLE_StackValue.oob_data                             = NULL;
+#endif /* BLUENRG_MS */
 
   /* Use BLE Random Address */
   BLE_StackValue.OwnAddressType = ADDRESS_TYPE;
 
   /* Set the BLE Board Name */
-  sprintf(BLE_StackValue.BoardName, "%s%c%c%c", "BLEM",
-          BLE_VERSION_FW_MAJOR,
-          BLE_VERSION_FW_MINOR,
-          BLE_VERSION_FW_PATCH);
+  SetBoardName();
 
   /* En_High_Power Enable High Power mode.
      High power mode should be enabled only to reach the maximum output power.
@@ -219,6 +241,9 @@ void BluetoothInit(void)
   /* Advertising policy for filtering (white list related) */
   BLE_StackValue.AdvertisingFilter = ADVERTISING_FILTER;
 
+  /* Used platform */
+  BLE_StackValue.BoardId = BLE_MANAGER_USED_PLATFORM;
+
   if (BLE_StackValue.EnableSecureConnection)
   {
     /* Using the Secure Connection, the Rescan should be done by BLE chip */
@@ -230,6 +255,19 @@ void BluetoothInit(void)
   }
 
   InitBleManager();
+}
+
+/**
+  * @brief  Set Board Name.
+  * @param  None
+  * @retval None
+  */
+__weak void SetBoardName(void)
+{
+  sprintf(BLE_StackValue.BoardName, "%s%c%c%c", "BLEM",
+          BLE_VERSION_FW_MAJOR,
+          BLE_VERSION_FW_MINOR,
+          BLE_VERSION_FW_PATCH);
 }
 
 /**
@@ -287,7 +325,7 @@ void BLE_InitCustomService(void)
 
   CustomNotifyEventGasConcentration =            NotifyEventGasConcentration;
 
-  CustomNotifyEventGnss =                         NotifyEventGnss;
+  CustomNotifyEventGnss =                        NotifyEventGnss;
 
   CustomNotifyEventInertial =                    NotifyEventInertial;
 
@@ -308,10 +346,14 @@ void BLE_InitCustomService(void)
   CustomNotifyECompass =                         NotifyEventECompass;
 
   CustomNotifyEventFitnessActivities =           NotifyEventFitnessActivities;
+  /* Define Custom Function for Write Request Fitness Activities */
+  CustomWriteRequestFitnessActivities =          WriteRequestFitnessActivities;
 
   CustomNotifyEventGestureRecognition =          NotifyEventGestureRecognition;
 
   CustomNotifyEventMotionAlgorithms =            NotifyEventMotionAlgorithms;
+  /* Define Custom Function for Write Request Motion Algorithms */
+  CustomWriteRequestMotionAlgorithms = WriteRequestMotionAlgorithms;
 
   CustomNotifyEventMotionIntensity =             NotifyEventMotionIntensity;
 
@@ -353,6 +395,16 @@ void BLE_InitCustomService(void)
 
   CustomNotifyEventNCC =                         NotifyEventNeaiNClassClassification;
   CustomWriteRequestNCC =                        WriteRequestNeaiNClassClassification;
+
+  CustomNotifyEventNormalization =               NotifyEventNormalization;
+
+  CustomNotifyEventGestureNavigation =           NotifyEventGestureNavigation;
+
+  CustomNotifyEventBinaryContent =               NotifyEventBinaryContent;
+  /* Define Custom Function for Write Request Binary Content */
+  CustomWriteRequestBinaryContent =              WriteRequestBinaryContent;
+
+  CustomNotifyEventQVAR =                        NotifyEventQVAR;
 
   /************************************************************************************
     * Callback functions to manage the extended configuration characteristic commands *
@@ -407,7 +459,7 @@ void BLE_InitCustomService(void)
   */
 
   /* Characteristc allocation for audio scene classification features */
-  BleManagerAddChar(BLE_InitAudioSceneClassService());
+  BleManagerAddChar(BLE_InitAudioSceneClassService(BLE_ASC_ALG_SCENE_CLASS));
 
   /* Characteristc allocation for high speed dataLog features */
   BleManagerAddChar(BLE_InitHighSpeedDataLogService());
@@ -423,7 +475,9 @@ void BLE_InitCustomService(void)
 
   /* Characteristc allocation for environmental features */
   /* BLE_InitEnvService(PressEnable,HumEnable,NumTempEnabled) */
-  BleManagerAddChar(BLE_InitEnvService(ENABLE_ENV_PRESSURE_DATA, ENABLE_ENV_HUMIDITY_DATA, ENABLE_ENV_TEMPERATURE_DATA));
+  BleManagerAddChar(BLE_InitEnvService(ENABLE_ENV_PRESSURE_DATA,
+                                       ENABLE_ENV_HUMIDITY_DATA,
+                                       ENABLE_ENV_TEMPERATURE_DATA));
 
   /* Characteristic allocation for finite state machine features */
   BleManagerAddChar(BLE_InitFiniteStateMachineService(BLE_FSM_16_REG));
@@ -435,7 +489,7 @@ void BLE_InitCustomService(void)
   BleManagerAddChar(BLE_InitGnssService());
 
   /* Characteristc allocation for inertial features */
-  /* BLE_InitInertialService(AccEnable,GyroEnable,MagEnabled) */
+  /* BLE_InitInertialService(AccEnable, GyroEnable, MagEnabled) */
   BleManagerAddChar(BLE_InitInertialService(ENABLE_ACC_DATA, ENABLE_GYRO_DATA, ENABLE_MAG_DATA));
 
   /* Characteristc allocation for the led features */
@@ -519,6 +573,18 @@ void BLE_InitCustomService(void)
   /* Characteristc allocation for time domain alarm speed RMS status features */
   BleManagerAddChar(BLE_InitNeaiClassificationService());
 
+  /* Characteristc allocation for normalization features */
+  BleManagerAddChar(BLE_InitNormalizationService());
+
+  /* Characteristc allocation for gesture navigation features */
+  BleManagerAddChar(BLE_InitGestureNavigationService());
+
+  /* Characteristc allocation for binary content features */
+  BleManagerAddChar(BLE_InitBinaryContentService());
+
+  /* Characteristc allocation for QVAR features */
+  BleManagerAddChar(BLE_InitQVARService());
+
 }
 
 /**
@@ -534,7 +600,7 @@ __weak void BLE_SetCustomAdvertiseData(uint8_t *manuf_data)
     * For example for the environmental features:
     *
     * BLE_SetCustomEnvAdvertizeData(manuf_data);
-  */
+    */
 
 #else /* BLE_MANAGER_SDKV2 */
   manuf_data[BLE_MANAGER_CUSTOM_FIELD1] = 0xFF; /* Custom Firmware */
@@ -645,6 +711,17 @@ __weak void DisconnectionCompletedFunction(void)
    */
 }
 
+#ifdef BLUENRG_1_2
+/**
+  * @brief  This function is called when there is a LE Connection Complete event.
+  * @param  uint16_t ConnectionHandle
+  * @param  uint8_t Address_Type
+  * @param  uint8_t addr[6]
+  * @retval None
+  */
+__weak void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t Address_Type, uint8_t addr[6])
+#endif /* BLUENRG_1_2 */
+#ifdef BLUENRG_MS
 /**
   * @brief  This function is called when there is a LE Connection Complete event.
   * @param  uint16_t ConnectionHandle
@@ -652,8 +729,22 @@ __weak void DisconnectionCompletedFunction(void)
   * @retval None
   */
 __weak void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t addr[6])
+#endif /* BLUENRG_MS */
+#ifdef BLUENRG_LP
+/**
+  * @brief  This function is called when there is a LE Connection Complete event.
+  * @param  uint16_t ConnectionHandle
+  * @param  uint8_t Address_Type
+  * @param  uint8_t addr[6]
+  * @retval None
+  */
+__weak void ConnectionCompletedFunction(uint16_t ConnectionHandle, uint8_t Address_Type, uint8_t addr[6])
+#endif /* BLUENRG_LP */
 {
   /* Prevent unused argument(s) compilation warning */
+#ifndef BLUENRG_MS
+  UNUSED(Address_Type);
+#endif /* BLUENRG_MS */
   UNUSED(ConnectionHandle);
   UNUSED(addr);
 
@@ -1030,6 +1121,18 @@ __weak void NotifyEventFitnessActivities(BLE_NotifyEvent_t Event)
 }
 
 /**
+  * @brief  Callback Function for Fitness Activities write request.
+  * @param  uint8_t FitnessActivitie
+  * @retval None
+  */
+__weak void WriteRequestFitnessActivities(uint8_t FitnessActivitie)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(FitnessActivitie);
+  /* NOTE: Insert here the function to write request for Fitness Activities */
+}
+
+/**
   * @brief  Callback Function for Un/Subscription Feature
   * @param  BLE_NotifyEvent_t Event Sub/Unsub
   * @retval None
@@ -1046,15 +1149,29 @@ __weak void NotifyEventGestureRecognition(BLE_NotifyEvent_t Event)
 /**
   * @brief  Callback Function for Un/Subscription Feature
   * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @param  BLE_MotionAlgorithmsType_t Algorithm
   * @retval None
   */
 __weak void NotifyEventMotionAlgorithms(BLE_NotifyEvent_t Event, BLE_MotionAlgorithmsType_t Algorithm)
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(Event);
+  UNUSED(Algorithm);
   /* NOTE: This function Should not be modified, when the callback is needed,
            the NotifyEventMotionAlgorithms could be implemented in the user file
    */
+}
+
+/**
+  * @brief  Callback Function for Motion Algorithms write request.
+  * @param  BLE_MotionAlgorithmsType_t Algorithm
+  * @retval None
+  */
+__weak void WriteRequestMotionAlgorithms(BLE_MotionAlgorithmsType_t Algorithm)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(Algorithm);
+  /* NOTE: Insert here the function to read the environmental data */
 }
 
 /**
@@ -1365,6 +1482,76 @@ __weak void WriteRequestNeaiNClassClassification(uint8_t *att_data, uint8_t data
    */
 }
 
+/**
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
+__weak void NotifyEventNormalization(BLE_NotifyEvent_t Event)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(Event);
+  /* NOTE: This function Should not be modified, when the callback is needed,
+           the NotifyEventNormalization could be implemented in the user file
+   */
+}
+
+/**
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
+__weak void NotifyEventGestureNavigation(BLE_NotifyEvent_t Event)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(Event);
+  /* NOTE: This function Should not be modified, when the callback is needed,
+           the NotifyEventGestureNavigation could be implemented in the user file
+   */
+}
+
+/**
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
+__weak void NotifyEventBinaryContent(BLE_NotifyEvent_t Event)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(Event);
+  /* NOTE: This function Should not be modified, when the callback is needed,
+           the NotifyEventBinaryContent could be implemented in the user file
+   */
+}
+
+/**
+  * @brief  Callback Function for binary content write request.
+  * @param  uint8_t *received_msg
+  * @param  uint8_t msg_length
+  * @retval None
+  */
+__weak void WriteRequestBinaryContent(uint8_t *received_msg, uint32_t msg_length)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(received_msg);
+  UNUSED(msg_length);
+  /* NOTE: Insert here the function to write request for Fitness Activities */
+}
+
+/**
+  * @brief  Callback Function for Un/Subscription Feature
+  * @param  BLE_NotifyEvent_t Event Sub/Unsub
+  * @retval None
+  */
+__weak void NotifyEventQVAR(BLE_NotifyEvent_t Event)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(Event);
+  /* NOTE: This function Should not be modified, when the callback is needed,
+           the NotifyEventQVAR could be implemented in the user file
+   */
+}
+
 /************************************************************************************
   * Callback functions to manage the extended configuration characteristic commands *
   ***********************************************************************************/
@@ -1652,7 +1839,7 @@ __weak void ExtConfigReadCustomCommandsCallback(JSON_Array *JSON_SensorArray)
 
     if (AddCustomCommand("IntValue2", /* Name */
                          BLE_CUSTOM_COMMAND_INTEGER, /* Type */
-                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* Default Value not important */
+                         BLE_MANAGER_CUSTOM_COMMAND_VALUE_NAN, /* Default Value */
                          10, /* MIN */
                          3000,  /* MAX */
                          NULL, /* Enum Int */
@@ -1821,7 +2008,7 @@ __weak void ExtConfigReadCustomCommandsCallback(JSON_Array *JSON_SensorArray)
     else
     {
       BLE_MANAGER_PRINTF("Error Adding Command <%s>\r\n", "ReadCert");
-      return; /* not mandatory... it's the last one  */
+      return; /* not mandatory... it's the last one */
     }
   }
   else if (CustomCommandPageLevel == 1)
@@ -1889,9 +2076,10 @@ __weak void  ExtConfigCustomCommandCallback(BLE_CustomCommadResult_t *CustomComm
     case BLE_CUSTOM_COMMAND_VOID:
       if (!strncmp((char *)CustomCommand->CommandName, "BleManagerReset", 15))
       {
+
         /* Sample code to reset BLE_Manager */
         /*
-              aci_gap_terminate(CurrentConnectionHandle,0x13);
+              aci_gap_terminate(CurrentConnectionHandle, 0x13);
               HAL_Delay(5000);
               needToResetBLE=1;
         */
@@ -2001,6 +2189,33 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
 #define WRITE_BUFFER_SIZE_LSM6DSOX_G   (uint32_t)(16384)
 #define WRITE_BUFFER_SIZE_LSM6DSOX_MLC (uint32_t)(1024)
 
+#define SAMPLES_PER_TIME_STAMP_1 1000
+#define SAMPLES_PER_TIME_STAMP_2 200
+
+#define FULL_SCALE_1             120.0f
+#define FULL_SCALE_2             100.0f
+#define FULL_SCALE_3             125.0f
+#define FULL_SCALE_4             250.0f
+#define FULL_SCALE_5             500.0f
+#define FULL_SCALE_6             1000.0f
+#define FULL_SCALE_7             2000.0f
+
+#define ODR_1                    100.0f
+#define ODR_2                    200.0f
+#define ODR_3                    1260.0f
+#define ODR_4                    104.0f
+#define ODR_5                    208.0f
+#define ODR_6                    417.0f
+#define ODR_7                    833.0f
+#define ODR_8                    1667.0f
+#define ODR_9                    3333.0f
+#define ODR_10                   6667.0f
+
+#define USB_DATA_PACKET_SIZE_1   1600
+#define USB_DATA_PACKET_SIZE_2   2048
+
+  float temp;
+
   COM_Sensor_t SensorHTS221, SensorLPS22HH, SensorLSM6DSOX;
   JSON_Value *tempJSON1;
   BLE_MANAGER_PRINTF("Received the Read Sensors Config Command\r\n");
@@ -2021,14 +2236,14 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorHTS221.sensorDescriptor.subSensorDescriptor[0].ODR[2] = 12.5f;
   SensorHTS221.sensorDescriptor.subSensorDescriptor[0].ODR[3] = COM_END_OF_LIST_FLOAT;
   SensorHTS221.sensorDescriptor.subSensorDescriptor[0].samplesPerTimestamp[0] = 0;
-  SensorHTS221.sensorDescriptor.subSensorDescriptor[0].samplesPerTimestamp[1] = 1000;
+  SensorHTS221.sensorDescriptor.subSensorDescriptor[0].samplesPerTimestamp[1] = SAMPLES_PER_TIME_STAMP_1;
   strcpy(SensorHTS221.sensorDescriptor.subSensorDescriptor[0].unit, "Celsius");
-  SensorHTS221.sensorDescriptor.subSensorDescriptor[0].FS[0] = 120.0f;
+  SensorHTS221.sensorDescriptor.subSensorDescriptor[0].FS[0] = FULL_SCALE_1;
   SensorHTS221.sensorDescriptor.subSensorDescriptor[0].FS[1] = COM_END_OF_LIST_FLOAT;
 
   /* SUBSENSOR 0 STATUS */
   SensorHTS221.sensorStatus.subSensorStatus[0].isActive = 1;
-  SensorHTS221.sensorStatus.subSensorStatus[0].FS = 120.0f;
+  SensorHTS221.sensorStatus.subSensorStatus[0].FS = FULL_SCALE_1;
   SensorHTS221.sensorStatus.subSensorStatus[0].sensitivity = 1.0f;
   SensorHTS221.sensorStatus.subSensorStatus[0].ODR = 12.5f;
   SensorHTS221.sensorStatus.subSensorStatus[0].measuredODR = 0.0f;
@@ -2050,14 +2265,14 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorHTS221.sensorDescriptor.subSensorDescriptor[1].ODR[2] = 12.5f;
   SensorHTS221.sensorDescriptor.subSensorDescriptor[1].ODR[3] = COM_END_OF_LIST_FLOAT;
   SensorHTS221.sensorDescriptor.subSensorDescriptor[1].samplesPerTimestamp[0] = 0;
-  SensorHTS221.sensorDescriptor.subSensorDescriptor[1].samplesPerTimestamp[1] = 1000;
+  SensorHTS221.sensorDescriptor.subSensorDescriptor[1].samplesPerTimestamp[1] = SAMPLES_PER_TIME_STAMP_1;
   strcpy(SensorHTS221.sensorDescriptor.subSensorDescriptor[1].unit, "%");
-  SensorHTS221.sensorDescriptor.subSensorDescriptor[1].FS[0] = 100.0f;
+  SensorHTS221.sensorDescriptor.subSensorDescriptor[1].FS[0] = FULL_SCALE_2;
   SensorHTS221.sensorDescriptor.subSensorDescriptor[1].FS[1] = COM_END_OF_LIST_FLOAT;
 
   /* SUBSENSOR 1 STATUS */
   SensorHTS221.sensorStatus.subSensorStatus[1].isActive = 1;
-  SensorHTS221.sensorStatus.subSensorStatus[1].FS = 100.0f;
+  SensorHTS221.sensorStatus.subSensorStatus[1].FS = FULL_SCALE_2;
   SensorHTS221.sensorStatus.subSensorStatus[1].sensitivity = 1.0f;
   SensorHTS221.sensorStatus.subSensorStatus[1].ODR = 12.5f;
   SensorHTS221.sensorStatus.subSensorStatus[1].measuredODR = 0.0f;
@@ -2084,24 +2299,24 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].ODR[2] = 25.0f;
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].ODR[3] = 50.0f;
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].ODR[4] = 75.0f;
-  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].ODR[5] = 100.0f;
-  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].ODR[6] = 200.0f;
+  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].ODR[5] = ODR_1;
+  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].ODR[6] = ODR_2;
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].ODR[7] = COM_END_OF_LIST_FLOAT;
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].samplesPerTimestamp[0] = 0;
-  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].samplesPerTimestamp[1] = 1000;
+  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].samplesPerTimestamp[1] = SAMPLES_PER_TIME_STAMP_1;
   strcpy(SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].unit, "hPa");
-  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].FS[0] = 1260.0f;
+  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].FS[0] = ODR_3;
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[0].FS[1] = COM_END_OF_LIST_FLOAT;
 
   /* SUBSENSOR 0 STATUS */
   SensorLPS22HH.sensorStatus.subSensorStatus[0].isActive = 1;
-  SensorLPS22HH.sensorStatus.subSensorStatus[0].FS = 1260.0f;
+  SensorLPS22HH.sensorStatus.subSensorStatus[0].FS = ODR_3;
   SensorLPS22HH.sensorStatus.subSensorStatus[0].sensitivity = 1.0f;
-  SensorLPS22HH.sensorStatus.subSensorStatus[0].ODR = 200.0f;
+  SensorLPS22HH.sensorStatus.subSensorStatus[0].ODR = ODR_2;
   SensorLPS22HH.sensorStatus.subSensorStatus[0].measuredODR = 0.0f;
   SensorLPS22HH.sensorStatus.subSensorStatus[0].initialOffset = 0.0f;
-  SensorLPS22HH.sensorStatus.subSensorStatus[0].samplesPerTimestamp = 200;
-  SensorLPS22HH.sensorStatus.subSensorStatus[0].usbDataPacketSize = 1600;
+  SensorLPS22HH.sensorStatus.subSensorStatus[0].samplesPerTimestamp = SAMPLES_PER_TIME_STAMP_2;
+  SensorLPS22HH.sensorStatus.subSensorStatus[0].usbDataPacketSize = USB_DATA_PACKET_SIZE_1;
   SensorLPS22HH.sensorStatus.subSensorStatus[0].sdWriteBufferSize = WRITE_BUFFER_SIZE_LPS22HH_P;
   SensorLPS22HH.sensorStatus.subSensorStatus[0].comChannelNumber = -1;
   SensorLPS22HH.sensorStatus.subSensorStatus[0].ucfLoaded = 0;
@@ -2117,11 +2332,11 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].ODR[2] = 25.0f;
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].ODR[3] = 50.0f;
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].ODR[4] = 75.0f;
-  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].ODR[5] = 100.0f;
-  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].ODR[6] = 200.0f;
+  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].ODR[5] = ODR_1;
+  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].ODR[6] = ODR_2;
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].ODR[7] = COM_END_OF_LIST_FLOAT;
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].samplesPerTimestamp[0] = 0;
-  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].samplesPerTimestamp[1] = 1000;
+  SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].samplesPerTimestamp[1] = SAMPLES_PER_TIME_STAMP_1;
   strcpy(SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].unit, "Celsius");
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].FS[0] = 85.0f;
   SensorLPS22HH.sensorDescriptor.subSensorDescriptor[1].FS[1] = COM_END_OF_LIST_FLOAT;
@@ -2130,11 +2345,11 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorLPS22HH.sensorStatus.subSensorStatus[1].isActive = 1;
   SensorLPS22HH.sensorStatus.subSensorStatus[1].FS = 85.0f;
   SensorLPS22HH.sensorStatus.subSensorStatus[1].sensitivity = 1.0f;
-  SensorLPS22HH.sensorStatus.subSensorStatus[1].ODR = 200.0f;
+  SensorLPS22HH.sensorStatus.subSensorStatus[1].ODR = ODR_2;
   SensorLPS22HH.sensorStatus.subSensorStatus[1].measuredODR = 0.0f;
   SensorLPS22HH.sensorStatus.subSensorStatus[1].initialOffset = 0.0f;
-  SensorLPS22HH.sensorStatus.subSensorStatus[1].samplesPerTimestamp = 200;
-  SensorLPS22HH.sensorStatus.subSensorStatus[1].usbDataPacketSize = 1600;
+  SensorLPS22HH.sensorStatus.subSensorStatus[1].samplesPerTimestamp = SAMPLES_PER_TIME_STAMP_2;
+  SensorLPS22HH.sensorStatus.subSensorStatus[1].usbDataPacketSize = USB_DATA_PACKET_SIZE_1;
   SensorLPS22HH.sensorStatus.subSensorStatus[1].sdWriteBufferSize = WRITE_BUFFER_SIZE_LPS22HH_T;
   SensorLPS22HH.sensorStatus.subSensorStatus[1].comChannelNumber = -1;
   SensorLPS22HH.sensorStatus.subSensorStatus[1].ucfLoaded = 0;
@@ -2155,16 +2370,16 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[0] = 12.5f;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[1] = 26.0f;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[2] = 52.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[3] = 104.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[4] = 208.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[5] = 417.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[6] = 833.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[7] = 1667.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[8] = 3333.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[9] = 6667.0f;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[3] = ODR_4;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[4] = ODR_5;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[5] = ODR_6;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[6] = ODR_7;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[7] = ODR_8;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[8] = ODR_9;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[9] = ODR_10;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].ODR[10] = COM_END_OF_LIST_FLOAT;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].samplesPerTimestamp[0] = 0;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].samplesPerTimestamp[1] = 1000;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].samplesPerTimestamp[1] = SAMPLES_PER_TIME_STAMP_1;
   strcpy(SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].unit, "g");
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].FS[0] = 2.0f;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[0].FS[1] = 4.0f;
@@ -2175,12 +2390,13 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   /* SUBSENSOR 0 STATUS */
   SensorLSM6DSOX.sensorStatus.subSensorStatus[0].isActive = 1;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[0].FS = 16.0f;
-  SensorLSM6DSOX.sensorStatus.subSensorStatus[0].sensitivity = 0.0000305f * SensorLSM6DSOX.sensorStatus.subSensorStatus[0].FS;
-  SensorLSM6DSOX.sensorStatus.subSensorStatus[0].ODR = 6667.0f;
+  temp = 0.0000305f * SensorLSM6DSOX.sensorStatus.subSensorStatus[0].FS;
+  SensorLSM6DSOX.sensorStatus.subSensorStatus[0].sensitivity = temp;
+  SensorLSM6DSOX.sensorStatus.subSensorStatus[0].ODR = ODR_10;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[0].measuredODR = 0.0f;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[0].initialOffset = 0.0f;
-  SensorLSM6DSOX.sensorStatus.subSensorStatus[0].samplesPerTimestamp = 1000;
-  SensorLSM6DSOX.sensorStatus.subSensorStatus[0].usbDataPacketSize = 2048;
+  SensorLSM6DSOX.sensorStatus.subSensorStatus[0].samplesPerTimestamp = SAMPLES_PER_TIME_STAMP_1;
+  SensorLSM6DSOX.sensorStatus.subSensorStatus[0].usbDataPacketSize = USB_DATA_PACKET_SIZE_2;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[0].sdWriteBufferSize = WRITE_BUFFER_SIZE_LSM6DSOX_A;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[0].comChannelNumber = -1;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[0].ucfLoaded = 0;
@@ -2196,33 +2412,34 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[0] = 12.5f;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[1] = 26.0f;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[2] = 52.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[3] = 104.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[4] = 208.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[5] = 417.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[6] = 833.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[7] = 1667.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[8] = 3333.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[9] = 6667.0f;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[3] = ODR_4;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[4] = ODR_5;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[5] = ODR_6;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[6] = ODR_7;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[7] = ODR_8;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[8] = ODR_9;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[9] = ODR_10;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].ODR[10] = COM_END_OF_LIST_FLOAT;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].samplesPerTimestamp[0] = 0;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].samplesPerTimestamp[1] = 1000;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].samplesPerTimestamp[1] = SAMPLES_PER_TIME_STAMP_1;
   strcpy(SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].unit, "mdps");
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[0] = 125.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[1] = 250.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[2] = 500.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[3] = 1000.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[4] = 2000.0f;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[0] = FULL_SCALE_3;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[1] = FULL_SCALE_4;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[2] = FULL_SCALE_5;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[3] = FULL_SCALE_6;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[4] = FULL_SCALE_7;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[1].FS[5] = COM_END_OF_LIST_FLOAT;
 
   /* SUBSENSOR 1 STATUS */
   SensorLSM6DSOX.sensorStatus.subSensorStatus[1].isActive = 1;
-  SensorLSM6DSOX.sensorStatus.subSensorStatus[1].FS = 2000.0f;
-  SensorLSM6DSOX.sensorStatus.subSensorStatus[1].sensitivity = 0.035f * SensorLSM6DSOX.sensorStatus.subSensorStatus[1].FS;
-  SensorLSM6DSOX.sensorStatus.subSensorStatus[1].ODR = 6667.0f;
+  SensorLSM6DSOX.sensorStatus.subSensorStatus[1].FS = FULL_SCALE_7;
+  temp = 0.035f * SensorLSM6DSOX.sensorStatus.subSensorStatus[1].FS;
+  SensorLSM6DSOX.sensorStatus.subSensorStatus[1].sensitivity = temp;
+  SensorLSM6DSOX.sensorStatus.subSensorStatus[1].ODR = ODR_10;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[1].measuredODR = 0.0f;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[1].initialOffset = 0.0f;
-  SensorLSM6DSOX.sensorStatus.subSensorStatus[1].samplesPerTimestamp = 1000;
-  SensorLSM6DSOX.sensorStatus.subSensorStatus[1].usbDataPacketSize = 2048;
+  SensorLSM6DSOX.sensorStatus.subSensorStatus[1].samplesPerTimestamp = SAMPLES_PER_TIME_STAMP_1;
+  SensorLSM6DSOX.sensorStatus.subSensorStatus[1].usbDataPacketSize = USB_DATA_PACKET_SIZE_2;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[1].sdWriteBufferSize = WRITE_BUFFER_SIZE_LSM6DSOX_G;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[1].comChannelNumber = -1;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[1].ucfLoaded = 0;
@@ -2243,10 +2460,10 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].ODR[0] = 12.5f;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].ODR[1] = 26.0f;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].ODR[2] = 52.0f;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].ODR[3] = 104.0f;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].ODR[3] = ODR_4;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].ODR[4] = COM_END_OF_LIST_FLOAT;
   SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].samplesPerTimestamp[0] = 0;
-  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].samplesPerTimestamp[1] = 1000;
+  SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].samplesPerTimestamp[1] = SAMPLES_PER_TIME_STAMP_1;
   strcpy(SensorLSM6DSOX.sensorDescriptor.subSensorDescriptor[2].unit, "out");
 
   /* SUBSENSOR 2 STATUS */
@@ -2262,7 +2479,7 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
   SensorLSM6DSOX.sensorStatus.subSensorStatus[2].comChannelNumber = -1;
   SensorLSM6DSOX.sensorStatus.subSensorStatus[2].ucfLoaded = 0;
 
-  /* Add the sensors to the Array
+  /* Add the sensors to the Array */
   tempJSON1 = json_value_init_object();
   create_JSON_Sensor(&SensorHTS221, tempJSON1);
   json_array_append_value(JSON_SensorArray, tempJSON1);
@@ -2277,15 +2494,15 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
            the ExtConfigReadSensorConfigCommandCallback could be implemented in the user file
            for managing the received command with the used sensor
    */
-  }
+}
 
-  /**
-    * @brief  Set Sensor Config
-    * @param  uint8_t *configuration
-    * @retval None
+/**
+  * @brief  Set Sensor Config
+  * @param  uint8_t *configuration
+  * @retval None
   */
-  __weak void ExtConfigSetSensorConfigCommandCallback(uint8_t *configuration)
-  {
+__weak void ExtConfigSetSensorConfigCommandCallback(uint8_t *configuration)
+{
   /* Prevent unused argument(s) compilation warning */
   UNUSED(configuration);
 
@@ -2293,5 +2510,5 @@ __weak void ExtConfigReadSensorConfigCommandCallback(JSON_Array *JSON_SensorArra
            the ExtConfigSetSensorConfigCommandCallback could be implemented in the user file
            for managing the received command with the used sensor
    */
-  }
-  #endif /* BLE_MANAGER_USE_PARSON */
+}
+#endif /* BLE_MANAGER_USE_PARSON */

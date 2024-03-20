@@ -18,7 +18,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -27,17 +27,16 @@
 #define SYSCONFIG_H_
 
 
-
 // Board and FW ID
 // *********************
 
 #define BOARD_ID_PROA           0x0D
-#define BLE_FW_ID_DATALOG2_PROA 0x13
-#define USB_FW_ID_DATALOG2_PROA 0x0B
+#define BLE_FW_ID_DATALOG2_PROA 0x14
+#define USB_FW_ID_DATALOG2_PROA 0x05
 
 #define BOARD_ID_PROB           0x11
-#define BLE_FW_ID_DATALOG2_PROB 0x0B
-#define USB_FW_ID_DATALOG2_PROB 0x02
+#define BLE_FW_ID_DATALOG2_PROB 0x07
+#define USB_FW_ID_DATALOG2_PROB 0x03
 
 // Other hardware configuration
 // ****************************
@@ -73,7 +72,6 @@
 
 /* SensorManager configuration */
 #define SM_MAX_SENSORS                            11U
-
 
 
 // file UtilTask.c
@@ -139,15 +137,14 @@
 #endif
 
 
-
 // file SysTimestamp.c
 #define SYS_TS_CFG_ENABLE_SERVICE 1
 /**
-* Configuration parameter for the timer used for the eLooM timestamp service.
-* Valid value are:
-* - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
-* - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
-*/
+  * Configuration parameter for the timer used for the eLooM timestamp service.
+  * Valid value are:
+  * - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
+  * - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
+  */
 #define SYS_TS_CFG_TSDRIVER_PARAMS &MX_TIM3InitParams
 //#define SYS_TS_CFG_TSDRIVER_PARAMS SYS_TS_USE_SW_TSDRIVER
 

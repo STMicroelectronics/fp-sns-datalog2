@@ -68,7 +68,8 @@
 static uint16_t dummyDataCounter = 0;
 #endif
 
-static const uint16_t GainRange[] = {
+static const uint16_t GainRange[] =
+{
   0x42AB,   /*   66, 67 */
   0x3200,   /*   50, 00 */
   0x2154,   /*   33, 33 */
@@ -199,7 +200,6 @@ static sys_error_code_t VD6283TXTaskConfigureIrqPin(const VD6283TXTask *_this, b
 static void VD6283TXTaskTimerCallbackFunction(ULONG param);
 
 
-
 /* Inline function forward declaration */
 // ***********************************
 /**
@@ -221,14 +221,6 @@ static inline sys_error_code_t VD6283TXTaskPostReportToFront(VD6283TXTask *_this
   * @return SYS_NO_EROR_CODE if success, SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE.
   */
 static inline sys_error_code_t VD6283TXTaskPostReportToBack(VD6283TXTask *_this, SMMessage *pReport);
-
-//static uint32_t float_to_fixed_point(float f) {
-//  uint32_t result;
-//  int integer_part = (int)f;
-//  float fractional_part = f - integer_part;
-//  result = (integer_part << 8) | (uint32_t)(fractional_part * 256);
-//  return result;
-//}
 
 /* Objects instance */
 /********************/
@@ -279,33 +271,7 @@ static VD6283TXTaskClass_t sTheClass =
   /* PRESENCE DESCRIPTOR */
   {
     "vd6283tx",
-    COM_TYPE_ALS,
-    {
-      0.25f,
-      0.5f,
-      1.0f,
-      2.0f,
-      4.0f,
-      8.0f,
-      15.0f,
-      30.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      2.0f,
-      4.0f,
-      8.0f,
-      16.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "lux"
-    },
-    "degrees",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_ALS
   },
   /* class (PM_STATE, ExecuteStepFunc) map */
   {
@@ -377,7 +343,7 @@ AManagedTaskEx *VD6283TXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfi
 }
 
 AManagedTaskEx *VD6283TXTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
-                                              const char *p_name)
+                                               const char *p_name)
 {
   VD6283TXTask *p_obj = (VD6283TXTask *)VD6283TXTaskStaticAlloc(p_mem_block, pIRQConfig, pCSConfig);
 
@@ -439,7 +405,7 @@ sys_error_code_t VD6283TXTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
     return res;
   }
   if (TX_SUCCESS != tx_queue_create(&p_obj->in_queue, "VD6283TX_Q", item_size / 4u, p_queue_items_buff,
-                                         VD6283TX_TASK_CFG_IN_QUEUE_LENGTH * item_size))
+                                    VD6283TX_TASK_CFG_IN_QUEUE_LENGTH * item_size))
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
@@ -447,8 +413,8 @@ sys_error_code_t VD6283TXTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
   }
   /* create the software timer*/
   if (TX_SUCCESS
-           != tx_timer_create(&p_obj->read_timer, "VD6283TX_T", VD6283TXTaskTimerCallbackFunction, (ULONG)_this,
-                              AMT_MS_TO_TICKS(VD6283TX_TASK_CFG_TIMER_PERIOD_MS), 0, TX_NO_ACTIVATE))
+      != tx_timer_create(&p_obj->read_timer, "VD6283TX_T", VD6283TXTaskTimerCallbackFunction, (ULONG)_this,
+                         AMT_MS_TO_TICKS(VD6283TX_TASK_CFG_TIMER_PERIOD_MS), 0, TX_NO_ACTIVATE))
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
@@ -478,16 +444,16 @@ sys_error_code_t VD6283TXTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
   {
     return res;
   }
-    /* Initialize the EventSrc interface */
-    p_obj->p_event_src = DataEventSrcAlloc();
-    if (p_obj->p_event_src == NULL)
-    {
+  /* Initialize the EventSrc interface */
+  p_obj->p_event_src = DataEventSrcAlloc();
+  if (p_obj->p_event_src == NULL)
+  {
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
     res = SYS_OUT_OF_MEMORY_ERROR_CODE;
     return res;
-    }
+  }
 
-      IEventSrcInit(p_obj->p_event_src);
+  IEventSrcInit(p_obj->p_event_src);
 
   if (!MTMap_IsInitialized(&sTheClass.task_map))
   {
@@ -508,34 +474,34 @@ sys_error_code_t VD6283TXTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
       return res;
     }
   }
-      memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
-      p_obj->id = 0;
-      p_obj->prev_timestamp = 0.0f;
-      _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
+  memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
+  p_obj->id = 0;
+  p_obj->prev_timestamp = 0.0f;
+  _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
 
-      *pTaskCode = AMTExRun;
-      *pName = "VD6283TX";
-      *pvStackStart = NULL; // allocate the task stack in the system memory pool.
-      *pStackDepth = VD6283TX_TASK_CFG_STACK_DEPTH;
-      *pParams = (ULONG) _this;
-      *pPriority = VD6283TX_TASK_CFG_PRIORITY;
-      *pPreemptThreshold = VD6283TX_TASK_CFG_PRIORITY;
-      *pTimeSlice = TX_NO_TIME_SLICE;
-      *pAutoStart = TX_AUTO_START;
+  *pTaskCode = AMTExRun;
+  *pName = "VD6283TX";
+  *pvStackStart = NULL; // allocate the task stack in the system memory pool.
+  *pStackDepth = VD6283TX_TASK_CFG_STACK_DEPTH;
+  *pParams = (ULONG) _this;
+  *pPriority = VD6283TX_TASK_CFG_PRIORITY;
+  *pPreemptThreshold = VD6283TX_TASK_CFG_PRIORITY;
+  *pTimeSlice = TX_NO_TIME_SLICE;
+  *pAutoStart = TX_AUTO_START;
 
-      res = VD6283TXTaskSensorInitTaskParams(p_obj);
+  res = VD6283TXTaskSensorInitTaskParams(p_obj);
   if (SYS_IS_ERROR_CODE(res))
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
     return res;
   }
-        res = VD6283TXTaskSensorRegister(p_obj);
+  res = VD6283TXTaskSensorRegister(p_obj);
   if (SYS_IS_ERROR_CODE(res))
   {
-          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("VD6283TX: unable to register with DB\r\n"));
-          sys_error_handler();
-        }
+    SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("VD6283TX: unable to register with DB\r\n"));
+    sys_error_handler();
+  }
 
   return res;
 }
@@ -648,8 +614,8 @@ sys_error_code_t VD6283TXTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
   // At this point all system has been initialized.
   // Execute task specific delayed one time initialization.
 
-  stmdev_ctx_t *p_sensor_drv_gen = (stmdev_ctx_t *) &((VD6283TXTask *)_this)->p_sensor_bus_if->m_xConnector;
-  VD6283TX_Object_t *p_platform_drv = (VD6283TX_Object_t *) &((VD6283TXTask *)_this)->als_driver_if;
+  stmdev_ctx_t *p_sensor_drv_gen = (stmdev_ctx_t *) & ((VD6283TXTask *)_this)->p_sensor_bus_if->m_xConnector;
+  VD6283TX_Object_t *p_platform_drv = (VD6283TX_Object_t *) & ((VD6283TXTask *)_this)->als_driver_if;
   p_platform_drv->IO = *p_sensor_drv_gen;
 
   uint8_t id;
@@ -664,9 +630,9 @@ sys_error_code_t VD6283TXTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 
     status = VD6283TX_Init(p_platform_drv);
     if (status != VD6283TX_OK)
-      {
-        res = SYS_BASE_LOW_LEVEL_ERROR_CODE;
-      }
+    {
+      res = SYS_BASE_LOW_LEVEL_ERROR_CODE;
+    }
   }
   else
   {
@@ -767,11 +733,11 @@ sys_error_code_t VD6283TXTask_vtblLightGetIntermeasurementTime(ISensorLight_t *_
   return res;
 }
 
-float VD6283TXTask_vtblLightGetExposureTime(ISensorLight_t *_this)
+uint32_t VD6283TXTask_vtblLightGetExposureTime(ISensorLight_t *_this)
 {
   assert_param(_this != NULL);
   VD6283TXTask *p_if_owner = (VD6283TXTask *)((uint32_t) _this - offsetof(VD6283TXTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.light.exposure_time;
+  uint32_t res = p_if_owner->sensor_status.type.light.exposure_time;
 
   return res;
 }
@@ -807,6 +773,8 @@ sys_error_code_t VD6283TXTask_vtblSensorSetIntermeasurementTime(ISensorLight_t *
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
+  intermeasurement_time = intermeasurement_time - (intermeasurement_time % 20);
+
   if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *) _this))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
@@ -827,7 +795,7 @@ sys_error_code_t VD6283TXTask_vtblSensorSetIntermeasurementTime(ISensorLight_t *
   return res;
 }
 
-sys_error_code_t VD6283TXTask_vtblSensorSetExposureTime(ISensorLight_t *_this, float exposure_time)
+sys_error_code_t VD6283TXTask_vtblSensorSetExposureTime(ISensorLight_t *_this, uint32_t exposure_time)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -835,6 +803,8 @@ sys_error_code_t VD6283TXTask_vtblSensorSetExposureTime(ISensorLight_t *_this, f
   VD6283TXTask *p_if_owner = (VD6283TXTask *)((uint32_t) _this - offsetof(VD6283TXTask, sensor_if));
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
+
+  exposure_time = exposure_time - (exposure_time % 1600);
 
   if ((log_status == E_POWER_MODE_SENSORS_ACTIVE) && ISensorIsEnabled((ISensor_t *) _this))
   {
@@ -848,7 +818,7 @@ sys_error_code_t VD6283TXTask_vtblSensorSetExposureTime(ISensorLight_t *_this, f
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_EXPOSURE_TIME,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (float) exposure_time
+      .sensorMessage.nParam = (uint32_t) exposure_time
     };
     res = VD6283TXTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -873,7 +843,7 @@ sys_error_code_t VD6283TXTask_vtblSensorSetLightGain(ISensorLight_t *_this, floa
   else
   {
     uint8_t cmd_id = 0;
-    switch(channel)
+    switch (channel)
     {
       case 1:
         cmd_id = SENSOR_CMD_ID_SET_LIGHT_CH1_GAIN;
@@ -898,7 +868,7 @@ sys_error_code_t VD6283TXTask_vtblSensorSetLightGain(ISensorLight_t *_this, floa
         break;
     }
 
-    if(cmd_id != 0)
+    if (cmd_id != 0)
     {
       /* Set a new command message in the queue */
       SMMessage report =
@@ -906,7 +876,7 @@ sys_error_code_t VD6283TXTask_vtblSensorSetLightGain(ISensorLight_t *_this, floa
         .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
         .sensorMessage.nCmdID = cmd_id,
         .sensorMessage.nSensorId = sensor_id,
-        .sensorMessage.nParam = LightGain
+        .sensorMessage.fParam = LightGain
       };
       res = VD6283TXTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
     }
@@ -1142,7 +1112,7 @@ static sys_error_code_t VD6283TXTaskExecuteStepDatalog(AManagedTask *_this)
           p_obj->prev_timestamp = timestamp;
 
           /* update measured data frequency: one sample in delta_timestamp time */
-          p_obj->sensor_status.type.light.measured_intermeasurement_time = (uint32_t) (delta_timestamp/1000.0f);
+          p_obj->sensor_status.type.light.measured_intermeasurement_time = (uint32_t)(delta_timestamp / 1000.0f);
           EMD_Init(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[0], E_EM_UINT32, E_EM_MODE_INTERLEAVED, 2, 1, 6);
 
           DataEvent_t evt;
@@ -1307,25 +1277,9 @@ static sys_error_code_t VD6283TXTaskSensorInit(VD6283TXTask *_this)
   VD6283TX_Object_t *p_platform_drv = (VD6283TX_Object_t *) &_this->als_driver_if;
   p_platform_drv->IO = *p_sensor_drv_gen;
 
-//  uint8_t id;
   uint32_t status = 0;
-//
-//  status = p_sensor_drv_gen->read_reg(p_sensor_drv_gen->handle, VD6283TX_DEVICE_ID_REG, &id, 1);
-//
-//  if (status == VD6283TX_OK)
-//  {
-//    ABusIFSetWhoAmI(_this->p_sensor_bus_if, id);
-//    SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("VD6283TX: sensor - I am 0x%x.\r\n", id));
 
-//    status = VD6283TX_Init(p_platform_drv);
-
-//    if (status == VD6283TX_OK)
-//    {
-//      /*PID requires time values in microseconds*/
-//      status = VD6283TX_SetExposureTime(p_platform_drv, (uint32_t)(_this->sensor_status.type.light.exposure_time*1000.0f));
-//    }
-
-  status = VD6283TX_SetExposureTime(p_platform_drv, (uint32_t)(_this->sensor_status.type.light.exposure_time*1000.0f));
+  status = VD6283TX_SetExposureTime(p_platform_drv, (uint32_t)(_this->sensor_status.type.light.exposure_time));
 
   if (status == VD6283TX_OK)
   {
@@ -1346,47 +1300,47 @@ static sys_error_code_t VD6283TXTaskSensorInit(VD6283TXTask *_this)
       {
         ch_gain_fp = GainRange[12];
       }
-      else if(ch_gain < 1.46)
+      else if (ch_gain < 1.46)
       {
         ch_gain_fp = GainRange[11];
       }
-      else if(ch_gain < 2.09)
+      else if (ch_gain < 2.09)
       {
         ch_gain_fp = GainRange[10];
       }
-      else if(ch_gain < 2.92)
+      else if (ch_gain < 2.92)
       {
         ch_gain_fp = GainRange[9];
       }
-      else if(ch_gain < 4.17)
+      else if (ch_gain < 4.17)
       {
         ch_gain_fp = GainRange[8];
       }
-      else if(ch_gain < 6.07)
+      else if (ch_gain < 6.07)
       {
         ch_gain_fp = GainRange[7];
       }
-      else if(ch_gain < 8.57)
+      else if (ch_gain < 8.57)
       {
         ch_gain_fp = GainRange[6];
       }
-      else if(ch_gain < 13.34)
+      else if (ch_gain < 13.34)
       {
         ch_gain_fp = GainRange[5];
       }
-      else if(ch_gain < 20.82)
+      else if (ch_gain < 20.82)
       {
         ch_gain_fp = GainRange[4];
       }
-      else if(ch_gain < 29.17)
+      else if (ch_gain < 29.17)
       {
         ch_gain_fp = GainRange[3];
       }
-      else if(ch_gain < 41.67)
+      else if (ch_gain < 41.67)
       {
         ch_gain_fp = GainRange[2];
       }
-      else if(ch_gain < 58.34)
+      else if (ch_gain < 58.34)
       {
         ch_gain_fp = GainRange[1];
       }
@@ -1402,7 +1356,7 @@ static sys_error_code_t VD6283TXTaskSensorInit(VD6283TXTask *_this)
   if (status == VD6283TX_OK)
   {
     /*PID requires time values in microseconds*/
-    status = VD6283TX_SetInterMeasurementTime(p_platform_drv, _this->sensor_status.type.light.intermeasurement_time*1000);
+    status = VD6283TX_SetInterMeasurementTime(p_platform_drv, _this->sensor_status.type.light.intermeasurement_time * 1000);
   }
 
   if (status == 0U && _this->sensor_status.is_active)
@@ -1420,8 +1374,10 @@ static sys_error_code_t VD6283TXTaskSensorInit(VD6283TXTask *_this)
     _this->sensor_status.is_active = false;
   }
 
-  _this->vd6283tx_task_cfg_timer_period_ms = _this->sensor_status.type.light.intermeasurement_time;
-//  }
+  if (_this->sensor_status.is_active)
+  {
+    _this->vd6283tx_task_cfg_timer_period_ms = _this->sensor_status.type.light.intermeasurement_time;
+  }
 
   if (status != VD6283TX_OK)
   {
@@ -1473,7 +1429,7 @@ static sys_error_code_t VD6283TXTaskSensorInitTaskParams(VD6283TXTask *_this)
   _this->sensor_status.isensor_class = ISENSOR_CLASS_LIGHT;
   _this->sensor_status.is_active = TRUE;
   _this->sensor_status.type.light.intermeasurement_time = 1000;
-  _this->sensor_status.type.light.exposure_time = 99.2f;
+  _this->sensor_status.type.light.exposure_time = 99200;
   _this->sensor_status.type.light.gain[ 0 ] = 1;
   _this->sensor_status.type.light.gain[ 1 ] = 1;
   _this->sensor_status.type.light.gain[ 2 ] = 1;
@@ -1511,7 +1467,7 @@ static sys_error_code_t VD6283TXTaskSensorSetIntermeasurementTime(VD6283TXTask *
 
     if (!SYS_IS_ERROR_CODE(res))
     {
-			_this->sensor_status.type.light.intermeasurement_time = intermeasurement_time;
+      _this->sensor_status.type.light.intermeasurement_time = intermeasurement_time;
       _this->sensor_status.type.light.measured_intermeasurement_time = 0;
     }
   }
@@ -1530,13 +1486,13 @@ static sys_error_code_t VD6283TXTaskSensorSetExposureTime(VD6283TXTask *_this, S
   stmdev_ctx_t *p_sensor_drv_gen = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   VD6283TX_Object_t *p_platform_drv = (VD6283TX_Object_t *) &_this->als_driver_if;
   p_platform_drv->IO = *p_sensor_drv_gen;
-  float exposure_time = (float)report.sensorMessage.nParam;
+  uint32_t exposure_time = (uint32_t)report.sensorMessage.nParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->id)
   {
     /*PID requires time values in microseconds*/
-    if (VD6283TX_SetExposureTime(p_platform_drv, (uint32_t)(exposure_time*1000.0f)) != 0)
+    if (VD6283TX_SetExposureTime(p_platform_drv, (uint32_t)(exposure_time)) != 0)
     {
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
     }
@@ -1576,7 +1532,7 @@ static sys_error_code_t VD6283TXTaskSensorSetLightGain(VD6283TXTask *_this, SMMe
 //      }
 //    }
     uint16_t ch_gain_fp;
-    float ch_gain = report.sensorMessage.nParam;
+    float ch_gain = report.sensorMessage.fParam;
 
     if (ch_gain < 0.77)
     {
@@ -1590,47 +1546,47 @@ static sys_error_code_t VD6283TXTaskSensorSetLightGain(VD6283TXTask *_this, SMMe
     {
       ch_gain_fp = GainRange[12];
     }
-    else if(ch_gain < 1.46)
+    else if (ch_gain < 1.46)
     {
       ch_gain_fp = GainRange[11];
     }
-    else if(ch_gain < 2.09)
+    else if (ch_gain < 2.09)
     {
       ch_gain_fp = GainRange[10];
     }
-    else if(ch_gain < 2.92)
+    else if (ch_gain < 2.92)
     {
       ch_gain_fp = GainRange[9];
     }
-    else if(ch_gain < 4.17)
+    else if (ch_gain < 4.17)
     {
       ch_gain_fp = GainRange[8];
     }
-    else if(ch_gain < 6.07)
+    else if (ch_gain < 6.07)
     {
       ch_gain_fp = GainRange[7];
     }
-    else if(ch_gain < 8.57)
+    else if (ch_gain < 8.57)
     {
       ch_gain_fp = GainRange[6];
     }
-    else if(ch_gain < 13.34)
+    else if (ch_gain < 13.34)
     {
       ch_gain_fp = GainRange[5];
     }
-    else if(ch_gain < 20.82)
+    else if (ch_gain < 20.82)
     {
       ch_gain_fp = GainRange[4];
     }
-    else if(ch_gain < 29.17)
+    else if (ch_gain < 29.17)
     {
       ch_gain_fp = GainRange[3];
     }
-    else if(ch_gain < 41.67)
+    else if (ch_gain < 41.67)
     {
       ch_gain_fp = GainRange[2];
     }
-    else if(ch_gain < 58.34)
+    else if (ch_gain < 58.34)
     {
       ch_gain_fp = GainRange[1];
     }
@@ -1639,10 +1595,10 @@ static sys_error_code_t VD6283TXTaskSensorSetLightGain(VD6283TXTask *_this, SMMe
       ch_gain_fp = GainRange[0];
     }
     /* ch_gain float value has been converted to 8.8 fixed point format */
-    res = VD6283TX_SetGain(p_platform_drv, report.sensorMessage.nCmdID-6, ch_gain_fp);
+    res = VD6283TX_SetGain(p_platform_drv, report.sensorMessage.nCmdID - 6, ch_gain_fp);
     if (res == SYS_NO_ERROR_CODE)
     {
-      _this->sensor_status.type.light.gain[report.sensorMessage.nCmdID-6] = report.sensorMessage.nParam;
+      _this->sensor_status.type.light.gain[report.sensorMessage.nCmdID - 6] = report.sensorMessage.fParam;
     }
   }
   else

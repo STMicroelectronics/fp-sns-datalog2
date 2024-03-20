@@ -32,7 +32,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    sem_unlink                                         PORTABLE C       */
-/*                                                           6.2.0        */
+/*                                                           6.1.7        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
@@ -65,9 +65,7 @@
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  06-02-2021      William E. Lamie        Initial Version 6.1.7         */
-/*  10-31-2022      Scott Larson            Remove double parenthesis,    */
-/*                                            resulting in version 6.2.0  */
+/*  06-02-2021     William E. Lamie         Initial Version 6.1.7         */
 /*                                                                        */
 /**************************************************************************/
 INT sem_unlink(const CHAR * name)
@@ -104,7 +102,7 @@ ULONG                                    len;
         sem->unlink_flag =TX_TRUE;
 
     /* Check for the count.  */
-    if(sem->count == 0)
+    if ((sem->count == 0) )
     {
         posix_sem_reset(sem );
         sem = NULL;

@@ -74,4 +74,4 @@ void MX_ThreadX_Init(void);
 #endif
 #endif /* __APP_THREADX_H__ */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

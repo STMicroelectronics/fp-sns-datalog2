@@ -71,11 +71,7 @@ uint8_t WaitMs(
   VL53L8CX_Platform *p_platform,
   uint32_t TimeMs)
 {
-  uint32_t tickstart;
-  tickstart = HAL_GetTick();
-
-  while ((HAL_GetTick() - tickstart) < TimeMs);
-
+  tx_thread_sleep(TimeMs);
   return 0;
 }
 

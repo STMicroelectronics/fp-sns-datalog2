@@ -1,12 +1,15 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file  : SensorTileBoxPro.h
-  * @brief : header file for the BSP Common driver
+  * @file    SensorTileBoxPro.h
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
+  * @brief   header file for the BSP Common driver
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -55,8 +58,8 @@
  * @brief STM32U5XX NUCLEO BSP Driver version number V1.0.0
  */
 #define __SENSORTILEBOXPRO_BSP_VERSION_MAIN   (uint32_t)(0x01) /*!< [31:24] main version */
-#define __SENSORTILEBOXPRO_BSP_VERSION_SUB1   (uint32_t)(0x00) /*!< [23:16] sub1 version */
-#define __SENSORTILEBOXPRO_BSP_VERSION_SUB2   (uint32_t)(0x01) /*!< [15:8]  sub2 version */
+#define __SENSORTILEBOXPRO_BSP_VERSION_SUB1   (uint32_t)(0x01) /*!< [23:16] sub1 version */
+#define __SENSORTILEBOXPRO_BSP_VERSION_SUB2   (uint32_t)(0x02) /*!< [15:8]  sub2 version */
 #define __SENSORTILEBOXPRO_BSP_VERSION_RC     (uint32_t)(0x00) /*!< [7:0]  release candidate */
 #define __SENSORTILEBOXPRO_BSP_VERSION        ((__SENSORTILEBOXPRO_BSP_VERSION_MAIN << 24)\
                                                     |(__SENSORTILEBOXPRO_BSP_VERSION_SUB1 << 16)\
@@ -185,6 +188,8 @@ typedef enum
   LED_BLUE = LED4
 }Led_TypeDef;
 
+/* FINISHA --> BOARD_ID = 0x0DU
+// FINISHB --> BOARD_ID = 0x11U */
 typedef enum
 {
   FINISHA = 0,
@@ -326,6 +331,7 @@ int32_t  BSP_COM_SelectLogPort(COM_TypeDef COM);
 int32_t BSP_COM_RegisterDefaultMspCallbacks(COM_TypeDef COM);
 int32_t BSP_COM_RegisterMspCallbacks(COM_TypeDef COM , BSP_COM_Cb_t *Callback);
 #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
+
 
 /**
  * @}

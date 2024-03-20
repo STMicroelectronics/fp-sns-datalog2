@@ -29,6 +29,9 @@ class HSDAdvLogControlWidget(HSDLogControlWidget):
         self.refresh_sd_button.setEnabled(True)
         self.refresh_sd_button.setVisible(True)
 
+        self.spectrum_radio.setEnabled(True)
+        self.spectrum_radio.setVisible(True)
+
         self.debug_radio.setEnabled(True)
         self.debug_radio.setVisible(True)
         

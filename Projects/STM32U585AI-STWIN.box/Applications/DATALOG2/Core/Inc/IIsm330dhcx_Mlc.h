@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:sensors:ism330dhcx_mlc;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:ism330dhcx_mlc;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -45,7 +45,7 @@ typedef struct _IIsm330dhcx_Mlc_t IIsm330dhcx_Mlc_t;
 /* Public API declarations ---------------------------------------------------*/
 
 /* Public interface */
-inline uint8_t IIsm330dhcx_Mlc_load_file(IIsm330dhcx_Mlc_t *_this, const char *data, uint32_t size);
+inline uint8_t IIsm330dhcx_Mlc_load_file(IIsm330dhcx_Mlc_t *_this, const char *data, int32_t size);
 
 #ifdef __cplusplus
 }

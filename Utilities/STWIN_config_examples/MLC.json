@@ -4,10 +4,10 @@
     "devices": [
         {
             "board_id": 9,
-            "fw_id": 5,
+            "fw_id": 7,
             "protocol_id": 2,
             "sn": "0011002F5652500420303153",
-            "pnpl_responses": false,
+            "pnpl_responses": true,
             "components": [
                 {
                     "iis3dwb_acc": {
@@ -19,7 +19,7 @@
                         "ioffset": 0,
                         "measodr": 0,
                         "usb_dps": 0,
-                        "sd_dps": 53248,
+                        "sd_dps": 49664,
                         "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "sensor_annotation": "",
@@ -59,7 +59,7 @@
                         "ioffset": 0,
                         "measodr": 192000,
                         "usb_dps": 0,
-                        "sd_dps": 126976,
+                        "sd_dps": 119296,
                         "sensitivity": 3.0517578125e-05,
                         "data_type": "int16",
                         "sensor_annotation": "",
@@ -79,7 +79,7 @@
                         "ioffset": 0,
                         "measodr": 0,
                         "usb_dps": 0,
-                        "sd_dps": 13312,
+                        "sd_dps": 12800,
                         "sensitivity": 6.0999998822808266e-05,
                         "data_type": "int16",
                         "sensor_annotation": "",
@@ -99,7 +99,7 @@
                         "ioffset": 0,
                         "measodr": 0,
                         "usb_dps": 0,
-                        "sd_dps": 13312,
+                        "sd_dps": 12800,
                         "sensitivity": 8.75,
                         "data_type": "int16",
                         "sensor_annotation": "",
@@ -136,7 +136,7 @@
                         "ioffset": 0,
                         "measodr": 48000,
                         "usb_dps": 0,
-                        "sd_dps": 31744,
+                        "sd_dps": 30208,
                         "sensitivity": 3.0517578125e-05,
                         "data_type": "int16",
                         "sensor_annotation": "",
@@ -156,7 +156,7 @@
                         "ioffset": 0,
                         "measodr": 0,
                         "usb_dps": 0,
-                        "sd_dps": 3072,
+                        "sd_dps": 2560,
                         "sensitivity": 0.0007309999782592058,
                         "data_type": "int16",
                         "sensor_annotation": "",
@@ -250,43 +250,28 @@
                         "sw_tag0": {
                             "label": "SW_TAG_0",
                             "enabled": true,
-                            "status": true
+                            "status": false
                         },
                         "sw_tag1": {
                             "label": "SW_TAG_1",
                             "enabled": true,
-                            "status": true
+                            "status": false
                         },
                         "sw_tag2": {
                             "label": "SW_TAG_2",
                             "enabled": true,
-                            "status": true
+                            "status": false
                         },
                         "sw_tag3": {
                             "label": "SW_TAG_3",
                             "enabled": true,
-                            "status": true
+                            "status": false
                         },
                         "sw_tag4": {
                             "label": "SW_TAG_4",
                             "enabled": true,
-                            "status": true
+                            "status": false
                         },
-                        "c_type": 2
-                    }
-                },
-                {
-                    "acquisition_info": {
-                        "tags": [],
-                        "name": "STEVAL-STWINKT1B_acquisition",
-                        "description": "",
-                        "uuid": "",
-                        "start_time": "",
-                        "end_time": "",
-                        "data_ext": ".dat",
-                        "data_fmt": "HSD_2.0.0",
-                        "interface": 0,
-                        "schema_version": "2.0.0",
                         "c_type": 2
                     }
                 },
@@ -294,11 +279,11 @@
                     "firmware_info": {
                         "alias": "STWIN_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "2.0.0",
+                        "fw_version": "2.1.0",
                         "part_number": "FP-SNS-DATALOG2",
                         "device_url": "https://www.st.com/stwin",
                         "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
-                        "mac_address": "0:0:0:0:0:0",
+                        "mac_address": "c2:6d:57:af:68:15",
                         "c_type": 2
                     }
                 },
@@ -306,7 +291,7 @@
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-STWINKT1B",
-                        "swVersion": "2.0.0",
+                        "swVersion": "2.1.0",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M4",
                         "processorManufacturer": "STMicroelectronics",

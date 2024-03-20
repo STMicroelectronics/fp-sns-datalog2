@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_SDLogging.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add SD Logging info services using vendor specific profiles.
   ******************************************************************************
   * @attention
@@ -24,7 +24,8 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_SDLOGGING_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x10,0x00,0x00,0x01,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_SDLOGGING_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x10,0x00,\
+                                                            0x00,0x01,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 #define SDLOGGING_ADVERTISE_DATA_POSITION  17
 
@@ -74,9 +75,12 @@ BleCharTypeDef *BLE_InitSDLogService(void)
 
   BleCharPointer->Char_UUID_Type = UUID_TYPE_128;
   BleCharPointer->Char_Value_Length = 2 + 9;
-  BleCharPointer->Char_Properties = ((uint8_t)CHAR_PROP_NOTIFY) | ((uint8_t)CHAR_PROP_WRITE) | ((uint8_t)(CHAR_PROP_READ));
+  BleCharPointer->Char_Properties = ((uint8_t)CHAR_PROP_NOTIFY) |
+                                    ((uint8_t)CHAR_PROP_WRITE) |
+                                    ((uint8_t)(CHAR_PROP_READ));
   BleCharPointer->Security_Permissions = ATTR_PERMISSION_NONE;
-  BleCharPointer->GATT_Evt_Mask = ((uint8_t)GATT_NOTIFY_ATTRIBUTE_WRITE) | ((uint8_t)GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP);
+  BleCharPointer->GATT_Evt_Mask = ((uint8_t)GATT_NOTIFY_ATTRIBUTE_WRITE) |
+                                  ((uint8_t)GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP);
   BleCharPointer->Enc_Key_Size = 16;
   BleCharPointer->Is_Variable = 0;
 

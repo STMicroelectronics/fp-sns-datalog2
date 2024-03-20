@@ -105,7 +105,7 @@ UINT _ux_device_class_sensor_streaming_read(UX_SLAVE_CLASS_SENSOR_STREAMING *sen
     status = _ux_device_stack_transfer_request(transfer_request, local_requested_length, local_requested_length);
 
     /* Check the status */
-    if(status == UX_SUCCESS)
+    if(status == (UINT) UX_SUCCESS)
     {
       /* We need to copy the buffer locally.  */
       _ux_utility_memory_copy(buffer, transfer_request->ux_slave_transfer_request_data_pointer, local_requested_length); /* Use case of memcpy is verified. */

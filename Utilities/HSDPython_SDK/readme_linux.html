@@ -20,7 +20,7 @@
 <div class="row">
 <div class="col-sm-12 col-lg-8">
 <h2 id="how-to-install-hsdpython_sdk-in-linux-environment"><strong>How to install HSDPython_SDK in Linux environment</strong></h2>
-<p>The HSDPython_SDK provides installer scripts that can be used to properly install the SDK and all the required dependencies. To install it, follow the above procedure:</p>
+<p>The HSDPython_SDK provides installer scripts that can be used to properly install the SDK and all the required dependencies. The SDK has been developed using Python 3.10. To properly use it, Python 3.10 or above must be already installed on the machine before proceeding with the following procedure:</p>
 <ul>
 <li><p>Open a terminal from HSDPython_SDK folder</p></li>
 <li><p>The SDK has been built in a Windows environment. To avoid any possible issues while executing the script in Linux environment, we suggest you to use dos2unix to reformat properly the files. To do so, execute the following commands:</p>
@@ -29,14 +29,17 @@
 <li><strong>dos2unix HSDPython_SDK_install.sh HSDPython_SDK_install_noGUI.sh HSDPython_SDK_uninstall.sh</strong></li>
 <li><strong>chmod 777 HSDPython_SDK_install.sh HSDPython_SDK_install_noGUI.sh HSDPython_SDK_uninstall.sh</strong></li>
 </ul></li>
-<li><p>Install the SDK by launching <strong>./HSDPython_SDK_install.sh</strong>. The script will install all the wheels with teh required dependencies and will create and enable a virtual environment.</p>
+<li><p>Install the SDK by launching <strong>./HSDPython_SDK_install.sh</strong>. The script will install all the wheels with the required dependencies.</p>
 <ul>
 <li>If you are behind a proxy server you must launch the installer script in this way: <strong>./HSDPython_SDK_install.sh http://usr_name:password@proxyserver_name:port</strong></li>
 <li>If you have special characters in your password you will have to replace them with their correspondent hex representation. E.g. ‘&amp;’ –&gt; %26</li>
 </ul></li>
+<li><p><strong>cd linux_setup</strong></p></li>
+<li><p><strong>dos2unix 30-hsdatalog.rules linux_USB_config_setup.sh linux_USB_config_removal.sh</strong></p></li>
+<li><p><strong>chmod 777 linux_USB_config_setup.sh linux_USB_config_removal.sh</strong></p></li>
+<li><p>Launch <strong>./linux_USB_config_setup.sh</strong></p></li>
 <li><p>Reboot to be sure to reload USB udev rules</p></li>
 <li><p>Reopen a terminal from HSDPython_SDK folder</p></li>
-<li><p>Activate the .venv venv automatically created from the install script by executing <strong>source .venv/bin/activate</strong></p></li>
 <li><p><strong>cd examples</strong></p></li>
 <li><p>Launch the preferred script: i.e.: to launch the GUI type <strong>python3 hsdatalog_GUI.py</strong></p></li>
 </ul>

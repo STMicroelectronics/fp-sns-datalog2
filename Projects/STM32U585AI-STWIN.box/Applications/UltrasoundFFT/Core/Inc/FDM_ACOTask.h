@@ -53,7 +53,7 @@ typedef struct _FDM_ACOTask FDM_ACOTask;
 /**
   * Allocate an instance of FDM_ACOTask.
   *
-  * @return a pointer to the generic obejct ::AManagedTaskEx if success,
+  * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *FDM_ACOTaskAlloc(void);

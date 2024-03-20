@@ -183,7 +183,6 @@ static sys_error_code_t STTS22HTaskConfigureIrqPin(const STTS22HTask *_this, boo
 static void STTS22HTaskTimerCallbackFunction(ULONG param);
 
 
-
 /* Inline function forward declaration */
 /***************************************/
 
@@ -257,27 +256,7 @@ static STTS22HTaskClass_t sTheClass =
   /* TEMPERATURE DESCRIPTOR */
   {
     "stts22h",
-    COM_TYPE_TEMP,
-    {
-      1.0f,
-      25.0f,
-      50.0f,
-      100.0f,
-      200.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      100.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "temp",
-    },
-    "Celsius",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_TEMP
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -1233,7 +1212,10 @@ static sys_error_code_t STTS22HTaskSensorInit(STTS22HTask *_this)
     _this->sensor_status.is_active = false;
   }
 
-  _this->task_delay = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
+  if (_this->sensor_status.is_active)
+  {
+    _this->task_delay = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
+  }
 
   return res;
 }

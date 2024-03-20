@@ -28,8 +28,6 @@
 #include "ux_device_class_sensor_streaming.h"
 #include "ux_device_stack.h"
 
-/* Remove compiling warning. */
-VOID _ux_device_class_sensor_streaming_thread(ULONG sensor_streaming_class);
 
 /**
  * @brief  _ux_device_class_sensor_streaming_thread
@@ -59,7 +57,7 @@ VOID _ux_device_class_sensor_streaming_thread(ULONG sensor_streaming_class)
     sensor_streaming = (UX_SLAVE_CLASS_SENSOR_STREAMING*) class->ux_slave_class_instance;
 
     /* Wait forever on the thread */
-    _ux_utility_event_flags_get(&sensor_streaming->ux_slave_class_sensor_streaming_event_flags_group,
+    (void)_ux_utility_event_flags_get(&sensor_streaming->ux_slave_class_sensor_streaming_event_flags_group,
                                 UX_DEVICE_CLASS_SENSOR_STREAMING_WRITE_EVENT,
                                 UX_OR_CLEAR, &actual_flags, UX_WAIT_FOREVER);
 

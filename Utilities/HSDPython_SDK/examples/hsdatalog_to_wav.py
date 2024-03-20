@@ -46,7 +46,7 @@ def show_help(ctx, param, value):
 @click.option('-st','--start_time', help="Start Time - Data conversion will start from this time (seconds)", type=int, default=0)
 @click.option('-et','--end_time', help="End Time - Data conversion will end up in this time (seconds)", type=int, default=-1)
 @click.option('-cdm','--custom_device_model', help="Upload a custom Device Template Model (DTDL)", type=(int, int, str))
-@click.version_option(script_version, '-v', '--version', prog_name="HSDatalogToUnico", is_flag=True, help="HSDatalogToUnico Converter tool version number")
+@click.version_option(script_version, '-v', '--version', prog_name="hsdatalog_to_wav", is_flag=True, help="hsdatalog_to_wav Converter tool version number")
 @click.option('-h', '--help', is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
 def hsd_toWav(acq_folder, output_folder, sensor_name, start_time, end_time, custom_device_model):
@@ -70,7 +70,7 @@ def hsd_toWav(acq_folder, output_folder, sensor_name, start_time, end_time, cust
 
     df_flag = True
     while df_flag:
-        if sensor_name is None:
+        if sensor_name == '':
             component = HSDatalog.ask_for_component(hsd, only_active=True)
             if component is not None:
                 HSDatalog.convert_dat_to_wav(hsd, component, start_time, end_time, output_folder)

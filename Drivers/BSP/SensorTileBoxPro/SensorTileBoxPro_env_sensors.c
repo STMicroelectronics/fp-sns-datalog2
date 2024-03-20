@@ -1,12 +1,15 @@
 /**
   ******************************************************************************
   * @file    SensorTileBoxPro_env_sensors.c
-  * @author  MEMS Application Team
-  * @brief   This file provides BSP Environmental Sensors interface for SensorTileBoxPro
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
+  * @brief   This file provides BSP Environmental Sensors interface
+  *          for SensorTileBoxPro
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -543,4 +546,3 @@ static int32_t LPS22DF_0_Probe(uint32_t Functions)
 }
 #endif
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

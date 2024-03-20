@@ -1416,27 +1416,11 @@
           },
           "enumValues": [
             {
-              "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2PDETECT:sensors:sths34pf80_tmos:odr:schema:hz0_25;1",
-              "displayName": {
-                "en": "0.25"
-              },
-              "enumValue": 0,
-              "name": "hz0_25"
-            },
-            {
-              "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2PDETECT:sensors:sths34pf80_tmos:odr:schema:hz0_5;1",
-              "displayName": {
-                "en": "0.5"
-              },
-              "enumValue": 1,
-              "name": "hz0_5"
-            },
-            {
               "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2PDETECT:sensors:sths34pf80_tmos:odr:schema:hz1;1",
               "displayName": {
                 "en": "1"
               },
-              "enumValue": 2,
+              "enumValue": 0,
               "name": "hz1"
             },
             {
@@ -1444,7 +1428,7 @@
               "displayName": {
                 "en": "2"
               },
-              "enumValue": 3,
+              "enumValue": 1,
               "name": "hz2"
             },
             {
@@ -1452,7 +1436,7 @@
               "displayName": {
                 "en": "4"
               },
-              "enumValue": 4,
+              "enumValue": 2,
               "name": "hz4"
             },
             {
@@ -1460,7 +1444,7 @@
               "displayName": {
                 "en": "8"
               },
-              "enumValue": 5,
+              "enumValue": 3,
               "name": "hz8"
             },
             {
@@ -1468,7 +1452,7 @@
               "displayName": {
                 "en": "15"
               },
-              "enumValue": 6,
+              "enumValue": 4,
               "name": "hz15"
             },
             {
@@ -1476,7 +1460,7 @@
               "displayName": {
                 "en": "30"
               },
-              "enumValue": 7,
+              "enumValue": 5,
               "name": "hz30"
             }
           ],
@@ -1484,7 +1468,7 @@
         },
         "unit": "hertz",
         "writable": true,
-        "initialValue": 6
+        "initialValue": 4
       },
       {
         "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2PDETECT:sensors:sths34pf80_tmos:transmittance;1",

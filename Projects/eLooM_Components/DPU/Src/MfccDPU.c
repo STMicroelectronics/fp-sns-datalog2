@@ -27,13 +27,13 @@
 
 
 /**
- * Class object declaration.
- */
+  * Class object declaration.
+  */
 typedef struct _MfccDPUClass
 {
   /**
-   * IDPU2_t class virtual table.
-   */
+    * IDPU2_t class virtual table.
+    */
   IDPU2_vtbl vtbl;
 
 } MfccDPUClass_t;
@@ -43,19 +43,20 @@ typedef struct _MfccDPUClass
 /********************/
 
 /**
- * The class object.
- */
-static const MfccDPUClass_t sTheClass = {
-    /* class virtual table */
-    {
-        ADPU2_vtblAttachToDataSource,
-        ADPU2_vtblDetachFromDataSource,
-        ADPU2_vtblAttachToDPU,
-        ADPU2_vtblDetachFromDPU,
-        ADPU2_vtblDispatchEvents,
-        ADPU2_vtblRegisterNotifyCallback,
-        MfccDPU_vtblProcess
-    }
+  * The class object.
+  */
+static const MfccDPUClass_t sTheClass =
+{
+  /* class virtual table */
+  {
+    ADPU2_vtblAttachToDataSource,
+    ADPU2_vtblDetachFromDataSource,
+    ADPU2_vtblAttachToDPU,
+    ADPU2_vtblDetachFromDPU,
+    ADPU2_vtblDispatchEvents,
+    ADPU2_vtblRegisterNotifyCallback,
+    MfccDPU_vtblProcess
+  }
 };
 
 
@@ -66,8 +67,9 @@ static const MfccDPUClass_t sTheClass = {
 /* Public API functions definition */
 /***********************************/
 
-IDPU2_t *MfccDPUAlloc() {
-  IDPU2_t *p_obj = (IDPU2_t*) SysAlloc(sizeof(MfccDPU_t));
+IDPU2_t *MfccDPUAlloc()
+{
+  IDPU2_t *p_obj = (IDPU2_t *) SysAlloc(sizeof(MfccDPU_t));
 
   if (p_obj != NULL)
   {
@@ -79,7 +81,7 @@ IDPU2_t *MfccDPUAlloc() {
 
 IDPU2_t *MfccDPUStaticAlloc(void *p_mem_block)
 {
-  IDPU2_t *p_obj = (IDPU2_t*)p_mem_block;
+  IDPU2_t *p_obj = (IDPU2_t *)p_mem_block;
   if (p_obj != NULL)
   {
     p_obj->vptr = &sTheClass.vtbl;
@@ -105,7 +107,7 @@ sys_error_code_t MfccDPUInit(MfccDPU_t *_this, uint16_t mfcc_data_input_user)
   {
     sys_error_handler();
   }
-  res = ADPU2_Init((ADPU2_t*)_this, in_data, out_data);
+  res = ADPU2_Init((ADPU2_t *)_this, in_data, out_data);
   if (SYS_IS_ERROR_CODE(res))
   {
     sys_error_handler();
@@ -179,7 +181,7 @@ sys_error_code_t MfccDPUPrepareToProcessData(MfccDPU_t *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  ADPU2_Reset((ADPU2_t*)_this);
+  ADPU2_Reset((ADPU2_t *)_this);
   _this->mfccRawIdx = 0;
 
   return res;
@@ -198,20 +200,22 @@ static void genLUT(void)
   uint32_t  start_indices[NUM_MEL];
   uint32_t  stop_indices [NUM_MEL];
   float32_t melFilterLut [NUM_MEL_COEF];
-  float32_t dct[NUM_MEL*NUM_MFCC];
+  float32_t dct[NUM_MEL * NUM_MFCC];
   MelFilterTypeDef           S_MelFilter;
   DCT_InstanceTypeDef        S_DCT;
   int i;
 
   /* Init window function */
-  if (Window_Init(Win, FFT_LEN , WINDOW_HANN) != 0){
-	while(1);
+  if (Window_Init(Win, FFT_LEN, WINDOW_HANN) != 0)
+  {
+    while (1);
   }
-  printf("Hanning window: %d \n\r",FFT_LEN);
-  for (i=0;i<FFT_LEN;i++)	{
-	printf("%.10e,",Win[i]);
-	if(!((i+1)%8)) printf("\n");
-  }
+  printf("Hanning window: %d \n\r", FFT_LEN);
+  for (i = 0; i < FFT_LEN; i++)
+  {
+    printf("%.10e,", Win[i]);
+    if (!((i + 1) % 8)) { printf("\n"); }
+    }
 
   S_MelFilter.pStartIndices = &start_indices[0];
   S_MelFilter.pStopIndices  = &stop_indices[0];
@@ -226,27 +230,28 @@ static void genLUT(void)
   S_MelFilter.Mel2F         = 1;
 
   MelFilterbank_Init(&S_MelFilter);
-  if (S_MelFilter.CoefficientsLength != NUM_MEL_COEF){
-	while(1); /* Adjust NUM_MEL_COEFS to match S_MelFilter.CoefficientsLength */
+  if (S_MelFilter.CoefficientsLength != NUM_MEL_COEF)
+  {
+    while (1); /* Adjust NUM_MEL_COEFS to match S_MelFilter.CoefficientsLength */
   }
   printf("Mel coefs : \n");
-  for (i=0;i<NUM_MEL_COEF;i++)
+  for (i = 0; i < NUM_MEL_COEF; i++)
   {
-	  printf("%.10e,",melFilterLut[i]);
-	  if(!((i+1)%8)) printf("\n");
-  }
+    printf("%.10e,", melFilterLut[i]);
+    if (!((i + 1) % 8)) { printf("\n"); }
+    }
   printf("\nstart idx : \n");
-  for (i=0;i<NUM_MEL;i++)
+  for (i = 0; i < NUM_MEL; i++)
   {
-	  printf("%4lu,",start_indices[i]);
-	  if(!((i+1)%8)) printf("\n");
-  }
+    printf("%4lu,", start_indices[i]);
+    if (!((i + 1) % 8)) { printf("\n"); }
+    }
   printf("stop  idx : \n");
-  for (i=0;i<NUM_MEL;i++)
+  for (i = 0; i < NUM_MEL; i++)
   {
-	  printf("%4lu,",stop_indices[i]);
-	  if(!((i+1)%8)) printf("\n");
-  }
+    printf("%4lu,", stop_indices[i]);
+    if (!((i + 1) % 8)) { printf("\n"); }
+    }
   printf("\n DCT table \n");
 
   S_DCT.NumFilters      = NUM_MFCC;
@@ -256,13 +261,13 @@ static void genLUT(void)
   S_DCT.pDCTCoefs       = dct;
   if (DCT_Init(&S_DCT) != 0)
   {
-	while(1);
+    while (1);
   }
-  for (i=0;i<NUM_MEL * NUM_MFCC;i++)
+  for (i = 0; i < NUM_MEL * NUM_MFCC; i++)
   {
-	  printf("%.10e,",dct[i]);
-	  if(!((i+1)%8)) printf("\n");
-  }
+    printf("%.10e,", dct[i]);
+    if (!((i + 1) % 8)) { printf("\n"); }
+    }
   printf("\n");
 }
 #endif
@@ -275,11 +280,11 @@ sys_error_code_t MfccDPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t 
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  MfccDPU_t *p_obj = (MfccDPU_t*)_this;
+  MfccDPU_t *p_obj = (MfccDPU_t *)_this;
 
-  float *p_in =  (float *)EMD_Data(&in_data);
+  float *p_in = (float *)EMD_Data(&in_data);
   float *p_out = (float *)EMD_2dDataAt(&out_data, p_obj->mfccRawIdx++, 0U);
-  MfccColumn(&p_obj->S_Mfcc, p_in , p_out);   	  /* call Mfcc library. */
+  MfccColumn(&p_obj->S_Mfcc, p_in, p_out);        /* call Mfcc library. */
 
   if (p_obj->mfccRawIdx >= MFCCDPU_NUM_MFCC_RAW)
   {

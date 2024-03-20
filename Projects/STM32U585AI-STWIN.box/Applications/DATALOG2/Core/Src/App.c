@@ -46,6 +46,7 @@
 
 #include "DatalogAppTask.h"
 #include "App_model.h"
+#include "app_netxduo.h"
 
 #include "PnPLCompManager.h"
 #include "Deviceinformation_PnPL.h"
@@ -71,9 +72,10 @@
 #include "Iis2iclx_Acc_PnPL.h"
 #include "Automode_PnPL.h"
 #include "parson.h"
+#include "Wifi_Config_PnPL.h"
 
-static uint8_t BOARD_ID = BOARD_ID_BOXA;
-static uint8_t FW_ID = USB_FW_ID_DATALOG2_BOXA;
+static uint8_t BoardId = BOARD_ID_BOXA;
+static uint8_t FwId = USB_FW_ID_DATALOG2_BOXA;
 
 static IPnPLComponent_t *pLogControllerPnPLObj = NULL;
 static IPnPLComponent_t *pDeviceInfoPnPLObj = NULL;
@@ -97,6 +99,10 @@ static IPnPLComponent_t *pILPS22QS_PRESS_PnPLObj = NULL;
 static IPnPLComponent_t *pIMP34DT05_MIC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2ICLX_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pAutomodePnPLObj = NULL;
+
+#if (DATALOG2_USE_WIFI == 1)
+static IPnPLComponent_t *pWifiConfigPnPLObj = NULL;
+#endif
 
 /**
   * Utility task object.
@@ -135,6 +141,7 @@ static AManagedTaskEx *sDatalogAppObj = NULL;
 /* eLooM framework entry points definition */
 /*******************************************/
 
+
 sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 {
   assert_param(pAppContext);
@@ -144,8 +151,8 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   boolean_t ext_iis330is = FALSE;
   boolean_t ext_stts22h = FALSE;
   hwd_st25dv_version st25dv_version;
-  /* Workaround to set malloc/free function even if BLE Init fails */
-  json_set_allocation_functions(SysAlloc, SysFree);
+
+  PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
   /* Check availability of external sensors */
   ext_iis3dwb = HardwareDetection_Check_Ext_IIS3DWB();
@@ -156,8 +163,8 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   st25dv_version = HardwareDetection_Check_ST25DV();
   if (st25dv_version == ST25DV64KC)
   {
-    BOARD_ID = BOARD_ID_BOXB;
-    FW_ID = USB_FW_ID_DATALOG2_BOXB;
+    BoardId = BOARD_ID_BOXB;
+    FwId = USB_FW_ID_DATALOG2_BOXB;
   }
 
   /************ Allocate task objects ************/
@@ -179,6 +186,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   }
   else if (ext_iis330is)
   {
+
     /* Use the onboard IIS3DWB and the external ISM330IS */
     sISM330ISObj = ISM330ISTaskAlloc(&MX_GPIO_INT2_EXInitParams, &MX_GPIO_INT1_EXTERNAL_ISPUInitParams, &MX_GPIO_CS_EXTERNALInitParams);
   }
@@ -258,8 +266,12 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   pLogControllerPnPLObj = Log_Controller_PnPLAlloc();
   pAutomodePnPLObj = Automode_PnPLAlloc();
 
-  PnPLSetBOARDID(BOARD_ID);
-  PnPLSetFWID(FW_ID);
+#if (DATALOG2_USE_WIFI == 1)
+  pWifiConfigPnPLObj = Wifi_Config_PnPLAlloc();
+#endif
+
+  PnPLSetBOARDID(BoardId);
+  PnPLSetFWID(FwId);
 
   return res;
 }
@@ -372,16 +384,9 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   Log_Controller_PnPLInit(pLogControllerPnPLObj, DatalogAppTask_GetILogControllerIF((DatalogAppTask *) sDatalogAppObj));
   Automode_PnPLInit(pAutomodePnPLObj);
 
-  /************ Set GUI label for external components ************/
-//  if(sIIS3DWBExtObj)
-//  {
-//    iis3dwb_ext_acc_set_sensor_annotation("[EXTERN]");
-//  }
-//
-//  if(sSTTS22HExtObj)
-//  {
-//    stts22h_temp_set_sensor_annotation("[EXTERN]");
-//  }
+#if (DATALOG2_USE_WIFI == 1)
+  Wifi_Config_PnPLInit(pWifiConfigPnPLObj, AppNetXDuo_GetIWifi_ConfigIF());
+#endif
 
   return SYS_NO_ERROR_CODE;
 }

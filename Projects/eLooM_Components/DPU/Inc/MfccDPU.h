@@ -37,18 +37,19 @@ extern "C" {
 
 
 /**
- * Create  type name for _MfccDPU_t.
- */
+  * Create  type name for _MfccDPU_t.
+  */
 typedef struct _MfccDPU MfccDPU_t;
 
 /**
- * MfccDPU_t internal state.
- * It declares only the virtual table used to implement the inheritance.
- */
-struct _MfccDPU {
+  * MfccDPU_t internal state.
+  * It declares only the virtual table used to implement the inheritance.
+  */
+struct _MfccDPU
+{
   /**
-   * Base class object.
-   */
+    * Base class object.
+    */
   ADPU2_t super;
 
   arm_rfft_fast_instance_f32 S_Rfft;
@@ -70,51 +71,51 @@ struct _MfccDPU {
 /**************************/
 
 /**
- * Allocate an instance of AiDPU_t in the eLooM framework heap.
- *
- * @return a pointer to the generic object ::IDPU2_t if success,
- * or NULL if out of memory error occurs.
- */
+  * Allocate an instance of AiDPU_t in the eLooM framework heap.
+  *
+  * @return a pointer to the generic object ::IDPU2_t if success,
+  * or NULL if out of memory error occurs.
+  */
 IDPU2_t *MfccDPUAlloc(void);
 
 /**
- * Allocate an instance of MfccDPU_t in a memory block specified by the application.
- * The size of the memory block must be greater or equal to sizeof(MfccDPU_t).
- * This allocator allows the application to avoid the dynamic allocation.
- *
- * \code
- * MfccDPU_t dpu;
- * MfccDPUStaticAlloc(&dpu);
- * \endcode
- *
- * @param p_mem_block [IN] specify a memory block allocated by the application.
- *        The size of the memory block must be greater or equal to sizeof(MfccDPU_t).
- * @return a pointer to the generic object ::IDPU if success,
- * or NULL if out of memory error occurs.
- */
+  * Allocate an instance of MfccDPU_t in a memory block specified by the application.
+  * The size of the memory block must be greater or equal to sizeof(MfccDPU_t).
+  * This allocator allows the application to avoid the dynamic allocation.
+  *
+  * \code
+  * MfccDPU_t dpu;
+  * MfccDPUStaticAlloc(&dpu);
+  * \endcode
+  *
+  * @param p_mem_block [IN] specify a memory block allocated by the application.
+  *        The size of the memory block must be greater or equal to sizeof(MfccDPU_t).
+  * @return a pointer to the generic object ::IDPU if success,
+  * or NULL if out of memory error occurs.
+  */
 IDPU2_t *MfccDPUStaticAlloc(void *p_mem_block);
 
 /**
- * Initialize the DPU. Most of the DPU parameters are constant and defined at the beginning of this header file:
- * - MFCCDPU_SAMPLE_RATE
- * - MFCCDPU_FFT_LEN
- * - MFCCDPU_FRAME_LEN
- * - MFCCDPU_NUM_MFCC
- * - MFCCDPU_NUM_MFCC_COL
- *
- * @param _this [IN] specifies a pointer to the object.
- * @param mfcc_data_input_user [IN] specifies the size of the ... [TBD]
- * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
- */
+  * Initialize the DPU. Most of the DPU parameters are constant and defined at the beginning of this header file:
+  * - MFCCDPU_SAMPLE_RATE
+  * - MFCCDPU_FFT_LEN
+  * - MFCCDPU_FRAME_LEN
+  * - MFCCDPU_NUM_MFCC
+  * - MFCCDPU_NUM_MFCC_COL
+  *
+  * @param _this [IN] specifies a pointer to the object.
+  * @param mfcc_data_input_user [IN] specifies the size of the ... [TBD]
+  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
+  */
 sys_error_code_t MfccDPUInit(MfccDPU_t *_this, uint16_t mfcc_data_input_user);
 
 /**
- * Partial reset of the DPU internal state: all input and output buffers are re-initialized to prepare
- * the DPU to process a new stream of data.
- *
- * @param _this [IN] specifies a pointer to the object.
- * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
- */
+  * Partial reset of the DPU internal state: all input and output buffers are re-initialized to prepare
+  * the DPU to process a new stream of data.
+  *
+  * @param _this [IN] specifies a pointer to the object.
+  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
+  */
 sys_error_code_t MfccDPUPrepareToProcessData(MfccDPU_t *_this);
 
 

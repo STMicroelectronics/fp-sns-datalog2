@@ -181,7 +181,6 @@ static sys_error_code_t IIS2DHTaskConfigureIrqPin(const IIS2DHTask *_this, boole
 static void IIS2DHTaskTimerCallbackFunction(ULONG param);
 
 
-
 /* Inline function forward declaration */
 /***************************************/
 
@@ -229,56 +228,31 @@ static IIS2DHTaskClass_t sTheClass =
     IIS2DHTask_vtblForceExecuteStep,
     IIS2DHTask_vtblOnEnterPowerMode
   },
-    /* class::sensor_if_vtbl virtual table */
+  /* class::sensor_if_vtbl virtual table */
+  {
     {
-        {
-            {
-                IIS2DHTask_vtblAccGetId,
-                IIS2DHTask_vtblGetEventSourceIF,
-                IIS2DHTask_vtblAccGetDataInfo },
-            IIS2DHTask_vtblSensorEnable,
-            IIS2DHTask_vtblSensorDisable,
-            IIS2DHTask_vtblSensorIsEnabled,
-            IIS2DHTask_vtblSensorGetDescription,
-            IIS2DHTask_vtblSensorGetStatus },
-        IIS2DHTask_vtblAccGetODR,
-        IIS2DHTask_vtblAccGetFS,
-        IIS2DHTask_vtblAccGetSensitivity,
-        IIS2DHTask_vtblSensorSetODR,
-        IIS2DHTask_vtblSensorSetFS,
-        IIS2DHTask_vtblSensorSetFifoWM },
+      {
+        IIS2DHTask_vtblAccGetId,
+        IIS2DHTask_vtblGetEventSourceIF,
+        IIS2DHTask_vtblAccGetDataInfo
+      },
+      IIS2DHTask_vtblSensorEnable,
+      IIS2DHTask_vtblSensorDisable,
+      IIS2DHTask_vtblSensorIsEnabled,
+      IIS2DHTask_vtblSensorGetDescription,
+      IIS2DHTask_vtblSensorGetStatus
+    },
+    IIS2DHTask_vtblAccGetODR,
+    IIS2DHTask_vtblAccGetFS,
+    IIS2DHTask_vtblAccGetSensitivity,
+    IIS2DHTask_vtblSensorSetODR,
+    IIS2DHTask_vtblSensorSetFS,
+    IIS2DHTask_vtblSensorSetFifoWM
+  },
   /* ACCELEROMETER DESCRIPTOR */
   {
     "iis2dh",
-    COM_TYPE_ACC,
-    {
-      1.0f,
-      10.0f,
-      25.0f,
-      50.0f,
-      100.0f,
-      200.0f,
-      400.0f,
-      1344.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      2.0f,
-      4.0f,
-      8.0f,
-      16.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "x",
-      "y",
-      "z",
-    },
-    "g",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_ACC
   },
   /* class (PM_STATE, ExecuteStepFunc) map */
   {
@@ -1334,11 +1308,14 @@ static sys_error_code_t IIS2DHTaskSensorInit(IIS2DHTask *_this)
   _this->samples_per_it = 1;
 #endif /* IIS2DH_FIFO_ENABLED */
 
+  if (_this->sensor_status.is_active)
+  {
 #if IIS2DH_FIFO_ENABLED
-  _this->iis2dh_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
+    _this->iis2dh_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
 #else
-  _this->iis2dh_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
+    _this->iis2dh_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 #endif
+  }
 
   return res;
 }
@@ -1485,7 +1462,6 @@ static sys_error_code_t IIS2DHTaskSensorSetFS(IIS2DHTask *_this, SMMessage repor
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
@@ -1493,33 +1469,26 @@ static sys_error_code_t IIS2DHTaskSensorSetFS(IIS2DHTask *_this, SMMessage repor
   {
     if (fs < 3.0f)
     {
-      iis2dh_full_scale_set(p_sensor_drv, IIS2DH_2g);
       fs = 2.0f;
       _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
     }
     else if (fs < 5.0f)
     {
-      iis2dh_full_scale_set(p_sensor_drv, IIS2DH_4g);
       fs = 4.0f;
       _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
     }
     else if (fs < 9.0f)
     {
-      iis2dh_full_scale_set(p_sensor_drv, IIS2DH_8g);
       fs = 8.0f;
       _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
     }
     else
     {
-      iis2dh_full_scale_set(p_sensor_drv, IIS2DH_16g);
       fs = 16.0f;
       _this->sensor_status.type.mems.sensitivity = 0.000731f;
     }
 
-    if (!SYS_IS_ERROR_CODE(res))
-    {
-      _this->sensor_status.type.mems.fs = fs;
-    }
+    _this->sensor_status.type.mems.fs = fs;
   }
   else
   {

@@ -4,7 +4,7 @@
     "devices": [
         {
             "board_id": 14,
-            "fw_id": 36,
+            "fw_id": 38,
             "protocol_id": 2,
             "sn": "003F004B4841500520363230",
             "pnpl_responses": true,
@@ -20,7 +20,7 @@
                         "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 3584,
-                        "sensitivity": 0.00048799999058246623,
+                        "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "sensor_annotation": "",
                         "sensor_category": 0,
@@ -93,15 +93,15 @@
                     "imp23absu_mic": {
                         "odr": 4,
                         "aop": 130,
-                        "volume": 100,
                         "enable": false,
+                        "volume": 100,
+                        "resolution": 0,
                         "samples_per_ts": 1000,
                         "dim": 1,
                         "ioffset": 0,
                         "usb_dps": 0,
                         "sd_dps": 126976,
                         "sensitivity": 3.0517578125e-05,
-                        "resolution": 0,
                         "data_type": "int16",
                         "sensor_annotation": "",
                         "sensor_category": 1,
@@ -114,15 +114,15 @@
                     "imp34dt05_mic": {
                         "odr": 2,
                         "aop": 122.5,
-                        "volume": 100,
                         "enable": true,
+                        "volume": 100,
+                        "resolution": 0,
                         "samples_per_ts": 1000,
                         "dim": 1,
                         "ioffset": 0,
                         "usb_dps": 0,
                         "sd_dps": 31744,
                         "sensitivity": 3.0517578125e-05,
-                        "resolution": 0,
                         "data_type": "int16",
                         "sensor_annotation": "",
                         "sensor_category": 1,
@@ -162,7 +162,7 @@
                         "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 53248,
-                        "sensitivity": 0.00048799999058246623,
+                        "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "sensor_annotation": "",
                         "sensor_category": 0,
@@ -182,7 +182,7 @@
                         "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 13312,
-                        "sensitivity": 0.00048799999058246623,
+                        "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "sensor_annotation": "",
                         "sensor_category": 0,
@@ -232,7 +232,7 @@
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-STWINBX1",
-                        "swVersion": "2.0.0",
+                        "swVersion": "2.1.0",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M33",
                         "processorManufacturer": "STMicroelectronics",
@@ -244,26 +244,11 @@
                     "firmware_info": {
                         "alias": "STWIN_BOX_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "2.0.0",
+                        "fw_version": "2.1.0",
                         "part_number": "FP-SNS-DATALOG2",
                         "device_url": "https://www.st.com/stwinbox",
                         "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
                         "mac_address": "e1:83:9d:84:76:71",
-                        "c_type": 2
-                    }
-                },
-                {
-                    "acquisition_info": {
-                        "tags": [],
-                        "name": "STWIN.Box_acquisition",
-                        "description": "",
-                        "uuid": "",
-                        "start_time": "",
-                        "end_time": "",
-                        "data_ext": ".dat",
-                        "data_fmt": "HSD_2.0.0",
-                        "interface": 0,
-                        "schema_version": "2.0.0",
                         "c_type": 2
                     }
                 },
@@ -313,6 +298,14 @@
                         "start_delay_s": 0,
                         "logging_period_s": 0,
                         "idle_period_s": 0,
+                        "c_type": 2
+                    }
+                },
+                {
+                    "wifi_config": {
+                        "ssid": "",
+                        "ip": "0.0.0.0",
+                        "ftp_username": "anonymous",
                         "c_type": 2
                     }
                 }

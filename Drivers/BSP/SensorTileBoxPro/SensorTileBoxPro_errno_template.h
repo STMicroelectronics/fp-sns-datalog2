@@ -1,12 +1,15 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : SensorTileBoxPro_errno.h
-  * @brief          : Error Code
+  * @file    SensorTileBoxPro_errno.h
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
+  * @brief   Error Code
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file

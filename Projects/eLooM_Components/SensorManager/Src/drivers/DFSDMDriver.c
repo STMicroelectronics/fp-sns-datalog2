@@ -73,65 +73,67 @@ sys_error_code_t DFSDMSetDFSDMConfig(IDriver *_this, float ODR)
     }
     else if (ODR <= 32000.0f)
     {
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x0D;
-        (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC5_ORDER;
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 96;
-        (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x0D;
+      (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC5_ORDER;
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 96;
+      (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
     }
     else
     {
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x0A;
-        (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC5_ORDER;
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 64;
-        (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x0A;
+      (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC5_ORDER;
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 64;
+      (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
     }
-    (void)HAL_DFSDM_FilterConfigRegChannel(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter, DFSDM_CHANNEL_5, DFSDM_CONTINUOUS_CONV_ON);
+    (void)HAL_DFSDM_FilterConfigRegChannel(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter, DFSDM_CHANNEL_5,
+                                           DFSDM_CONTINUOUS_CONV_ON);
   }
   else  /* IMP23ABSU - Analog mic */
   {
     if (ODR <= 16000.0f)
     {
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x07;
-        (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC2_ORDER;
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 192;
-        (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x07;
+      (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC2_ORDER;
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 192;
+      (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
     }
     else if (ODR <= 32000.0f)
     {
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x05;
-        (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC2_ORDER;
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 96;
-        (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x05;
+      (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC2_ORDER;
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 96;
+      (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
     }
     else if (ODR <= 48000.0f)
     {
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x0A;
-        (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC3_ORDER;
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 64;
-        (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x0A;
+      (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC3_ORDER;
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 64;
+      (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
     }
     else if (ODR <= 96000.0f)
     {
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x07;
-        (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC3_ORDER;
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 32;
-        (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x07;
+      (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC3_ORDER;
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 32;
+      (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
     }
     else
     {
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x08;
-        (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC4_ORDER;
-        p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 16;
-        (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel->Init.RightBitShift = 0x08;
+      (void)HAL_DFSDM_ChannelInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_channel);
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.SincOrder = DFSDM_FILTER_SINC4_ORDER;
+      p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter->Init.FilterParam.Oversampling = 16;
+      (void)HAL_DFSDM_FilterInit(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter);
     }
-    (void)HAL_DFSDM_FilterConfigRegChannel(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter, DFSDM_CHANNEL_0, DFSDM_CONTINUOUS_CONV_ON);
+    (void)HAL_DFSDM_FilterConfigRegChannel(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter, DFSDM_CHANNEL_0,
+                                           DFSDM_CONTINUOUS_CONV_ON);
   }
   return SYS_NO_ERROR_CODE;
 }
@@ -187,7 +189,8 @@ sys_error_code_t DFSDMDriver_vtblStart(IDriver *_this)
   if (p_obj->p_buffer != NULL)
   {
     HAL_NVIC_EnableIRQ(p_obj->mx_handle.p_mx_dfsdm_cfg->irq_n);
-    if (HAL_OK != HAL_DFSDM_FilterRegularStart_DMA(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter, p_obj->p_buffer, p_obj->buffer_size))
+    if (HAL_OK != HAL_DFSDM_FilterRegularStart_DMA(p_obj->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter, p_obj->p_buffer,
+                                                   p_obj->buffer_size))
     {
       res = SYS_DFSDM_DRV_GENERIC_ERROR_CODE;
       SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_DFSDM_DRV_GENERIC_ERROR_CODE);
@@ -230,11 +233,11 @@ sys_error_code_t DFSDMDriver_vtblStop(IDriver *_this)
 }
 
 sys_error_code_t DFSDMDriver_vtblDoEnterPowerMode(IDriver *_this, const EPowerMode active_power_mode,
-                                                const EPowerMode new_power_mode)
+                                                  const EPowerMode new_power_mode)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  DFSDMDriver_t *p_obj = (DFSDMDriver_t*)_this;
+  DFSDMDriver_t *p_obj = (DFSDMDriver_t *)_this;
 
   if (!SYS_IS_ERROR_CODE(res))
   {

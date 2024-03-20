@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_SensorFusion.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Sensor Fusion info service APIs.
   ******************************************************************************
   * @attention
@@ -31,9 +31,9 @@ extern "C" {
 /* Exported typedef --------------------------------------------------------- */
 typedef struct
 {
-  int32_t x;
-  int32_t y;
-  int32_t z;
+  int32_t Axis_x;
+  int32_t Axis_y;
+  int32_t Axis_z;
 } BLE_MOTION_SENSOR_Axes_t;
 
 typedef void (*CustomNotifyEventSensorFusion_t)(BLE_NotifyEvent_t Event);

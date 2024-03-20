@@ -32,7 +32,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    pthread_sigmask                                     PORTABLE C      */
-/*                                                           6.2.0        */
+/*                                                           6.1.7        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
@@ -68,10 +68,7 @@
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  06-02-2021      William E. Lamie        Initial Version 6.1.7         */
-/*  10-31-2022      Scott Larson            Update pthread_kill argument  */
-/*                                            cast,                       */
-/*                                            resulting in version 6.2.0  */
+/*  06-02-2021     William E. Lamie         Initial Version 6.1.7         */
 /*                                                                        */
 /**************************************************************************/
 
@@ -191,7 +188,7 @@ ULONG       reissue_flag;
                     base_thread -> signals.signal_pending.signal_set  =  base_thread -> signals.signal_pending.signal_set & ~(((unsigned long) 1) << signal_number);
 
                     /* Call pthread_kill to reissue the signal.  */
-                    pthread_kill((ALIGN_TYPE) base_thread, signal_number);
+                    pthread_kill((ULONG) base_thread, signal_number);
                     
                     /* Set the reissue flag.  */
                     reissue_flag =  TX_TRUE;

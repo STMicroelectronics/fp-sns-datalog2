@@ -18,6 +18,7 @@
 | Components/lps22hh			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/sths34pf80			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/lsm6dsv16x			| STMicroelectronics				| BSD-3-Clause	        |
+| Components/mx_wifi			| STMicroelectronics				| SLA0044	        	|
 | Components/stts22h			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/stts751			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/vd6283tx			| STMicroelectronics				| BSD-3-Clause	        |
@@ -53,8 +54,10 @@
 | Sensortile.box PRO/DATALOG2  	| STMicroelectronics				| SLA0094	            |
 | STWIN/DATALOG2			  	| STMicroelectronics				| SLA0094	            |
 | STWIN.box/DATALOG2		  	| STMicroelectronics				| SLA0094	            |
+| STWIN.box/PDetect				| STMicroelectronics				| SLA0094	            |
 | STWIN.box/UltrasoundFFT	  	| STMicroelectronics				| SLA0094	            |
 | HSD2 Utilities				| STMicroelectronics				| BSD-3-Clause	        |
 | cli_example               	| STMicroelectronics				| BSD-3-Clause	        |
 | nlohmann/json library			| Lohmann, N. 						| MIT	                |
 | Python_SDK					| STMicroelectronics				| BSD-3-Clause	        |
+| WiFi_module_upgrade			| STMicroelectronics				| SLA0044				|

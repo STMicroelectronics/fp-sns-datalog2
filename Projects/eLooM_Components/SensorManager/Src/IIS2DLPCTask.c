@@ -181,7 +181,6 @@ static sys_error_code_t IIS2DLPCTaskConfigureIrqPin(const IIS2DLPCTask *_this, b
 static void IIS2DLPCTaskTimerCallbackFunction(ULONG param);
 
 
-
 /* Inline function forward declaration */
 /***************************************/
 
@@ -253,36 +252,7 @@ static IIS2DLPCTaskClass_t sTheClass =
   /* ACCELEROMETER DESCRIPTOR */
   {
     "iis2dlpc",
-    COM_TYPE_ACC,
-    {
-      1.6f,
-      12.5f,
-      25.0f,
-      50.0f,
-      100.0f,
-      200.0f,
-      400.0f,
-      800.0f,
-      1600.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      2.0f,
-      4.0f,
-      8.0f,
-      16.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "x",
-      "y",
-      "z",
-    },
-    "g",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_ACC
   },
   /* class (PM_STATE, ExecuteStepFunc) map */
   {
@@ -1355,11 +1325,14 @@ static sys_error_code_t IIS2DLPCTaskSensorInit(IIS2DLPCTask *_this)
 #endif /* IIS2DLPC_FIFO_ENABLED */
   iis2dlpc_pin_int2_route_set(p_sensor_drv, &int2_route);
 
+  if (_this->sensor_status.is_active)
+  {
 #if IIS2DLPC_FIFO_ENABLED
-  _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
+    _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
 #else
-  _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
+    _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 #endif
+  }
 
   return res;
 }
@@ -1510,7 +1483,6 @@ static sys_error_code_t IIS2DLPCTaskSensorSetFS(IIS2DLPCTask *_this, SMMessage r
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
@@ -1518,30 +1490,23 @@ static sys_error_code_t IIS2DLPCTaskSensorSetFS(IIS2DLPCTask *_this, SMMessage r
   {
     if (fs < 3.0f)
     {
-      iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_2g);
       fs = 2.0f;
     }
     else if (fs < 5.0f)
     {
-      iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_4g);
       fs = 4.0f;
     }
     else if (fs < 9.0f)
     {
-      iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_8g);
       fs = 8.0f;
     }
     else
     {
-      iis2dlpc_full_scale_set(p_sensor_drv, IIS2DLPC_16g);
       fs = 16.0f;
     }
 
-    if (!SYS_IS_ERROR_CODE(res))
-    {
-      _this->sensor_status.type.mems.fs = fs;
-      _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
-    }
+    _this->sensor_status.type.mems.fs = fs;
+    _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
   }
   else
   {

@@ -81,19 +81,19 @@ struct _DatalogAppTask
   TX_TIMER ble_advertise_timer;
 
   /**
-   * Data Event Listener
-   */
+    * Data Event Listener
+    */
   IDataEventListener_t sensorListener;
   void *owner;
 
   /**
-   * USBX ctrl class
-   */
+    * USBX ctrl class
+    */
   usbx_dctrl_class_t *usbx_device;
 
   /**
-   * FileX ctrl class
-   */
+    * FileX ctrl class
+    */
   filex_dctrl_class_t *filex_device;
 
   /** FILEX ctrl class **/
@@ -105,13 +105,13 @@ struct _DatalogAppTask
   PnPLCommand_t outPnPLCommand;
 
   /**
-   * PnPL interface for Log Control
-   */
+    * PnPL interface for Log Control
+    */
   ILog_Controller_t pnplLogCtrl;
 
   /**
-   * PnPL interface for MLC
-   */
+    * PnPL interface for MLC
+    */
   IIsm330dhcx_Mlc_t pnplMLCCtrl;
 
   /** SensorLL interface for MLC

@@ -164,8 +164,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   assert_param(pAppContext);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  /* set the allocator functions for parson */
-  json_set_allocation_functions(SysAlloc, SysFree);
+  PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
   /* Allocate the task objects */
   spHelloWorldObj = HelloWorldTaskAlloc(&MX_GPIO_PH7InitParams, &MX_GPIO_PC13InitParams);

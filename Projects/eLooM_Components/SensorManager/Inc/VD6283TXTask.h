@@ -209,8 +209,8 @@ AManagedTaskEx *VD6283TXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfi
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *VD6283TXTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
-                                              const char *p_name);
-											  
+                                               const char *p_name);
+
 /**
   * Get the Bus interface for the sensor task.
   *

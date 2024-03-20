@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_TimeDomainAlarmSpeed_RMS_Status.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add BLE Time Domain Alarm Speed RMS Status info services using vendor
   *          specific profiles.
   ******************************************************************************
@@ -25,7 +25,9 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_TD_ALARM_SPEED_RMS_STATUS_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x07,0x00,0x02,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_TD_ALARM_SPEED_RMS_STATUS_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x07,0x00,0x02,\
+                                                                            0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,\
+                                                                            0xc5,0x1b)
 
 /* Exported variables --------------------------------------------------------*/
 CustomNotifyEventTD_AlarmSpeed_RMS_Status_t CustomNotifyEventTD_AlarmSpeed_RMS_Status = NULL;
@@ -112,7 +114,8 @@ tBleStatus BLE_TD_AlarmSpeed_RMS_StatusUpdate(sBLE_TD_AlarmSpeed_RMS_Status_t Al
     {
       if (BLE_StdErr_Service == BLE_SERV_ENABLE)
       {
-        BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "Error Updating Time Domain Alarm Speed RMS Status Char\n");
+        BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite,
+                                        "Error Updating Time Domain Alarm Speed RMS Status Char\n");
         Stderr_Update(BufferToWrite, BytesToWrite);
       }
       else
@@ -162,12 +165,15 @@ static void AttrMod_Request_TD_AlarmSpeed_RMS_Status(void *VoidCharPointer, uint
 #if (BLE_DEBUG_LEVEL>1)
   if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
   {
-    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "--->TD Alarm Speed RMS Status=%s\n", (att_data[0] == 01U) ? " ON" : " OFF");
+    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite,
+                                    "--->TD Alarm Speed RMS Status=%s\n",
+                                    (att_data[0] == 01U) ? " ON" : " OFF");
     Term_Update(BufferToWrite, BytesToWrite);
   }
   else
   {
-    BLE_MANAGER_PRINTF("--->TD Alarm Speed RMS Status=%s", (att_data[0] == 01U == BLE_NOTIFY_SUB) ? " ON\r\n" : " OFF\r\n");
+    BLE_MANAGER_PRINTF("--->TD Alarm Speed RMS Status=%s",
+                       (att_data[0] == 01U == BLE_NOTIFY_SUB) ? " ON\r\n" : " OFF\r\n");
   }
 #endif /* (BLE_DEBUG_LEVEL>1) */
 }

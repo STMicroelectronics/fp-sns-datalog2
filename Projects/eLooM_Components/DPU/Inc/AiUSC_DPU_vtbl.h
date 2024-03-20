@@ -25,8 +25,7 @@ extern "C" {
 
 
 /* IDPU virtual functions */
- sys_error_code_t AiUSC_DPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t out_data); /*!< @sa IDPU2_Process */
-
+sys_error_code_t AiUSC_DPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t out_data); /*!< @sa IDPU2_Process */
 
 
 #ifdef __cplusplus

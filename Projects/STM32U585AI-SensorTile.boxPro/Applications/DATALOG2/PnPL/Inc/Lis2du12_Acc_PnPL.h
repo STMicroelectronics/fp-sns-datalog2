@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lis2du12_acc;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************

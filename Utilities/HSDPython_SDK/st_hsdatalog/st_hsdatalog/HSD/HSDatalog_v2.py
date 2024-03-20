@@ -19,11 +19,14 @@ from datetime import datetime
 import json
 import os
 import struct
+from collections import OrderedDict
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-from matplotlib.widgets import Slider
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from matplotlib.widgets import CheckButtons, Slider
 import numpy as np
 import pandas as pd
+from st_dtdl_gui.Utils.DataClass import UnitMap
 
 from st_hsdatalog.HSD_utils.exceptions import *
 import st_hsdatalog.HSD_utils.logger as logger
@@ -94,6 +97,7 @@ class HSDatalog_v2:
             self.acq_info_model = None
 
         self.__acq_folder_path = acquisition_folder
+        self.lines_colors = ['#e6007e', '#a4c238', '#3cb4e6', '#ef4f4f', '#46b28e', '#e8ce0e', '#60b562', '#f99e20', '#41b3ba']
     
     #========================================================================================#
     ### Data Analisys ########################################################################
@@ -246,7 +250,9 @@ class HSDatalog_v2:
         enum_dname = prop_content.schema.enum_values[prop_enum_index].display_name
         value = enum_dname if isinstance(enum_dname,str) else enum_dname.en
         if prop_content.schema.value_schema.value == "integer":
-            return float(value.replace(',','.'))
+            num_value = value.replace(',','').replace('.','')
+            if num_value.isnumeric():
+                return float(value.replace(',','.'))
         return value
         
     
@@ -557,11 +563,11 @@ class HSDatalog_v2:
                 check_timestamps = not sensor_name_contains_mlc_ispu
                 if not s_category == SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
                     measodr = ss_stat.get("measodr")
-                    if measodr is None:
+                    if measodr is None or measodr == 0:
                         measodr = ss_stat.get("odr")
                     frame_period = 0 if sensor_name_contains_mlc_ispu else samples_per_ts / measodr
                 else:
-                    frame_period = 0 if sensor_name_contains_mlc_ispu else samples_per_ts / (1//(ss_stat.get("intermeasurement_time")//1000))
+                    frame_period = 0 if sensor_name_contains_mlc_ispu else samples_per_ts / (1/(ss_stat.get("intermeasurement_time")/1000))
             elif c_type == ComponentTypeEnum.ALGORITHM.value:
                 check_timestamps = False
                 frame_period = 0
@@ -604,10 +610,6 @@ class HSDatalog_v2:
                         data[data_range, 0] = 0
                         timestamps[ii] = timestamps[ii - 1] + frame_period
                         log.warning("Sensor {}: corrupted data at {}".format(sensor_name, "{} sec".format(timestamps[ii])))
-            
-            # when you have only 1 frame, framePeriod = last timestamp
-            # if num_frames == 1:
-            #     timestamps.append(frame_period)
 
             if c_type == ComponentTypeEnum.SENSOR.value:
                 s_dim = ss_stat.get('dim',1)
@@ -638,14 +640,6 @@ class HSDatalog_v2:
                 # if samples_per_ts is 1, the timestamps coincides with the sample timestamp
                 # initial offset and interpolation is not relevant anymore
                 samples_time = np.array(timestamps).reshape(-1, 1)
-            
-            # elif c_type == ComponentTypeEnum.ACTUATOR.value:
-            #     # initial_offset is relevant
-            #     timestamps = np.append(ss_stat.get('ioffset', 0), timestamps)
-            #     samples_time = np.zeros((num_frames * samples_per_ts, 1))
-            #     # sample times between timestamps are linearly interpolated
-            #     for ii in range(num_frames): # For each Frame:
-            #         samples_time[ii * samples_per_ts:(ii + 1) * samples_per_ts, 0] = np.linspace(timestamps[ii], timestamps[ii + 1], samples_per_ts, endpoint=False)
 
             return s_data, samples_time
         #####################################################################
@@ -721,7 +715,7 @@ class HSDatalog_v2:
         # data protocol size:
         data_protocol_size = 4
 
-        # data packet size (0:sd card, 1:usb)
+        # data packet size (0:sd card, 1:usb, 2:serial)
         if interface == 0:
             # s_category = s_stat.get("sensor_category")
             # if s_category is not None:
@@ -729,7 +723,7 @@ class HSDatalog_v2:
             #         data_packet_size = s_stat["sd_dps"]
             #     else:
             #         data_packet_size = s_stat["sd_dps"] - data_protocol_size    
-            # else:
+            # else: 
             data_packet_size = s_stat["sd_dps"] - data_protocol_size
         else:
             data_packet_size = s_stat["usb_dps"]
@@ -780,17 +774,16 @@ class HSDatalog_v2:
             s_samples_per_ts = spts
         else:
             s_samples_per_ts = spts.get('val', 0)
-        # s_samples_per_ts = s_stat.get('samples_per_ts', {}).get('val', 0)
         
         if c_type == ComponentTypeEnum.SENSOR.value:
             #TODO sample_end = N/s = 26667 in 1 sec, 266670 in 10 sec, --> 26667*10 in 1*10 sec --> ODR*end_time(in sec) = sample_end
             #TODO sample_start = N/s = 104 in 1 sec, 1040 in 10 sec, --> 104*10 in 1*10 sec --> ODR*start_time(in sec) = sample_start
             s_category = s_stat.get("sensor_category")
             if s_category is not None and s_category == SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
-                odr = 1//(s_stat.get("intermeasurement_time")//1000)
+                odr = 1/(s_stat.get("intermeasurement_time")/1000)
             else:
                 odr = s_stat.get("measodr")
-                if odr is None:
+                if odr is None or odr == 0:
                     odr = s_stat.get("odr",1)
             sample_end = int(odr * end_time) if end_time != -1 else -1
             total_samples = file_size//(s_data_type_len * s_dim)
@@ -804,11 +797,8 @@ class HSDatalog_v2:
             try:
                 # Sample per Ts == 0 #######################################################################           
                 if s_samples_per_ts == 0:
-
-                    # n_of_samples = sample_end - sample_start
                     if sample_end == -1:
                         sample_end = total_samples
-                        # sample_end = n_of_samples
                     
                     read_start_bytes = sample_start * (s_dim * s_data_type_len)
                     read_end_bytes = sample_end * (s_dim * s_data_type_len)#dataframe_byte_size
@@ -825,8 +815,6 @@ class HSDatalog_v2:
                     if sample_end == -1:
                         n_of_blocks_in_file = file_size // (timestamp_byte_size + dataframe_byte_size)
                         sample_end = n_of_blocks_in_file * s_samples_per_ts
-
-                    # n_of_samples = sample_end - sample_start
                     
                     blocks_before_ss = sample_start // s_samples_per_ts
                     blocks_before_se = sample_end // s_samples_per_ts
@@ -842,11 +830,6 @@ class HSDatalog_v2:
                         raise NoDataAtIndexError(read_start_bytes, file_path, os.stat(f.name).st_size)
                 
                 raw_data = np.fromstring(raw_data, dtype='uint8')
-                
-                #NOTE Removed!
-                # real_start = sample_start + blocks_before_ss
-                # timestamp_pre_id = max(0, blocks_before_ss * s_samples_per_ts + blocks_before_ss - 1)
-                # data_offset_pre = real_start - timestamp_pre_id - (blocks_before_ss > 0)
 
                 # if the start_sample isn't in the first block (pre_t_bytes_id != 0)
                 if read_start_bytes != 0 :
@@ -858,11 +841,6 @@ class HSDatalog_v2:
                 data, timestamp = self.__process_datalog(sensor_name, s_stat, raw_data,
                                                          dataframe_byte_size, timestamp_byte_size,
                                                          raw_flag, start_time)
-
-                #NOTE Removed!
-                #trim results to obtain only the requested [data,timestamp]
-                # data = data[data_offset_pre:n_of_samples]
-                # timestamp = timestamp[data_offset_pre:n_of_samples]
 
                 #DEBUG
                 log.debug("data Len: {}".format(len(data)))
@@ -882,37 +860,13 @@ class HSDatalog_v2:
                 raise
 
         elif c_type == ComponentTypeEnum.ALGORITHM.value:
-            # if "dim" not in s_stat:
-            #     # algo_packet_size = s_stat["dim"]
-            # # else:
-            #     log.error("Missing dim property, Algorithm packet size unknown.")
-            #     return None, None
-            
-            # algo_contents = self.components_dtdl[sensor_name].contents 
-            # for ac in algo_contents:
-            #     if ac.name == "algorithm_type":
-            #         algo_type =  ac.schema.enum_values[s_stat["algorithm_type"]].name
-            
             if algo_type == AlgorithmTypeEnum.IALGORITHM_TYPE_FFT.value:#"fft":
                 log.info("FFT Algorithm!")
                 
-                # dataframe_byte_size = int(s_dim * algo_packet_size * s_data_type_len)
                 dataframe_byte_size = int(s_dim * s_data_type_len)
                 timestamp_byte_size = 0
 
-                # n_of_samples = sample_end - sample_start
-
-                # blocks_before_ss = 0
-
-                # if sample_end == -1:
-                # n_of_samples = int(file_size/dataframe_byte_size)
-                # sample_end = n_of_samples
-                
-                # read_start_bytes = sample_start * (s_data_type_len* s_dim)
-                # read_end_bytes = sample_end * (s_data_type_len* s_dim)
                 with open(file_path, "rb") as f:
-                    # f.seek(read_start_bytes)
-                    # f_data = f.read(read_end_bytes - read_start_bytes)
                     f_data = f.read()
                     if not f_data:
                         log.error("No data @ index: {} for file \"{}\" size: {}[bytes]".format(0, file_path, os.stat(f.name).st_size))
@@ -920,12 +874,6 @@ class HSDatalog_v2:
                     raw_data = np.fromstring(f_data, dtype='uint8')
                 
                 data, timestamp = self.__process_datalog(sensor_name, s_stat, raw_data, dataframe_byte_size, timestamp_byte_size, raw_flag = raw_flag )
-                
-                #trim results to obtain only the requested [data,timestamp]
-                # data = data[data_offset_pre:]
-                # data = data[:n_of_samples]
-                # timestamp = timestamp[data_offset_pre:]
-                # timestamp = timestamp[:n_of_samples]
 
                 #DEBUG
                 log.debug("data Len: {}".format(len(data)))
@@ -936,7 +884,6 @@ class HSDatalog_v2:
                 log.error("Algorithm type not supported")
                 os.remove(file_path)
                 return None, None
-                # raise
 
         elif c_type == ComponentTypeEnum.ACTUATOR.value:
             # s_samples_per_ts = 1
@@ -965,11 +912,11 @@ class HSDatalog_v2:
                             raise NoDataAtIndexError(0, file_path, os.stat(f.name).st_size)
                         raw_data = np.fromstring(f_data, dtype='uint8')
 
-                    print(len(raw_data))
-                    print(dataframe_byte_size)
+                    # print(len(raw_data))
+                    # print(dataframe_byte_size)
                     if n_of_samples >= 1:
                         first_timestamp = raw_data[dataframe_byte_size:dataframe_byte_size + timestamp_byte_size]
-                        print(struct.unpack("=d",first_timestamp))
+                        # print(struct.unpack("=d",first_timestamp))
                     
                     data, timestamp = self.__process_datalog(sensor_name, s_stat, raw_data, dataframe_byte_size, timestamp_byte_size, raw_flag = raw_flag )
 
@@ -1017,8 +964,9 @@ class HSDatalog_v2:
             col_prefix = s_type[0].upper() + '_' if cc else ""
             col_postfix = ''
             if "unit" in ss_stat:
-                col_postfix = ' [' + self.__v1_unit_map(ss_stat["unit"]) + ']'
-            c = [col_prefix + s + col_postfix for s in cc] if cc else [s_type.upper()]
+                unit = ss_stat["unit"]
+                col_postfix = ' [' + UnitMap().unit_dict.get(unit, unit) + ']'
+            c = [col_prefix + s + col_postfix for s in cc] if cc else [s_type.upper() + col_postfix]
         else:
             if s_type == "ispu":
                 c = self.get_ispu_output_column_names()
@@ -1036,6 +984,7 @@ class HSDatalog_v2:
         if data is not None and time is not None:
             cols = []
             s_type = ""
+            d_type = ss_stat.get("data_type")
             c_type = ss_stat.get("c_type")
             if c_type == ComponentTypeEnum.SENSOR.value:
                 numAxes = int(ss_stat.get('dim',1))
@@ -1049,9 +998,13 @@ class HSDatalog_v2:
                              "Presence flag","Tmotion","Motion flag","Tobject (sw_comp)",
                              "Tobject_change (sw_comp)","Motion flag (sw_comp)","Presence flag (sw_comp)"]
                     elif s_category == SensorCategoryEnum.ISENSOR_CLASS_RANGING.value:
-                        cc = range(ss_stat['dim'])
-                        col_prefix = s_type[0].upper() + '_'
-                        c = [col_prefix + str(s) for s in cc]
+                        res = 4 if ss_stat['dim'] == 128 else 8
+                        c = []
+                        for i in range(res):
+                            for j in range(res):
+                                c += [f"N Target Z({i},{j})",f"Ambient per SPAD Z({i},{j})",f"Signal per SPAD T1_Z({i},{j})",
+                                    f"Target Status T1_Z({i},{j})",f"Distance T1_Z({i},{j})",f"Signal per SPAD T2_Z({i},{j})",
+                                    f"Target Status T2_Z({i},{j})",f"Distance T2_Z({i},{j})"]
                     elif s_category == SensorCategoryEnum.ISENSOR_CLASS_CAMERA:
                         raise UnsupportedSensorCategoryError(sensor_name)#TODO
                     else:
@@ -1107,17 +1060,17 @@ class HSDatalog_v2:
                         ss_data_frame[lbl] = lbl_col
 
             sensitivity = ss_stat.get("sensitivity", 1)
-            
-            mapper = {'Time': '{0:.6f}'}
+            data_type = ss_stat.get("data_type")
+            ss_data_frame["Time"] = ss_data_frame["Time"].round(decimals=6)
             for i, c in enumerate(cols):
-                if raw_flag or sensitivity == 1 and "data_type" in ss_stat:
-                    if i != 0:
-                        mapper[c] = '{}'.format(TypeConversion.get_str_format(ss_stat["data_type"]))
-                else:
-                    mapper[c] = '{0:.6f}'
-                
-            for key, value in mapper.items():
-                ss_data_frame[key] = ss_data_frame[key].apply(value.format)
+                if c != "Time":
+                    if raw_flag or sensitivity == 1 and data_type:
+                        if i != 0:
+                            ss_data_frame[c] = ss_data_frame[c].apply(TypeConversion.get_np_dtype(data_type))
+                            if data_type in ["float","float32","double"]:
+                                ss_data_frame[c] = ss_data_frame[c].round(decimals=6)
+                    else:
+                        ss_data_frame[c] = ss_data_frame[c].round(decimals=6)
             
             return ss_data_frame
             # else:
@@ -1139,8 +1092,12 @@ class HSDatalog_v2:
 
 
     # Plots Helper Functions ################################################################################################################
-    def __draw_line(self, plt, ss_data_frame, idx, color, label):
-        plt.plot(ss_data_frame['Time'], ss_data_frame.iloc[:, idx + 1], color=color, label=label)
+    def __draw_line(self, plt, ss_data_frame, idx, color, label, picker = False):
+        if picker:
+            line, = plt.plot(ss_data_frame['Time'], ss_data_frame.iloc[:, idx + 1], color=color, label=label, picker=5)
+        else:
+            line, = plt.plot(ss_data_frame['Time'], ss_data_frame.iloc[:, idx + 1], color=color, label=label)
+        return line
 
     def __draw_tag_lines(self, plt, ss_data_frame, label, alpha=0.9):
         true_tag_idxs = ss_data_frame[label].loc[lambda x: x== True].index
@@ -1161,54 +1118,125 @@ class HSDatalog_v2:
         else:
             axs[0].set(xlabel = 'Time (s)')
     
-    def __set_legend(self, ax, dim):
-        handles, labels = ax.get_legend_handles_labels()
-        by_label = dict(zip(labels[dim:], handles[dim:]))
-        ax.legend(by_label.values(), by_label.keys(), loc='upper left')
+    def __set_legend(self, ax):
+        old_handles, old_labels = ax.get_legend_handles_labels()
+        ax.legend = plt.legend(handles=old_handles, labels=list(OrderedDict.fromkeys(old_labels)), loc='upper left', ncol=1)
 
     def __draw_regions(self, plt, ss_data_frame, label, color, edgecolor, alpha, hatch):
         true_flag_idxs = ss_data_frame[label].loc[lambda x: x== 1.0].index
-        flag_groups = np.split(true_flag_idxs, np.where(np.diff(true_flag_idxs) != 1)[0]+1)
-        for i in range(len(flag_groups)):
-            start_flag_time = ss_data_frame.at[flag_groups[i][0],'Time']
-            end_flag_time = ss_data_frame.at[flag_groups[i][-1],'Time']
-            plt.axvspan(start_flag_time, end_flag_time, facecolor=color, edgecolor=edgecolor, alpha=alpha, hatch=hatch)
+        if len(true_flag_idxs)>0:
+            flag_groups = np.split(true_flag_idxs, np.where(np.diff(true_flag_idxs) != 1)[0]+1)
+            for i in range(len(flag_groups)):
+                start_flag_time = ss_data_frame.at[flag_groups[i][0],'Time']
+                end_flag_time = ss_data_frame.at[flag_groups[i][-1],'Time']
+                plt.axvspan(start_flag_time, end_flag_time, facecolor=color, edgecolor=edgecolor, alpha=alpha, hatch=hatch)
         
     def __plot_ranging_sensor(self, sensor_name, ss_data_frame, resolution):
         new_shape = (4,4) if resolution == 16 else (8,8)
         start_t1_dist_id = 5
-        start_t2_dist_id = 8
         ss_t1_dist_df = ss_data_frame.iloc[:, range(start_t1_dist_id,len(ss_data_frame.columns),8)]
-        ss_t2_dist_df = ss_data_frame.iloc[:, range(start_t2_dist_id,len(ss_data_frame.columns),8)]
-        dist_matrices = {"t1":[], "t2": []}
-        nof_rows = len(ss_t1_dist_df)
+        start_t1_status_id = 4
+        ss_t1_status_df = ss_data_frame.iloc[:, range(start_t1_status_id,len(ss_data_frame.columns),8)]
+        ss_t1_status_df.columns = ss_t1_dist_df.columns
+        ss_t1_mask_df = ss_t1_status_df == 5
+        ss_t1_times = ss_data_frame["Time"]
+        # use the boolean matrix as a mask for the second dataframe
+        masked_df = ss_t1_dist_df.where(ss_t1_mask_df)
+        nof_rows = len(masked_df)
+
+        dist_matrices = np.empty((nof_rows, ), dtype=object)
         for r_id in range(nof_rows):
-            row_t1 = ss_t1_dist_df.iloc[r_id]
-            row_t2 = ss_t2_dist_df.iloc[r_id]
+            row_t1 = masked_df.iloc[r_id]
             t1_mat = np.array(row_t1.values).reshape(new_shape).astype('float')
-            t2_mat = np.array(row_t2.values).reshape(new_shape).astype('float')
-            dist_matrices["t1"].append(np.flip(t1_mat,axis=1))
-            dist_matrices["t2"].append(np.flip(t2_mat,axis=1))
-        fig, (ax1, ax2) = plt.subplots(1, 2)
-        plt.subplots_adjust(bottom=0.25) #adjust the bottom space for the slider
-        im_t1 = ax1.imshow(dist_matrices["t1"][0], cmap='viridis', vmin=0, vmax=4000)
-        plt.colorbar(im_t1)
-        im_t2 = ax2.imshow(dist_matrices["t2"][0], cmap='viridis', vmin=0, vmax=4000)
-        plt.colorbar(im_t2)
+            t1_mat = np.swapaxes(t1_mat, 0, 1)
+            dist_matrices[r_id] = t1_mat
 
+        # figure axis setup 
+        fig, ax = plt.subplots()
+        fig.subplots_adjust(bottom=0.15)
+        # add a fake legend item
+        plt.legend(handles = [mpatches.Patch(color="black", label='Invalid Zone')], loc='upper left', ncol=1)
+
+        cmap = plt.cm.get_cmap('viridis')
+        cmap.set_bad(color='black')
+        # display initial image 
+        # im_h = ax.imshow(dist_matrices[0], cmap=cmap, interpolation='nearest', vmin=0, vmax=4000)
+        im_h = ax.imshow(dist_matrices[0], cmap=cmap, vmin=0, vmax=4000, origin='lower')
+        axins = inset_axes(ax,
+                    width="5%",  
+                    height="100%",
+                    loc='center right',
+                    borderpad= -5
+                   )
+        fig.colorbar(im_h, cax=axins, orientation="vertical")
+
+        # setup a slider axis and the Slider
+        ax_slider = plt.axes([0.23, 0.02, 0.56, 0.04])
+        slider = Slider(ax_slider, 'Time Step', 0, nof_rows-1, valinit=ss_t1_times[0])
+
+        # update the figure with a change on the slider 
+        def update_depth(val):
+            idx = int(round(slider.val))
+            im_h.set_data(dist_matrices[idx])
+            slider.valtext.set_text(ss_t1_times[idx])
+
+        slider.on_changed(update_depth)
+        
+        fig.suptitle(f"{sensor_name.upper()}")
+        plt.draw()
+
+        self.__plot_pixels_over_time(sensor_name, ss_data_frame, resolution, masked_df)
+
+    def __plot_pixels_over_time(self, sensor_name, ss_data_frame, resolution, t1_dist_df):
+        fig, ax = plt.subplots()
+
+        n_lines = resolution
+        # extract the first column (Times column) of ss_data_frame
+        times_col = ss_data_frame.iloc[:, 0]
+        # extract Target 1 distance values columns from ss_data_frame
+        times_df = pd.DataFrame({"Time": times_col})
+        ss_t1_dist_df = pd.concat([times_df, t1_dist_df.fillna(0)], axis=1)
+                                   
+        matrix_l = 8 if n_lines == 64 else 4
+        
+        cnt = 0
+        lines = []
+        for i in range(matrix_l):
+            for j in range(matrix_l):
+                line = self.__draw_line(ax, ss_t1_dist_df, cnt, np.random.rand(3, ), f"({i},{j})", True)
+                lines.append(line)
+                if i+j == 0:
+                    line.set_visible(True)
+                else:
+                    line.set_visible(False)
+                cnt += 1
+        
+        ax.set(xlabel = 'Time (s)', ylabel = 'Distance [mm]')
+
+        # Create the checkbox widgets
+        rax = []
+        check = []
+        for i in range(matrix_l):
+            rax.append(plt.axes([0.1+i*0.1, 0.05, 0.1, 0.23]))
+            labels = [f"({i},{j%matrix_l})" for j in range(i*matrix_l, (i+1)*matrix_l)]
+            actives = [False]*matrix_l
+            if i == 0:
+                actives[0] = True
+            check.append(CheckButtons(rax[i], labels, actives))
+
+        # Define the function to update the plot based on the checkbox state
         def update(val):
-            time_step = int(slider.val)
-            new_matrix_t1 = dist_matrices["t1"][time_step]
-            im_t1.set_data(new_matrix_t1)
-            new_matrix_t2 = dist_matrices["t2"][time_step]
-            im_t2.set_data(new_matrix_t2)
-            fig.canvas.draw_idle()
+            for i, line in enumerate(lines):
+                line.set_visible(check[i//matrix_l].get_status()[i%matrix_l])
+            plt.draw()
 
-        ax_slider = plt.axes([0.25, 0.02, 0.65, 0.03], facecolor='lightgoldenrodyellow')
-        slider = Slider(ax_slider, 'Time Step', 0, nof_rows -1, valinit=0, valstep=1)
-        slider.on_changed(update)
+        # Connect the checkbox widgets to the update function
+        for i in range(matrix_l):
+            check[i].on_clicked(update)
 
-        plt.show()
+        fig.suptitle(f"{sensor_name.upper()} - Distance over time per Zone")
+        fig.subplots_adjust(top=0.93, bottom=0.37)
+        plt.draw()
     
     def __plot_light_sensor(self, sensor_name, ss_data_frame, cols, dim, label):
         fig = plt.figure()
@@ -1217,44 +1245,50 @@ class HSDatalog_v2:
             self.__draw_line(plt, ss_data_frame, k, als_lines_colors[idx], cols[idx])
 
         ax = fig.axes[0]
-        ax.set_xlim(left=-0.5)
+        # ax.set_xlim(left=-0.5)
         
         if label is not None:
             ax.patch.set_facecolor('0.8')
             ax.set_alpha(float('0.5'))
             self.__draw_tag_lines(plt, ss_data_frame, label)
-            self.__set_legend(plt.gca(), dim)
+            self.__set_legend(plt.gca())
+        else:
+            plt.legend(loc='upper left', ncol=1)
 
-        plt.title(sensor_name)
-        plt.tight_layout()
+        plt.title(sensor_name.upper())
+        plt.tight_layout(pad=2.0)
+        plt.ylabel("ADC count")
         plt.xlabel('Time (s)')
-        plt.legend(loc='upper left')
 
         plt.draw()
     
     def __plot_presence_sensor(self, sensor_name, ss_data_frame, cols, label):
-        fig, axs = plt.subplots(2)
-        fig.suptitle("{} - Ambient & Object".format(sensor_name))
-        for idx, p in enumerate(axs):
-            if idx == 0:#Ambient
-                self.__draw_line(p, ss_data_frame, 0, np.random.rand(3, ), cols[0])
-            elif idx == 1:#Object
-                lines_ids = [1,2,7,8]
-                for l in lines_ids:
-                    self.__draw_line(p, ss_data_frame, l, np.random.rand(3, ), cols[l])
-            if label is not None:
-                p.patch.set_facecolor('0.6')
-                p.patch.set_alpha(float('0.5'))
-                self.__draw_tag_lines(p, ss_data_frame, label)
-            p.legend(bbox_to_anchor=(0, 1), loc='upper left', ncol=1)
+        fig = plt.figure()
+        
+        for idx in range(2):
+            self.__draw_line(plt, ss_data_frame, idx, self.lines_colors[idx], cols[idx])
+        
+        ax = fig.axes[0]
+        # ax.set_xlim(left=-0.5)
+
+        if label is not None:
+            ax.patch.set_facecolor('0.6')
+            ax.set_alpha(float('0.5'))
+            self.__draw_tag_lines(p, ss_data_frame, label)
+            self.__set_legend(plt.gca())
+        else:
+            plt.legend(loc='upper left', ncol=1)
+        
+        plt.title(f"{sensor_name.upper()} - Ambient & Object (raw)")
         plt.xlabel('Time (s)')
         plt.tight_layout()
         plt.draw()
 
         line_color = "#335c67"
         line_color_sw = "#bb3e03"
+        line_color_emb = "#ff9900"
         fig, axs = plt.subplots(2)
-        fig.suptitle("{} - Presence".format(sensor_name))
+        fig.suptitle(f"{sensor_name.upper()} - Presence")
         for idx, p in enumerate(axs):
             if idx == 0:#Presence + Flag
                 color = "#97D3C2"
@@ -1266,26 +1300,34 @@ class HSDatalog_v2:
                 color = "#FDD891"
                 edgecolor = self.__darken_color(color, 10)
                 self.__draw_regions(p, ss_data_frame, "Presence flag (sw_comp)", color, edgecolor, 1, '')
-                self.__draw_line(p, ss_data_frame, 3, line_color_sw, cols[3])
+                self.__draw_line(p, ss_data_frame, 7, line_color_sw, cols[7])# tObj sw comp
+                self.__draw_line(p, ss_data_frame, 2, line_color_emb, cols[2])# tObj emb comp
                 flag_patch = mpatches.Patch(color=color, label='Presence flag (sw_comp)')
             
             if label is not None:
                 p.patch.set_facecolor('0.6')
                 p.patch.set_alpha(float('0.5'))
+                pre_tag_handles, pre_tag_labels = p.get_legend_handles_labels()
+                pre_tag_handles.append(flag_patch)
+                pre_tag_labels.append(flag_patch.get_label())
                 self.__draw_tag_lines(p, ss_data_frame, label, 0.4)
-
-            # where some data has already been plotted to ax
-            handles, labels = p.get_legend_handles_labels()
-            # handles is a list, so append manual patch
-            handles.append(flag_patch)
-            # plot the legend
-            p.legend(handles=handles, bbox_to_anchor=(0, 1), loc='upper left', ncol=1)
+                old_handles, old_labels = p.get_legend_handles_labels()
+                for h in old_handles[1:]:
+                    pre_tag_handles.append(h)
+                for l in old_labels[1:]:
+                    pre_tag_labels.append(l)
+            else:
+                pre_tag_handles, pre_tag_labels = p.get_legend_handles_labels()
+                pre_tag_handles.append(flag_patch)
+                pre_tag_labels.append(flag_patch.get_label())
+            p.legend(handles=pre_tag_handles, labels=list(OrderedDict.fromkeys(pre_tag_labels)), loc='upper left', ncol=1)
+        
         plt.xlabel('Time (s)')
         plt.tight_layout()
         plt.draw()
 
         fig, axs = plt.subplots(2)
-        fig.suptitle("{} - Motion".format(sensor_name))
+        fig.suptitle(f"{sensor_name.upper()} - Motion")
         for idx, p in enumerate(axs):
             if idx == 0:#Motion + Flag
                 color = "#97D3C2"
@@ -1297,25 +1339,32 @@ class HSDatalog_v2:
                 color = "#FDD891"
                 edgecolor = self.__darken_color(color, 10)
                 self.__draw_regions(p, ss_data_frame, "Motion flag (sw_comp)", color, edgecolor, 1, '')
-                self.__draw_line(p, ss_data_frame, 5, line_color_sw, cols[5])
+                self.__draw_line(p, ss_data_frame, 8, line_color_sw, cols[8]) #Tobj change
                 flag_patch = mpatches.Patch(color=color, label='Motion flag (sw_comp)')
             
             if label is not None:
                 p.patch.set_facecolor('0.6')
-                p.patch.set_alpha(float('0.2'))
-                self.__draw_tag_lines(p, ss_data_frame, label)
+                p.patch.set_alpha(float('0.5'))
+                pre_tag_handles, pre_tag_labels = p.get_legend_handles_labels()
+                pre_tag_handles.append(flag_patch)
+                pre_tag_labels.append(flag_patch.get_label())
+                self.__draw_tag_lines(p, ss_data_frame, label, 0.4)
+                old_handles, old_labels = p.get_legend_handles_labels()
+                for h in old_handles[1:]:
+                    pre_tag_handles.append(h)
+                for l in old_labels[1:]:
+                    pre_tag_labels.append(l)
+            else:
+                pre_tag_handles, pre_tag_labels = p.get_legend_handles_labels()
+                pre_tag_handles.append(flag_patch)
+                pre_tag_labels.append(flag_patch.get_label())
+            p.legend(handles=pre_tag_handles, labels=list(OrderedDict.fromkeys(pre_tag_labels)), loc='upper left', ncol=1)
 
-            # where some data has already been plotted to ax
-            handles, labels = p.get_legend_handles_labels()
-            # handles is a list, so append manual patch
-            handles.append(flag_patch) 
-            # plot the legend
-            p.legend(handles=handles, bbox_to_anchor=(0, 1), loc='upper left', ncol=1)
         plt.xlabel('Time (s)')
         plt.tight_layout()
         plt.draw()
 
-    def __plot_mems_audio_sensor(self, sensor_name, ss_data_frame, cols, dim, subplots, label, raw_flag, unit):
+    def __plot_mems_audio_sensor(self, sensor_name, ss_data_frame, cols, dim, subplots, label, raw_flag, unit, fft_params):
         if subplots:
             fig, axs = plt.subplots(dim)
             if dim == 1: axs = [axs]
@@ -1324,8 +1373,8 @@ class HSDatalog_v2:
                 fig.text(0.04, 0.5, self.__v1_unit_map(unit), va='center', rotation='vertical')
             
             for idx, p in enumerate(axs):
-                self.__draw_line(p, ss_data_frame, idx, np.random.rand(3, ), cols[idx])
-                p.axes.set_xlim(left=-0.5)
+                self.__draw_line(p, ss_data_frame, idx, self.lines_colors[idx], cols[idx])
+                # p.axes.set_xlim(left=-0.5)
                 p.set(title=cols[idx])
                 if label is not None:
                     p.patch.set_facecolor('0.6')
@@ -1334,7 +1383,9 @@ class HSDatalog_v2:
             
             self.__set_plot_time_label(axs, fig, dim)
             if label is not None:
-                self.__set_legend(axs[0],1)
+                for ax in axs:
+                    old_handles, old_labels = ax.get_legend_handles_labels()
+                    ax.legend(handles=old_handles, labels=list(OrderedDict.fromkeys(old_labels)), loc='upper left', ncol=1)
         else:
             fig = plt.figure()
             
@@ -1346,10 +1397,10 @@ class HSDatalog_v2:
             else:
                 n_lines = dim
             for k in range(n_lines):
-                self.__draw_line(plt, ss_data_frame, k, np.random.rand(3, ), cols[k])
+                self.__draw_line(plt, ss_data_frame, k, self.lines_colors[k], cols[k])
 
             ax = fig.axes[0]
-            ax.set_xlim(left=-0.5)
+            # ax.set_xlim(left=-0.5)
             
             plt.title(sensor_name)
             plt.xlabel('Time (s)')
@@ -1359,12 +1410,28 @@ class HSDatalog_v2:
                 ax.patch.set_facecolor('0.8')
                 ax.set_alpha(float('0.5'))
                 self.__draw_tag_lines(plt, ss_data_frame, label)
-                self.__set_legend(plt.gca(), dim)
+                self.__set_legend(plt.gca())
         
         plt.draw()
+
+        if fft_params is not None and ("_acc" in sensor_name or "_mic" in sensor_name):
+            cc = ['X', 'Y', 'Z'] if len(cols) == 3 else ['X', 'Y'] if len(cols) == 2 else []
+            for i, c in enumerate(cols):
+                fig = plt.figure()
+                
+                if len(cols) == 1:
+                    plt.title(sensor_name)
+                else:
+                    plt.title(sensor_name + " [" + cc[i] + "]")
+                # extract the signal values as a NumPy array
+                signal = ss_data_frame[c].values
+                # create a spectrogram using matplotlib
+                plt.specgram(signal, Fs=fft_params[1])
+
+                plt.draw()
     # Plots Helper Functions ################################################################################################################
 
-    def get_sensor_plot(self, sensor_name, sensor_type = None, start_time = 0, end_time = -1, label=None, subplots=False, raw_flag = False):
+    def get_sensor_plot(self, sensor_name, sensor_type = None, start_time = 0, end_time = -1, label=None, subplots=False, raw_flag = False, fft_plots = False):
 
         try:
             sensor = self.get_component(sensor_name)
@@ -1375,20 +1442,6 @@ class HSDatalog_v2:
                 ss_stat = sensor
 
             if ss_data_frame is not None:
-
-                # cast pandas dataframe columns from objects to float
-                for k in range(len(ss_data_frame.columns)):
-                    ss_data_frame.iloc[:,k] = ss_data_frame.iloc[:,k].astype("float")
-                
-                #Tag columns check (if any)
-                # if label is not None and len(ss_data_frame.columns) < ss_stat['dim'] + 1:
-                #     log.warning("No [{}] annotation has been found in the selected acquisition".format(label))
-                #     label = None
-
-                # #Tag columns check (selected label exists?)
-                # if label is not None and not label in ss_data_frame.columns:
-                #     log.warning("No {} label found in selected acquisition".format(label))
-                #     label = None
 
                 c_type = ss_stat["c_type"]
                 s_category = ss_stat.get("sensor_category")
@@ -1433,7 +1486,11 @@ class HSDatalog_v2:
                     elif s_category is not None and s_category == SensorCategoryEnum.ISENSOR_CLASS_PRESENCE.value:
                         self.__plot_presence_sensor(sensor_name, ss_data_frame, cols, label)
                     else: #ISENSOR_CLASS_MEMS and ISENSOR_CLASS_AUDIO
-                        self.__plot_mems_audio_sensor(sensor_name, ss_data_frame, cols, dim, subplots, label, raw_flag, ss_stat.get('unit'))
+                        fft_params = None
+                        if fft_plots:
+                            odr = sensor.get('odr', 1)
+                            fft_params = (fft_plots, odr)
+                        self.__plot_mems_audio_sensor(sensor_name, ss_data_frame, cols, dim, subplots, label, raw_flag, ss_stat.get('unit'), fft_params)
             else:
                 log.error("Error extracting subsensor DataFrame {}".format(sensor_name))
                 raise DataExtractionError(sensor_name)

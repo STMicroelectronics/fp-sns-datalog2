@@ -21,9 +21,15 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32u5xx_it.h"
 #include "drivers/EXTIPinMap.h"
+#include "main.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "fx_stm32_sd_driver.h"
+
+#include "mx_wifi_conf.h"
+#include "app_netxduo.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,6 +50,8 @@ extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;
 extern TIM_HandleTypeDef htim5;
 extern TIM_HandleTypeDef htim6;
+extern DMA_HandleTypeDef handle_GPDMA1_Channel9;
+extern DMA_HandleTypeDef handle_GPDMA1_Channel8;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel6;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel7;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel5;
@@ -53,11 +61,18 @@ extern DMA_HandleTypeDef handle_GPDMA1_Channel3;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel2;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel1;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel0;
+extern ADC_HandleTypeDef hadc1;
+extern SPI_HandleTypeDef hspi1;
 extern SPI_HandleTypeDef hspi2;
 extern I2C_HandleTypeDef hi2c2;
 extern I2C_HandleTypeDef hi2c3;
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern SD_HandleTypeDef hsd1;
+extern LPTIM_HandleTypeDef hlptim1;
+
+extern DMA_HandleTypeDef handle_GPDMA1_Channel9;
+extern DMA_HandleTypeDef handle_GPDMA1_Channel8;
+
 
 EXTI_DECLARE_PIN2F_MAP()
 
@@ -435,6 +450,29 @@ void GPDMA1_Channel7_IRQHandler(void)
   /* USER CODE END GPDMA1_Channel7_IRQn 1 */
 }
 
+void GPDMA1_Channel8_IRQHandler(void)
+{
+  /* USER CODE BEGIN GPDMA1_Channel8_IRQn 0 */
+
+  /* USER CODE END GPDMA1_Channel8_IRQn 0 */
+  HAL_DMA_IRQHandler(&handle_GPDMA1_Channel8);
+  /* USER CODE BEGIN GPDMA1_Channel8_IRQn 1 */
+
+  /* USER CODE END GPDMA1_Channel8_IRQn 1 */
+}
+
+void GPDMA1_Channel9_IRQHandler(void)
+{
+  /* USER CODE BEGIN GPDMA1_Channel9_IRQn 0 */
+
+  /* USER CODE END GPDMA1_Channel9_IRQn 0 */
+  HAL_DMA_IRQHandler(&handle_GPDMA1_Channel9);
+  /* USER CODE BEGIN GPDMA1_Channel9_IRQn 1 */
+
+  /* USER CODE END GPDMA1_Channel9_IRQn 1 */
+}
+
+
 void SPI2_IRQHandler(void)
 {
   HAL_SPI_IRQHandler(&hspi2);
@@ -473,7 +511,6 @@ void I2C3_ER_IRQHandler(void)
 }
 
 
-
 /**
   * @brief This function handles USB OTG FS global interrupt.
   */
@@ -506,6 +543,24 @@ void TIM3_IRQHandler(void)
   /* USER CODE BEGIN TIM3_IRQn 1 */
 
   /* USER CODE END TIM3_IRQn 1 */
+}
+
+extern LPTIM_HandleTypeDef hlptim1;
+extern SPI_HandleTypeDef hspi1;
+/**
+  * @brief This function handles LPTIM1 (WIFI)global interrupt.
+  */
+void LPTIM1_IRQHandler(void)
+{
+  HAL_LPTIM_IRQHandler(&hlptim1);
+}
+
+/**
+  * @brief This function handles SPI1 (WIFI) global interrupt.
+  */
+void SPI1_IRQHandler(void)
+{
+  HAL_SPI_IRQHandler(&hspi1);
 }
 
 /**

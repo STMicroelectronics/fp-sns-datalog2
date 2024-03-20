@@ -5,7 +5,7 @@
   *
   * @brief   Utility function for the application messages.
   *
-  * DEfien the API for the application messages.
+  * define the API for the application messages.
   *
   *********************************************************************************
   * @attention

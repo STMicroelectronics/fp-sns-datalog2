@@ -1,12 +1,12 @@
 {
     "schema_version": "2.1.0",
-    "uuid": "53349c72-5761-4d9b-aff0-30c6356eed4f",
+    "uuid": "",
     "devices": [
         {
             "board_id": 13,
-            "fw_id": 11,
+            "fw_id": 5,
             "protocol_id": 2,
-            "sn": "0023002B5752501720353339",
+            "sn": "003A00274841500520363230",
             "pnpl_responses": true,
             "components": [
                 {
@@ -16,11 +16,11 @@
                         "enable": true,
                         "samples_per_ts": 1000,
                         "dim": 3,
-                        "ioffset": 0.4914698600769043,
-                        "measodr": 797.496337890625,
+                        "ioffset": 0,
+                        "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 2048,
-                        "sensitivity": 0.00048799999058246613,
+                        "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "sensor_annotation": "",
                         "sensor_category": 0,
@@ -36,8 +36,8 @@
                         "enable": true,
                         "samples_per_ts": 100,
                         "dim": 3,
-                        "ioffset": 0.36875534057617188,
-                        "measodr": 199.99324035644531,
+                        "ioffset": 0,
+                        "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 512,
                         "sensitivity": 0.001500000013038516,
@@ -56,8 +56,8 @@
                         "enable": true,
                         "samples_per_ts": 200,
                         "dim": 1,
-                        "ioffset": 0.6847376823425293,
-                        "measodr": 198.75776672363281,
+                        "ioffset": 0,
+                        "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 512,
                         "sensitivity": 1,
@@ -76,7 +76,7 @@
                         "enable": true,
                         "samples_per_ts": 1000,
                         "dim": 1,
-                        "ioffset": 0.36587604880332947,
+                        "ioffset": 0,
                         "measodr": 48000,
                         "usb_dps": 0,
                         "sd_dps": 31744,
@@ -96,8 +96,8 @@
                         "enable": true,
                         "samples_per_ts": 200,
                         "dim": 1,
-                        "ioffset": 0.36873745918273926,
-                        "measodr": 199.99400329589844,
+                        "ioffset": 0,
+                        "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 512,
                         "sensitivity": 1,
@@ -116,11 +116,11 @@
                         "enable": true,
                         "samples_per_ts": 1000,
                         "dim": 3,
-                        "ioffset": 0.37203726172447205,
-                        "measodr": 7869.9609375,
+                        "ioffset": 0,
+                        "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 15360,
-                        "sensitivity": 0.00048799999058246613,
+                        "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "sensor_annotation": "",
                         "sensor_category": 0,
@@ -136,8 +136,8 @@
                         "enable": true,
                         "samples_per_ts": 1000,
                         "dim": 3,
-                        "ioffset": 0.37203726172447205,
-                        "measodr": 7869.9609375,
+                        "ioffset": 0,
+                        "measodr": 0,
                         "usb_dps": 0,
                         "sd_dps": 15360,
                         "sensitivity": 140,
@@ -170,11 +170,11 @@
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-MKBOXPRO",
-                        "swVersion": "2.0.0",
+                        "swVersion": "2.1.0",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M33",
                         "processorManufacturer": "STMicroelectronics",
-                        "totalStorage": 4,
+                        "totalStorage": 0,
                         "totalMemory": 784
                     }
                 },
@@ -182,11 +182,11 @@
                     "firmware_info": {
                         "alias": "STBOX_PRO_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "2.0.0",
+                        "fw_version": "2.1.0",
                         "part_number": "FP-SNS-DATALOG2",
-                        "device_url": "www.st.com\/sensortileboxpro",
-                        "fw_url": "https:\/\/github.com\/STMicroelectronics\/fp-sns-datalog2",
-                        "mac_address": "c1:be:c2:bf:7f:62",
+                        "device_url": "www.st.com/sensortileboxpro",
+                        "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
+                        "mac_address": "df:fd:8b:87:ae:e7",
                         "c_type": 2
                     }
                 },
@@ -224,7 +224,7 @@
                 {
                     "log_controller": {
                         "log_status": false,
-                        "sd_mounted": true,
+                        "sd_mounted": false,
                         "controller_type": 0,
                         "c_type": 2
                     }
@@ -233,13 +233,13 @@
                     "automode": {
                         "enabled": false,
                         "nof_acquisitions": 0,
-                        "start_delay_ms": 0,
-                        "datalog_time_length": 0,
-                        "idle_time_length": 0,
+                        "start_delay_s": 0,
+                        "logging_period_s": 0,
+                        "idle_period_s": 0,
                         "c_type": 2
                     }
                 }
             ]
         }
     ]
-} 
+}

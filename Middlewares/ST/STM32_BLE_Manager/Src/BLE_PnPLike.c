@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_PnPLike.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add PnPLike info services using vendor specific profile.
   ******************************************************************************
   * @attention
@@ -24,7 +24,8 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_PNPLIKE_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x1b,0x00,0x02,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_PNPLIKE_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x1b,\
+                                                          0x00,0x02,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 /* Exported Variables ------------------------------------------------------- */
 /* Identifies the notification Events */
@@ -43,6 +44,8 @@ static void AttrMod_Request_PnPLike(void *BleCharPointer, uint16_t attr_handle, 
 static void Write_Request_PnPLike(void *BleCharPointer, uint16_t handle, uint16_t Offset, uint8_t data_length,
                                   uint8_t *att_data);
 
+
+static uint16_t PnPLikeContentMaxCharLength = DEFAULT_MAX_PNPL_NOTIFICATION_CHAR_LEN;
 /**
   * @brief  Init PnPLike info service
   * @param  None
@@ -60,7 +63,7 @@ BleCharTypeDef *BLE_InitPnPLikeService(void)
   BleCharPointer->Write_Request_CB = Write_Request_PnPLike;
   COPY_PNPLIKE_CHAR_UUID((BleCharPointer->uuid));
   BleCharPointer->Char_UUID_Type = UUID_TYPE_128;
-  BleCharPointer->Char_Value_Length = 20;
+  BleCharPointer->Char_Value_Length = PnPLikeContentMaxCharLength;
   BleCharPointer->Char_Properties = ((uint8_t)CHAR_PROP_NOTIFY) | ((uint8_t)CHAR_PROP_WRITE_WITHOUT_RESP);
   BleCharPointer->Security_Permissions = ATTR_PERMISSION_NONE;
   BleCharPointer->GATT_Evt_Mask = GATT_NOTIFY_ATTRIBUTE_WRITE;
@@ -99,8 +102,9 @@ tBleStatus BLE_PnPLikeUpdate(uint8_t *buffer, uint8_t len)
   * @param  uint16_t attr_handle Handle of the attribute
   * @param  uint16_t Offset: (SoC mode) the offset is never used and it is always 0. Network coprocessor mode:
   *                          - Bits 0-14: offset of the reported value inside the attribute.
-  *                          - Bit 15: if the entire value of the attribute does not fit inside a single ACI_GATT_ATTRIBUTE_MODIFIED_EVENT event,
-  *                            this bit is set to 1 to notify that other ACI_GATT_ATTRIBUTE_MODIFIED_EVENT events will follow to report the remaining value.
+  *                          - Bit 15: if the entire value of the attribute does not fit inside a single
+  *                            ACI_GATT_ATTRIBUTE_MODIFIED_EVENT event, this bit is set to 1 to notify that other
+  *                            ACI_GATT_ATTRIBUTE_MODIFIED_EVENT events will follow to report the remaining value.
   * @param  uint8_t data_length length of the data
   * @param  uint8_t *att_data attribute data
   * @retval None
@@ -123,14 +127,16 @@ static void AttrMod_Request_PnPLike(void *VoidCharPointer, uint16_t attr_handle,
 #if (BLE_DEBUG_LEVEL>1)
   if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
   {
-    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "--->PnPLike=%s\n", (att_data[0] == BLE_NOTIFY_SUB) ? " ON" : " OFF");
+    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite,
+                                    "--->PnPLike=%s\n",
+                                    (att_data[0] == BLE_NOTIFY_SUB) ? " ON" : " OFF");
     Term_Update(BufferToWrite, BytesToWrite);
   }
   else
   {
     BLE_MANAGER_PRINTF("--->PnPLike=%s", (att_data[0] == BLE_NOTIFY_SUB) ? " ON\r\n" : " OFF\r\n");
   }
-#endif
+#endif /* (BLE_DEBUG_LEVEL>1) */
 }
 
 
@@ -153,20 +159,41 @@ static void Write_Request_PnPLike(void *BleCharPointer, uint16_t handle, uint16_
     {
       CustomWriteRequestPnPLike(ble_command_buffer, CommandBufLen);
 
-      BLE_FreeFunction(ble_command_buffer);
-      ble_command_buffer = NULL;
-
 #if (BLE_DEBUG_LEVEL>1)
       BLE_MANAGER_PRINTF("\r\n%s\r\n", ble_command_buffer);
-#endif
+#endif /* (BLE_DEBUG_LEVEL>1) */
+
+      BLE_FREE_FUNCTION(ble_command_buffer);
+      ble_command_buffer = NULL;
     }
   }
   else
   {
 #if (BLE_DEBUG_LEVEL>1)
     BLE_MANAGER_PRINTF("\r\nWrite request PnPLike function not defined\r\n");
-#endif
+#endif /* (BLE_DEBUG_LEVEL>1) */
   }
 }
+
+/**
+  * @brief  PnPLike Set Max Char Length
+  * @param  uint16_t MaxCharLength
+  * @retval none
+  */
+void BLE_PnPLikeSetMaxCharLength(uint16_t MaxCharLength)
+{
+  PnPLikeContentMaxCharLength = MaxCharLength;
+}
+
+/**
+  * @brief  PnPLike Get Max Char Length
+  * @param  None
+  * @retval uint16_t MaxCharLength
+  */
+uint16_t BLE_PnPLikeGetMaxCharLength(void)
+{
+  return PnPLikeContentMaxCharLength;
+}
+
 
 

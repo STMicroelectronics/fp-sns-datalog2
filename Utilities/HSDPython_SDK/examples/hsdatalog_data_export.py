@@ -55,7 +55,7 @@ def show_help(ctx, param, value):
 @click.option('-r', '--raw_data', is_flag=True, help="Uses Raw data (not multiplied by sensitivity)", default=False)
 @click.option('-l', '--labeled', is_flag=True, help="Includes annotations taken during acquisition (if any) in the exported data", default=False)
 @click.option('-cdm','--custom_device_model', help="Upload a custom Device Template Model (DTDL)", type=(int, int, str))
-@click.version_option(script_version, '-v', '--version', prog_name="HSDatalogToUnico", is_flag=True, help="HSDatalogToUnico Converter tool version number")
+@click.version_option(script_version, '-v', '--version', prog_name="hsdatalog_data_export", is_flag=True, help="hsdatalog_data_export tool version number")
 @click.option('-d', '--debug', is_flag=True, help="[DEBUG] Check for corrupted data and timestamps", default=False)
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 

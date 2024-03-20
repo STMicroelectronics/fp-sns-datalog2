@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_PnPLike.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   BLE_PnPLike info services APIs.
   ******************************************************************************
   * @attention
@@ -25,6 +25,11 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* Exported Defines ----------------------------------------------------------*/
+#ifndef DEFAULT_MAX_PNPL_NOTIFICATION_CHAR_LEN
+#define DEFAULT_MAX_PNPL_NOTIFICATION_CHAR_LEN  20
+#endif /* DEFAULT_MAX_PNPL_NOTIFICATION_CHAR_LEN */
 
 /* Exported typedef --------------------------------------------------------- */
 typedef void (*CustomWriteRequestPnPLike_t)(uint8_t *received_msg, uint8_t msg_length);
@@ -50,6 +55,21 @@ extern BleCharTypeDef *BLE_InitPnPLikeService(void);
   * @retval tBleStatus Status
   */
 extern tBleStatus BLE_PnPLikeUpdate(uint8_t *buffer, uint8_t len);
+
+
+/**
+  * @brief  PnPLike Set Max Char Length
+  * @param  uint16_t MaxCharLength
+  * @retval none
+  */
+extern void BLE_PnPLikeSetMaxCharLength(uint16_t MaxCharLength);
+
+/**
+  * @brief  PnPLike Get Max Char Length
+  * @param  None
+  * @retval uint16_t MaxCharLength
+  */
+extern uint16_t BLE_PnPLikeGetMaxCharLength(void);
 
 #ifdef __cplusplus
 }

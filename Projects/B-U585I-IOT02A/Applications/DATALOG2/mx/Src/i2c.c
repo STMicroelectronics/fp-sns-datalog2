@@ -73,19 +73,19 @@ void MX_I2C2_Init(void)
 
 }
 
-void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
+void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-  if(i2cHandle->Instance==I2C2)
+  if (i2cHandle->Instance == I2C2)
   {
-  /* USER CODE BEGIN I2C2_MspInit 0 */
+    /* USER CODE BEGIN I2C2_MspInit 0 */
 
-  /* USER CODE END I2C2_MspInit 0 */
+    /* USER CODE END I2C2_MspInit 0 */
 
-  /** Initializes the peripherals clock
-  */
+    /** Initializes the peripherals clock
+    */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_I2C2;
     PeriphClkInit.I2c2ClockSelection = RCC_I2C2CLKSOURCE_PCLK1;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -97,8 +97,8 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
     /**I2C2 GPIO Configuration
     PH4     ------> I2C2_SCL
     PH5     ------> I2C2_SDA
-    */
-    GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5;
+      */
+    GPIO_InitStruct.Pin = GPIO_PIN_4 | GPIO_PIN_5;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -121,7 +121,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
     handle_GPDMA1_Channel3.Init.Priority = DMA_LOW_PRIORITY_LOW_WEIGHT;
     handle_GPDMA1_Channel3.Init.SrcBurstLength = 1;
     handle_GPDMA1_Channel3.Init.DestBurstLength = 1;
-    handle_GPDMA1_Channel3.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0|DMA_DEST_ALLOCATED_PORT0;
+    handle_GPDMA1_Channel3.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT0;
     handle_GPDMA1_Channel3.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
     handle_GPDMA1_Channel3.Init.Mode = DMA_NORMAL;
     if (HAL_DMA_Init(&handle_GPDMA1_Channel3) != HAL_OK)
@@ -148,7 +148,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
     handle_GPDMA1_Channel2.Init.Priority = DMA_LOW_PRIORITY_LOW_WEIGHT;
     handle_GPDMA1_Channel2.Init.SrcBurstLength = 1;
     handle_GPDMA1_Channel2.Init.DestBurstLength = 1;
-    handle_GPDMA1_Channel2.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0|DMA_DEST_ALLOCATED_PORT0;
+    handle_GPDMA1_Channel2.Init.TransferAllocatedPort = DMA_SRC_ALLOCATED_PORT0 | DMA_DEST_ALLOCATED_PORT0;
     handle_GPDMA1_Channel2.Init.TransferEventMode = DMA_TCEM_BLOCK_TRANSFER;
     handle_GPDMA1_Channel2.Init.Mode = DMA_NORMAL;
     if (HAL_DMA_Init(&handle_GPDMA1_Channel2) != HAL_OK)
@@ -168,27 +168,27 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef* i2cHandle)
     HAL_NVIC_EnableIRQ(I2C2_EV_IRQn);
     HAL_NVIC_SetPriority(I2C2_ER_IRQn, 4, 0);
     HAL_NVIC_EnableIRQ(I2C2_ER_IRQn);
-  /* USER CODE BEGIN I2C2_MspInit 1 */
+    /* USER CODE BEGIN I2C2_MspInit 1 */
 
-  /* USER CODE END I2C2_MspInit 1 */
+    /* USER CODE END I2C2_MspInit 1 */
   }
 }
 
-void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
+void HAL_I2C_MspDeInit(I2C_HandleTypeDef *i2cHandle)
 {
 
-  if(i2cHandle->Instance==I2C2)
+  if (i2cHandle->Instance == I2C2)
   {
-  /* USER CODE BEGIN I2C2_MspDeInit 0 */
+    /* USER CODE BEGIN I2C2_MspDeInit 0 */
 
-  /* USER CODE END I2C2_MspDeInit 0 */
+    /* USER CODE END I2C2_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_I2C2_CLK_DISABLE();
 
     /**I2C2 GPIO Configuration
     PH4     ------> I2C2_SCL
     PH5     ------> I2C2_SDA
-    */
+      */
     HAL_GPIO_DeInit(GPIOH, GPIO_PIN_4);
 
     HAL_GPIO_DeInit(GPIOH, GPIO_PIN_5);
@@ -200,9 +200,9 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
     /* I2C2 interrupt Deinit */
     HAL_NVIC_DisableIRQ(I2C2_EV_IRQn);
     HAL_NVIC_DisableIRQ(I2C2_ER_IRQn);
-  /* USER CODE BEGIN I2C2_MspDeInit 1 */
+    /* USER CODE BEGIN I2C2_MspDeInit 1 */
 
-  /* USER CODE END I2C2_MspDeInit 1 */
+    /* USER CODE END I2C2_MspDeInit 1 */
   }
 }
 

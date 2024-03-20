@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_BinaryContent.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add BinaryContent info services using vendor specific profile.
   ******************************************************************************
   * @attention
@@ -24,7 +24,8 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_BINARYCONTENT_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x22,0x00,0x02,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_BINARYCONTENT_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x22,0x00,0x02,0x11,\
+                                                                0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 /* Exported Variables ------------------------------------------------------- */
 /* Identifies the notification Events */
@@ -37,7 +38,7 @@ static BleCharTypeDef BleCharBinaryContent;
 /* Buffer used to save the complete command received via BLE*/
 static uint8_t *ble_command_buffer = NULL;
 
-static int32_t BinaryContentMaxCharLength = DEFAULT_MAX_BINARY_CONTENT_CHAR_LEN;
+static uint16_t BinaryContentMaxCharLength = DEFAULT_MAX_BINARY_CONTENT_CHAR_LEN;
 
 /* Private functions ---------------------------------------------------------*/
 static void AttrMod_Request_BinaryContent(void *BleCharPointer, uint16_t attr_handle, uint16_t Offset,
@@ -74,10 +75,10 @@ BleCharTypeDef *BLE_InitBinaryContentService(void)
 
 /**
   * @brief  BinaryContent Set Max Char Length
-  * @param  int32_t MaxCharLength
+  * @param  uint16_t MaxCharLength
   * @retval none
   */
-void BLE_BinaryContentSetMaxCharLength(int32_t MaxCharLength)
+void BLE_BinaryContentSetMaxCharLength(uint16_t MaxCharLength)
 {
   BinaryContentMaxCharLength = MaxCharLength;
 }
@@ -85,9 +86,9 @@ void BLE_BinaryContentSetMaxCharLength(int32_t MaxCharLength)
 /**
   * @brief  BinaryContent Get Max Char Length
   * @param  None
-  * @retval int32_t MaxCharLength
+  * @retval uint16_t MaxCharLength
   */
-int32_t BLE_BinaryContentGetMaxCharLength(void)
+uint16_t BLE_BinaryContentGetMaxCharLength(void)
 {
   return BinaryContentMaxCharLength;
 }
@@ -139,7 +140,9 @@ static void AttrMod_Request_BinaryContent(void *VoidCharPointer, uint16_t attr_h
 #if (BLE_DEBUG_LEVEL>1)
   if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
   {
-    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "--->BinaryContent=%s\n", (att_data[0] == BLE_NOTIFY_SUB) ? " ON" : " OFF");
+    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite,
+                                    "--->BinaryContent=%s\n",
+                                    (att_data[0] == BLE_NOTIFY_SUB) ? " ON" : " OFF");
     Term_Update(BufferToWrite, BytesToWrite);
   }
   else
@@ -168,7 +171,7 @@ __weak void Write_Request_BinaryContent(void *BleCharPointer, uint16_t handle, u
     {
       CustomWriteRequestBinaryContent(ble_command_buffer, CommandBufLen);
 
-      BLE_FreeFunction(ble_command_buffer);
+      BLE_FREE_FUNCTION(ble_command_buffer);
       ble_command_buffer = NULL;
     }
   }

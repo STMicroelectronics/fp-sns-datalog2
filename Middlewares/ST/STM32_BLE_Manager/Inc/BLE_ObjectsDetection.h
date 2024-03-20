@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_ObjectsDetection.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Object detection info services APIs.
   ******************************************************************************
   * @attention
@@ -39,7 +39,7 @@ extern CustomNotifyEventObjectsDetection_t CustomNotifyEventObjectsDetection;
 /**
   * @brief  Init Object Detection info service
   * @param  None
-  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for led info service
+  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for object detection info service
   */
 extern BleCharTypeDef *BLE_InitObjectsDetectionService(void);
 

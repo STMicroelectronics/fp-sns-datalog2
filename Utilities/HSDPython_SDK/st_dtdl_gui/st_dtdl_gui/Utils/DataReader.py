@@ -121,6 +121,8 @@ class DataReader(object):
             self.data_samples_counter = int(data_samples)
             # add remaining extracted data into the data_buffer
             self.data_buffer.extend(np.frombuffer(data[n_cplt_packet * (self.data_size + self.time_size) : n_cplt_packet * (self.data_size + self.time_size) + int_rem_data_bytes], dtype=self.data_format, count=self.data_samples_counter))
+            # cast self.data_buffer to be a numpy array
+            self.data_buffer = np.array(self.data_buffer)
             # take the remaining bytes, if any (e.g., if data finish with a non complete sample (x,y,) z missing)
             self.rem_dim_bytes = data[ n_cplt_packet * (self.data_size + self.time_size) + int_rem_data_bytes :]
             # update data_samples_counter and timestamp flag

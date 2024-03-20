@@ -25,11 +25,6 @@ class HSDPlotTMOSWidget(PlotWidget):
             for i in reversed(range(pw.layout().count())): 
                 pw.layout().itemAt(i).widget().setParent(None)
 
-            # lri = pg.LinearRegionItem([interval[0], interval[1]], brush=pg.mkBrush(color=colors[i], alpha=0.4))
-            # lri.setMovable(False)
-            # lri.setAcceptedMouseButtons(pg.QtCore.Qt.NoButton)
-            # self.plot_widget.addItem(lri)
-
             self.contents_frame.layout().addWidget(self.graph_widgets[p].graph_widget)
             self.contents_frame.layout().setSpacing(6)
 

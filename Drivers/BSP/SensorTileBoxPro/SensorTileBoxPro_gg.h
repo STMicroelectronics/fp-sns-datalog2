@@ -1,24 +1,23 @@
 /**
-******************************************************************************
-* @file    SensorTileBox_gg.h
-* @author  SRA - Central Labs
-* @version v2.1.6
-* @date    10-Feb-2022
-* @brief   This file contains definitions for SensorTileBox_gg.c 
-*          firmware driver.
-******************************************************************************
-* @attention
-*
-* Copyright (c) 2022 STMicroelectronics.
-* All rights reserved.
-*
-* This software is licensed under terms that can be found in the LICENSE file
-* in the root directory of this software component.
-* If no LICENSE file comes with this software, it is provided AS-IS.
-*
-******************************************************************************
+  ******************************************************************************
+  * @file    SensorTileBox_gg.h
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
+  * @brief   This file contains definitions for SensorTileBox_gg.c 
+  *          firmware driver.
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
 */
-  
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SENSORTILEBOXPRO_GG_H__
@@ -79,7 +78,4 @@ int32_t Sensor_IO_Write( void *handle, uint8_t WriteAddr, uint8_t *pBuffer, uint
 #endif
   
 #endif /* __SENSORTILEBOXPRO_GG_H__ */
-  
 
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/ 

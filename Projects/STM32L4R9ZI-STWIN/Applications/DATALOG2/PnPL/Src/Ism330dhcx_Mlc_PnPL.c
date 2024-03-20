@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:ism330dhcx_mlc;1
+  * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:ism330dhcx_mlc;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,13 +53,9 @@ static const IPnPLComponent_vtbl sIsm330dhcx_Mlc_PnPL_CompIF_vtbl =
   */
 struct _Ism330dhcx_Mlc_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
-  /**
-    * Contains Ism330dhcx_Mlc functions pointers.
-    */
+  /* Contains Ism330dhcx_Mlc functions pointers. */
   IIsm330dhcx_Mlc_t *cmdIF;
 };
 
@@ -103,14 +99,15 @@ char *Ism330dhcx_Mlc_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
 {
   switch (id)
   {
-  case 0:
-    return "ism330dhcx_mlc*load_file";
-    break;
+    case 0:
+      return "ism330dhcx_mlc*load_file";
+      break;
   }
   return 0;
 }
 
-uint8_t Ism330dhcx_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Ism330dhcx_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                          uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -168,31 +165,67 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   return 0;
 }
 
-uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                            uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "ism330dhcx_mlc.enable");
-    ism330dhcx_mlc_set_enable(enable);
+    ret = ism330dhcx_mlc_set_enable(enable);
+    if (ret == 0)
+    {
+      json_object_dotset_boolean(respJSONObject, "ism330dhcx_mlc.enable.value", enable);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "ism330dhcx_mlc.enable.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.sensor_annotation"))
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ism330dhcx_mlc.sensor_annotation");
-    ism330dhcx_mlc_set_sensor_annotation(sensor_annotation);
+    ret = ism330dhcx_mlc_set_sensor_annotation(sensor_annotation);
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "ism330dhcx_mlc.sensor_annotation.value", sensor_annotation);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "ism330dhcx_mlc.sensor_annotation.value", "PNPL_SET_ERROR");
+    }
   }
   json_value_free(tempJSON);
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
+  json_value_free(respJSON);
   return ret;
 }
 
-uint8_t Ism330dhcx_Mlc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+
+uint8_t Ism330dhcx_Mlc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                                uint32_t *size, uint8_t pretty)
 {
   Ism330dhcx_Mlc_PnPL *p_if_owner = (Ism330dhcx_Mlc_PnPL *) _this;
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
+
+  uint8_t ret = 0;
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc*load_file.ucf_data"))
   {
     const char *data;
@@ -202,11 +235,31 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *s
       data = json_object_dotget_string(tempJSONObject, "ism330dhcx_mlc*load_file.ucf_data.data");
       if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc*load_file.ucf_data.size"))
       {
-        size =(int32_t) json_object_dotget_number(tempJSONObject, "ism330dhcx_mlc*load_file.ucf_data.size");
-        ism330dhcx_mlc_load_file(p_if_owner->cmdIF, (char*) data, size);
+        size = (int32_t) json_object_dotget_number(tempJSONObject, "ism330dhcx_mlc*load_file.ucf_data.size");
+        ret = ism330dhcx_mlc_load_file(p_if_owner->cmdIF, (char *) data, size);
+        if (ret == 0)
+        {
+          json_object_dotset_string(respJSONObject, "ism330dhcx_mlc*load_file.response", "PNPL_CMD_OK");
+        }
+        else
+        {
+          json_object_dotset_string(respJSONObject, "ism330dhcx_mlc.load_file.response", "PNPL_CMD_ERROR");
+        }
       }
     }
   }
   json_value_free(tempJSON);
-  return 0;
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
+  json_value_free(respJSON);
+  return ret;
 }
+

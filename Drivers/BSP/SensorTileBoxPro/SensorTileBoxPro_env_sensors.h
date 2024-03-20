@@ -1,12 +1,15 @@
 /**
   ******************************************************************************
   * @file    SensorTileBoxPro_env_sensors.h
-  * @author  MEMS Application Team
-  * @brief   This file contains definitions for the BSP Environmental Sensors interface for SensorTileBoxPro
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
+  * @brief   This file contains definitions for the BSP Environmental
+  *          Sensors interface for SensorTileBoxPro
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -76,7 +79,9 @@ typedef struct
 #ifndef ENV_PRESSURE
 #define ENV_PRESSURE         2U
 #endif
-
+#ifndef ENV_HUMIDITY
+#define ENV_HUMIDITY        4U
+#endif
 
 #define BSP_ENV_FUNCTIONS_NBR    2U
 #define BSP_ENV_INSTANCES_NBR    (USE_ENV_SENSOR_STTS22H_0 + USE_ENV_SENSOR_LPS22DF_0)
@@ -101,4 +106,3 @@ int32_t BSP_ENV_SENSOR_GetValue(uint32_t Instance, uint32_t Function, float *Val
 
 #endif /* __SENSORTILEBOXPRO_ENV_SENSORS_H__ */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

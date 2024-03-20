@@ -28,17 +28,18 @@
 
 
 /**
- * Class object declaration.
- */
-typedef struct _ADPU2Class {
+  * Class object declaration.
+  */
+typedef struct _ADPU2Class
+{
   /**
-   * ADPU2_t class virtual table.
-   */
+    * ADPU2_t class virtual table.
+    */
   IDPU2_vtbl vtbl;
 
   /**
-   * IDataEventListener_t virtual table.
-   */
+    * IDataEventListener_t virtual table.
+    */
   IDataEventListener_vtbl if_data_evt_listener_vtbl;
 } ADPU2Class_t;
 
@@ -47,27 +48,28 @@ typedef struct _ADPU2Class {
 /********************/
 
 /**
- * The class object.
- */
-static const ADPU2Class_t sTheClass = {
-    /* class virtual table */
-    {
-        ADPU2_vtblAttachToDataSource,
-        ADPU2_vtblDetachFromDataSource,
-        ADPU2_vtblAttachToDPU,
-        ADPU2_vtblDetachFromDPU,
-        ADPU2_vtblDispatchEvents,
-        ADPU2_vtblRegisterNotifyCallback,
-        NULL
-    },
+  * The class object.
+  */
+static const ADPU2Class_t sTheClass =
+{
+  /* class virtual table */
+  {
+    ADPU2_vtblAttachToDataSource,
+    ADPU2_vtblDetachFromDataSource,
+    ADPU2_vtblAttachToDPU,
+    ADPU2_vtblDetachFromDPU,
+    ADPU2_vtblDispatchEvents,
+    ADPU2_vtblRegisterNotifyCallback,
+    NULL
+  },
 
-    /*IDataEventListener virtual table*/
-    {
-        ADPU2_vtblOnStatusChange,
-        ADPU2_vtblSetOwner,
-        ADPU2_vtblGetOwner,
-        ADPU2_vtblOnNewDataReady
-    }
+  /*IDataEventListener virtual table*/
+  {
+    ADPU2_vtblOnStatusChange,
+    ADPU2_vtblSetOwner,
+    ADPU2_vtblGetOwner,
+    ADPU2_vtblOnNewDataReady
+  }
 };
 
 
@@ -75,96 +77,100 @@ static const ADPU2Class_t sTheClass = {
 /*********************************/
 
 /**
- * Initialize an empty attached data source observed item.
- *
- * @param _this [IN] specifies a pointer to an object.
- * @return SYS_NO_ERROR_CODE.
- */
+  * Initialize an empty attached data source observed item.
+  *
+  * @param _this [IN] specifies a pointer to an object.
+  * @return SYS_NO_ERROR_CODE.
+  */
 static sys_error_code_t ASOItemInit(AttachedSourceObservedItem_t *_this);
 
 /**
- * Find a specific data source (::ISourceObservable) in a AOS List.
- *
- * @param p_list_head [IN] specifies the head of the list where to search.
- * @param p_data_src [IN] specified the data source to search for.
- * @return a pointer to the list item if the data source has been found, NULL if the data source is not in the list.
- */
-static AttachedSourceObservedItem_t *ASOListFindItem(AttachedSourceObservedItem_t *p_list_head, ISourceObservable *p_data_src);
+  * Find a specific data source (::ISourceObservable) in a AOS List.
+  *
+  * @param p_list_head [IN] specifies the head of the list where to search.
+  * @param p_data_src [IN] specified the data source to search for.
+  * @return a pointer to the list item if the data source has been found, NULL if the data source is not in the list.
+  */
+static AttachedSourceObservedItem_t *ASOListFindItem(AttachedSourceObservedItem_t *p_list_head,
+                                                     ISourceObservable *p_data_src);
 
 /**
- * Find a specific data source (::ISourceObservable) in a AOS List.
- *
- * @param p_list_head [IN] specifies the head of the list where to search.
- * @param data_src_id [IN] specified the ID of the data source to search for.
- * @return a pointer to the list item if the data source has been found, NULL if the data source is not in the list.
- */
-static AttachedSourceObservedItem_t *ASOListFindItemBySrcID(AttachedSourceObservedItem_t *p_list_head, uint16_t data_src_id);
+  * Find a specific data source (::ISourceObservable) in a AOS List.
+  *
+  * @param p_list_head [IN] specifies the head of the list where to search.
+  * @param data_src_id [IN] specified the ID of the data source to search for.
+  * @return a pointer to the list item if the data source has been found, NULL if the data source is not in the list.
+  */
+static AttachedSourceObservedItem_t *ASOListFindItemBySrcID(AttachedSourceObservedItem_t *p_list_head,
+                                                            uint16_t data_src_id);
 
 /**
- * Find a specific data source (::ISourceObservable) in a AOS List.
- *
- * @param p_list_head [IN] specifies the head of the list where to search.
- * @param p_data_builder [IN] specified the data builder to search for.
- * @return a pointer to the list item if the data source has been found, NULL if the data source is not in the list.
- */
-static AttachedSourceObservedItem_t *ASOListFindItemByDataBuilder(AttachedSourceObservedItem_t *p_list_head, IDataBuilder_t *p_data_builder);
+  * Find a specific data source (::ISourceObservable) in a AOS List.
+  *
+  * @param p_list_head [IN] specifies the head of the list where to search.
+  * @param p_data_builder [IN] specified the data builder to search for.
+  * @return a pointer to the list item if the data source has been found, NULL if the data source is not in the list.
+  */
+static AttachedSourceObservedItem_t *ASOListFindItemByDataBuilder(AttachedSourceObservedItem_t *p_list_head,
+                                                                  IDataBuilder_t *p_data_builder);
 
 /**
- * Add an item in the head of the Attached Source Observable list. The function doesn't check if
- * the embedded ::ISourceObservable is already in the list.
- *
- * @param p_list_head [IN] specifies the head of the list.
- * @param p_item [IN] specifies the item to add into the list.
- */
+  * Add an item in the head of the Attached Source Observable list. The function doesn't check if
+  * the embedded ::ISourceObservable is already in the list.
+  *
+  * @param p_list_head [IN] specifies the head of the list.
+  * @param p_item [IN] specifies the item to add into the list.
+  */
 static inline void ASOListAddItem(AttachedSourceObservedItem_t *p_list_head, AttachedSourceObservedItem_t *p_item);
 
 /**
- * Remove an item from the attached source observable list.
- *
- * @param p_list_head [IN] specifies the head of the list.
- * @param p_item [IN] specifies the item to add into the list.
- */
+  * Remove an item from the attached source observable list.
+  *
+  * @param p_list_head [IN] specifies the head of the list.
+  * @param p_item [IN] specifies the item to add into the list.
+  */
 static inline void ASOListRemoveItem(AttachedSourceObservedItem_t *p_list_head, AttachedSourceObservedItem_t *p_item);
 
 /**
- * Extract, from the ::CircularBuffer_t, a new buffer used to build a new input data for the DPU, and reset all the
- * ::DataBuilder_t IF linked to the data sources of the DPU.
- *
- * @param _this [IN] specifies a pointer to the object.
- * @param p_no_reset_item [IN] specifies an item that is not reset. It can be NULL.
- * @return SYS_NO_ERROR_CODE if success, an application specific error code otherwise.
- */
+  * Extract, from the ::CircularBuffer_t, a new buffer used to build a new input data for the DPU, and reset all the
+  * ::DataBuilder_t IF linked to the data sources of the DPU.
+  *
+  * @param _this [IN] specifies a pointer to the object.
+  * @param p_no_reset_item [IN] specifies an item that is not reset. It can be NULL.
+  * @return SYS_NO_ERROR_CODE if success, an application specific error code otherwise.
+  */
 static sys_error_code_t ADPU2_PrepareToBuildNewData(ADPU2_t *_this, AttachedSourceObservedItem_t *p_no_reset_item);
 
 /**
- * Callback called by a ::IDataBuilder_t object when a new data is ready.
- *
- * @param _this [IN] specifies a data builder object.
- * @param p_data_build_context [IN] specifies a data build context.
- */
+  * Callback called by a ::IDataBuilder_t object when a new data is ready.
+  *
+  * @param _this [IN] specifies a data builder object.
+  * @param p_data_build_context [IN] specifies a data build context.
+  */
 static uint8_t *ADPU2_DataBuffAlloc(IDataBuilder_t *_this, void *p_data_build_context);
 
 /**
- * This function implements the DPU chain. It is used to dispatch a process data to the next DPU.
- *
- * @param _this [IN] specifies a pointer to the object. It is the DPU that receives the data to be processed.
- * @param p_evt [IN] specifies a pointer to a data event.
- * @param p_src_dpu [IN] specifies the DPU that has generated the data.
- * @return SYS_NO_ERROR_CODE if success, an application specific error code otherwise.
- */
+  * This function implements the DPU chain. It is used to dispatch a process data to the next DPU.
+  *
+  * @param _this [IN] specifies a pointer to the object. It is the DPU that receives the data to be processed.
+  * @param p_evt [IN] specifies a pointer to a data event.
+  * @param p_src_dpu [IN] specifies the DPU that has generated the data.
+  * @return SYS_NO_ERROR_CODE if success, an application specific error code otherwise.
+  */
 static sys_error_code_t ADPU2_OnNewInputDataFromDPU(ADPU2_t *_this,  DataEvent_t *p_evt, ADPU2_t *p_src_dpu);
 
 
 /* IDPU2 virtual functions definition */
 /**************************************/
 
-sys_error_code_t ADPU2_vtblAttachToDataSource(IDPU2_t *_this, ISourceObservable *p_data_source, IDataBuilder_t *p_builder, IDB_BuildStrategy_e build_strategy)
+sys_error_code_t ADPU2_vtblAttachToDataSource(IDPU2_t *_this, ISourceObservable *p_data_source,
+                                              IDataBuilder_t *p_builder, IDB_BuildStrategy_e build_strategy)
 {
   assert_param(_this != NULL);
   assert_param(p_data_source != NULL);
   assert_param(p_builder != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  ADPU2_t *p_obj = (ADPU2_t*)_this;
+  ADPU2_t *p_obj = (ADPU2_t *)_this;
 
   if (p_obj->is_chained_as_next)
   {
@@ -216,12 +222,13 @@ sys_error_code_t ADPU2_vtblAttachToDataSource(IDPU2_t *_this, ISourceObservable 
   return res;
 }
 
-sys_error_code_t ADPU2_vtblDetachFromDataSource(IDPU2_t *_this, ISourceObservable *p_data_source, IDataBuilder_t **p_data_builder)
+sys_error_code_t ADPU2_vtblDetachFromDataSource(IDPU2_t *_this, ISourceObservable *p_data_source,
+                                                IDataBuilder_t **p_data_builder)
 {
   assert_param(_this != NULL);
   assert_param(p_data_source != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  ADPU2_t *p_obj = (ADPU2_t*)_this;
+  ADPU2_t *p_obj = (ADPU2_t *)_this;
 
   /*check if the data source is attached to this DPU*/
   AttachedSourceObservedItem_t *p_item = ASOListFindItem(&p_obj->attached_data_src_list, p_data_source);
@@ -233,7 +240,7 @@ sys_error_code_t ADPU2_vtblDetachFromDataSource(IDPU2_t *_this, ISourceObservabl
     /* remove the DPU as listener from the data source.*/
     IEventSrc *p_evenr_src = ISourceGetEventSrcIF(p_data_source);
     res = IEventSrcRemoveEventListener(p_evenr_src, ADPU2_GetEventListenerIF(p_obj));
-    if(SYS_IS_ERROR_CODE(res))
+    if (SYS_IS_ERROR_CODE(res))
     {
       sys_error_handler();
     }
@@ -248,7 +255,8 @@ sys_error_code_t ADPU2_vtblDetachFromDataSource(IDPU2_t *_this, ISourceObservabl
   }
   else
   {
-    if (p_data_builder != NULL){
+    if (p_data_builder != NULL)
+    {
       *p_data_builder = NULL;
     }
   }
@@ -256,15 +264,16 @@ sys_error_code_t ADPU2_vtblDetachFromDataSource(IDPU2_t *_this, ISourceObservabl
   return res;
 }
 
-sys_error_code_t ADPU2_vtblAttachToDPU(IDPU2_t *_this, IDPU2_t *p_next_dpu, IDataBuilder_t *p_builder, IDB_BuildStrategy_e build_strategy)
+sys_error_code_t ADPU2_vtblAttachToDPU(IDPU2_t *_this, IDPU2_t *p_next_dpu, IDataBuilder_t *p_builder,
+                                       IDB_BuildStrategy_e build_strategy)
 {
   assert_param(_this != NULL);
   assert_param(p_next_dpu != NULL);
   assert_param(p_builder != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  ADPU2_t *p_obj = (ADPU2_t*)_this;
+  ADPU2_t *p_obj = (ADPU2_t *)_this;
 
-  if (ADPU2_IsAttachedToDPU(p_obj) || ADPU2_IsAttachedToDPU((ADPU2_t*)p_next_dpu))
+  if (ADPU2_IsAttachedToDPU(p_obj) || ADPU2_IsAttachedToDPU((ADPU2_t *)p_next_dpu))
   {
     res = SYS_ADPU2_ALREADY_ATTACHED;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_ADPU2_ALREADY_ATTACHED);
@@ -273,7 +282,7 @@ sys_error_code_t ADPU2_vtblAttachToDPU(IDPU2_t *_this, IDPU2_t *p_next_dpu, IDat
   }
   else
   {
-    p_obj->next_dpu.p_next = (ADPU2_t*)p_next_dpu;
+    p_obj->next_dpu.p_next = (ADPU2_t *)p_next_dpu;
     p_obj->next_dpu.build_strategy = build_strategy;
     p_obj->next_dpu.p_builder = p_builder;
     p_obj->next_dpu.p_next->is_chained_as_next = true;
@@ -286,7 +295,7 @@ sys_error_code_t ADPU2_vtblDetachFromDPU(IDPU2_t *_this, IDataBuilder_t **p_data
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  ADPU2_t *p_obj = (ADPU2_t*)_this;
+  ADPU2_t *p_obj = (ADPU2_t *)_this;
 
   if (p_obj->next_dpu.p_next != NULL)
   {
@@ -313,11 +322,11 @@ sys_error_code_t ADPU2_vtblDispatchEvents(IDPU2_t *_this,  DataEvent_t *p_evt)
   assert_param(_this != NULL);
   assert_param(p_evt != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  ADPU2_t *p_obj = (ADPU2_t*)_this;
+  ADPU2_t *p_obj = (ADPU2_t *)_this;
 
   /* first notify the listeners.*/
   res = IEventSrcSendEvent((IEventSrc *)&p_obj->data_evt_src_if, (IEvent *) p_evt, NULL);
-  if(SYS_IS_ERROR_CODE(res))
+  if (SYS_IS_ERROR_CODE(res))
   {
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
 
@@ -326,7 +335,7 @@ sys_error_code_t ADPU2_vtblDispatchEvents(IDPU2_t *_this,  DataEvent_t *p_evt)
   else
   {
     /* then propagate the data into DPU2 chain*/
-    if(p_obj->next_dpu.p_next != NULL)
+    if (p_obj->next_dpu.p_next != NULL)
     {
       res = ADPU2_OnNewInputDataFromDPU(p_obj->next_dpu.p_next, p_evt, p_obj);
 
@@ -336,7 +345,7 @@ sys_error_code_t ADPU2_vtblDispatchEvents(IDPU2_t *_this,  DataEvent_t *p_evt)
       }
     }
 
-    if(SYS_IS_ERROR_CODE(res))
+    if (SYS_IS_ERROR_CODE(res))
     {
       SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
 
@@ -352,7 +361,7 @@ sys_error_code_t ADPU2_vtblRegisterNotifyCallback(IDPU2_t *_this, DPU2_ReadyToPr
   assert_param(_this != NULL);
   assert_param(callback != NULL);
   sys_error_code_t xRes = SYS_NO_ERROR_CODE;
-  ADPU2_t *p_obj = (ADPU2_t*)_this;
+  ADPU2_t *p_obj = (ADPU2_t *)_this;
 
   p_obj->notify_data_ready_f = callback;
   p_obj->p_data_ready_callback_param = p_param;
@@ -381,7 +390,7 @@ void ADPU2_vtblSetOwner(IEventListener *_this, void *p_owner)
 {
   assert_param(_this != NULL);
   assert_param(p_owner != NULL);
-  ADPU2_t* p_obj = (ADPU2_t*) ((uint32_t) _this - offsetof (ADPU2_t , data_evt_listener_if));
+  ADPU2_t *p_obj = (ADPU2_t *)((uint32_t) _this - offsetof(ADPU2_t, data_evt_listener_if));
 
   p_obj->p_owner = p_owner;
 }
@@ -389,7 +398,7 @@ void ADPU2_vtblSetOwner(IEventListener *_this, void *p_owner)
 void *ADPU2_vtblGetOwner(IEventListener *_this)
 {
   assert_param(_this != NULL);
-  ADPU2_t* p_obj = (ADPU2_t*) ((uint32_t) _this - offsetof (ADPU2_t , data_evt_listener_if));
+  ADPU2_t *p_obj = (ADPU2_t *)((uint32_t) _this - offsetof(ADPU2_t, data_evt_listener_if));
 
   return p_obj->p_owner;
 }
@@ -403,7 +412,7 @@ sys_error_code_t ADPU2_vtblOnNewDataReady(IEventListener *_this, const DataEvent
   assert_param(_this != NULL);
   assert_param(p_evt != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  ADPU2_t* p_obj = (ADPU2_t*) ((uint32_t) _this - offsetof (ADPU2_t , data_evt_listener_if));
+  ADPU2_t *p_obj = (ADPU2_t *)((uint32_t) _this - offsetof(ADPU2_t, data_evt_listener_if));
   SYS_DECLARE_CS(cs);
 
   if (p_obj->active)
@@ -451,12 +460,12 @@ sys_error_code_t ADPU2_vtblOnNewDataReady(IEventListener *_this, const DataEvent
         SYS_ENTER_CRITICAL(cs);
         p_obj->cbh.p_producer_data_buff = NULL;
         SYS_EXIT_CRITICAL(cs);
-        if(p_obj->notify_data_ready_f)
+        if (p_obj->notify_data_ready_f)
         {
           /* I do not process inline the new data, but I notify the app.
            * It will be responsibility of the app to call ADPU2_ProcessAndDispatch or manually
            * do the Process&Dispatch */
-          p_obj->notify_data_ready_f((IDPU2_t*)p_obj, p_obj->p_data_ready_callback_param);
+          p_obj->notify_data_ready_f((IDPU2_t *)p_obj, p_obj->p_data_ready_callback_param);
         }
         else
         {
@@ -478,18 +487,18 @@ sys_error_code_t ADPU2_vtblOnNewDataReady(IEventListener *_this, const DataEvent
 sys_error_code_t ADPU2_Init(ADPU2_t *_this, EMData_t in_data, EMData_t out_data)
 {
   assert_param(_this);
-  ADPU2_t *p_obj = (ADPU2_t*)_this;
+  ADPU2_t *p_obj = (ADPU2_t *)_this;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* The DPU vtbl has been initialized during the allocation of the derived DPU,
    * so we have to initialize only the listener IF
    */
   p_obj->data_evt_listener_if.vptr = &sTheClass.if_data_evt_listener_vtbl;
-  IEventListenerSetOwner((IEventListener*)&p_obj->data_evt_listener_if, p_obj);
+  IEventListenerSetOwner((IEventListener *)&p_obj->data_evt_listener_if, p_obj);
 
   /* Initialize the data event source IF*/
   (void)DataEventSrcAllocStatic(&p_obj->data_evt_src_if);
-  (void)IEventSrcInit((IEventSrc*)&p_obj->data_evt_src_if);
+  (void)IEventSrcInit((IEventSrc *)&p_obj->data_evt_src_if);
 
   /* Initialize the list of attached data source*/
   (void)ASOItemInit(&p_obj->attached_data_src_list);
@@ -514,14 +523,14 @@ IEventListener *ADPU2_GetEventListenerIF(ADPU2_t *_this)
 {
   assert_param(_this != NULL);
 
-  return (IEventListener*) &_this->data_evt_listener_if;
+  return (IEventListener *) &_this->data_evt_listener_if;
 }
 
-IEventSrc *ADPU2_GetEventSrcIF(ADPU2_t * _this)
+IEventSrc *ADPU2_GetEventSrcIF(ADPU2_t *_this)
 {
   assert_param(_this != NULL);
 
-  return (IEventSrc*) &_this->data_evt_src_if;
+  return (IEventSrc *) &_this->data_evt_src_if;
 }
 
 sys_error_code_t ADPU2_SetTag(ADPU2_t *_this, uint32_t tag)
@@ -666,14 +675,14 @@ sys_error_code_t ADPU2_ProcessAndDispatch(ADPU2_t *_this)
 
   EMData_t in_data = _this->in_data;
   in_data.p_payload = CB_GetItemData(p_ready_item);
-  res = IDPU2_Process((IDPU2_t*)_this, in_data, _this->out_data);
+  res = IDPU2_Process((IDPU2_t *)_this, in_data, _this->out_data);
   CB_ReleaseItem(_this->cbh.p_cb, p_ready_item);
   double timestamp = SysTsGetTimestampF(SysGetTimestampSrv());
   if (!SYS_IS_ERROR_CODE(res))
   {
     DataEvent_t data_evt;
-    DataEventInit((IEvent*)&data_evt, (IEventSrc*)&_this->data_evt_src_if, &_this->out_data, timestamp, _this->tag);
-    res = IDPU2_DispatchEvents((IDPU2_t*)_this, &data_evt);
+    DataEventInit((IEvent *)&data_evt, (IEventSrc *)&_this->data_evt_src_if, &_this->out_data, timestamp, _this->tag);
+    res = IDPU2_DispatchEvents((IDPU2_t *)_this, &data_evt);
   }
 
   return res;
@@ -694,14 +703,16 @@ static sys_error_code_t ASOItemInit(AttachedSourceObservedItem_t *_this)
   return SYS_NO_ERROR_CODE;
 }
 
-static AttachedSourceObservedItem_t *ASOListFindItem(AttachedSourceObservedItem_t *p_list_head, ISourceObservable *p_data_src)
+static AttachedSourceObservedItem_t *ASOListFindItem(AttachedSourceObservedItem_t *p_list_head,
+                                                     ISourceObservable *p_data_src)
 {
   assert_param(p_data_src != NULL);
 
   return ASOListFindItemBySrcID(p_list_head, ISourceGetId(p_data_src));
 }
 
-static AttachedSourceObservedItem_t *ASOListFindItemByDataBuilder(AttachedSourceObservedItem_t *p_list_head, IDataBuilder_t *p_data_builder)
+static AttachedSourceObservedItem_t *ASOListFindItemByDataBuilder(AttachedSourceObservedItem_t *p_list_head,
+                                                                  IDataBuilder_t *p_data_builder)
 {
   assert_param(p_data_builder != NULL);
 
@@ -724,7 +735,8 @@ static AttachedSourceObservedItem_t *ASOListFindItemByDataBuilder(AttachedSource
   return p_tmp;
 }
 
-static AttachedSourceObservedItem_t *ASOListFindItemBySrcID(AttachedSourceObservedItem_t *p_list_head, uint16_t data_src_id)
+static AttachedSourceObservedItem_t *ASOListFindItemBySrcID(AttachedSourceObservedItem_t *p_list_head,
+                                                            uint16_t data_src_id)
 {
   assert_param(p_list_head != NULL);
 
@@ -752,7 +764,7 @@ void ASOListAddItem(AttachedSourceObservedItem_t *p_list_head, AttachedSourceObs
 {
   assert_param(p_list_head != NULL);
 
-  if(p_item != NULL)
+  if (p_item != NULL)
   {
     p_item->p_next = p_list_head->p_next;
     p_list_head->p_next = p_item;
@@ -795,12 +807,12 @@ static sys_error_code_t ADPU2_PrepareToBuildNewData(ADPU2_t *_this, AttachedSour
   res = (sys_error_code_t)CB_GetFreeItemFromHead(_this->cbh.p_cb, &_this->cbh.p_producer_data_buff);
   if (!SYS_IS_ERROR_CODE(res))
   {
-    _this->in_data.p_payload = (uint8_t*)CB_GetItemData(_this->cbh.p_producer_data_buff);
+    _this->in_data.p_payload = (uint8_t *)CB_GetItemData(_this->cbh.p_producer_data_buff);
 
     /* reset the data builder interface*/
     AttachedSourceObservedItem_t *p_tmp = _this->attached_data_src_list.p_next;
 
-    while(p_tmp != NULL)
+    while (p_tmp != NULL)
     {
       if (p_tmp->p_builder == NULL)
       {
@@ -823,7 +835,7 @@ static uint8_t *ADPU2_DataBuffAlloc(IDataBuilder_t *_this, void *p_data_build_co
 {
   assert_param(_this != NULL);
   assert_param(p_data_build_context != NULL);
-  ADPU2_t *p_obj = (ADPU2_t*)p_data_build_context;
+  ADPU2_t *p_obj = (ADPU2_t *)p_data_build_context;
   uint8_t *p_buff = NULL;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   SYS_DECLARE_CS(cs);
@@ -848,12 +860,12 @@ static uint8_t *ADPU2_DataBuffAlloc(IDataBuilder_t *_this, void *p_data_build_co
     }
 
     /* */
-    if(p_obj->notify_data_ready_f)
+    if (p_obj->notify_data_ready_f)
     {
       /* I do not process inline the new data, but I notify the app.
        * It will be responsibility of the app to call ADPU2_ProcessAndDispatch or manually
        * do the Process&Dispatch */
-      p_obj->notify_data_ready_f((IDPU2_t*)p_obj, p_obj->p_data_ready_callback_param);
+      p_obj->notify_data_ready_f((IDPU2_t *)p_obj, p_obj->p_data_ready_callback_param);
     }
     else
     {
@@ -883,7 +895,7 @@ static sys_error_code_t ADPU2_OnNewInputDataFromDPU(ADPU2_t *_this,  DataEvent_t
       res = (sys_error_code_t)CB_GetFreeItemFromHead(_this->cbh.p_cb, &_this->cbh.p_producer_data_buff);
       if (!SYS_IS_ERROR_CODE(res))
       {
-        _this->in_data.p_payload = (uint8_t*)CB_GetItemData(_this->cbh.p_producer_data_buff);
+        _this->in_data.p_payload = (uint8_t *)CB_GetItemData(_this->cbh.p_producer_data_buff);
 
         /* reset the data builder interface*/
         (void)IDataBuilder_Reset(p_src_dpu->next_dpu.p_builder, _this);
@@ -919,12 +931,12 @@ static sys_error_code_t ADPU2_OnNewInputDataFromDPU(ADPU2_t *_this,  DataEvent_t
       SYS_ENTER_CRITICAL(cs);
       _this->cbh.p_producer_data_buff = NULL;
       SYS_EXIT_CRITICAL(cs);
-      if(_this->notify_data_ready_f)
+      if (_this->notify_data_ready_f)
       {
         /* I do not process inline the new data, but I notify the app.
          * It will be responsibility of the app to call ADPU2_ProcessAndDispatch or manually
          * do the Process&Dispatch */
-        _this->notify_data_ready_f((IDPU2_t*)_this, _this->p_data_ready_callback_param);
+        _this->notify_data_ready_f((IDPU2_t *)_this, _this->p_data_ready_callback_param);
       }
       else
       {

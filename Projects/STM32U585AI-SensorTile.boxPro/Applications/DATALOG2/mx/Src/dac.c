@@ -78,19 +78,19 @@ void MX_DAC1_Init(void)
 
 }
 
-void HAL_DAC_MspInit(DAC_HandleTypeDef* dacHandle)
+void HAL_DAC_MspInit(DAC_HandleTypeDef *dacHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-  if(dacHandle->Instance==DAC1)
+  if (dacHandle->Instance == DAC1)
   {
-  /* USER CODE BEGIN DAC1_MspInit 0 */
+    /* USER CODE BEGIN DAC1_MspInit 0 */
 
-  /* USER CODE END DAC1_MspInit 0 */
+    /* USER CODE END DAC1_MspInit 0 */
 
-  /** Initializes the peripherals clock
-  */
+    /** Initializes the peripherals clock
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_DAC1;
     PeriphClkInit.Dac1ClockSelection = RCC_DAC1CLKSOURCE_LSI;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -104,37 +104,37 @@ void HAL_DAC_MspInit(DAC_HandleTypeDef* dacHandle)
     __HAL_RCC_GPIOA_CLK_ENABLE();
     /**DAC1 GPIO Configuration
     PA4     ------> DAC1_OUT1
-    */
+      */
     GPIO_InitStruct.Pin = GPIO_PIN_4;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN DAC1_MspInit 1 */
+    /* USER CODE BEGIN DAC1_MspInit 1 */
 
-  /* USER CODE END DAC1_MspInit 1 */
+    /* USER CODE END DAC1_MspInit 1 */
   }
 }
 
-void HAL_DAC_MspDeInit(DAC_HandleTypeDef* dacHandle)
+void HAL_DAC_MspDeInit(DAC_HandleTypeDef *dacHandle)
 {
 
-  if(dacHandle->Instance==DAC1)
+  if (dacHandle->Instance == DAC1)
   {
-  /* USER CODE BEGIN DAC1_MspDeInit 0 */
+    /* USER CODE BEGIN DAC1_MspDeInit 0 */
 
-  /* USER CODE END DAC1_MspDeInit 0 */
+    /* USER CODE END DAC1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_DAC1_CLK_DISABLE();
 
     /**DAC1 GPIO Configuration
     PA4     ------> DAC1_OUT1
-    */
+      */
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_4);
 
-  /* USER CODE BEGIN DAC1_MspDeInit 1 */
+    /* USER CODE BEGIN DAC1_MspDeInit 1 */
 
-  /* USER CODE END DAC1_MspDeInit 1 */
+    /* USER CODE END DAC1_MspDeInit 1 */
   }
 }
 

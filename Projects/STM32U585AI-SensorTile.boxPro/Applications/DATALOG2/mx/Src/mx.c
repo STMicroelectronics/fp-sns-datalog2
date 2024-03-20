@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    mx.c
   * @author  SRA - GPM
-  * 
-  * 
+  *
+  *
   *
   * @brief Project peripherals configuration files.
   *

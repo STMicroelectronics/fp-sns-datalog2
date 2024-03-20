@@ -38,11 +38,12 @@ typedef struct _ISensorLight_t ISensorLight_t;
 // Public API declaration
 //***********************
 /** Public interface **/
-static inline sys_error_code_t ISensorGetIntermeasurementTime(ISensorLight_t *_this, uint32_t *p_measured, uint32_t *p_nominal);
-static inline float ISensorGetExposureTime(ISensorLight_t *_this);
+static inline sys_error_code_t ISensorGetIntermeasurementTime(ISensorLight_t *_this, uint32_t *p_measured,
+                                                              uint32_t *p_nominal);
+static inline uint32_t ISensorGetExposureTime(ISensorLight_t *_this);
 static inline sys_error_code_t ISensorGetLightGain(ISensorLight_t *_this, float *LightGain);
 static inline sys_error_code_t ISensorSetIntermeasurementTime(ISensorLight_t *_this, uint32_t intermeasurement_time);
-static inline sys_error_code_t ISensorSetExposureTime(ISensorLight_t *_this, float exposure_time);
+static inline sys_error_code_t ISensorSetExposureTime(ISensorLight_t *_this, uint32_t exposure_time);
 static inline sys_error_code_t ISensorSetLightGain(ISensorLight_t *_this, float LightGain, uint8_t channel);
 
 #ifdef __cplusplus

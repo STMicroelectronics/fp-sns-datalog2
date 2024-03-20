@@ -181,7 +181,6 @@ static sys_error_code_t IIS3DWBTaskConfigureIrqPin(const IIS3DWBTask *_this, boo
 static void IIS3DWBTaskTimerCallbackFunction(ULONG param);
 
 
-
 /* Inline function forward declaration */
 /***************************************/
 
@@ -255,28 +254,7 @@ static IIS3DWBTaskClass_t sTheClass =
   /* ACCELEROMETER DESCRIPTOR */
   {
     "iis3dwb",
-    COM_TYPE_ACC,
-    {
-      26667.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      2.0f,
-      4.0f,
-      8.0f,
-      16.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "x",
-      "y",
-      "z",
-    },
-    "g",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_ACC
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -1440,7 +1418,6 @@ static sys_error_code_t IIS3DWBTaskSensorSetFS(IIS3DWBTask *_this, SMMessage rep
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
@@ -1448,30 +1425,23 @@ static sys_error_code_t IIS3DWBTaskSensorSetFS(IIS3DWBTask *_this, SMMessage rep
   {
     if (fs < 3.0f)
     {
-      iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_2g);
       fs = 2.0f;
     }
     else if (fs < 5.0f)
     {
-      iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_4g);
       fs = 4.0f;
     }
     else if (fs < 9.0f)
     {
-      iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_8g);
       fs = 8.0f;
     }
     else
     {
-      iis3dwb_xl_full_scale_set(p_sensor_drv, IIS3DWB_16g);
       fs = 16.0f;
     }
 
-    if (!SYS_IS_ERROR_CODE(res))
-    {
-      _this->sensor_status.type.mems.fs = fs;
-      _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
-    }
+    _this->sensor_status.type.mems.fs = fs;
+    _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
   }
   else
   {

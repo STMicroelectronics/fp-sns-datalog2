@@ -77,20 +77,20 @@ void MX_SAI1_Init(void)
   /* USER CODE END SAI1_Init 2 */
 
 }
-static uint32_t SAI1_client =0;
+static uint32_t SAI1_client = 0;
 
-void HAL_SAI_MspInit(SAI_HandleTypeDef* saiHandle)
+void HAL_SAI_MspInit(SAI_HandleTypeDef *saiHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct;
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-/* SAI1 */
-    if(saiHandle->Instance==SAI1_Block_A)
-    {
+  /* SAI1 */
+  if (saiHandle->Instance == SAI1_Block_A)
+  {
     /* SAI1 clock enable */
 
-  /** Initializes the peripherals clock
-  */
+    /** Initializes the peripherals clock
+    */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_SAI1;
     PeriphClkInit.Sai1ClockSelection = RCC_SAI1CLKSOURCE_PLL1;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -100,7 +100,7 @@ void HAL_SAI_MspInit(SAI_HandleTypeDef* saiHandle)
 
     if (SAI1_client == 0)
     {
-       __HAL_RCC_SAI1_CLK_ENABLE();
+      __HAL_RCC_SAI1_CLK_ENABLE();
     }
     SAI1_client ++;
 
@@ -109,7 +109,7 @@ void HAL_SAI_MspInit(SAI_HandleTypeDef* saiHandle)
     PA10     ------> SAI1_SD_A
     PA8     ------> SAI1_SCK_A
     PA9     ------> SAI1_FS_A
-    */
+      */
     GPIO_InitStruct.Pin = GPIO_PIN_2;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -117,40 +117,40 @@ void HAL_SAI_MspInit(SAI_HandleTypeDef* saiHandle)
     GPIO_InitStruct.Alternate = GPIO_AF13_SAI1;
     HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_10|GPIO_PIN_8|GPIO_PIN_9;
+    GPIO_InitStruct.Pin = GPIO_PIN_10 | GPIO_PIN_8 | GPIO_PIN_9;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     GPIO_InitStruct.Alternate = GPIO_AF13_SAI1;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-    }
+  }
 }
 
-void HAL_SAI_MspDeInit(SAI_HandleTypeDef* saiHandle)
+void HAL_SAI_MspDeInit(SAI_HandleTypeDef *saiHandle)
 {
 
-/* SAI1 */
-    if(saiHandle->Instance==SAI1_Block_A)
-    {
+  /* SAI1 */
+  if (saiHandle->Instance == SAI1_Block_A)
+  {
     SAI1_client --;
     if (SAI1_client == 0)
-      {
+    {
       /* Peripheral clock disable */
-       __HAL_RCC_SAI1_CLK_DISABLE();
-      }
+      __HAL_RCC_SAI1_CLK_DISABLE();
+    }
 
     /**SAI1_A_Block_A GPIO Configuration
     PE2     ------> SAI1_MCLK_A
     PA10     ------> SAI1_SD_A
     PA8     ------> SAI1_SCK_A
     PA9     ------> SAI1_FS_A
-    */
+      */
     HAL_GPIO_DeInit(GPIOE, GPIO_PIN_2);
 
-    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_10|GPIO_PIN_8|GPIO_PIN_9);
+    HAL_GPIO_DeInit(GPIOA, GPIO_PIN_10 | GPIO_PIN_8 | GPIO_PIN_9);
 
-    }
+  }
 }
 
 /**

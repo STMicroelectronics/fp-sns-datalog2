@@ -94,7 +94,7 @@ UINT ux_device_class_sensor_streaming_SetTxDataBuffer(UX_SLAVE_CLASS_SENSOR_STRE
     hwcid->tx_cbdl2[ch_number] = cbdl2;
 
     /* Initialize the CircularBuffer with the specified parameters */
-    CBDL2_Init(cbdl2, ptr, item_size, true);
+    (void)CBDL2_Init(cbdl2, ptr, item_size, true);
   }
   else
   {

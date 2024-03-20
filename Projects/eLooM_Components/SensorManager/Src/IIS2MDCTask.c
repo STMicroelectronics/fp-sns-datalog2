@@ -253,28 +253,7 @@ static IIS2MDCTaskClass_t sTheClass =
   /* MAGNETOMETER DESCRIPTOR */
   {
     "iis2mdc",
-    COM_TYPE_MAG,
-    {
-      10.0,
-      20.0,
-      50.0,
-      100.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      50.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "x",
-      "y",
-      "z",
-    },
-    "gauss",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_MAG
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -1221,11 +1200,11 @@ static sys_error_code_t IIS2MDCTaskSensorInit(IIS2MDCTask *_this)
   {
     iis2mdc_odr = IIS2MDC_ODR_100Hz;
   }
-  _this->iis2mdc_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 
   if (_this->sensor_status.is_active)
   {
     iis2mdc_data_rate_set(p_sensor_drv, iis2mdc_odr);
+    _this->iis2mdc_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
   }
   else
   {

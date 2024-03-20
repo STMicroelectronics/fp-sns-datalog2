@@ -53,7 +53,8 @@ static inline uint16_t ISensorGetLPF_P_Bandwidth(ISensorPresence_t *_this);
 static inline uint16_t ISensorGetLPF_M_Bandwidth(ISensorPresence_t *_this);
 static inline uint8_t ISensorGetEmbeddedCompensation(ISensorPresence_t *_this);
 static inline uint8_t ISensorGetSoftwareCompensation(ISensorPresence_t *_this);
-static inline sys_error_code_t ISensorGetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this, CompensationAlgorithmConfig_t *pAlgorithmConfig);
+static inline sys_error_code_t ISensorGetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this,
+                                                                             CompensationAlgorithmConfig_t *pAlgorithmConfig);
 static inline sys_error_code_t ISensorSetDataFrequency(ISensorPresence_t *_this, float DataFrequency);
 static inline sys_error_code_t ISensorSetTransmittance(ISensorPresence_t *_this, float Transmittance);
 static inline sys_error_code_t ISensorSetAverageTObject(ISensorPresence_t *_this, uint16_t avgTobject);
@@ -62,14 +63,17 @@ static inline sys_error_code_t ISensorSetPresenceThreshold(ISensorPresence_t *_t
 static inline sys_error_code_t ISensorSetPresenceHysteresis(ISensorPresence_t *_this, uint8_t PresenceHysteresis);
 static inline sys_error_code_t ISensorSetMotionThreshold(ISensorPresence_t *_this, uint16_t MotionThreshold);
 static inline sys_error_code_t ISensorSetMotionHysteresis(ISensorPresence_t *_this, uint8_t MotionHysteresis);
-static inline sys_error_code_t ISensorSetTAmbientShockThreshold(ISensorPresence_t *_this, uint16_t TAmbientShockThreshold);
-static inline sys_error_code_t ISensorSetTAmbientShockHysteresis(ISensorPresence_t *_this, uint8_t TAmbientShockHysteresis);
+static inline sys_error_code_t ISensorSetTAmbientShockThreshold(ISensorPresence_t *_this,
+                                                                uint16_t TAmbientShockThreshold);
+static inline sys_error_code_t ISensorSetTAmbientShockHysteresis(ISensorPresence_t *_this,
+                                                                 uint8_t TAmbientShockHysteresis);
 static inline sys_error_code_t ISensorSetLPF_P_M_Bandwidth(ISensorPresence_t *_this, uint16_t bandwidth);
 static inline sys_error_code_t ISensorSetLPF_P_Bandwidth(ISensorPresence_t *_this, uint16_t bandwidth);
 static inline sys_error_code_t ISensorSetLPF_M_Bandwidth(ISensorPresence_t *_this, uint16_t bandwidth);
 static inline sys_error_code_t ISensorSetEmbeddedCompensation(ISensorPresence_t *_this, uint8_t EmbeddedCompensation);
 static inline sys_error_code_t ISensorSetSoftwareCompensation(ISensorPresence_t *_this, uint8_t SoftwareCompensation);
-static inline sys_error_code_t ISensorSetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this, CompensationAlgorithmConfig_t *pAlgorithmConfig);
+static inline sys_error_code_t ISensorSetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this,
+                                                                             CompensationAlgorithmConfig_t *pAlgorithmConfig);
 
 #ifdef __cplusplus
 }

@@ -33,7 +33,6 @@
 #define _PNPL_ISM330DHCX_MLC_H_
 
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif

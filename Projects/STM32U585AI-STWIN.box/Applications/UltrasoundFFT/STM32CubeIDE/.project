@@ -868,6 +868,11 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rcc_ex.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rng.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rng.c</locationURI>
+		</link>
+		<link>
 			<name>Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rtc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rtc.c</locationURI>
@@ -1461,6 +1466,11 @@
 			<name>User/mx/Src/mx.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/mx.c</locationURI>
+		</link>
+		<link>
+			<name>User/mx/Src/rng.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/rng.c</locationURI>
 		</link>
 		<link>
 			<name>User/mx/Src/rtc.c</name>

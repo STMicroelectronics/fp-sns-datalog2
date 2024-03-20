@@ -158,7 +158,8 @@ uint8_t Acquisition_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seri
   return 0;
 }
 
-uint8_t Acquisition_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Acquisition_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                              uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
@@ -197,7 +198,8 @@ uint8_t Acquisition_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *ser
   return ret;
 }
 
-uint8_t Acquisition_Info_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Acquisition_Info_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                                  uint32_t *size, uint8_t pretty)
 {
   return 1;
 }

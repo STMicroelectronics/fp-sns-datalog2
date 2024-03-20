@@ -24,7 +24,6 @@ extern "C" {
 #endif
 
 
-
 /* AManagedTask virtual functions */
 sys_error_code_t MP23DB01HPTask_vtblHardwareInit(AManagedTask *_this, void *pParams); ///< @sa AMTHardwareInit
 sys_error_code_t MP23DB01HPTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pvTaskCode, CHAR **pcName,

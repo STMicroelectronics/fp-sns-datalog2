@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:ism330is_ispu;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,13 +53,9 @@ static const IPnPLComponent_vtbl sIsm330is_Ispu_PnPL_CompIF_vtbl =
   */
 struct _Ism330is_Ispu_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
-  /**
-    * Contains Ism330is_Ispu functions pointers.
-    */
+  /* Contains Ism330is_Ispu functions pointers. */
   IIsm330is_Ispu_t *cmdIF;
 };
 
@@ -118,30 +114,32 @@ uint8_t Ism330is_Ispu_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   tempJSON = json_value_init_object();
   JSON_Status = json_value_get_object(tempJSON);
 
-  char *temp_s = "";
-  ism330is_ispu_get_sensor_annotation(&temp_s);
-  json_object_dotset_string(JSON_Status, "ism330is_ispu.sensor_annotation", temp_s);
   bool temp_b = 0;
   ism330is_ispu_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "ism330is_ispu.enable", temp_b);
   int32_t temp_i = 0;
   ism330is_ispu_get_samples_per_ts(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_ispu.samples_per_ts", temp_i);
+  ism330is_ispu_get_dim(&temp_i);
+  json_object_dotset_number(JSON_Status, "ism330is_ispu.dim", temp_i);
+  float temp_f = 0;
+  ism330is_ispu_get_ioffset(&temp_f);
+  json_object_dotset_number(JSON_Status, "ism330is_ispu.ioffset", temp_f);
   ism330is_ispu_get_ucf_status(&temp_b);
   json_object_dotset_boolean(JSON_Status, "ism330is_ispu.ucf_status", temp_b);
-  float temp_f = 0;
   ism330is_ispu_get_usb_dps(&temp_f);
   json_object_dotset_number(JSON_Status, "ism330is_ispu.usb_dps", temp_f);
   ism330is_ispu_get_sd_dps(&temp_f);
   json_object_dotset_number(JSON_Status, "ism330is_ispu.sd_dps", temp_f);
+  char *temp_s = "";
   ism330is_ispu_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "ism330is_ispu.data_type", temp_s);
-  ism330is_ispu_get_dim(&temp_i);
-  json_object_dotset_number(JSON_Status, "ism330is_ispu.dim", temp_i);
-  ism330is_ispu_get_ioffset(&temp_f);
-  json_object_dotset_number(JSON_Status, "ism330is_ispu.ioffset", temp_f);
+  ism330is_ispu_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "ism330is_ispu.sensor_annotation", temp_s);
   ism330is_ispu_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_ispu.sensor_category", temp_i);
+  ism330is_ispu_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "ism330is_ispu.mounted", temp_b);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "ism330is_ispu.c_type", COMP_TYPE_SENSOR);
@@ -168,7 +166,8 @@ uint8_t Ism330is_Ispu_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   return 0;
 }
 
-uint8_t Ism330is_Ispu_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Ism330is_Ispu_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                           uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
@@ -180,9 +179,12 @@ uint8_t Ism330is_Ispu_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "ism330is_ispu.enable");
     ret = ism330is_ispu_set_enable(enable);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_boolean(respJSONObject, "ism330is_ispu.enable.value", enable);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "ism330is_ispu.enable.value", "PNPL_SET_ERROR");
     }
   }
@@ -190,7 +192,14 @@ uint8_t Ism330is_Ispu_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ism330is_ispu.sensor_annotation");
     ret = ism330is_ispu_set_sensor_annotation(sensor_annotation);
-    json_object_dotset_string(respJSONObject, "ism330is_ispu.sensor_annotation.value", ret == 0 ? sensor_annotation : "PNPL_SET_ERROR");
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "ism330is_ispu.sensor_annotation.value", sensor_annotation);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "ism330is_ispu.sensor_annotation.value", "PNPL_SET_ERROR");
+    }
   }
   json_value_free(tempJSON);
   if (pretty == 1)
@@ -203,13 +212,13 @@ uint8_t Ism330is_Ispu_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
     *response = json_serialize_to_string(respJSON);
     *size = json_serialization_size(respJSON);
   }
-
   json_value_free(respJSON);
-
   return ret;
 }
 
-uint8_t Ism330is_Ispu_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+
+uint8_t Ism330is_Ispu_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                               uint32_t *size, uint8_t pretty)
 {
   Ism330is_Ispu_PnPL *p_if_owner = (Ism330is_Ispu_PnPL *) _this;
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
@@ -236,8 +245,15 @@ uint8_t Ism330is_Ispu_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *se
           if (json_object_dothas_value(tempJSONObject, "ism330is_ispu*load_file.files.output_size"))
           {
             output_size = (int32_t) json_object_dotget_number(tempJSONObject, "ism330is_ispu*load_file.files.output_size");
-            ism330is_ispu_load_file(p_if_owner->cmdIF, (char *) ucf_data, ucf_size, (char *) output_data, output_size);
-            json_object_dotset_string(respJSONObject, "ism330is_ispu*load_file.result", ret == 0 ? "PNPL_CMD_OK" : "PNPL_CMD_ERROR");
+            ret = ism330is_ispu_load_file(p_if_owner->cmdIF, (char *) ucf_data, ucf_size, (char *) output_data, output_size);
+            if (ret == 0)
+            {
+              json_object_dotset_string(respJSONObject, "ism330is_ispu*load_file.response", "PNPL_CMD_OK");
+            }
+            else
+            {
+              json_object_dotset_string(respJSONObject, "ism330is_ispu.load_file.response", "PNPL_CMD_ERROR");
+            }
           }
         }
       }
@@ -254,8 +270,7 @@ uint8_t Ism330is_Ispu_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *se
     *response = json_serialize_to_string(respJSON);
     *size = json_serialization_size(respJSON);
   }
-
   json_value_free(respJSON);
-
-  return 0;
+  return ret;
 }
+

@@ -50,13 +50,14 @@ def show_help(ctx, param, value):
 @click.option('-st','--start_time', help="Start Time - Data conversion will start from this time (seconds)", type=int, default=0)
 @click.option('-et','--end_time', help="End Time - Data conversion will end up in this time (seconds)", type=int, default=-1)
 @click.option('-it','--ignore_datalog_tags', is_flag=True, help="Use this flag to ignore information about annotations taken during acquisition (if any) in the exported data", default=False)
+@click.option('-r', '--raw_data', is_flag=True, help="Uses Raw data (not multiplied by sensitivity)", default=False)
 @click.option('-f', '--out_format', help="Select exported data format", type=click.Choice(['TXT', 'CSV', 'TSV'], case_sensitive=False))
 @click.option('-cdm','--custom_device_model', help="Upload a custom Device Template Model (DTDL)", type=(int, int, str))
-@click.version_option(script_version, '-v', '--version', prog_name="HSDatalogToUnico", is_flag=True, help="HSDatalogToUnico Converter tool version number")
+@click.version_option(script_version, '-v', '--version', prog_name="hsdatalog_data_export_by_tags", is_flag=True, help="hsdatalog_data_export_by_tags converter script version number")
 @click.option('-d', '--debug', is_flag=True, help="[DEBUG] Check for corrupted data and timestamps", default=False)
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
-def hsd_exportByTags(acq_folder, output_folder, sensor_name, start_time, end_time, ignore_datalog_tags, out_format, custom_device_model, debug):
+def hsd_exportByTags(acq_folder, output_folder, sensor_name, start_time, end_time, ignore_datalog_tags, raw_data, out_format, custom_device_model, debug):
 
     if custom_device_model is not None:
         HSDatalogDTM.upload_custom_dtm(custom_device_model)
@@ -80,27 +81,27 @@ def hsd_exportByTags(acq_folder, output_folder, sensor_name, start_time, end_tim
         if sensor_name == '':
             component = HSDatalog.ask_for_component(hsd, only_active=True)
             if component is not None:
-                convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
+                convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, raw_data)
             else:
                 break
 
         elif sensor_name == 'all':
             component_list = HSDatalog.get_all_components(hsd, only_active=True)
             for component in component_list:
-                convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
+                convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, raw_data)
             df_flag = False
         
         else:
             component = HSDatalog.get_component(hsd, sensor_name)
             if component is not None:
-                convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
+                convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, raw_data)
             else:
                 log.error("No \"{}\" Component found in your Device Configuration file.".format(sensor_name))
             df_flag = False
 
-def convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format):
+def convert_data(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, raw_data = False):
     try:
-        HSDatalog.convert_dat_to_txt_by_tags(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format)
+        HSDatalog.convert_dat_to_txt_by_tags(hsd, component, start_time, end_time, ignore_datalog_tags, acq_folder, output_folder, out_format, raw_data = raw_data)
     except MissingISPUOutputDescriptorException as ispu_err:
         log.error(ispu_err)
         log.warning("Copy the right ISPU output descriptor file in your \"{}\" acquisition folder renamed as \"ispu_output_format.json\"".format(acq_folder))

@@ -111,7 +111,7 @@ void MX_UCPD1_Init(void)
   LL_DMA_Init(GPDMA1, LL_DMA_CHANNEL_3, &DMA_InitStruct);
 
   /* UCPD1 interrupt Init */
-  NVIC_SetPriority(UCPD1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),5, 0));
+  NVIC_SetPriority(UCPD1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 5, 0));
   NVIC_EnableIRQ(UCPD1_IRQn);
 
   /* USER CODE BEGIN UCPD1_Init 1 */

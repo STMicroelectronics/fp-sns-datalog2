@@ -6,4 +6,6 @@ include st_hsdatalog/HSD_link/communication/libhs_datalog/32bit/*
 include st_hsdatalog/HSD_link/communication/libhs_datalog/64bit/*
 include st_hsdatalog/HSD_link/communication/libhs_datalog/linux/*
 include st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi/*
+include st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_32bit/*
+include st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_64bit/*
 include st_hsdatalog/HSD_GUI/UI/*

@@ -27,7 +27,7 @@
 /* Private variables ---------------------------------------------------------*/
 TIM_HandleTypeDef        htim6;
 /* Private function prototypes -----------------------------------------------*/
- void TimeBase_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+void TimeBase_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 /* Private functions ---------------------------------------------------------*/
 
 /**
@@ -67,7 +67,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
   }
 
   /* Compute the prescaler value to have TIM6 counter clock equal to 1MHz */
-  uwPrescalerValue = (uint32_t) ((uwTimclock / 1000000U) - 1U);
+  uwPrescalerValue = (uint32_t)((uwTimclock / 1000000U) - 1U);
 
   /* Initialize TIM6 */
   htim6.Instance = TIM6;
@@ -92,8 +92,8 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
     status = HAL_TIM_Base_Start_IT(&htim6);
     if (status == HAL_OK)
     {
-    /* Enable the TIM6 global Interrupt */
-        HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+      /* Enable the TIM6 global Interrupt */
+      HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
       /* Configure the SysTick IRQ priority */
       if (TickPriority < (1UL << __NVIC_PRIO_BITS))
       {
@@ -110,7 +110,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
 
   HAL_TIM_RegisterCallback(&htim6, HAL_TIM_PERIOD_ELAPSED_CB_ID, TimeBase_TIM_PeriodElapsedCallback);
 
- /* Return function status */
+  /* Return function status */
   return status;
 }
 
@@ -138,14 +138,14 @@ void HAL_ResumeTick(void)
   __HAL_TIM_ENABLE_IT(&htim6, TIM_IT_UPDATE);
 }
 
- /**
+/**
   * @brief  Period elapsed callback in non blocking mode
   * @note   This function is called  when TIM6 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
   * a global variable "uwTick" used as application time base.
   * @param  htim TIM handle
   * @retval None
-  */
+ */
 
 void TimeBase_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {

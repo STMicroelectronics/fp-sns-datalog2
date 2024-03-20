@@ -68,7 +68,7 @@ class PlotLinesWidget(PlotWidget):
         self.plot_params.time_window = new_time_w
         self.update_plot_characteristics(self.plot_params)
 
-    @Slot(bool)
+    @Slot(bool, int)
     def s_is_logging(self, status: bool, interface: int):
         if interface == 1 or interface == 3:
             print("Component {} is logging via USB: {}".format(self.comp_name,status))

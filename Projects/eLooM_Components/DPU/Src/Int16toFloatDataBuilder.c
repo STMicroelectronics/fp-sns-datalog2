@@ -1,24 +1,24 @@
 /**
- ******************************************************************************
- * @file    Int16toFloatDataBuilder.c
- * @author  STMicroelectronics - AIS - MCD Team
- * @version M.m.b
- * @date    May 21, 2022
- *
- * @brief
- *
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    Int16toFloatDataBuilder.c
+  * @author  STMicroelectronics - AIS - MCD Team
+  * @version M.m.b
+  * @date    May 21, 2022
+  *
+  * @brief
+  *
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  ******************************************************************************
+  */
 
 #include "Int16toFloatDataBuilder.h"
 #include "Int16toFloatDataBuilder_vtbl.h"
@@ -28,12 +28,13 @@
 
 
 /**
- * Class object declaration.
- */
-typedef struct _Int16toFloatDataBuilderClass {
+  * Class object declaration.
+  */
+typedef struct _Int16toFloatDataBuilderClass
+{
   /**
-   * IDataBuilder_t class virtual table.
-   */
+    * IDataBuilder_t class virtual table.
+    */
   IDataBuilder_vtbl vtbl;
 
 } Int16toFloatDataBuilderClass_t;
@@ -43,14 +44,15 @@ typedef struct _Int16toFloatDataBuilderClass {
 /********************/
 
 /**
- * The class object.
- */
-static const Int16toFloatDataBuilderClass_t sTheClass = {
-    /* class virtual table */
-    {
-        Int16ToFloatDB_vtblOnReset,
-        Int16ToFloatDB_vtblOnNewInData
-    },
+  * The class object.
+  */
+static const Int16toFloatDataBuilderClass_t sTheClass =
+{
+  /* class virtual table */
+  {
+    Int16ToFloatDB_vtblOnReset,
+    Int16ToFloatDB_vtblOnNewInData
+  },
 };
 
 
@@ -64,7 +66,7 @@ static const Int16toFloatDataBuilderClass_t sTheClass = {
 sys_error_code_t Int16ToFloatDB_vtblOnReset(IDataBuilder_t *_this, void *p_data_build_context)
 {
   assert_param(_this != NULL);
-  Int16toFloatDataBuilder_t *p_obj = (Int16toFloatDataBuilder_t*)_this;
+  Int16toFloatDataBuilder_t *p_obj = (Int16toFloatDataBuilder_t *)_this;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   p_obj->index = 0;
@@ -73,10 +75,11 @@ sys_error_code_t Int16ToFloatDB_vtblOnReset(IDataBuilder_t *_this, void *p_data_
   return res;
 }
 
-sys_error_code_t Int16ToFloatDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t *p_target_data, const EMData_t *p_new_in_data, IDB_BuildStrategy_e build_strategy, DataBuffAllocator_f data_buff_alloc)
+sys_error_code_t Int16ToFloatDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t *p_target_data,
+                                                const EMData_t *p_new_in_data, IDB_BuildStrategy_e build_strategy, DataBuffAllocator_f data_buff_alloc)
 {
   assert_param(_this != NULL);
-  Int16toFloatDataBuilder_t *p_obj = (Int16toFloatDataBuilder_t*)_this;
+  Int16toFloatDataBuilder_t *p_obj = (Int16toFloatDataBuilder_t *)_this;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   EMData_t reshaped_target_data, reshaped_in_data;
 
@@ -86,8 +89,8 @@ sys_error_code_t Int16ToFloatDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t 
   EMD_1dInit(&reshaped_in_data, EMD_Data(p_new_in_data), EMD_GetType(p_new_in_data), in_elements);
   EMD_1dInit(&reshaped_target_data, EMD_Data(p_target_data), E_EM_FLOAT, target_elements);
 
-  register float *p_target_val = (float*)EMD_1dDataAt(&reshaped_target_data, p_obj->index);
-  register int16_t *p_src_val = (int16_t*)EMD_1dDataAt(&reshaped_in_data, 0);
+  register float *p_target_val = (float *)EMD_1dDataAt(&reshaped_target_data, p_obj->index);
+  register int16_t *p_src_val = (int16_t *)EMD_1dDataAt(&reshaped_in_data, 0);
   /*consume all the new input data*/
   while (in_elements > 0U)
   {
@@ -95,9 +98,9 @@ sys_error_code_t Int16ToFloatDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t 
     uint32_t free_elements = target_elements - p_obj->index;
     uint32_t element_to_copy = (free_elements < in_elements ? free_elements : in_elements); // MIN(free_elements, in_elements)
     /*copy the input data elements in the target data payload*/
-    for (uint32_t i=0; i<element_to_copy; ++i)
+    for (uint32_t i = 0; i < element_to_copy; ++i)
     {
-      *p_target_val++ = (float)*p_src_val++;
+      *p_target_val++ = (float) * p_src_val++;
     }
 
     in_elements -= element_to_copy;
@@ -123,7 +126,7 @@ sys_error_code_t Int16ToFloatDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t 
             {
               /*I have a buffer to build a new data, so I reset the index.*/
               p_obj->index = 0;
-              p_target_val = (float*)EMD_1dDataAt(&reshaped_target_data, p_obj->index);
+              p_target_val = (float *)EMD_1dDataAt(&reshaped_target_data, p_obj->index);
             }
             break;
 
@@ -156,7 +159,7 @@ sys_error_code_t Int16ToFloatDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t 
 
 IDataBuilder_t *Int16ToFloatDB_Alloc(void)
 {
-  IDataBuilder_t *p_new_obj = (IDataBuilder_t*)SysAlloc(sizeof(Int16toFloatDataBuilder_t));
+  IDataBuilder_t *p_new_obj = (IDataBuilder_t *)SysAlloc(sizeof(Int16toFloatDataBuilder_t));
   if (p_new_obj != NULL)
   {
     p_new_obj->vptr = &sTheClass.vtbl;
@@ -178,7 +181,6 @@ IDataBuilder_t *Int16ToFloatDB_AllocStatic(Int16toFloatDataBuilder_t *_this)
     _this->super.vptr = &sTheClass.vtbl;
   }
 
-  return (IDataBuilder_t*)_this;
+  return (IDataBuilder_t *)_this;
 }
-
 

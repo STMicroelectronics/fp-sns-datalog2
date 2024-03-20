@@ -12,8 +12,8 @@
 
 /**************************************************************************/
 /**************************************************************************/
-/**                                                                       */
-/** POSIX wrapper for THREADX                                             */
+/**                                                                       */ 
+/** POSIX wrapper for THREADX                                             */ 
 /**                                                                       */
 /**                                                                       */
 /**                                                                       */
@@ -32,7 +32,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    posix_priority_search                               PORTABLE C      */
-/*                                                           6.2.0        */
+/*                                                           6.1.7        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
@@ -63,17 +63,15 @@
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  06-02-2021      William E. Lamie        Initial Version 6.1.7         */
-/*  10-31-2022      Scott Larson            Add 64-bit support,           */
-/*                                            resulting in version 6.2.0  */
+/*  06-02-2021     William E. Lamie         Initial Version 6.1.7         */
 /*                                                                        */
 /**************************************************************************/
-ULONG posix_priority_search(mqd_t msgQId, ULONG priority)
+ULONG posix_priority_search(mqd_t msgQId ,ULONG priority)
 {
 
 TX_QUEUE            *queue;
 POSIX_MSG_QUEUE     *q_ptr;
-ULONG                order = 1;
+ULONG                order;
 ULONG                numMsgs;
 UINT                 index;
 ULONG               *source;
@@ -89,21 +87,18 @@ ULONG                msgp;
     source  =  q_ptr->queue.tx_queue_read;
 
     /* check for same priority.  */
-    for(index = 0; index < numMsgs; index++)
+    for(index = 0,order = 1;index <= numMsgs ;index++)
     {
-        source += TX_POSIX_QUEUE_PRIORITY_OFFSET;
+        source += 2;
         msgp = *source;
-        source += (TX_POSIX_MESSAGE_SIZE - TX_POSIX_QUEUE_PRIORITY_OFFSET);
+        source += 2;
 
-        /* If we're at end of queue, go to start. */
         if(source == q_ptr->queue.tx_queue_end)
             source = q_ptr->queue.tx_queue_start;
-
-        /* Increment priority count. */
+    
         if(priority == msgp)
             order += 1;
     }
-
-    /* Return the number of same priority messages. */
+    /* Returns the number of same priority messages. */
     return(order);
 }

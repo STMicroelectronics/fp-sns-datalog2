@@ -18,7 +18,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -27,17 +27,16 @@
 #define SYSCONFIG_H_
 
 
-
 // Board ID and FW_ID
 // *********************
 
 #define BOARD_ID_BOXA           0x0E
-#define BLE_FW_ID_DATALOG2_BOXA 0x20
-#define USB_FW_ID_DATALOG2_BOXA 0x24
+#define BLE_FW_ID_DATALOG2_BOXA 0x1F
+#define USB_FW_ID_DATALOG2_BOXA 0x26
 
 #define BOARD_ID_BOXB           0x12
-#define BLE_FW_ID_DATALOG2_BOXB 0x03
-#define USB_FW_ID_DATALOG2_BOXB 0x03
+#define BLE_FW_ID_DATALOG2_BOXB 0x02
+#define USB_FW_ID_DATALOG2_BOXB 0x05
 
 // Drivers configuration
 // *********************
@@ -70,7 +69,7 @@
 #define INIT_TASK_CFG_STACK_SIZE                  (TX_MINIMUM_STACK*10)
 
 //memory used by eloom to build up the system using azure rtos
-#define INIT_TASK_CFG_HEAP_SIZE                   (550*1024)
+#define INIT_TASK_CFG_HEAP_SIZE                   (565*1024)
 
 
 #ifdef ENABLE_THREADX_DBG_PIN
@@ -80,7 +79,6 @@
 
 /* SensorManager configuration */
 #define SM_MAX_SENSORS                            13U
-
 
 
 // file UtilTask.c
@@ -146,15 +144,17 @@
 #endif
 
 
+#define DATALOG2_USE_WIFI         1
+
 
 // file SysTimestamp.c
 #define SYS_TS_CFG_ENABLE_SERVICE 1
 /**
-* Configuration parameter for the timer used for the eLooM timestamp service.
-* Valid value are:
-* - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
-* - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
-*/
+  * Configuration parameter for the timer used for the eLooM timestamp service.
+  * Valid value are:
+  * - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
+  * - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
+  */
 #define SYS_TS_CFG_TSDRIVER_PARAMS &MX_TIM3InitParams
 //#define SYS_TS_CFG_TSDRIVER_PARAMS SYS_TS_USE_SW_TSDRIVER
 

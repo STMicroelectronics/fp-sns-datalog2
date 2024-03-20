@@ -31,7 +31,7 @@
   * This demo add processing capability to the SensorManager demo by using
   * the Digital Processing Unit (DPU) eLooM component. In the entry point
   * SysOnStartApplication() a DPU is allocated, initialized and connect to the
-  * selected sensor. An instance of DProcessTask1 allow to process teh data coming
+  * selected sensor. An instance of DProcessTask1 allow to process the data coming
   * from the sensor in a concurrent thread.
   *
   * ## How to use the demo

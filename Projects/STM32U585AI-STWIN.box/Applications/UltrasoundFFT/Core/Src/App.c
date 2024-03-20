@@ -108,6 +108,8 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   assert_param(pAppContext);
   sys_error_code_t xRes = SYS_NO_ERROR_CODE;
 
+  PnPLSetAllocationFunctions(SysAlloc, SysFree);
+
   /* Allocate the task objects */
   sFFTAudioObj = FDM_ACOTaskAlloc();
   sDatalogAppObj = DatalogAppTaskAlloc();

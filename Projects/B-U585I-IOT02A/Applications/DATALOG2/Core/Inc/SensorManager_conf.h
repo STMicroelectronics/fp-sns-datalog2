@@ -63,5 +63,4 @@
 #define SPIBUS_TASK_CFG_PRIORITY                  (4)
 
 
-
 #endif /* SENSORMANAGERCONF_H_ */

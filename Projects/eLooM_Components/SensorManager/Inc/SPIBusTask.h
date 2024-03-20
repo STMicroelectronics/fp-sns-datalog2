@@ -49,7 +49,6 @@ extern "C" {
 #define SYS_SPIBUS_TASK_UNSUPPORTED_CMD_ERROR_CODE          SYS_BASE_SPIBUS_TASK_ERROR_CODE + 3
 
 
-
 /**
   * Create  type name for _SPIBusTask.
   */
@@ -132,7 +131,6 @@ sys_error_code_t SPIBusTaskDisconnectDevice(SPIBusTask *_this, SPIBusIF *p_bus_i
   * @return the ::IBus interface of the task.
   */
 IBus *SPIBusTaskGetBusIF(SPIBusTask *_this);
-
 
 
 // Inline functions definition

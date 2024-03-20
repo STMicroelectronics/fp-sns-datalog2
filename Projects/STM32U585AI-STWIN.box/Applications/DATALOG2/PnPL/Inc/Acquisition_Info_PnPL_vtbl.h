@@ -41,8 +41,10 @@ uint8_t Acquisition_Info_PnPL_vtblGetNCommands(IPnPLComponent_t *_this);
 char *Acquisition_Info_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id);
 uint8_t Acquisition_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
                                             uint8_t pretty);
-uint8_t Acquisition_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
-uint8_t Acquisition_Info_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
+uint8_t Acquisition_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                              uint32_t *size, uint8_t pretty);
+uint8_t Acquisition_Info_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                                  uint32_t *size, uint8_t pretty);
 
 #ifdef __cplusplus
 }

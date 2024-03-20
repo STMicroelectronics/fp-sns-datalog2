@@ -22,8 +22,6 @@
 extern "C" {
 #endif
 
-#include "PnPLCompManager_Conf.h"
-
 /**
   * Create a type name for IPnPLComponent_vtbl.
   */

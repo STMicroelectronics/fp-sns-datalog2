@@ -1,61 +1,61 @@
 /**
- ******************************************************************************
- * @file    App.c
- * @author  SRA - GPM
- * 
- * 
- *
- * @brief   Define the Application main entry points
- *
- * ## Introduction
- *
- * This file is the main entry point for the user code.
- *
- * The framework `weak` functions are redefined in this file and they link
- * the application specific code with the framework:
- * - SysLoadApplicationContext(): it is the first application defined function
- *   called by the framework. Here we define all managed tasks. A managed task
- *   implements one or more application specific feature.
- * - SysOnStartApplication(): this function is called by the framework
- *   when the system is initialized (all managed task objects have been
- *   initialized), and before the INIT task release the control. Here we
- *   link the application objects according to the application design.
- *
- * The execution time  between the two above functions is called
- * *system initialization*. During this period only the INIT task is running.
- *
- * Each managed task will be activated in turn to initialize its hardware
- * resources, if any - MyTask_vtblHardwareInit() - and its software
- * resources - MyTask_vtblOnCreateTask().
- *
- * ## About this demo
- *
- * This is the most simple eLooM application. It shows how to setup an eLooM project.
- * It create one managed task (::HelloWorldTask_t). The task display
- * a greeting message in the debug log every second.
- *
- * ## How to use the demo
- *
- * connect the board through the ST-Link. Open a terminal
- * like [Tera Term](http://www.teraterm.org) to display the debug log using these parameters:
- * - Speed       : 115200
- * - Data        : 8 bit
- * - Parity      : none
- * - Stop bits   : 1
- * - Flow control: none
- *
- * Build the project and program the board.
- *********************************************************************************
- * @attention
- *
- * Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *********************************************************************************
- */
+  ******************************************************************************
+  * @file    App.c
+  * @author  SRA - GPM
+  *
+  *
+  *
+  * @brief   Define the Application main entry points
+  *
+  * ## Introduction
+  *
+  * This file is the main entry point for the user code.
+  *
+  * The framework `weak` functions are redefined in this file and they link
+  * the application specific code with the framework:
+  * - SysLoadApplicationContext(): it is the first application defined function
+  *   called by the framework. Here we define all managed tasks. A managed task
+  *   implements one or more application specific feature.
+  * - SysOnStartApplication(): this function is called by the framework
+  *   when the system is initialized (all managed task objects have been
+  *   initialized), and before the INIT task release the control. Here we
+  *   link the application objects according to the application design.
+  *
+  * The execution time  between the two above functions is called
+  * *system initialization*. During this period only the INIT task is running.
+  *
+  * Each managed task will be activated in turn to initialize its hardware
+  * resources, if any - MyTask_vtblHardwareInit() - and its software
+  * resources - MyTask_vtblOnCreateTask().
+  *
+  * ## About this demo
+  *
+  * This is the most simple eLooM application. It shows how to setup an eLooM project.
+  * It create one managed task (::HelloWorldTask_t). The task display
+  * a greeting message in the debug log every second.
+  *
+  * ## How to use the demo
+  *
+  * connect the board through the ST-Link. Open a terminal
+  * like [Tera Term](http://www.teraterm.org) to display the debug log using these parameters:
+  * - Speed       : 115200
+  * - Data        : 8 bit
+  * - Parity      : none
+  * - Stop bits   : 1
+  * - Flow control: none
+  *
+  * Build the project and program the board.
+  *********************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *********************************************************************************
+  */
 
 #include "services/sysdebug.h"
 #include "services/ApplicationContext.h"
@@ -151,12 +151,11 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   assert_param(pAppContext != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  /* Workaround to set malloc/free function even if BLE Init fails */
-  json_set_allocation_functions(SysAlloc, SysFree);
+  PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
   /* Allocate the task objects */
   sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams, &MX_GPIO_PF6InitParams, &MX_GPIO_PB0InitParams, &MX_GPIO_PF8InitParams, &MX_TIM3InitParams, &MX_ADC1InitParams,
-                              &MX_GPIO_UBInitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams);
+                           &MX_GPIO_UBInitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams);
 
   sSPI3BusObj = SPIBusTaskAlloc(&MX_SPI3InitParams);
   sI2C2BusObj = I2CBusTaskAlloc(&MX_I2C2InitParams);
@@ -243,14 +242,15 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   Imp23absu_Mic_PnPLInit(pImp23absu_Mic_PnPLObj);
   Ism330dhcx_Acc_PnPLInit(pIsm330dhcx_Acc_PnPLObj);
   Ism330dhcx_Gyro_PnPLInit(pIsm330dhcx_Gyro_PnPLObj);
-  Ism330dhcx_Mlc_PnPLInit(pIsm330dhcx_Mlc_PnPLObj, DatalogAppTask_GetIMLCControllerIF((DatalogAppTask *) sDatalogAppObj, (AManagedTask *) sISM330DHCXObj));
+  Ism330dhcx_Mlc_PnPLInit(pIsm330dhcx_Mlc_PnPLObj, DatalogAppTask_GetIMLCControllerIF((DatalogAppTask *) sDatalogAppObj,
+                          (AManagedTask *) sISM330DHCXObj));
   Imp34dt05_Mic_PnPLInit(pImp34dt05_Mic_PnPLObj);
   Iis2dh_Acc_PnPLInit(pIis2dh_Acc_PnPLObj);
   Stts751_Temp_PnPLInit(pStts751_Temp_PnPLObj);
   Lps22hh_Press_PnPLInit(pLps22hh_Press_PnPLObj);
   Lps22hh_Temp_PnPLInit(pLps22hh_Temp_PnPLObj);
   Automode_PnPLInit(pAutomode_PnPLObj);
-  Log_Controller_PnPLInit(pLog_Controller_PnPLObj, DatalogAppTask_GetILogControllerIF((DatalogAppTask*) sDatalogAppObj));
+  Log_Controller_PnPLInit(pLog_Controller_PnPLObj, DatalogAppTask_GetILogControllerIF((DatalogAppTask *) sDatalogAppObj));
   Tags_Info_PnPLInit(pTags_Info_PnPLObj);
   Acquisition_Info_PnPLInit(pAcquisition_Info_PnPLObj);
   Firmware_Info_PnPLInit(pFirmware_Info_PnPLObj);
@@ -277,7 +277,8 @@ IAppPowerModeHelper *SysGetPowerModeHelper(void)
 {
   /* Install the application power mode helper. */
   static IAppPowerModeHelper *s_pxPowerModeHelper = NULL;
-  if (s_pxPowerModeHelper == NULL) {
+  if (s_pxPowerModeHelper == NULL)
+  {
     s_pxPowerModeHelper = AppPowerModeHelperAlloc();
   }
 

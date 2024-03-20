@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:iis3dwb_acc;4
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sIis3dwb_Acc_PnPL_CompIF_vtbl =
   */
 struct _Iis3dwb_Acc_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -107,29 +105,29 @@ uint8_t Iis3dwb_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   tempJSON = json_value_init_object();
   JSON_Status = json_value_get_object(tempJSON);
 
-  float temp_f = 0;
-  iis3dwb_acc_get_odr(&temp_f);
+  int32_t temp_i = 0;
+  iis3dwb_acc_get_odr(&temp_i);
   uint8_t enum_id = 0;
-  if (temp_f == iis3dwb_acc_odr_hz26667)
+  if (temp_i == iis3dwb_acc_odr_hz26667)
   {
     enum_id = 0;
   }
   json_object_dotset_number(JSON_Status, "iis3dwb_acc.odr", enum_id);
-  iis3dwb_acc_get_fs(&temp_f);
+  iis3dwb_acc_get_fs(&temp_i);
   enum_id = 0;
-  if (temp_f == iis3dwb_acc_fs_g2)
+  if (temp_i == iis3dwb_acc_fs_g2)
   {
     enum_id = 0;
   }
-  else if (temp_f == iis3dwb_acc_fs_g4)
+  else if (temp_i == iis3dwb_acc_fs_g4)
   {
     enum_id = 1;
   }
-  else if (temp_f == iis3dwb_acc_fs_g8)
+  else if (temp_i == iis3dwb_acc_fs_g8)
   {
     enum_id = 2;
   }
-  else if (temp_f == iis3dwb_acc_fs_g16)
+  else if (temp_i == iis3dwb_acc_fs_g16)
   {
     enum_id = 3;
   }
@@ -137,11 +135,11 @@ uint8_t Iis3dwb_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   bool temp_b = 0;
   iis3dwb_acc_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "iis3dwb_acc.enable", temp_b);
-  int32_t temp_i = 0;
   iis3dwb_acc_get_samples_per_ts(&temp_i);
   json_object_dotset_number(JSON_Status, "iis3dwb_acc.samples_per_ts", temp_i);
   iis3dwb_acc_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "iis3dwb_acc.dim", temp_i);
+  float temp_f = 0;
   iis3dwb_acc_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "iis3dwb_acc.ioffset", temp_f);
   iis3dwb_acc_get_measodr(&temp_f);
@@ -185,7 +183,8 @@ uint8_t Iis3dwb_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   return 0;
 }
 
-uint8_t Iis3dwb_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Iis3dwb_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size,
+                                         uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
@@ -211,9 +210,12 @@ uint8_t Iis3dwb_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
         ret = iis3dwb_acc_set_fs(iis3dwb_acc_fs_g16);
         break;
     }
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "iis3dwb_acc.fs.value", fs);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "iis3dwb_acc.fs.value", "PNPL_SET_ERROR");
     }
   }
@@ -221,9 +223,12 @@ uint8_t Iis3dwb_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "iis3dwb_acc.enable");
     ret = iis3dwb_acc_set_enable(enable);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_boolean(respJSONObject, "iis3dwb_acc.enable.value", enable);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "iis3dwb_acc.enable.value", "PNPL_SET_ERROR");
     }
   }
@@ -231,9 +236,12 @@ uint8_t Iis3dwb_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   {
     int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "iis3dwb_acc.samples_per_ts");
     ret = iis3dwb_acc_set_samples_per_ts(samples_per_ts);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "iis3dwb_acc.samples_per_ts.value", samples_per_ts);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "iis3dwb_acc.samples_per_ts.value", "PNPL_SET_ERROR");
     }
   }
@@ -241,26 +249,34 @@ uint8_t Iis3dwb_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "iis3dwb_acc.sensor_annotation");
     ret = iis3dwb_acc_set_sensor_annotation(sensor_annotation);
-    json_object_dotset_string(respJSONObject, "iis3dwb_acc.sensor_annotation.value", ret == 0 ? sensor_annotation : "PNPL_SET_ERROR");
-  }
-  json_value_free(tempJSON);
-  if (pretty == 1)
+    if (ret == 0)
     {
-      *response = json_serialize_to_string_pretty(respJSON);
-      *size = json_serialization_size_pretty(respJSON);
+      json_object_dotset_string(respJSONObject, "iis3dwb_acc.sensor_annotation.value", sensor_annotation);
     }
     else
     {
-      *response = json_serialize_to_string(respJSON);
-      *size = json_serialization_size(respJSON);
+      json_object_dotset_string(respJSONObject, "iis3dwb_acc.sensor_annotation.value", "PNPL_SET_ERROR");
     }
-
-    json_value_free(respJSON);
-
-    return ret;
+  }
+  json_value_free(tempJSON);
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
+  json_value_free(respJSON);
+  return ret;
 }
 
-uint8_t Iis3dwb_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+
+uint8_t Iis3dwb_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                             uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

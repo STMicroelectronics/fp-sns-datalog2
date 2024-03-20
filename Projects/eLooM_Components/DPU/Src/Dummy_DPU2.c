@@ -1,23 +1,23 @@
 /**
- ******************************************************************************
- * @file    Dummy_DPU2.c
- * @author  STMicroelectronics - AIS - MCD Team
- * @version 2.0.0
- * @date    May 20, 2022
- *
- * @brief   Dummy DPU used as template.
- *
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- ******************************************************************************
+  ******************************************************************************
+  * @file    Dummy_DPU2.c
+  * @author  STMicroelectronics - AIS - MCD Team
+  * @version 2.0.0
+  * @date    May 20, 2022
+  *
+  * @brief   Dummy DPU used as template.
+  *
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  ******************************************************************************
   */
 
 #include "Dummy_DPU2.h"
@@ -29,24 +29,25 @@
 
 
 /**
- * Class object declaration.
- */
+  * Class object declaration.
+  */
 typedef struct _Dummy_DPU2Class
 {
   /**
-   * IDPU2_t class virtual table.
-   */
+    * IDPU2_t class virtual table.
+    */
   IDPU2_vtbl vtbl;
 
 } Dummy_DPU2Class_t;
 
 /**
- *  Dummy_DPU internal structure.
- */
-struct _Dummy_DPU2 {
+  *  Dummy_DPU internal structure.
+  */
+struct _Dummy_DPU2
+{
   /**
-   * Base class object.
-   */
+    * Base class object.
+    */
   ADPU2_t super;
 
   uint16_t samples;
@@ -58,19 +59,20 @@ struct _Dummy_DPU2 {
 /********************/
 
 /**
- * The class object.
- */
-static const Dummy_DPU2Class_t sTheClass = {
-    /* class virtual table */
-    {
-        ADPU2_vtblAttachToDataSource,
-        ADPU2_vtblDetachFromDataSource,
-        ADPU2_vtblAttachToDPU,
-        ADPU2_vtblDetachFromDPU,
-        ADPU2_vtblDispatchEvents,
-        ADPU2_vtblRegisterNotifyCallback,
-        Dummy_DPU2_vtblProcess
-    }
+  * The class object.
+  */
+static const Dummy_DPU2Class_t sTheClass =
+{
+  /* class virtual table */
+  {
+    ADPU2_vtblAttachToDataSource,
+    ADPU2_vtblDetachFromDataSource,
+    ADPU2_vtblAttachToDPU,
+    ADPU2_vtblDetachFromDPU,
+    ADPU2_vtblDispatchEvents,
+    ADPU2_vtblRegisterNotifyCallback,
+    Dummy_DPU2_vtblProcess
+  }
 };
 
 
@@ -98,8 +100,8 @@ sys_error_code_t Dummy_DPU2_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData
 #endif
 
   /**
-   * Get first element: Acc_x, Acc_y, Acc_z
-   */
+    * Get first element: Acc_x, Acc_y, Acc_z
+    */
   EMD_2dGetValueAt(&in_data, &p_data_acc_x, 0, 0);
   EMD_2dGetValueAt(&in_data, &p_data_acc_y, 0, 1);
   EMD_2dGetValueAt(&in_data, &p_data_acc_z, 0, 2);
@@ -119,7 +121,7 @@ sys_error_code_t Dummy_DPU2_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData
 
 IDPU2_t *Dummy_DPU2Alloc()
 {
-  IDPU2_t *p_obj = (IDPU2_t*) SysAlloc(sizeof(Dummy_DPU2_t));
+  IDPU2_t *p_obj = (IDPU2_t *) SysAlloc(sizeof(Dummy_DPU2_t));
 
   if (p_obj != NULL)
   {
@@ -129,7 +131,8 @@ IDPU2_t *Dummy_DPU2Alloc()
   return p_obj;
 }
 
-sys_error_code_t Dummy_DPU2Init(Dummy_DPU2_t *_this, uint16_t samples, uint8_t axis) {
+sys_error_code_t Dummy_DPU2Init(Dummy_DPU2_t *_this, uint16_t samples, uint8_t axis)
+{
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
@@ -158,12 +161,11 @@ sys_error_code_t Dummy_DPU2Init(Dummy_DPU2_t *_this, uint16_t samples, uint8_t a
   }
 
   /*initialize the base class*/
-  res = ADPU2_Init((ADPU2_t*)_this, in_data, out_data);
+  res = ADPU2_Init((ADPU2_t *)_this, in_data, out_data);
 
   return res;
 }
 
 /* Private function definition */
 /*******************************/
-
 

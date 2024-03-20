@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_TiltSensing.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add Tilt Sensing service using vendor specific profiles.
   ******************************************************************************
   * @attention
@@ -24,7 +24,8 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_TILT_SENSING_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x0D,0x00,0x02,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_TILT_SENSING_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x0D,0x00,0x02,\
+                                                               0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 /* Exported variables --------------------------------------------------------*/
 CustomReadRequestTiltSensing_t CustomReadRequestTiltSensing = NULL;
@@ -165,7 +166,9 @@ static void AttrMod_Request_TiltSensing(void *VoidCharPointer, uint16_t attr_han
 
   if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
   {
-    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "--->TiltSensing=%s\n", (att_data[0] == 01U) ? " ON" : " OFF");
+    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite,
+                                    "--->TiltSensing=%s\n",
+                                    (att_data[0] == 01U) ? " ON" : " OFF");
     Term_Update(BufferToWrite, BytesToWrite);
   }
   else

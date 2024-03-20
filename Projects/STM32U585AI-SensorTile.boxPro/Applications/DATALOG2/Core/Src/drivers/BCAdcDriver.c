@@ -40,7 +40,6 @@
 #define ADC_BATMS_RATIO                 (float)((ADC_BATMS_RUP+ADC_BATMS_RDOWN)/ADC_BATMS_RDOWN)
 
 
-
 /**
   * BCDriver Driver virtual table.
   */

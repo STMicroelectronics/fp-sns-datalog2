@@ -71,6 +71,7 @@ st_dtdl_gui/UI/icons/outline_save_white_18dp.png
 st_dtdl_gui/UI/icons/outline_settings_input_com_white_18dp.png
 st_dtdl_gui/UI/icons/outline_settings_white_18dp.png
 st_dtdl_gui/UI/icons/outline_stop_white_18dp.png
+st_dtdl_gui/UI/icons/outline_window_white_18dp.png
 st_dtdl_gui/UI/icons/outline_zoom_in_white_18dp.png
 st_dtdl_gui/UI/images/AI_Output.png
 st_dtdl_gui/UI/images/ISPU.png

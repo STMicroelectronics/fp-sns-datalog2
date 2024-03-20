@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:other:automode;2
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sAutomode_PnPL_CompIF_vtbl =
   */
 struct _Automode_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -138,7 +136,8 @@ uint8_t Automode_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJS
   return 0;
 }
 
-uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size,
+                                      uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
@@ -150,9 +149,12 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   {
     bool enabled = json_object_dotget_boolean(tempJSONObject, "automode.enabled");
     ret = automode_set_enabled(enabled);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_boolean(respJSONObject, "automode.enabled.value", enabled);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "automode.enabled.value", "PNPL_SET_ERROR");
     }
   }
@@ -160,9 +162,12 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   {
     int32_t nof_acquisitions = (int32_t) json_object_dotget_number(tempJSONObject, "automode.nof_acquisitions");
     ret = automode_set_nof_acquisitions(nof_acquisitions);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "automode.nof_acquisitions.value", nof_acquisitions);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "automode.nof_acquisitions.value", "PNPL_SET_ERROR");
     }
   }
@@ -170,9 +175,12 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   {
     int32_t start_delay_s = (int32_t) json_object_dotget_number(tempJSONObject, "automode.start_delay_s");
     ret = automode_set_start_delay_s(start_delay_s);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "automode.start_delay_s.value", start_delay_s);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "automode.start_delay_s.value", "PNPL_SET_ERROR");
     }
   }
@@ -180,9 +188,12 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   {
     int32_t logging_period_s = (int32_t) json_object_dotget_number(tempJSONObject, "automode.logging_period_s");
     ret = automode_set_logging_period_s(logging_period_s);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "automode.logging_period_s.value", logging_period_s);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "automode.logging_period_s.value", "PNPL_SET_ERROR");
     }
   }
@@ -190,14 +201,16 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   {
     int32_t idle_period_s = (int32_t) json_object_dotget_number(tempJSONObject, "automode.idle_period_s");
     ret = automode_set_idle_period_s(idle_period_s);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "automode.idle_period_s.value", idle_period_s);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "automode.idle_period_s.value", "PNPL_SET_ERROR");
     }
   }
   json_value_free(tempJSON);
-
   if (pretty == 1)
   {
     *response = json_serialize_to_string_pretty(respJSON);
@@ -208,13 +221,14 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
     *response = json_serialize_to_string(respJSON);
     *size = json_serialization_size(respJSON);
   }
-
   json_value_free(respJSON);
-
   return ret;
 }
 
-uint8_t Automode_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+
+uint8_t Automode_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                          uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

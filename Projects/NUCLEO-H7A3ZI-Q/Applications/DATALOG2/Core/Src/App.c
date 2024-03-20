@@ -145,8 +145,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   assert_param(pAppContext != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  /* set the allocator functions for parson */
-  json_set_allocation_functions(SysAlloc, SysFree);
+  PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
   /* Allocate the task objects */
   sDatalogAppObj   = DatalogAppTaskAlloc();

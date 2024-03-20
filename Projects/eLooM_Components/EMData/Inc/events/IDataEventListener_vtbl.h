@@ -43,7 +43,8 @@ struct _IDataEventListener_vtbl
   sys_error_code_t (*OnStatusChange)(IListener *_this);                                   ///< @sa IListenerOnStatusChange
   void (*SetOwner)(IEventListener *_this, void *p_owner);                                 ///< @sa IEventListenerSetOwner
   void *(*GetOwner)(IEventListener *_this);                                               ///< @sa IEventListenerGetOwner
-  sys_error_code_t (*OnNewDataReady)(IEventListener *_this, const DataEvent_t *p_evt);      ///< @sa IDataEventListenerOnNewDataReady
+  sys_error_code_t (*OnNewDataReady)(IEventListener *_this,
+                                     const DataEvent_t *p_evt);      ///< @sa IDataEventListenerOnNewDataReady
 };
 
 /**

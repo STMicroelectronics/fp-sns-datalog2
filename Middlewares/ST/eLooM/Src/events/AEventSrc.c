@@ -2,13 +2,7 @@
   ******************************************************************************
   * @file    AEventSrc.c
   * @author  STMicroelectronics - AIS - MCD Team
-  * @version 3.0.0
-  * @date    Jul 13, 2020
-  *
   * @brief
-  *
-  * <DESCRIPTIOM>
-  *
   ******************************************************************************
   * @attention
   *
@@ -68,13 +62,35 @@ sys_error_code_t AEventSrv_vtblAddEventListener(IEventSrc *_this, IEventListener
   AEventSrc *pObj = (AEventSrc *)_this;
   sys_error_code_t xRes = SYS_IEVTSRC_FULL_ERROR_CODE;
 
-  for (uint8_t i = 0; i < AEVENT_SRC_CFG_MAX_LISTENERS; ++i)
+  uint8_t i;
+  bool found = false;
+  for (i = 0; i < AEVENT_SRC_CFG_MAX_LISTENERS; ++i)
   {
     if (pObj->m_pxListeners[i] == NULL)
     {
       pObj->m_pxListeners[i] = pListener;
       xRes = SYS_NO_ERROR_CODE;
       break;
+    }
+    else if (pObj->m_pxListeners[i] == pListener)
+    {
+      found = true;
+      xRes = SYS_NO_ERROR_CODE;
+      break;
+    }
+  }
+
+  /* check if the listener is already in the set */
+  if (!found && (i < AEVENT_SRC_CFG_MAX_LISTENERS))
+  {
+    for (uint8_t j = i+1; j < AEVENT_SRC_CFG_MAX_LISTENERS; ++j)
+    {
+      if (pObj->m_pxListeners[j] == pListener)
+      {
+        /* the listener was already in the set, so we free the previous position.*/
+    	pObj->m_pxListeners[i] = NULL;
+        break;
+      }
     }
   }
 

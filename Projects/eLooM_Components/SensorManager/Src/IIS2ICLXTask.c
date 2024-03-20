@@ -254,33 +254,7 @@ static IIS2ICLXTaskClass_t sTheClass =
   /* ACCELEROMETER DESCRIPTOR */
   {
     "iis2iclx",
-    COM_TYPE_ACC,
-    {
-      12.5,
-      26,
-      52,
-      104,
-      208,
-      416,
-      833,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      0.5f,
-      1.0f,
-      2.0f,
-      3.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "x",
-      "y",
-    },
-    "g",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_ACC
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -1355,11 +1329,14 @@ static sys_error_code_t IIS2ICLXTaskSensorInit(IIS2ICLXTask *_this)
   iis2iclx_pin_int1_route_set(p_sensor_drv, &int1_route);
 #endif /* IIS2ICLX_FIFO_ENABLED */
 
+  if (_this->sensor_status.is_active)
+  {
 #if IIS2ICLX_FIFO_ENABLED
-  _this->iis2iclx_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
+    _this->iis2iclx_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
 #else
-  _this->iis2iclx_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
+    _this->iis2iclx_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 #endif
+  }
 
   return res;
 }
@@ -1521,7 +1498,6 @@ static sys_error_code_t IIS2ICLXTaskSensorSetFS(IIS2ICLXTask *_this, SMMessage r
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
@@ -1529,30 +1505,23 @@ static sys_error_code_t IIS2ICLXTaskSensorSetFS(IIS2ICLXTask *_this, SMMessage r
   {
     if (fs < 1.0f)
     {
-      iis2iclx_xl_full_scale_set(p_sensor_drv, IIS2ICLX_500mg);
       fs = 0.5f;
     }
     else if (fs < 2.0f)
     {
-      iis2iclx_xl_full_scale_set(p_sensor_drv, IIS2ICLX_1g);
       fs = 1.0f;
     }
     else if (fs < 3.0f)
     {
-      iis2iclx_xl_full_scale_set(p_sensor_drv, IIS2ICLX_2g);
       fs = 2.0f;
     }
     else
     {
-      iis2iclx_xl_full_scale_set(p_sensor_drv, IIS2ICLX_3g);
       fs = 3.0f;
     }
 
-    if (!SYS_IS_ERROR_CODE(res))
-    {
-      _this->sensor_status.type.mems.fs = fs;
-      _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
-    }
+    _this->sensor_status.type.mems.fs = fs;
+    _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
   }
   else
   {

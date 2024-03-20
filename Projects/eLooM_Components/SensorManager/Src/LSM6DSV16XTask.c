@@ -299,62 +299,71 @@ static LSM6DSV16XTaskClass_t sTheClass =
     LSM6DSV16XTask_vtblOnEnterPowerMode
   },
 
-    /* class::acc_sensor_if_vtbl virtual table */
+  /* class::acc_sensor_if_vtbl virtual table */
+  {
     {
-        {
-            {
-                LSM6DSV16XTask_vtblAccGetId,
-                LSM6DSV16XTask_vtblAccGetEventSourceIF,
-                LSM6DSV16XTask_vtblAccGetDataInfo },
-            LSM6DSV16XTask_vtblSensorEnable,
-            LSM6DSV16XTask_vtblSensorDisable,
-            LSM6DSV16XTask_vtblSensorIsEnabled,
-            LSM6DSV16XTask_vtblAccGetDescription,
-            LSM6DSV16XTask_vtblAccGetStatus },
-        LSM6DSV16XTask_vtblAccGetODR,
-        LSM6DSV16XTask_vtblAccGetFS,
-        LSM6DSV16XTask_vtblAccGetSensitivity,
-        LSM6DSV16XTask_vtblSensorSetODR,
-        LSM6DSV16XTask_vtblSensorSetFS,
-        LSM6DSV16XTask_vtblSensorSetFifoWM },
+      {
+        LSM6DSV16XTask_vtblAccGetId,
+        LSM6DSV16XTask_vtblAccGetEventSourceIF,
+        LSM6DSV16XTask_vtblAccGetDataInfo
+      },
+      LSM6DSV16XTask_vtblSensorEnable,
+      LSM6DSV16XTask_vtblSensorDisable,
+      LSM6DSV16XTask_vtblSensorIsEnabled,
+      LSM6DSV16XTask_vtblAccGetDescription,
+      LSM6DSV16XTask_vtblAccGetStatus
+    },
+    LSM6DSV16XTask_vtblAccGetODR,
+    LSM6DSV16XTask_vtblAccGetFS,
+    LSM6DSV16XTask_vtblAccGetSensitivity,
+    LSM6DSV16XTask_vtblSensorSetODR,
+    LSM6DSV16XTask_vtblSensorSetFS,
+    LSM6DSV16XTask_vtblSensorSetFifoWM
+  },
 
-    /* class::gyro_sensor_if_vtbl virtual table */
+  /* class::gyro_sensor_if_vtbl virtual table */
+  {
     {
-        {
-            {
-                LSM6DSV16XTask_vtblGyroGetId,
-                LSM6DSV16XTask_vtblGyroGetEventSourceIF,
-                LSM6DSV16XTask_vtblGyroGetDataInfo },
-            LSM6DSV16XTask_vtblSensorEnable,
-            LSM6DSV16XTask_vtblSensorDisable,
-            LSM6DSV16XTask_vtblSensorIsEnabled,
-            LSM6DSV16XTask_vtblGyroGetDescription,
-            LSM6DSV16XTask_vtblGyroGetStatus },
-        LSM6DSV16XTask_vtblGyroGetODR,
-        LSM6DSV16XTask_vtblGyroGetFS,
-        LSM6DSV16XTask_vtblGyroGetSensitivity,
-        LSM6DSV16XTask_vtblSensorSetODR,
-        LSM6DSV16XTask_vtblSensorSetFS,
-        LSM6DSV16XTask_vtblSensorSetFifoWM },
+      {
+        LSM6DSV16XTask_vtblGyroGetId,
+        LSM6DSV16XTask_vtblGyroGetEventSourceIF,
+        LSM6DSV16XTask_vtblGyroGetDataInfo
+      },
+      LSM6DSV16XTask_vtblSensorEnable,
+      LSM6DSV16XTask_vtblSensorDisable,
+      LSM6DSV16XTask_vtblSensorIsEnabled,
+      LSM6DSV16XTask_vtblGyroGetDescription,
+      LSM6DSV16XTask_vtblGyroGetStatus
+    },
+    LSM6DSV16XTask_vtblGyroGetODR,
+    LSM6DSV16XTask_vtblGyroGetFS,
+    LSM6DSV16XTask_vtblGyroGetSensitivity,
+    LSM6DSV16XTask_vtblSensorSetODR,
+    LSM6DSV16XTask_vtblSensorSetFS,
+    LSM6DSV16XTask_vtblSensorSetFifoWM
+  },
 
-    /* class::mlc_sensor_if_vtbl virtual table */
+  /* class::mlc_sensor_if_vtbl virtual table */
+  {
     {
-        {
-            {
-                LSM6DSV16XTask_vtblMlcGetId,
-                LSM6DSV16XTask_vtblMlcGetEventSourceIF,
-                LSM6DSV16XTask_vtblMlcGetDataInfo },
-            LSM6DSV16XTask_vtblSensorEnable,
-            LSM6DSV16XTask_vtblSensorDisable,
-            LSM6DSV16XTask_vtblSensorIsEnabled,
-            LSM6DSV16XTask_vtblMlcGetDescription,
-            LSM6DSV16XTask_vtblMlcGetStatus },
-        LSM6DSV16XTask_vtblMlcGetODR,
-        LSM6DSV16XTask_vtblMlcGetFS,
-        LSM6DSV16XTask_vtblMlcGetSensitivity,
-        LSM6DSV16XTask_vtblSensorSetODR,
-        LSM6DSV16XTask_vtblSensorSetFS,
-        LSM6DSV16XTask_vtblSensorSetFifoWM },
+      {
+        LSM6DSV16XTask_vtblMlcGetId,
+        LSM6DSV16XTask_vtblMlcGetEventSourceIF,
+        LSM6DSV16XTask_vtblMlcGetDataInfo
+      },
+      LSM6DSV16XTask_vtblSensorEnable,
+      LSM6DSV16XTask_vtblSensorDisable,
+      LSM6DSV16XTask_vtblSensorIsEnabled,
+      LSM6DSV16XTask_vtblMlcGetDescription,
+      LSM6DSV16XTask_vtblMlcGetStatus
+    },
+    LSM6DSV16XTask_vtblMlcGetODR,
+    LSM6DSV16XTask_vtblMlcGetFS,
+    LSM6DSV16XTask_vtblMlcGetSensitivity,
+    LSM6DSV16XTask_vtblSensorSetODR,
+    LSM6DSV16XTask_vtblSensorSetFS,
+    LSM6DSV16XTask_vtblSensorSetFifoWM
+  },
 
   /* class::sensor_ll_if_vtbl virtual table */
   {
@@ -366,95 +375,19 @@ static LSM6DSV16XTaskClass_t sTheClass =
   /* ACCELEROMETER DESCRIPTOR */
   {
     "lsm6dsv16x",
-    COM_TYPE_ACC,
-    {
-      7.5,
-      15,
-      30,
-      60,
-      120,
-      240,
-      480,
-      960,
-      1920,
-      3840,
-      7680,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      2,
-      4,
-      8,
-      16,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "acc",
-    },
-    "g",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_ACC
   },
 
   /* GYROSCOPE DESCRIPTOR */
   {
     "lsm6dsv16x",
-    COM_TYPE_GYRO,
-    {
-      7.5,
-      15,
-      30,
-      60,
-      120,
-      240,
-      420,
-      960,
-      1920,
-      3840,
-      7680,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      125,
-      250,
-      500,
-      1000,
-      2000,
-      4000,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "gyro",
-    },
-    "mdps",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_GYRO
   },
 
   /* MLC DESCRIPTOR */
   {
     "lsm6dsv16x",
-    COM_TYPE_MLC,
-    {
-      1,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      1,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "mlc",
-    },
-    "out",
-    {
-      0,
-      1,
-    }
+    COM_TYPE_MLC
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -2243,7 +2176,25 @@ static sys_error_code_t LSM6DSV16XTaskSensorInit(LSM6DSV16XTask *_this)
   }
 #endif
 
-  _this->lsm6dsv16x_task_cfg_timer_period_ms = (uint16_t)(_this->acc_sensor_status.type.mems.odr < _this->gyro_sensor_status.type.mems.odr ? _this->acc_sensor_status.type.mems.odr : _this->gyro_sensor_status.type.mems.odr);
+  if ((_this->acc_sensor_status.is_active) && (_this->gyro_sensor_status.is_active))
+  {
+    _this->lsm6dsv16x_task_cfg_timer_period_ms = (uint16_t)(
+                                                   _this->acc_sensor_status.type.mems.odr < _this->gyro_sensor_status.type.mems.odr ?
+                                                   _this->acc_sensor_status.type.mems.odr :
+                                                   _this->gyro_sensor_status.type.mems.odr);
+  }
+  else if (_this->acc_sensor_status.is_active)
+  {
+    _this->lsm6dsv16x_task_cfg_timer_period_ms = (uint16_t)(_this->acc_sensor_status.type.mems.odr);
+  }
+  else if (_this->gyro_sensor_status.is_active)
+  {
+    _this->lsm6dsv16x_task_cfg_timer_period_ms = (uint16_t)(_this->acc_sensor_status.type.mems.odr);
+  }
+  else
+  {
+  }
+
 #if LSM6DSV16X_FIFO_ENABLED
   _this->lsm6dsv16x_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->lsm6dsv16x_task_cfg_timer_period_ms) * (((float)(_this->samples_per_it)) / 2.0f));
 #else
@@ -2701,7 +2652,6 @@ static sys_error_code_t LSM6DSV16XTaskSensorSetFS(LSM6DSV16XTask *_this, SMMessa
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
@@ -2713,69 +2663,53 @@ static sys_error_code_t LSM6DSV16XTaskSensorSetFS(LSM6DSV16XTask *_this, SMMessa
   {
     if (fs < 3.0f)
     {
-      lsm6dsv16x_xl_full_scale_set(p_sensor_drv, LSM6DSV16X_2g);
       fs = 2.0f;
     }
     else if (fs < 5.0f)
     {
-      lsm6dsv16x_xl_full_scale_set(p_sensor_drv, LSM6DSV16X_4g);
       fs = 4.0f;
     }
     else if (fs < 9.0f)
     {
-      lsm6dsv16x_xl_full_scale_set(p_sensor_drv, LSM6DSV16X_8g);
       fs = 8.0f;
     }
     else
     {
-      lsm6dsv16x_xl_full_scale_set(p_sensor_drv, LSM6DSV16X_16g);
       fs = 16.0f;
     }
 
-    if (!SYS_IS_ERROR_CODE(res))
-    {
-      _this->acc_sensor_status.type.mems.fs = fs;
-      _this->acc_sensor_status.type.mems.sensitivity = 0.0000305f * _this->acc_sensor_status.type.mems.fs;
-    }
+    _this->acc_sensor_status.type.mems.fs = fs;
+    _this->acc_sensor_status.type.mems.sensitivity = 0.0000305f * _this->acc_sensor_status.type.mems.fs;
   }
   else if (id == _this->gyro_id)
   {
     if (fs < 126.0f)
     {
-      lsm6dsv16x_gy_full_scale_set(p_sensor_drv, LSM6DSV16X_125dps);
       fs = 125.0f;
     }
     else if (fs < 251.0f)
     {
-      lsm6dsv16x_gy_full_scale_set(p_sensor_drv, LSM6DSV16X_250dps);
       fs = 250.0f;
     }
     else if (fs < 501.0f)
     {
-      lsm6dsv16x_gy_full_scale_set(p_sensor_drv, LSM6DSV16X_500dps);
       fs = 500.0f;
     }
     else if (fs < 1001.0f)
     {
-      lsm6dsv16x_gy_full_scale_set(p_sensor_drv, LSM6DSV16X_1000dps);
       fs = 1000.0f;
     }
     else if (fs < 2001.0f)
     {
-      lsm6dsv16x_gy_full_scale_set(p_sensor_drv, LSM6DSV16X_2000dps);
       fs = 2000.0f;
     }
     else
     {
-      lsm6dsv16x_gy_full_scale_set(p_sensor_drv, LSM6DSV16X_4000dps);
       fs = 4000.0f;
     }
 
-    if (!SYS_IS_ERROR_CODE(res))
-    {
-      _this->gyro_sensor_status.type.mems.fs = fs;
-      _this->gyro_sensor_status.type.mems.sensitivity = 0.035f * _this->gyro_sensor_status.type.mems.fs;
-    }
+    _this->gyro_sensor_status.type.mems.fs = fs;
+    _this->gyro_sensor_status.type.mems.sensitivity = 0.035f * _this->gyro_sensor_status.type.mems.fs;
   }
   else if (id == _this->mlc_id)
   {

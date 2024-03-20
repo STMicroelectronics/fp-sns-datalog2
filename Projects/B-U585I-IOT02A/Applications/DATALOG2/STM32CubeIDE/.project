@@ -268,6 +268,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rcc_ex.h</locationURI>
 		</link>
 		<link>
+			<name>Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rng.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rng.h</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rng_ex.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rng_ex.h</locationURI>
+		</link>
+		<link>
 			<name>Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rtc.h</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rtc.h</locationURI>
@@ -403,6 +413,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rcc_ex.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rng.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rng.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rng_ex.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rng_ex.c</locationURI>
+		</link>
+		<link>
 			<name>Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rtc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rtc.c</locationURI>
@@ -447,36 +467,6 @@
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/CircularBufferDL2/CircularBufferDL2.h</locationURI>
 		</link>
-		<link>
-			<name>Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent.h</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent.h</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent_vtbl.h</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent_vtbl.h</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/PnPLCompManager/Inc/PnPLCompManager.h</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/PnPLCompManager.h</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/PnPLCompManager/Inc/PnPLDef.h</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/PnPLDef.h</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/PnPLCompManager/Src/IPnPLComponent.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Src/IPnPLComponent.c</locationURI>
-		</link>
-		<link>
-			<name>Middlewares/ST/PnPLCompManager/Src/PnPLCompManager.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Src/PnPLCompManager.c</locationURI>
-		</link>		
 		<link>
 			<name>Middlewares/ST/SensorStreaming_USBX/ux_device_class_sensor_streaming.h</name>
 			<type>1</type>
@@ -878,9 +868,19 @@
 			<locationURI>PARENT-1-PROJECT_LOC/mx/Inc/mdf.h</locationURI>
 		</link>
 		<link>
+			<name>User/mx/Inc/memorymap.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mx/Inc/memorymap.h</locationURI>
+		</link>
+		<link>
 			<name>User/mx/Inc/mx.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/mx/Inc/mx.h</locationURI>
+		</link>
+		<link>
+			<name>User/mx/Inc/rng.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mx/Inc/rng.h</locationURI>
 		</link>
 		<link>
 			<name>User/mx/Inc/rtc.h</name>
@@ -933,9 +933,19 @@
 			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/mdf.c</locationURI>
 		</link>
 		<link>
+			<name>User/mx/Src/memorymap.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/memorymap.c</locationURI>
+		</link>
+		<link>
 			<name>User/mx/Src/mx.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/mx.c</locationURI>
+		</link>
+		<link>
+			<name>User/mx/Src/rng.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mx/Src/rng.c</locationURI>
 		</link>
 		<link>
 			<name>User/mx/Src/rtc.c</name>
@@ -1201,6 +1211,36 @@
 			<name>Drivers/STM32U5xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/IPnPLComponent_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Inc/PnPLCompManager.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/PnPLCompManager.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Inc/PnPLDef.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Inc/PnPLDef.h</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Src/IPnPLComponent.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Src/IPnPLComponent.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/PnPLCompManager/Src/PnPLCompManager.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Src/PnPLCompManager.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/usbx/UX Device Controllers/ux_dcd_stm32.h</name>

@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:lps22hh_temp;1
+  * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:lps22hh_temp;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sLps22hh_Temp_PnPL_CompIF_vtbl =
   */
 struct _Lps22hh_Temp_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -107,41 +105,41 @@ uint8_t Lps22hh_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   tempJSON = json_value_init_object();
   JSON_Status = json_value_get_object(tempJSON);
 
-  float temp_f = 0;
-  lps22hh_temp_get_odr(&temp_f);
+  int32_t temp_i = 0;
+  lps22hh_temp_get_odr(&temp_i);
   uint8_t enum_id = 0;
-  if(temp_f == lps22hh_temp_odr_hz1)
+  if (temp_i == lps22hh_temp_odr_hz1)
   {
     enum_id = 0;
   }
-  else if(temp_f == lps22hh_temp_odr_hz10)
+  else if (temp_i == lps22hh_temp_odr_hz10)
   {
     enum_id = 1;
   }
-  else if(temp_f == lps22hh_temp_odr_hz25)
+  else if (temp_i == lps22hh_temp_odr_hz25)
   {
     enum_id = 2;
   }
-  else if(temp_f == lps22hh_temp_odr_hz50)
+  else if (temp_i == lps22hh_temp_odr_hz50)
   {
     enum_id = 3;
   }
-  else if(temp_f == lps22hh_temp_odr_hz75)
+  else if (temp_i == lps22hh_temp_odr_hz75)
   {
     enum_id = 4;
   }
-  else if(temp_f == lps22hh_temp_odr_hz100)
+  else if (temp_i == lps22hh_temp_odr_hz100)
   {
     enum_id = 5;
   }
-  else if(temp_f == lps22hh_temp_odr_hz200)
+  else if (temp_i == lps22hh_temp_odr_hz200)
   {
     enum_id = 6;
   }
   json_object_dotset_number(JSON_Status, "lps22hh_temp.odr", enum_id);
-  lps22hh_temp_get_fs(&temp_f);
+  lps22hh_temp_get_fs(&temp_i);
   enum_id = 0;
-  if(temp_f == lps22hh_temp_fs_hpa1260)
+  if (temp_i == lps22hh_temp_fs_hpa1260)
   {
     enum_id = 0;
   }
@@ -149,11 +147,11 @@ uint8_t Lps22hh_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   bool temp_b = 0;
   lps22hh_temp_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "lps22hh_temp.enable", temp_b);
-  int32_t temp_i = 0;
   lps22hh_temp_get_samples_per_ts(&temp_i);
   json_object_dotset_number(JSON_Status, "lps22hh_temp.samples_per_ts", temp_i);
   lps22hh_temp_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "lps22hh_temp.dim", temp_i);
+  float temp_f = 0;
   lps22hh_temp_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "lps22hh_temp.ioffset", temp_f);
   lps22hh_temp_get_measodr(&temp_f);
@@ -197,60 +195,109 @@ uint8_t Lps22hh_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   return 0;
 }
 
-uint8_t Lps22hh_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Lps22hh_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                          uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
-  if(json_object_dothas_value(tempJSONObject, "lps22hh_temp.odr"))
+  if (json_object_dothas_value(tempJSONObject, "lps22hh_temp.odr"))
   {
     int odr = (int)json_object_dotget_number(tempJSONObject, "lps22hh_temp.odr");
-    switch(odr)
+    switch (odr)
     {
-    case 0:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz1);
-      break;
-    case 1:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz10);
-      break;
-    case 2:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz25);
-      break;
-    case 3:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz50);
-      break;
-    case 4:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz75);
-      break;
-    case 5:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz100);
-      break;
-    case 6:
-      lps22hh_temp_set_odr(lps22hh_temp_odr_hz200);
-      break;
+      case 0:
+        ret = lps22hh_temp_set_odr(lps22hh_temp_odr_hz1);
+        break;
+      case 1:
+        ret = lps22hh_temp_set_odr(lps22hh_temp_odr_hz10);
+        break;
+      case 2:
+        ret = lps22hh_temp_set_odr(lps22hh_temp_odr_hz25);
+        break;
+      case 3:
+        ret = lps22hh_temp_set_odr(lps22hh_temp_odr_hz50);
+        break;
+      case 4:
+        ret = lps22hh_temp_set_odr(lps22hh_temp_odr_hz75);
+        break;
+      case 5:
+        ret = lps22hh_temp_set_odr(lps22hh_temp_odr_hz100);
+        break;
+      case 6:
+        ret = lps22hh_temp_set_odr(lps22hh_temp_odr_hz200);
+        break;
+    }
+    if (ret == 0)
+    {
+      json_object_dotset_number(respJSONObject, "lps22hh_temp.odr.value", odr);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "lps22hh_temp.odr.value", "PNPL_SET_ERROR");
     }
   }
   if (json_object_dothas_value(tempJSONObject, "lps22hh_temp.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "lps22hh_temp.enable");
-    lps22hh_temp_set_enable(enable);
+    ret = lps22hh_temp_set_enable(enable);
+    if (ret == 0)
+    {
+      json_object_dotset_boolean(respJSONObject, "lps22hh_temp.enable.value", enable);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "lps22hh_temp.enable.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "lps22hh_temp.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "lps22hh_temp.samples_per_ts");
-    lps22hh_temp_set_samples_per_ts(samples_per_ts);
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "lps22hh_temp.samples_per_ts");
+    ret = lps22hh_temp_set_samples_per_ts(samples_per_ts);
+    if (ret == 0)
+    {
+      json_object_dotset_number(respJSONObject, "lps22hh_temp.samples_per_ts.value", samples_per_ts);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "lps22hh_temp.samples_per_ts.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "lps22hh_temp.sensor_annotation"))
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "lps22hh_temp.sensor_annotation");
-    lps22hh_temp_set_sensor_annotation(sensor_annotation);
+    ret = lps22hh_temp_set_sensor_annotation(sensor_annotation);
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "lps22hh_temp.sensor_annotation.value", sensor_annotation);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "lps22hh_temp.sensor_annotation.value", "PNPL_SET_ERROR");
+    }
   }
   json_value_free(tempJSON);
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
+  json_value_free(respJSON);
   return ret;
 }
 
-uint8_t Lps22hh_Temp_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+
+uint8_t Lps22hh_Temp_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                              uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

@@ -180,7 +180,6 @@ static sys_error_code_t DUMMYSENSORTaskConfigureIrqPin(const DUMMYSENSORTask *_t
 static void DUMMYSENSORTaskTimerCallbackFunction(ULONG param);
 
 
-
 /* Inline function forward declaration */
 /***************************************/
 

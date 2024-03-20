@@ -54,7 +54,6 @@
 //#define SYS_TS_CFG_TSDRIVER_PARAMS                SYS_TS_USE_SW_TSDRIVER
 
 
-
 #define SYS_TS_CFG_TSDRIVER_FREQ_HZ     SystemCoreClock ///< hardware timer clock frequency in Hz
 //#define SYS_TS_CFG_TSDRIVER_FREQ_HZ               TX_TIMER_TICKS_PER_SECOND ///< ThreadX clock frequency in Hz
 
@@ -99,7 +98,7 @@
 /*******************/
 
 #define BOARD_ID                                  0x20
-#define FW_ID                                     0x02
+#define FW_ID                                     0x03
 
 
 #endif /* SYSCONFIG_H_ */

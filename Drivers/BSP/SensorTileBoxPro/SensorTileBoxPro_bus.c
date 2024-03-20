@@ -1,12 +1,15 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : SensorTileBoxPro_bus.c
-  * @brief          : source file for the BSP BUS IO driver
+  * @file    SensorTileBoxPro_bus.c
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
+  * @brief   Source file for the BSP BUS IO driver
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -24,6 +27,7 @@ __weak HAL_StatusTypeDef MX_SPI2_Init(SPI_HandleTypeDef* hspi);
 __weak HAL_StatusTypeDef MX_SPI1_Init(SPI_HandleTypeDef* hspi);
 __weak HAL_StatusTypeDef MX_I2C1_Init(I2C_HandleTypeDef* hi2c);
 __weak HAL_StatusTypeDef MX_I2C2_Init(I2C_HandleTypeDef* hi2c);
+__weak HAL_StatusTypeDef MX_I2C3_Init(I2C_HandleTypeDef* hi2c);
 __weak HAL_StatusTypeDef MX_I2C4_Init(I2C_HandleTypeDef* hi2c);
 
 /** @addtogroup BSP
@@ -45,6 +49,7 @@ SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
+I2C_HandleTypeDef hi2c3;
 I2C_HandleTypeDef hi2c4;
 /**
   * @}
@@ -92,7 +97,8 @@ static uint32_t Compute_SCLL_SCLH (uint32_t clock_src_freq, uint32_t I2C_speed);
 
 static void I2C2_MspInit(I2C_HandleTypeDef* hI2c);
 static void I2C2_MspDeInit(I2C_HandleTypeDef* hI2c);
-
+static void I2C3_MspInit(I2C_HandleTypeDef* hI2c);
+static void I2C3_MspDeInit(I2C_HandleTypeDef* hI2c);
 static void I2C4_MspInit(I2C_HandleTypeDef* hI2c);
 static void I2C4_MspDeInit(I2C_HandleTypeDef* hI2c);
 
@@ -796,6 +802,245 @@ int32_t BSP_I2C2_Recv(uint16_t DevAddr, uint8_t *pData, uint16_t Length) {
   }
   return ret;
 }
+
+
+
+/**
+* @brief  Initialize I2C HAL
+* @retval BSP status
+*/
+int32_t BSP_I2C3_Init(void)
+{
+  
+  int32_t ret = BSP_ERROR_NONE;
+  
+  hi2c3.Instance  = I2C3;
+  
+  if (HAL_I2C_GetState(&hi2c3) == HAL_I2C_STATE_RESET)
+  {
+#if (USE_HAL_I2C_REGISTER_CALLBACKS == 0U)
+    /* Init the I2C Msp */
+    I2C3_MspInit(&hi2c3);
+#else
+    if(IsI2C3MspCbValid == 0U)
+    {
+      if(BSP_I2C3_RegisterDefaultMspCallbacks() != BSP_ERROR_NONE)
+      {
+        return BSP_ERROR_MSP_FAILURE;
+      }
+    }
+#endif
+    /* Init the I2C */
+    if(MX_I2C3_Init(&hi2c3) != HAL_OK)
+    {
+      ret = BSP_ERROR_BUS_FAILURE;
+    }
+    else if(HAL_I2CEx_ConfigAnalogFilter(&hi2c3, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+    {
+      ret = BSP_ERROR_BUS_FAILURE;
+    }
+    else
+    {
+      ret = BSP_ERROR_NONE;
+    }
+  }
+  return ret;
+}
+
+/**
+* @brief  DeInitialize I2C HAL.
+* @retval BSP status
+*/
+int32_t BSP_I2C3_DeInit(void)
+{
+  int32_t ret = BSP_ERROR_NONE;
+  
+#if (USE_HAL_I2C_REGISTER_CALLBACKS == 0U)
+  /* DeInit the I2C */
+  I2C3_MspDeInit(&hi2c3);
+#endif
+  /* DeInit the I2C */
+  if (HAL_I2C_DeInit(&hi2c3) != HAL_OK)
+  {
+    ret = BSP_ERROR_BUS_FAILURE;
+  }
+  return ret;
+}
+
+
+/**
+  * @brief  Check whether the I2C bus is ready.
+  * @param DevAddr : I2C device address
+  * @param Trials : Check trials number
+  * @retval BSP status
+  */
+int32_t BSP_I2C3_IsReady(uint16_t DevAddr, uint32_t Trials)
+{
+  int32_t ret = BSP_ERROR_NONE;
+
+  if (HAL_I2C_IsDeviceReady(&hi2c3, DevAddr, Trials, BUS_I2C3_POLL_TIMEOUT) != HAL_OK)
+  {
+    ret = BSP_ERROR_BUSY;
+  }
+
+  return ret;
+}
+
+/**
+  * @brief  Write a value in a register of the device through BUS.
+  * @param  DevAddr Device address on Bus.
+  * @param  Reg    The target register address to write
+  * @param  pData  Pointer to data buffer to write
+  * @param  Length Data Length
+  * @retval BSP status
+  */
+
+int32_t BSP_I2C3_WriteReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length)
+{
+  int32_t ret = BSP_ERROR_NONE;
+
+  if (HAL_I2C_Mem_Write(&hi2c3, DevAddr,Reg, I2C_MEMADD_SIZE_8BIT,pData, Length, BUS_I2C3_POLL_TIMEOUT) != HAL_OK)
+  {
+    if (HAL_I2C_GetError(&hi2c3) == HAL_I2C_ERROR_AF)
+    {
+      ret = BSP_ERROR_BUS_ACKNOWLEDGE_FAILURE;
+    }
+    else
+    {
+      ret =  BSP_ERROR_PERIPH_FAILURE;
+    }
+  }
+  return ret;
+}
+
+/**
+  * @brief  Read a register of the device through BUS
+  * @param  DevAddr Device address on Bus.
+  * @param  Reg    The target register address to read
+  * @param  pData  Pointer to data buffer to read
+  * @param  Length Data Length
+  * @retval BSP status
+  */
+int32_t  BSP_I2C3_ReadReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length)
+{
+  int32_t ret = BSP_ERROR_NONE;
+
+  if (HAL_I2C_Mem_Read(&hi2c3, DevAddr, Reg, I2C_MEMADD_SIZE_8BIT, pData, Length, BUS_I2C3_POLL_TIMEOUT) != HAL_OK)
+  {
+    if (HAL_I2C_GetError(&hi2c3) == HAL_I2C_ERROR_AF)
+    {
+      ret = BSP_ERROR_BUS_ACKNOWLEDGE_FAILURE;
+    }
+    else
+    {
+      ret = BSP_ERROR_PERIPH_FAILURE;
+    }
+  }
+  return ret;
+}
+
+/**
+
+  * @brief  Write a value in a register of the device through BUS.
+  * @param  DevAddr Device address on Bus.
+  * @param  Reg    The target register address to write
+
+  * @param  pData  Pointer to data buffer to write
+  * @param  Length Data Length
+  * @retval BSP statu
+  */
+int32_t BSP_I2C3_WriteReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length)
+{
+  int32_t ret = BSP_ERROR_NONE;
+
+  if (HAL_I2C_Mem_Write(&hi2c3, DevAddr, Reg, I2C_MEMADD_SIZE_16BIT, pData, Length, BUS_I2C3_POLL_TIMEOUT) != HAL_OK)
+  {
+    if (HAL_I2C_GetError(&hi2c3) == HAL_I2C_ERROR_AF)
+    {
+      ret = BSP_ERROR_BUS_ACKNOWLEDGE_FAILURE;
+    }
+    else
+    {
+      ret =  BSP_ERROR_PERIPH_FAILURE;
+    }
+  }
+  return ret;
+}
+
+/**
+  * @brief  Read registers through a bus (16 bits)
+  * @param  DevAddr: Device address on BUS
+  * @param  Reg: The target register address to read
+  * @param  Length Data Length
+  * @retval BSP status
+  */
+int32_t  BSP_I2C3_ReadReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length)
+{
+  int32_t ret = BSP_ERROR_NONE;
+
+  if (HAL_I2C_Mem_Read(&hi2c3, DevAddr, Reg, I2C_MEMADD_SIZE_16BIT, pData, Length, BUS_I2C3_POLL_TIMEOUT) != HAL_OK)
+  {
+    if (HAL_I2C_GetError(&hi2c3) != HAL_I2C_ERROR_AF)
+    {
+      ret =  BSP_ERROR_BUS_ACKNOWLEDGE_FAILURE;
+    }
+    else
+    {
+      ret =  BSP_ERROR_PERIPH_FAILURE;
+    }
+  }
+  return ret;
+}
+
+/**
+  * @brief  Send an amount width data through bus (Simplex)
+  * @param  DevAddr: Device address on Bus.
+  * @param  pData: Data pointer
+  * @param  Length: Data length
+  * @retval BSP status
+  */
+int32_t BSP_I2C3_Send(uint16_t DevAddr, uint8_t *pData, uint16_t Length) {
+  int32_t ret = BSP_ERROR_NONE;
+
+  if (HAL_I2C_Master_Transmit(&hi2c3, DevAddr, pData, Length, BUS_I2C3_POLL_TIMEOUT) != HAL_OK)
+  {
+    if (HAL_I2C_GetError(&hi2c3) != HAL_I2C_ERROR_AF)
+    {
+      ret = BSP_ERROR_BUS_ACKNOWLEDGE_FAILURE;
+    }
+    else
+    {
+      ret =  BSP_ERROR_PERIPH_FAILURE;
+    }
+  }
+
+  return ret;
+}
+
+/**
+  * @brief  Receive an amount of data through a bus (Simplex)
+  * @param  DevAddr: Device address on Bus.
+  * @param  pData: Data pointer
+  * @param  Length: Data length
+  * @retval BSP status
+  */
+int32_t BSP_I2C3_Recv(uint16_t DevAddr, uint8_t *pData, uint16_t Length) {
+  int32_t ret = BSP_ERROR_NONE;
+
+  if (HAL_I2C_Master_Receive(&hi2c3, DevAddr, pData, Length, BUS_I2C3_POLL_TIMEOUT) != HAL_OK)
+  {
+    if (HAL_I2C_GetError(&hi2c3) != HAL_I2C_ERROR_AF)
+    {
+      ret = BSP_ERROR_BUS_ACKNOWLEDGE_FAILURE;
+    }
+    else
+    {
+      ret =  BSP_ERROR_PERIPH_FAILURE;
+    }
+  }
+  return ret;
+}
+
 
 /**
   * @brief  Initialize I2C HAL
@@ -1698,6 +1943,109 @@ static void I2C2_MspDeInit(I2C_HandleTypeDef* i2cHandle)
   /* USER CODE END I2C2_MspDeInit 1 */
 }
 
+
+
+/**
+* @brief I2C3 Initialization Function
+* @param None
+* @retval None
+*/
+__weak HAL_StatusTypeDef MX_I2C3_Init(I2C_HandleTypeDef* hi2c)
+{
+  HAL_StatusTypeDef ret = HAL_OK;
+  /* USER CODE BEGIN I2C3_Init 0 */
+  
+  /* USER CODE END I2C3_Init 0 */
+  
+  /* USER CODE BEGIN I2C3_Init 1 */
+  
+  /* USER CODE END I2C3_Init 1 */
+  hi2c3.Instance = I2C3;
+  hi2c3.Init.Timing = 0x00901850;// 0xC545E4D;// 0x20E0FB78; //0x10707DBC;
+  hi2c3.Init.OwnAddress1 = 0;
+  hi2c3.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c3.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c3.Init.OwnAddress2 = 0;
+  hi2c3.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+  hi2c3.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c3.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c3) != HAL_OK)
+  {
+    ret = HAL_ERROR;
+  }
+  /** Configure Analogue filter
+  */
+  else if (HAL_I2CEx_ConfigAnalogFilter(&hi2c3, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+  {
+    ret = HAL_ERROR;
+  }
+  /** Configure Digital filter
+  */
+  else if (HAL_I2CEx_ConfigDigitalFilter(&hi2c3, 0) != HAL_OK)
+  {
+    ret = HAL_ERROR;
+  }
+  /* USER CODE BEGIN I2C3_Init 2 */
+  return ret;
+  /* USER CODE END I2C3_Init 2 */
+  
+}
+
+
+void I2C3_MspInit(I2C_HandleTypeDef* i2cHandle)
+{
+  GPIO_InitTypeDef GPIO_InitStruct;
+  /* USER CODE BEGIN I2C3_MspInit 0 */
+  
+  /* USER CODE END I2C3_MspInit 0 */
+  
+  __HAL_RCC_GPIOG_CLK_ENABLE();
+  /**I2C3 GPIO Configuration
+  PG7     ------> I2C3_SCL
+  PG8     ------> I2C3_SDA
+  */
+  GPIO_InitStruct.Pin = BUS_I2C3_SCL_GPIO_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = BUS_I2C3_SCL_GPIO_AF;
+  HAL_GPIO_Init(BUS_I2C3_SCL_GPIO_PORT, &GPIO_InitStruct);
+  
+  GPIO_InitStruct.Pin = BUS_I2C3_SDA_GPIO_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = BUS_I2C3_SDA_GPIO_AF;
+  HAL_GPIO_Init(BUS_I2C3_SDA_GPIO_PORT, &GPIO_InitStruct);
+  
+  /* Peripheral clock enable */
+  __HAL_RCC_I2C3_CLK_ENABLE();
+  /* USER CODE BEGIN I2C3_MspInit 1 */
+  
+  /* USER CODE END I2C3_MspInit 1 */
+}
+
+
+void I2C3_MspDeInit(I2C_HandleTypeDef* i2cHandle)
+{
+  /* USER CODE BEGIN I2C3_MspDeInit 0 */
+  
+  /* USER CODE END I2C3_MspDeInit 0 */
+  /* Peripheral clock disable */
+  __HAL_RCC_I2C3_CLK_DISABLE();
+  
+  /**I2C3 GPIO Configuration  qweqwe
+  PB6     ------> I2C3_SCL
+  PB7     ------> I2C3_SDA
+  */
+  HAL_GPIO_DeInit(BUS_I2C3_SCL_GPIO_PORT, BUS_I2C3_SCL_GPIO_PIN);
+  
+  HAL_GPIO_DeInit(BUS_I2C3_SDA_GPIO_PORT, BUS_I2C3_SDA_GPIO_PIN);
+  
+  /* USER CODE BEGIN I2C3_MspDeInit 1 */
+  
+  /* USER CODE END I2C3_MspDeInit 1 */
+}
 
 
 __weak HAL_StatusTypeDef MX_I2C4_Init(I2C_HandleTypeDef* hi2c)

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_GeneralPurpose.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add General Purpose info services using vendor specific profiles.
   ******************************************************************************
   * @attention
@@ -24,7 +24,8 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_GP_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x00,0x03,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_GP_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,\
+                                                     0x00,0x03,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 
 /* Exported variables --------------------------------------------------------*/
@@ -94,7 +95,10 @@ tBleStatus BLE_GeneralPurposeStatusUpdate(uint8_t GP_CharNum, uint8_t *Data)
   STORE_LE_16(buff, (HAL_GetTick() >> 3));
   memcpy(buff + 2, Data, (uint32_t)BleCharGeneralPurpose[GP_CharNum].Char_Value_Length - 2U);
 
-  ret = ACI_GATT_UPDATE_CHAR_VALUE(&BleCharGeneralPurpose[GP_CharNum], 0, (uint8_t)BleCharGeneralPurpose[GP_CharNum].Char_Value_Length, buff);
+  ret = ACI_GATT_UPDATE_CHAR_VALUE(&BleCharGeneralPurpose[GP_CharNum],
+                                   0,
+                                   (uint8_t)BleCharGeneralPurpose[GP_CharNum].Char_Value_Length,
+                                   buff);
 
   if (ret != (tBleStatus)BLE_STATUS_SUCCESS)
   {
@@ -118,8 +122,9 @@ tBleStatus BLE_GeneralPurposeStatusUpdate(uint8_t GP_CharNum, uint8_t *Data)
   * @param  uint16_t attr_handle Handle of the attribute
   * @param  uint16_t Offset: (SoC mode) the offset is never used and it is always 0. Network coprocessor mode:
   *                          - Bits 0-14: offset of the reported value inside the attribute.
-  *                          - Bit 15: if the entire value of the attribute does not fit inside a single ACI_GATT_ATTRIBUTE_MODIFIED_EVENT event,
-  *                            this bit is set to 1 to notify that other ACI_GATT_ATTRIBUTE_MODIFIED_EVENT events will follow to report the remaining value.
+  *                          - Bit 15: if the entire value of the attribute does not fit inside a single
+  *                            ACI_GATT_ATTRIBUTE_MODIFIED_EVENT event, this bit is set to 1 to notify that other
+  *                            ACI_GATT_ATTRIBUTE_MODIFIED_EVENT events will follow to report the remaining value.
   * @param  uint8_t data_length length of the data
   * @param  uint8_t *att_data attribute data
   * @retval None
@@ -131,10 +136,12 @@ static void AttrMod_Request_GeneralPurpose(void *VoidCharPointer, uint16_t attr_
 
   if (CustomNotifyEventGeneralPurpose != NULL)
   {
-    //find the right GP feature
+    /* find the right GP feature */
     BleCharTypeDef *LocalBleChar = (BleCharTypeDef *)VoidCharPointer;
     uint32_t search;
-    for (search = 0; ((search < (uint32_t)NumberAllocatedGP) && (GP_CharNum == BLE_GENERAL_PURPOSE_MAX_CHARS_NUM)); search++)
+    for (search = 0;
+         ((search < (uint32_t)NumberAllocatedGP) && (GP_CharNum == BLE_GENERAL_PURPOSE_MAX_CHARS_NUM));
+         search++)
     {
       if (LocalBleChar->uuid[14] == BleCharGeneralPurpose[search].uuid[14])
       {
@@ -144,7 +151,7 @@ static void AttrMod_Request_GeneralPurpose(void *VoidCharPointer, uint16_t attr_
 
     if (GP_CharNum != BLE_GENERAL_PURPOSE_MAX_CHARS_NUM)
     {
-      //if we had found the corresponding General Purpose Feature
+      /* if we had found the corresponding General Purpose Feature */
       if (att_data[0] == 01U)
       {
         CustomNotifyEventGeneralPurpose(GP_CharNum, BLE_NOTIFY_SUB);
@@ -161,7 +168,10 @@ static void AttrMod_Request_GeneralPurpose(void *VoidCharPointer, uint16_t attr_
   {
     if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
     {
-      BytesToWrite = (uint8_t) sprintf((char *)BufferToWrite, "--->GP[%d]=%s\n", GP_CharNum, (att_data[0] == 01U) ? " ON" : " OFF");
+      BytesToWrite = (uint8_t) sprintf((char *)BufferToWrite,
+                                       "--->GP[%d]=%s\n",
+                                       GP_CharNum,
+                                       (att_data[0] == 01U) ? " ON" : " OFF");
       Term_Update(BufferToWrite, BytesToWrite);
     }
     else
@@ -174,7 +184,9 @@ static void AttrMod_Request_GeneralPurpose(void *VoidCharPointer, uint16_t attr_
     /* if we didn't find a suitable General Purpose char */
     if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
     {
-      BytesToWrite = (uint8_t) sprintf((char *)BufferToWrite, "--->GP[Not Found]=%s\n", (att_data[0] == 01U) ? " ON" : " OFF");
+      BytesToWrite = (uint8_t) sprintf((char *)BufferToWrite,
+                                       "--->GP[Not Found]=%s\n",
+                                       (att_data[0] == 01U) ? " ON" : " OFF");
       Term_Update(BufferToWrite, BytesToWrite);
     }
     else
@@ -182,7 +194,7 @@ static void AttrMod_Request_GeneralPurpose(void *VoidCharPointer, uint16_t attr_
       BLE_MANAGER_PRINTF("--->GP[Not Found]=%s", (att_data[0] == 01U) ? " ON\r\n" : " OFF\r\n");
     }
   }
-#endif
+#endif /* (BLE_DEBUG_LEVEL>1) */
 }
 
 

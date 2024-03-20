@@ -1,0 +1,46 @@
+********************************************************************************
+*
+* STMicroelectronics - VL53L8CX - Ultra Lite Driver
+*
+********************************************************************************
+
+# Driver version history 
+
+---------------------------------------------------------------------------------------------------------------
+
+Version : 1.0.0
+Date : 11/09/2022
+Comments : Initial driver release.
+
+---------------------------------------------------------------------------------------------------------------
+
+Version : 1.0.1
+Date : 11/14/2022
+Comments : Changed module id in function vl53l8cx_is_alive().
+
+---------------------------------------------------------------------------------------------------------------
+
+Version : 1.0.2
+Date : 01/19/2023
+Comments : 
+	- Changed licences for full BSD3
+	- Fixed distance computing that might be wrong in some cases (random apparition)
+
+---------------------------------------------------------------------------------------------------------------
+
+
+Version : 1.0.3
+Date : 04/17/2023
+- Fixed bug in motion indicator: configuration was not correctly sent when resolution was changed
+- Fixed SPI limitation in initialization sequence
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+Version : 1.0.4
+Date : 04/24/2023
+- Fixed stop function that may fail when multi-sensors where used
+
+
+---------------------------------------------------------------------------------------------------------------

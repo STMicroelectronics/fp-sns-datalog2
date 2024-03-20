@@ -154,39 +154,38 @@ sys_error_code_t filex_dctrl_vtblStream_enable(IStream_t *_this)
   uint16_t tmp = -1;
 
   SD_DetectInit();
-  if(SD_IsDetected())
+
+  if (SD_IsDetected() && TX_SUCCESS != obj->fx_opened)
   {
     /* Open the SD disk driver */
     obj->fx_opened = fx_media_open(&obj->sdio_disk, "STM32_SDIO_DISK", fx_stm32_sd_driver, 0, &obj->media_memory, sizeof(obj->media_memory));
+  }
 
-    if(TX_SUCCESS == obj->fx_opened) /* SD card detected */
+  if (TX_SUCCESS == obj->fx_opened)
+  {
+    obj->fx_stream_enabled = true;
+
+    /* Scan the root folder... */
+    while (fx_directory_next_entry_find(&obj->sdio_disk, return_entry_name) != FX_NO_MORE_ENTRIES)
     {
-      /* Scan the root folder... */
-      while(fx_directory_next_entry_find(&obj->sdio_disk, return_entry_name) != FX_NO_MORE_ENTRIES)
+      int16_t nLenght = strlen(return_entry_name);
+      for (int i = nLenght - 1; i >= 0; --i)
       {
-        int16_t nLenght = strlen(return_entry_name);
-        for(int i = nLenght - 1; i >= 0; --i)
+        if (return_entry_name[i] == '.')
         {
-          if(return_entry_name[i] == '.')
-          {
-            nLenght = i;
-            break;
-          }
-        }
-        /* and check if there are already some acquisition folders */
-        if(strncmp(return_entry_name, FILEX_DCTRL_LOG_DIR_PREFIX, sizeof(FILEX_DCTRL_LOG_DIR_PREFIX) - 1) == 0)
-        {
-          tmp = strtol(&return_entry_name[sizeof(FILEX_DCTRL_LOG_DIR_PREFIX)], NULL, 10);
-          if(tmp > obj->dir_n)
-          {
-            obj->dir_n = tmp;
-          }
+          nLenght = i;
+          break;
         }
       }
-    }
-    else /* No SD card inserted */
-    {
-      res = SYS_BASE_ERROR_CODE;
+      /* and check if there are already some acquisition folders */
+      if (strncmp(return_entry_name, FILEX_DCTRL_LOG_DIR_PREFIX, sizeof(FILEX_DCTRL_LOG_DIR_PREFIX) - 1) == 0)
+      {
+        tmp = strtol(&return_entry_name[sizeof(FILEX_DCTRL_LOG_DIR_PREFIX)], NULL, 10);
+        if (tmp > obj->dir_n)
+        {
+          obj->dir_n = tmp;
+        }
+      }
     }
   }
   else /* No SD card inserted */
@@ -203,40 +202,17 @@ sys_error_code_t filex_dctrl_vtblStream_disable(IStream_t *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   filex_dctrl_class_t *obj = (filex_dctrl_class_t *) _this;
 
-  SD_DetectInit();
-  if((SD_IsDetected() == true) && (obj->fx_opened == TX_SUCCESS))
-  {
-    /* Close the SD disk driver.  */
-    if(TX_SUCCESS != fx_media_close(&obj->sdio_disk))
-    {
-      res = SYS_BASE_ERROR_CODE;
-    }
-    else
-    {
-      res = SYS_NO_ERROR_CODE;
-    }
-  }
+  obj->fx_stream_enabled = false;
 
-  obj->fx_opened = FX_INVALID_STATE;
   return res;
 }
 
 bool filex_dctrl_vtblStream_is_enabled(IStream_t *_this)
 {
   assert_param(_this != NULL);
-  bool res;
   filex_dctrl_class_t *obj = (filex_dctrl_class_t *) _this;
 
-  if (TX_SUCCESS != obj->fx_opened)
-  {
-    res = false;
-  }
-  else
-  {
-    res = true;
-  }
-
-  return res;
+  return obj->fx_stream_enabled;
 }
 
 sys_error_code_t filex_dctrl_vtblStream_deinit(IStream_t *_this)
@@ -271,10 +247,23 @@ sys_error_code_t filex_dctrl_vtblStream_start(IStream_t *_this, void *param)
   char *p_name = obj->dir_name;
   if (sDate.Year != 0)
   {
-    /* split in two to avoid warning */
-    int32_t size;
-    size = sprintf(p_name, "%04d%02d%02d_", sDate.Year + 2000, sDate.Month, sDate.Date);
-    sprintf(&p_name[size], "%02d_%02d_%02d", sTime.Hours, sTime.Minutes, sTime.Seconds);
+    char *temp_s = "";
+    acquisition_info_get_start_time(&temp_s); /* "YYYY-MM-DDTHH:MM:SS.mmmZ" */
+
+    memcpy(obj->year, temp_s, 4);         /* YYYY */
+    memcpy(obj->month, &temp_s[5], 2);    /* MM   */
+    memcpy(obj->day, &temp_s[8], 2);      /* DD   */
+    memcpy(obj->hours, &temp_s[11], 2);   /* HH   */
+    memcpy(obj->minutes, &temp_s[14], 2); /* MM   */
+    memcpy(obj->seconds, &temp_s[17], 2); /* SS   */
+
+    snprintf(p_name, 5, "%s", obj->year);
+    snprintf(&p_name[4], 3, "%s", obj->month);
+    snprintf(&p_name[6], 3, "%s", obj->day);
+    snprintf(&p_name[8], 4, "_%s", obj->hours);
+    snprintf(&p_name[11], 4, "_%s", obj->minutes);
+    snprintf(&p_name[14], 4, "_%s", obj->seconds);
+    /* p_name = YYYYMMDD_HH_MM_SS */
   }
   else
   {
@@ -379,11 +368,6 @@ sys_error_code_t filex_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   filex_dctrl_class_t *obj = (filex_dctrl_class_t *) _this;
-  RTC_TimeTypeDef sTime;
-  RTC_DateTypeDef sDate;
-
-  HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
-  HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
 
   /* Allocate a DL2 Circular Buffer with SD_BUFFER_ITEMS elements*/
   CircularBufferDL2 *cbdl2 = CBDL2_Alloc(SD_BUFFER_ITEMS);
@@ -737,6 +721,14 @@ void fx_thread_entry(unsigned long thread_input)
   }
 }
 
+
+FX_MEDIA *filex_dctrl_get_media(filex_dctrl_class_t *_this)
+{
+  assert_param(_this != NULL);
+  return &_this->sdio_disk;
+}
+
+
 void filex_data_ready(filex_dctrl_class_t *_this, uint32_t data_ready_mask)
 {
   uint32_t stream_id = data_ready_mask & FILEX_DCTRL_DATA_SENSOR_ID_MASK;
@@ -766,23 +758,26 @@ void filex_data_flush(filex_dctrl_class_t *_this, uint8_t stream_id)
   CBItem *p_item;
   uint32_t item_size = CB_GetItemSize((CircularBuffer *)cbdl2);
 
-  if (CB_GetReadyItemFromTail((CircularBuffer *) cbdl2, &p_item) == SYS_NO_ERROR_CODE)
+  if (item_size != 0)
   {
-    if (FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t *) CB_GetItemData(p_item), item_size))
+    if (CB_GetReadyItemFromTail((CircularBuffer *) cbdl2, &p_item) == SYS_NO_ERROR_CODE)
     {
-      SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+      if (FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t *) CB_GetItemData(p_item), item_size))
+      {
+        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+      }
+      /* Release the buffer item and reset tx_state */
+      CB_ReleaseItem((CircularBuffer *)cbdl2, p_item);
     }
-    /* Release the buffer item and reset tx_state */
-    CB_ReleaseItem((CircularBuffer *)cbdl2, p_item);
-  }
 
-  uint32_t byte_counter = cbdl2->byte_counter;
-  if (byte_counter > 0 && byte_counter < item_size)
-  {
-    if (FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t *) CB_GetItemData(cbdl2->p_current_item),
-                                    byte_counter))
+    uint32_t byte_counter = cbdl2->byte_counter;
+    if (byte_counter > 0 && byte_counter < item_size)
     {
-      SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+      if (FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t *) CB_GetItemData(cbdl2->p_current_item),
+                                      byte_counter))
+      {
+        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+      }
     }
   }
 }

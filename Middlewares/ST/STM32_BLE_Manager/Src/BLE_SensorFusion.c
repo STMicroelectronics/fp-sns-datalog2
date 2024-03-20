@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_SensorFusion.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add Sensor Fusion service using vendor specific profiles.
   ******************************************************************************
   * @attention
@@ -24,7 +24,8 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_SENSOR_FUSION_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x01,0x00,0x00,0x01,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_SENSOR_FUSION_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x01,0x00,0x00,0x01,\
+                                                                0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 #define SENSOR_FUSION_ADVERTISE_DATA_POSITION  17
 
@@ -107,28 +108,28 @@ tBleStatus BLE_SensorFusionUpdate(BLE_MOTION_SENSOR_Axes_t *data, uint8_t Number
   switch (NumberQuaternionsToSend)
   {
     case 1:
-      STORE_LE_16(buff + 2, data[0].x);
-      STORE_LE_16(buff + 4, data[0].y);
-      STORE_LE_16(buff + 6, data[0].z);
+      STORE_LE_16(buff + 2, data[0].Axis_x);
+      STORE_LE_16(buff + 4, data[0].Axis_y);
+      STORE_LE_16(buff + 6, data[0].Axis_z);
       break;
     case 2:
-      STORE_LE_16(buff + 2, data[0].x);
-      STORE_LE_16(buff + 4, data[0].y);
-      STORE_LE_16(buff + 6, data[0].z);
-      STORE_LE_16(buff + 8, data[1].x);
-      STORE_LE_16(buff + 10, data[1].y);
-      STORE_LE_16(buff + 12, data[1].z);
+      STORE_LE_16(buff + 2, data[0].Axis_x);
+      STORE_LE_16(buff + 4, data[0].Axis_y);
+      STORE_LE_16(buff + 6, data[0].Axis_z);
+      STORE_LE_16(buff + 8, data[1].Axis_x);
+      STORE_LE_16(buff + 10, data[1].Axis_y);
+      STORE_LE_16(buff + 12, data[1].Axis_z);
       break;
     case 3:
-      STORE_LE_16(buff + 2, data[0].x);
-      STORE_LE_16(buff + 4, data[0].y);
-      STORE_LE_16(buff + 6, data[0].z);
-      STORE_LE_16(buff + 8, data[1].x);
-      STORE_LE_16(buff + 10, data[1].y);
-      STORE_LE_16(buff + 12, data[1].z);
-      STORE_LE_16(buff + 14, data[2].x);
-      STORE_LE_16(buff + 16, data[2].y);
-      STORE_LE_16(buff + 18, data[2].z);
+      STORE_LE_16(buff + 2, data[0].Axis_x);
+      STORE_LE_16(buff + 4, data[0].Axis_y);
+      STORE_LE_16(buff + 6, data[0].Axis_z);
+      STORE_LE_16(buff + 8, data[1].Axis_x);
+      STORE_LE_16(buff + 10, data[1].Axis_y);
+      STORE_LE_16(buff + 12, data[1].Axis_z);
+      STORE_LE_16(buff + 14, data[2].Axis_x);
+      STORE_LE_16(buff + 16, data[2].Axis_y);
+      STORE_LE_16(buff + 18, data[2].Axis_z);
       break;
   }
 
@@ -185,7 +186,9 @@ static void AttrMod_Request_SensorFusion(void *VoidCharPointer, uint16_t attr_ha
   }
   if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
   {
-    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "--->Sensor Fusion=%s\n", (att_data[0] == 01U) ? " ON" : " OFF");
+    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite,
+                                    "--->Sensor Fusion=%s\n",
+                                    (att_data[0] == 01U) ? " ON" : " OFF");
     Term_Update(BufferToWrite, BytesToWrite);
   }
   else

@@ -87,23 +87,32 @@ struct _filex_dctrl_class_t
   UCHAR *queue_memory_pointer;
 
   /*
-   * Buffer for FileX FX_MEDIA sector cache.
-   **/
+    * Buffer for FileX FX_MEDIA sector cache.
+    **/
   uint32_t media_memory[FX_STM32_SD_DEFAULT_SECTOR_SIZE / sizeof(uint32_t)];
 
   /*
-   * Define FileX global data structures.
-   **/
+    * Define FileX global data structures.
+    **/
   FX_MEDIA sdio_disk;
   FX_FILE file_dat[FILEX_DCTRL_DAT_FILES_COUNT];
   FX_FILE file_tmp;
   uint32_t fx_opened;
+  bool fx_stream_enabled;
   /* Define ThreadX global data structures.  */
   TX_THREAD fx_app_thread;
   TX_QUEUE fx_app_queue;
 
+  /* Save date and time from app_model.start_time */
+  char year[4];
+  char month[2];
+  char day[2];
+  char hours[2];
+  char minutes[2];
+  char seconds[2];
+
   /* Directory name */
-  char dir_name[sizeof(FILEX_DCTRL_LOG_DIR_PREFIX) + 9];
+  char dir_name[sizeof(FILEX_DCTRL_LOG_DIR_PREFIX) + 14];
   /* Directory number */
   uint16_t dir_n;
   /* Dat file names */
@@ -138,6 +147,7 @@ sys_error_code_t filex_dctrl_msg(filex_dctrl_class_t *_this, unsigned long *msg)
 
 sys_error_code_t filex_dctrl_write_ucf(filex_dctrl_class_t *_this, uint32_t ucf_size, const char *ucf_data);
 
+FX_MEDIA *filex_dctrl_get_media(filex_dctrl_class_t *_this);
 
 #ifdef __cplusplus
 }

@@ -1,28 +1,28 @@
 /**
- ******************************************************************************
- * @file    sysconfig.h
- * @author  SRA - GPM
- * 
- * 
- * @brief   Global System configuration file
- *
- * This file include some configuration parameters grouped here for user
- * convenience. This file override the default configuration value, and it is
- * used in the "Preinclude file" section of the "compiler > prepocessor"
- * options.
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2023 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    sysconfig.h
+  * @author  SRA - GPM
+  *
+  *
+  * @brief   Global System configuration file
+  *
+  * This file include some configuration parameters grouped here for user
+  * convenience. This file override the default configuration value, and it is
+  * used in the "Preinclude file" section of the "compiler > prepocessor"
+  * options.
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 
 #ifndef SYSCONFIG_H_
 #define SYSCONFIG_H_
@@ -31,8 +31,8 @@
 // *********************
 
 #define BOARD_ID           0x09
-#define BLE_FW_ID_DATALOG2 0x0C
-#define USB_FW_ID_DATALOG2 0x05
+#define BLE_FW_ID_DATALOG2 0x09
+#define USB_FW_ID_DATALOG2 0x07
 
 // Other hardware configuration
 // ****************************
@@ -58,7 +58,7 @@
 #define INIT_TASK_CFG_STACK_SIZE                  (TX_MINIMUM_STACK*10)
 
 // HEAP memory used for SysAlloc
-#define INIT_TASK_CFG_HEAP_SIZE                   (540*1024)
+#define INIT_TASK_CFG_HEAP_SIZE                   (545*1024)
 
 #define DT_TASK_CFG_STACK_DEPTH                   (TX_MINIMUM_STACK*12)
 #define DT_TASK_CFG_PRIORITY                      (12)
@@ -123,11 +123,11 @@
 // file SysTimestamp.c
 #define SYS_TS_CFG_ENABLE_SERVICE 1
 /**
-* Configuration parameter for the timer used for the eLooM timestamp service.
-* Valid value are:
-* - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
-* - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
-*/
+  * Configuration parameter for the timer used for the eLooM timestamp service.
+  * Valid value are:
+  * - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
+  * - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
+  */
 #define SYS_TS_CFG_TSDRIVER_PARAMS &MX_TIM5InitParams
 //#define SYS_TS_CFG_TSDRIVER_PARAMS SYS_TS_USE_SW_TSDRIVER
 

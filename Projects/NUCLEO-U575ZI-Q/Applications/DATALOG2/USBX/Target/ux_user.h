@@ -279,7 +279,7 @@
 #endif
 #endif
 
-/* Defined, this value represents the maximum size of single tansfers for the SCSI data phase.
+/* Defined, this value represents the maximum size of single transfers for the SCSI data phase.
  */
 
 /* #define UX_HOST_CLASS_STORAGE_MAX_TRANSFER_SIZE             (1024 * 1) */

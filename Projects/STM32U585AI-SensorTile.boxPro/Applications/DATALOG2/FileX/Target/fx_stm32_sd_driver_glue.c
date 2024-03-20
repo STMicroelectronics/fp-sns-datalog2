@@ -154,7 +154,7 @@ bool SD_IsDetected(void)
   bool res = true;
 
   /* Check SD card detect pin */
-  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5) == GPIO_PIN_SET)
+  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_5) == GPIO_PIN_SET)
   {
     res = false;
   }

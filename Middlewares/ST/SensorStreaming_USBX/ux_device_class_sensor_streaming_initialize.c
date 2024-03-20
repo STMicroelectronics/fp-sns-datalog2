@@ -59,7 +59,7 @@ UINT _ux_device_class_sensor_streaming_initialize(UX_SLAVE_CLASS_COMMAND *comman
   slave_class->ux_slave_class_thread_stack = _ux_utility_memory_allocate(UX_NO_ALIGN, UX_REGULAR_MEMORY, SS_CLASS_THREAD_STACK_SIZE);
 
   /* Create a event flag group for the cdc_acm class to synchronize with the application writing event .  */
-  status = _ux_utility_event_flags_create(&sensor_streaming->ux_slave_class_sensor_streaming_event_flags_group, "ux_device_class_sensor_streaming_event_flag");
+  (void)_ux_utility_event_flags_create(&sensor_streaming->ux_slave_class_sensor_streaming_event_flags_group, "ux_device_class_sensor_streaming_event_flag");
 
   status = _ux_utility_thread_create(&slave_class->ux_slave_class_thread, "ux_slave_class_thread", _ux_device_class_sensor_streaming_thread,
                                      (ULONG) (ALIGN_TYPE) slave_class, (VOID*) slave_class->ux_slave_class_thread_stack,
@@ -79,7 +79,7 @@ UINT _ux_device_class_sensor_streaming_initialize(UX_SLAVE_CLASS_COMMAND *comman
   for(i = 0; i < SS_N_IN_ENDPOINTS; i++)
   {
     status = _ux_utility_semaphore_create(&sensor_streaming->ux_slave_class_sensor_streaming_bulkin[i].ep_param.semaphore, "semaphore 0", 0);
-    if(status != UX_SUCCESS)
+    if(status != (UINT) UX_SUCCESS)
     {
       return status;
     }

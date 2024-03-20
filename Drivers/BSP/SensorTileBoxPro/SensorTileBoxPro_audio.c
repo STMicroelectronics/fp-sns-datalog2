@@ -1,20 +1,22 @@
 /**
- ******************************************************************************
- * @file    SensorTileBoxPro_audio.c
- * @author  SRA
- * @brief   This file provides the Audio driver for the SensorTileBoxPro board 
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    SensorTileBoxPro_audio.c
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
+  * @brief   This file provides the Audio driver for the SensorTileBoxPro board 
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+*/
 
 /* Includes ------------------------------------------------------------------*/
 #include "SensorTileBoxPro_audio.h"

@@ -54,20 +54,20 @@ void MX_SDMMC1_SD_Init(void)
 
 }
 
-void HAL_SD_MspInit(SD_HandleTypeDef* sdHandle)
+void HAL_SD_MspInit(SD_HandleTypeDef *sdHandle)
 {
 
   GPIO_InitTypeDef GPIO_InitStruct = {0};
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-  if(sdHandle->Instance==SDMMC1)
+  if (sdHandle->Instance == SDMMC1)
   {
-  /* USER CODE BEGIN SDMMC1_MspInit 0 */
+    /* USER CODE BEGIN SDMMC1_MspInit 0 */
 
-  /* USER CODE END SDMMC1_MspInit 0 */
+    /* USER CODE END SDMMC1_MspInit 0 */
 
-  /** Initializes the peripherals clock
-  */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_SDMMC|RCC_PERIPHCLK_CLK48;
+    /** Initializes the peripherals clock
+    */
+    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_SDMMC | RCC_PERIPHCLK_CLK48;
     PeriphClkInit.IclkClockSelection = RCC_CLK48CLKSOURCE_HSI48;
     PeriphClkInit.SdmmcClockSelection = RCC_SDMMCCLKSOURCE_CLK48;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -92,16 +92,16 @@ void HAL_SD_MspInit(SD_HandleTypeDef* sdHandle)
     PC8     ------> SDMMC1_D0
     PC7     ------> SDMMC1_D123DIR
     PC6     ------> SDMMC1_D0DIR
-    */
-    GPIO_InitStruct.Pin = GPIO_PIN_11|GPIO_PIN_10|GPIO_PIN_12|GPIO_PIN_9
-                          |GPIO_PIN_8;
+      */
+    GPIO_InitStruct.Pin = GPIO_PIN_11 | GPIO_PIN_10 | GPIO_PIN_12 | GPIO_PIN_9
+                          | GPIO_PIN_8;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF12_SDMMC1;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_9|GPIO_PIN_8;
+    GPIO_InitStruct.Pin = GPIO_PIN_9 | GPIO_PIN_8;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -115,27 +115,27 @@ void HAL_SD_MspInit(SD_HandleTypeDef* sdHandle)
     GPIO_InitStruct.Alternate = GPIO_AF12_SDMMC1;
     HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-    GPIO_InitStruct.Pin = GPIO_PIN_7|GPIO_PIN_6;
+    GPIO_InitStruct.Pin = GPIO_PIN_7 | GPIO_PIN_6;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF8_SDMMC1;
     HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /* USER CODE BEGIN SDMMC1_MspInit 1 */
+    /* USER CODE BEGIN SDMMC1_MspInit 1 */
 
-  /* USER CODE END SDMMC1_MspInit 1 */
+    /* USER CODE END SDMMC1_MspInit 1 */
   }
 }
 
-void HAL_SD_MspDeInit(SD_HandleTypeDef* sdHandle)
+void HAL_SD_MspDeInit(SD_HandleTypeDef *sdHandle)
 {
 
-  if(sdHandle->Instance==SDMMC1)
+  if (sdHandle->Instance == SDMMC1)
   {
-  /* USER CODE BEGIN SDMMC1_MspDeInit 0 */
+    /* USER CODE BEGIN SDMMC1_MspDeInit 0 */
 
-  /* USER CODE END SDMMC1_MspDeInit 0 */
+    /* USER CODE END SDMMC1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_SDMMC1_CLK_DISABLE();
 
@@ -150,17 +150,17 @@ void HAL_SD_MspDeInit(SD_HandleTypeDef* sdHandle)
     PC8     ------> SDMMC1_D0
     PC7     ------> SDMMC1_D123DIR
     PC6     ------> SDMMC1_D0DIR
-    */
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_11|GPIO_PIN_10|GPIO_PIN_12|GPIO_PIN_9
-                          |GPIO_PIN_8|GPIO_PIN_7|GPIO_PIN_6);
+      */
+    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_11 | GPIO_PIN_10 | GPIO_PIN_12 | GPIO_PIN_9
+                    | GPIO_PIN_8 | GPIO_PIN_7 | GPIO_PIN_6);
 
-    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_9|GPIO_PIN_8);
+    HAL_GPIO_DeInit(GPIOB, GPIO_PIN_9 | GPIO_PIN_8);
 
     HAL_GPIO_DeInit(GPIOD, GPIO_PIN_2);
 
-  /* USER CODE BEGIN SDMMC1_MspDeInit 1 */
+    /* USER CODE BEGIN SDMMC1_MspDeInit 1 */
 
-  /* USER CODE END SDMMC1_MspDeInit 1 */
+    /* USER CODE END SDMMC1_MspDeInit 1 */
   }
 }
 

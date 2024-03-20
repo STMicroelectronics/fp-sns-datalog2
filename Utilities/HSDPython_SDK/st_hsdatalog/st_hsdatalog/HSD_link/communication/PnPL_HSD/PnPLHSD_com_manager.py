@@ -271,7 +271,7 @@ class PnPLHSD_CommandManager:
 
     def get_algorithm_components_names(self, d_id: int, only_active: bool):
         algo_names = []
-        res = self.get_algorithm_components_status(d_id)
+        res = self.get_algorithm_components_status(d_id, only_active)
         if res is not None:
             for r in res:
                 if only_active == False:

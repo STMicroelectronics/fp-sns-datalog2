@@ -64,7 +64,8 @@ uint16_t STHS34PF80Task_vtblPresenceGetLPF_P_Bandwidth(ISensorPresence_t *_this)
 uint16_t STHS34PF80Task_vtblPresenceGetLPF_M_Bandwidth(ISensorPresence_t *_this);
 uint8_t STHS34PF80Task_vtblPresenceGetEmbeddedCompensation(ISensorPresence_t *_this);
 uint8_t STHS34PF80Task_vtblPresenceGetSoftwareCompensation(ISensorPresence_t *_this);
-sys_error_code_t STHS34PF80Task_vtblPresenceGetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this, CompensationAlgorithmConfig_t *pAlgorithmConfig);
+sys_error_code_t STHS34PF80Task_vtblPresenceGetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this,
+    CompensationAlgorithmConfig_t *pAlgorithmConfig);
 sys_error_code_t STHS34PF80Task_vtblSensorSetDataFrequency(ISensorPresence_t *_this, float data_frequency);
 sys_error_code_t STHS34PF80Task_vtblSensorSetTransmittance(ISensorPresence_t *_this, float Transmittance);
 sys_error_code_t STHS34PF80Task_vtblSensorSetAverageTObject(ISensorPresence_t *_this, uint16_t average_tobject);
@@ -84,7 +85,8 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetEmbeddedCompensation(ISensorPresenc
                                                                   uint8_t embedded_compensation);
 sys_error_code_t STHS34PF80Task_vtblSensorSetSoftwareCompensation(ISensorPresence_t *_this,
                                                                   uint8_t software_compensation);
-sys_error_code_t STHS34PF80Task_vtblSensorSetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this, CompensationAlgorithmConfig_t *pAlgorithmConfig);
+sys_error_code_t STHS34PF80Task_vtblSensorSetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this,
+    CompensationAlgorithmConfig_t *pAlgorithmConfig);
 
 #ifdef __cplusplus
 }

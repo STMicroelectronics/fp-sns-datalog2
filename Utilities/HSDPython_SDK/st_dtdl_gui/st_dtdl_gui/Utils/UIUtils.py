@@ -8,12 +8,14 @@ from st_dtdl_gui.Widgets.TelemetryWidget import TelemetryWidget
 
 
 @staticmethod
-def validate_value(widget, text_value):        
+def validate_value(controller, widget, text_value):        
     if isinstance(widget, PropertyWidget) or isinstance(widget, TelemetryWidget) or isinstance(widget, CommandWidget):
         validation_res = widget.validator.validate(text_value,0)
+        widget_id = f"{widget.comp_name}.{widget.prop_name}"
         widget = widget.value
     else:
         validation_res = widget.validator().validate(text_value,0)
+        widget_id = widget.__str__()
     
     if isinstance(validation_res, tuple):
         validation_res = validation_res[0]
@@ -23,10 +25,12 @@ def validate_value(widget, text_value):
             widget.setStyleSheet(STDTDL_SpinBox.valid)
         else:
             widget.setStyleSheet(STDTDL_LineEdit.valid)
+        controller.remove_error_in_configuration(widget_id)
         return True
     else:
         if isinstance(widget, QSpinBox):
             widget.setStyleSheet(STDTDL_SpinBox.invalid)
         else:
             widget.setStyleSheet(STDTDL_LineEdit.invalid)
+        controller.add_error_in_configuration(widget_id)
         return False

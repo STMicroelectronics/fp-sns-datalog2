@@ -20,7 +20,9 @@ from PySide6.QtCore import QObject, Signal
 
 from st_pnpl.DTDL.device_template_manager import DeviceTemplateManager
 from st_pnpl.DTDL.device_template_model import InterfaceElement
-from st_pnpl.DTDL.dtdl_utils import DTDL_ACTUATORS_ID_COMP_KEY, DTDL_ALGORITHMS_ID_COMP_KEY, DTDL_SENSORS_ID_COMP_KEY           
+from st_dtdl_gui.Utils.DataClass import SensorPlotParams, AlgorithmPlotParams, ActuatorPlotParams
+from st_pnpl.DTDL.dtdl_utils import DTDL_ACTUATORS_ID_COMP_KEY, DTDL_ALGORITHMS_ID_COMP_KEY, DTDL_SENSORS_ID_COMP_KEY
+
 
 class ComponentType(Enum):
     SENSOR = 0
@@ -44,9 +46,9 @@ class STDTDL_Controller(QObject):
     sig_algorithm_component_found = Signal(str, InterfaceElement)
 
     sig_component_updated = Signal(str, dict)
-    sig_sensor_component_updated = Signal(str, dict)
-    sig_algorithm_component_updated = Signal(str, dict)
-    sig_actuator_component_updated = Signal(str, dict)
+    sig_sensor_component_updated = Signal(str, SensorPlotParams)
+    sig_algorithm_component_updated = Signal(str, AlgorithmPlotParams)
+    sig_actuator_component_updated = Signal(str, ActuatorPlotParams)
     
     sig_component_removed = Signal(str)
     

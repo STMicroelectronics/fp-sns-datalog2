@@ -87,7 +87,7 @@ int32_t HCI_TL_SPI_Init(void *pConf)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(BLE_INT_GPIO_Port, &GPIO_InitStruct);
-  HAL_NVIC_SetPriority(EXTI1_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(EXTI1_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(EXTI1_IRQn);
 
   HAL_GPIO_WritePin(BLE_SPI_CS_GPIO_Port, BLE_SPI_CS_Pin, GPIO_PIN_SET);
@@ -202,7 +202,6 @@ int32_t HCI_TL_SPI_Receive(uint8_t *buffer, uint16_t size)
   }
 
   HCI_TL_SPI_Enable_IRQ();
-
 
 
   return len;
@@ -342,5 +341,4 @@ void hci_tl_lowlevel_init(void)
 #endif /* HCI_TL */
 
 }
-
 

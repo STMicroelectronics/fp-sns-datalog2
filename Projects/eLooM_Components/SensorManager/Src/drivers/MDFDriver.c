@@ -240,7 +240,7 @@ sys_error_code_t MDFDriver_vtblDoEnterPowerMode(IDriver *_this, const EPowerMode
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  MDFDriver_t *p_obj = (MDFDriver_t*)_this;
+  MDFDriver_t *p_obj = (MDFDriver_t *)_this;
 
   if (!SYS_IS_ERROR_CODE(res))
   {

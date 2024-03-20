@@ -3,12 +3,20 @@
 # NOTE: unplug the board before running the script
 echo "NOTE: unplug the board before running the script"
 
-if [[ "$(uname -m)" == "aarch64" || "$(uname -m)" == "armv7l" ]]; then
-sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi/libhs_datalog_v1.so /usr/lib
-sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi/libhs_datalog_v2.so /usr/lib
+if [[ "$(uname -m)" == "armv7l" ]]; then
+	sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi/libhs_datalog_v1.so /usr/lib
+	sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi/libhs_datalog_v2.so /usr/lib
+elif [[ "$(uname -m)" == "aarch64" ]]; then
+	if [[ "$(getconf LONG_BIT)" == "32" ]]; then
+		sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_32bit/libhs_datalog_v1.so /usr/lib
+		sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_32bit/libhs_datalog_v2.so /usr/lib
+	else
+		sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_64bit/libhs_datalog_v1.so /usr/lib
+		sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_64bit/libhs_datalog_v2.so /usr/lib
+	fi
 else
-sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/linux/libhs_datalog_v1.so /usr/lib
-sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/linux/libhs_datalog_v2.so /usr/lib
+	sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/linux/libhs_datalog_v1.so /usr/lib
+	sudo cp ../st_hsdatalog/st_hsdatalog/HSD_link/communication/libhs_datalog/linux/libhs_datalog_v2.so /usr/lib
 fi
 
 sudo cp 30-hsdatalog.rules /etc/udev/rules.d

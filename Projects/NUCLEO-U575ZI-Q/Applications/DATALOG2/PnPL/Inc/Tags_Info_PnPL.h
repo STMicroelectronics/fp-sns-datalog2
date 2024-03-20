@@ -33,7 +33,6 @@
 #define _PNPL_TAGS_INFO_H_
 
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -46,6 +46,7 @@ extern "C" {
 /* #define HAL_DCMI_MODULE_ENABLED   */
 /* #define HAL_DMA2D_MODULE_ENABLED   */
 /* #define HAL_ETH_MODULE_ENABLED   */
+/* #define HAL_ETH_LEGACY_MODULE_ENABLED   */
 /* #define HAL_NAND_MODULE_ENABLED   */
 /* #define HAL_NOR_MODULE_ENABLED   */
 /* #define HAL_OTFDEC_MODULE_ENABLED   */
@@ -66,7 +67,7 @@ extern "C" {
 /* #define HAL_LTDC_MODULE_ENABLED   */
 /* #define HAL_QSPI_MODULE_ENABLED   */
 /* #define HAL_RAMECC_MODULE_ENABLED   */
-/* #define HAL_RNG_MODULE_ENABLED   */
+#define HAL_RNG_MODULE_ENABLED
 #define HAL_RTC_MODULE_ENABLED
 /* #define HAL_SAI_MODULE_ENABLED   */
 /* #define HAL_SD_MODULE_ENABLED   */
@@ -203,7 +204,7 @@ in voltage and temperature.*/
 #define  USE_HAL_OPAMP_REGISTER_CALLBACKS   0U /* MDIO register callback disabled    */
 #define  USE_HAL_OSPI_REGISTER_CALLBACKS    0U /* OSPI register callback disabled    */
 #define  USE_HAL_OTFDEC_REGISTER_CALLBACKS  0U /* OTFDEC register callback disabled  */
-#define  USE_HAL_PCD_REGISTER_CALLBACKS     1U /* PCD register callback disabled     */
+#define  USE_HAL_PCD_REGISTER_CALLBACKS     1U /* PCD register callback enabled     */
 #define  USE_HAL_QSPI_REGISTER_CALLBACKS    0U /* QSPI register callback disabled    */
 #define  USE_HAL_RNG_REGISTER_CALLBACKS     0U /* RNG register callback disabled     */
 #define  USE_HAL_RTC_REGISTER_CALLBACKS     0U /* RTC register callback disabled     */
@@ -220,8 +221,8 @@ in voltage and temperature.*/
 #define  USE_HAL_WWDG_REGISTER_CALLBACKS    0U /* WWDG register callback disabled    */
 
 /* ########################### Ethernet Configuration ######################### */
-#define ETH_TX_DESC_CNT         4  /* number of Ethernet Tx DMA descriptors */
-#define ETH_RX_DESC_CNT         4  /* number of Ethernet Rx DMA descriptors */
+#define ETH_TX_DESC_CNT         4U  /* number of Ethernet Tx DMA descriptors */
+#define ETH_RX_DESC_CNT         4U  /* number of Ethernet Rx DMA descriptors */
 
 #define ETH_MAC_ADDR0    (0x02UL)
 #define ETH_MAC_ADDR1    (0x00UL)
@@ -235,8 +236,7 @@ in voltage and temperature.*/
   * @brief Uncomment the line below to expanse the "assert_param" macro in the
   *        HAL drivers code
   */
-/* It is defined in the project settings*/
-/* #define USE_FULL_ASSERT    1U*/
+/* #define USE_FULL_ASSERT    1U */
 
 /* Includes ------------------------------------------------------------------*/
 /**
@@ -286,6 +286,10 @@ in voltage and temperature.*/
 #ifdef HAL_ETH_MODULE_ENABLED
 #include "stm32h7xx_hal_eth.h"
 #endif /* HAL_ETH_MODULE_ENABLED */
+
+#ifdef HAL_ETH_LEGACY_MODULE_ENABLED
+#include "stm32h7xx_hal_eth_legacy.h"
+#endif /* HAL_ETH_LEGACY_MODULE_ENABLED */
 
 #ifdef HAL_EXTI_MODULE_ENABLED
 #include "stm32h7xx_hal_exti.h"

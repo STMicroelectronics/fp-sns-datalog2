@@ -180,7 +180,6 @@ static sys_error_code_t ILPS22QSTaskConfigureIrqPin(const ILPS22QSTask *_this, b
 static void ILPS22QSTaskTimerCallbackFunction(ULONG param);
 
 
-
 /* Inline function forward declaration */
 /***************************************/
 
@@ -254,31 +253,7 @@ static ILPS22QSTaskClass_t sTheClass =
   /* PRESSURE DESCRIPTOR */
   {
     "ilps22qs",
-    COM_TYPE_PRESS,
-    {
-      1.0f,
-      4.0f,
-      10.0f,
-      25.0f,
-      50.0f,
-      75.0f,
-      100.0f,
-      200.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      1260.0f,
-      4060.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "prs",
-    },
-    "hPa",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_PRESS
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -1331,11 +1306,14 @@ static sys_error_code_t ILPS22QSTaskSensorInit(ILPS22QSTask *_this)
                       _this->samples_per_it * 3);
   }
 
+  if (_this->sensor_status.is_active)
+  {
 #if ILPS22QS_FIFO_ENABLED
-  _this->task_delay = (uint16_t)((1000.0f / ilps22qs_odr) * (((float)(_this->samples_per_it)) / 2.0f));
+    _this->task_delay = (uint16_t)((1000.0f / ilps22qs_odr) * (((float)(_this->samples_per_it)) / 2.0f));
 #else
-  _this->task_delay = (uint16_t)(1000.0f / ilps22qs_odr);
+    _this->task_delay = (uint16_t)(1000.0f / ilps22qs_odr);
 #endif
+  }
 
   return res;
 }
@@ -1506,31 +1484,21 @@ static sys_error_code_t ILPS22QSTaskSensorSetFS(ILPS22QSTask *_this, SMMessage r
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
-
-  ilps22qs_md_t md;
-  ilps22qs_mode_get(p_sensor_drv, &md);
 
   if (id == _this->press_id)
   {
     if (fs <= 1261.0f)
     {
-      md.fs = ILPS22QS_1260hPa;
       fs = 1260.0f;
     }
     else
     {
-      md.fs = ILPS22QS_4060hPa;
       fs = 4060.0f;
     }
-    ilps22qs_mode_set(p_sensor_drv, &md);
 
-    if (!SYS_IS_ERROR_CODE(res))
-    {
-      _this->sensor_status.type.mems.fs = fs;
-    }
+    _this->sensor_status.type.mems.fs = fs;
   }
   else
   {

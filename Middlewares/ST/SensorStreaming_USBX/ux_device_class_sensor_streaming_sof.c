@@ -65,7 +65,7 @@ UINT _ux_device_class_sensor_streaming_sof(void)
         {
           cbdl2 = hwcid->tx_cbdl2[i];
           ep = hwcid->ep_map[i];
-          if(cbdl2 != 0 && ep != SS_ENDPOINT_NOT_ASSIGNED)
+          if((cbdl2 != NULL) && (ep != SS_ENDPOINT_NOT_ASSIGNED))
           {
             ep_bulk = &sensor_streaming->ux_slave_class_sensor_streaming_bulkin[ep].ep_param;
             if(ep_bulk->tx_state != 1U)
@@ -87,6 +87,10 @@ UINT _ux_device_class_sensor_streaming_sof(void)
       else if(*status == STREAMING_STATUS_STOPPING)
       {
         ;
+      }
+      else
+      {
+        /* Nothing to do */
       }
     }
   }

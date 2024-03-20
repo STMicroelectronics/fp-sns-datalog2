@@ -61,7 +61,6 @@ extern "C" {
 #define SYS_BASE_I2CBUS_TASK_ERROR_CODE                        SYS_BASE_APP_TASK_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 
 
-
 #ifdef __cplusplus
 }
 #endif

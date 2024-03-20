@@ -101,7 +101,7 @@ VOID _ux_device_class_sensor_streaming_bulkin_entry(ULONG ss)
         }
 #endif
         /* Release the buffer item and reset tx_state */
-        CB_ReleaseItem((CircularBuffer *)param->cbdl2, param->ready_item);
+        (void)CB_ReleaseItem((CircularBuffer *)param->cbdl2, param->ready_item);
         param->tx_state = 0;
       }
     }

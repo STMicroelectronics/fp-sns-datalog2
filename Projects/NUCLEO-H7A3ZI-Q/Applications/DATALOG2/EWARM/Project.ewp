@@ -2544,6 +2544,9 @@
                         <name>$PROJ_DIR$\..\mx\Inc\mx.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\mx\Inc\rng.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\mx\Inc\rtc.h</name>
                     </file>
                     <file>
@@ -2569,6 +2572,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\mx\Src\mx.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\mx\Src\rng.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\mx\Src\rtc.c</name>

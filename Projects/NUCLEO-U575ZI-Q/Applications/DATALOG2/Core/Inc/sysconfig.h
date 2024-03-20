@@ -104,6 +104,6 @@
 /*******************/
 
 #define BOARD_ID                                  0x10
-#define FW_ID                                     0x02
+#define FW_ID                                     0x04
 
 #endif /* SYSCONFIG_H_ */

@@ -59,7 +59,7 @@ typedef struct _DatalogAppTask DatalogAppTask;
 /**
   * Allocate an instance of DatalogAppTask.
   *
-  * @return a pointer to the generic obejct ::AManagedTaskEx if success,
+  * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *DatalogAppTaskAlloc(void);

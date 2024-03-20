@@ -24,7 +24,6 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "PnPLCompManager_Conf.h"
 /**
   * Create  type name for IPnPLComponent.
   */

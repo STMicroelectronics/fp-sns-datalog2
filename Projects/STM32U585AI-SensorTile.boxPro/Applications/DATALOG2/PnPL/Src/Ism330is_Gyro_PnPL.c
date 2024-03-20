@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:ism330is_gyro;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sIsm330is_Gyro_PnPL_CompIF_vtbl =
   */
 struct _Ism330is_Gyro_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -107,72 +105,70 @@ uint8_t Ism330is_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   tempJSON = json_value_init_object();
   JSON_Status = json_value_get_object(tempJSON);
 
-  char *temp_s = "";
-  ism330is_gyro_get_sensor_annotation(&temp_s);
-  json_object_dotset_string(JSON_Status, "ism330is_gyro.sensor_annotation", temp_s);
   float temp_f = 0;
   ism330is_gyro_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == ism330is_gyro_odr_hz12_5)
+  if (temp_f == ism330is_gyro_odr_hz12_5)
   {
     enum_id = 0;
   }
-  else if(temp_f == ism330is_gyro_odr_hz26)
+  else if (temp_f == ism330is_gyro_odr_hz26)
   {
     enum_id = 1;
   }
-  else if(temp_f == ism330is_gyro_odr_hz52)
+  else if (temp_f == ism330is_gyro_odr_hz52)
   {
     enum_id = 2;
   }
-  else if(temp_f == ism330is_gyro_odr_hz104)
+  else if (temp_f == ism330is_gyro_odr_hz104)
   {
     enum_id = 3;
   }
-  else if(temp_f == ism330is_gyro_odr_hz208)
+  else if (temp_f == ism330is_gyro_odr_hz208)
   {
     enum_id = 4;
   }
-  else if(temp_f == ism330is_gyro_odr_hz416)
+  else if (temp_f == ism330is_gyro_odr_hz416)
   {
     enum_id = 5;
   }
-  else if(temp_f == ism330is_gyro_odr_hz833)
+  else if (temp_f == ism330is_gyro_odr_hz833)
   {
     enum_id = 6;
   }
-  else if(temp_f == ism330is_gyro_odr_hz1667)
+  else if (temp_f == ism330is_gyro_odr_hz1667)
   {
     enum_id = 7;
   }
-  else if(temp_f == ism330is_gyro_odr_hz3333)
+  else if (temp_f == ism330is_gyro_odr_hz3333)
   {
     enum_id = 8;
   }
-  else if(temp_f == ism330is_gyro_odr_hz6667)
+  else if (temp_f == ism330is_gyro_odr_hz6667)
   {
     enum_id = 9;
   }
   json_object_dotset_number(JSON_Status, "ism330is_gyro.odr", enum_id);
-  ism330is_gyro_get_fs(&temp_f);
+  int32_t temp_i = 0;
+  ism330is_gyro_get_fs(&temp_i);
   enum_id = 0;
-  if(temp_f == ism330is_gyro_fs_dps125)
+  if (temp_i == ism330is_gyro_fs_dps125)
   {
     enum_id = 0;
   }
-  else if(temp_f == ism330is_gyro_fs_dps250)
+  else if (temp_i == ism330is_gyro_fs_dps250)
   {
     enum_id = 1;
   }
-  else if(temp_f == ism330is_gyro_fs_dps500)
+  else if (temp_i == ism330is_gyro_fs_dps500)
   {
     enum_id = 2;
   }
-  else if(temp_f == ism330is_gyro_fs_dps1000)
+  else if (temp_i == ism330is_gyro_fs_dps1000)
   {
     enum_id = 3;
   }
-  else if(temp_f == ism330is_gyro_fs_dps2000)
+  else if (temp_i == ism330is_gyro_fs_dps2000)
   {
     enum_id = 4;
   }
@@ -180,7 +176,6 @@ uint8_t Ism330is_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   bool temp_b = 0;
   ism330is_gyro_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "ism330is_gyro.enable", temp_b);
-  int32_t temp_i = 0;
   ism330is_gyro_get_samples_per_ts(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_gyro.samples_per_ts", temp_i);
   ism330is_gyro_get_dim(&temp_i);
@@ -195,10 +190,15 @@ uint8_t Ism330is_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   json_object_dotset_number(JSON_Status, "ism330is_gyro.sd_dps", temp_i);
   ism330is_gyro_get_sensitivity(&temp_f);
   json_object_dotset_number(JSON_Status, "ism330is_gyro.sensitivity", temp_f);
+  char *temp_s = "";
   ism330is_gyro_get_data_type(&temp_s);
   json_object_dotset_string(JSON_Status, "ism330is_gyro.data_type", temp_s);
+  ism330is_gyro_get_sensor_annotation(&temp_s);
+  json_object_dotset_string(JSON_Status, "ism330is_gyro.sensor_annotation", temp_s);
   ism330is_gyro_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_gyro.sensor_category", temp_i);
+  ism330is_gyro_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "ism330is_gyro.mounted", temp_b);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "ism330is_gyro.c_type", COMP_TYPE_SENSOR);
@@ -225,7 +225,8 @@ uint8_t Ism330is_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   return 0;
 }
 
-uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                           uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
@@ -233,77 +234,78 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
-  if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.sensor_annotation"))
-  {
-    const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ism330is_gyro.sensor_annotation");
-    ism330is_gyro_set_sensor_annotation(sensor_annotation);
-  }
-  if(json_object_dothas_value(tempJSONObject, "ism330is_gyro.odr"))
+  if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.odr"))
   {
     int odr = (int)json_object_dotget_number(tempJSONObject, "ism330is_gyro.odr");
-    switch(odr)
+    switch (odr)
     {
-    case 0:
-      ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz12_5);
-      break;
-    case 1:
-      ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz26);
-      break;
-    case 2:
-      ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz52);
-      break;
-    case 3:
-      ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz104);
-      break;
-    case 4:
-      ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz208);
-      break;
-    case 5:
-      ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz416);
-      break;
-    case 6:
-      ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz833);
-      break;
-    case 7:
-      ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz1667);
-      break;
-    case 8:
-      ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz3333);
-      break;
-    case 9:
-      ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz6667);
-      break;
+      case 0:
+        ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz12_5);
+        break;
+      case 1:
+        ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz26);
+        break;
+      case 2:
+        ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz52);
+        break;
+      case 3:
+        ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz104);
+        break;
+      case 4:
+        ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz208);
+        break;
+      case 5:
+        ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz416);
+        break;
+      case 6:
+        ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz833);
+        break;
+      case 7:
+        ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz1667);
+        break;
+      case 8:
+        ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz3333);
+        break;
+      case 9:
+        ret = ism330is_gyro_set_odr(ism330is_gyro_odr_hz6667);
+        break;
     }
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "ism330is_gyro.odr.value", odr);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "ism330is_gyro.odr.value", "PNPL_SET_ERROR");
     }
   }
-  if(json_object_dothas_value(tempJSONObject, "ism330is_gyro.fs"))
+  if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.fs"))
   {
     int fs = (int)json_object_dotget_number(tempJSONObject, "ism330is_gyro.fs");
-    switch(fs)
+    switch (fs)
     {
-    case 0:
-      ret = ism330is_gyro_set_fs(ism330is_gyro_fs_dps125);
-      break;
-    case 1:
-      ret = ism330is_gyro_set_fs(ism330is_gyro_fs_dps250);
-      break;
-    case 2:
-      ret = ism330is_gyro_set_fs(ism330is_gyro_fs_dps500);
-      break;
-    case 3:
-      ret = ism330is_gyro_set_fs(ism330is_gyro_fs_dps1000);
-      break;
-    case 4:
-      ret = ism330is_gyro_set_fs(ism330is_gyro_fs_dps2000);
-      break;
+      case 0:
+        ret = ism330is_gyro_set_fs(ism330is_gyro_fs_dps125);
+        break;
+      case 1:
+        ret = ism330is_gyro_set_fs(ism330is_gyro_fs_dps250);
+        break;
+      case 2:
+        ret = ism330is_gyro_set_fs(ism330is_gyro_fs_dps500);
+        break;
+      case 3:
+        ret = ism330is_gyro_set_fs(ism330is_gyro_fs_dps1000);
+        break;
+      case 4:
+        ret = ism330is_gyro_set_fs(ism330is_gyro_fs_dps2000);
+        break;
     }
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "ism330is_gyro.fs.value", fs);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "ism330is_gyro.fs.value", "PNPL_SET_ERROR");
     }
   }
@@ -311,9 +313,12 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "ism330is_gyro.enable");
     ret = ism330is_gyro_set_enable(enable);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_boolean(respJSONObject, "ism330is_gyro.enable.value", enable);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "ism330is_gyro.enable.value", "PNPL_SET_ERROR");
     }
   }
@@ -321,9 +326,12 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "ism330is_gyro.samples_per_ts");
     ret = ism330is_gyro_set_samples_per_ts(samples_per_ts);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "ism330is_gyro.samples_per_ts.value", samples_per_ts);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "ism330is_gyro.samples_per_ts.value", "PNPL_SET_ERROR");
     }
   }
@@ -331,7 +339,14 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ism330is_gyro.sensor_annotation");
     ret = ism330is_gyro_set_sensor_annotation(sensor_annotation);
-    json_object_dotset_string(respJSONObject, "ism330is_gyro.sensor_annotation.value", ret == 0 ? sensor_annotation : "PNPL_SET_ERROR");
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "ism330is_gyro.sensor_annotation.value", sensor_annotation);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "ism330is_gyro.sensor_annotation.value", "PNPL_SET_ERROR");
+    }
   }
   json_value_free(tempJSON);
   if (pretty == 1)
@@ -344,13 +359,14 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
     *response = json_serialize_to_string(respJSON);
     *size = json_serialization_size(respJSON);
   }
-
   json_value_free(respJSON);
-
   return ret;
 }
 
-uint8_t Ism330is_Gyro_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+
+uint8_t Ism330is_Gyro_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                               uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

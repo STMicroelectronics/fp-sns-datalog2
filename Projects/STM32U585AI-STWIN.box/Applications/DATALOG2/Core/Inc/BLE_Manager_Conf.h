@@ -36,7 +36,7 @@ extern "C" {
 #define BLE_MANAGER_SDKV2
 
 
-/* Define the Max dimesion of the Bluetooth characteristics for Debug Console services  */
+/* Define the Max dimension of the Bluetooth characteristics for Debug Console services  */
 #define DEFAULT_MAX_STDOUT_CHAR_LEN     217
 #define DEFAULT_MAX_STDERR_CHAR_LEN     217
 
@@ -45,13 +45,16 @@ extern "C" {
 /* For enabling the capability to handle BlueNRG Congestion */
 #define ACC_BLUENRG_CONGESTION
 
+/* Define the Max Dimension of the Bluetooth characteristics for PnPL (only for Notification) */
+#define DEFAULT_MAX_PNPL_NOTIFICATION_CHAR_LEN 217
+
 /* Define the Delay function to use inside the BLE Manager (HAL_Delay/osDelay) */
 #define BLE_MANAGER_DELAY tx_thread_sleep
 
 /****************** Malloc/Free **************************/
-#define BLE_MallocFunction SysAlloc
-#define BLE_FreeFunction SysFree
-#define BLE_MemCpy memcpy
+#define BLE_MALLOC_FUNCTION SysAlloc
+#define BLE_FREE_FUNCTION SysFree
+#define BLE_MEM_CPY memcpy
 
 
 /*---------- Print messages from BLE Manager files at middleware level -----------*/

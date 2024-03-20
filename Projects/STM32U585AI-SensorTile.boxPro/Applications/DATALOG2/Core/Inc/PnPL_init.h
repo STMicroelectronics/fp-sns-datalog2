@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    PnPL_Init.h
+  * @file    PnPL_init.h
   * @author  SRA
   * @brief   PnPL Components initialization functions
   ******************************************************************************
@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2;3
+  * dtmi:vespucci:steval_mkboxpro:FP_SNS_DATALOG2_Datalog2;4
   *
-  * Created by: DTDL2PnPL_cGen version 1.1.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -41,18 +41,18 @@ extern "C" {
 #include "Lsm6dsv16x_Acc_PnPL.h"
 #include "Lsm6dsv16x_Gyro_PnPL.h"
 #include "Lsm6dsv16x_Mlc_PnPL.h"
-#include "Mp23db01hp_Mic_PnPL.h"
-#include "Stts22h_Temp_PnPL.h"
-#include "Lps22df_Press_PnPL.h"
 #include "Ism330is_Acc_PnPL.h"
 #include "Ism330is_Gyro_PnPL.h"
 #include "Ism330is_Ispu_PnPL.h"
+#include "Mp23db01hp_Mic_PnPL.h"
+#include "Stts22h_Temp_PnPL.h"
+#include "Lps22df_Press_PnPL.h"
+#include "Automode_PnPL.h"
 #include "Log_Controller_PnPL.h"
 #include "Tags_Info_PnPL.h"
 #include "Acquisition_Info_PnPL.h"
 #include "Firmware_Info_PnPL.h"
 #include "Deviceinformation_PnPL.h"
-#include "Automode_PnPL.h"
 
 #include "ILsm6dsv16x_Mlc.h"
 #include "ILsm6dsv16x_Mlc_vtbl.h"
@@ -62,8 +62,9 @@ extern "C" {
 #include "ILog_Controller_vtbl.h"
 
 
-uint8_t PnPL_Components_Alloc();
-uint8_t PnPL_Components_Init(ILsm6dsv16x_Mlc_t iLsm6dsv16x_Mlc, IIsm330is_Ispu_t iIsm330is_Ispu, ILog_Controller_t iLog_Controller);
+uint8_t PnPL_Components_Alloc(void);
+uint8_t PnPL_Components_Init(ILsm6dsv16x_Mlc_t *iLsm6dsv16x_Mlc, IIsm330is_Ispu_t *iIsm330is_Ispu,
+                             ILog_Controller_t *iLog_Controller);
 
 
 #ifdef __cplusplus

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_Environmental.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add environmental info services using vendor specific profiles.
   ******************************************************************************
   * @attention
@@ -24,7 +24,8 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_ENVIRONMENTAL_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x00,0x01,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_ENVIRONMENTAL_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x00,0x01,\
+                                                                0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 #define ENVIRONMENTAL_ADVERTISE_DATA_POSITION  16
 
@@ -38,11 +39,11 @@ typedef struct
   uint8_t PressureIsEnable;
   uint8_t HumidityIsEnable;
   uint8_t NumberTemperaturesEnabled;
-} BLE_Manager_EnvFeaturesEnabled;
+} BLE_Manager_EnvFeaturesEnabled_t;
 
 /* Private variables ---------------------------------------------------------*/
 /* Data structure for identify environmental info services enabled */
-BLE_Manager_EnvFeaturesEnabled EnvFeaturesEnabled;
+BLE_Manager_EnvFeaturesEnabled_t EnvFeaturesEnabled;
 /* Data structure pointer for environmental info service */
 static BleCharTypeDef BleCharEnv;
 /* Size for Environmental BLE characteristic */

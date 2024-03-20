@@ -374,93 +374,19 @@ static ISM330DHCXTaskClass_t sTheClass =
   /* ACCELEROMETER DESCRIPTOR */
   {
     "ism330dhcx",
-    COM_TYPE_ACC,
-    {
-      12.5,
-      26,
-      52,
-      104,
-      208,
-      416,
-      833,
-      1666,
-      3332,
-      6667,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      2,
-      4,
-      8,
-      16,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "acc",
-    },
-    "g",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_ACC
   },
 
   /* GYROSCOPE DESCRIPTOR */
   {
     "ism330dhcx",
-    COM_TYPE_GYRO,
-    {
-      12.5,
-      26,
-      52,
-      104,
-      208,
-      416,
-      833,
-      1666,
-      3332,
-      6667,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      125,
-      250,
-      500,
-      1000,
-      2000,
-      4000,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "gyro",
-    },
-    "mdps",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_GYRO
   },
 
   /* MLC DESCRIPTOR */
   {
     "ism330dhcx",
-    COM_TYPE_MLC,
-    {
-      1,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      1,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "mlc",
-    },
-    "out",
-    {
-      0,
-      1,
-    }
+    COM_TYPE_MLC
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -2239,10 +2165,25 @@ static sys_error_code_t ISM330DHCXTaskSensorInit(ISM330DHCXTask *_this)
     }
   }
 
-  _this->ism330dhcx_task_cfg_timer_period_ms = (uint16_t)(
-                                                 _this->acc_sensor_status.type.mems.odr < _this->gyro_sensor_status.type.mems.odr ?
-                                                 _this->acc_sensor_status.type.mems.odr :
-                                                 _this->gyro_sensor_status.type.mems.odr);
+  if ((_this->acc_sensor_status.is_active) && (_this->gyro_sensor_status.is_active))
+  {
+    _this->ism330dhcx_task_cfg_timer_period_ms = (uint16_t)(
+                                                   _this->acc_sensor_status.type.mems.odr < _this->gyro_sensor_status.type.mems.odr ?
+                                                   _this->acc_sensor_status.type.mems.odr :
+                                                   _this->gyro_sensor_status.type.mems.odr);
+  }
+  else if (_this->acc_sensor_status.is_active)
+  {
+    _this->ism330dhcx_task_cfg_timer_period_ms = (uint16_t)(_this->acc_sensor_status.type.mems.odr);
+  }
+  else if (_this->gyro_sensor_status.is_active)
+  {
+    _this->ism330dhcx_task_cfg_timer_period_ms = (uint16_t)(_this->acc_sensor_status.type.mems.odr);
+  }
+  else
+  {
+  }
+
 #if ISM330DHCX_FIFO_ENABLED
   _this->ism330dhcx_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->ism330dhcx_task_cfg_timer_period_ms) * (((float)(_this->samples_per_it)) / 2.0f));
 #else
@@ -2681,7 +2622,6 @@ static sys_error_code_t ISM330DHCXTaskSensorSetFS(ISM330DHCXTask *_this, SMMessa
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
@@ -2693,69 +2633,53 @@ static sys_error_code_t ISM330DHCXTaskSensorSetFS(ISM330DHCXTask *_this, SMMessa
   {
     if (fs < 3.0f)
     {
-      ism330dhcx_xl_full_scale_set(p_sensor_drv, ISM330DHCX_2g);
       fs = 2.0f;
     }
     else if (fs < 5.0f)
     {
-      ism330dhcx_xl_full_scale_set(p_sensor_drv, ISM330DHCX_4g);
       fs = 4.0f;
     }
     else if (fs < 9.0f)
     {
-      ism330dhcx_xl_full_scale_set(p_sensor_drv, ISM330DHCX_8g);
       fs = 8.0f;
     }
     else
     {
-      ism330dhcx_xl_full_scale_set(p_sensor_drv, ISM330DHCX_16g);
       fs = 16.0f;
     }
 
-    if (!SYS_IS_ERROR_CODE(res))
-    {
-      _this->acc_sensor_status.type.mems.fs = fs;
-      _this->acc_sensor_status.type.mems.sensitivity = 0.0000305f * _this->acc_sensor_status.type.mems.fs;
-    }
+    _this->acc_sensor_status.type.mems.fs = fs;
+    _this->acc_sensor_status.type.mems.sensitivity = 0.0000305f * _this->acc_sensor_status.type.mems.fs;
   }
   else if (id == _this->gyro_id)
   {
     if (fs < 126.0f)
     {
-      ism330dhcx_gy_full_scale_set(p_sensor_drv, ISM330DHCX_125dps);
       fs = 125.0f;
     }
     else if (fs < 251.0f)
     {
-      ism330dhcx_gy_full_scale_set(p_sensor_drv, ISM330DHCX_250dps);
       fs = 250.0f;
     }
     else if (fs < 501.0f)
     {
-      ism330dhcx_gy_full_scale_set(p_sensor_drv, ISM330DHCX_500dps);
       fs = 500.0f;
     }
     else if (fs < 1001.0f)
     {
-      ism330dhcx_gy_full_scale_set(p_sensor_drv, ISM330DHCX_1000dps);
       fs = 1000.0f;
     }
     else if (fs < 2001.0f)
     {
-      ism330dhcx_gy_full_scale_set(p_sensor_drv, ISM330DHCX_2000dps);
       fs = 2000.0f;
     }
     else
     {
-      ism330dhcx_gy_full_scale_set(p_sensor_drv, ISM330DHCX_4000dps);
       fs = 4000.0f;
     }
 
-    if (!SYS_IS_ERROR_CODE(res))
-    {
-      _this->gyro_sensor_status.type.mems.fs = fs;
-      _this->gyro_sensor_status.type.mems.sensitivity = 0.035f * _this->gyro_sensor_status.type.mems.fs;
-    }
+    _this->gyro_sensor_status.type.mems.fs = fs;
+    _this->gyro_sensor_status.type.mems.sensitivity = 0.035f * _this->gyro_sensor_status.type.mems.fs;
   }
   else if (id == _this->mlc_id)
   {

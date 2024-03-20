@@ -1,12 +1,15 @@
 /**
   ******************************************************************************
   * @file    SensorTileBoxPro_nfctag.c
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
+  * @version V1.1.0
+  * @date    20-July-2023
   * @brief   This file provides a set of functions needed to manage a nfc dual 
   *          interface eeprom memory.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -333,7 +336,7 @@ int32_t BSP_NFCTAG_WriteData( uint32_t Instance, const uint8_t * const pData, co
 int32_t BSP_NFCTAG_ReadRegister( uint32_t Instance, uint8_t * const pData, const uint16_t TarAddr, const uint16_t Size )
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -358,7 +361,7 @@ int32_t BSP_NFCTAG_ReadRegister( uint32_t Instance, uint8_t * const pData, const
 int32_t BSP_NFCTAG_WriteRegister( uint32_t Instance, const uint8_t * const pData, const uint16_t TarAddr, const uint16_t Size )
 {
   UNUSED(Instance);
-   int32_t ret_value;
+   int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
 
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -389,7 +392,7 @@ int32_t BSP_NFCTAG_WriteRegister( uint32_t Instance, const uint8_t * const pData
 uint32_t BSP_NFCTAG_GetByteSize( uint32_t Instance )
 {
   UNUSED(Instance);
-  uint32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   ST25DV_MEM_SIZE mem_size;
   ST25DVxxKC_MEM_SIZE_t mem_size_xxkc;
   
@@ -416,7 +419,7 @@ uint32_t BSP_NFCTAG_GetByteSize( uint32_t Instance )
 int32_t BSP_NFCTAG_ReadICRev( uint32_t Instance, uint8_t * const pICRev )
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -440,7 +443,7 @@ int32_t BSP_NFCTAG_ReadICRev( uint32_t Instance, uint8_t * const pICRev )
 int32_t BSP_NFCTAG_ReadITPulse(uint32_t Instance, void * const pITtime )
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -464,7 +467,7 @@ int32_t BSP_NFCTAG_ReadITPulse(uint32_t Instance, void * const pITtime )
 int32_t BSP_NFCTAG_WriteITPulse( uint32_t Instance, const uint8_t ITtime )
 {
   UNUSED(Instance);
-    int32_t ret_value;
+    int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -487,7 +490,7 @@ int32_t BSP_NFCTAG_WriteITPulse( uint32_t Instance, const uint8_t ITtime )
 int32_t BSP_NFCTAG_ReadUID( uint32_t Instance, void * const pUid )
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -511,7 +514,7 @@ int32_t BSP_NFCTAG_ReadUID( uint32_t Instance, void * const pUid )
 int32_t BSP_NFCTAG_ReadDSFID( uint32_t Instance, uint8_t * const pDsfid )
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -534,7 +537,7 @@ int32_t BSP_NFCTAG_ReadDSFID( uint32_t Instance, uint8_t * const pDsfid )
 int32_t BSP_NFCTAG_ReadDsfidRFProtection( uint32_t Instance, void * const pLockDsfid )
 {
   UNUSED(Instance);
-    int32_t ret_value;
+    int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -557,7 +560,7 @@ int32_t BSP_NFCTAG_ReadDsfidRFProtection( uint32_t Instance, void * const pLockD
 int32_t BSP_NFCTAG_ReadAFI( uint32_t Instance, uint8_t * const pAfi )
 {
   UNUSED(Instance);
-   int32_t ret_value;
+   int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -580,7 +583,7 @@ int32_t BSP_NFCTAG_ReadAFI( uint32_t Instance, uint8_t * const pAfi )
 int32_t BSP_NFCTAG_ReadAfiRFProtection( uint32_t Instance, void * const pLockAfi )
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -603,7 +606,7 @@ int32_t BSP_NFCTAG_ReadAfiRFProtection( uint32_t Instance, void * const pLockAfi
 int32_t BSP_NFCTAG_ReadI2CProtectZone( uint32_t Instance, void * const pProtZone )
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -628,7 +631,7 @@ int32_t BSP_NFCTAG_ReadI2CProtectZone( uint32_t Instance, void * const pProtZone
 int32_t BSP_NFCTAG_WriteI2CProtectZonex(uint32_t Instance, const uint8_t Zone,  const uint8_t ReadWriteProtection )
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -653,7 +656,7 @@ int32_t BSP_NFCTAG_WriteI2CProtectZonex(uint32_t Instance, const uint8_t Zone,  
 int32_t BSP_NFCTAG_ReadLockCCFile(const uint32_t Instance, void *const pLockCCFile)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -678,7 +681,7 @@ int32_t BSP_NFCTAG_ReadLockCCFile(const uint32_t Instance, void *const pLockCCFi
 int32_t BSP_NFCTAG_WriteLockCCFile(const uint32_t Instance, const uint8_t NbBlockCCFile, const uint8_t LockCCFile)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -702,7 +705,7 @@ int32_t BSP_NFCTAG_WriteLockCCFile(const uint32_t Instance, const uint8_t NbBloc
 int32_t BSP_NFCTAG_ReadLockCFG(const uint32_t Instance, void *const pLockCfg)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -726,7 +729,7 @@ int32_t BSP_NFCTAG_ReadLockCFG(const uint32_t Instance, void *const pLockCfg)
 int32_t BSP_NFCTAG_WriteLockCFG(const uint32_t Instance, const uint8_t LockCfg)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -749,7 +752,7 @@ int32_t BSP_NFCTAG_WriteLockCFG(const uint32_t Instance, const uint8_t LockCfg)
 int32_t BSP_NFCTAG_PresentI2CPassword(const uint32_t Instance, const void *const PassWord)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   ST25DV_PASSWD *password_tmp;
   ST25DVxxKC_PASSWD_t *passwordxxkc_tmp;
   
@@ -779,7 +782,7 @@ int32_t BSP_NFCTAG_PresentI2CPassword(const uint32_t Instance, const void *const
 int32_t BSP_NFCTAG_WriteI2CPassword(const uint32_t Instance, const void *const PassWord)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   ST25DV_PASSWD *password_tmp;
   ST25DVxxKC_PASSWD_t *passwordxxkc_tmp;
   
@@ -810,7 +813,7 @@ int32_t BSP_NFCTAG_ReadRFZxSS(const uint32_t Instance, const uint8_t Zone,
                                                           void *const pRfprotZone)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -836,7 +839,7 @@ int32_t BSP_NFCTAG_ReadRFZxSS(const uint32_t Instance, const uint8_t Zone,
 int32_t BSP_NFCTAG_WriteRFZxSS(const uint32_t Instance, const uint8_t Zone, const void *const RfProtZone)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   ST25DV_RF_PROT_ZONE *rfprotzone_tmp;
   ST25DVxxKC_RF_PROT_ZONE_t *rfprotzonexxkc_tmp;
   
@@ -867,7 +870,7 @@ int32_t BSP_NFCTAG_WriteRFZxSS(const uint32_t Instance, const uint8_t Zone, cons
 int32_t BSP_NFCTAG_ReadEndZonex(const uint32_t Instance, const uint8_t EndZone, uint8_t *pEndZ)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -894,7 +897,7 @@ int32_t BSP_NFCTAG_ReadEndZonex(const uint32_t Instance, const uint8_t EndZone, 
 int32_t BSP_NFCTAG_WriteEndZonex(const uint32_t Instance, const uint8_t EndZone, const uint8_t EndZ)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -919,7 +922,7 @@ int32_t BSP_NFCTAG_WriteEndZonex(const uint32_t Instance, const uint8_t EndZone,
 int32_t BSP_NFCTAG_InitEndZone(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -947,7 +950,7 @@ int32_t BSP_NFCTAG_CreateUserZone(const uint32_t Instance, uint16_t Zone1Length,
                                                           uint16_t Zone3Length, uint16_t Zone4Length)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -970,7 +973,7 @@ int32_t BSP_NFCTAG_CreateUserZone(const uint32_t Instance, uint16_t Zone1Length,
 int32_t BSP_NFCTAG_ReadMemSize(const uint32_t Instance, void *const pSizeInfo)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -993,7 +996,7 @@ int32_t BSP_NFCTAG_ReadMemSize(const uint32_t Instance, void *const pSizeInfo)
 int32_t BSP_NFCTAG_ReadEHMode(const uint32_t Instance, void *const pEH_mode)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1017,7 +1020,7 @@ int32_t BSP_NFCTAG_ReadEHMode(const uint32_t Instance, void *const pEH_mode)
 int32_t BSP_NFCTAG_WriteEHMode(const uint32_t Instance, const uint8_t EH_mode)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1040,7 +1043,7 @@ int32_t BSP_NFCTAG_WriteEHMode(const uint32_t Instance, const uint8_t EH_mode)
 int32_t BSP_NFCTAG_ReadRFMngt(const uint32_t Instance, void *const pRF_Mngt)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1064,7 +1067,7 @@ int32_t BSP_NFCTAG_ReadRFMngt(const uint32_t Instance, void *const pRF_Mngt)
 int32_t BSP_NFCTAG_WriteRFMngt(const uint32_t Instance, const uint8_t Rfmngt)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1087,7 +1090,7 @@ int32_t BSP_NFCTAG_WriteRFMngt(const uint32_t Instance, const uint8_t Rfmngt)
 int32_t BSP_NFCTAG_GetRFDisable(const uint32_t Instance, void *const pRFDisable)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1110,7 +1113,7 @@ int32_t BSP_NFCTAG_GetRFDisable(const uint32_t Instance, void *const pRFDisable)
 int32_t BSP_NFCTAG_SetRFDisable(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1133,7 +1136,7 @@ int32_t BSP_NFCTAG_SetRFDisable(const uint32_t Instance)
 int32_t BSP_NFCTAG_ResetRFDisable(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1156,7 +1159,7 @@ int32_t BSP_NFCTAG_ResetRFDisable(const uint32_t Instance)
 int32_t BSP_NFCTAG_GetRFSleep(const uint32_t Instance, void *const pRFSleep)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1179,7 +1182,7 @@ int32_t BSP_NFCTAG_GetRFSleep(const uint32_t Instance, void *const pRFSleep)
 int32_t BSP_NFCTAG_SetRFSleep(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1202,7 +1205,7 @@ int32_t BSP_NFCTAG_SetRFSleep(const uint32_t Instance)
 int32_t BSP_NFCTAG_ResetRFSleep(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1225,7 +1228,7 @@ int32_t BSP_NFCTAG_ResetRFSleep(const uint32_t Instance)
 int32_t BSP_NFCTAG_ReadMBMode(const uint32_t Instance, void *const pMB_mode)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1249,7 +1252,7 @@ int32_t BSP_NFCTAG_ReadMBMode(const uint32_t Instance, void *const pMB_mode)
 int32_t BSP_NFCTAG_WriteMBMode(const uint32_t Instance, const uint8_t MB_mode)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1272,7 +1275,7 @@ int32_t BSP_NFCTAG_WriteMBMode(const uint32_t Instance, const uint8_t MB_mode)
 int32_t BSP_NFCTAG_ReadMBWDG(const uint32_t Instance, uint8_t *const pWdgDelay)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1296,7 +1299,7 @@ int32_t BSP_NFCTAG_ReadMBWDG(const uint32_t Instance, uint8_t *const pWdgDelay)
 int32_t BSP_NFCTAG_WriteMBWDG(const uint32_t Instance, const uint8_t WdgDelay)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1322,7 +1325,7 @@ int32_t BSP_NFCTAG_ReadMailboxData(const uint32_t Instance, uint8_t *const pData
                                                           const uint16_t NbByte)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1346,7 +1349,7 @@ int32_t BSP_NFCTAG_ReadMailboxData(const uint32_t Instance, uint8_t *const pData
 int32_t BSP_NFCTAG_WriteMailboxData(const uint32_t Instance, const uint8_t *const pData, const uint16_t NbByte)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1372,7 +1375,7 @@ int32_t BSP_NFCTAG_ReadMailboxRegister(const uint32_t Instance, uint8_t *const p
                                                           const uint16_t NbByte)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1398,7 +1401,7 @@ int32_t BSP_NFCTAG_WriteMailboxRegister(const uint32_t Instance, const uint8_t *
                                                           const uint16_t NbByte)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1421,7 +1424,7 @@ int32_t BSP_NFCTAG_WriteMailboxRegister(const uint32_t Instance, const uint8_t *
 int32_t BSP_NFCTAG_ReadI2CSecuritySession_Dyn(const uint32_t Instance, void *const pSession)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1453,7 +1456,7 @@ int32_t BSP_NFCTAG_ReadI2CSecuritySession_Dyn(const uint32_t Instance, void *con
 int32_t BSP_NFCTAG_ReadITSTStatus_Dyn(const uint32_t Instance, uint8_t *const pITStatus)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1476,7 +1479,7 @@ int32_t BSP_NFCTAG_ReadITSTStatus_Dyn(const uint32_t Instance, uint8_t *const pI
 int32_t BSP_NFCTAG_ReadGPO_Dyn(const uint32_t Instance, uint8_t *GPOConfig)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1499,7 +1502,7 @@ int32_t BSP_NFCTAG_ReadGPO_Dyn(const uint32_t Instance, uint8_t *GPOConfig)
 int32_t BSP_NFCTAG_GetGPO_en_Dyn(const uint32_t Instance, void *const pGPO_en)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1522,7 +1525,7 @@ int32_t BSP_NFCTAG_GetGPO_en_Dyn(const uint32_t Instance, void *const pGPO_en)
 int32_t BSP_NFCTAG_SetGPO_en_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1545,7 +1548,7 @@ int32_t BSP_NFCTAG_SetGPO_en_Dyn(const uint32_t Instance)
 int32_t BSP_NFCTAG_ResetGPO_en_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1568,7 +1571,7 @@ int32_t BSP_NFCTAG_ResetGPO_en_Dyn(const uint32_t Instance)
 int32_t BSP_NFCTAG_ReadEHCtrl_Dyn(const uint32_t Instance, void *const pEH_CTRL)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1591,7 +1594,7 @@ int32_t BSP_NFCTAG_ReadEHCtrl_Dyn(const uint32_t Instance, void *const pEH_CTRL)
 int32_t BSP_NFCTAG_GetEHENMode_Dyn(const uint32_t Instance, void *const pEH_Val)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1613,7 +1616,7 @@ int32_t BSP_NFCTAG_GetEHENMode_Dyn(const uint32_t Instance, void *const pEH_Val)
 int32_t BSP_NFCTAG_SetEHENMode_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1635,7 +1638,7 @@ int32_t BSP_NFCTAG_SetEHENMode_Dyn(const uint32_t Instance)
 int32_t BSP_NFCTAG_ResetEHENMode_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1658,7 +1661,7 @@ int32_t BSP_NFCTAG_ResetEHENMode_Dyn(const uint32_t Instance)
 int32_t BSP_NFCTAG_GetEHON_Dyn(const uint32_t Instance, void *const pEHON)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1681,7 +1684,7 @@ int32_t BSP_NFCTAG_GetEHON_Dyn(const uint32_t Instance, void *const pEHON)
 int32_t BSP_NFCTAG_GetRFField_Dyn(const uint32_t Instance, void *const pRF_Field)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1704,7 +1707,7 @@ int32_t BSP_NFCTAG_GetRFField_Dyn(const uint32_t Instance, void *const pRF_Field
 int32_t BSP_NFCTAG_GetVCC_Dyn(const uint32_t Instance, void *const pVCC)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1727,7 +1730,7 @@ int32_t BSP_NFCTAG_GetVCC_Dyn(const uint32_t Instance, void *const pVCC)
 int32_t BSP_NFCTAG_ReadRFMngt_Dyn(const uint32_t Instance, void *const pRF_Mngt)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1751,7 +1754,7 @@ int32_t BSP_NFCTAG_ReadRFMngt_Dyn(const uint32_t Instance, void *const pRF_Mngt)
 int32_t BSP_NFCTAG_WriteRFMngt_Dyn(const uint32_t Instance, const uint8_t RF_Mngt)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1774,7 +1777,7 @@ int32_t BSP_NFCTAG_WriteRFMngt_Dyn(const uint32_t Instance, const uint8_t RF_Mng
 int32_t BSP_NFCTAG_GetRFDisable_Dyn(const uint32_t Instance, void *const pRFDisable)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1796,7 +1799,7 @@ int32_t BSP_NFCTAG_GetRFDisable_Dyn(const uint32_t Instance, void *const pRFDisa
 int32_t BSP_NFCTAG_SetRFDisable_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1818,7 +1821,7 @@ int32_t BSP_NFCTAG_SetRFDisable_Dyn(const uint32_t Instance)
 int32_t BSP_NFCTAG_ResetRFDisable_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1841,7 +1844,7 @@ int32_t BSP_NFCTAG_ResetRFDisable_Dyn(const uint32_t Instance)
 int32_t BSP_NFCTAG_GetRFSleep_Dyn(const uint32_t Instance, void *const pRFSleep)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1863,7 +1866,7 @@ int32_t BSP_NFCTAG_GetRFSleep_Dyn(const uint32_t Instance, void *const pRFSleep)
 int32_t BSP_NFCTAG_SetRFSleep_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1885,7 +1888,7 @@ int32_t BSP_NFCTAG_SetRFSleep_Dyn(const uint32_t Instance)
 int32_t BSP_NFCTAG_ResetRFSleep_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1909,7 +1912,7 @@ int32_t BSP_NFCTAG_ResetRFSleep_Dyn(const uint32_t Instance)
 int32_t BSP_NFCTAG_ReadMBCtrl_Dyn(const uint32_t Instance, void *const pCtrlStatus)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1931,7 +1934,7 @@ int32_t BSP_NFCTAG_ReadMBCtrl_Dyn(const uint32_t Instance, void *const pCtrlStat
 int32_t BSP_NFCTAG_GetMBEN_Dyn(const uint32_t Instance, void *const pMBEN)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1953,7 +1956,7 @@ int32_t BSP_NFCTAG_GetMBEN_Dyn(const uint32_t Instance, void *const pMBEN)
 int32_t BSP_NFCTAG_SetMBEN_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1975,7 +1978,7 @@ int32_t BSP_NFCTAG_SetMBEN_Dyn(const uint32_t Instance)
 int32_t BSP_NFCTAG_ResetMBEN_Dyn(const uint32_t Instance)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -1998,7 +2001,7 @@ int32_t BSP_NFCTAG_ResetMBEN_Dyn(const uint32_t Instance)
 int32_t BSP_NFCTAG_ReadMBLength_Dyn(const uint32_t Instance, uint8_t *const pMBLength)
 {
   UNUSED(Instance);
-  int32_t ret_value;
+  int32_t ret_value = BSP_ERROR_PERIPH_FAILURE;
   
   if(ST25DVObj.IsInitialized == 1)
   {
@@ -2013,4 +2016,3 @@ int32_t BSP_NFCTAG_ReadMBLength_Dyn(const uint32_t Instance, uint8_t *const pMBL
   return ret_value;
 }
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

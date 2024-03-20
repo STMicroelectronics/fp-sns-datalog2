@@ -49,7 +49,6 @@ extern "C" {
 #define USBD_PRODUCT_STRING                   "NUU575ZIQ_Multi_Sensor_Streaming"
 
 
-
 #ifdef __cplusplus
 }
 #endif

@@ -35,6 +35,7 @@ class HSDAutoModeWidget(ComponentWidget):
         self.controller.sig_is_auto_started.connect(self.is_auto_started)
 
         self.app = self.controller.qt_app
+        self.is_packed = False
         self.is_logging = False
         self.parent_widget = parent
 
@@ -64,9 +65,9 @@ class HSDAutoModeWidget(ComponentWidget):
         start_delay_info = self.frame_contents.findChild(QLabel,"start_delay_info")
 
         nof_acq_value = self.frame_contents.findChild(QSpinBox,"nof_acq_value")
-        idle_period_value = self.frame_contents.findChild(QSpinBox,"idle_period_value")
-        log_period_value = self.frame_contents.findChild(QSpinBox,"log_period_value")
-        start_delay_value = self.frame_contents.findChild(QSpinBox,"start_delay_value")
+        self.idle_period_value:QSpinBox = self.frame_contents.findChild(QSpinBox,"idle_period_value")
+        self.log_period_value:QSpinBox = self.frame_contents.findChild(QSpinBox,"log_period_value")
+        self.start_delay_value:QSpinBox = self.frame_contents.findChild(QSpinBox,"start_delay_value")
 
         for pw in self.property_widgets:
             
@@ -84,41 +85,42 @@ class HSDAutoModeWidget(ComponentWidget):
 
             if pw == "enabled":
                 self.property_widgets[pw].value = toggle_button
-                self.assign_callbacks(self.property_widgets[pw], "boolean")
+                self.assign_callbacks(controller, self.property_widgets[pw], "boolean")
             elif pw == "nof_acquisitions":
                 self.property_widgets[pw].value = nof_acq_value
                 nof_acq_info.setVisible(True)
                 if min_val != None or max_val != None:
                     nof_acq_info.setToolTip(range_value_str)
-                self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, self.property_widgets[pw]))
-                self.assign_callbacks(self.property_widgets[pw], "integer")
+                # self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, controller, self.property_widgets[pw]))
+                self.assign_callbacks(controller, self.property_widgets[pw], "integer")
             elif pw == "start_delay_s" or pw == "start_delay_ms":
-                self.property_widgets[pw].value = start_delay_value
-                if min_val != None or max_val != None:
-                    idle_period_info.setVisible(True)
-                    idle_period_info.setToolTip(range_value_str)
-                else:
-                    idle_period_info.setVisible(False)
-                self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, self.property_widgets[pw]))
-                self.assign_callbacks(self.property_widgets[pw], "integer")
-            elif pw == "logging_period_s" or pw == "datalog_time_length":
-                self.property_widgets[pw].value = log_period_value
-                if min_val != None or max_val != None:
-                    log_period_info.setVisible(True)
-                    log_period_info.setToolTip(range_value_str)
-                else:
-                    log_period_info.setVisible(False)
-                self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, self.property_widgets[pw]))
-                self.assign_callbacks(self.property_widgets[pw], "integer")
-            elif pw == "idle_period_s" or pw == "idle_time_length":
+                self.property_widgets[pw].value = self.start_delay_value
                 if min_val != None or max_val != None:
                     start_delay_info.setVisible(True)
                     start_delay_info.setToolTip(range_value_str)
                 else:
                     start_delay_info.setVisible(False)
-                self.property_widgets[pw].value = idle_period_value
-                self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, self.property_widgets[pw]))
-                self.assign_callbacks(self.property_widgets[pw], "integer")
+                # self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, controller, self.property_widgets[pw]))
+                self.assign_callbacks(controller, self.property_widgets[pw], "integer")
+            elif pw == "logging_period_s" or pw == "datalog_time_length":
+                self.property_widgets[pw].value = self.log_period_value
+                if min_val != None or max_val != None:
+                    log_period_info.setVisible(True)
+                    log_period_info.setToolTip(range_value_str)
+                else:
+                    log_period_info.setVisible(False)
+                # self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, controller, self.property_widgets[pw]))
+                self.assign_callbacks(controller, self.property_widgets[pw], "integer")
+            elif pw == "idle_period_s" or pw == "idle_time_length":
+                if min_val != None or max_val != None:
+                    idle_period_info.setVisible(True)
+                    idle_period_info.setToolTip(range_value_str)
+                else:
+                    idle_period_info.setVisible(False)
+                self.property_widgets[pw].value = self.idle_period_value
+                # self.property_widgets[pw].value.textChanged.connect(partial(UIUtils.validate_value, controller, self.property_widgets[pw]))
+                # res = UIUtils.validate_value(self.property_widgets[pw], self.property_widgets[pw].value.text())
+                self.assign_callbacks(controller, self.property_widgets[pw], "integer")
 
         automode_status = self.controller.get_component_status(comp_name).get(comp_name).get("enabled")
         self.controller.set_automode_enabled(automode_status if automode_status is not None else False)
@@ -147,22 +149,22 @@ class HSDAutoModeWidget(ComponentWidget):
     
     def update_time(self):
         if self.is_waiting_logging:
-            self.elapsed_time += 1
+            self.elapsed_time -= 1
             time_str = self.format_time(self.elapsed_time)
             self.title_label.setText("Automatic Mode ---> LOG START in: {}".format(time_str))
         else:
             if self.is_logging:
                 if self.is_waiting_idle:
-                    self.elapsed_time += 1
+                    self.elapsed_time -= 1
                     time_str = self.format_time(self.elapsed_time)
                     self.title_label.setText("Automatic Mode ---> IDLE: {}".format(time_str))
                 else:
-                    self.elapsed_time += 1
+                    self.elapsed_time -= 1
                     time_str = self.format_time(self.elapsed_time)
                     self.title_label.setText("Automatic Mode ---> LOGGING: {}".format(time_str))
             else:
                 if self.is_waiting_idle:
-                    self.elapsed_time += 1
+                    self.elapsed_time -= 1
                     time_str = self.format_time(self.elapsed_time)
                     self.title_label.setText("Automatic Mode ---> IDLE: {}".format(time_str))
                 else:
@@ -170,18 +172,18 @@ class HSDAutoModeWidget(ComponentWidget):
                     self.title_label.setText("Automatic Mode")
     
     def is_waiting_auto_start(self, status):
-        self.elapsed_time = 0
+        self.elapsed_time = self.start_delay_value.value() #0
         self.is_waiting_logging = status
         if status:
             self.digital_clock_timer.start(1000)
 
     def is_idle_auto_start(self, status):
-        self.elapsed_time = 0
+        self.elapsed_time = self.idle_period_value.value() #0
         self.is_waiting_idle = status
         if status:
             self.digital_clock_timer.start(1000)
 
     def is_auto_started(self, status):
-        self.elapsed_time = 0
+        self.elapsed_time = self.log_period_value.value() #0
         self.is_logging = status
         self.digital_clock_timer.start(1000)

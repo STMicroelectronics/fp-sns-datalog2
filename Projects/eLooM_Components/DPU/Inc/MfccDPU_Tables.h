@@ -15,7 +15,7 @@
   *
   ******************************************************************************
   */
-  
+
 #ifndef _MFCC_DPU_TABLES_H
 #define _MFCC_DPU_TABLES_H
 
@@ -30,8 +30,8 @@ extern const float32_t melFilterLut_8192_128[8016];
 extern const uint32_t  melFiltersStartIndices_4096_32[32];
 extern const uint32_t  melFiltersStopIndices_4096_32[32];
 extern const float32_t melFilterLut_4096_32[3772];
-extern const float32_t dct2_60_128[60*128];
-extern const float32_t dct2_32_32[32*32];
+extern const float32_t dct2_60_128[60 * 128];
+extern const float32_t dct2_32_32[32 * 32];
 
 
 #endif /* _MFCC_DPU_TABLES_H */

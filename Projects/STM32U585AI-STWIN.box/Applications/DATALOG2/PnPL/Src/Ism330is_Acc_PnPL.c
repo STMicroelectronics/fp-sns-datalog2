@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:ism330is_acc;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sIsm330is_Acc_PnPL_CompIF_vtbl =
   */
 struct _Ism330is_Acc_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -151,21 +149,22 @@ uint8_t Ism330is_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
     enum_id = 9;
   }
   json_object_dotset_number(JSON_Status, "ism330is_acc.odr", enum_id);
-  ism330is_acc_get_fs(&temp_f);
+  int32_t temp_i = 0;
+  ism330is_acc_get_fs(&temp_i);
   enum_id = 0;
-  if (temp_f == ism330is_acc_fs_g2)
+  if (temp_i == ism330is_acc_fs_g2)
   {
     enum_id = 0;
   }
-  else if (temp_f == ism330is_acc_fs_g4)
+  else if (temp_i == ism330is_acc_fs_g4)
   {
     enum_id = 1;
   }
-  else if (temp_f == ism330is_acc_fs_g8)
+  else if (temp_i == ism330is_acc_fs_g8)
   {
     enum_id = 2;
   }
-  else if (temp_f == ism330is_acc_fs_g16)
+  else if (temp_i == ism330is_acc_fs_g16)
   {
     enum_id = 3;
   }
@@ -173,7 +172,6 @@ uint8_t Ism330is_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   bool temp_b = 0;
   ism330is_acc_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "ism330is_acc.enable", temp_b);
-  int32_t temp_i = 0;
   ism330is_acc_get_samples_per_ts(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_acc.samples_per_ts", temp_i);
   ism330is_acc_get_dim(&temp_i);
@@ -195,6 +193,8 @@ uint8_t Ism330is_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   json_object_dotset_string(JSON_Status, "ism330is_acc.sensor_annotation", temp_s);
   ism330is_acc_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_acc.sensor_category", temp_i);
+  ism330is_acc_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "ism330is_acc.mounted", temp_b);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "ism330is_acc.c_type", COMP_TYPE_SENSOR);
@@ -221,7 +221,8 @@ uint8_t Ism330is_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   return 0;
 }
 
-uint8_t Ism330is_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Ism330is_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                          uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
@@ -265,9 +266,12 @@ uint8_t Ism330is_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
         ret = ism330is_acc_set_odr(ism330is_acc_odr_hz6667);
         break;
     }
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "ism330is_acc.odr.value", odr);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "ism330is_acc.odr.value", "PNPL_SET_ERROR");
     }
   }
@@ -289,9 +293,12 @@ uint8_t Ism330is_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
         ret = ism330is_acc_set_fs(ism330is_acc_fs_g16);
         break;
     }
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "ism330is_acc.fs.value", fs);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "ism330is_acc.fs.value", "PNPL_SET_ERROR");
     }
   }
@@ -299,9 +306,12 @@ uint8_t Ism330is_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "ism330is_acc.enable");
     ret = ism330is_acc_set_enable(enable);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_boolean(respJSONObject, "ism330is_acc.enable.value", enable);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "ism330is_acc.enable.value", "PNPL_SET_ERROR");
     }
   }
@@ -309,9 +319,12 @@ uint8_t Ism330is_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "ism330is_acc.samples_per_ts");
     ret = ism330is_acc_set_samples_per_ts(samples_per_ts);
-    if(ret == 0){
+    if (ret == 0)
+    {
       json_object_dotset_number(respJSONObject, "ism330is_acc.samples_per_ts.value", samples_per_ts);
-    } else {
+    }
+    else
+    {
       json_object_dotset_string(respJSONObject, "ism330is_acc.samples_per_ts.value", "PNPL_SET_ERROR");
     }
   }
@@ -319,7 +332,14 @@ uint8_t Ism330is_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ism330is_acc.sensor_annotation");
     ret = ism330is_acc_set_sensor_annotation(sensor_annotation);
-    json_object_dotset_string(respJSONObject, "ism330is_acc.sensor_annotation.value", ret == 0 ? sensor_annotation : "PNPL_SET_ERROR");
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "ism330is_acc.sensor_annotation.value", sensor_annotation);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "ism330is_acc.sensor_annotation.value", "PNPL_SET_ERROR");
+    }
   }
   json_value_free(tempJSON);
   if (pretty == 1)
@@ -332,13 +352,14 @@ uint8_t Ism330is_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
     *response = json_serialize_to_string(respJSON);
     *size = json_serialization_size(respJSON);
   }
-
   json_value_free(respJSON);
-
   return ret;
 }
 
-uint8_t Ism330is_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+
+uint8_t Ism330is_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                              uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

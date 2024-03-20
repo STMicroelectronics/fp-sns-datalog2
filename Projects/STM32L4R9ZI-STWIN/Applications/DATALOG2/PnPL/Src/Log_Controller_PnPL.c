@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinkt1b:fpSnsDatalog2_datalog2:other:log_controller;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:other:log_controller;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,13 +53,9 @@ static const IPnPLComponent_vtbl sLog_Controller_PnPL_CompIF_vtbl =
   */
 struct _Log_Controller_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
-  /**
-    * Contains Log_Controller functions pointers.
-    */
+  /* Contains Log_Controller functions pointers. */
   ILog_Controller_t *cmdIF;
 };
 
@@ -96,33 +92,37 @@ char *Log_Controller_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 
 uint8_t Log_Controller_PnPL_vtblGetNCommands(IPnPLComponent_t *_this)
 {
-  return 5;
+  return 6;
 }
 
 char *Log_Controller_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
 {
   switch (id)
   {
-  case 0:
-    return "log_controller*save_config";
-    break;
-  case 1:
-    return "log_controller*start_log";
-    break;
-  case 2:
-    return "log_controller*stop_log";
-    break;
-  case 3:
-    return "log_controller*set_time";
-    break;
-  case 4:
-    return "log_controller*switch_bank";
-    break;
+    case 0:
+      return "log_controller*save_config";
+      break;
+    case 1:
+      return "log_controller*start_log";
+      break;
+    case 2:
+      return "log_controller*stop_log";
+      break;
+    case 3:
+      return "log_controller*set_time";
+      break;
+    case 4:
+      return "log_controller*switch_bank";
+      break;
+    case 5:
+      return "log_controller*set_dfu_mode";
+      break;
   }
   return 0;
 }
 
-uint8_t Log_Controller_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Log_Controller_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                          uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -157,38 +157,112 @@ uint8_t Log_Controller_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   return 0;
 }
 
-uint8_t Log_Controller_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Log_Controller_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                            uint32_t *size, uint8_t pretty)
 {
+  *size = 61;
+  *response = (char *)pnpl_malloc(*size);
+  (void)strcpy(*response, "{\"PnPL_Error\":\"No writable Properties in DeviceInformation\"}\0");
   return 0;
 }
 
-uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+
+uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                                uint32_t *size, uint8_t pretty)
 {
   Log_Controller_PnPL *p_if_owner = (Log_Controller_PnPL *) _this;
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
+
+  uint8_t ret = 0;
   if (json_object_dothas_value(tempJSONObject, "log_controller*save_config"))
   {
-    log_controller_save_config(p_if_owner->cmdIF);
+    ret = log_controller_save_config(p_if_owner->cmdIF);
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "log_controller*save_config.response", "PNPL_CMD_OK");
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "log_controller.save_config.response", "PNPL_CMD_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*start_log.interface"))
   {
-    int32_t interface =(int32_t) json_object_dotget_number(tempJSONObject, "log_controller*start_log.interface");
-    log_controller_start_log(p_if_owner->cmdIF, interface);
+    int32_t interface = (int32_t) json_object_dotget_number(tempJSONObject, "log_controller*start_log.interface");
+    ret = log_controller_start_log(p_if_owner->cmdIF, interface);
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "log_controller*start_log.interface.response", "PNPL_CMD_OK");
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "log_controller.start_log.interface.response", "PNPL_CMD_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*stop_log"))
   {
-    log_controller_stop_log(p_if_owner->cmdIF);
+    ret = log_controller_stop_log(p_if_owner->cmdIF);
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "log_controller*stop_log.response", "PNPL_CMD_OK");
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "log_controller.stop_log.response", "PNPL_CMD_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*set_time.datetime"))
   {
     const char *datetime = json_object_dotget_string(tempJSONObject, "log_controller*set_time.datetime");
-    log_controller_set_time(p_if_owner->cmdIF, datetime);
+    ret = log_controller_set_time(p_if_owner->cmdIF, datetime);
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "log_controller*set_time.datetime.response", "PNPL_CMD_OK");
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "log_controller.set_time.datetime.response", "PNPL_CMD_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*switch_bank"))
   {
-    log_controller_switch_bank(p_if_owner->cmdIF);
+    ret = log_controller_switch_bank(p_if_owner->cmdIF);
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "log_controller*switch_bank.response", "PNPL_CMD_OK");
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "log_controller.switch_bank.response", "PNPL_CMD_ERROR");
+    }
+  }
+  if (json_object_dothas_value(tempJSONObject, "log_controller*set_dfu_mode"))
+  {
+    ret = log_controller_set_dfu_mode(p_if_owner->cmdIF);
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "log_controller*set_dfu_mode.response", "PNPL_CMD_OK");
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "log_controller.set_dfu_mode.response", "PNPL_CMD_ERROR");
+    }
   }
   json_value_free(tempJSON);
-  return 0;
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
+  json_value_free(respJSON);
+  return ret;
 }
+

@@ -30,7 +30,6 @@ extern "C" {
 #endif
 
 
-
 #include "services/eloom_sysbase.h"
 
 
@@ -98,7 +97,6 @@ typedef struct _SensorDescriptor_t SensorDescriptor_t;
   */
 struct _SensorDescriptor_t
 {
-
   /**
     * Specifies the sensor name.
     */
@@ -108,31 +106,6 @@ struct _SensorDescriptor_t
     * Specifies the sensor type (ACC, GYRO, TEMP, ...).
     */
   uint8_t sensor_type;
-
-  /**
-    * Specifies the supported data rates.
-    */
-  float p_odr[SM_MAX_SUPPORTED_ODR];
-
-  /**
-    * Specifies the supported full scales.
-    */
-  float p_fs[SM_MAX_SUPPORTED_FS];
-
-  /**
-    * Specifies a label for each axes.
-    */
-  char p_dimensions_label[SM_MAX_DIM_LABELS][SM_DIM_LABELS_LENGTH];
-
-  /**
-    * Specifies the unit of measurement for each axes.
-    */
-  char unit[SM_MAX_DIM_LABELS];
-
-  /**
-    * Specifies the supported values for SamplesPerTimestamp variable.
-    */
-  uint16_t p_samples_per_timestamp[2];
 };
 
 
@@ -160,8 +133,8 @@ typedef struct
 } ITConfig_t;
 
 /**
- * SW Compensation Algorithm Config parameters
- */
+  * SW Compensation Algorithm Config parameters
+  */
 typedef struct
 {
   uint8_t comp_type; /*<! None: 0, Linear: 1, Non-linear: 2 */
@@ -272,8 +245,8 @@ typedef struct SensorStatusPresence_t
   float measured_data_frequency;
 
   /**
-   * Specifies the transmittance of the lens.
-   */
+    * Specifies the transmittance of the lens.
+    */
   float Transmittance;
 
   /**
@@ -342,24 +315,24 @@ typedef struct SensorStatusPresence_t
   uint8_t software_compensation;
 
   /**
-   * Specifies software compensation algorithm parameters.
-   */
+    * Specifies software compensation algorithm parameters.
+    */
   CompensationAlgorithmConfig_t AlgorithmConfig;
-  
+
 } SensorStatusPresence;
 
 
 typedef struct SensorStatusLight_t
 {
   /**
-    * Specifies the nominal data rate.
+    * Specifies the nominal data rate [ms].
     */
   uint32_t intermeasurement_time;
 
   /**
-    * Specifies the exposure time.
+    * Specifies the exposure time [us].
     */
-  float exposure_time;
+  uint32_t exposure_time;
 
   /**
     * Specifies the gain.
@@ -367,7 +340,7 @@ typedef struct SensorStatusLight_t
   float gain[ ALS_NUM_CHANNELS ];
 
   /**
-    * Specifies the effective data rate.
+    * Specifies the effective data rate [ms].
     */
   uint32_t measured_intermeasurement_time;
 } SensorStatusLight;

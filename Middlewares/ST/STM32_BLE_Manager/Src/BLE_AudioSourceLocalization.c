@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_AudioSourceLocalization.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add BLE_AudioSourceLocalization service using vendor specific profiles.
   ******************************************************************************
   * @attention
@@ -24,7 +24,9 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_AUDIO_SOURCE_LOCALIZATION_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x10,0x00,0x00,0x00,0x00,0x01,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_AUDIO_SOURCE_LOCALIZATION_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x10,0x00,0x00,0x00,\
+                                                                            0x00,0x01,0x11,0xe1,0xac,0x36,0x00,\
+                                                                            0x02,0xa5,0xd5,0xc5,0x1b)
 
 #define AUDIO_SOURCE_LOCALIZATION_ADVERTISE_DATA_POSITION  18
 
@@ -146,7 +148,9 @@ static void AttrMod_Request_AudioSourceLocalization(void *VoidCharPointer, uint1
 
   if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
   {
-    BytesToWrite = (uint8_t) sprintf((char *)BufferToWrite, "\tAudioSrcLoc=%s\n", (att_data[0] == 01U) ? " ON" : " OFF");
+    BytesToWrite = (uint8_t) sprintf((char *)BufferToWrite,
+                                     "\tAudioSrcLoc=%s\n",
+                                     (att_data[0] == 01U) ? " ON" : " OFF");
     Term_Update(BufferToWrite, BytesToWrite);
   }
   else

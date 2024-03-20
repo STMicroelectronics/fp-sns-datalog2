@@ -21,7 +21,7 @@ with open("LICENSE.md", "r") as fh:
 
 setuptools.setup(
     name="st_dtdl_gui",
-    version="2.1.0",
+    version="2.2.0",
     author="SRA-ASP",
     author_email="matteo.ronchi@st.com",
     description="STMicroelectronics UI Toolkit based on DTDL and PySide6.",
@@ -42,13 +42,15 @@ setuptools.setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Embedded Systems"
     ],
     install_requires=[
        "st_pnpl",
        "numpy",
        "pyqtgraph",
-       "PySide6==6.4.3",
+       "setuptools",
+       "PySide6",
        "pyaudio"
     ]
 )

@@ -230,25 +230,7 @@ static IMP34DT05TaskClass_t sTheClass =
   /* MIC DESCRIPTOR */
   {
     "imp34dt05",
-    COM_TYPE_MIC,
-    {
-      16000.0,
-      32000.0,
-      48000.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      130.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "aud",
-    },
-    "Waveform",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_MIC
   },
   /* class (PM_STATE, ExecuteStepFunc) map */
   {
@@ -364,9 +346,9 @@ sys_error_code_t IMP34DT05Task_vtblHardwareInit(AManagedTask *_this, void *pPara
     if (!SYS_IS_ERROR_CODE(res))
     {
       DFSDMDriverFilterRegisterCallback((DFSDMDriver_t *) p_obj->p_driver, HAL_DFSDM_FILTER_REGCONV_HALFCOMPLETE_CB_ID,
-                                      DFSDM_Filter_0_HalfComplete_Callback);
+                                        DFSDM_Filter_0_HalfComplete_Callback);
       DFSDMDriverFilterRegisterCallback((DFSDMDriver_t *) p_obj->p_driver, HAL_DFSDM_FILTER_REGCONV_COMPLETE_CB_ID,
-                                      DFSDM_Filter_0_Complete_Callback);
+                                        DFSDM_Filter_0_Complete_Callback);
     }
 
     if (!MTMap_IsInitialized(&sTheClass.task_map))
@@ -917,25 +899,25 @@ static sys_error_code_t IMP34DT05TaskExecuteStepDatalog(AManagedTask *_this)
 //        if (timestamp > 0.3f)
 //        {
 #if (HSD_USE_DUMMY_DATA == 1)
-          IMP34DT05TaskWriteDummyData(p_obj);
-          EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
+        IMP34DT05TaskWriteDummyData(p_obj);
+        EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
 #else
         int32_t *p32 = (int32_t *) &p_obj->p_dma_data_buff[(p_obj->half - 1) * samples];
         int16_t *p16 = p_obj->p_sensor_data_buff;
-          uint16_t idx = 0;
-          for (idx = 0; idx < samples ; idx++)
-          {
-            *p16++ = p_obj->old_out = (0xFC * (p_obj->old_out + ((*p32) >> 11) - p_obj->old_in)) / 0xFF;
-            p_obj->old_in = (*p32++) >> 11;
-          }
-          EMD_1dInit(&p_obj->data, (uint8_t *) p_obj->p_sensor_data_buff, E_EM_INT16, samples);
+        uint16_t idx = 0;
+        for (idx = 0; idx < samples ; idx++)
+        {
+          *p16++ = p_obj->old_out = (0xFC * (p_obj->old_out + ((*p32) >> 11) - p_obj->old_in)) / 0xFF;
+          p_obj->old_in = (*p32++) >> 11;
+        }
+        EMD_1dInit(&p_obj->data, (uint8_t *) p_obj->p_sensor_data_buff, E_EM_INT16, samples);
 #endif
-          DataEvent_t evt;
+        DataEvent_t evt;
 
-          DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
-          IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
+        DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
+        IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP34DT05: ts = %f\r\n", (float)timestamp));
+        SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP34DT05: ts = %f\r\n", (float)timestamp));
 //        }
         break;
       }
@@ -1112,9 +1094,9 @@ static sys_error_code_t IMP34DT05TaskSensorSetFrequency(IMP34DT05Task *_this, SM
     {
       DFSDMSetDFSDMConfig(p_obj->p_driver, ODR);
       DFSDMDriverFilterRegisterCallback((DFSDMDriver_t *) p_obj->p_driver, HAL_DFSDM_FILTER_REGCONV_HALFCOMPLETE_CB_ID,
-                                      DFSDM_Filter_0_HalfComplete_Callback);
+                                        DFSDM_Filter_0_HalfComplete_Callback);
       DFSDMDriverFilterRegisterCallback((DFSDMDriver_t *) p_obj->p_driver, HAL_DFSDM_FILTER_REGCONV_COMPLETE_CB_ID,
-                                      DFSDM_Filter_0_Complete_Callback);
+                                        DFSDM_Filter_0_Complete_Callback);
 
       _this->sensor_status.type.audio.frequency = ODR;
     }

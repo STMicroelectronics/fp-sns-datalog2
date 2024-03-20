@@ -29,7 +29,8 @@ class UnitMap():
             "second":"s",
             "Waveform":"Waveform",
             "percent":"%",
-            "millisecond":"ms"
+            "millisecond":"ms",
+            "microsecond":"μs"
         }
 
 class TypeEnum(Enum):

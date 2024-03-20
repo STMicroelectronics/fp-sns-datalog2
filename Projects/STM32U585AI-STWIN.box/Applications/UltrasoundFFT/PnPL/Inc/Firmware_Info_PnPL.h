@@ -33,7 +33,6 @@
 #define _PNPL_FIRMWARE_INFO_H_
 
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif

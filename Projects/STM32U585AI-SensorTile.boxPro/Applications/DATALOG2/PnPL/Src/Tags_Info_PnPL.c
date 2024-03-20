@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:other:tags_info;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sTags_Info_PnPL_CompIF_vtbl =
   */
 struct _Tags_Info_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -161,7 +159,8 @@ uint8_t Tags_Info_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJ
   return 0;
 }
 
-uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size,
+                                       uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
@@ -175,7 +174,14 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       const char *sw_tag0 = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag0.label");
       ret = tags_info_set_sw_tag0__label(sw_tag0);
-      json_object_dotset_string(respJSONObject, "tags_info.sw_tag0.label.value", ret == 0 ? sw_tag0 : "PNPL_SET_ERROR");
+      if (ret == 0)
+      {
+        json_object_dotset_string(respJSONObject, "tags_info.sw_tag0.label.value", sw_tag0);
+      }
+      else
+      {
+        json_object_dotset_string(respJSONObject, "tags_info.sw_tag0.label.value", "PNPL_SET_ERROR");
+      }
     }
   }
   if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag0"))
@@ -184,9 +190,12 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       bool sw_tag0 = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag0.enabled");
       ret = tags_info_set_sw_tag0__enabled(sw_tag0);
-      if(ret == 0){
+      if (ret == 0)
+      {
         json_object_dotset_boolean(respJSONObject, "tags_info.sw_tag0.enabled.value", sw_tag0);
-      } else {
+      }
+      else
+      {
         json_object_dotset_string(respJSONObject, "tags_info.sw_tag0.enabled.value", "PNPL_SET_ERROR");
       }
     }
@@ -197,9 +206,12 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       bool sw_tag0 = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag0.status");
       ret = tags_info_set_sw_tag0__status(sw_tag0);
-      if(ret == 0){
+      if (ret == 0)
+      {
         json_object_dotset_boolean(respJSONObject, "tags_info.sw_tag0.status.value", sw_tag0);
-      } else {
+      }
+      else
+      {
         json_object_dotset_string(respJSONObject, "tags_info.sw_tag0.status.value", "PNPL_SET_ERROR");
       }
     }
@@ -210,7 +222,14 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       const char *sw_tag1 = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag1.label");
       ret = tags_info_set_sw_tag1__label(sw_tag1);
-      json_object_dotset_string(respJSONObject, "tags_info.sw_tag1.label.value", ret == 0 ? sw_tag1 : "PNPL_SET_ERROR");
+      if (ret == 0)
+      {
+        json_object_dotset_string(respJSONObject, "tags_info.sw_tag1.label.value", sw_tag1);
+      }
+      else
+      {
+        json_object_dotset_string(respJSONObject, "tags_info.sw_tag1.label.value", "PNPL_SET_ERROR");
+      }
     }
   }
   if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag1"))
@@ -219,9 +238,12 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       bool sw_tag1 = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag1.enabled");
       ret = tags_info_set_sw_tag1__enabled(sw_tag1);
-      if(ret == 0){
+      if (ret == 0)
+      {
         json_object_dotset_boolean(respJSONObject, "tags_info.sw_tag1.enabled.value", sw_tag1);
-      } else {
+      }
+      else
+      {
         json_object_dotset_string(respJSONObject, "tags_info.sw_tag1.enabled.value", "PNPL_SET_ERROR");
       }
     }
@@ -232,9 +254,12 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       bool sw_tag1 = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag1.status");
       ret = tags_info_set_sw_tag1__status(sw_tag1);
-      if(ret == 0){
+      if (ret == 0)
+      {
         json_object_dotset_boolean(respJSONObject, "tags_info.sw_tag1.status.value", sw_tag1);
-      } else {
+      }
+      else
+      {
         json_object_dotset_string(respJSONObject, "tags_info.sw_tag1.status.value", "PNPL_SET_ERROR");
       }
     }
@@ -245,7 +270,14 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       const char *sw_tag2 = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag2.label");
       ret = tags_info_set_sw_tag2__label(sw_tag2);
-      json_object_dotset_string(respJSONObject, "tags_info.sw_tag2.label.value", ret == 0 ? sw_tag2 : "PNPL_SET_ERROR");
+      if (ret == 0)
+      {
+        json_object_dotset_string(respJSONObject, "tags_info.sw_tag2.label.value", sw_tag2);
+      }
+      else
+      {
+        json_object_dotset_string(respJSONObject, "tags_info.sw_tag2.label.value", "PNPL_SET_ERROR");
+      }
     }
   }
   if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag2"))
@@ -254,9 +286,12 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       bool sw_tag2 = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag2.enabled");
       ret = tags_info_set_sw_tag2__enabled(sw_tag2);
-      if(ret == 0){
+      if (ret == 0)
+      {
         json_object_dotset_boolean(respJSONObject, "tags_info.sw_tag2.enabled.value", sw_tag2);
-      } else {
+      }
+      else
+      {
         json_object_dotset_string(respJSONObject, "tags_info.sw_tag2.enabled.value", "PNPL_SET_ERROR");
       }
     }
@@ -267,9 +302,12 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       bool sw_tag2 = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag2.status");
       ret = tags_info_set_sw_tag2__status(sw_tag2);
-      if(ret == 0){
+      if (ret == 0)
+      {
         json_object_dotset_boolean(respJSONObject, "tags_info.sw_tag2.status.value", sw_tag2);
-      } else {
+      }
+      else
+      {
         json_object_dotset_string(respJSONObject, "tags_info.sw_tag2.status.value", "PNPL_SET_ERROR");
       }
     }
@@ -280,7 +318,14 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       const char *sw_tag3 = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag3.label");
       ret = tags_info_set_sw_tag3__label(sw_tag3);
-      json_object_dotset_string(respJSONObject, "tags_info.sw_tag3.label.value", ret == 0 ? sw_tag3 : "PNPL_SET_ERROR");
+      if (ret == 0)
+      {
+        json_object_dotset_string(respJSONObject, "tags_info.sw_tag3.label.value", sw_tag3);
+      }
+      else
+      {
+        json_object_dotset_string(respJSONObject, "tags_info.sw_tag3.label.value", "PNPL_SET_ERROR");
+      }
     }
   }
   if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag3"))
@@ -289,9 +334,12 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       bool sw_tag3 = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag3.enabled");
       ret = tags_info_set_sw_tag3__enabled(sw_tag3);
-      if(ret == 0){
+      if (ret == 0)
+      {
         json_object_dotset_boolean(respJSONObject, "tags_info.sw_tag3.enabled.value", sw_tag3);
-      } else {
+      }
+      else
+      {
         json_object_dotset_string(respJSONObject, "tags_info.sw_tag3.enabled.value", "PNPL_SET_ERROR");
       }
     }
@@ -302,9 +350,12 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       bool sw_tag3 = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag3.status");
       ret = tags_info_set_sw_tag3__status(sw_tag3);
-      if(ret == 0){
+      if (ret == 0)
+      {
         json_object_dotset_boolean(respJSONObject, "tags_info.sw_tag3.status.value", sw_tag3);
-      } else {
+      }
+      else
+      {
         json_object_dotset_string(respJSONObject, "tags_info.sw_tag3.status.value", "PNPL_SET_ERROR");
       }
     }
@@ -315,7 +366,14 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       const char *sw_tag4 = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag4.label");
       ret = tags_info_set_sw_tag4__label(sw_tag4);
-      json_object_dotset_string(respJSONObject, "tags_info.sw_tag4.label.value", ret == 0 ? sw_tag4 : "PNPL_SET_ERROR");
+      if (ret == 0)
+      {
+        json_object_dotset_string(respJSONObject, "tags_info.sw_tag4.label.value", sw_tag4);
+      }
+      else
+      {
+        json_object_dotset_string(respJSONObject, "tags_info.sw_tag4.label.value", "PNPL_SET_ERROR");
+      }
     }
   }
   if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag4"))
@@ -324,9 +382,12 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       bool sw_tag4 = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag4.enabled");
       ret = tags_info_set_sw_tag4__enabled(sw_tag4);
-      if(ret == 0){
+      if (ret == 0)
+      {
         json_object_dotset_boolean(respJSONObject, "tags_info.sw_tag4.enabled.value", sw_tag4);
-      } else {
+      }
+      else
+      {
         json_object_dotset_string(respJSONObject, "tags_info.sw_tag4.enabled.value", "PNPL_SET_ERROR");
       }
     }
@@ -337,9 +398,12 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     {
       bool sw_tag4 = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag4.status");
       ret = tags_info_set_sw_tag4__status(sw_tag4);
-      if(ret == 0){
+      if (ret == 0)
+      {
         json_object_dotset_boolean(respJSONObject, "tags_info.sw_tag4.status.value", sw_tag4);
-      } else {
+      }
+      else
+      {
         json_object_dotset_string(respJSONObject, "tags_info.sw_tag4.status.value", "PNPL_SET_ERROR");
       }
     }
@@ -355,13 +419,14 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     *response = json_serialize_to_string(respJSON);
     *size = json_serialization_size(respJSON);
   }
-
   json_value_free(respJSON);
-
   return ret;
 }
 
-uint8_t Tags_Info_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+
+uint8_t Tags_Info_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                           uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

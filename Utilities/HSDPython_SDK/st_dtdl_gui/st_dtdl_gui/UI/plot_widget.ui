@@ -333,7 +333,7 @@ QSpinBox::down-button {
             </size>
            </property>
            <property name="toolTip">
-            <string>Frequency peak detector</string>
+            <string>live plot over time</string>
            </property>
            <property name="styleSheet">
             <string notr="true"/>
@@ -358,7 +358,7 @@ QSpinBox::down-button {
             </size>
            </property>
            <property name="toolTip">
-            <string>Enable frequency filter regions</string>
+            <string>live FFT plot</string>
            </property>
            <property name="styleSheet">
             <string notr="true"/>
@@ -368,35 +368,94 @@ QSpinBox::down-button {
            </property>
           </widget>
          </item>
-         <item alignment="Qt::AlignHCenter">
-          <widget class="QPushButton" name="pushButton_tf_spectro">
+         <item>
+          <widget class="QFrame" name="frame_tf_fft_settings">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="minimumSize">
-            <size>
-             <width>50</width>
-             <height>30</height>
-            </size>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
            </property>
-           <property name="maximumSize">
-            <size>
-             <width>50</width>
-             <height>30</height>
-            </size>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
            </property>
-           <property name="toolTip">
-            <string>Enable frequency filter regions</string>
-           </property>
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-           <property name="text">
-            <string>spectro</string>
-           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <property name="spacing">
+             <number>3</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="hanning_window_label">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Hanning&lt;br/&gt;Window&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="textFormat">
+               <enum>Qt::MarkdownText</enum>
+              </property>
+             </widget>
+            </item>
+            <item alignment="Qt::AlignHCenter">
+             <widget class="QPushButton" name="pushButton_hanning_window">
+              <property name="minimumSize">
+               <size>
+                <width>18</width>
+                <height>18</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>18</width>
+                <height>18</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/icons/icons/outline_window_white_18dp.png</normaloff>:/icons/icons/outline_window_white_18dp.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>

@@ -13,15 +13,16 @@
   * in the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
+  *
   ******************************************************************************
   */
 
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2_ispu;1
+  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2;5
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -36,14 +37,11 @@ extern "C" {
 #endif
 
 #include "stm32u5xx_hal.h"
-#include "services/sysmem.h"
-
-/****************** Malloc/Free **************************/
-#define pnpl_malloc SysAlloc
-#define pnpl_free SysFree
+#include <stdlib.h>
 
 /****************** PnPL Responses ***********************/
 #define PNPL_RESPONSES
+
 
 #ifdef __cplusplus
 }

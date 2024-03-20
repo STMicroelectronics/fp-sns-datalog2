@@ -24,8 +24,6 @@ extern "C" {
 #endif
 
 
-
-
 /* AManagedTask virtual functions */
 sys_error_code_t IIS3DWBTask_vtblHardwareInit(AManagedTask *_this, void *pParams); ///< @sa AMTHardwareInit
 sys_error_code_t IIS3DWBTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pvTaskCode, CHAR **pcName,

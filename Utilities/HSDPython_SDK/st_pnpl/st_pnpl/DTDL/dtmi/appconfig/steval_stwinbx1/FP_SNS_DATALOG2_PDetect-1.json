@@ -1,0 +1,5241 @@
+[
+  {
+    "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:vl53l8cx_tof;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "VL53L8CX_TOF"
+        },
+        "name": "vl53l8cx_tof",
+        "schema": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:vd6283tx_als;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "VD6283TX_ALS"
+        },
+        "name": "vd6283tx_als",
+        "schema": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:sths34pf80_tmos;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "STHS34PF80_TMOS"
+        },
+        "name": "sths34pf80_tmos",
+        "schema": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:imp34dt05_mic;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "IMP34DT05_MIC"
+        },
+        "name": "imp34dt05_mic",
+        "schema": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:ism330dhcx_acc;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "ISM330DHCX_ACC"
+        },
+        "name": "ism330dhcx_acc",
+        "schema": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:ism330dhcx_gyro;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "ISM330DHCX_GYRO"
+        },
+        "name": "ism330dhcx_gyro",
+        "schema": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:iis2iclx_acc;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "IIS2ICLX_ACC"
+        },
+        "name": "iis2iclx_acc",
+        "schema": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:iis2mdc_mag;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "IIS2MDC_MAG"
+        },
+        "name": "iis2mdc_mag",
+        "schema": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:stts22h_temp;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "STTS22H_TEMP"
+        },
+        "name": "stts22h_temp",
+        "schema": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:ilps22qs_press;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "ILPS22QS_PRESS"
+        },
+        "name": "ilps22qs_press",
+        "schema": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:automode;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "AutoMode"
+        },
+        "name": "automode",
+        "schema": "dtmi:vespucci:other:automode;3"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:log_controller;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "Log Controller"
+        },
+        "name": "log_controller",
+        "schema": "dtmi:vespucci:other:log_controller;2"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:tags_info;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "Tags Information"
+        },
+        "name": "tags_info",
+        "schema": "dtmi:vespucci:other:tags_info;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:acquisition_info;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "Acquisition Information"
+        },
+        "name": "acquisition_info",
+        "schema": "dtmi:vespucci:other:acquisition_info;1"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:firmware_info;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "Firmware Information"
+        },
+        "name": "firmware_info",
+        "schema": "dtmi:vespucci:other:firmware_info;3"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:DeviceInformation;1",
+        "@type": "Component",
+        "displayName": {
+          "en": "Device Information"
+        },
+        "name": "DeviceInformation",
+        "schema": "dtmi:azure:DeviceManagement:DeviceInformation;1"
+      }
+    ],
+    "displayName": {
+      "en": "FP_SNS_DATALOG2_PDetect-1"
+    },
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ]
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:resolution;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Resolution"
+        },
+        "name": "resolution",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:resolution:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:resolution:schema:n4x4;1",
+              "displayName": {
+                "en": "4x4"
+              },
+              "enumValue": 0,
+              "name": "n4x4"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:resolution:schema:n8x8;1",
+              "displayName": {
+                "en": "8x8"
+              },
+              "enumValue": 1,
+              "name": "n8x8"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 1
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:odr;1",
+        "@type": [
+          "Property",
+          "NumberValue",
+          "Initialized"
+        ],
+        "description": {
+          "en": "Minimum of 1 and maximum of 15 (for 8x8 zones) or 60 (for 4x4 zones)"
+        },
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": "integer",
+        "unit": "hertz",
+        "writable": true,
+        "initialValue": 10,
+        "maxValue": 60,
+        "minValue": 1
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:ranging_mode;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Ranging Mode"
+        },
+        "name": "ranging_mode",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:ranging_mode:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:ranging_mode:schema:continuous;1",
+              "displayName": {
+                "en": "Continuous"
+              },
+              "enumValue": 0,
+              "name": "continuous"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:ranging_mode:schema:autonomous;1",
+              "displayName": {
+                "en": "Autonomous"
+              },
+              "enumValue": 1,
+              "name": "autonomous"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:integration_time;1",
+        "@type": [
+          "Property",
+          "NumberValue",
+          "Initialized"
+        ],
+        "description": {
+          "en": "time < ranging period for 4x4 mode or (4*time + 1) < ranging period for 8x8 mode. Valid only for autonomous mode"
+        },
+        "displayName": {
+          "en": "Integration Time"
+        },
+        "name": "integration_time",
+        "schema": "integer",
+        "unit": "millisecond",
+        "writable": true,
+        "initialValue": 10,
+        "maxValue": 1000,
+        "minValue": 2
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:samples_per_ts;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 10,
+        "maxValue": 60,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:sensor_annotation;1",
+        "@type": [
+          "Property",
+          "StringValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Sensor Annotation"
+        },
+        "name": "sensor_annotation",
+        "schema": "string",
+        "writable": true,
+        "initialValue": "[EXTERN]"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:sensor_category;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "2 = ISENSOR_CLASS_RANGING"
+        },
+        "displayName": {
+          "en": "Sensor Category"
+        },
+        "name": "sensor_category",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "VL53L8CX_TOF"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:exposure_time;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "{\"step\":1600}"
+        },
+        "displayName": {
+          "en": "Exposure Time"
+        },
+        "name": "exposure_time",
+        "schema": "integer",
+        "unit": "microsecond",
+        "writable": true,
+        "decimalPlaces": 1,
+        "initialValue": 99200,
+        "maxValue": 1600000,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:intermeasurement_time;1",
+        "@type": [
+          "Property",
+          "NumberValue",
+          "Initialized"
+        ],
+        "description": {
+          "en": "{\"step\":20}"
+        },
+        "displayName": {
+          "en": "Intermeasurement Time"
+        },
+        "name": "intermeasurement_time",
+        "schema": "integer",
+        "unit": "millisecond",
+        "writable": true,
+        "initialValue": 1000,
+        "maxValue": 5100,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Channel 1 (Red) Gain"
+        },
+        "name": "channel1_gain",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n0_71;1",
+              "displayName": {
+                "en": "0.71"
+              },
+              "enumValue": 0,
+              "name": "n0_71"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n0_83;1",
+              "displayName": {
+                "en": "0.83"
+              },
+              "enumValue": 1,
+              "name": "n0_83"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 2,
+              "name": "n1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n1_25;1",
+              "displayName": {
+                "en": "1.25"
+              },
+              "enumValue": 3,
+              "name": "n1_25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n1_67;1",
+              "displayName": {
+                "en": "1.67"
+              },
+              "enumValue": 4,
+              "name": "n1_67"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n2_5;1",
+              "displayName": {
+                "en": "2.5"
+              },
+              "enumValue": 5,
+              "name": "n2_5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n3_33;1",
+              "displayName": {
+                "en": "3.33"
+              },
+              "enumValue": 6,
+              "name": "n3_33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n5;1",
+              "displayName": {
+                "en": "5"
+              },
+              "enumValue": 7,
+              "name": "n5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n7_1;1",
+              "displayName": {
+                "en": "7.1"
+              },
+              "enumValue": 8,
+              "name": "n7_1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n10;1",
+              "displayName": {
+                "en": "10"
+              },
+              "enumValue": 9,
+              "name": "n10"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 10,
+              "name": "n16"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 11,
+              "name": "n25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n33;1",
+              "displayName": {
+                "en": "33"
+              },
+              "enumValue": 12,
+              "name": "n33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 13,
+              "name": "n50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel1_gain:schema:n66_6;1",
+              "displayName": {
+                "en": "66.6"
+              },
+              "enumValue": 14,
+              "name": "n66_6"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 2
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Channel 2 (Visible) Gain"
+        },
+        "name": "channel2_gain",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n0_71;1",
+              "displayName": {
+                "en": "0.71"
+              },
+              "enumValue": 0,
+              "name": "n0_71"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n0_83;1",
+              "displayName": {
+                "en": "0.83"
+              },
+              "enumValue": 1,
+              "name": "n0_83"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 2,
+              "name": "n1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n1_25;1",
+              "displayName": {
+                "en": "1.25"
+              },
+              "enumValue": 3,
+              "name": "n1_25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n1_67;1",
+              "displayName": {
+                "en": "1.67"
+              },
+              "enumValue": 4,
+              "name": "n1_67"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n2_5;1",
+              "displayName": {
+                "en": "2.5"
+              },
+              "enumValue": 5,
+              "name": "n2_5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n3_33;1",
+              "displayName": {
+                "en": "3.33"
+              },
+              "enumValue": 6,
+              "name": "n3_33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n5;1",
+              "displayName": {
+                "en": "5"
+              },
+              "enumValue": 7,
+              "name": "n5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n7_1;1",
+              "displayName": {
+                "en": "7.1"
+              },
+              "enumValue": 8,
+              "name": "n7_1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n10;1",
+              "displayName": {
+                "en": "10"
+              },
+              "enumValue": 9,
+              "name": "n10"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 10,
+              "name": "n16"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 11,
+              "name": "n25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n33;1",
+              "displayName": {
+                "en": "33"
+              },
+              "enumValue": 12,
+              "name": "n33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 13,
+              "name": "n50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel2_gain:schema:n66_6;1",
+              "displayName": {
+                "en": "66.6"
+              },
+              "enumValue": 14,
+              "name": "n66_6"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 2
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Channel 3 (Blue) Gain"
+        },
+        "name": "channel3_gain",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n0_71;1",
+              "displayName": {
+                "en": "0.71"
+              },
+              "enumValue": 0,
+              "name": "n0_71"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n0_83;1",
+              "displayName": {
+                "en": "0.83"
+              },
+              "enumValue": 1,
+              "name": "n0_83"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 2,
+              "name": "n1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n1_25;1",
+              "displayName": {
+                "en": "1.25"
+              },
+              "enumValue": 3,
+              "name": "n1_25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n1_67;1",
+              "displayName": {
+                "en": "1.67"
+              },
+              "enumValue": 4,
+              "name": "n1_67"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n2_5;1",
+              "displayName": {
+                "en": "2.5"
+              },
+              "enumValue": 5,
+              "name": "n2_5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n3_33;1",
+              "displayName": {
+                "en": "3.33"
+              },
+              "enumValue": 6,
+              "name": "n3_33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n5;1",
+              "displayName": {
+                "en": "5"
+              },
+              "enumValue": 7,
+              "name": "n5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n7_1;1",
+              "displayName": {
+                "en": "7.1"
+              },
+              "enumValue": 8,
+              "name": "n7_1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n10;1",
+              "displayName": {
+                "en": "10"
+              },
+              "enumValue": 9,
+              "name": "n10"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 10,
+              "name": "n16"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 11,
+              "name": "n25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n33;1",
+              "displayName": {
+                "en": "33"
+              },
+              "enumValue": 12,
+              "name": "n33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 13,
+              "name": "n50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel3_gain:schema:n66_6;1",
+              "displayName": {
+                "en": "66.6"
+              },
+              "enumValue": 14,
+              "name": "n66_6"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 2
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Channel 4 (Green) Gain"
+        },
+        "name": "channel4_gain",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n0_71;1",
+              "displayName": {
+                "en": "0.71"
+              },
+              "enumValue": 0,
+              "name": "n0_71"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n0_83;1",
+              "displayName": {
+                "en": "0.83"
+              },
+              "enumValue": 1,
+              "name": "n0_83"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 2,
+              "name": "n1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n1_25;1",
+              "displayName": {
+                "en": "1.25"
+              },
+              "enumValue": 3,
+              "name": "n1_25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n1_67;1",
+              "displayName": {
+                "en": "1.67"
+              },
+              "enumValue": 4,
+              "name": "n1_67"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n2_5;1",
+              "displayName": {
+                "en": "2.5"
+              },
+              "enumValue": 5,
+              "name": "n2_5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n3_33;1",
+              "displayName": {
+                "en": "3.33"
+              },
+              "enumValue": 6,
+              "name": "n3_33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n5;1",
+              "displayName": {
+                "en": "5"
+              },
+              "enumValue": 7,
+              "name": "n5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n7_1;1",
+              "displayName": {
+                "en": "7.1"
+              },
+              "enumValue": 8,
+              "name": "n7_1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n10;1",
+              "displayName": {
+                "en": "10"
+              },
+              "enumValue": 9,
+              "name": "n10"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 10,
+              "name": "n16"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 11,
+              "name": "n25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n33;1",
+              "displayName": {
+                "en": "33"
+              },
+              "enumValue": 12,
+              "name": "n33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 13,
+              "name": "n50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel4_gain:schema:n66_6;1",
+              "displayName": {
+                "en": "66.6"
+              },
+              "enumValue": 14,
+              "name": "n66_6"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 2
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Channel 5 (IR) Gain"
+        },
+        "name": "channel5_gain",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n0_71;1",
+              "displayName": {
+                "en": "0.71"
+              },
+              "enumValue": 0,
+              "name": "n0_71"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n0_83;1",
+              "displayName": {
+                "en": "0.83"
+              },
+              "enumValue": 1,
+              "name": "n0_83"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 2,
+              "name": "n1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n1_25;1",
+              "displayName": {
+                "en": "1.25"
+              },
+              "enumValue": 3,
+              "name": "n1_25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n1_67;1",
+              "displayName": {
+                "en": "1.67"
+              },
+              "enumValue": 4,
+              "name": "n1_67"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n2_5;1",
+              "displayName": {
+                "en": "2.5"
+              },
+              "enumValue": 5,
+              "name": "n2_5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n3_33;1",
+              "displayName": {
+                "en": "3.33"
+              },
+              "enumValue": 6,
+              "name": "n3_33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n5;1",
+              "displayName": {
+                "en": "5"
+              },
+              "enumValue": 7,
+              "name": "n5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n7_1;1",
+              "displayName": {
+                "en": "7.1"
+              },
+              "enumValue": 8,
+              "name": "n7_1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n10;1",
+              "displayName": {
+                "en": "10"
+              },
+              "enumValue": 9,
+              "name": "n10"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 10,
+              "name": "n16"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 11,
+              "name": "n25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n33;1",
+              "displayName": {
+                "en": "33"
+              },
+              "enumValue": 12,
+              "name": "n33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 13,
+              "name": "n50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel5_gain:schema:n66_6;1",
+              "displayName": {
+                "en": "66.6"
+              },
+              "enumValue": 14,
+              "name": "n66_6"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 2
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Channel 6 (Clear) Gain"
+        },
+        "name": "channel6_gain",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n0_71;1",
+              "displayName": {
+                "en": "0.71"
+              },
+              "enumValue": 0,
+              "name": "n0_71"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n0_83;1",
+              "displayName": {
+                "en": "0.83"
+              },
+              "enumValue": 1,
+              "name": "n0_83"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 2,
+              "name": "n1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n1_25;1",
+              "displayName": {
+                "en": "1.25"
+              },
+              "enumValue": 3,
+              "name": "n1_25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n1_67;1",
+              "displayName": {
+                "en": "1.67"
+              },
+              "enumValue": 4,
+              "name": "n1_67"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n2_5;1",
+              "displayName": {
+                "en": "2.5"
+              },
+              "enumValue": 5,
+              "name": "n2_5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n3_33;1",
+              "displayName": {
+                "en": "3.33"
+              },
+              "enumValue": 6,
+              "name": "n3_33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n5;1",
+              "displayName": {
+                "en": "5"
+              },
+              "enumValue": 7,
+              "name": "n5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n7_1;1",
+              "displayName": {
+                "en": "7.1"
+              },
+              "enumValue": 8,
+              "name": "n7_1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n10;1",
+              "displayName": {
+                "en": "10"
+              },
+              "enumValue": 9,
+              "name": "n10"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 10,
+              "name": "n16"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 11,
+              "name": "n25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n33;1",
+              "displayName": {
+                "en": "33"
+              },
+              "enumValue": 12,
+              "name": "n33"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 13,
+              "name": "n50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:channel6_gain:schema:n66_6;1",
+              "displayName": {
+                "en": "66.6"
+              },
+              "enumValue": 14,
+              "name": "n66_6"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 2
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:samples_per_ts;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 1,
+        "maxValue": 5,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:sensor_annotation;1",
+        "@type": [
+          "Property",
+          "StringValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Sensor Annotation"
+        },
+        "name": "sensor_annotation",
+        "schema": "string",
+        "writable": true,
+        "initialValue": "[EXTERN]"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:sensor_category;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "3 = ISENSOR_CLASS_LIGHT"
+        },
+        "displayName": {
+          "en": "Sensor Category"
+        },
+        "name": "sensor_category",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_als:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimension"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "VD6283TX_ALS"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:odr;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:odr:schema:hz1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 0,
+              "name": "hz1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:odr:schema:hz2;1",
+              "displayName": {
+                "en": "2"
+              },
+              "enumValue": 1,
+              "name": "hz2"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:odr:schema:hz4;1",
+              "displayName": {
+                "en": "4"
+              },
+              "enumValue": 2,
+              "name": "hz4"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:odr:schema:hz8;1",
+              "displayName": {
+                "en": "8"
+              },
+              "enumValue": 3,
+              "name": "hz8"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:odr:schema:hz15;1",
+              "displayName": {
+                "en": "15"
+              },
+              "enumValue": 4,
+              "name": "hz15"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:odr:schema:hz30;1",
+              "displayName": {
+                "en": "30"
+              },
+              "enumValue": 5,
+              "name": "hz30"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true,
+        "initialValue": 4
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:transmittance;1",
+        "@type": [
+          "Property",
+          "NumberValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Transmittance"
+        },
+        "name": "transmittance",
+        "schema": "double",
+        "writable": true,
+        "decimalPlaces": 2,
+        "initialValue": 1,
+        "maxValue": 1,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tobject_num;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Avg Object Temperature Number"
+        },
+        "name": "avg_tobject_num",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tobject_num:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tobject_num:schema:n2;1",
+              "displayName": {
+                "en": "2"
+              },
+              "enumValue": 0,
+              "name": "n2"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tobject_num:schema:n8;1",
+              "displayName": {
+                "en": "8"
+              },
+              "enumValue": 1,
+              "name": "n8"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tobject_num:schema:n32;1",
+              "displayName": {
+                "en": "32"
+              },
+              "enumValue": 2,
+              "name": "n32"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tobject_num:schema:n128;1",
+              "displayName": {
+                "en": "128"
+              },
+              "enumValue": 3,
+              "name": "n128"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tobject_num:schema:n256;1",
+              "displayName": {
+                "en": "256"
+              },
+              "enumValue": 4,
+              "name": "n256"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tobject_num:schema:n512;1",
+              "displayName": {
+                "en": "512"
+              },
+              "enumValue": 5,
+              "name": "n512"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tobject_num:schema:n1024;1",
+              "displayName": {
+                "en": "1024"
+              },
+              "enumValue": 6,
+              "name": "n1024"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tobject_num:schema:n2048;1",
+              "displayName": {
+                "en": "2048"
+              },
+              "enumValue": 7,
+              "name": "n2048"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 2
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tambient_num;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Avg Ambient Temperature Number"
+        },
+        "name": "avg_tambient_num",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tambient_num:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tambient_num:schema:n1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 0,
+              "name": "n1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tambient_num:schema:n2;1",
+              "displayName": {
+                "en": "2"
+              },
+              "enumValue": 1,
+              "name": "n2"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tambient_num:schema:n4;1",
+              "displayName": {
+                "en": "4"
+              },
+              "enumValue": 2,
+              "name": "n4"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:avg_tambient_num:schema:n8;1",
+              "displayName": {
+                "en": "8"
+              },
+              "enumValue": 3,
+              "name": "n8"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 3
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_m_bandwidth;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "LPF Presence and Motion"
+        },
+        "name": "lpf_p_m_bandwidth",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_m_bandwidth:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_m_bandwidth:schema:n9;1",
+              "displayName": {
+                "en": "9"
+              },
+              "enumValue": 0,
+              "name": "n9"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_m_bandwidth:schema:n20;1",
+              "displayName": {
+                "en": "20"
+              },
+              "enumValue": 1,
+              "name": "n20"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_m_bandwidth:schema:n50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 2,
+              "name": "n50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_m_bandwidth:schema:n100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 3,
+              "name": "n100"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_m_bandwidth:schema:n200;1",
+              "displayName": {
+                "en": "200"
+              },
+              "enumValue": 4,
+              "name": "n200"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_m_bandwidth:schema:n400;1",
+              "displayName": {
+                "en": "400"
+              },
+              "enumValue": 5,
+              "name": "n400"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_m_bandwidth:schema:n800;1",
+              "displayName": {
+                "en": "800"
+              },
+              "enumValue": 6,
+              "name": "n800"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_bandwidth;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "LPF Presence"
+        },
+        "name": "lpf_p_bandwidth",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_bandwidth:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_bandwidth:schema:n9;1",
+              "displayName": {
+                "en": "9"
+              },
+              "enumValue": 0,
+              "name": "n9"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_bandwidth:schema:n20;1",
+              "displayName": {
+                "en": "20"
+              },
+              "enumValue": 1,
+              "name": "n20"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_bandwidth:schema:n50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 2,
+              "name": "n50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_bandwidth:schema:n100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 3,
+              "name": "n100"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_bandwidth:schema:n200;1",
+              "displayName": {
+                "en": "200"
+              },
+              "enumValue": 4,
+              "name": "n200"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_bandwidth:schema:n400;1",
+              "displayName": {
+                "en": "400"
+              },
+              "enumValue": 5,
+              "name": "n400"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_p_bandwidth:schema:n800;1",
+              "displayName": {
+                "en": "800"
+              },
+              "enumValue": 6,
+              "name": "n800"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 5
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_m_bandwidth;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "LPF Motion"
+        },
+        "name": "lpf_m_bandwidth",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_m_bandwidth:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_m_bandwidth:schema:n9;1",
+              "displayName": {
+                "en": "9"
+              },
+              "enumValue": 0,
+              "name": "n9"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_m_bandwidth:schema:n20;1",
+              "displayName": {
+                "en": "20"
+              },
+              "enumValue": 1,
+              "name": "n20"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_m_bandwidth:schema:n50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 2,
+              "name": "n50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_m_bandwidth:schema:n100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 3,
+              "name": "n100"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_m_bandwidth:schema:n200;1",
+              "displayName": {
+                "en": "200"
+              },
+              "enumValue": 4,
+              "name": "n200"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_m_bandwidth:schema:n400;1",
+              "displayName": {
+                "en": "400"
+              },
+              "enumValue": 5,
+              "name": "n400"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:lpf_m_bandwidth:schema:n800;1",
+              "displayName": {
+                "en": "800"
+              },
+              "enumValue": 6,
+              "name": "n800"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 4
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:presence_threshold;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Presence Threshold"
+        },
+        "name": "presence_threshold",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 120,
+        "maxValue": 32767,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:presence_hysteresis;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Presence Hysteresis"
+        },
+        "name": "presence_hysteresis",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 50,
+        "maxValue": 255,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:motion_threshold;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Motion Threshold"
+        },
+        "name": "motion_threshold",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 120,
+        "maxValue": 32767,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:motion_hysteresis;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Motion Hysteresis"
+        },
+        "name": "motion_hysteresis",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 50,
+        "maxValue": 255,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:tambient_shock_threshold;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Ambient Threshold"
+        },
+        "name": "tambient_shock_threshold",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 20,
+        "maxValue": 32767,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:tambient_shock_hysteresis;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Ambient Hysteresis"
+        },
+        "name": "tambient_shock_hysteresis",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 5,
+        "maxValue": 255,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:embedded_compensation;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Embedded Compensation"
+        },
+        "name": "embedded_compensation",
+        "schema": "boolean",
+        "writable": true,
+        "initialValue": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:software_compensation;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Software Compensation"
+        },
+        "name": "software_compensation",
+        "schema": "boolean",
+        "writable": true,
+        "initialValue": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:compensation_type;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Compensation Type"
+        },
+        "name": "compensation_type",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:compensation_type:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:compensation_type:schema:ipd_comp_none;1",
+              "displayName": {
+                "en": "IPD_COMP_NONE"
+              },
+              "enumValue": 0,
+              "name": "ipd_comp_none"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:compensation_type:schema:ipd_comp_lin;1",
+              "displayName": {
+                "en": "IPD_COMP_LIN"
+              },
+              "enumValue": 1,
+              "name": "ipd_comp_lin"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:compensation_type:schema:ipd_comp_nonlin;1",
+              "displayName": {
+                "en": "IPD_COMP_NONLIN"
+              },
+              "enumValue": 2,
+              "name": "ipd_comp_nonlin"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "initialValue": 2
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:sw_presence_threshold;1",
+        "@type": [
+          "Property",
+          "NumberValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "SW Presence Threshold"
+        },
+        "name": "sw_presence_threshold",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 250
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:sw_motion_threshold;1",
+        "@type": [
+          "Property",
+          "NumberValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "SW Motion Threshold"
+        },
+        "name": "sw_motion_threshold",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 150
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:compensation_filter_flag;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Compensation Filter Flag"
+        },
+        "name": "compensation_filter_flag",
+        "schema": "boolean",
+        "writable": true,
+        "initialValue": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:absence_static_flag;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Absence Static Flag"
+        },
+        "name": "absence_static_flag",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:samples_per_ts;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 15,
+        "maxValue": 30,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:sensor_annotation;1",
+        "@type": [
+          "Property",
+          "StringValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Sensor Annotation"
+        },
+        "name": "sensor_annotation",
+        "schema": "string",
+        "writable": true,
+        "initialValue": "[EXTERN]"
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:sensor_category;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "5 = ISENSOR_CLASS_PRESENCE"
+        },
+        "displayName": {
+          "en": "Sensor Category"
+        },
+        "name": "sensor_category",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "STHS34PF80_TMOS"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:odr;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:odr:schema:hz16000;1",
+              "displayName": {
+                "en": "16000"
+              },
+              "enumValue": 0,
+              "name": "hz16000"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:odr:schema:hz32000;1",
+              "displayName": {
+                "en": "32000"
+              },
+              "enumValue": 1,
+              "name": "hz32000"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:odr:schema:hz48000;1",
+              "displayName": {
+                "en": "48000"
+              },
+              "enumValue": 2,
+              "name": "hz48000"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true,
+        "initialValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:aop;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "AOP"
+        },
+        "name": "aop",
+        "schema": "double",
+        "writable": false,
+        "displayUnit": {
+          "en": "Waveform"
+        }
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:volume;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Volume"
+        },
+        "name": "volume",
+        "schema": "integer",
+        "unit": "percent",
+        "writable": true,
+        "initialValue": 100,
+        "maxValue": 100,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:resolution;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Resolution"
+        },
+        "name": "resolution",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:resolution:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:resolution:schema:bit16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 0,
+              "name": "bit16"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "bit",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:samples_per_ts;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 1000,
+        "maxValue": 1000,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "unit": "second",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:sensor_annotation;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Sensor Annotation"
+        },
+        "name": "sensor_annotation",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:imp34dt05_mic:sensor_category;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "1 = ISENSOR_CLASS_AUDIO"
+        },
+        "displayName": {
+          "en": "Sensor Category"
+        },
+        "name": "sensor_category",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IMP34DT05_MIC"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema:hz12_5;1",
+              "displayName": {
+                "en": "12.5"
+              },
+              "enumValue": 0,
+              "name": "hz12_5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema:hz26;1",
+              "displayName": {
+                "en": "26"
+              },
+              "enumValue": 1,
+              "name": "hz26"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema:hz52;1",
+              "displayName": {
+                "en": "52"
+              },
+              "enumValue": 2,
+              "name": "hz52"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema:hz104;1",
+              "displayName": {
+                "en": "104"
+              },
+              "enumValue": 3,
+              "name": "hz104"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema:hz208;1",
+              "displayName": {
+                "en": "208"
+              },
+              "enumValue": 4,
+              "name": "hz208"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema:hz416;1",
+              "displayName": {
+                "en": "416"
+              },
+              "enumValue": 5,
+              "name": "hz416"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema:hz833;1",
+              "displayName": {
+                "en": "833"
+              },
+              "enumValue": 6,
+              "name": "hz833"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema:hz1666;1",
+              "displayName": {
+                "en": "1666"
+              },
+              "enumValue": 7,
+              "name": "hz1666"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema:hz3332;1",
+              "displayName": {
+                "en": "3332"
+              },
+              "enumValue": 8,
+              "name": "hz3332"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:odr:schema:hz6667;1",
+              "displayName": {
+                "en": "6667"
+              },
+              "enumValue": 9,
+              "name": "hz6667"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true,
+        "initialValue": 3
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:fs;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:fs:schema:g2;1",
+              "displayName": {
+                "en": "2"
+              },
+              "enumValue": 0,
+              "name": "g2"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:fs:schema:g4;1",
+              "displayName": {
+                "en": "4"
+              },
+              "enumValue": 1,
+              "name": "g4"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:fs:schema:g8;1",
+              "displayName": {
+                "en": "8"
+              },
+              "enumValue": 2,
+              "name": "g8"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:fs:schema:g16;1",
+              "displayName": {
+                "en": "16"
+              },
+              "enumValue": 3,
+              "name": "g16"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "gForce",
+        "writable": true,
+        "initialValue": 3
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true,
+        "initialValue": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:samples_per_ts;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 104,
+        "maxValue": 1000,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "unit": "second",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "unit": "hertz",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:sensor_annotation;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Sensor Annotation"
+        },
+        "name": "sensor_annotation",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc:sensor_category;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "0 = ISENSOR_CLASS_MEMS"
+        },
+        "displayName": {
+          "en": "Sensor Category"
+        },
+        "name": "sensor_category",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "ISM330DHCX_ACC"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema:hz12_5;1",
+              "displayName": {
+                "en": "12.5"
+              },
+              "enumValue": 0,
+              "name": "hz12_5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema:hz26;1",
+              "displayName": {
+                "en": "26"
+              },
+              "enumValue": 1,
+              "name": "hz26"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema:hz52;1",
+              "displayName": {
+                "en": "52"
+              },
+              "enumValue": 2,
+              "name": "hz52"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema:hz104;1",
+              "displayName": {
+                "en": "104"
+              },
+              "enumValue": 3,
+              "name": "hz104"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema:hz208;1",
+              "displayName": {
+                "en": "208"
+              },
+              "enumValue": 4,
+              "name": "hz208"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema:hz416;1",
+              "displayName": {
+                "en": "416"
+              },
+              "enumValue": 5,
+              "name": "hz416"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema:hz833;1",
+              "displayName": {
+                "en": "833"
+              },
+              "enumValue": 6,
+              "name": "hz833"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema:hz1666;1",
+              "displayName": {
+                "en": "1666"
+              },
+              "enumValue": 7,
+              "name": "hz1666"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema:hz3332;1",
+              "displayName": {
+                "en": "3332"
+              },
+              "enumValue": 8,
+              "name": "hz3332"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:odr:schema:hz6667;1",
+              "displayName": {
+                "en": "6667"
+              },
+              "enumValue": 9,
+              "name": "hz6667"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true,
+        "initialValue": 3
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:fs;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:fs:schema:dps125;1",
+              "displayName": {
+                "en": "125"
+              },
+              "enumValue": 0,
+              "name": "dps125"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:fs:schema:dps250;1",
+              "displayName": {
+                "en": "250"
+              },
+              "enumValue": 1,
+              "name": "dps250"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:fs:schema:dps500;1",
+              "displayName": {
+                "en": "500"
+              },
+              "enumValue": 2,
+              "name": "dps500"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:fs:schema:dps1000;1",
+              "displayName": {
+                "en": "1000"
+              },
+              "enumValue": 3,
+              "name": "dps1000"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:fs:schema:dps2000;1",
+              "displayName": {
+                "en": "2000"
+              },
+              "enumValue": 4,
+              "name": "dps2000"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:fs:schema:dps4000;1",
+              "displayName": {
+                "en": "4000"
+              },
+              "enumValue": 5,
+              "name": "dps4000"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "displayUnit": {
+          "en": "mdps"
+        },
+        "initialValue": 5
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true,
+        "initialValue": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:samples_per_ts;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 104,
+        "maxValue": 1000,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "unit": "second",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "unit": "hertz",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:sensor_annotation;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Sensor Annotation"
+        },
+        "name": "sensor_annotation",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_gyro:sensor_category;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "0 = ISENSOR_CLASS_MEMS"
+        },
+        "displayName": {
+          "en": "Sensor Category"
+        },
+        "name": "sensor_category",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "ISM330DHCX_GYRO"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:odr;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:odr:schema:hz12_5;1",
+              "displayName": {
+                "en": "12.5"
+              },
+              "enumValue": 0,
+              "name": "hz12_5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:odr:schema:hz26;1",
+              "displayName": {
+                "en": "26"
+              },
+              "enumValue": 1,
+              "name": "hz26"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:odr:schema:hz52;1",
+              "displayName": {
+                "en": "52"
+              },
+              "enumValue": 2,
+              "name": "hz52"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:odr:schema:hz104;1",
+              "displayName": {
+                "en": "104"
+              },
+              "enumValue": 3,
+              "name": "hz104"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:odr:schema:hz208;1",
+              "displayName": {
+                "en": "208"
+              },
+              "enumValue": 4,
+              "name": "hz208"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:odr:schema:hz416;1",
+              "displayName": {
+                "en": "416"
+              },
+              "enumValue": 5,
+              "name": "hz416"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:odr:schema:hz833;1",
+              "displayName": {
+                "en": "833"
+              },
+              "enumValue": 6,
+              "name": "hz833"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true,
+        "initialValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:fs;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:fs:schema:g0_5;1",
+              "displayName": {
+                "en": "0.5"
+              },
+              "enumValue": 0,
+              "name": "g0_5"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:fs:schema:g1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 1,
+              "name": "g1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:fs:schema:g2;1",
+              "displayName": {
+                "en": "2"
+              },
+              "enumValue": 2,
+              "name": "g2"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:fs:schema:g3;1",
+              "displayName": {
+                "en": "3"
+              },
+              "enumValue": 3,
+              "name": "g3"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "gForce",
+        "writable": true,
+        "initialValue": 3
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true,
+        "initialValue": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:samples_per_ts;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 10,
+        "maxValue": 1000,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "unit": "second",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "unit": "hertz",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:sensor_annotation;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Sensor Annotation"
+        },
+        "name": "sensor_annotation",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2iclx_acc:sensor_category;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "0 = ISENSOR_CLASS_MEMS"
+        },
+        "displayName": {
+          "en": "Sensor Category"
+        },
+        "name": "sensor_category",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IIS2ICLX_ACC"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:odr;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:odr:schema:hz10;1",
+              "displayName": {
+                "en": "10"
+              },
+              "enumValue": 0,
+              "name": "hz10"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:odr:schema:hz20;1",
+              "displayName": {
+                "en": "20"
+              },
+              "enumValue": 1,
+              "name": "hz20"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:odr:schema:hz50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 2,
+              "name": "hz50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:odr:schema:hz100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 3,
+              "name": "hz100"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true,
+        "initialValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:fs;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:fs:schema:g50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 0,
+              "name": "g50"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": false,
+        "displayUnit": {
+          "en": "gauss"
+        }
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true,
+        "initialValue": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:samples_per_ts;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 10,
+        "maxValue": 100,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "unit": "second",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "unit": "hertz",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:sensor_annotation;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Sensor Annotation"
+        },
+        "name": "sensor_annotation",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag:sensor_category;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "0 = ISENSOR_CLASS_MEMS"
+        },
+        "displayName": {
+          "en": "Sensor Category"
+        },
+        "name": "sensor_category",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "IIS2MDC_MAG"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:odr;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:odr:schema:hz1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 0,
+              "name": "hz1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:odr:schema:hz25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 1,
+              "name": "hz25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:odr:schema:hz50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 2,
+              "name": "hz50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:odr:schema:hz100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 3,
+              "name": "hz100"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:odr:schema:hz200;1",
+              "displayName": {
+                "en": "200"
+              },
+              "enumValue": 4,
+              "name": "hz200"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true,
+        "initialValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:fs;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:fs:schema:cdeg100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 0,
+              "name": "cdeg100"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "degreeCelsius",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true,
+        "initialValue": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:samples_per_ts;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 1,
+        "maxValue": 200,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "unit": "second",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "unit": "hertz",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:sensor_annotation;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Sensor Annotation"
+        },
+        "name": "sensor_annotation",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp:sensor_category;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "0 = ISENSOR_CLASS_MEMS"
+        },
+        "displayName": {
+          "en": "Sensor Category"
+        },
+        "name": "sensor_category",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "STTS22H_TEMP"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:odr;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "ODR"
+        },
+        "name": "odr",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:odr:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:odr:schema:hz1;1",
+              "displayName": {
+                "en": "1"
+              },
+              "enumValue": 0,
+              "name": "hz1"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:odr:schema:hz4;1",
+              "displayName": {
+                "en": "4"
+              },
+              "enumValue": 1,
+              "name": "hz4"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:odr:schema:hz10;1",
+              "displayName": {
+                "en": "10"
+              },
+              "enumValue": 2,
+              "name": "hz10"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:odr:schema:hz25;1",
+              "displayName": {
+                "en": "25"
+              },
+              "enumValue": 3,
+              "name": "hz25"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:odr:schema:hz50;1",
+              "displayName": {
+                "en": "50"
+              },
+              "enumValue": 4,
+              "name": "hz50"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:odr:schema:hz75;1",
+              "displayName": {
+                "en": "75"
+              },
+              "enumValue": 5,
+              "name": "hz75"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:odr:schema:hz100;1",
+              "displayName": {
+                "en": "100"
+              },
+              "enumValue": 6,
+              "name": "hz100"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:odr:schema:hz200;1",
+              "displayName": {
+                "en": "200"
+              },
+              "enumValue": 7,
+              "name": "hz200"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "unit": "hertz",
+        "writable": true,
+        "initialValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:fs;1",
+        "@type": [
+          "Property",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "FS"
+        },
+        "name": "fs",
+        "schema": {
+          "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:fs:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:fs:schema:hpa1260;1",
+              "displayName": {
+                "en": "1260"
+              },
+              "enumValue": 0,
+              "name": "hpa1260"
+            },
+            {
+              "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:fs:schema:hpa4060;1",
+              "displayName": {
+                "en": "4060"
+              },
+              "enumValue": 1,
+              "name": "hpa4060"
+            }
+          ],
+          "valueSchema": "integer"
+        },
+        "writable": true,
+        "displayUnit": {
+          "en": "hPa"
+        },
+        "initialValue": 1
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:enable;1",
+        "@type": [
+          "Property",
+          "BooleanValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enable",
+        "schema": "boolean",
+        "writable": true,
+        "initialValue": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:samples_per_ts;1",
+        "@type": [
+          "Property",
+          "Initialized",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Samples per Timestamp"
+        },
+        "name": "samples_per_ts",
+        "schema": "integer",
+        "writable": true,
+        "initialValue": 1,
+        "maxValue": 200,
+        "minValue": 0
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:dim;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Dimensions"
+        },
+        "name": "dim",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:ioffset;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Initial Offset"
+        },
+        "name": "ioffset",
+        "schema": "double",
+        "unit": "second",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:measodr;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Measured ODR"
+        },
+        "name": "measodr",
+        "schema": "double",
+        "unit": "hertz",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:usb_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "USB Data Packet Size"
+        },
+        "name": "usb_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:sd_dps;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "SD Data Packet Size"
+        },
+        "name": "sd_dps",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:sensitivity;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Sensitivity"
+        },
+        "name": "sensitivity",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:data_type;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Data Type"
+        },
+        "name": "data_type",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:sensor_annotation;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Sensor Annotation"
+        },
+        "name": "sensor_annotation",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press:sensor_category;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "0 = ISENSOR_CLASS_MEMS"
+        },
+        "displayName": {
+          "en": "Sensor Category"
+        },
+        "name": "sensor_category",
+        "schema": "integer",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "ILPS22QS_PRESS"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:other:automode;3",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:other:automode:enabled;1",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Enabled"
+        },
+        "name": "enabled",
+        "schema": "boolean",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:other:automode:nof_acquisitions;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Number of acquisitions"
+        },
+        "name": "nof_acquisitions",
+        "schema": "integer",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:other:automode:start_delay_s;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Start delay"
+        },
+        "name": "start_delay_s",
+        "schema": "integer",
+        "unit": "second",
+        "writable": true,
+        "displayUnit": {
+          "en": "s"
+        }
+      },
+      {
+        "@id": "dtmi:vespucci:other:automode:logging_period_s;1",
+        "@type": [
+          "Property",
+          "NumberValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Logging Period"
+        },
+        "name": "logging_period_s",
+        "schema": "integer",
+        "unit": "second",
+        "writable": true,
+        "displayUnit": {
+          "en": "s"
+        },
+        "initialValue": 1,
+        "minValue": 1
+      },
+      {
+        "@id": "dtmi:vespucci:other:automode:idle_period_s;1",
+        "@type": [
+          "Property",
+          "NumberValue",
+          "Initialized"
+        ],
+        "displayName": {
+          "en": "Idle Period"
+        },
+        "name": "idle_period_s",
+        "schema": "integer",
+        "unit": "second",
+        "writable": true,
+        "displayUnit": {
+          "en": "s"
+        },
+        "initialValue": 1,
+        "minValue": 1
+      }
+    ],
+    "displayName": {
+      "en": "AutoMode"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:other:log_controller;2",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:other:log_controller:save_config;2",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Set Default Configuration"
+        },
+        "name": "save_config"
+      },
+      {
+        "@id": "dtmi:vespucci:other:log_controller:log_status;2",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "Log Status"
+        },
+        "name": "log_status",
+        "schema": "boolean",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:log_controller:sd_mounted;2",
+        "@type": [
+          "Property",
+          "BooleanValue"
+        ],
+        "displayName": {
+          "en": "SD Card Mounted"
+        },
+        "name": "sd_mounted",
+        "schema": "boolean",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:log_controller:start_log;2",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Start Acquisition"
+        },
+        "name": "start_log",
+        "request": {
+          "@type": "CommandPayload",
+          "displayName": {
+            "en": "Log Interface"
+          },
+          "name": "interface",
+          "schema": {
+            "@type": "Enum",
+            "displayName": {
+              "en": "Enum"
+            },
+            "enumValues": [
+              {
+                "displayName": {
+                  "en": "SD Card"
+                },
+                "enumValue": 0,
+                "name": "sd_card"
+              },
+              {
+                "displayName": {
+                  "en": "USB"
+                },
+                "enumValue": 1,
+                "name": "usb"
+              }
+            ],
+            "valueSchema": "integer"
+          }
+        }
+      },
+      {
+        "@id": "dtmi:vespucci:other:log_controller:stop_log;2",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Stop Acquisition"
+        },
+        "name": "stop_log"
+      },
+      {
+        "@id": "dtmi:vespucci:other:log_controller:set_time;2",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Set Time"
+        },
+        "name": "set_time",
+        "request": {
+          "@type": "CommandPayload",
+          "description": {
+            "en": "yyyyMMdd_hh_mm_ss"
+          },
+          "displayName": {
+            "en": "datetime"
+          },
+          "name": "datetime",
+          "schema": "string"
+        }
+      },
+      {
+        "@id": "dtmi:vespucci:other:log_controller:controller_type;2",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Controller Type"
+        },
+        "name": "controller_type",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:log_controller:switch_bank;2",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Switch Bank"
+        },
+        "name": "switch_bank"
+      },
+      {
+        "@id": "dtmi:vespucci:other:log_controller:set_dfu_mode;2",
+        "@type": "Command",
+        "commandType": "synchronous",
+        "displayName": {
+          "en": "Set DFU Mode"
+        },
+        "name": "set_dfu_mode"
+      }
+    ],
+    "displayName": {
+      "en": "Log Controller"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:other:tags_info;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:other:tags_info:max_tags_num;1",
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "displayName": {
+          "en": "Maximum Tag number per acquisition"
+        },
+        "name": "max_tags_num",
+        "schema": "integer",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:tags_info:sw_tag0;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "SW Tag Class 0"
+        },
+        "name": "sw_tag0",
+        "schema": {
+          "@id": "dtmi:vespucci:other:tags_info:sw_tag0:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag0:schema:label;1",
+              "displayName": {
+                "en": "Label"
+              },
+              "name": "label",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag0:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag0:schema:status;1",
+              "displayName": {
+                "en": "Status"
+              },
+              "name": "status",
+              "schema": "boolean"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:other:tags_info:sw_tag1;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "SW Tag Class 1"
+        },
+        "name": "sw_tag1",
+        "schema": {
+          "@id": "dtmi:vespucci:other:tags_info:sw_tag1:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag1:schema:label;1",
+              "displayName": {
+                "en": "Label"
+              },
+              "name": "label",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag1:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag1:schema:status;1",
+              "displayName": {
+                "en": "Status"
+              },
+              "name": "status",
+              "schema": "boolean"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:other:tags_info:sw_tag2;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "SW Tag Class 2"
+        },
+        "name": "sw_tag2",
+        "schema": {
+          "@id": "dtmi:vespucci:other:tags_info:sw_tag2:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag2:schema:label;1",
+              "displayName": {
+                "en": "Label"
+              },
+              "name": "label",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag2:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag2:schema:status;1",
+              "displayName": {
+                "en": "Status"
+              },
+              "name": "status",
+              "schema": "boolean"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:other:tags_info:sw_tag3;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "SW Tag Class 3"
+        },
+        "name": "sw_tag3",
+        "schema": {
+          "@id": "dtmi:vespucci:other:tags_info:sw_tag3:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag3:schema:label;1",
+              "displayName": {
+                "en": "Label"
+              },
+              "name": "label",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag3:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag3:schema:status;1",
+              "displayName": {
+                "en": "Status"
+              },
+              "name": "status",
+              "schema": "boolean"
+            }
+          ]
+        },
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:other:tags_info:sw_tag4;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "SW Tag Class 4"
+        },
+        "name": "sw_tag4",
+        "schema": {
+          "@id": "dtmi:vespucci:other:tags_info:sw_tag4:schema;1",
+          "@type": "Object",
+          "displayName": {
+            "en": "Object"
+          },
+          "fields": [
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag4:schema:label;1",
+              "displayName": {
+                "en": "Label"
+              },
+              "name": "label",
+              "schema": "string"
+            },
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag4:schema:enabled;1",
+              "displayName": {
+                "en": "Enabled"
+              },
+              "name": "enabled",
+              "schema": "boolean"
+            },
+            {
+              "@id": "dtmi:vespucci:other:tags_info:sw_tag4:schema:status;1",
+              "displayName": {
+                "en": "Status"
+              },
+              "name": "status",
+              "schema": "boolean"
+            }
+          ]
+        },
+        "writable": true
+      }
+    ],
+    "displayName": {
+      "en": "Tags Information"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:other:acquisition_info;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@id": "dtmi:vespucci:other:acquisition_info:name;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Acquisition Name"
+        },
+        "name": "name",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:other:acquisition_info:description;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Acquisition Description"
+        },
+        "name": "description",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@id": "dtmi:vespucci:other:acquisition_info:uuid;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Acquisition UUID"
+        },
+        "name": "uuid",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:acquisition_info:start_time;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Acquisition Start Time"
+        },
+        "name": "start_time",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:acquisition_info:end_time;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Acquisition End Time"
+        },
+        "name": "end_time",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:acquisition_info:data_ext;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Exported Data Extension"
+        },
+        "name": "data_ext",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:acquisition_info:data_fmt;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Exported Data Format"
+        },
+        "name": "data_fmt",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:acquisition_info:tags;1",
+        "@type": "Property",
+        "comment": "JSON Value",
+        "displayName": {
+          "en": "Tag List"
+        },
+        "name": "tags",
+        "schema": "vector",
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:acquisition_info:interface;1",
+        "@type": "Property",
+        "displayName": {
+          "en": "Acquisition Interface"
+        },
+        "name": "interface",
+        "schema": {
+          "@id": "dtmi:vespucci:other:acquisition_info:interface:schema;1",
+          "@type": "Enum",
+          "displayName": {
+            "en": "Enum"
+          },
+          "enumValues": [
+            {
+              "@id": "dtmi:vespucci:other:acquisition_info:interface:schema:sd;1",
+              "displayName": {
+                "en": "SD Card"
+              },
+              "enumValue": "0",
+              "name": "sd"
+            },
+            {
+              "@id": "dtmi:vespucci:other:acquisition_info:interface:schema:usb;1",
+              "displayName": {
+                "en": "USB"
+              },
+              "enumValue": "1",
+              "name": "usb"
+            }
+          ],
+          "valueSchema": "string"
+        },
+        "writable": false
+      },
+      {
+        "@id": "dtmi:vespucci:other:acquisition_info:schema_version;1",
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "displayName": {
+          "en": "Schema Version"
+        },
+        "name": "schema_version",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "Acquisition Information"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:vespucci:other:firmware_info;3",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Alias name of the firmware"
+        },
+        "displayName": {
+          "en": "Alias"
+        },
+        "name": "alias",
+        "schema": "string",
+        "writable": true
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Firmware name"
+        },
+        "displayName": {
+          "en": "Firmware name"
+        },
+        "name": "fw_name",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Firmware version"
+        },
+        "displayName": {
+          "en": "Firmware version"
+        },
+        "name": "fw_version",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Part number"
+        },
+        "displayName": {
+          "en": "Part number"
+        },
+        "name": "part_number",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Device URL"
+        },
+        "displayName": {
+          "en": "Device URL"
+        },
+        "name": "device_url",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Firmware URL"
+        },
+        "displayName": {
+          "en": "Firmware URL"
+        },
+        "name": "fw_url",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "MAC Address"
+        },
+        "displayName": {
+          "en": "MAC Address"
+        },
+        "name": "mac_address",
+        "schema": "string",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "Firmware Information"
+    }
+  },
+  {
+    "@context": [
+      "dtmi:iotcentral:context;2",
+      "dtmi:dtdl:context;2"
+    ],
+    "@id": "dtmi:azure:DeviceManagement:DeviceInformation;1",
+    "@type": "Interface",
+    "contents": [
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Company name of the device manufacturer. This could be the same as the name of the original equipment manufacturer (OEM). Ex. Contoso."
+        },
+        "displayName": {
+          "en": "Manufacturer"
+        },
+        "name": "manufacturer",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Device model name or ID. Ex. Surface Book 2."
+        },
+        "displayName": {
+          "en": "Device model"
+        },
+        "name": "model",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Version of the software on your device. This could be the version of your firmware. Ex. 1.3.45"
+        },
+        "displayName": {
+          "en": "Software version"
+        },
+        "name": "swVersion",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Name of the operating system on the device. Ex. Windows 10 IoT Core."
+        },
+        "displayName": {
+          "en": "Operating system name"
+        },
+        "name": "osName",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Architecture of the processor on the device. Ex. x64 or ARM."
+        },
+        "displayName": {
+          "en": "Processor architecture"
+        },
+        "name": "processorArchitecture",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "StringValue"
+        ],
+        "description": {
+          "en": "Name of the manufacturer of the processor on the device. Ex. Intel."
+        },
+        "displayName": {
+          "en": "Processor manufacturer"
+        },
+        "name": "processorManufacturer",
+        "schema": "string",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "Total available storage on the device in kilobytes. Ex. 2048000 kilobytes."
+        },
+        "displayName": {
+          "en": "Total storage"
+        },
+        "name": "totalStorage",
+        "schema": "double",
+        "writable": false
+      },
+      {
+        "@type": [
+          "Property",
+          "NumberValue"
+        ],
+        "description": {
+          "en": "Total available memory on the device in kilobytes. Ex. 256000 kilobytes."
+        },
+        "displayName": {
+          "en": "Total memory"
+        },
+        "name": "totalMemory",
+        "schema": "double",
+        "writable": false
+      }
+    ],
+    "displayName": {
+      "en": "Device Information"
+    }
+  }
+]

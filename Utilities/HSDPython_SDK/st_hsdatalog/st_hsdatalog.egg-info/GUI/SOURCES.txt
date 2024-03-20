@@ -43,6 +43,7 @@ st_hsdatalog/HSD_GUI/Widgets/HSDAdvLogControlWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDAutoModeWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDComponentWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDLogControlWidget.py
+st_hsdatalog/HSD_GUI/Widgets/HSDMLCConfigurationWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDPlotALSWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDPlotLinesTMOSWidget.py
 st_hsdatalog/HSD_GUI/Widgets/HSDPlotLinesWidget.py
@@ -83,6 +84,10 @@ st_hsdatalog/HSD_link/communication/libhs_datalog/linux/libhs_datalog_v1.so
 st_hsdatalog/HSD_link/communication/libhs_datalog/linux/libhs_datalog_v2.so
 st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi/libhs_datalog_v1.so
 st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi/libhs_datalog_v2.so
+st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_32bit/libhs_datalog_v1.so
+st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_32bit/libhs_datalog_v2.so
+st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_64bit/libhs_datalog_v1.so
+st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_64bit/libhs_datalog_v2.so
 st_hsdatalog/HSD_utils/LICENSE.md
 st_hsdatalog/HSD_utils/LICENSE.txt
 st_hsdatalog/HSD_utils/__init__.py

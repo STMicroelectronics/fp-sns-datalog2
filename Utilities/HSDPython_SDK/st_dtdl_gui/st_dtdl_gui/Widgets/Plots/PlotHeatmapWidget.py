@@ -13,6 +13,7 @@
 # ******************************************************************************
 #
 
+import time
 import numpy as np
 from functools import partial
 
@@ -44,8 +45,13 @@ roi_qcolors = [QColor('#B6CE5F'),
                QColor('#6AC1A4')]
 
 MIN_DIST = 0
-MAX_DIST = 2000
+MAX_DIST = 4000
 ROI_NUMBER = 4
+VALIDITY_MASK_VALID_VALUE_1 = 5
+VALIDITY_MASK_VALID_VALUE_2 = 9
+VALIDITY_MASK_INVALID_VALUE = 255
+# VALIDITY_MASK_NOT_SURE_VALUE_1 = 6
+# VALIDITY_MASK_NOT_SURE_VALUE_2 = 9
 
 class CustomHeatmapPlotWidget(CustomPGPlotWidget):
     def __init__(self, parent=None, background='default', plotItem=None, **kargs):
@@ -90,8 +96,6 @@ class Chip(QPushButton):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setPen(QPen(Qt.PenStyle.NoPen))
         brush = QBrush(self.color)
-        # painter.setBrush(brush)
-        # painter.drawRoundedRect(self.rect(), 12, 12)
         brush.setColor(QColor(self._color.red(), self._color.green(), self._color.blue(), self._alpha))
         painter.setBrush(brush)
         painter.drawRoundedRect(self.rect(), 12, 12)
@@ -116,9 +120,9 @@ class ROISettingsWidget(QFrame):
     sig_roi_threshold_set = Signal(int,int)#roi_id,th_value
     sig_presence_threshold_set = Signal(int)#th_value
 
-    def __init__(self):
+    def __init__(self, controller):
         super().__init__()
-        
+        self.controller = controller
         # Create a vertical layout for the widget
         layout = QVBoxLayout()
 
@@ -133,7 +137,8 @@ class ROISettingsWidget(QFrame):
 
         self.rotation_id = 0
         self.flipped_status = False
-        self.rois = {}
+        self.rois_chips = {}
+        self.rois_threshold_lineedits = {}
         self.setStyleSheet("QFrame { border: transparent; background:#272c36}")
 
         # Create button widgets to adjust the rotation value
@@ -189,7 +194,7 @@ class ROISettingsWidget(QFrame):
         int_validator.setRange(MIN_DIST, MAX_DIST)
         self.global_thresh_value.setToolTip("min: {}, max: {}".format(MIN_DIST, MAX_DIST))
         self.global_thresh_value.setValidator(int_validator)
-        self.global_thresh_value.textChanged.connect(partial(UIUtils.validate_value, self.global_thresh_value))
+        self.global_thresh_value.textChanged.connect(partial(UIUtils.validate_value, self.controller,  self.global_thresh_value))
         self.global_thresh_value.editingFinished.connect(lambda: self.presence_threshold_set(self.global_thresh_value))
         global_thresh_layout.addWidget(self.global_thresh_value)
         self.layout().insertLayout(4, global_thresh_layout)
@@ -248,33 +253,40 @@ class ROISettingsWidget(QFrame):
         int_validator.setRange(MIN_DIST, MAX_DIST)
         roi_threshold_lineedit.setToolTip("min: {}, max: {}".format(MIN_DIST, MAX_DIST))
         roi_threshold_lineedit.setValidator(int_validator)
-        roi_threshold_lineedit.textChanged.connect(partial(UIUtils.validate_value, roi_threshold_lineedit))
+        roi_threshold_lineedit.textChanged.connect(partial(UIUtils.validate_value, self.controller, roi_threshold_lineedit))
         roi_threshold_lineedit.editingFinished.connect(lambda: self.roi_threshold_set(roi_id, roi_threshold_lineedit))
         # chip_layout.addWidget(roi_threshold_lineedit)
 
         # Add the radio button to the button group
         self.button_group.addButton(roi_chip)
 
-        self.rois[roi_id] = roi_chip        
-        if len(self.rois) == 1:
+        self.rois_chips[roi_id] = roi_chip    
+        if len(self.rois_chips) == 1:
             roi_chip.toggle()
-        
+        self.rois_threshold_lineedits[roi_id] = roi_threshold_lineedit
         # self.layout().setSpacing(12)
         # self.layout().insertLayout(roi_id+start_offset, chip_layout)
         rois_layout.addWidget(roi_chip, roi_id+1, 0)
         rois_layout.addWidget(roi_threshold_lineedit, roi_id+1, 1)
     
     def get_rois_chips(self):
-        return self.rois
+        return self.rois_chips
 
     def roi_radio_clicked(self, roi_id):
         self.sig_selected_roi.emit(roi_id)
 
     def roi_threshold_set(self, roi_id, threshold_lineedit):
         self.sig_roi_threshold_set.emit(roi_id, int(threshold_lineedit.text()))
+        if (int(threshold_lineedit.text()) > int(self.global_thresh_value.text())):
+            self.global_thresh_value.setText(self.rois_threshold_lineedits[roi_id].text())
+            self.sig_presence_threshold_set.emit(int(threshold_lineedit.text()))
     
     def presence_threshold_set(self, threshold_lineedit):
         self.sig_presence_threshold_set.emit(int(threshold_lineedit.text()))
+        for roi_id in range(ROI_NUMBER):
+            if (int(self.rois_threshold_lineedits[roi_id].text()) > int(threshold_lineedit.text())):
+                self.rois_threshold_lineedits[roi_id].setText(threshold_lineedit.text())
+                self.sig_roi_threshold_set.emit(roi_id, int(threshold_lineedit.text()))
 
 class PlotHeatmapWidget(PlotWidget):
     
@@ -303,15 +315,14 @@ class PlotHeatmapWidget(PlotWidget):
         self.heatmap_is_flipped = False
         self.roi_thresolds = {i:MIN_DIST for i in range(ROI_NUMBER)}
         self.presence_threshold = MIN_DIST
+        self.global_presence_status = False
         
         self.data = np.zeros(shape=(self.heatmap_shape), dtype='i')
-        # self.data = np.random.uniform(0, 4000, size=self.heatmap_shape)#debug
-        # self.data = np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]])
         self.validity_mask = np.zeros(shape=(self.heatmap_shape), dtype='i')
-        
         self.zones = PlotHeatmapWidget.create_matrix(self.heatmap_shape[0])
         self.rois = {i: {} for i in range(ROI_NUMBER)}
-        self.underthresh = {}
+        self.underthresh = {i: [] for i in range(ROI_NUMBER)}
+        self.global_underthresh = np.zeros(shape=(self.heatmap_shape), dtype='i')
         self.is_roi_flashing = {i:False for i in range(ROI_NUMBER)}
         
         self.selected_roi_id = 0
@@ -332,17 +343,20 @@ class PlotHeatmapWidget(PlotWidget):
         styles = {'color':'#d2d2d2', 'font-size':'12px'}
         self.graph_widget.setLabel('bottom', self.left_label, **styles)
         self.graph_widget.setBackground('#1b1d23')
+
+        self.red_color = QColor(255, 0, 0)
+        self.green_color = QColor(0, 255, 0)
         
         self.timer_interval_ms = self.timer_interval*700
 
         self.rois_layout = QVBoxLayout()
-        self.rois_frame = ROISettingsWidget()
+        self.rois_frame = ROISettingsWidget(controller)
         self.rois_frame.sig_data_rotation.connect(self.data_rotation_callback)
         self.rois_frame.sig_selected_roi.connect(self.set_selected_roi_id)
         self.rois_frame.sig_data_flip.connect(self.data_flip_callback)
         self.rois_frame.sig_roi_threshold_set.connect(self.roi_threshold_set_callback)
         self.rois_frame.sig_presence_threshold_set.connect(self.presence_threshold_set_callback)
-        self.roi_chips = self.rois_frame.rois
+        self.roi_chips = self.rois_frame.rois_chips
         # self.roi_animations = {}
 
         self.plot_layout = QHBoxLayout()
@@ -376,8 +390,8 @@ class PlotHeatmapWidget(PlotWidget):
         for i in range(self.heatmap_shape[0]):
             row = []
             for j in range(self.heatmap_shape[1]):
-                text_item = pg.TextItem(text= str(self.data[i, j]), color=(200, 200, 200))
-                text_item.setPos(j, i + 0.5)
+                text_item = pg.TextItem(text= str(self.data[i, j]), color=(200, 200, 200), anchor=(0,1))
+                text_item.setPos(j, i)
                 self.graph_widget.addItem(text_item)
                 row.append(text_item)
             self.text_items.append(row)
@@ -386,6 +400,8 @@ class PlotHeatmapWidget(PlotWidget):
         self.heatmap_shape = heatmap_shape
         self.zones = PlotHeatmapWidget.create_matrix(self.heatmap_shape[0])
         self.data = np.zeros(shape=(self.heatmap_shape),dtype='i')
+        self.global_underthresh = np.zeros(shape=(self.heatmap_shape), dtype='i')
+        self.validity_mask = np.zeros(shape=(self.heatmap_shape), dtype='i')
         self.heatmap_img.setImage(self.data, levels=[MIN_DIST, MAX_DIST])
         self.graph_widget.getPlotItem()._updateView()
         # Add text items for each pixel
@@ -405,51 +421,66 @@ class PlotHeatmapWidget(PlotWidget):
             print("Component {} is logging on SD Card: {}".format(self.comp_name,status))
 
     def update_plot(self):
-        self.heatmap_img.setImage(self.data, levels=[MIN_DIST, MAX_DIST])
-        #TODO send signal only if ...
-        self.controller.sig_tof_presence_detected.emit(np.any(np.less(self.data ,self.presence_threshold)),"tof_presence")
-
+        self.heatmap_img.setImage(self.data, levels=[MIN_DIST, MAX_DIST]) 
+            
         for i in range(self.heatmap_shape[0]):
             for j in range(self.heatmap_shape[1]):
                 curr_data = self.data[i][j]
                 curr_valid_mask = self.validity_mask[i][j]
                 if curr_data > MAX_DIST:
                     self.text_items[j][i].setText("X")
-                    curr_valid_mask = -1
-                    self.text_items[j][i].setColor("#ee6055")
+                    curr_valid_mask = VALIDITY_MASK_INVALID_VALUE
+                    self.global_underthresh[i][j] = 0
                 else:                    
                     self.text_items[j][i].setText(str(curr_data))
-                if curr_valid_mask == 5:
-                    self.text_items[j][i].setColor("#6a994e")
-                elif curr_valid_mask == 6 or curr_valid_mask == 9:
-                    self.text_items[j][i].setColor("#ffcf56")
+                
+                if curr_valid_mask == VALIDITY_MASK_INVALID_VALUE:
+                    self.text_items[j][i].setColor(self.red_color) #red, invalid
+                    self.global_underthresh[i][j] = 0
                 else:
-                    self.text_items[j][i].setColor("#ee6055")
+                    self.text_items[j][i].setColor(self.green_color) #green, valid
+                    if curr_data < self.presence_threshold:
+                        self.global_underthresh[i][j] = 1
+                    else:
+                        self.global_underthresh[i][j] = 0
                 for k in range(ROI_NUMBER):
                     if len(self.rois[k].keys()) == 0:
                         self.underthresh[k] = []
                     elif (i,j) in self.rois[k].keys():
-                        if curr_data < self.roi_thresolds[k]:
-                            if (i,j) not in self.underthresh[k]:
-                                self.underthresh[k].append((i,j))
-                        else:
+
+                        if curr_valid_mask == VALIDITY_MASK_INVALID_VALUE:
                             if (i,j) in self.underthresh[k]:
                                 self.underthresh[k].remove((i,j))
+                        else:
+                            if curr_data < self.roi_thresolds[k]:
+                                if (i,j) not in self.underthresh[k]:
+                                    self.underthresh[k].append((i,j))
+                            else:
+                                if (i,j) in self.underthresh[k]:
+                                    self.underthresh[k].remove((i,j))
+        
+        if bool(np.any(self.global_underthresh)) == True and self.global_presence_status == False:
+            self.global_presence_status = True
+            self.controller.sig_tof_presence_detected.emit(self.global_presence_status, "tof_presence")
+        elif bool(np.any(self.global_underthresh)) == False and self.global_presence_status == True:
+            self.global_presence_status = False
+            self.controller.sig_tof_presence_detected.emit(self.global_presence_status, "tof_presence")
         
         for x in range(ROI_NUMBER):
             if x in self.underthresh and self.underthresh[x] != []:
                  if not self.is_roi_flashing[x]: 
-                    roi_chip = self.rois_frame.rois[x]
+                    roi_chip = self.rois_frame.rois_chips[x]
                     self.is_roi_flashing[x] = True
                     roi_chip.start_flash()
                     self.controller.sig_tof_presence_detected_in_roi.emit(True,x+1,"Target {}".format(x+1))
+                    # self.controller.setPresenceInRoiFlag()
             else:
                 if self.is_roi_flashing[x]: 
-                    roi_chip = self.rois_frame.rois[x]
+                    roi_chip = self.rois_frame.rois_chips[x]
                     self.is_roi_flashing[x] = False
                     roi_chip.stop_flash()
                     self.controller.sig_tof_presence_detected_in_roi.emit(False,x+1,"Target {}".format(x+1))
-                        
+                    # self.controller.setPresenceInRoiFlag()
         
     def add_data(self, data):
         if len(data[0]) == self.heatmap_shape[0]*self.heatmap_shape[1]:
@@ -500,9 +531,9 @@ class PlotHeatmapWidget(PlotWidget):
         x, y = int(pos.x()), int(pos.y())
 
         # Get the pixel value at the clicked position
-        pixel_value = self.data[y, x]
+        # pixel_value = self.data[y, x]
 
-        print(f"Clicked on pixel ({x}, {y}) with value {pixel_value}")
+        # print(f"Clicked on pixel ({x}, {y}) with value {pixel_value}")
 
         if self.zones[(x,y)] == False:
             if (x,y) not in self.rois[self.selected_roi_id]:

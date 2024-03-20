@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinbx1:fp_sns_datalog2:other:log_controller;2
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:other:log_controller;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -38,8 +38,9 @@
   */
 #if defined (__GNUC__) || defined(__ICCARM__)
 extern uint8_t ILog_Controller_save_config(ILog_Controller_t *_this);
-extern uint8_t ILog_Controller_start_log(ILog_Controller_t *_this, uint32_t interface);
+extern uint8_t ILog_Controller_start_log(ILog_Controller_t *_this, int32_t interface);
 extern uint8_t ILog_Controller_stop_log(ILog_Controller_t *_this);
 extern uint8_t ILog_Controller_set_time(ILog_Controller_t *_this, const char *datetime);
 extern uint8_t ILog_Controller_switch_bank(ILog_Controller_t *_this);
+extern uint8_t ILog_Controller_set_dfu_mode(ILog_Controller_t *_this);
 #endif

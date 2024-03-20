@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    DoxyfileALLMEMS1_STM32F401RE-Nucleo.h
   * @author  System Research & Applications Team - Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   This file contains definitions needed only for Doxygen documents
   ******************************************************************************
   * @attention

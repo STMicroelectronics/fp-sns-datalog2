@@ -12,7 +12,7 @@
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *                             
+  *
   *
   ******************************************************************************
   */
@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:ism330dhcx_mlc;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -42,7 +42,7 @@ typedef struct _IIsm330dhcx_Mlc_vtbl IIsm330dhcx_Mlc_vtbl;
 
 struct _IIsm330dhcx_Mlc_vtbl
 {
-  uint8_t (*ism330dhcx_mlc_load_file)(IIsm330dhcx_Mlc_t * _this, const char *data, uint32_t size);
+  uint8_t (*ism330dhcx_mlc_load_file)(IIsm330dhcx_Mlc_t *_this, const char *data, int32_t size);
 };
 
 struct _IIsm330dhcx_Mlc_t
@@ -54,7 +54,7 @@ struct _IIsm330dhcx_Mlc_t
 };
 
 /* Inline functions definition -----------------------------------------------*/
-inline uint8_t IIsm330dhcx_Mlc_load_file(IIsm330dhcx_Mlc_t *_this, const char *data, uint32_t size)
+inline uint8_t IIsm330dhcx_Mlc_load_file(IIsm330dhcx_Mlc_t *_this, const char *data, int32_t size)
 {
   return _this->vptr->ism330dhcx_mlc_load_file(_this, data, size);
 }

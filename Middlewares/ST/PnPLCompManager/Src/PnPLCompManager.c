@@ -17,8 +17,8 @@
 
 #include "PnPLCompManager.h"
 
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 static PnPLCompManager_t spPnPLObj =
@@ -73,6 +73,44 @@ void PnPLSetBOARDID(uint8_t id)
   board_id = id;
 }
 #endif
+
+PnPL_Malloc_Function prv_pnpl_malloc = malloc;
+PnPL_Free_Function prv_pnpl_free = free;
+
+#ifdef pnpl_malloc
+#error "pnpl_malloc already defined! Check your PnPLCompManager_Conf.h and remove it if present. Use PnPLSetAllocationFunctions() defined in this file to set your memory allocation functions."
+#endif
+
+#ifdef pnpl_free
+#error "pnpl_free already defined! Check your PnPLCompManager_Conf.h and remove it if present. Use PnPLSetAllocationFunctions() defined in this file to set your memory allocation functions."
+#endif
+
+void *pnpl_malloc(size_t size){
+  return prv_pnpl_malloc(size);
+}
+
+void pnpl_free(void *ptr){
+  prv_pnpl_free(ptr);
+}
+
+/**
+ * @brief Sets custom allocation functions for the PnPL library.
+ *
+ * @param malloc_fun Function pointer to the custom malloc function.
+ * @param free_fun Function pointer to the custom free function.
+ *
+ * @note This function sets custom allocation functions for the PnPL library
+ *       and ensures that they are set even if the BLE initialization fails.
+ *       It also sets the allocation functions for the Parson library using
+ *       the `json_set_allocation_functions` function.
+ */
+void PnPLSetAllocationFunctions(PnPL_Malloc_Function malloc_fun, PnPL_Free_Function free_fun) {
+    /* Parson allocation functions */
+    json_set_allocation_functions(malloc_fun, free_fun);
+
+    prv_pnpl_malloc = malloc_fun;
+    prv_pnpl_free = free_fun;
+}
 
 /* Unique ID is directly derived from STM32 UID and converted to string
 string needs to be 25bytes 24+\0  */
@@ -744,6 +782,9 @@ uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uin
     }
     if (comp_found == 0u)
     {
+      *size = 18;
+      *SerializedJSON = (char*)pnpl_malloc(*size);
+      (void)strcpy(*SerializedJSON, "{\"PnPL_Error\":\"\"}\0");
       ret = PNPL_CMD_ERROR_CODE;
     }
   }
@@ -774,6 +815,11 @@ uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uin
     /* nothing to do */
   }
   return ret;
+}
+
+
+void PnPLFreeSerializedString(char *string){
+  json_free_serialized_string(string);
 }
 
 static uint8_t setTelemetryValue(uint8_t type, JSON_Object *json_obj, char *name, void *value,

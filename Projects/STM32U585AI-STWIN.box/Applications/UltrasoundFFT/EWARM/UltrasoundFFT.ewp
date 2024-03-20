@@ -2671,6 +2671,9 @@
                         <name>$PROJ_DIR$\..\mx\Src\mx.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\mx\Src\rng.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\mx\Src\rtc.c</name>
                     </file>
                     <file>
@@ -3171,6 +3174,15 @@
                 </group>
             </group>
             <group>
+                <name>GenericFFT</name>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_GenericFFT_Library\Src\fft.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_GenericFFT_Library\Inc\fft.h</name>
+                </file>
+            </group>
+            <group>
                 <name>PnPLCompManager</name>
                 <group>
                     <name>Inc</name>
@@ -3196,15 +3208,6 @@
                         <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\PnPLCompManager\Src\PnPLCompManager.c</name>
                     </file>
                 </group>
-            </group>
-            <group>
-                <name>GenericFFT</name>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_GenericFFT_Library\Src\fft.c</name>
-                </file>
-                <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_GenericFFT_Library\Inc\fft.h</name>
-                </file>
             </group>
             <group>
                 <name>ThreadX</name>

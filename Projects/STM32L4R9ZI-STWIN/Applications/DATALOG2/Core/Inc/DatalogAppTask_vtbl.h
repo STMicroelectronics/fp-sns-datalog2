@@ -56,17 +56,19 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_
 sys_error_code_t DatalogAppTask_vtblICommandParse_t_serialize_response(ICommandParse_t *_this, char **response_name,
                                                                        char **buff, uint32_t *size,
                                                                        uint8_t pretty);
-sys_error_code_t DatalogAppTask_vtblICommandParse_t_send_ctrl_msg(ICommandParse_t *_this,  uint32_t *msg, uint32_t length);
+sys_error_code_t DatalogAppTask_vtblICommandParse_t_send_ctrl_msg(ICommandParse_t *_this,  uint32_t *msg,
+                                                                  uint32_t length);
 
 // ILogController_t virtual functions
-uint8_t DatalogAppTask_start_vtbl(ILog_Controller_t *_this, uint32_t interface);
+uint8_t DatalogAppTask_start_vtbl(ILog_Controller_t *_this, int32_t interface);
 uint8_t DatalogAppTask_stop_vtbl(ILog_Controller_t *_this);
 uint8_t DatalogAppTask_save_config_vtbl(ILog_Controller_t *_this);
 uint8_t DatalogAppTask_set_time_vtbl(ILog_Controller_t *_this, const char *datetime);
 uint8_t DatalogAppTask_switch_bank_vtbl(ILog_Controller_t *_this);
+uint8_t DatalogAppTask_set_dfu_mode(ILog_Controller_t *_this);
 
 // IMLCController_t virtual functions
-uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(IIsm330dhcx_Mlc_t *_this, const char *ucf_data, uint32_t ucf_size);
+uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(IIsm330dhcx_Mlc_t *_this, const char *ucf_data, int32_t ucf_size);
 
 #ifdef __cplusplus
 }

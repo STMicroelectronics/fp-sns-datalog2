@@ -26,6 +26,7 @@
 #include "pthread.h"  /* Posix API */
 #include "px_int.h"    /* Posix helper functions */
 
+
 /**************************************************************************/
 /*                                                                        */
 /*  FUNCTION                                               RELEASE        */
@@ -72,9 +73,7 @@
 /*                                                                        */
 /*    DATE              NAME                      DESCRIPTION             */
 /*                                                                        */
-/*  06-02-2021      William E. Lamie        Initial Version 6.1.7         */
-/*  10-31-2022      Scott Larson            Add 64-bit support,           */
-/*                                            resulting in version 6.2.0  */
+/*  06-02-2021     William E. Lamie         Initial Version 6.1.7         */
 /*                                                                        */
 /**************************************************************************/
 INT  mq_send( mqd_t mqdes, const CHAR * msg_ptr, size_t msg_len, 
@@ -89,7 +88,7 @@ UCHAR              *source;
 UCHAR              *destination;
 UCHAR              *save_ptr;
 ULONG               mycount;
-ULONG               msg[TX_POSIX_MESSAGE_SIZE];
+ULONG               msg[4]; 
 
     /* Assign a temporary variable for clarity.  */ 
     Queue = &(mqdes->f_data->queue); 
@@ -100,7 +99,7 @@ ULONG               msg[TX_POSIX_MESSAGE_SIZE];
     {
         /* Queue pointer is invalid, return appropriate error code.  */
         posix_errno = EBADF;
-        posix_set_pthread_errno(EBADF);
+	    posix_set_pthread_errno(EBADF);
 
         /* Return ERROR.  */
         return(ERROR);
@@ -111,7 +110,7 @@ ULONG               msg[TX_POSIX_MESSAGE_SIZE];
     {
         /* POSIX doesn't have error for this, hence give default.  */
         posix_errno = EINTR ;
-        posix_set_pthread_errno(EINTR);
+	    posix_set_pthread_errno(EINTR);
 
         /* Return ERROR.  */
         return(ERROR);
@@ -122,7 +121,7 @@ ULONG               msg[TX_POSIX_MESSAGE_SIZE];
     {
         /* Queue descriptor is invalid, set appropriate error code.  */
         posix_errno = EBADF ;
-        posix_set_pthread_errno(EBADF);
+	    posix_set_pthread_errno(EBADF);
 
         /* Return ERROR.  */
         return(ERROR);
@@ -131,7 +130,7 @@ ULONG               msg[TX_POSIX_MESSAGE_SIZE];
     {
         /* Queue pointer is invalid, return appropriate error code.  */
         posix_errno = EBADF;
-        posix_set_pthread_errno(EBADF);
+	    posix_set_pthread_errno(EBADF);
 
         /* Return ERROR.  */
         return(ERROR);
@@ -140,7 +139,7 @@ ULONG               msg[TX_POSIX_MESSAGE_SIZE];
     {
         /* Return appropriate error.  */
         posix_errno = EINVAL;
-        posix_set_pthread_errno(EINVAL);
+	    posix_set_pthread_errno(EINVAL);
 
         /* Return error.  */
         return(ERROR);
@@ -150,7 +149,7 @@ ULONG               msg[TX_POSIX_MESSAGE_SIZE];
     {
         /* POSIX doesn't have error for this, hence give default.  */
         posix_errno = EINTR ;
-        posix_set_pthread_errno(EINTR);
+	    posix_set_pthread_errno(EINTR);
 
         /* Return ERROR.  */
         return(ERROR);
@@ -161,7 +160,7 @@ ULONG               msg[TX_POSIX_MESSAGE_SIZE];
     {
         /*  Return message length exceeds max length.  */
         posix_errno = EMSGSIZE ;
-        posix_set_pthread_errno(EMSGSIZE);
+	    posix_set_pthread_errno(EMSGSIZE);
 
         /* Return ERROR.  */
         return(ERROR);
@@ -193,18 +192,11 @@ ULONG               msg[TX_POSIX_MESSAGE_SIZE];
     /* Restore the pointer of save message.  */
     source =  save_ptr ;
     /* Create message that holds saved message pointer and message length.  */
-#ifdef TX_64_BIT
-    msg[0] = (ULONG)((ALIGN_TYPE)source >> 32);
-    msg[1] = (ULONG)((ALIGN_TYPE)source);
-    msg[2] =  msg_len;
-    msg[3] =  msg_prio;
-    msg[4] =  posix_priority_search(mqdes, msg_prio);
-#else
     msg[0] = (ULONG)source;
     msg[1] =  msg_len;
     msg[2] =  msg_prio;
     msg[3] =  posix_priority_search(mqdes, msg_prio);
-#endif
+    
     /* Attempt to post the message to the queue.  */
     temp1 = tx_queue_send(Queue, msg, TX_WAIT_FOREVER);
     if ( temp1 != TX_SUCCESS)

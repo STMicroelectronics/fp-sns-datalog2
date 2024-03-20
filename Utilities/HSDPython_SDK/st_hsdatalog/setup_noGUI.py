@@ -21,7 +21,7 @@ with open("LICENSE.md", "r") as fh:
 
 setuptools.setup(
     name="st_hsdatalog",
-    version="3.0.1",
+    version="3.1.0",
     author="SRA-ASP",
     author_email="matteo.ronchi@st.com",
     description="STMicroelectronics High Speed Datalog python package (NO GUI)",
@@ -42,6 +42,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Embedded Systems"
     ],
     install_requires=[
@@ -50,6 +51,7 @@ setuptools.setup(
        "pandas",
        "colorama",
        "click",
-       "matplotlib"
+       "matplotlib",
+       "setuptools"
     ]
 )

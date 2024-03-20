@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_TimeDomainAlarmSpeed_RMS_Status.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Time Domain Alarm Speed RMS Status info services APIs.
   ******************************************************************************
   * @attention

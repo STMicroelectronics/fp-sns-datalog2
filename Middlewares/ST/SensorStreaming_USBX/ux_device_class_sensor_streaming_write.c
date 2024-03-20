@@ -62,7 +62,7 @@ UINT _ux_device_class_sensor_streaming_write(UX_SLAVE_ENDPOINT *ep, UCHAR *buffe
   }
 
   /* Locate the IN endpoint.  */
-  endpoint = ep; //sensor_streaming -> ux_slave_class_sensor_streaming_bulkin_endpoint;
+  endpoint = ep; /* sensor_streaming -> ux_slave_class_sensor_streaming_bulkin_endpoint */
 
   /* Check endpoint. If NULL, we have not yet received the proper SET_INTERFACE command.  */
   if(endpoint == UX_NULL)

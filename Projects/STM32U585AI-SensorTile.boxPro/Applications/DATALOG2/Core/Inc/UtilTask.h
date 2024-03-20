@@ -33,7 +33,7 @@ extern "C" {
 #include "services/AManagedTaskEx_vtbl.h"
 
 
-#define UTIL_CMD_ID_DATALOG_LED                       ((uint16_t)0x0006)              ///< Button event. Toogle led
+#define UTIL_CMD_ID_DATALOG_LED                       ((uint16_t)0x0006)              ///< Button event. Toggle led
 
 
 /**

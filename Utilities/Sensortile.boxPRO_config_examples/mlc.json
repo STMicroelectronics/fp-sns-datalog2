@@ -4,9 +4,9 @@
     "devices": [
         {
             "board_id": 13,
-            "fw_id": 11,
+            "fw_id": 5,
             "protocol_id": 2,
-            "sn": "0023002B5752501720353339",
+            "sn": "003A00274841500520363230",
             "pnpl_responses": true,
             "components": [
                 {
@@ -170,7 +170,7 @@
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-MKBOXPRO",
-                        "swVersion": "2.0.0",
+                        "swVersion": "2.1.0",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M33",
                         "processorManufacturer": "STMicroelectronics",
@@ -182,26 +182,11 @@
                     "firmware_info": {
                         "alias": "STBOX_PRO_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "2.0.0",
+                        "fw_version": "2.1.0",
                         "part_number": "FP-SNS-DATALOG2",
                         "device_url": "www.st.com/sensortileboxpro",
                         "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
-                        "mac_address": "c1:be:c2:bf:7f:62",
-                        "c_type": 2
-                    }
-                },
-                {
-                    "acquisition_info": {
-                        "tags": [],
-                        "name": "Sensortile.Box_PRO_acquisition",
-                        "description": "",
-                        "uuid": "",
-                        "start_time": "",
-                        "end_time": "",
-                        "data_ext": ".dat",
-                        "data_fmt": "HSD_2.0.0",
-                        "interface": 0,
-                        "schema_version": "2.0.0",
+                        "mac_address": "df:fd:8b:87:ae:e7",
                         "c_type": 2
                     }
                 },
@@ -248,9 +233,9 @@
                     "automode": {
                         "enabled": false,
                         "nof_acquisitions": 0,
-                        "start_delay_ms": 0,
-                        "datalog_time_length": 0,
-                        "idle_time_length": 0,
+                        "start_delay_s": 0,
+                        "logging_period_s": 0,
+                        "idle_period_s": 0,
                         "c_type": 2
                     }
                 }

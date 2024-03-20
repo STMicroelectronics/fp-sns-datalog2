@@ -44,7 +44,7 @@ sys_error_code_t DFSDMDriver_vtblStop(IDriver *_this);
   * @sa IDrvDoEnterPowerMode
   */
 sys_error_code_t DFSDMDriver_vtblDoEnterPowerMode(IDriver *_this, const EPowerMode active_power_mode,
-                                                const EPowerMode new_power_mode);
+                                                  const EPowerMode new_power_mode);
 
 /**
   * @sa IDrvReset

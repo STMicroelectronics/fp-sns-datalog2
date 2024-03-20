@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
-Name: st-hsdatalog
-Version: 3.0.1
+Name: st_hsdatalog
+Version: 3.1.0
 Summary: STMicroelectronics High Speed Datalog python package
 Home-page: 
 Author: SRA-ASP
@@ -15,10 +15,21 @@ Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
 Classifier: Topic :: Software Development :: Embedded Systems
 Description-Content-Type: text\markdown
 License-File: LICENSE.md
 License-File: LICENSE.txt
+Requires-Dist: st_pnpl
+Requires-Dist: st_dtdl_gui
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: colorama
+Requires-Dist: click
+Requires-Dist: pyqtgraph
+Requires-Dist: PySide6
+Requires-Dist: setuptools
+Requires-Dist: matplotlib
 
 Copyright (c) 2022 STMicroelectronics.
 All rights reserved.

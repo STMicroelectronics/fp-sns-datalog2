@@ -67,7 +67,7 @@ typedef struct _UtilTaskClass_t
   AManagedTaskEx_vtbl vtbl;
 
   /**
-    * UtilTask class (PM_STATE, ExecuteStepFunc) map. The map is implemente with an array and
+    * UtilTask class (PM_STATE, ExecuteStepFunc) map. The map is implemented with an array and
     * the key is the index. Number of items of this array must be equal to the number of PM state
     * of the application. If the managed task does nothing in a PM state, then set to NULL the
     * relative entry in the map.
@@ -152,9 +152,6 @@ AManagedTaskEx *UtilTaskAlloc(const void *p_mx_sw1_drv_cfg, const void *p_mx_led
   /* In this application there is only one Keyboard task,
    * so this allocator implement the singleton design pattern.
    */
-
-  json_set_allocation_functions(SysAlloc, SysFree);
-
   /* Initialize the super class */
   AMTInitEx(&sTaskObj.super);
 

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_AudioSceneClasssification.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add Audio Scene Classification service using vendor specific profiles.
   ******************************************************************************
   * @attention
@@ -24,7 +24,8 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_AUDIO_SCENE_CLASS_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x03,0x00,0x02,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_AUDIO_SCENE_CLASS_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x03,0x00,0x02,\
+                                                                    0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 /* Exported variables --------------------------------------------------------*/
 
@@ -63,7 +64,8 @@ BleCharTypeDef *BLE_InitAudioSceneClassService(uint8_t SendAlgorithmCode)
   BleCharTypeDef *BleCharPointer;
 
   BleSendAlgorithmCode = SendAlgorithmCode;
-  if ((BleSendAlgorithmCode != BLE_ASC_ALG_SCENE_CLASS) & (BleSendAlgorithmCode != BLE_ASC_ALG_BABY_CRYING))
+  if ((BleSendAlgorithmCode != (uint8_t)BLE_ASC_ALG_SCENE_CLASS)
+      && (BleSendAlgorithmCode != (uint8_t)BLE_ASC_ALG_BABY_CRYING))
   {
     BLE_MANAGER_PRINTF("Error: BleSendAlgorithmCode not valid\r\n");
     return NULL;
@@ -76,7 +78,8 @@ BleCharTypeDef *BLE_InitAudioSceneClassService(uint8_t SendAlgorithmCode)
   BleCharPointer->Read_Request_CB = Read_Request_AudioSceneClass;
   COPY_AUDIO_SCENE_CLASS_CHAR_UUID((BleCharPointer->uuid));
   BleCharPointer->Char_UUID_Type = UUID_TYPE_128;
-  BleCharPointer->Char_Value_Length = 2 + 1 + BleSendAlgorithmCode; /* 2 byte timestamp, 1 byte aucoustic scene classification +1 BleSendAlgorithmCode (optional)*/
+  /* 2 byte timestamp, 1 byte aucoustic scene classification +1 BleSendAlgorithmCode (optional)*/
+  BleCharPointer->Char_Value_Length = 2U + 1U + (uint16_t)BleSendAlgorithmCode;
   BleCharPointer->Char_Properties = ((uint8_t)CHAR_PROP_NOTIFY) | ((uint8_t)CHAR_PROP_READ);
   BleCharPointer->Security_Permissions = ATTR_PERMISSION_NONE;
   BleCharPointer->GATT_Evt_Mask = GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP;
@@ -113,7 +116,7 @@ tBleStatus BLE_AudioSceneClassUpdate(BLE_ASC_output_t ASC_Code, BLE_ASC_Algorith
     buff[3] = (uint8_t) ASC_AlgId;
   }
 
-  ret = ACI_GATT_UPDATE_CHAR_VALUE(&BleCharAudioSceneClass, 0, 2 + 1 + BleSendAlgorithmCode, buff);
+  ret = ACI_GATT_UPDATE_CHAR_VALUE(&BleCharAudioSceneClass, 0, 2U + 1U + BleSendAlgorithmCode, buff);
 
   if (ret != (tBleStatus)BLE_STATUS_SUCCESS)
   {

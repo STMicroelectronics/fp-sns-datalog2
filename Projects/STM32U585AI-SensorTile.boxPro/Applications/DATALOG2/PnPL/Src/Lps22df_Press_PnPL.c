@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lps22df_press;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sLps22df_Press_PnPL_CompIF_vtbl =
   */
 struct _Lps22df_Press_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -107,45 +105,45 @@ uint8_t Lps22df_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   tempJSON = json_value_init_object();
   JSON_Status = json_value_get_object(tempJSON);
 
-  float temp_f = 0;
-  lps22df_press_get_odr(&temp_f);
+  int32_t temp_i = 0;
+  lps22df_press_get_odr(&temp_i);
   uint8_t enum_id = 0;
-  if(temp_f == lps22df_press_odr_hz1)
+  if (temp_i == lps22df_press_odr_hz1)
   {
     enum_id = 0;
   }
-  else if(temp_f == lps22df_press_odr_hz4)
+  else if (temp_i == lps22df_press_odr_hz4)
   {
     enum_id = 1;
   }
-  else if(temp_f == lps22df_press_odr_hz10)
+  else if (temp_i == lps22df_press_odr_hz10)
   {
     enum_id = 2;
   }
-  else if(temp_f == lps22df_press_odr_hz25)
+  else if (temp_i == lps22df_press_odr_hz25)
   {
     enum_id = 3;
   }
-  else if(temp_f == lps22df_press_odr_hz50)
+  else if (temp_i == lps22df_press_odr_hz50)
   {
     enum_id = 4;
   }
-  else if(temp_f == lps22df_press_odr_hz75)
+  else if (temp_i == lps22df_press_odr_hz75)
   {
     enum_id = 5;
   }
-  else if(temp_f == lps22df_press_odr_hz100)
+  else if (temp_i == lps22df_press_odr_hz100)
   {
     enum_id = 6;
   }
-  else if(temp_f == lps22df_press_odr_hz200)
+  else if (temp_i == lps22df_press_odr_hz200)
   {
     enum_id = 7;
   }
   json_object_dotset_number(JSON_Status, "lps22df_press.odr", enum_id);
-  lps22df_press_get_fs(&temp_f);
+  lps22df_press_get_fs(&temp_i);
   enum_id = 0;
-  if(temp_f == lps22df_press_fs_hpa1260)
+  if (temp_i == lps22df_press_fs_hpa1260)
   {
     enum_id = 0;
   }
@@ -153,11 +151,11 @@ uint8_t Lps22df_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   bool temp_b = 0;
   lps22df_press_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "lps22df_press.enable", temp_b);
-  int32_t temp_i = 0;
   lps22df_press_get_samples_per_ts(&temp_i);
   json_object_dotset_number(JSON_Status, "lps22df_press.samples_per_ts", temp_i);
   lps22df_press_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "lps22df_press.dim", temp_i);
+  float temp_f = 0;
   lps22df_press_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "lps22df_press.ioffset", temp_f);
   lps22df_press_get_measodr(&temp_f);
@@ -201,7 +199,8 @@ uint8_t Lps22df_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   return 0;
 }
 
-uint8_t Lps22df_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Lps22df_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                           uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
@@ -209,71 +208,83 @@ uint8_t Lps22df_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
-  if(json_object_dothas_value(tempJSONObject, "lps22df_press.odr"))
+  if (json_object_dothas_value(tempJSONObject, "lps22df_press.odr"))
   {
     int odr = (int)json_object_dotget_number(tempJSONObject, "lps22df_press.odr");
-    switch(odr)
+    switch (odr)
     {
-    case 0:
-      ret = lps22df_press_set_odr(lps22df_press_odr_hz1);
-      break;
-    case 1:
-      ret = lps22df_press_set_odr(lps22df_press_odr_hz4);
-      break;
-    case 2:
-      ret = lps22df_press_set_odr(lps22df_press_odr_hz10);
-      break;
-    case 3:
-      ret = lps22df_press_set_odr(lps22df_press_odr_hz25);
-      break;
-    case 4:
-      ret = lps22df_press_set_odr(lps22df_press_odr_hz50);
-      break;
-    case 5:
-      ret = lps22df_press_set_odr(lps22df_press_odr_hz75);
-      break;
-    case 6:
-      ret = lps22df_press_set_odr(lps22df_press_odr_hz100);
-      break;
-    case 7:
-      ret = lps22df_press_set_odr(lps22df_press_odr_hz200);
-      break;
+      case 0:
+        ret = lps22df_press_set_odr(lps22df_press_odr_hz1);
+        break;
+      case 1:
+        ret = lps22df_press_set_odr(lps22df_press_odr_hz4);
+        break;
+      case 2:
+        ret = lps22df_press_set_odr(lps22df_press_odr_hz10);
+        break;
+      case 3:
+        ret = lps22df_press_set_odr(lps22df_press_odr_hz25);
+        break;
+      case 4:
+        ret = lps22df_press_set_odr(lps22df_press_odr_hz50);
+        break;
+      case 5:
+        ret = lps22df_press_set_odr(lps22df_press_odr_hz75);
+        break;
+      case 6:
+        ret = lps22df_press_set_odr(lps22df_press_odr_hz100);
+        break;
+      case 7:
+        ret = lps22df_press_set_odr(lps22df_press_odr_hz200);
+        break;
     }
-  if(ret == 0){
-    json_object_dotset_number(respJSONObject, "lps22df_press.odr.value", odr);
-  } else {
-    json_object_dotset_string(respJSONObject, "lps22df_press.odr.value", "PNPL_SET_ERROR");
-  }
+    if (ret == 0)
+    {
+      json_object_dotset_number(respJSONObject, "lps22df_press.odr.value", odr);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "lps22df_press.odr.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "lps22df_press.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "lps22df_press.enable");
     ret = lps22df_press_set_enable(enable);
-  if(ret == 0){
-    json_object_dotset_boolean(respJSONObject, "lps22df_press.enable.value", enable);
-  } else {
-    json_object_dotset_string(respJSONObject, "lps22df_press.enable.value", "PNPL_SET_ERROR");
-  }
+    if (ret == 0)
+    {
+      json_object_dotset_boolean(respJSONObject, "lps22df_press.enable.value", enable);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "lps22df_press.enable.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "lps22df_press.samples_per_ts"))
   {
     int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "lps22df_press.samples_per_ts");
     ret = lps22df_press_set_samples_per_ts(samples_per_ts);
-  if(ret == 0){
-    json_object_dotset_number(respJSONObject, "lps22df_press.samples_per_ts.value", samples_per_ts);
-  } else {
-    json_object_dotset_string(respJSONObject, "lps22df_press.samples_per_ts.value", "PNPL_SET_ERROR");
-  }
+    if (ret == 0)
+    {
+      json_object_dotset_number(respJSONObject, "lps22df_press.samples_per_ts.value", samples_per_ts);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "lps22df_press.samples_per_ts.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "lps22df_press.sensor_annotation"))
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "lps22df_press.sensor_annotation");
     ret = lps22df_press_set_sensor_annotation(sensor_annotation);
-  if(ret == 0){
-    json_object_dotset_string(respJSONObject, "lps22df_press.sensor_annotation.value", sensor_annotation);
-  } else {
-    json_object_dotset_string(respJSONObject, "ism330is_acc.odr.value", "PNPL_SET_ERROR");
-  }
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "lps22df_press.sensor_annotation.value", sensor_annotation);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "lps22df_press.sensor_annotation.value", "PNPL_SET_ERROR");
+    }
   }
   json_value_free(tempJSON);
   if (pretty == 1)
@@ -286,10 +297,14 @@ uint8_t Lps22df_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
     *response = json_serialize_to_string(respJSON);
     *size = json_serialization_size(respJSON);
   }
+  json_value_free(respJSON);
   return ret;
 }
 
-uint8_t Lps22df_Press_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+
+uint8_t Lps22df_Press_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                               uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

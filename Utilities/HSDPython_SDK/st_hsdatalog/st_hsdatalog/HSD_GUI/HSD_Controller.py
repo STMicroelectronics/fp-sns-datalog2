@@ -63,6 +63,7 @@ class HSD_Controller(STDTDL_Controller):
     sig_is_auto_started = Signal(bool)
     sig_tag_done = Signal(bool, str) #(on|off),tag_label
     sig_hsd_bandwidth_exceeded = Signal(bool)
+    sig_lock_start_button = Signal(bool)
     sig_streaming_error = Signal(bool, str)
     # TODO: Next version --> Hotplug events notification support
     # sig_usb_hotplug = Signal(bool)
@@ -160,6 +161,7 @@ class HSD_Controller(STDTDL_Controller):
         self.automode_enabled = False #False:DISABLED, True:ENABLED
         self.automode_status = AutomodeStatus.AUTOMODE_UNSTARTED
         self.curr_bandwidth = 0
+        self.config_error_dict = {}
 
         # TODO: Next version --> Hotplug events notification support
         # self.plugged_flag = False
@@ -754,7 +756,12 @@ class HSD_Controller(STDTDL_Controller):
         if on_pc:
             fname = QFileDialog.getSaveFileName(None, "Save Current Device Configuration", "device_config", "JSON (*.json)")
             with open(fname[0], 'w', encoding='utf-8') as f:
-                json.dump(self.get_device_status(), f, ensure_ascii=False, indent=4)
+                device_status = self.get_device_status()
+                components = device_status["devices"][self.device_id]["components"]
+                for i, c in enumerate(components):
+                    if list(c.keys())[0] == "acquisition_info":
+                        del device_status["devices"][self.device_id]["components"][i]
+                json.dump(device_status, f, ensure_ascii=False, indent=4)
         if on_sd:
             self.hsd_link.save_config(self.device_id)
             
@@ -846,7 +853,7 @@ class HSD_Controller(STDTDL_Controller):
     def set_rtc_time(self):
         self.hsd_link.set_rtc_time(self.device_id)
     
-    def do_offline_plots(self, cb_sensor_value, tag_label, start_time, end_time, active_sensor_list, active_algorithm_list, debug_flag, sub_plots_flag, raw_data_flag, active_actuator_list = None):
+    def do_offline_plots(self, cb_sensor_value, tag_label, start_time, end_time, active_sensor_list, active_algorithm_list, debug_flag, sub_plots_flag, raw_data_flag, active_actuator_list = None, fft_flag = None):
         acquisition_folder = self.hsd_link.get_acquisition_folder()
         hsd_factory = HSDatalog()
         hsd = hsd_factory.create_hsd(acquisition_folder)
@@ -857,14 +864,14 @@ class HSD_Controller(STDTDL_Controller):
         if cb_sensor_value == "all":
             for s in active_sensor_list:
                 s_key = list(s.keys())[0]
-                hsd.get_sensor_plot(s_key, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
+                hsd.get_sensor_plot(s_key, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag, fft_flag)
             for a in active_algorithm_list:
                 a_key = list(a.keys())[0]
                 hsd.get_algorithm_plot(a_key, start_time, end_time)
             if active_actuator_list is not None:
                 for act in active_actuator_list:
                     act_key = list(act.keys())[0]
-                    hsd.get_sensor_plot(act_key, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
+                    hsd.get_sensor_plot(act_key, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag, fft_flag)
         else:
             s_list = hsd.get_sensor_list(only_active=True)
             a_list = hsd.get_algorithm_list(only_active=True)
@@ -873,12 +880,12 @@ class HSD_Controller(STDTDL_Controller):
             algo_comp = [a for a in a_list if cb_sensor_value in a]
             act_comp = [act for act in act_list if cb_sensor_value in act]
             if len(sensor_comp) > 0: # == 1
-                hsd.get_sensor_plot(cb_sensor_value, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
+                hsd.get_sensor_plot(cb_sensor_value, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag, fft_flag)
             elif len(algo_comp) > 0: # == 1
                 a_key = list(algo_comp[0].keys())[0]
                 hsd.get_algorithm_plot(a_key, start_time, end_time)
             elif len(act_comp) > 0: # == 1
-                 hsd.get_sensor_plot(cb_sensor_value, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
+                 hsd.get_sensor_plot(cb_sensor_value, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag, fft_flag)
         
         self.sig_offline_plots_completed.emit()
     
@@ -924,5 +931,16 @@ class HSD_Controller(STDTDL_Controller):
     
     def get_acquisition_folder(self):
         return self.hsd_link.get_acquisition_folder()
+    
+    def add_error_in_configuration(self, error_key):
+        if not error_key in self.config_error_dict:
+            self.config_error_dict[error_key] = True
+            self.sig_lock_start_button.emit(True)
+
+    def remove_error_in_configuration(self, error_key):
+        if error_key in self.config_error_dict:
+            del self.config_error_dict[error_key]
+            if len(self.config_error_dict) == 0:
+                self.sig_lock_start_button.emit(False)
 
         

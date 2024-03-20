@@ -53,12 +53,13 @@ def show_help(ctx, param, value):
 @click.option('-r', '--raw_data', is_flag=True, help="Uses Raw data (not multiplied by sensitivity)", default=False)
 @click.option('-l', '--labeled', is_flag=True, help="Plot data including information about annotations taken during acquisition (if any)", default=False)
 @click.option('-p', '--subplots', is_flag=True, help="Multiple subplot for multi-dimensional sensors", default=False)
+@click.option('-fp', '--fft_plots', is_flag=True, help="Display frequency plots for inertial sensors and microphones", default=False)
 @click.option('-cdm','--custom_device_model', help="Upload a custom Device Template Model (DTDL)", type=(int, int, str))
-@click.version_option(script_version, '-v', '--version', prog_name="HSDatalogToUnico", is_flag=True, help="HSDatalogToUnico Converter tool version number")
+@click.version_option(script_version, '-v', '--version', prog_name="hsdatalog_plot", is_flag=True, help="hsdatalog_plot tool version number")
 @click.option('-d', '--debug', is_flag=True, help="[DEBUG] Check for corrupted data and timestamps", default=False)
 @click.option("-h"," --help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
-def hsd_plot(acq_folder, sensor_name, start_time, end_time, raw_data, labeled, subplots, custom_device_model, debug):
+def hsd_plot(acq_folder, sensor_name, start_time, end_time, raw_data, labeled, subplots, fft_plots, custom_device_model, debug):
 
     if custom_device_model is not None:
         HSDatalogDTM.upload_custom_dtm(custom_device_model)
@@ -87,18 +88,18 @@ def hsd_plot(acq_folder, sensor_name, start_time, end_time, raw_data, labeled, s
         if sensor_name == '':
             component = HSDatalog.ask_for_component(hsd, only_active=True)
             if component is not None:
-                plot(hsd, component, start_time, end_time, label, subplots, raw_data, acq_folder)
+                plot(hsd, component, start_time, end_time, label, subplots, raw_data, acq_folder, fft_plots)
             else:
                 break
         elif sensor_name == 'all':
             component_list = HSDatalog.get_all_components(hsd, only_active=True)
             for component in component_list:
-                plot(hsd, component, start_time, end_time, label, subplots, raw_data, acq_folder)
+                plot(hsd, component, start_time, end_time, label, subplots, raw_data, acq_folder, fft_plots)
             plot_flag = False
         else:
             component = HSDatalog.get_component(hsd, sensor_name)
             if component is not None:
-                plot(hsd, component, start_time, end_time, label, subplots, raw_data, acq_folder)
+                plot(hsd, component, start_time, end_time, label, subplots, raw_data, acq_folder, fft_plots)
             else:
                 log.error("No \"{}\" Component to plot found in your Device Configuration file.".format(sensor_name))
                 quit()
@@ -106,9 +107,9 @@ def hsd_plot(acq_folder, sensor_name, start_time, end_time, raw_data, labeled, s
         
         plt.show()
 
-def plot(hsd, component, start_time, end_time, label, subplots, raw_data, acq_folder):
+def plot(hsd, component, start_time, end_time, label, subplots, raw_data, acq_folder, fft_plots):
     try:
-        df = HSDatalog.plot(hsd, component, start_time, end_time, label, subplots, raw_data)
+        df = HSDatalog.plot(hsd, component, start_time, end_time, label, subplots, raw_data, fft_plots)
         return df
     except MissingISPUOutputDescriptorException as ispu_err:
         log.error(ispu_err)

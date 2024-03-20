@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_Json.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   BLE_Json info services APIs.
   ******************************************************************************
   * @attention
@@ -44,8 +44,8 @@ typedef void (*CustomNotifyEventJson_t)(BLE_NotifyEvent_t Event);
 extern CustomWriteRequestJson_t CustomWriteRequestJson;
 extern CustomNotifyEventJson_t CustomNotifyEventJson;
 
-extern uint8_t *JsonCommandName[BLE_JSON_TOTAL_NUMBER];
-extern uint8_t *JsonAnswer;
+extern char *JsonCommandName[BLE_JSON_TOTAL_NUMBER];
+extern char *JsonAnswer;
 
 
 /* Exported functions ------------------------------------------------------- */

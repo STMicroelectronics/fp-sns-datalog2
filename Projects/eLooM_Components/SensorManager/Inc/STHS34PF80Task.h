@@ -70,8 +70,8 @@ struct _STHS34PF80Task
   ABusIF *p_sensor_bus_if;
 
   /**
-   * Software Compensation Library Algorithm Data Structure.
-   */
+    * Software Compensation Library Algorithm Data Structure.
+    */
   IPD_input_t *tmos_swlib;
 
   /**
@@ -214,7 +214,7 @@ AManagedTaskEx *STHS34PF80TaskStaticAlloc(void *p_mem_block, const void *pIRQCon
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *STHS34PF80TaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
-                                              const char *p_name);
+                                                 const char *p_name);
 
 /**
   * Get the Bus interface for the sensor task.

@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:azure:DeviceManagement:DeviceInformation;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sDeviceinformation_PnPL_CompIF_vtbl =
   */
 struct _Deviceinformation_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -144,15 +142,19 @@ uint8_t Deviceinformation_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **ser
   return 0;
 }
 
-uint8_t Deviceinformation_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+uint8_t Deviceinformation_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                               uint32_t *size, uint8_t pretty)
 {
   *size = 61;
-  *response = (char*)pnpl_malloc(*size);
+  *response = (char *)pnpl_malloc(*size);
   (void)strcpy(*response, "{\"PnPL_Error\":\"No writable Properties in DeviceInformation\"}\0");
   return 0;
 }
 
-uint8_t Deviceinformation_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
+
+uint8_t Deviceinformation_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                                   uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

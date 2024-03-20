@@ -122,8 +122,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   boolean_t ext_iis330is = FALSE;
   hwd_st25dv_version st25dv_version;
 
-  /* Workaround to set malloc/free function even if BLE Init fails */
-  json_set_allocation_functions(SysAlloc, SysFree);
+  PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
   /* Check availability of external sensors */
   ext_iis330is = HardwareDetection_Check_Ext_ISM330IS();
@@ -193,7 +192,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
     pISM330IS_GYRO_PnPLObj = Ism330is_Gyro_PnPLAlloc();
     pISM330IS_ISPU_PnPLObj = Ism330is_Ispu_PnPLAlloc();
   }
-  if(sLSM6DSV16XObj)
+  if (sLSM6DSV16XObj)
   {
     pLSM6DSV16X_ACC_PnPLObj = Lsm6dsv16x_Acc_PnPLAlloc();
     pLSM6DSV16X_GYRO_PnPLObj = Lsm6dsv16x_Gyro_PnPLAlloc();
@@ -224,13 +223,14 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)LIS2DU12TaskGetSensorIF((LIS2DU12Task *) sLIS2DU12Obj));
 
   /* Use the external ISM330IS with ISPU or the onboard LSM6DSV16X with MLC */
-  if(sISM330ISObj)
+  if (sISM330ISObj)
   {
     SPIBusTaskConnectDevice((SPIBusTask *) sSPI3BusObj, (SPIBusIF *)ISM330ISTaskGetSensorIF((ISM330ISTask *) sISM330ISObj));
   }
-  if(sLSM6DSV16XObj)
+  if (sLSM6DSV16XObj)
   {
-    SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)LSM6DSV16XTaskGetSensorIF((LSM6DSV16XTask *) sLSM6DSV16XObj));
+    SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj,
+                            (SPIBusIF *)LSM6DSV16XTaskGetSensorIF((LSM6DSV16XTask *) sLSM6DSV16XObj));
   }
 
   /************ Connect the Sensor events to the DatalogAppTask ************/
@@ -248,7 +248,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     IEventSrcAddEventListener(ISM330ISTaskGetGyroEventSrcIF((ISM330ISTask *) sISM330ISObj), DatalogAppListener);
     IEventSrcAddEventListener(ISM330ISTaskGetMlcEventSrcIF((ISM330ISTask *) sISM330ISObj), DatalogAppListener);
   }
-  if(sLSM6DSV16XObj)
+  if (sLSM6DSV16XObj)
   {
     IEventSrcAddEventListener(LSM6DSV16XTaskGetAccEventSrcIF((LSM6DSV16XTask *) sLSM6DSV16XObj), DatalogAppListener);
     IEventSrcAddEventListener(LSM6DSV16XTaskGetGyroEventSrcIF((LSM6DSV16XTask *) sLSM6DSV16XObj), DatalogAppListener);
@@ -267,13 +267,15 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     Ism330is_Acc_PnPLInit(pISM330IS_ACC_PnPLObj);
     Ism330is_Gyro_PnPLInit(pISM330IS_GYRO_PnPLObj);
-    Ism330is_Ispu_PnPLInit(pISM330IS_ISPU_PnPLObj, DatalogAppTask_GetIIspuControllerIF((DatalogAppTask *) sDatalogAppObj, (AManagedTask *) sISM330ISObj));
+    Ism330is_Ispu_PnPLInit(pISM330IS_ISPU_PnPLObj, DatalogAppTask_GetIIspuControllerIF((DatalogAppTask *) sDatalogAppObj,
+                           (AManagedTask *) sISM330ISObj));
   }
-  if(sLSM6DSV16XObj)
+  if (sLSM6DSV16XObj)
   {
     Lsm6dsv16x_Acc_PnPLInit(pLSM6DSV16X_ACC_PnPLObj);
     Lsm6dsv16x_Gyro_PnPLInit(pLSM6DSV16X_GYRO_PnPLObj);
-    Lsm6dsv16x_Mlc_PnPLInit(pLSM6DSV16X_MLC_PnPLObj, DatalogAppTask_GetIMLCControllerIF((DatalogAppTask *) sDatalogAppObj, (AManagedTask *) sLSM6DSV16XObj));
+    Lsm6dsv16x_Mlc_PnPLInit(pLSM6DSV16X_MLC_PnPLObj, DatalogAppTask_GetIMLCControllerIF((DatalogAppTask *) sDatalogAppObj,
+                            (AManagedTask *) sLSM6DSV16XObj));
   }
 
   //Other PnPL Components

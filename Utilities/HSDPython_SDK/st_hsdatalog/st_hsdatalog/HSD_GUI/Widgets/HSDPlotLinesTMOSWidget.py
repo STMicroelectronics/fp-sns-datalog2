@@ -13,10 +13,11 @@
 # ******************************************************************************
 #
 
-
+import time
 from PySide6.QtCore import Slot, Qt
 
 import pyqtgraph as pg
+from PySide6.QtGui import QColor, QBrush
 
 from st_dtdl_gui.Utils.DataClass import PlotPMotionParams, PlotPPresenceParams
 from st_hsdatalog.HSD_GUI.Widgets.HSDPlotLinesWidget import HSDPlotLinesWidget
@@ -25,14 +26,44 @@ class HSDPlotLinesTMOSWidget(HSDPlotLinesWidget):
     def __init__(self, controller, comp_name, comp_display_name, plot_params, p_id=0, parent=None):
         super().__init__(controller, comp_name, comp_display_name, plot_params, p_id, parent)
         
+        self.legend.clear()
+
         self.controller.sig_tag_done.connect(self.s_tag_done)
         
         self.controller.sig_tmos_presence_detected.connect(self.s_tmos_data_tag_done)
         self.controller.sig_tmos_motion_detected.connect(self.s_tmos_data_tag_done)
         
-        self.prev_data_flag = False
         self.data_flag = False
         self.data_flag_regions = {}
+
+        self.ambient_lines_params = {0:{"label":"Tambient (raw)"}}
+        self.object_lines_params = {0:{"label":"Tobject (raw)"},
+                                    1:{"label":"Tobject (emb_comp)"},
+                                    2:{"label":"Tobject (sw_comp)"},
+                                    3:{"label":"Tobject_change (sw_comp)"}}
+        self.presence_lines_params = {0:{"label":"Tpresence"},
+                                      1:{"label":"Presence flag"},
+                                      2:{"label":"Presence flag (sw_comp)"}}
+        self.motion_lines_params = {0:{"label":"Tmotion"},
+                                    1:{"label":"Motion flag"},
+                                    2:{"label":"Motion flag (sw_comp)"}}
+
+        self.legend = self.graph_widget.addLegend()
+        brush = QBrush(QColor(255, 255, 255, 15))
+        self.legend.setBrush(brush)
+
+        #Time,Tambient (raw),Tobject (raw),Tobject (emb_comp),Tpresence,Presence flag,
+        #Tmotion,Motion flag,Tobject (sw_comp),Tobject_change (sw_comp),Motion flag (sw_comp),
+        #Presence flag (sw_comp)
+        for gc_id in self.graph_curves:
+            if plot_params.unit == "Ambient":
+                self.legend.addItem(self.graph_curves[gc_id], self.ambient_lines_params[gc_id]["label"])
+            elif plot_params.unit == "Object":
+                self.legend.addItem(self.graph_curves[gc_id], self.object_lines_params[gc_id]["label"])
+            elif plot_params.unit == "Presence":
+                self.legend.addItem(self.graph_curves[gc_id], self.presence_lines_params[gc_id]["label"])
+            elif plot_params.unit == "Motion":
+                self.legend.addItem(self.graph_curves[gc_id], self.motion_lines_params[gc_id]["label"])
 
     @Slot()
     def s_tmos_data_tag_done(self, status, tag_label:str):
@@ -62,12 +93,14 @@ class HSDPlotLinesTMOSWidget(HSDPlotLinesWidget):
     def add_data(self, data):
         super().add_data(data)
         if isinstance(self.plot_params, PlotPPresenceParams):
-            if bool(data[1].any()) != self.data_flag:
-                self.data_flag = not self.data_flag
-                self.controller.sig_tmos_presence_detected.emit(self.data_flag, "Presence")
-        elif isinstance(self.plot_params, PlotPMotionParams):
-            if bool(data[1].any()) != self.data_flag:
-                self.data_flag = not self.data_flag
-                self.controller.sig_tmos_motion_detected.emit(self.data_flag, "Motion")
+            if bool(data[1].any()) == True:
+                self.controller.sig_tmos_presence_detected.emit(True, "Presence")
+            else:
+                self.controller.sig_tmos_presence_detected.emit(False, "Presence")
 
+        elif isinstance(self.plot_params, PlotPMotionParams):
+            if bool(data[1].any()) == True:
+                self.controller.sig_tmos_motion_detected.emit(True, "Motion")
+            else:
+                self.controller.sig_tmos_motion_detected.emit(False, "Motion")
     

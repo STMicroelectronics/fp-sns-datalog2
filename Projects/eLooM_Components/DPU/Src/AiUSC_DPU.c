@@ -26,13 +26,13 @@
 
 
 /**
- * Class object declaration.
- */
+  * Class object declaration.
+  */
 typedef struct _AiUSC_DPUClass
 {
   /**
-   * IDPU2_t class virtual table.
-   */
+    * IDPU2_t class virtual table.
+    */
   IDPU2_vtbl vtbl;
 
 } AiUSC_DPUClass_t;
@@ -42,19 +42,20 @@ typedef struct _AiUSC_DPUClass
 /********************/
 
 /**
- * The class object.
- */
-static const AiUSC_DPUClass_t sTheClass = {
-    /* class virtual table */
-    {
-        ADPU2_vtblAttachToDataSource,
-        ADPU2_vtblDetachFromDataSource,
-        ADPU2_vtblAttachToDPU,
-        ADPU2_vtblDetachFromDPU,
-        ADPU2_vtblDispatchEvents,
-        ADPU2_vtblRegisterNotifyCallback,
-        AiUSC_DPU_vtblProcess
-    }
+  * The class object.
+  */
+static const AiUSC_DPUClass_t sTheClass =
+{
+  /* class virtual table */
+  {
+    ADPU2_vtblAttachToDataSource,
+    ADPU2_vtblDetachFromDataSource,
+    ADPU2_vtblAttachToDPU,
+    ADPU2_vtblDetachFromDPU,
+    ADPU2_vtblDispatchEvents,
+    ADPU2_vtblRegisterNotifyCallback,
+    AiUSC_DPU_vtblProcess
+  }
 };
 
 /* Private member function declaration */
@@ -64,8 +65,9 @@ static const AiUSC_DPUClass_t sTheClass = {
 /* Public API functions definition */
 /***********************************/
 
-IDPU2_t *AiUSC_DPUAlloc() {
-  IDPU2_t *p_obj = (IDPU2_t*) SysAlloc(sizeof(AiUSC_DPU_t));
+IDPU2_t *AiUSC_DPUAlloc()
+{
+  IDPU2_t *p_obj = (IDPU2_t *) SysAlloc(sizeof(AiUSC_DPU_t));
 
   if (p_obj != NULL)
   {
@@ -77,7 +79,7 @@ IDPU2_t *AiUSC_DPUAlloc() {
 
 IDPU2_t *AiUSC_DPUStaticAlloc(void *p_mem_block)
 {
-  IDPU2_t *p_obj = (IDPU2_t*)p_mem_block;
+  IDPU2_t *p_obj = (IDPU2_t *)p_mem_block;
   if (p_obj != NULL)
   {
     p_obj->vptr = &sTheClass.vtbl;
@@ -105,7 +107,7 @@ sys_error_code_t AiUSC_DPUInit(AiUSC_DPU_t *_this, uint16_t mfcc_rows, uint16_t 
   }
 
   /*initialize the base class*/
-  res = ADPU2_Init((ADPU2_t*)_this, in_data, out_data);
+  res = ADPU2_Init((ADPU2_t *)_this, in_data, out_data);
 
   // take the ownership of the Sensor Event IF
   IEventListenerSetOwner((IEventListener *) ADPU2_GetEventListenerIF(&_this->super), &_this->super);
@@ -131,8 +133,8 @@ sys_error_code_t AiUSC_DPUPrepareToProcessData(AiUSC_DPU_t *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  ADPU2_Reset((ADPU2_t*)_this);
-  float *p_out_buff = (float*)EMD_Data(&_this->super.out_data);
+  ADPU2_Reset((ADPU2_t *)_this);
+  float *p_out_buff = (float *)EMD_Data(&_this->super.out_data);
   if (p_out_buff != NULL)
   {
     /*
@@ -155,10 +157,10 @@ sys_error_code_t AiUSC_DPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  AiUSC_DPU_t *p_obj = (AiUSC_DPU_t*)_this;
+  AiUSC_DPU_t *p_obj = (AiUSC_DPU_t *)_this;
 
-  float *p_in =  (float*)EMD_Data(&in_data);
-  float *p_out =  (float*)EMD_Data(&out_data);
+  float *p_in = (float *)EMD_Data(&in_data);
+  float *p_out = (float *)EMD_Data(&out_data);
   /* call AI library. */
   if (p_obj->ai_processing_f(AI_USC_DPU_CFG_NAME, p_in, p_out) != 0)
   {
@@ -171,5 +173,4 @@ sys_error_code_t AiUSC_DPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_
 
 /* Private member function definition */
 /**************************************/
-
 

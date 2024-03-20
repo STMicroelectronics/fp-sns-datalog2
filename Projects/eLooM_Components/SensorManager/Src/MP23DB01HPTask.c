@@ -205,47 +205,32 @@ static MP23DB01HPTaskClass_t sTheClass =
     MP23DB01HPTask_vtblOnEnterPowerMode
   },
 
-    /* class::sensor_if_vtbl virtual table */
+  /* class::sensor_if_vtbl virtual table */
+  {
     {
-        {
-            {
-                MP23DB01HPTask_vtblMicGetId,
-                MP23DB01HPTask_vtblGetEventSourceIF,
-                MP23DB01HPTask_vtblMicGetDataInfo },
-            MP23DB01HPTask_vtblSensorEnable,
-            MP23DB01HPTask_vtblSensorDisable,
-            MP23DB01HPTask_vtblSensorIsEnabled,
-            MP23DB01HPTask_vtblSensorGetDescription,
-            MP23DB01HPTask_vtblSensorGetStatus },
-        MP23DB01HPTask_vtblMicGetFrequency,
-        MP23DB01HPTask_vtblMicGetVolume,
-        MP23DB01HPTask_vtblMicGetResolution,
-        MP23DB01HPTask_vtblSensorSetFrequency,
-        MP23DB01HPTask_vtblSensorSetVolume,
-        MP23DB01HPTask_vtblSensorSetResolution },
+      {
+        MP23DB01HPTask_vtblMicGetId,
+        MP23DB01HPTask_vtblGetEventSourceIF,
+        MP23DB01HPTask_vtblMicGetDataInfo
+      },
+      MP23DB01HPTask_vtblSensorEnable,
+      MP23DB01HPTask_vtblSensorDisable,
+      MP23DB01HPTask_vtblSensorIsEnabled,
+      MP23DB01HPTask_vtblSensorGetDescription,
+      MP23DB01HPTask_vtblSensorGetStatus
+    },
+    MP23DB01HPTask_vtblMicGetFrequency,
+    MP23DB01HPTask_vtblMicGetVolume,
+    MP23DB01HPTask_vtblMicGetResolution,
+    MP23DB01HPTask_vtblSensorSetFrequency,
+    MP23DB01HPTask_vtblSensorSetVolume,
+    MP23DB01HPTask_vtblSensorSetResolution
+  },
 
   /* MIC DESCRIPTOR */
   {
     "mp23db01hp",
-    COM_TYPE_MIC,
-    {
-      16000.0,
-      32000.0,
-      48000.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      130.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "aud",
-    },
-    "Waveform",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_MIC
   },
   /* class (PM_STATE, ExecuteStepFunc) map */
   {
@@ -914,17 +899,17 @@ static sys_error_code_t MP23DB01HPTaskExecuteStepDatalog(AManagedTask *_this)
 //        if (timestamp > 0.3f)
 //        {
 #if (HSD_USE_DUMMY_DATA == 1)
-          MP23DB01HPTaskWriteDummyData(p_obj);
-          EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
+        MP23DB01HPTaskWriteDummyData(p_obj);
+        EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
 #else
-          EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[(p_obj->half - 1) * samples], E_EM_INT16, samples);
+        EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[(p_obj->half - 1) * samples], E_EM_INT16, samples);
 #endif
-          DataEvent_t evt;
+        DataEvent_t evt;
 
-          DataEventInit((IEvent *)&evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
-          IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
+        DataEventInit((IEvent *)&evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
+        IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("MP23DB01HP: ts = %f\r\n", (float)timestamp));
+        SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("MP23DB01HP: ts = %f\r\n", (float)timestamp));
 //        }
         break;
       }

@@ -22,7 +22,7 @@
   * This file has been auto generated from the following DTDL Component:
   * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:ism330is_ispu;3
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -31,7 +31,6 @@
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef _PNPL_ISM330IS_ISPU_H_
 #define _PNPL_ISM330IS_ISPU_H_
-
 
 
 #ifdef __cplusplus

@@ -2582,7 +2582,13 @@
                         <name>$PROJ_DIR$\..\mx\Inc\main.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\mx\Inc\memorymap.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\mx\Inc\mx.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\mx\Inc\rng.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\mx\Inc\rtc.h</name>
@@ -2618,7 +2624,13 @@
                         <name>$PROJ_DIR$\..\mx\Src\icache.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\mx\Src\memorymap.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\mx\Src\mx.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\mx\Src\rng.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\mx\Src\rtc.c</name>

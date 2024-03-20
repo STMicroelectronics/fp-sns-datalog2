@@ -50,7 +50,8 @@ struct _ISensorPresence_vtbl
   uint16_t (*SensorGetLPF_M_Bandwidth)(ISensorPresence_t *_this);
   uint8_t (*SensorGetEmbeddedCompensation)(ISensorPresence_t *_this);
   uint8_t (*SensorGetSoftwareCompensation)(ISensorPresence_t *_this);
-  sys_error_code_t (*SensorGetSoftwareCompensationAlgorithmConfig)(ISensorPresence_t *_this, CompensationAlgorithmConfig_t *pAlgorithmConfig);
+  sys_error_code_t (*SensorGetSoftwareCompensationAlgorithmConfig)(ISensorPresence_t *_this,
+                                                                   CompensationAlgorithmConfig_t *pAlgorithmConfig);
   sys_error_code_t (*SensorSetDataFrequency)(ISensorPresence_t *_this, float DataFrequency);
   sys_error_code_t (*SensorSetTransmittance)(ISensorPresence_t *_this, float Transmittance);
   sys_error_code_t (*SensorSetAverageTObject)(ISensorPresence_t *_this, uint16_t avgTobject);
@@ -66,7 +67,8 @@ struct _ISensorPresence_vtbl
   sys_error_code_t (*SensorSetLPF_M_Bandwidth)(ISensorPresence_t *_this, uint16_t bandwidth);
   sys_error_code_t (*SensorSetEmbeddedCompensation)(ISensorPresence_t *_this, uint8_t EmbeddedCompensation);
   sys_error_code_t (*SensorSetSoftwareCompensation)(ISensorPresence_t *_this, uint8_t SoftwareCompensation);
-  sys_error_code_t (*SensorSetSoftwareCompensationAlgorithmConfig)(ISensorPresence_t *_this, CompensationAlgorithmConfig_t *pAlgorithmConfig);
+  sys_error_code_t (*SensorSetSoftwareCompensationAlgorithmConfig)(ISensorPresence_t *_this,
+                                                                   CompensationAlgorithmConfig_t *pAlgorithmConfig);
 };
 
 struct _ISensorPresence_t
@@ -155,7 +157,8 @@ static inline uint8_t ISensorGetSoftwareCompensation(ISensorPresence_t *_this)
   return _this->vptr->SensorGetSoftwareCompensation(_this);
 }
 
-static inline sys_error_code_t ISensorGetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this, CompensationAlgorithmConfig_t *pAlgorithmConfig)
+static inline sys_error_code_t ISensorGetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this,
+                                                                             CompensationAlgorithmConfig_t *pAlgorithmConfig)
 {
   return _this->vptr->SensorGetSoftwareCompensationAlgorithmConfig(_this, pAlgorithmConfig);
 }
@@ -200,12 +203,14 @@ static inline sys_error_code_t ISensorSetMotionHysteresis(ISensorPresence_t *_th
   return _this->vptr->SensorSetMotionHysteresis(_this, MotionHysteresis);
 }
 
-static inline sys_error_code_t ISensorSetTAmbientShockThreshold(ISensorPresence_t *_this, uint16_t TAmbientShockThreshold)
+static inline sys_error_code_t ISensorSetTAmbientShockThreshold(ISensorPresence_t *_this,
+                                                                uint16_t TAmbientShockThreshold)
 {
   return _this->vptr->SensorSetTAmbientShockThreshold(_this, TAmbientShockThreshold);
 }
 
-static inline sys_error_code_t ISensorSetTAmbientShockHysteresis(ISensorPresence_t *_this, uint8_t TAmbientShockHysteresis)
+static inline sys_error_code_t ISensorSetTAmbientShockHysteresis(ISensorPresence_t *_this,
+                                                                 uint8_t TAmbientShockHysteresis)
 {
   return _this->vptr->SensorSetTAmbientShockHysteresis(_this, TAmbientShockHysteresis);
 }
@@ -235,7 +240,8 @@ static inline sys_error_code_t ISensorSetSoftwareCompensation(ISensorPresence_t 
   return _this->vptr->SensorSetSoftwareCompensation(_this, SoftwareCompensation);
 }
 
-static inline sys_error_code_t ISensorSetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this, CompensationAlgorithmConfig_t *pAlgorithmConfig)
+static inline sys_error_code_t ISensorSetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this,
+                                                                             CompensationAlgorithmConfig_t *pAlgorithmConfig)
 {
   return _this->vptr->SensorSetSoftwareCompensationAlgorithmConfig(_this, pAlgorithmConfig);
 }

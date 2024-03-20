@@ -37,7 +37,7 @@
 /*  FUNCTION                                               RELEASE        */
 /*                                                                        */
 /*    _tx_thread_create                                  PORTABLE SMP     */
-/*                                                           6.2.0        */
+/*                                                           6.1.8        */
 /*  AUTHOR                                                                */
 /*                                                                        */
 /*    William E. Lamie, Microsoft Corporation                             */
@@ -85,10 +85,6 @@
 /*                                            resulting in version 6.1.3  */
 /*  08-02-2021      Scott Larson            Removed unneeded cast,        */
 /*                                            resulting in version 6.1.8  */
-/*  10-31-2022      Scott Larson            Removed ifdef block to always */
-/*                                            restore interrupts at end   */
-/*                                            of if block,                */
-/*                                            resulting in version 6.2.0  */
 /*                                                                        */
 /**************************************************************************/
 UINT  _tx_thread_create(TX_THREAD *thread_ptr, CHAR *name_ptr,
@@ -348,8 +344,11 @@ ALIGN_TYPE              updated_stack_start;
 #endif
         }
 
+#ifndef TX_NOT_INTERRUPTABLE
+
         /* Restore interrupts.  */
         TX_RESTORE
+#endif
     }
     else
     {

@@ -228,60 +228,31 @@ static LIS2DU12TaskClass_t sTheClass =
     LIS2DU12Task_vtblForceExecuteStep,
     LIS2DU12Task_vtblOnEnterPowerMode
   },
-    /* class::sensor_if_vtbl virtual table */
+  /* class::sensor_if_vtbl virtual table */
+  {
     {
-        {
-            {
-                LIS2DU12Task_vtblAccGetId,
-                LIS2DU12Task_vtblGetEventSourceIF,
-                LIS2DU12Task_vtblAccGetDataInfo
-            },
-            LIS2DU12Task_vtblSensorEnable,
-            LIS2DU12Task_vtblSensorDisable,
-            LIS2DU12Task_vtblSensorIsEnabled,
-            LIS2DU12Task_vtblSensorGetDescription,
-            LIS2DU12Task_vtblSensorGetStatus
-        },
-        LIS2DU12Task_vtblAccGetODR,
-        LIS2DU12Task_vtblAccGetFS,
-        LIS2DU12Task_vtblAccGetSensitivity,
-        LIS2DU12Task_vtblSensorSetODR,
-        LIS2DU12Task_vtblSensorSetFS,
-        LIS2DU12Task_vtblSensorSetFifoWM
+      {
+        LIS2DU12Task_vtblAccGetId,
+        LIS2DU12Task_vtblGetEventSourceIF,
+        LIS2DU12Task_vtblAccGetDataInfo
+      },
+      LIS2DU12Task_vtblSensorEnable,
+      LIS2DU12Task_vtblSensorDisable,
+      LIS2DU12Task_vtblSensorIsEnabled,
+      LIS2DU12Task_vtblSensorGetDescription,
+      LIS2DU12Task_vtblSensorGetStatus
     },
+    LIS2DU12Task_vtblAccGetODR,
+    LIS2DU12Task_vtblAccGetFS,
+    LIS2DU12Task_vtblAccGetSensitivity,
+    LIS2DU12Task_vtblSensorSetODR,
+    LIS2DU12Task_vtblSensorSetFS,
+    LIS2DU12Task_vtblSensorSetFifoWM
+  },
   /* ACCELEROMETER DESCRIPTOR */
   {
     "lis2du12",
-    COM_TYPE_ACC,
-    {
-      1.6f,
-      12.5f,
-      25.0f,
-      50.0f,
-      100.0f,
-      200.0f,
-      400.0f,
-      800.0f,
-      1600.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      2.0f,
-      4.0f,
-      8.0f,
-      16.0f,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "x",
-      "y",
-      "z",
-    },
-    "g",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_ACC
   },
   /* class (PM_STATE, ExecuteStepFunc) map */
   {
@@ -1350,11 +1321,16 @@ static sys_error_code_t LIS2DU12TaskSensorInit(LIS2DU12Task *_this)
     lis2du12_read_reg(p_sensor_drv, LIS2DU12_OUTX_L, (uint8_t *) _this->p_sensor_data_buff,
                       ((uint16_t)_this->samples_per_it * 6u));
   }
-
-  _this->lis2du12_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
-#else
-  _this->lis2du12_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 #endif
+
+  if (_this->sensor_status.is_active)
+  {
+#if LIS2DU12_FIFO_ENABLED
+    _this->lis2du12_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
+#else
+    _this->lis2du12_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
+#endif
+  }
 
   return res;
 }
@@ -1511,42 +1487,31 @@ static sys_error_code_t LIS2DU12TaskSensorSetFS(LIS2DU12Task *_this, SMMessage r
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   float fs = (float) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
-
-  lis2du12_md_t mode = { LIS2DU12_OFF, LIS2DU12_2g, LIS2DU12_ODR_div_2 };
 
   if (id == _this->acc_id)
   {
     /* Full scale selection. */
     if (fs < 3.0f)
     {
-      mode.fs = LIS2DU12_2g;
       fs = 2.0f;
     }
     else if (fs < 5.0f)
     {
-      mode.fs = LIS2DU12_4g;
       fs = 4.0f;
     }
     else if (fs < 9.0f)
     {
-      mode.fs = LIS2DU12_8g;
       fs = 8.0f;
     }
     else
     {
-      mode.fs = LIS2DU12_16g;
       fs = 16.0f;
     }
-    lis2du12_mode_set(p_sensor_drv, &mode);
 
-    if (!SYS_IS_ERROR_CODE(res))
-    {
-      _this->sensor_status.type.mems.fs = fs;
-      _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
-    }
+    _this->sensor_status.type.mems.fs = fs;
+    _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
   }
   else
   {

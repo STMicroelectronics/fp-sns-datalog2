@@ -51,7 +51,7 @@ static uint8_t __stream_control(ILog_Controller_t *ifn, bool status);
 
 AppModel_t app_model;
 
-AppModel_t* getAppModel(void)
+AppModel_t *getAppModel(void)
 {
   return &app_model;
 }
@@ -84,41 +84,39 @@ uint8_t lis2mdl_mag_comp_init(void)
   __stream_control(NULL, true);
   return 0;
 }
-char* lis2mdl_mag_get_key(void)
+char *lis2mdl_mag_get_key(void)
 {
   return "lis2mdl_mag";
 }
 
-uint8_t lis2mdl_mag_get_odr(float *value)
+uint8_t lis2mdl_mag_get_odr(int32_t *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lis2mdl_mag_model.id;
   lis2mdl_mag_model.sensor_status = SMSensorGetStatus(id);
-  *value = lis2mdl_mag_model.sensor_status.type.mems.odr;
+  *value = (int32_t)lis2mdl_mag_model.sensor_status.type.mems.odr;
+  /* USER Code */
   return 0;
 }
-uint8_t lis2mdl_mag_get_fs(float *value)
+uint8_t lis2mdl_mag_get_fs(int32_t *value)
 {
-  /* User code */
   uint16_t id = lis2mdl_mag_model.id;
   lis2mdl_mag_model.sensor_status = SMSensorGetStatus(id);
-  *value = lis2mdl_mag_model.sensor_status.type.mems.fs;
+  *value = (int32_t)lis2mdl_mag_model.sensor_status.type.mems.fs;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2mdl_mag_get_enable(bool *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lis2mdl_mag_model.id;
   lis2mdl_mag_model.sensor_status = SMSensorGetStatus(id);
   *value = lis2mdl_mag_model.sensor_status.is_active;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2mdl_mag_get_samples_per_ts(int32_t *value)
 {
-  /* User code */
   *value = lis2mdl_mag_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2mdl_mag_get_dim(int32_t *value)
@@ -129,39 +127,36 @@ uint8_t lis2mdl_mag_get_dim(int32_t *value)
 }
 uint8_t lis2mdl_mag_get_ioffset(float *value)
 {
-  /* User code */
-
   *value = lis2mdl_mag_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2mdl_mag_get_measodr(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lis2mdl_mag_model.id;
   lis2mdl_mag_model.sensor_status = SMSensorGetStatus(id);
   *value = lis2mdl_mag_model.sensor_status.type.mems.measured_odr;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2mdl_mag_get_usb_dps(int32_t *value)
 {
-  /* User code */
   *value = lis2mdl_mag_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2mdl_mag_get_sd_dps(int32_t *value)
 {
-  /* User code */
   *value = lis2mdl_mag_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2mdl_mag_get_sensitivity(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lis2mdl_mag_model.id;
   lis2mdl_mag_model.sensor_status = SMSensorGetStatus(id);
   *value = lis2mdl_mag_model.sensor_status.type.mems.sensitivity;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2mdl_mag_get_data_type(char **value)
@@ -178,27 +173,26 @@ uint8_t lis2mdl_mag_get_sensor_annotation(char **value)
 }
 uint8_t lis2mdl_mag_get_sensor_category(int32_t *value)
 {
-  /* USER Code */
   *value = lis2mdl_mag_model.sensor_status.isensor_class;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2mdl_mag_get_stream_id(int8_t *value)
 {
-  /* User code */
   *value = lis2mdl_mag_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2mdl_mag_get_ep_id(int8_t *value)
 {
-  /* User code */
   *value = lis2mdl_mag_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
-uint8_t lis2mdl_mag_set_odr(float value)
+uint8_t lis2mdl_mag_set_odr(int32_t value)
 {
-  /* User code */
   sys_error_code_t ret = SMSensorSetODR(lis2mdl_mag_model.id, value);
-  if(ret == SYS_NO_ERROR_CODE)
+  if (ret == SYS_NO_ERROR_CODE)
   {
     lis2mdl_mag_model.sensor_status.type.mems.odr = value;
 #if (HSD_USE_DUMMY_DATA != 1)
@@ -210,7 +204,6 @@ uint8_t lis2mdl_mag_set_odr(float value)
 }
 uint8_t lis2mdl_mag_set_enable(bool value)
 {
-  /* User code */
   sys_error_code_t ret = 1;
   if (value)
   {
@@ -223,6 +216,7 @@ uint8_t lis2mdl_mag_set_enable(bool value)
   if (ret == SYS_NO_ERROR_CODE)
   {
     lis2mdl_mag_model.sensor_status.is_active = value;
+    /* USER Code */
     __stream_control(NULL, true);
   }
   return ret;
@@ -236,6 +230,14 @@ uint8_t lis2mdl_mag_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     lis2mdl_mag_model.stream_params.spts = value;
+  }
+  else if (value > max_v)
+  {
+	  lis2mdl_mag_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  lis2mdl_mag_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -252,7 +254,6 @@ uint8_t lis2du12_acc_comp_init(void)
 {
   lis2du12_acc_model.comp_name = lis2du12_acc_get_key();
 
-  /* USER Component initialization code */
   SQuery_t querySM;
   SQInit(&querySM, SMGetSensorManager());
   uint16_t id = SQNextByNameAndType(&querySM, "lis2du12", COM_TYPE_ACC);
@@ -272,41 +273,39 @@ uint8_t lis2du12_acc_comp_init(void)
   __stream_control(NULL, true);
   return 0;
 }
-char* lis2du12_acc_get_key(void)
+char *lis2du12_acc_get_key(void)
 {
   return "lis2du12_acc";
 }
 
 uint8_t lis2du12_acc_get_odr(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lis2du12_acc_model.id;
   lis2du12_acc_model.sensor_status = SMSensorGetStatus(id);
   *value = lis2du12_acc_model.sensor_status.type.mems.odr;
+  /* USER Code */
   return 0;
 }
-uint8_t lis2du12_acc_get_fs(float *value)
+uint8_t lis2du12_acc_get_fs(int32_t *value)
 {
-  /* User code */
   uint16_t id = lis2du12_acc_model.id;
   lis2du12_acc_model.sensor_status = SMSensorGetStatus(id);
-  *value = lis2du12_acc_model.sensor_status.type.mems.fs;
+  *value = (int32_t)lis2du12_acc_model.sensor_status.type.mems.fs;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_get_enable(bool *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lis2du12_acc_model.id;
   lis2du12_acc_model.sensor_status = SMSensorGetStatus(id);
   *value = lis2du12_acc_model.sensor_status.is_active;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_get_samples_per_ts(int32_t *value)
 {
-  /* User code */
   *value = lis2du12_acc_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_get_dim(int32_t *value)
@@ -317,39 +316,36 @@ uint8_t lis2du12_acc_get_dim(int32_t *value)
 }
 uint8_t lis2du12_acc_get_ioffset(float *value)
 {
-  /* User code */
-
   *value = lis2du12_acc_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_get_measodr(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lis2du12_acc_model.id;
   lis2du12_acc_model.sensor_status = SMSensorGetStatus(id);
   *value = lis2du12_acc_model.sensor_status.type.mems.measured_odr;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_get_usb_dps(int32_t *value)
 {
-  /* User code */
   *value = lis2du12_acc_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_get_sd_dps(int32_t *value)
 {
-  /* User code */
   *value = lis2du12_acc_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_get_sensitivity(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lis2du12_acc_model.id;
   lis2du12_acc_model.sensor_status = SMSensorGetStatus(id);
   *value = lis2du12_acc_model.sensor_status.type.mems.sensitivity;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_get_data_type(char **value)
@@ -366,25 +362,24 @@ uint8_t lis2du12_acc_get_sensor_annotation(char **value)
 }
 uint8_t lis2du12_acc_get_sensor_category(int32_t *value)
 {
-  /* USER Code */
   *value = lis2du12_acc_model.sensor_status.isensor_class;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_get_stream_id(int8_t *value)
 {
-  /* User code */
   *value = lis2du12_acc_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_get_ep_id(int8_t *value)
 {
-  /* User code */
   *value = lis2du12_acc_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
 uint8_t lis2du12_acc_set_odr(float value)
 {
-  /* User code */
   sys_error_code_t ret = SMSensorSetODR(lis2du12_acc_model.id, value);
   if (ret == SYS_NO_ERROR_CODE)
   {
@@ -396,19 +391,18 @@ uint8_t lis2du12_acc_set_odr(float value)
   }
   return ret;
 }
-uint8_t lis2du12_acc_set_fs(float value)
+uint8_t lis2du12_acc_set_fs(int32_t value)
 {
-  /* User code */
   sys_error_code_t ret = SMSensorSetFS(lis2du12_acc_model.id, value);
   if (ret == SYS_NO_ERROR_CODE)
   {
     lis2du12_acc_model.sensor_status.type.mems.fs = value;
+    /* USER Code */
   }
   return ret;
 }
 uint8_t lis2du12_acc_set_enable(bool value)
 {
-  /* User code */
   sys_error_code_t ret = 1;
   if (value)
   {
@@ -421,6 +415,7 @@ uint8_t lis2du12_acc_set_enable(bool value)
   if (ret == SYS_NO_ERROR_CODE)
   {
     lis2du12_acc_model.sensor_status.is_active = value;
+    /* USER Code */
     __stream_control(NULL, true);
   }
   return ret;
@@ -434,6 +429,14 @@ uint8_t lis2du12_acc_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     lis2du12_acc_model.stream_params.spts = value;
+  }
+  else if (value > max_v)
+  {
+	  lis2du12_acc_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  lis2du12_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -450,7 +453,6 @@ uint8_t lsm6dsv16x_acc_comp_init(void)
 {
   lsm6dsv16x_acc_model.comp_name = lsm6dsv16x_acc_get_key();
 
-  /* USER Component initialization code */
   SQuery_t querySM;
   SQInit(&querySM, SMGetSensorManager());
   uint16_t id = SQNextByNameAndType(&querySM, "lsm6dsv16x", COM_TYPE_ACC);
@@ -470,41 +472,39 @@ uint8_t lsm6dsv16x_acc_comp_init(void)
   __stream_control(NULL, true);
   return 0;
 }
-char* lsm6dsv16x_acc_get_key(void)
+char *lsm6dsv16x_acc_get_key(void)
 {
   return "lsm6dsv16x_acc";
 }
 
 uint8_t lsm6dsv16x_acc_get_odr(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lsm6dsv16x_acc_model.id;
   lsm6dsv16x_acc_model.sensor_status = SMSensorGetStatus(id);
   *value = lsm6dsv16x_acc_model.sensor_status.type.mems.odr;
+  /* USER Code */
   return 0;
 }
-uint8_t lsm6dsv16x_acc_get_fs(float *value)
+uint8_t lsm6dsv16x_acc_get_fs(int32_t *value)
 {
-  /* User code */
   uint16_t id = lsm6dsv16x_acc_model.id;
   lsm6dsv16x_acc_model.sensor_status = SMSensorGetStatus(id);
-  *value = lsm6dsv16x_acc_model.sensor_status.type.mems.fs;
+  *value = (int32_t)lsm6dsv16x_acc_model.sensor_status.type.mems.fs;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_acc_get_enable(bool *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lsm6dsv16x_acc_model.id;
   lsm6dsv16x_acc_model.sensor_status = SMSensorGetStatus(id);
   *value = lsm6dsv16x_acc_model.sensor_status.is_active;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_acc_get_samples_per_ts(int32_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_acc_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 
@@ -516,38 +516,36 @@ uint8_t lsm6dsv16x_acc_get_dim(int32_t *value)
 }
 uint8_t lsm6dsv16x_acc_get_ioffset(float *value)
 {
-  /* User code */
   *value = lsm6dsv16x_acc_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_acc_get_measodr(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lsm6dsv16x_acc_model.id;
   lsm6dsv16x_acc_model.sensor_status = SMSensorGetStatus(id);
   *value = lsm6dsv16x_acc_model.sensor_status.type.mems.measured_odr;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_acc_get_usb_dps(int32_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_acc_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_acc_get_sd_dps(int32_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_acc_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_acc_get_sensitivity(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lsm6dsv16x_acc_model.id;
   lsm6dsv16x_acc_model.sensor_status = SMSensorGetStatus(id);
   *value = lsm6dsv16x_acc_model.sensor_status.type.mems.sensitivity;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_acc_get_data_type(char **value)
@@ -565,25 +563,24 @@ uint8_t lsm6dsv16x_acc_get_sensor_annotation(char **value)
 }
 uint8_t lsm6dsv16x_acc_get_sensor_category(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16x_acc_model.sensor_status.isensor_class;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_acc_get_stream_id(int8_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_acc_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_acc_get_ep_id(int8_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_acc_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_acc_set_odr(float value)
 {
-  /* User code */
   sys_error_code_t ret = SMSensorSetODR(lsm6dsv16x_acc_model.id, value);
   if (ret == SYS_NO_ERROR_CODE)
   {
@@ -599,9 +596,8 @@ uint8_t lsm6dsv16x_acc_set_odr(float value)
   }
   return ret;
 }
-uint8_t lsm6dsv16x_acc_set_fs(float value)
+uint8_t lsm6dsv16x_acc_set_fs(int32_t value)
 {
-  /* User code */
   sys_error_code_t ret = SMSensorSetFS(lsm6dsv16x_acc_model.id, value);
   if (ret == SYS_NO_ERROR_CODE)
   {
@@ -615,7 +611,6 @@ uint8_t lsm6dsv16x_acc_set_fs(float value)
 }
 uint8_t lsm6dsv16x_acc_set_enable(bool value)
 {
-  /* User code */
   sys_error_code_t ret = 1;
   if (value)
   {
@@ -645,7 +640,14 @@ uint8_t lsm6dsv16x_acc_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     lsm6dsv16x_acc_model.stream_params.spts = value;
-    /* update spts in sensor manager */
+  }
+  else if (value > max_v)
+  {
+	  lsm6dsv16x_acc_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  lsm6dsv16x_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -662,7 +664,6 @@ uint8_t lsm6dsv16x_gyro_comp_init(void)
 {
   lsm6dsv16x_gyro_model.comp_name = lsm6dsv16x_gyro_get_key();
 
-  /* USER Component initialization code */
   SQuery_t querySM;
   SQInit(&querySM, SMGetSensorManager());
   uint16_t id = SQNextByNameAndType(&querySM, "lsm6dsv16x", COM_TYPE_GYRO);
@@ -682,41 +683,39 @@ uint8_t lsm6dsv16x_gyro_comp_init(void)
   __stream_control(NULL, true);
   return 0;
 }
-char* lsm6dsv16x_gyro_get_key(void)
+char *lsm6dsv16x_gyro_get_key(void)
 {
   return "lsm6dsv16x_gyro";
 }
 
 uint8_t lsm6dsv16x_gyro_get_odr(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lsm6dsv16x_gyro_model.id;
   lsm6dsv16x_gyro_model.sensor_status = SMSensorGetStatus(id);
   *value = lsm6dsv16x_gyro_model.sensor_status.type.mems.odr;
+  /* USER Code */
   return 0;
 }
-uint8_t lsm6dsv16x_gyro_get_fs(float *value)
+uint8_t lsm6dsv16x_gyro_get_fs(int32_t *value)
 {
-  /* User code */
   uint16_t id = lsm6dsv16x_gyro_model.id;
   lsm6dsv16x_gyro_model.sensor_status = SMSensorGetStatus(id);
-  *value = lsm6dsv16x_gyro_model.sensor_status.type.mems.fs;
+  *value = (int32_t)lsm6dsv16x_gyro_model.sensor_status.type.mems.fs;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_get_enable(bool *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lsm6dsv16x_gyro_model.id;
   lsm6dsv16x_gyro_model.sensor_status = SMSensorGetStatus(id);
   *value = lsm6dsv16x_gyro_model.sensor_status.is_active;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_get_samples_per_ts(int32_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_gyro_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_get_dim(int32_t *value)
@@ -727,39 +726,36 @@ uint8_t lsm6dsv16x_gyro_get_dim(int32_t *value)
 }
 uint8_t lsm6dsv16x_gyro_get_ioffset(float *value)
 {
-  /* User code */
-
   *value = lsm6dsv16x_gyro_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_get_measodr(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lsm6dsv16x_gyro_model.id;
   lsm6dsv16x_gyro_model.sensor_status = SMSensorGetStatus(id);
   *value = lsm6dsv16x_gyro_model.sensor_status.type.mems.measured_odr;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_get_usb_dps(int32_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_gyro_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_get_sd_dps(int32_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_gyro_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_get_sensitivity(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lsm6dsv16x_gyro_model.id;
   lsm6dsv16x_gyro_model.sensor_status = SMSensorGetStatus(id);
   *value = lsm6dsv16x_gyro_model.sensor_status.type.mems.sensitivity;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_get_data_type(char **value)
@@ -777,25 +773,24 @@ uint8_t lsm6dsv16x_gyro_get_sensor_annotation(char **value)
 }
 uint8_t lsm6dsv16x_gyro_get_sensor_category(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16x_gyro_model.sensor_status.isensor_class;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_get_stream_id(int8_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_gyro_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_get_ep_id(int8_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_gyro_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_set_odr(float value)
 {
-  /* User code */
   sys_error_code_t ret = SMSensorSetODR(lsm6dsv16x_gyro_model.id, value);
   if (ret == SYS_NO_ERROR_CODE)
   {
@@ -811,11 +806,10 @@ uint8_t lsm6dsv16x_gyro_set_odr(float value)
   }
   return ret;
 }
-uint8_t lsm6dsv16x_gyro_set_fs(float value)
+uint8_t lsm6dsv16x_gyro_set_fs(int32_t value)
 {
-  /* User code */
   sys_error_code_t ret = SMSensorSetFS(lsm6dsv16x_gyro_model.id, value);
-  if(ret == SYS_NO_ERROR_CODE)
+  if (ret == SYS_NO_ERROR_CODE)
   {
     lsm6dsv16x_gyro_model.sensor_status.type.mems.fs = value;
     if (app_model.mlc_ucf_valid == true)
@@ -827,9 +821,8 @@ uint8_t lsm6dsv16x_gyro_set_fs(float value)
 }
 uint8_t lsm6dsv16x_gyro_set_enable(bool value)
 {
-  /* User code */
   sys_error_code_t ret = 1;
-  if(value)
+  if (value)
   {
     ret = SMSensorEnable(lsm6dsv16x_gyro_model.id);
   }
@@ -858,6 +851,14 @@ uint8_t lsm6dsv16x_gyro_set_samples_per_ts(int32_t value)
   {
     lsm6dsv16x_gyro_model.stream_params.spts = value;
   }
+  else if (value > max_v)
+  {
+	  lsm6dsv16x_gyro_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  lsm6dsv16x_gyro_model.stream_params.spts = min_v;
+  }
   return 0;
 }
 uint8_t lsm6dsv16x_gyro_set_sensor_annotation(const char *value)
@@ -873,7 +874,6 @@ uint8_t lsm6dsv16x_mlc_comp_init(void)
 {
   lsm6dsv16x_mlc_model.comp_name = lsm6dsv16x_mlc_get_key();
 
-  /* USER Component initialization code */
   SQuery_t querySM;
   SQInit(&querySM, SMGetSensorManager());
   uint16_t id = SQNextByNameAndType(&querySM, "lsm6dsv16x", COM_TYPE_MLC);
@@ -890,24 +890,23 @@ uint8_t lsm6dsv16x_mlc_comp_init(void)
   __stream_control(NULL, true);
   return 0;
 }
-char* lsm6dsv16x_mlc_get_key(void)
+char *lsm6dsv16x_mlc_get_key(void)
 {
   return "lsm6dsv16x_mlc";
 }
 
 uint8_t lsm6dsv16x_mlc_get_enable(bool *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lsm6dsv16x_mlc_model.id;
   lsm6dsv16x_mlc_model.sensor_status = SMSensorGetStatus(id);
   *value = lsm6dsv16x_mlc_model.sensor_status.is_active;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_mlc_get_samples_per_ts(int32_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_mlc_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_mlc_get_ucf_status(bool *value)
@@ -924,9 +923,8 @@ uint8_t lsm6dsv16x_mlc_get_dim(int32_t *value)
 }
 uint8_t lsm6dsv16x_mlc_get_ioffset(float *value)
 {
-  /* User code */
-
   *value = lsm6dsv16x_mlc_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_mlc_get_data_type(char **value)
@@ -937,14 +935,14 @@ uint8_t lsm6dsv16x_mlc_get_data_type(char **value)
 }
 uint8_t lsm6dsv16x_mlc_get_usb_dps(int32_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_mlc_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_mlc_get_sd_dps(int32_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_mlc_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_mlc_get_sensor_annotation(char **value)
@@ -956,41 +954,40 @@ uint8_t lsm6dsv16x_mlc_get_sensor_annotation(char **value)
 }
 uint8_t lsm6dsv16x_mlc_get_sensor_category(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16x_mlc_model.sensor_status.isensor_class;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_mlc_get_stream_id(int8_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_mlc_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_mlc_get_ep_id(int8_t *value)
 {
-  /* User code */
   *value = lsm6dsv16x_mlc_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
 uint8_t lsm6dsv16x_mlc_set_enable(bool value)
 {
-  /* User code */
   sys_error_code_t ret = 1;
   if (app_model.mlc_ucf_valid == true)
   {
-  if(value)
-  {
-    ret = SMSensorEnable(lsm6dsv16x_mlc_model.id);
-  }
-  else
-  {
-    ret = SMSensorDisable(lsm6dsv16x_mlc_model.id);
-  }
-  if(ret == SYS_NO_ERROR_CODE)
-  {
-    lsm6dsv16x_mlc_model.sensor_status.is_active = value;
-  }
-  __stream_control(NULL, true);
+    if (value)
+    {
+      ret = SMSensorEnable(lsm6dsv16x_mlc_model.id);
+    }
+    else
+    {
+      ret = SMSensorDisable(lsm6dsv16x_mlc_model.id);
+    }
+    if (ret == SYS_NO_ERROR_CODE)
+    {
+      lsm6dsv16x_mlc_model.sensor_status.is_active = value;
+    }
+    __stream_control(NULL, true);
   }
   return ret;
 }
@@ -1003,6 +1000,14 @@ uint8_t lsm6dsv16x_mlc_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     lsm6dsv16x_mlc_model.stream_params.spts = value;
+  }
+  else if (value > max_v)
+  {
+	  lsm6dsv16x_mlc_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  lsm6dsv16x_mlc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1028,7 +1033,6 @@ uint8_t mp23db01hp_mic_comp_init(void)
 {
   mp23db01hp_mic_model.comp_name = mp23db01hp_mic_get_key();
 
-  /* USER Component initialization code */
   SQuery_t querySM;
   SQInit(&querySM, SMGetSensorManager());
   uint16_t id = SQNextByNameAndType(&querySM, "mp23db01hp", COM_TYPE_MIC);
@@ -1048,21 +1052,20 @@ uint8_t mp23db01hp_mic_comp_init(void)
   __stream_control(NULL, true);
   return 0;
 }
-char* mp23db01hp_mic_get_key(void)
+char *mp23db01hp_mic_get_key(void)
 {
   return "mp23db01hp_mic";
 }
 
-uint8_t mp23db01hp_mic_get_odr(float *value) /* TODO: uint8_t imp23absu_mic_get_frequency(uint32_t *value) */
+uint8_t mp23db01hp_mic_get_odr(int32_t *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = mp23db01hp_mic_model.id;
   mp23db01hp_mic_model.sensor_status = SMSensorGetStatus(id);
   *value = mp23db01hp_mic_model.sensor_status.type.audio.frequency;
+  /* USER Code */
   return 0;
 }
-uint8_t mp23db01hp_mic_get_aop(float *value) /* TODO: uint8_t imp23absu_mic_get_volume(uint8_t *value) */
+uint8_t mp23db01hp_mic_get_aop(int32_t *value)
 {
   /* User code */
   uint16_t id = mp23db01hp_mic_model.id;
@@ -1072,17 +1075,16 @@ uint8_t mp23db01hp_mic_get_aop(float *value) /* TODO: uint8_t imp23absu_mic_get_
 }
 uint8_t mp23db01hp_mic_get_enable(bool *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = mp23db01hp_mic_model.id;
   mp23db01hp_mic_model.sensor_status = SMSensorGetStatus(id);
   *value = mp23db01hp_mic_model.sensor_status.is_active;
+  /* USER Code */
   return 0;
 }
 uint8_t mp23db01hp_mic_get_samples_per_ts(int32_t *value)
 {
-  /* User code */
   *value = mp23db01hp_mic_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 uint8_t mp23db01hp_mic_get_dim(int32_t *value)
@@ -1093,11 +1095,11 @@ uint8_t mp23db01hp_mic_get_dim(int32_t *value)
 }
 uint8_t mp23db01hp_mic_get_ioffset(float *value)
 {
-  /* User code */
   *value = mp23db01hp_mic_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
-uint8_t mp23db01hp_mic_get_measodr(float *value) /* TODO: delete */
+uint8_t mp23db01hp_mic_get_measodr(float *value)
 {
   /* User code */
   /* Status update to check if the value has been updated by the FW */
@@ -1108,17 +1110,17 @@ uint8_t mp23db01hp_mic_get_measodr(float *value) /* TODO: delete */
 }
 uint8_t mp23db01hp_mic_get_usb_dps(int32_t *value)
 {
-  /* User code */
   *value = mp23db01hp_mic_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t mp23db01hp_mic_get_sd_dps(int32_t *value)
 {
-  /* User code */
   *value = mp23db01hp_mic_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
-uint8_t mp23db01hp_mic_get_sensitivity(float *value) /* TODO: uint8_t imp23absu_mic_get_resolution(uint8_t *value) */
+uint8_t mp23db01hp_mic_get_sensitivity(float *value)
 {
   *value = 0.000030517578125; // 2/(2^mp23db01hp_mic_model.sensor_status.type.audio.resolution);
   return 0;
@@ -1138,36 +1140,34 @@ uint8_t mp23db01hp_mic_get_sensor_annotation(char **value)
 }
 uint8_t mp23db01hp_mic_get_sensor_category(int32_t *value)
 {
-  /* USER Code */
   *value = mp23db01hp_mic_model.sensor_status.isensor_class;
+  /* USER Code */
   return 0;
 }
 uint8_t mp23db01hp_mic_get_stream_id(int8_t *value)
 {
-  /* User code */
   *value = mp23db01hp_mic_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 uint8_t mp23db01hp_mic_get_ep_id(int8_t *value)
 {
-  /* User code */
   *value = mp23db01hp_mic_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
-uint8_t mp23db01hp_mic_set_odr(float value) /* TODO: uint8_t imp23absu_mic_set_frequency(uint32_t value) */
+uint8_t mp23db01hp_mic_set_odr(int32_t value)
 {
-  /* User code */
-  sys_error_code_t ret = SMSensorSetFrequency(mp23db01hp_mic_model.id, (uint32_t)value);
+  sys_error_code_t ret = SMSensorSetFrequency(mp23db01hp_mic_model.id, value);
   if (ret == SYS_NO_ERROR_CODE)
   {
-    mp23db01hp_mic_model.sensor_status.type.audio.frequency = (uint32_t)value;
+    mp23db01hp_mic_model.sensor_status.type.audio.frequency = value;
     __stream_control(NULL, true);
   }
   return ret;
 }
 uint8_t mp23db01hp_mic_set_enable(bool value)
 {
-  /* User code */
   sys_error_code_t ret = 1;
   if (value)
   {
@@ -1180,6 +1180,7 @@ uint8_t mp23db01hp_mic_set_enable(bool value)
   if (ret == SYS_NO_ERROR_CODE)
   {
     mp23db01hp_mic_model.sensor_status.is_active = value;
+    /* USER Code */
     __stream_control(NULL, true);
   }
   return ret;
@@ -1193,6 +1194,14 @@ uint8_t mp23db01hp_mic_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     mp23db01hp_mic_model.stream_params.spts = value;
+  }
+  else if (value > max_v)
+  {
+	  mp23db01hp_mic_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  mp23db01hp_mic_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1228,41 +1237,39 @@ uint8_t stts22h_temp_comp_init(void)
   __stream_control(NULL, true);
   return 0;
 }
-char* stts22h_temp_get_key(void)
+char *stts22h_temp_get_key(void)
 {
   return "stts22h_temp";
 }
 
-uint8_t stts22h_temp_get_odr(float *value)
+uint8_t stts22h_temp_get_odr(int32_t *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = stts22h_temp_model.id;
   stts22h_temp_model.sensor_status = SMSensorGetStatus(id);
-  *value = stts22h_temp_model.sensor_status.type.mems.odr;
+  *value = (int32_t)stts22h_temp_model.sensor_status.type.mems.odr;
+  /* USER Code */
   return 0;
 }
-uint8_t stts22h_temp_get_fs(float *value)
+uint8_t stts22h_temp_get_fs(int32_t *value)
 {
-  /* User code */
   uint16_t id = stts22h_temp_model.id;
   stts22h_temp_model.sensor_status = SMSensorGetStatus(id);
-  *value = stts22h_temp_model.sensor_status.type.mems.fs;
+  *value = (int32_t)stts22h_temp_model.sensor_status.type.mems.fs;
+  /* USER Code */
   return 0;
 }
 uint8_t stts22h_temp_get_enable(bool *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = stts22h_temp_model.id;
   stts22h_temp_model.sensor_status = SMSensorGetStatus(id);
   *value = stts22h_temp_model.sensor_status.is_active;
+  /* USER Code */
   return 0;
 }
 uint8_t stts22h_temp_get_samples_per_ts(int32_t *value)
 {
-  /* User code */
   *value = stts22h_temp_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 uint8_t stts22h_temp_get_dim(int32_t *value)
@@ -1273,38 +1280,36 @@ uint8_t stts22h_temp_get_dim(int32_t *value)
 }
 uint8_t stts22h_temp_get_ioffset(float *value)
 {
-  /* User code */
   *value = stts22h_temp_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
 uint8_t stts22h_temp_get_measodr(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = stts22h_temp_model.id;
   stts22h_temp_model.sensor_status = SMSensorGetStatus(id);
   *value = stts22h_temp_model.sensor_status.type.mems.measured_odr;
+  /* USER Code */
   return 0;
 }
 uint8_t stts22h_temp_get_usb_dps(int32_t *value)
 {
-  /* User code */
   *value = stts22h_temp_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t stts22h_temp_get_sd_dps(int32_t *value)
 {
-  /* User code */
   *value = stts22h_temp_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t stts22h_temp_get_sensitivity(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = stts22h_temp_model.id;
   stts22h_temp_model.sensor_status = SMSensorGetStatus(id);
   *value = stts22h_temp_model.sensor_status.type.mems.sensitivity;
+  /* USER Code */
   return 0;
 }
 uint8_t stts22h_temp_get_data_type(char **value)
@@ -1322,27 +1327,26 @@ uint8_t stts22h_temp_get_sensor_annotation(char **value)
 }
 uint8_t stts22h_temp_get_sensor_category(int32_t *value)
 {
-  /* USER Code */
   *value = stts22h_temp_model.sensor_status.isensor_class;
+  /* USER Code */
   return 0;
 }
 uint8_t stts22h_temp_get_stream_id(int8_t *value)
 {
-  /* User code */
   *value = stts22h_temp_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 uint8_t stts22h_temp_get_ep_id(int8_t *value)
 {
-  /* User code */
   *value = stts22h_temp_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
-uint8_t stts22h_temp_set_odr(float value)
+uint8_t stts22h_temp_set_odr(int32_t value)
 {
-  /* User code */
   sys_error_code_t ret = SMSensorSetODR(stts22h_temp_model.id, value);
-  if(ret == SYS_NO_ERROR_CODE)
+  if (ret == SYS_NO_ERROR_CODE)
   {
     stts22h_temp_model.sensor_status.type.mems.odr = value;
 #if (HSD_USE_DUMMY_DATA != 1)
@@ -1354,9 +1358,8 @@ uint8_t stts22h_temp_set_odr(float value)
 }
 uint8_t stts22h_temp_set_enable(bool value)
 {
-  /* User code */
   sys_error_code_t ret = 1;
-  if(value)
+  if (value)
   {
     ret = SMSensorEnable(stts22h_temp_model.id);
   }
@@ -1364,9 +1367,10 @@ uint8_t stts22h_temp_set_enable(bool value)
   {
     ret = SMSensorDisable(stts22h_temp_model.id);
   }
-  if(ret == SYS_NO_ERROR_CODE)
+  if (ret == SYS_NO_ERROR_CODE)
   {
     stts22h_temp_model.sensor_status.is_active = value;
+    /* USER Code */
     __stream_control(NULL, true);
   }
   return ret;
@@ -1380,6 +1384,14 @@ uint8_t stts22h_temp_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     stts22h_temp_model.stream_params.spts = value;
+  }
+  else if (value > max_v)
+  {
+	  stts22h_temp_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  stts22h_temp_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1397,7 +1409,6 @@ uint8_t lps22df_press_comp_init(void)
 {
   lps22df_press_model.comp_name = lps22df_press_get_key();
 
-  /* USER Component initialization code */
   SQuery_t querySM;
   SQInit(&querySM, SMGetSensorManager());
   uint16_t id = SQNextByNameAndType(&querySM, "lps22df", COM_TYPE_PRESS);
@@ -1417,41 +1428,39 @@ uint8_t lps22df_press_comp_init(void)
   __stream_control(NULL, true);
   return 0;
 }
-char* lps22df_press_get_key(void)
+char *lps22df_press_get_key(void)
 {
   return "lps22df_press";
 }
 
-uint8_t lps22df_press_get_odr(float *value)
+uint8_t lps22df_press_get_odr(int32_t *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lps22df_press_model.id;
   lps22df_press_model.sensor_status = SMSensorGetStatus(id);
-  *value = lps22df_press_model.sensor_status.type.mems.odr;
+  *value = (int32_t)lps22df_press_model.sensor_status.type.mems.odr;
+  /* USER Code */
   return 0;
 }
-uint8_t lps22df_press_get_fs(float *value)
+uint8_t lps22df_press_get_fs(int32_t *value)
 {
-  /* User code */
   uint16_t id = lps22df_press_model.id;
   lps22df_press_model.sensor_status = SMSensorGetStatus(id);
-  *value = lps22df_press_model.sensor_status.type.mems.fs;
+  *value = (int32_t)lps22df_press_model.sensor_status.type.mems.fs;
+  /* USER Code */
   return 0;
 }
 uint8_t lps22df_press_get_enable(bool *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lps22df_press_model.id;
   lps22df_press_model.sensor_status = SMSensorGetStatus(id);
   *value = lps22df_press_model.sensor_status.is_active;
+  /* USER Code */
   return 0;
 }
 uint8_t lps22df_press_get_samples_per_ts(int32_t *value)
 {
-  /* User code */
   *value = lps22df_press_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 uint8_t lps22df_press_get_dim(int32_t *value)
@@ -1462,39 +1471,36 @@ uint8_t lps22df_press_get_dim(int32_t *value)
 }
 uint8_t lps22df_press_get_ioffset(float *value)
 {
-  /* User code */
-
   *value = lps22df_press_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
 uint8_t lps22df_press_get_measodr(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lps22df_press_model.id;
   lps22df_press_model.sensor_status = SMSensorGetStatus(id);
   *value = lps22df_press_model.sensor_status.type.mems.measured_odr;
+  /* USER Code */
   return 0;
 }
 uint8_t lps22df_press_get_usb_dps(int32_t *value)
 {
-  /* User code */
   *value = lps22df_press_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lps22df_press_get_sd_dps(int32_t *value)
 {
-  /* User code */
   *value = lps22df_press_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t lps22df_press_get_sensitivity(float *value)
 {
-  /* User code */
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = lps22df_press_model.id;
   lps22df_press_model.sensor_status = SMSensorGetStatus(id);
   *value = lps22df_press_model.sensor_status.type.mems.sensitivity;
+  /* USER Code */
   return 0;
 }
 uint8_t lps22df_press_get_data_type(char **value)
@@ -1512,27 +1518,26 @@ uint8_t lps22df_press_get_sensor_annotation(char **value)
 }
 uint8_t lps22df_press_get_sensor_category(int32_t *value)
 {
-  /* USER Code */
   *value = lps22df_press_model.sensor_status.isensor_class;
+  /* USER Code */
   return 0;
 }
 uint8_t lps22df_press_get_stream_id(int8_t *value)
 {
-  /* User code */
   *value = lps22df_press_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 uint8_t lps22df_press_get_ep_id(int8_t *value)
 {
-  /* User code */
   *value = lps22df_press_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
-uint8_t lps22df_press_set_odr(float value)
+uint8_t lps22df_press_set_odr(int32_t value)
 {
-  /* User code */
   sys_error_code_t ret = SMSensorSetODR(lps22df_press_model.id, value);
-  if(ret == SYS_NO_ERROR_CODE)
+  if (ret == SYS_NO_ERROR_CODE)
   {
     lps22df_press_model.sensor_status.type.mems.odr = value;
 #if (HSD_USE_DUMMY_DATA != 1)
@@ -1544,9 +1549,8 @@ uint8_t lps22df_press_set_odr(float value)
 }
 uint8_t lps22df_press_set_enable(bool value)
 {
-  /* User code */
   sys_error_code_t ret = 1;
-  if(value)
+  if (value)
   {
     ret = SMSensorEnable(lps22df_press_model.id);
   }
@@ -1554,9 +1558,10 @@ uint8_t lps22df_press_set_enable(bool value)
   {
     ret = SMSensorDisable(lps22df_press_model.id);
   }
-  if(ret == SYS_NO_ERROR_CODE)
+  if (ret == SYS_NO_ERROR_CODE)
   {
     lps22df_press_model.sensor_status.is_active = value;
+    /* USER Code */
     __stream_control(NULL, true);
   }
   return ret;
@@ -1570,6 +1575,14 @@ uint8_t lps22df_press_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     lps22df_press_model.stream_params.spts = value;
+  }
+  else if (value > max_v)
+  {
+	  lps22df_press_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  lps22df_press_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1606,8 +1619,7 @@ uint8_t ism330is_acc_comp_init(void)
   __stream_control(NULL, true);
   return 0;
 }
-
-char* ism330is_acc_get_key(void)
+char *ism330is_acc_get_key(void)
 {
   return "ism330is_acc";
 }
@@ -1620,11 +1632,11 @@ uint8_t ism330is_acc_get_odr(float *value)
   /* USER Code */
   return 0;
 }
-uint8_t ism330is_acc_get_fs(float *value)
+uint8_t ism330is_acc_get_fs(int32_t *value)
 {
   uint16_t id = ism330is_acc_model.id;
   ism330is_acc_model.sensor_status = SMSensorGetStatus(id);
-  *value = ism330is_acc_model.sensor_status.type.mems.fs;
+  *value = (int32_t)ism330is_acc_model.sensor_status.type.mems.fs;
   /* USER Code */
   return 0;
 }
@@ -1639,6 +1651,7 @@ uint8_t ism330is_acc_get_enable(bool *value)
 uint8_t ism330is_acc_get_samples_per_ts(int32_t *value)
 {
   *value = ism330is_acc_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 uint8_t ism330is_acc_get_dim(int32_t *value)
@@ -1649,6 +1662,7 @@ uint8_t ism330is_acc_get_dim(int32_t *value)
 uint8_t ism330is_acc_get_ioffset(float *value)
 {
   *value = ism330is_acc_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
 uint8_t ism330is_acc_get_measodr(float *value)
@@ -1662,11 +1676,13 @@ uint8_t ism330is_acc_get_measodr(float *value)
 uint8_t ism330is_acc_get_usb_dps(int32_t *value)
 {
   *value = ism330is_acc_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t ism330is_acc_get_sd_dps(int32_t *value)
 {
   *value = ism330is_acc_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
 uint8_t ism330is_acc_get_sensitivity(float *value)
@@ -1689,20 +1705,27 @@ uint8_t ism330is_acc_get_sensor_annotation(char **value)
   *value = ism330is_acc_model.annotation;
   return 0;
 }
-
 uint8_t ism330is_acc_get_sensor_category(int32_t *value)
 {
   *value = ism330is_acc_model.sensor_status.isensor_class;
+  /* USER Code */
+  return 0;
+}
+uint8_t ism330is_acc_get_mounted(bool *value)
+{
+  /* USER Code */
   return 0;
 }
 uint8_t ism330is_acc_get_stream_id(int8_t *value)
 {
   *value = ism330is_acc_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 uint8_t ism330is_acc_get_ep_id(int8_t *value)
 {
   *value = ism330is_acc_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
 uint8_t ism330is_acc_set_odr(float value)
@@ -1719,7 +1742,7 @@ uint8_t ism330is_acc_set_odr(float value)
   }
   return ret;
 }
-uint8_t ism330is_acc_set_fs(float value)
+uint8_t ism330is_acc_set_fs(int32_t value)
 {
   sys_error_code_t ret = SMSensorSetFS(ism330is_acc_model.id, value);
   if (ret == SYS_NO_ERROR_CODE)
@@ -1754,11 +1777,17 @@ uint8_t ism330is_acc_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
   int32_t max_v = 1000;
-  /* USER Code */
   if (value >= min_v && value <= max_v)
   {
     ism330is_acc_model.stream_params.spts = value;
-    //update spts in sensor manager
+  }
+  else if (value > max_v)
+  {
+	  ism330is_acc_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  ism330is_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1795,7 +1824,6 @@ uint8_t ism330is_gyro_comp_init(void)
   __stream_control(NULL, true);
   return 0;
 }
-
 char *ism330is_gyro_get_key(void)
 {
   return "ism330is_gyro";
@@ -1803,38 +1831,39 @@ char *ism330is_gyro_get_key(void)
 
 uint8_t ism330is_gyro_get_odr(float *value)
 {
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = ism330is_gyro_model.id;
   ism330is_gyro_model.sensor_status = SMSensorGetStatus(id);
   *value = ism330is_gyro_model.sensor_status.type.mems.odr;
+  /* USER Code */
   return 0;
 }
-
-uint8_t ism330is_gyro_get_fs(float *value)
+uint8_t ism330is_gyro_get_fs(int32_t *value)
 {
   uint16_t id = ism330is_gyro_model.id;
   ism330is_gyro_model.sensor_status = SMSensorGetStatus(id);
-  *value = ism330is_gyro_model.sensor_status.type.mems.fs;
+  *value = (int32_t)ism330is_gyro_model.sensor_status.type.mems.fs;
+  /* USER Code */
   return 0;
 }
-
 uint8_t ism330is_gyro_get_enable(bool *value)
 {
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = ism330is_gyro_model.id;
   ism330is_gyro_model.sensor_status = SMSensorGetStatus(id);
   *value = ism330is_gyro_model.sensor_status.is_active;
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_gyro_get_samples_per_ts(int32_t *value)
 {
   *value = ism330is_gyro_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_gyro_get_dim(int32_t *value)
 {
+  /* USER Code */
   *value = 3;
   return 0;
 }
@@ -1842,36 +1871,39 @@ uint8_t ism330is_gyro_get_dim(int32_t *value)
 uint8_t ism330is_gyro_get_ioffset(float *value)
 {
   *value = ism330is_gyro_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_gyro_get_measodr(float *value)
 {
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = ism330is_gyro_model.id;
   ism330is_gyro_model.sensor_status = SMSensorGetStatus(id);
   *value = ism330is_gyro_model.sensor_status.type.mems.measured_odr;
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_gyro_get_usb_dps(int32_t *value)
 {
   *value = ism330is_gyro_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_gyro_get_sd_dps(int32_t *value)
 {
   *value = ism330is_gyro_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_gyro_get_sensitivity(float *value)
 {
-  /* Status update to check if the value has been updated by the FW */
   uint16_t id = ism330is_gyro_model.id;
   ism330is_gyro_model.sensor_status = SMSensorGetStatus(id);
   *value = ism330is_gyro_model.sensor_status.type.mems.sensitivity;
+  /* USER Code */
   return 0;
 }
 
@@ -1891,19 +1923,27 @@ uint8_t ism330is_gyro_get_sensor_annotation(char **value)
 
 uint8_t ism330is_gyro_get_sensor_category(int32_t *value)
 {
-    *value = ism330is_gyro_model.sensor_status.isensor_class;
+  *value = ism330is_gyro_model.sensor_status.isensor_class;
+  /* USER Code */
+  return 0;
+}
+uint8_t ism330is_gyro_get_mounted(bool *value)
+{
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_gyro_get_stream_id(int8_t *value)
 {
   *value = ism330is_gyro_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_gyro_get_ep_id(int8_t *value)
 {
   *value = ism330is_gyro_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
 
@@ -1921,8 +1961,7 @@ uint8_t ism330is_gyro_set_odr(float value)
   }
   return ret;
 }
-
-uint8_t ism330is_gyro_set_fs(float value)
+uint8_t ism330is_gyro_set_fs(int32_t value)
 {
   sys_error_code_t ret = SMSensorSetFS(ism330is_gyro_model.id, value);
   if (ret == SYS_NO_ERROR_CODE)
@@ -1958,11 +1997,17 @@ uint8_t ism330is_gyro_set_samples_per_ts(int32_t value)
 {
   int32_t min_v = 0;
   int32_t max_v = 1000;
-  /* USER Code */
   if (value >= min_v && value <= max_v)
   {
     ism330is_gyro_model.stream_params.spts = value;
-    //update spts in sensor manager
+  }
+  else if (value > max_v)
+  {
+	  ism330is_gyro_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  ism330is_gyro_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -2010,11 +2055,13 @@ uint8_t ism330is_ispu_get_enable(bool *value)
   uint16_t id = ism330is_ispu_model.id;
   ism330is_ispu_model.sensor_status = SMSensorGetStatus(id);
   *value = ism330is_ispu_model.sensor_status.is_active;
+  /* USER Code */
   return 0;
 }
 uint8_t ism330is_ispu_get_samples_per_ts(int32_t *value)
 {
   *value = ism330is_ispu_model.stream_params.spts;
+  /* USER Code */
   return 0;
 }
 
@@ -2027,12 +2074,14 @@ uint8_t ism330is_ispu_get_ucf_status(bool *value)
 uint8_t ism330is_ispu_get_usb_dps(float *value)
 {
   *value = ism330is_ispu_model.stream_params.usb_dps;
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_ispu_get_sd_dps(float *value)
 {
   *value = ism330is_ispu_model.stream_params.sd_dps;
+  /* USER Code */
   return 0;
 }
 
@@ -2051,6 +2100,7 @@ uint8_t ism330is_ispu_get_dim(int32_t *value)
 uint8_t ism330is_ispu_get_ioffset(float *value)
 {
   *value = ism330is_ispu_model.stream_params.ioffset;
+  /* USER Code */
   return 0;
 }
 
@@ -2064,19 +2114,27 @@ uint8_t ism330is_ispu_get_sensor_annotation(char **value)
 
 uint8_t ism330is_ispu_get_sensor_category(int32_t *value)
 {
-    *value = ism330is_ispu_model.sensor_status.isensor_class;
+  *value = ism330is_ispu_model.sensor_status.isensor_class;
+  /* USER Code */
+  return 0;
+}
+uint8_t ism330is_ispu_get_mounted(bool *value)
+{
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_ispu_get_stream_id(int8_t *value)
 {
   *value = ism330is_ispu_model.stream_params.stream_id;
+  /* USER Code */
   return 0;
 }
 
 uint8_t ism330is_ispu_get_ep_id(int8_t *value)
 {
   *value = ism330is_ispu_model.stream_params.usb_ep;
+  /* USER Code */
   return 0;
 }
 
@@ -2085,19 +2143,19 @@ uint8_t ism330is_ispu_set_enable(bool value)
   sys_error_code_t ret = 1;
   if (app_model.ispu_ucf_valid == true)
   {
-  if (value)
-  {
-    ret = SMSensorEnable(ism330is_ispu_model.id);
-  }
-  else
-  {
-    ret = SMSensorDisable(ism330is_ispu_model.id);
-  }
-  if (ret == SYS_NO_ERROR_CODE)
-  {
-    ism330is_ispu_model.sensor_status.is_active = value;
-  }
-  __stream_control(NULL, true);
+    if (value)
+    {
+      ret = SMSensorEnable(ism330is_ispu_model.id);
+    }
+    else
+    {
+      ret = SMSensorDisable(ism330is_ispu_model.id);
+    }
+    if (ret == SYS_NO_ERROR_CODE)
+    {
+      ism330is_ispu_model.sensor_status.is_active = value;
+    }
+    __stream_control(NULL, true);
   }
   return ret;
 }
@@ -2107,7 +2165,6 @@ uint8_t ism330is_ispu_set_sensor_annotation(const char *value)
   strcpy(ism330is_ispu_model.annotation, value);
   return 0;
 }
-
 uint8_t ism330is_ispu_load_file(IIsm330is_Ispu_t *ifn, const char *ucf_data, int32_t ucf_size, const char *output_data,
                                 int32_t output_size)
 {
@@ -2167,6 +2224,21 @@ uint8_t automode_set_enabled(bool value)
 {
   /* USER Code */
   app_model.automode_model.enabled = value;
+  if (app_model.automode_model.start_delay_s == 0)
+  {
+    /* To avoid issue while opening SD card or handling files, setup a minimum default value */
+    app_model.automode_model.start_delay_s = 3;
+  }
+  if (app_model.automode_model.idle_period_s == 0)
+  {
+    /* To avoid issue while opening SD card or handling files, setup a minimum default value */
+    app_model.automode_model.idle_period_s = 3;
+  }
+  if (app_model.automode_model.logging_period_s == 0)
+  {
+    /* To avoid issue while opening SD card or handling files, setup a minimum default value */
+    app_model.automode_model.logging_period_s = 3;
+  }
   return 0;
 }
 uint8_t automode_set_nof_acquisitions(int32_t value)
@@ -2178,11 +2250,6 @@ uint8_t automode_set_nof_acquisitions(int32_t value)
 uint8_t automode_set_start_delay_s(int32_t value)
 {
   /* USER Code */
-  if (value < 3)
-  {
-    /* To avoid issue while opening SD card or handling files, setup a minimum delay */
-    value = 3;
-  }
   app_model.automode_model.start_delay_s = value;
   return 0;
 }
@@ -2195,11 +2262,6 @@ uint8_t automode_set_logging_period_s(int32_t value)
 uint8_t automode_set_idle_period_s(int32_t value)
 {
   /* USER Code */
-  if (value < 3)
-  {
-    /* To avoid issue while opening SD card or handling files, setup a minimum delay */
-    value = 3;
-  }
   app_model.automode_model.idle_period_s = value;
   return 0;
 }
@@ -2237,8 +2299,7 @@ uint8_t log_controller_get_controller_type(int32_t *value)
 }
 uint8_t log_controller_save_config(ILog_Controller_t *ifn)
 {
-  ILog_Controller_save_config(ifn);
-  return 0;
+  return ILog_Controller_save_config(ifn);
 }
 uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
 {
@@ -2248,7 +2309,6 @@ uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
 
   //Reset Tag counter
   TMResetTagListCounter();
-  ILog_Controller_start_log(ifn, interface);
 
   RTC_DateTypeDef sdate;
   RTC_TimeTypeDef stime;
@@ -2285,6 +2345,8 @@ uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
   app_model.acquisition_info_model.start_time[23] = 'Z';
   app_model.acquisition_info_model.start_time[24] = '\0';
 
+  ILog_Controller_start_log(ifn, interface);
+
   return 0;
 }
 uint8_t log_controller_stop_log(ILog_Controller_t *ifn)
@@ -2297,13 +2359,15 @@ uint8_t log_controller_stop_log(ILog_Controller_t *ifn)
 }
 uint8_t log_controller_set_time(ILog_Controller_t *ifn, const char *datetime)
 {
-  ILog_Controller_set_time(ifn, datetime);
-  return 0;
+  return ILog_Controller_set_time(ifn, datetime);
 }
 uint8_t log_controller_switch_bank(ILog_Controller_t *ifn)
 {
-  ILog_Controller_switch_bank(ifn);
-  return 0;
+  return ILog_Controller_switch_bank(ifn);
+}
+uint8_t log_controller_set_dfu_mode(ILog_Controller_t *ifn)
+{
+  return ILog_Controller_set_dfu_mode(ifn);
 }
 
 /* Tags Information PnPL Component -------------------------------------------*/
@@ -2325,7 +2389,7 @@ uint8_t tags_info_comp_init(void)
   tags_info_set_sw_tag4__status(false);
   return 0;
 }
-char* tags_info_get_key(void)
+char *tags_info_get_key(void)
 {
   return "tags_info";
 }
@@ -2556,7 +2620,7 @@ uint8_t acquisition_info_comp_init(void)
   app_model.acquisition_info_model.interface = -1;
   return 0;
 }
-char* acquisition_info_get_key(void)
+char *acquisition_info_get_key(void)
 {
   return "acquisition_info";
 }
@@ -2672,7 +2736,7 @@ uint8_t firmware_info_comp_init(void)
 
   return 0;
 }
-char* firmware_info_get_key(void)
+char *firmware_info_get_key(void)
 {
   return "firmware_info";
 }
@@ -2723,7 +2787,7 @@ uint8_t DeviceInformation_comp_init(void)
 {
   return 0;
 }
-char* DeviceInformation_get_key(void)
+char *DeviceInformation_get_key(void)
 {
   return "DeviceInformation";
 }
@@ -2939,9 +3003,9 @@ static uint8_t __stream_control(ILog_Controller_t *ifn, bool status)
   }
   else
   {
-    for(i = 0; i < SENSOR_NUMBER; i++)
+    for (i = 0; i < SENSOR_NUMBER; i++)
     {
-      if(app_model.s_models[i] != NULL)
+      if (app_model.s_models[i] != NULL)
       {
         app_model.s_models[i]->stream_params.stream_id = -1;
         app_model.s_models[i]->stream_params.usb_ep = -1;

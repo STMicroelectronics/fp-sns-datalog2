@@ -39,6 +39,7 @@ class HSDPlotToFWidget(PlotWidget):
         # self.t2_out = PlotHeatmapWidget(controller, comp_name, comp_display_name, heatmaps_shape, plot_label= "Target 2", p_id = p_id, parent=self)
         self.heatmaps["target1"] = self.t1_out
         # self.heatmaps["target2"] = self.t2_out
+        self.t1_out.setMinimumWidth(540)
 
         heatmaps_frame = QFrame()
         wdg_layout = QHBoxLayout()

@@ -1,24 +1,24 @@
 /**
- ******************************************************************************
- * @file    DefDataBuilder.c
- * @author  STMicroelectronics - AIS - MCD Team
- * @version M.m.b
- * @date    Jun 17, 2022
- *
- * @brief
- *
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    DefDataBuilder.c
+  * @author  STMicroelectronics - AIS - MCD Team
+  * @version M.m.b
+  * @date    Jun 17, 2022
+  *
+  * @brief
+  *
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  ******************************************************************************
+  */
 
 #include "DefDataBuilder.h"
 #include "DefDataBuilder_vtbl.h"
@@ -29,12 +29,13 @@
 
 
 /**
- * Class object declaration.
- */
-typedef struct _DefDataBuilderClass {
+  * Class object declaration.
+  */
+typedef struct _DefDataBuilderClass
+{
   /**
-   * IDataBuilder_t class virtual table.
-   */
+    * IDataBuilder_t class virtual table.
+    */
   IDataBuilder_vtbl vtbl;
 
 } DefDataBuilderClass_t;
@@ -44,14 +45,15 @@ typedef struct _DefDataBuilderClass {
 /********************/
 
 /**
- * The class object.
- */
-static const DefDataBuilderClass_t sTheClass = {
-    /* class virtual table */
-    {
-        DefDB_vtblOnReset,
-        DefDB_vtblOnNewInData
-    },
+  * The class object.
+  */
+static const DefDataBuilderClass_t sTheClass =
+{
+  /* class virtual table */
+  {
+    DefDB_vtblOnReset,
+    DefDB_vtblOnNewInData
+  },
 };
 
 
@@ -65,7 +67,7 @@ static const DefDataBuilderClass_t sTheClass = {
 sys_error_code_t DefDB_vtblOnReset(IDataBuilder_t *_this, void *p_data_build_context)
 {
   assert_param(_this != NULL);
-  DefDataBuilder_t *p_obj = (DefDataBuilder_t*)_this;
+  DefDataBuilder_t *p_obj = (DefDataBuilder_t *)_this;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   p_obj->index = 0;
@@ -74,11 +76,12 @@ sys_error_code_t DefDB_vtblOnReset(IDataBuilder_t *_this, void *p_data_build_con
   return res;
 }
 
-sys_error_code_t DefDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t *p_target_data, const EMData_t *p_new_in_data, IDB_BuildStrategy_e build_strategy, DataBuffAllocator_f data_buff_alloc)
+sys_error_code_t DefDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t *p_target_data, const EMData_t *p_new_in_data,
+                                       IDB_BuildStrategy_e build_strategy, DataBuffAllocator_f data_buff_alloc)
 {
   assert_param(_this != NULL);
   assert_param(EMD_GetType(p_new_in_data) == EMD_GetType(p_target_data)); //TODO: STF.Note - to be moved in the ADPU2::AttachToDataSource()
-  DefDataBuilder_t *p_obj = (DefDataBuilder_t*)_this;
+  DefDataBuilder_t *p_obj = (DefDataBuilder_t *)_this;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /*reshape the data as 1D because it is a more convenient format for this builder.*/
@@ -156,7 +159,7 @@ sys_error_code_t DefDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t *p_target
 
 IDataBuilder_t *DefDB_Alloc(void)
 {
-  IDataBuilder_t *p_new_obj = (IDataBuilder_t*)SysAlloc(sizeof(DefDataBuilder_t));
+  IDataBuilder_t *p_new_obj = (IDataBuilder_t *)SysAlloc(sizeof(DefDataBuilder_t));
   if (p_new_obj != NULL)
   {
     p_new_obj->vptr = &sTheClass.vtbl;
@@ -178,7 +181,6 @@ IDataBuilder_t *DefDB_AllocStatic(DefDataBuilder_t *_this)
     _this->super.vptr = &sTheClass.vtbl;
   }
 
-  return (IDataBuilder_t*)_this;
+  return (IDataBuilder_t *)_this;
 }
-
 

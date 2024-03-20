@@ -32,10 +32,71 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section14" checked aria-hidden="true"> <label for="collapse-section14" aria-hidden="true">v3.1.0 / 27-Nov-23</label>
+<input type="checkbox" id="collapse-section15" checked aria-hidden="true"> <label for="collapse-section15" aria-hidden="true">v3.2.0 / 16-Feb-24</label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
+<ul>
+<li>Python3.12 and RaspberryPI4 (aarch64) 32 and 64 bit support</li>
+<li>New -ag option in hsdatalog_to_unico.py: enable data aggregation in a single csv file</li>
+<li>Enabled FFT support for accelerometers and microphones:
+<ul>
+<li>New -fp option in hsdatalog_plot.py to plot spectrograms</li>
+<li>New time/freq toggle button in hsdatalog_GUI.py to enable live FFT</li>
+</ul></li>
+<li>Added -r flag to hsdatalog_data_export_by_tags.py example script and resolved parameter mismatch in raw data input</li>
+<li>Updated –version string in example scripts</li>
+<li>Fixed hsdatalog_to_wav with no sensor selected</li>
+<li>Updates and bug fixed in st_dtdl_gui
+<ul>
+<li>Added FFT hanning window toggle button, added icon and updated resources file</li>
+<li>Updated ‘i’ tooltip</li>
+<li>Python3.12 support -&gt; component updated signals definition dict explicitly replaced with right type</li>
+</ul></li>
+<li>Updates and bug fixed in st_hsdatalog
+<ul>
+<li>HSD
+<ul>
+<li>TOF plot optimized + Plot legends fixed</li>
+<li>Added offline spectro plots</li>
+<li>Defined a fixed color palette for offline plots</li>
+<li>Added unit in dataframes also for 1-axis sensors</li>
+<li>Removed initial 0.5 padding in all offline plots</li>
+<li>Fixed __check_dummy_data and __convert_prop_enum_in_value function and odr estimation for ISENSOR_CLASS_LIGHT</li>
+<li>Fixed parameter name in get_dataframe</li>
+<li>Added -r flag to convert_dat_to_txt_by_tags function</li>
+</ul></li>
+<li>HSD_GUI
+<ul>
+<li>Automode start_delay_info and idle_period_info graphical widgets inverted + UI file updated</li>
+<li>Added FFT in live plots</li>
+<li>Added customized managements for MLC component ucf loading</li>
+<li>Fixed x-axis repositioning on log restart</li>
+<li>Fixed HSDPlotALSWidget, extending HSDPlotLinesWidget instead of PlotLinesWavWidget</li>
+<li>FIxed dobule click issue for AutoMode widgets</li>
+<li>Updated presence and motion detection signals emit</li>
+</ul></li>
+<li>HSD_link
+<ul>
+<li>New .so for RaspberryPI4 (aarch64) 32 and 64 bit</li>
+<li>Updated .DLL and .so</li>
+</ul></li>
+<li>HSD_utils
+<ul>
+<li>Added sep = keyword in df.to_csv arguments to avoid pandas FutureWarning</li>
+<li>Updated float format in to_xsv converter function</li>
+</ul></li>
+</ul></li>
+<li>Updated Device Template models and board catalog in st_pnpl</li>
+<li>Fixed commands string creation for DTDL commands with primitive request type</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section14" aria-hidden="true"> <label for="collapse-section14" aria-hidden="true">v3.1.0 / 27-Nov-23</label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
 <ul>
 <li>HOTFIX: missing acq_folder arguments passed to converter functions</li>
 <li>Added export data by tags example in nb_hsdatalog_converters notebook</li>
@@ -88,8 +149,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section13" aria-hidden="true"> <label for="collapse-section13" aria-hidden="true">v3.0.0 / 29-Sep-23</label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
+<h2 id="main-changes-2">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
 <ul>
 <li>Redesigned Linux Setup files and README</li>
 <li>Examples updated catching MissingISPUOutputDescriptorException exception</li>
@@ -150,7 +211,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section12" aria-hidden="true"> <label for="collapse-section12" aria-hidden="true">v2.2.1 / 11-Aug-23</label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
+<h2 id="main-changes-3">Main Changes</h2>
 <h3 id="patch-release">Patch release</h3>
 <ul>
 <li>Included DATALOG2 v1.2.1 patch in local USB catalog</li>
@@ -161,8 +222,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true">v2.2.0 / 7-Jul-23</label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
+<h2 id="main-changes-4">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
 <ul>
 <li>Reshaped hsdatalog_to_unico script to convert any kind of sensor</li>
 <li>Fixed hsdatalog_cli
@@ -227,8 +288,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section10" aria-hidden="true"> <label for="collapse-section10" aria-hidden="true">v2.1.0 / 24-Mar-23</label>
 <div>
-<h2 id="main-changes-4">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
+<h2 id="main-changes-5">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
 <ul>
 <li>Refactored HSDPython_SDK Install/uninstall batch scripts</li>
 <li>Fixed setup issues in Linux environment</li>
@@ -256,7 +317,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true">v2.0.1 / 14-Feb-23</label>
 <div>
-<h2 id="main-changes-5">Main Changes</h2>
+<h2 id="main-changes-6">Main Changes</h2>
 <h3 id="patch-release-1">Patch release</h3>
 <ul>
 <li>Fixed toNanoedge converter and offline plot data for dummy data</li>
@@ -267,8 +328,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">v2.0.0 / 30-Sep-22</label>
 <div>
-<h2 id="main-changes-6">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
+<h2 id="main-changes-7">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-5">Maintenance release and product update</h3>
 <ul>
 <li>Added support for both DATALOG1 and DATALOG2</li>
 </ul>
@@ -277,8 +338,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true">v1.4.0 / 8-Jul-2022</label>
 <div>
-<h2 id="main-changes-7">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-5">Maintenance release and product update</h3>
+<h2 id="main-changes-8">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-6">Maintenance release and product update</h3>
 <ul>
 <li>Added support to SensorTile.box and LSM6DSOX</li>
 <li>Bug fixed in plot function:
@@ -317,7 +378,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true">v1.3.0 / 5-Nov-2021</label>
 <div>
-<h2 id="main-changes-8">Main Changes</h2>
+<h2 id="main-changes-9">Main Changes</h2>
 <h3 id="maintenance-release">Maintenance release</h3>
 <ul>
 <li><strong>Updated requirements.txt for Linux and Raspberry pi 3B compatibility</strong></li>
@@ -352,8 +413,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true">v1.2.0 / 25-Jun-2021</label>
 <div>
-<h2 id="main-changes-9">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-6">Maintenance release and product update</h3>
+<h2 id="main-changes-10">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-7">Maintenance release and product update</h3>
 <ul>
 <li><strong>Updated requirements.txt - import missing</strong></li>
 <li><strong>Hotfix in nb_hsdatalog_communication notebook</strong></li>
@@ -369,8 +430,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true">v1.1.0 / 29-Jan-2021</label>
 <div>
-<h2 id="main-changes-10">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-7">Maintenance release and product update</h3>
+<h2 id="main-changes-11">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-8">Maintenance release and product update</h3>
 <ul>
 <li><strong>Updated core module and code cleaning</strong></li>
 <li>Add BSD 3 Clause license disclaimer</li>
@@ -384,7 +445,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">v1.0.0 / 13-Nov-2020</label>
 <div>
-<h2 id="main-changes-11">Main Changes</h2>
+<h2 id="main-changes-12">Main Changes</h2>
 <h3 id="first-official-release">First official release</h3>
 </div>
 </div>

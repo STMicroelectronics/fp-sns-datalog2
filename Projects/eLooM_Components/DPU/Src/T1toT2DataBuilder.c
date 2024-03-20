@@ -1,25 +1,25 @@
 /**
- ******************************************************************************
- * @file    T1toT2DataBuilder.c
- * @author  STMicroelectronics - AIS - MCD Team
- * @version M.m.b
- * @date    Jun 22, 2022
- *
- * @brief   Generic data builder that use an application defined function to
- *          convert from T1 to T2 type.
- *
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file in
- * the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    T1toT2DataBuilder.c
+  * @author  STMicroelectronics - AIS - MCD Team
+  * @version M.m.b
+  * @date    Jun 22, 2022
+  *
+  * @brief   Generic data builder that use an application defined function to
+  *          convert from T1 to T2 type.
+  *
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  ******************************************************************************
+  */
 
 #include "T1toT2DataBuilder.h"
 #include "T1toT2DataBuilder_vtbl.h"
@@ -29,12 +29,13 @@
 
 
 /**
- * Class object declaration.
- */
-typedef struct _T1toT2DataBuilderClass {
+  * Class object declaration.
+  */
+typedef struct _T1toT2DataBuilderClass
+{
   /**
-   * IDataBuilder_t class virtual table.
-   */
+    * IDataBuilder_t class virtual table.
+    */
   IDataBuilder_vtbl vtbl;
 
 } T1toT2DataBuilderClass_t;
@@ -44,14 +45,15 @@ typedef struct _T1toT2DataBuilderClass {
 /********************/
 
 /**
- * The class object.
- */
-static const T1toT2DataBuilderClass_t sTheClass = {
-    /* class virtual table */
-    {
-        T1toT2DB_vtblOnReset,
-        T1toT2DB_vtblOnNewInData
-    },
+  * The class object.
+  */
+static const T1toT2DataBuilderClass_t sTheClass =
+{
+  /* class virtual table */
+  {
+    T1toT2DB_vtblOnReset,
+    T1toT2DB_vtblOnNewInData
+  },
 };
 
 
@@ -65,7 +67,7 @@ static const T1toT2DataBuilderClass_t sTheClass = {
 sys_error_code_t T1toT2DB_vtblOnReset(IDataBuilder_t *_this, void *p_data_build_context)
 {
   assert_param(_this != NULL);
-  T1toT2DataBuilder_t *p_obj = (T1toT2DataBuilder_t*)_this;
+  T1toT2DataBuilder_t *p_obj = (T1toT2DataBuilder_t *)_this;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   p_obj->index = 0;
@@ -74,10 +76,11 @@ sys_error_code_t T1toT2DB_vtblOnReset(IDataBuilder_t *_this, void *p_data_build_
   return res;
 }
 
-sys_error_code_t T1toT2DB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t *p_target_data, const EMData_t *p_new_in_data, IDB_BuildStrategy_e build_strategy, DataBuffAllocator_f data_buff_alloc)
+sys_error_code_t T1toT2DB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t *p_target_data, const EMData_t *p_new_in_data,
+                                          IDB_BuildStrategy_e build_strategy, DataBuffAllocator_f data_buff_alloc)
 {
   assert_param(_this != NULL);
-  T1toT2DataBuilder_t *p_obj = (T1toT2DataBuilder_t*)_this;
+  T1toT2DataBuilder_t *p_obj = (T1toT2DataBuilder_t *)_this;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   EMData_t reshaped_target_data, reshaped_in_data;
 
@@ -96,7 +99,7 @@ sys_error_code_t T1toT2DB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t *p_tar
     uint32_t free_elements = target_elements - p_obj->index;
     uint32_t element_to_copy = (free_elements < in_elements ? free_elements : in_elements); // MIN(free_elements, in_elements)
     /*copy the input data elements in the target data payload*/
-    for (uint32_t i=0; i<element_to_copy; ++i)
+    for (uint32_t i = 0; i < element_to_copy; ++i)
     {
       p_obj->convert(p_src_val, p_target_val);
       p_target_val += EMD_GetElementSize(&reshaped_target_data);
@@ -159,11 +162,11 @@ sys_error_code_t T1toT2DB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t *p_tar
 
 IDataBuilder_t *T1toT2DB_Alloc(void)
 {
-  IDataBuilder_t *p_new_obj = (IDataBuilder_t*)SysAlloc(sizeof(T1toT2DataBuilder_t));
+  IDataBuilder_t *p_new_obj = (IDataBuilder_t *)SysAlloc(sizeof(T1toT2DataBuilder_t));
   if (p_new_obj != NULL)
   {
     p_new_obj->vptr = &sTheClass.vtbl;
-    ((T1toT2DataBuilder_t*)p_new_obj)->convert = NULL;
+    ((T1toT2DataBuilder_t *)p_new_obj)->convert = NULL;
   }
   else
   {
@@ -183,7 +186,6 @@ IDataBuilder_t *T1toT2DB_AllocStatic(T1toT2DataBuilder_t *_this)
     _this->convert = NULL;
   }
 
-  return (IDataBuilder_t*)_this;
+  return (IDataBuilder_t *)_this;
 }
-
 

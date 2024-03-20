@@ -44,7 +44,7 @@ def show_help(ctx, param, value):
 @click.option('-st','--start_time', help="Sample Start - Data analysis will start from this time (seconds)", type=int, default=0)
 @click.option('-et','--end_time', help="Sample End - Data analysis will end up in this time (seconds)", type=int, default=-1)
 @click.option('-cdm','--custom_device_model', help="Upload a custom Device Template Model (DTDL)", type=(int, int, str))
-@click.version_option(script_version, '-v', '--version', prog_name="HSDatalogToUnico", is_flag=True, help="HSDatalogToUnico Converter tool version number")
+@click.version_option(script_version, '-v', '--version', prog_name="hsdatalog_check_dummy_data", is_flag=True, help="hsdatalog_check_dummy_data tool version number")
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
 def hsd_dataframe(acq_folder, sensor_name, start_time, end_time, custom_device_model):

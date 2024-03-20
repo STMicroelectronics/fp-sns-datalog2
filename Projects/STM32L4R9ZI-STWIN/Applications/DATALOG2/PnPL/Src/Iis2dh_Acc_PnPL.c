@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:iis2dh_acc;1
+  * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:iis2dh_acc;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sIis2dh_Acc_PnPL_CompIF_vtbl =
   */
 struct _Iis2dh_Acc_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -107,57 +105,57 @@ uint8_t Iis2dh_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialized
   tempJSON = json_value_init_object();
   JSON_Status = json_value_get_object(tempJSON);
 
-  float temp_f = 0;
-  iis2dh_acc_get_odr(&temp_f);
+  int32_t temp_i = 0;
+  iis2dh_acc_get_odr(&temp_i);
   uint8_t enum_id = 0;
-  if(temp_f == iis2dh_acc_odr_hz1)
+  if (temp_i == iis2dh_acc_odr_hz1)
   {
     enum_id = 0;
   }
-  else if(temp_f == iis2dh_acc_odr_hz10)
+  else if (temp_i == iis2dh_acc_odr_hz10)
   {
     enum_id = 1;
   }
-  else if(temp_f == iis2dh_acc_odr_hz25)
+  else if (temp_i == iis2dh_acc_odr_hz25)
   {
     enum_id = 2;
   }
-  else if(temp_f == iis2dh_acc_odr_hz50)
+  else if (temp_i == iis2dh_acc_odr_hz50)
   {
     enum_id = 3;
   }
-  else if(temp_f == iis2dh_acc_odr_hz100)
+  else if (temp_i == iis2dh_acc_odr_hz100)
   {
     enum_id = 4;
   }
-  else if(temp_f == iis2dh_acc_odr_hz200)
+  else if (temp_i == iis2dh_acc_odr_hz200)
   {
     enum_id = 5;
   }
-  else if(temp_f == iis2dh_acc_odr_hz400)
+  else if (temp_i == iis2dh_acc_odr_hz400)
   {
     enum_id = 6;
   }
-  else if(temp_f == iis2dh_acc_odr_hz1344)
+  else if (temp_i == iis2dh_acc_odr_hz1344)
   {
     enum_id = 7;
   }
   json_object_dotset_number(JSON_Status, "iis2dh_acc.odr", enum_id);
-  iis2dh_acc_get_fs(&temp_f);
+  iis2dh_acc_get_fs(&temp_i);
   enum_id = 0;
-  if(temp_f == iis2dh_acc_fs_g2)
+  if (temp_i == iis2dh_acc_fs_g2)
   {
     enum_id = 0;
   }
-  else if(temp_f == iis2dh_acc_fs_g4)
+  else if (temp_i == iis2dh_acc_fs_g4)
   {
     enum_id = 1;
   }
-  else if(temp_f == iis2dh_acc_fs_g8)
+  else if (temp_i == iis2dh_acc_fs_g8)
   {
     enum_id = 2;
   }
-  else if(temp_f == iis2dh_acc_fs_g16)
+  else if (temp_i == iis2dh_acc_fs_g16)
   {
     enum_id = 3;
   }
@@ -165,11 +163,11 @@ uint8_t Iis2dh_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialized
   bool temp_b = 0;
   iis2dh_acc_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "iis2dh_acc.enable", temp_b);
-  int32_t temp_i = 0;
   iis2dh_acc_get_samples_per_ts(&temp_i);
   json_object_dotset_number(JSON_Status, "iis2dh_acc.samples_per_ts", temp_i);
   iis2dh_acc_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "iis2dh_acc.dim", temp_i);
+  float temp_f = 0;
   iis2dh_acc_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "iis2dh_acc.ioffset", temp_f);
   iis2dh_acc_get_measodr(&temp_f);
@@ -213,82 +211,139 @@ uint8_t Iis2dh_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialized
   return 0;
 }
 
-uint8_t Iis2dh_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Iis2dh_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size,
+                                        uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
-  if(json_object_dothas_value(tempJSONObject, "iis2dh_acc.odr"))
+  if (json_object_dothas_value(tempJSONObject, "iis2dh_acc.odr"))
   {
     int odr = (int)json_object_dotget_number(tempJSONObject, "iis2dh_acc.odr");
-    switch(odr)
+    switch (odr)
     {
-    case 0:
-      iis2dh_acc_set_odr(iis2dh_acc_odr_hz1);
-      break;
-    case 1:
-      iis2dh_acc_set_odr(iis2dh_acc_odr_hz10);
-      break;
-    case 2:
-      iis2dh_acc_set_odr(iis2dh_acc_odr_hz25);
-      break;
-    case 3:
-      iis2dh_acc_set_odr(iis2dh_acc_odr_hz50);
-      break;
-    case 4:
-      iis2dh_acc_set_odr(iis2dh_acc_odr_hz100);
-      break;
-    case 5:
-      iis2dh_acc_set_odr(iis2dh_acc_odr_hz200);
-      break;
-    case 6:
-      iis2dh_acc_set_odr(iis2dh_acc_odr_hz400);
-      break;
-    case 7:
-      iis2dh_acc_set_odr(iis2dh_acc_odr_hz1344);
-      break;
+      case 0:
+        ret = iis2dh_acc_set_odr(iis2dh_acc_odr_hz1);
+        break;
+      case 1:
+        ret = iis2dh_acc_set_odr(iis2dh_acc_odr_hz10);
+        break;
+      case 2:
+        ret = iis2dh_acc_set_odr(iis2dh_acc_odr_hz25);
+        break;
+      case 3:
+        ret = iis2dh_acc_set_odr(iis2dh_acc_odr_hz50);
+        break;
+      case 4:
+        ret = iis2dh_acc_set_odr(iis2dh_acc_odr_hz100);
+        break;
+      case 5:
+        ret = iis2dh_acc_set_odr(iis2dh_acc_odr_hz200);
+        break;
+      case 6:
+        ret = iis2dh_acc_set_odr(iis2dh_acc_odr_hz400);
+        break;
+      case 7:
+        ret = iis2dh_acc_set_odr(iis2dh_acc_odr_hz1344);
+        break;
+    }
+    if (ret == 0)
+    {
+      json_object_dotset_number(respJSONObject, "iis2dh_acc.odr.value", odr);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "iis2dh_acc.odr.value", "PNPL_SET_ERROR");
     }
   }
-  if(json_object_dothas_value(tempJSONObject, "iis2dh_acc.fs"))
+  if (json_object_dothas_value(tempJSONObject, "iis2dh_acc.fs"))
   {
     int fs = (int)json_object_dotget_number(tempJSONObject, "iis2dh_acc.fs");
-    switch(fs)
+    switch (fs)
     {
-    case 0:
-      iis2dh_acc_set_fs(iis2dh_acc_fs_g2);
-      break;
-    case 1:
-      iis2dh_acc_set_fs(iis2dh_acc_fs_g4);
-      break;
-    case 2:
-      iis2dh_acc_set_fs(iis2dh_acc_fs_g8);
-      break;
-    case 3:
-      iis2dh_acc_set_fs(iis2dh_acc_fs_g16);
-      break;
+      case 0:
+        ret = iis2dh_acc_set_fs(iis2dh_acc_fs_g2);
+        break;
+      case 1:
+        ret = iis2dh_acc_set_fs(iis2dh_acc_fs_g4);
+        break;
+      case 2:
+        ret = iis2dh_acc_set_fs(iis2dh_acc_fs_g8);
+        break;
+      case 3:
+        ret = iis2dh_acc_set_fs(iis2dh_acc_fs_g16);
+        break;
+    }
+    if (ret == 0)
+    {
+      json_object_dotset_number(respJSONObject, "iis2dh_acc.fs.value", fs);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "iis2dh_acc.fs.value", "PNPL_SET_ERROR");
     }
   }
   if (json_object_dothas_value(tempJSONObject, "iis2dh_acc.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "iis2dh_acc.enable");
-    iis2dh_acc_set_enable(enable);
+    ret = iis2dh_acc_set_enable(enable);
+    if (ret == 0)
+    {
+      json_object_dotset_boolean(respJSONObject, "iis2dh_acc.enable.value", enable);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "iis2dh_acc.enable.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "iis2dh_acc.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "iis2dh_acc.samples_per_ts");
-    iis2dh_acc_set_samples_per_ts(samples_per_ts);
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "iis2dh_acc.samples_per_ts");
+    ret = iis2dh_acc_set_samples_per_ts(samples_per_ts);
+    if (ret == 0)
+    {
+      json_object_dotset_number(respJSONObject, "iis2dh_acc.samples_per_ts.value", samples_per_ts);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "iis2dh_acc.samples_per_ts.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "iis2dh_acc.sensor_annotation"))
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "iis2dh_acc.sensor_annotation");
-    iis2dh_acc_set_sensor_annotation(sensor_annotation);
+    ret = iis2dh_acc_set_sensor_annotation(sensor_annotation);
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "iis2dh_acc.sensor_annotation.value", sensor_annotation);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "iis2dh_acc.sensor_annotation.value", "PNPL_SET_ERROR");
+    }
   }
   json_value_free(tempJSON);
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
+  json_value_free(respJSON);
   return ret;
 }
 
-uint8_t Iis2dh_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+
+uint8_t Iis2dh_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                            uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

@@ -56,7 +56,6 @@ extern "C" {
 #define SYS_PM_EVT_PARAM_EXIT_LP            0x02U  ///< Event parameter: exit low power mode command.
 
 
-
 /**
   * Specifies the possible power states of the system.
   */

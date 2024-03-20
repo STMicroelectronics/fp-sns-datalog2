@@ -167,7 +167,7 @@ uint8_t iis2dlpc_acc_get_sensor_annotation(char **value)
 }
 uint8_t iis2dlpc_acc_get_sensor_category(int32_t *value)
 {
-    *value = iis2dlpc_acc_model.sensor_status.isensor_class;
+  *value = iis2dlpc_acc_model.sensor_status.isensor_class;
   return 0;
 }
 uint8_t iis2dlpc_acc_get_stream_id(int8_t *value)
@@ -230,6 +230,14 @@ uint8_t iis2dlpc_acc_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     iis2dlpc_acc_model.stream_params.spts = value;
+  }
+  else if (value > max_v)
+  {
+	  iis2dlpc_acc_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  iis2dlpc_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -352,7 +360,7 @@ uint8_t iis2mdc_mag_get_sensor_annotation(char **value)
 }
 uint8_t iis2mdc_mag_get_sensor_category(int32_t *value)
 {
-    *value = iis2mdc_mag_model.sensor_status.isensor_class;
+  *value = iis2mdc_mag_model.sensor_status.isensor_class;
   return 0;
 }
 uint8_t iis2mdc_mag_get_stream_id(int8_t *value)
@@ -405,6 +413,14 @@ uint8_t iis2mdc_mag_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     iis2mdc_mag_model.stream_params.spts = value;
+  }
+  else if (value > max_v)
+  {
+	iis2mdc_mag_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	iis2mdc_mag_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -525,7 +541,7 @@ uint8_t ism330dhcx_gyro_get_sensor_annotation(char **value)
 }
 uint8_t ism330dhcx_gyro_get_sensor_category(int32_t *value)
 {
-    *value = ism330dhcx_gyro_model.sensor_status.isensor_class;
+  *value = ism330dhcx_gyro_model.sensor_status.isensor_class;
   return 0;
 }
 uint8_t ism330dhcx_gyro_get_stream_id(int8_t *value)
@@ -597,6 +613,14 @@ uint8_t ism330dhcx_gyro_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     ism330dhcx_gyro_model.stream_params.spts = value;
+  }
+  else if (value > max_v)
+  {
+	  ism330dhcx_gyro_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  ism330dhcx_gyro_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -717,7 +741,7 @@ uint8_t ism330dhcx_acc_get_sensor_annotation(char **value)
 }
 uint8_t ism330dhcx_acc_get_sensor_category(int32_t *value)
 {
-    *value = ism330dhcx_acc_model.sensor_status.isensor_class;
+  *value = ism330dhcx_acc_model.sensor_status.isensor_class;
   return 0;
 }
 uint8_t ism330dhcx_acc_get_stream_id(int8_t *value)
@@ -789,7 +813,14 @@ uint8_t ism330dhcx_acc_set_samples_per_ts(int32_t value)
   if (value >= min_v && value <= max_v)
   {
     ism330dhcx_acc_model.stream_params.spts = value;
-    //update spts in sensor manager
+  }
+  else if (value > max_v)
+  {
+	  ism330dhcx_acc_model.stream_params.spts = max_v;
+  }
+  else
+  {
+	  ism330dhcx_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -883,7 +914,7 @@ uint8_t ism330dhcx_mlc_get_sensor_annotation(char **value)
 }
 uint8_t ism330dhcx_mlc_get_sensor_category(int32_t *value)
 {
-    *value = ism330dhcx_mlc_model.sensor_status.isensor_class;
+  *value = ism330dhcx_mlc_model.sensor_status.isensor_class;
   return 0;
 }
 uint8_t ism330dhcx_mlc_get_stream_id(int8_t *value)
@@ -1557,7 +1588,7 @@ uint8_t firmware_info_get_fw_url(char **value)
 }
 uint8_t firmware_info_get_mac_address(char **value)
 {
-  /* USER Code */
+  *value = NULL;
   return 0;
 }
 uint8_t firmware_info_set_alias(const char *value)

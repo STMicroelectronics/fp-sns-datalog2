@@ -71,7 +71,6 @@ extern "C" {
 #define SENSOR_CMD_ID_SET_LIGHT_CH6_GAIN            ((uint16_t)0x000B)              ///< SET Channel 6 Gain command ID.
 
 
-
 #ifdef __cplusplus
 }
 #endif

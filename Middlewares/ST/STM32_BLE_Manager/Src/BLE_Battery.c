@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_Battery.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add battery info services using vendor specific profiles.
   ******************************************************************************
   * @attention
@@ -24,7 +24,8 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_BATTERY_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x02,0x00,0x00,0x00,0x01,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_BATTERY_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x02,0x00,0x00,\
+                                                          0x00,0x01,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 #define BATTERY_ADVERTISE_DATA_POSITION  16
 

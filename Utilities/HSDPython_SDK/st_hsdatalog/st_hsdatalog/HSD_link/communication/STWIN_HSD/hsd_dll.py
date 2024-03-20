@@ -51,9 +51,14 @@ class HSD_Dll_Wrapper:
         dll_name = ""
         log.info("{} - {}".format(platform.system(), platform.architecture()[0]))
         if platform.system() == 'Linux':
-            if platform.machine() == 'armv7l' or platform.machine() == 'aarch64':
-                log.info("RaspberryPi")
+            if platform.machine() == 'armv7l':
                 dll_name = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0] + "/libhs_datalog/raspberryPi/libhs_datalog_v1.so"
+            elif platform.machine() == 'aarch64':
+                arch = platform.architecture()[0]
+                if arch == "32bit":
+                    dll_name = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0] + "/libhs_datalog/raspberryPi4_32bit/libhs_datalog_v1.so"
+                else:
+                    dll_name = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0] + "/libhs_datalog/raspberryPi4_64bit/libhs_datalog_v1.so"
             else:
                 dll_name = os.path.split(os.path.dirname(os.path.abspath(__file__)))[0] + "/libhs_datalog/linux/libhs_datalog_v1.so"
             self._hsd_dll = cdll.LoadLibrary(dll_name)

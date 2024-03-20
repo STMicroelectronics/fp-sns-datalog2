@@ -3029,11 +3029,11 @@ static uint32_t SD_InitCard(SD_HandleTypeDef *hsd)
     /* SD Card publishes its RCA. */
     // while (sd_rca == 0U)
     // {
-      errorstate = SDMMC_CmdSetRelAdd(hsd->Instance, &sd_rca);
-      if (errorstate != HAL_SD_ERROR_NONE)
-      {
-        return errorstate;
-      }
+    errorstate = SDMMC_CmdSetRelAdd(hsd->Instance, &sd_rca);
+    if (errorstate != HAL_SD_ERROR_NONE)
+    {
+      return errorstate;
+    }
     //   if ((HAL_GetTick() - tickstart) >=  SDMMC_CMDTIMEOUT)
     //   {
     //     return HAL_SD_ERROR_TIMEOUT;

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_Inertial.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add inertial info services using vendor specific profiles.
   ******************************************************************************
   * @attention
@@ -24,7 +24,8 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_INERTIAL_CHAR_UUID(uuid_struct)  COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x00,0x01,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_INERTIAL_CHAR_UUID(uuid_struct)  COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,\
+                                                            0x00,0x01,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 #define INERTIAL_ADVERTISE_DATA_POSITION  16
 
@@ -37,11 +38,11 @@ typedef struct
   uint8_t AccIsEnable;
   uint8_t GyroIsEnable;
   uint8_t MagIsEnabled;
-} BLE_Manager_InertialFeaturesEnabled;
+} BLE_Manager_InertialFeaturesEnabled_t;
 
 /* Private variables ---------------------------------------------------------*/
 /* Data structure for identify inertial info services enabled */
-BLE_Manager_InertialFeaturesEnabled InertialFeaturesEnabled;
+BLE_Manager_InertialFeaturesEnabled_t InertialFeaturesEnabled;
 /* Data structure pointer for inertial info service */
 static BleCharTypeDef BleCharInertial;
 /* Size for inertial BLE characteristic */
@@ -86,7 +87,7 @@ BleCharTypeDef *BLE_InitInertialService(uint8_t AccEnable, uint8_t GyroEnable, u
       InertialCharSize += 3U * 2U;
 #if (BLE_DEBUG_LEVEL>1)
       BLE_MANAGER_PRINTF("\t--> Accelerometer feature enabled\r\n");
-#endif
+#endif /* (BLE_DEBUG_LEVEL>1) */
     }
 
     /* Enables BLE gyroscope feature */
@@ -96,7 +97,7 @@ BleCharTypeDef *BLE_InitInertialService(uint8_t AccEnable, uint8_t GyroEnable, u
       InertialCharSize += 3U * 2U;
 #if (BLE_DEBUG_LEVEL>1)
       BLE_MANAGER_PRINTF("\t--> Gyroscope feature enabled\r\n");
-#endif
+#endif /* (BLE_DEBUG_LEVEL>1) */
     }
 
     /* Enables BLE magnetometer feature */
@@ -106,7 +107,7 @@ BleCharTypeDef *BLE_InitInertialService(uint8_t AccEnable, uint8_t GyroEnable, u
       InertialCharSize += 3U * 2U;
 #if (BLE_DEBUG_LEVEL>1)
       BLE_MANAGER_PRINTF("\t--> Magnetometer feature enabled\r\n");
-#endif
+#endif /* (BLE_DEBUG_LEVEL>1) */
     }
 
     BleCharPointer->Char_UUID_Type = UUID_TYPE_128;
@@ -177,35 +178,35 @@ tBleStatus BLE_AccGyroMagUpdate(BLE_MANAGER_INERTIAL_Axes_t *Acc,
 
   if (InertialFeaturesEnabled.AccIsEnable == 1U)
   {
-    STORE_LE_16(buff + BuffPos, ((uint16_t)Acc->x));
+    STORE_LE_16(buff + BuffPos, ((uint16_t)Acc->Axis_x));
     BuffPos += 2U;
-    STORE_LE_16(buff + BuffPos, ((uint16_t)Acc->y));
+    STORE_LE_16(buff + BuffPos, ((uint16_t)Acc->Axis_y));
     BuffPos += 2U;
-    STORE_LE_16(buff + BuffPos, ((uint16_t)Acc->z));
+    STORE_LE_16(buff + BuffPos, ((uint16_t)Acc->Axis_z));
     BuffPos += 2U;
   }
 
   if (InertialFeaturesEnabled.GyroIsEnable == 1U)
   {
-    Gyro->x /= 100;
-    Gyro->y /= 100;
-    Gyro->z /= 100;
+    Gyro->Axis_x /= 100;
+    Gyro->Axis_y /= 100;
+    Gyro->Axis_z /= 100;
 
-    STORE_LE_16(buff + BuffPos, ((uint16_t)Gyro->x));
+    STORE_LE_16(buff + BuffPos, ((uint16_t)Gyro->Axis_x));
     BuffPos += 2U;
-    STORE_LE_16(buff + BuffPos, ((uint16_t)Gyro->y));
+    STORE_LE_16(buff + BuffPos, ((uint16_t)Gyro->Axis_y));
     BuffPos += 2U;
-    STORE_LE_16(buff + BuffPos, ((uint16_t)Gyro->z));
+    STORE_LE_16(buff + BuffPos, ((uint16_t)Gyro->Axis_z));
     BuffPos += 2U;
   }
 
   if (InertialFeaturesEnabled.MagIsEnabled == 1U)
   {
-    STORE_LE_16(buff + BuffPos, ((uint16_t)Mag->x));
+    STORE_LE_16(buff + BuffPos, ((uint16_t)Mag->Axis_x));
     BuffPos += 2U;
-    STORE_LE_16(buff + BuffPos, ((uint16_t)Mag->y));
+    STORE_LE_16(buff + BuffPos, ((uint16_t)Mag->Axis_y));
     BuffPos += 2U;
-    STORE_LE_16(buff + BuffPos, ((uint16_t)Mag->z));
+    STORE_LE_16(buff + BuffPos, ((uint16_t)Mag->Axis_z));
     BuffPos += 2U;
   }
 
@@ -241,8 +242,9 @@ tBleStatus BLE_AccGyroMagUpdate(BLE_MANAGER_INERTIAL_Axes_t *Acc,
   * @param  uint16_t attr_handle Handle of the attribute
   * @param  uint16_t Offset: (SoC mode) the offset is never used and it is always 0. Network coprocessor mode:
   *                          - Bits 0-14: offset of the reported value inside the attribute.
-  *                          - Bit 15: if the entire value of the attribute does not fit inside a single ACI_GATT_ATTRIBUTE_MODIFIED_EVENT event,
-  *                            this bit is set to 1 to notify that other ACI_GATT_ATTRIBUTE_MODIFIED_EVENT events will follow to report the remaining value.
+  *                          - Bit 15: if the entire value of the attribute does not fit inside a single
+  *                            ACI_GATT_ATTRIBUTE_MODIFIED_EVENT event, this bit is set to 1 to notify that other
+  *                            ACI_GATT_ATTRIBUTE_MODIFIED_EVENT events will follow to report the remaining value.
   * @param  uint8_t data_length length of the data
   * @param  uint8_t *att_data attribute data
   * @retval None
@@ -269,13 +271,15 @@ static void AttrMod_Request_Inertial(void *VoidCharPointer, uint16_t attr_handle
 
   if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
   {
-    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "--->Acc/Gyro/Mag=%s\n", (att_data[0] == 01U) ? " ON" : " OFF");
+    BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite,
+                                    "--->Acc/Gyro/Mag=%s\n",
+                                    (att_data[0] == 01U) ? " ON" : " OFF");
     Term_Update(BufferToWrite, BytesToWrite);
   }
   else
   {
     BLE_MANAGER_PRINTF("--->Acc/Gyro/Mag=%s", (att_data[0] == 01U) ? " ON\r\n" : " OFF\r\n");
   }
-#endif
+#endif /* (BLE_DEBUG_LEVEL>1) */
 }
 

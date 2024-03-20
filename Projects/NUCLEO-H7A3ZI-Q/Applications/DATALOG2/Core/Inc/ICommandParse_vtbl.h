@@ -32,7 +32,8 @@ typedef struct _ICommandParse_vtbl ICommandParse_vtbl;
 struct _ICommandParse_vtbl
 {
   sys_error_code_t (*parse_command)(ICommandParse_t *_this, char *commandString, uint8_t mode);
-  sys_error_code_t (*serialize_response)(ICommandParse_t *_this, char **response_name, char **buff, uint32_t *size, uint8_t pretty);
+  sys_error_code_t (*serialize_response)(ICommandParse_t *_this, char **response_name, char **buff, uint32_t *size,
+                                         uint8_t pretty);
   sys_error_code_t (*ISendCtrlMsg)(ICommandParse_t *_this,  uint32_t *msg, uint32_t length);
 };
 

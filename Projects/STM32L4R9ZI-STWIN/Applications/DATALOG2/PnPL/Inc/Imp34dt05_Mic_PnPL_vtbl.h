@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:imp34dt05_mic;1
+  * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:imp34dt05_mic;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -39,9 +39,12 @@ extern "C" {
 char *Imp34dt05_Mic_PnPL_vtblGetKey(IPnPLComponent_t *_this);
 uint8_t Imp34dt05_Mic_PnPL_vtblGetNCommands(IPnPLComponent_t *_this);
 char *Imp34dt05_Mic_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id);
-uint8_t Imp34dt05_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,uint8_t pretty);
-uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON);
-uint8_t Imp34dt05_Mic_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON);
+uint8_t Imp34dt05_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                         uint8_t pretty);
+uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                           uint32_t *size, uint8_t pretty);
+uint8_t Imp34dt05_Mic_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                               uint32_t *size, uint8_t pretty);
 
 #ifdef __cplusplus
 }

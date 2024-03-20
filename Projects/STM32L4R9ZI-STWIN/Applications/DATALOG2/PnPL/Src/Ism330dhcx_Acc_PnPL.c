@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:ism330dhcx_acc;1
+  * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:ism330dhcx_acc;1
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.0
+  * Created by: DTDL2PnPL_cGen version 1.2.3
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -53,9 +53,7 @@ static const IPnPLComponent_vtbl sIsm330dhcx_Acc_PnPL_CompIF_vtbl =
   */
 struct _Ism330dhcx_Acc_PnPL
 {
-  /**
-    * Implements the IPnPLComponent interface.
-    */
+  /* Implements the IPnPLComponent interface. */
   IPnPLComponent_t component_if;
 
 };
@@ -99,7 +97,8 @@ char *Ism330dhcx_Acc_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
   return "";
 }
 
-uint8_t Ism330dhcx_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty)
+uint8_t Ism330dhcx_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size,
+                                          uint8_t pretty)
 {
   JSON_Value *tempJSON;
   JSON_Object *JSON_Status;
@@ -110,62 +109,63 @@ uint8_t Ism330dhcx_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   float temp_f = 0;
   ism330dhcx_acc_get_odr(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f == ism330dhcx_acc_odr_hz12_5)
+  if (temp_f == ism330dhcx_acc_odr_hz12_5)
   {
     enum_id = 0;
   }
-  else if(temp_f == ism330dhcx_acc_odr_hz26)
+  else if (temp_f == ism330dhcx_acc_odr_hz26)
   {
     enum_id = 1;
   }
-  else if(temp_f == ism330dhcx_acc_odr_hz52)
+  else if (temp_f == ism330dhcx_acc_odr_hz52)
   {
     enum_id = 2;
   }
-  else if(temp_f == ism330dhcx_acc_odr_hz104)
+  else if (temp_f == ism330dhcx_acc_odr_hz104)
   {
     enum_id = 3;
   }
-  else if(temp_f == ism330dhcx_acc_odr_hz208)
+  else if (temp_f == ism330dhcx_acc_odr_hz208)
   {
     enum_id = 4;
   }
-  else if(temp_f == ism330dhcx_acc_odr_hz416)
+  else if (temp_f == ism330dhcx_acc_odr_hz416)
   {
     enum_id = 5;
   }
-  else if(temp_f == ism330dhcx_acc_odr_hz833)
+  else if (temp_f == ism330dhcx_acc_odr_hz833)
   {
     enum_id = 6;
   }
-  else if(temp_f == ism330dhcx_acc_odr_hz1666)
+  else if (temp_f == ism330dhcx_acc_odr_hz1666)
   {
     enum_id = 7;
   }
-  else if(temp_f == ism330dhcx_acc_odr_hz3332)
+  else if (temp_f == ism330dhcx_acc_odr_hz3332)
   {
     enum_id = 8;
   }
-  else if(temp_f == ism330dhcx_acc_odr_hz6667)
+  else if (temp_f == ism330dhcx_acc_odr_hz6667)
   {
     enum_id = 9;
   }
   json_object_dotset_number(JSON_Status, "ism330dhcx_acc.odr", enum_id);
-  ism330dhcx_acc_get_fs(&temp_f);
+  int32_t temp_i = 0;
+  ism330dhcx_acc_get_fs(&temp_i);
   enum_id = 0;
-  if(temp_f == ism330dhcx_acc_fs_g2)
+  if (temp_i == ism330dhcx_acc_fs_g2)
   {
     enum_id = 0;
   }
-  else if(temp_f == ism330dhcx_acc_fs_g4)
+  else if (temp_i == ism330dhcx_acc_fs_g4)
   {
     enum_id = 1;
   }
-  else if(temp_f == ism330dhcx_acc_fs_g8)
+  else if (temp_i == ism330dhcx_acc_fs_g8)
   {
     enum_id = 2;
   }
-  else if(temp_f == ism330dhcx_acc_fs_g16)
+  else if (temp_i == ism330dhcx_acc_fs_g16)
   {
     enum_id = 3;
   }
@@ -173,7 +173,6 @@ uint8_t Ism330dhcx_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   bool temp_b = 0;
   ism330dhcx_acc_get_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "ism330dhcx_acc.enable", temp_b);
-  int32_t temp_i = 0;
   ism330dhcx_acc_get_samples_per_ts(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330dhcx_acc.samples_per_ts", temp_i);
   ism330dhcx_acc_get_dim(&temp_i);
@@ -221,88 +220,145 @@ uint8_t Ism330dhcx_Acc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   return 0;
 }
 
-uint8_t Ism330dhcx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON)
+uint8_t Ism330dhcx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                            uint32_t *size, uint8_t pretty)
 {
   JSON_Value *tempJSON = json_parse_string(serializedJSON);
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+  JSON_Value *respJSON = json_value_init_object();
+  JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = 0;
-  if(json_object_dothas_value(tempJSONObject, "ism330dhcx_acc.odr"))
+  if (json_object_dothas_value(tempJSONObject, "ism330dhcx_acc.odr"))
   {
     int odr = (int)json_object_dotget_number(tempJSONObject, "ism330dhcx_acc.odr");
-    switch(odr)
+    switch (odr)
     {
-    case 0:
-      ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz12_5);
-      break;
-    case 1:
-      ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz26);
-      break;
-    case 2:
-      ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz52);
-      break;
-    case 3:
-      ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz104);
-      break;
-    case 4:
-      ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz208);
-      break;
-    case 5:
-      ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz416);
-      break;
-    case 6:
-      ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz833);
-      break;
-    case 7:
-      ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz1666);
-      break;
-    case 8:
-      ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz3332);
-      break;
-    case 9:
-      ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz6667);
-      break;
+      case 0:
+        ret = ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz12_5);
+        break;
+      case 1:
+        ret = ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz26);
+        break;
+      case 2:
+        ret = ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz52);
+        break;
+      case 3:
+        ret = ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz104);
+        break;
+      case 4:
+        ret = ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz208);
+        break;
+      case 5:
+        ret = ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz416);
+        break;
+      case 6:
+        ret = ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz833);
+        break;
+      case 7:
+        ret = ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz1666);
+        break;
+      case 8:
+        ret = ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz3332);
+        break;
+      case 9:
+        ret = ism330dhcx_acc_set_odr(ism330dhcx_acc_odr_hz6667);
+        break;
+    }
+    if (ret == 0)
+    {
+      json_object_dotset_number(respJSONObject, "ism330dhcx_acc.odr.value", odr);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "ism330dhcx_acc.odr.value", "PNPL_SET_ERROR");
     }
   }
-  if(json_object_dothas_value(tempJSONObject, "ism330dhcx_acc.fs"))
+  if (json_object_dothas_value(tempJSONObject, "ism330dhcx_acc.fs"))
   {
     int fs = (int)json_object_dotget_number(tempJSONObject, "ism330dhcx_acc.fs");
-    switch(fs)
+    switch (fs)
     {
-    case 0:
-      ism330dhcx_acc_set_fs(ism330dhcx_acc_fs_g2);
-      break;
-    case 1:
-      ism330dhcx_acc_set_fs(ism330dhcx_acc_fs_g4);
-      break;
-    case 2:
-      ism330dhcx_acc_set_fs(ism330dhcx_acc_fs_g8);
-      break;
-    case 3:
-      ism330dhcx_acc_set_fs(ism330dhcx_acc_fs_g16);
-      break;
+      case 0:
+        ret = ism330dhcx_acc_set_fs(ism330dhcx_acc_fs_g2);
+        break;
+      case 1:
+        ret = ism330dhcx_acc_set_fs(ism330dhcx_acc_fs_g4);
+        break;
+      case 2:
+        ret = ism330dhcx_acc_set_fs(ism330dhcx_acc_fs_g8);
+        break;
+      case 3:
+        ret = ism330dhcx_acc_set_fs(ism330dhcx_acc_fs_g16);
+        break;
+    }
+    if (ret == 0)
+    {
+      json_object_dotset_number(respJSONObject, "ism330dhcx_acc.fs.value", fs);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "ism330dhcx_acc.fs.value", "PNPL_SET_ERROR");
     }
   }
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_acc.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "ism330dhcx_acc.enable");
-    ism330dhcx_acc_set_enable(enable);
+    ret = ism330dhcx_acc_set_enable(enable);
+    if (ret == 0)
+    {
+      json_object_dotset_boolean(respJSONObject, "ism330dhcx_acc.enable.value", enable);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "ism330dhcx_acc.enable.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_acc.samples_per_ts"))
   {
-    int32_t samples_per_ts =(int32_t) json_object_dotget_number(tempJSONObject, "ism330dhcx_acc.samples_per_ts");
-    ism330dhcx_acc_set_samples_per_ts(samples_per_ts);
+    int32_t samples_per_ts = (int32_t) json_object_dotget_number(tempJSONObject, "ism330dhcx_acc.samples_per_ts");
+    ret = ism330dhcx_acc_set_samples_per_ts(samples_per_ts);
+    if (ret == 0)
+    {
+      json_object_dotset_number(respJSONObject, "ism330dhcx_acc.samples_per_ts.value", samples_per_ts);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "ism330dhcx_acc.samples_per_ts.value", "PNPL_SET_ERROR");
+    }
   }
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_acc.sensor_annotation"))
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ism330dhcx_acc.sensor_annotation");
-    ism330dhcx_acc_set_sensor_annotation(sensor_annotation);
+    ret = ism330dhcx_acc_set_sensor_annotation(sensor_annotation);
+    if (ret == 0)
+    {
+      json_object_dotset_string(respJSONObject, "ism330dhcx_acc.sensor_annotation.value", sensor_annotation);
+    }
+    else
+    {
+      json_object_dotset_string(respJSONObject, "ism330dhcx_acc.sensor_annotation.value", "PNPL_SET_ERROR");
+    }
   }
   json_value_free(tempJSON);
+  if (pretty == 1)
+  {
+    *response = json_serialize_to_string_pretty(respJSON);
+    *size = json_serialization_size_pretty(respJSON);
+  }
+  else
+  {
+    *response = json_serialize_to_string(respJSON);
+    *size = json_serialization_size(respJSON);
+  }
+  json_value_free(respJSON);
   return ret;
 }
 
-uint8_t Ism330dhcx_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON)
+
+uint8_t Ism330dhcx_Acc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
+                                                uint32_t *size, uint8_t pretty)
 {
   return 1;
 }
+

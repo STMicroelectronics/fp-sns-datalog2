@@ -53,11 +53,11 @@
 #define SYS_TS_CFG_ENABLE_SERVICE 1
 
 /**
-* Configuration parameter for the timer used for the eLooM timestamp service.
-* Valid value are:
-* - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
-* - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
-*/
+  * Configuration parameter for the timer used for the eLooM timestamp service.
+  * Valid value are:
+  * - SYS_TS_USE_SW_TSDRIVER to use the RTOS tick
+  * - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
+  */
 #define SYS_TS_CFG_TSDRIVER_PARAMS &MX_TIM3InitParams
 //#define SYS_TS_CFG_TSDRIVER_PARAMS SYS_TS_USE_SW_TSDRIVER
 

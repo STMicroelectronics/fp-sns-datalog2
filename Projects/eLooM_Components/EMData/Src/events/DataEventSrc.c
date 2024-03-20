@@ -38,7 +38,6 @@ typedef struct _DataEventSrcClass
 } DataEventClass_t;
 
 
-
 /* Objects instance */
 /********************/
 

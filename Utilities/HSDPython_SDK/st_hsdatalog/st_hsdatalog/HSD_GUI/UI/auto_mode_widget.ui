@@ -469,7 +469,7 @@ QSpinBox:disabled {
                  </property>
                 </widget>
                </item>
-               <item>
+               <item alignment="Qt::AlignRight">
                 <widget class="QLabel" name="idle_period_info">
                  <property name="text">
                   <string/>

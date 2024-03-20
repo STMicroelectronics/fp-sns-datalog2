@@ -534,6 +534,16 @@
               <FileType>1</FileType>
               <FilePath>..\mx\Src\usb_otg.c</FilePath>
             </File>
+            <File>
+              <FileName>memorymap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\mx\Src\memorymap.c</FilePath>
+            </File>
+            <File>
+              <FileName>rng.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\mx\Src\rng.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3141,6 +3151,16 @@
               <FileName>usb_otg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\mx\Src\usb_otg.c</FilePath>
+            </File>
+            <File>
+              <FileName>memorymap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\mx\Src\memorymap.c</FilePath>
+            </File>
+            <File>
+              <FileName>rng.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\mx\Src\rng.c</FilePath>
             </File>
           </Files>
         </Group>

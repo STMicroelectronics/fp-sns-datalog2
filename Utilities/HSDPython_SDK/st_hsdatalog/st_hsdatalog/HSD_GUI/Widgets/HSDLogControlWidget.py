@@ -19,7 +19,7 @@ import math
 import threading
 import time
 
-from st_dtdl_gui.UI.styles import STDTDL_PushButton
+from st_dtdl_gui.UI.styles import STDTDL_Label, STDTDL_PushButton
 from st_dtdl_gui.Widgets.LoadingWindow import StaticLoadingWindow
 
 import matplotlib.pyplot as plt
@@ -42,6 +42,7 @@ class HSDLogControlWidget(ComponentWidget):
         super().__init__(controller, comp_name, comp_display_name, comp_sem_type, comp_contents, c_id, parent)
         
         self.controller.sig_offline_plots_completed.connect(self.s_offline_plots_completed)
+        self.controller.sig_lock_start_button.connect(self.s_lock_start_button)
         
         self.app = self.controller.qt_app
         self.is_waiting_to_start = False
@@ -67,6 +68,9 @@ class HSDLogControlWidget(ComponentWidget):
         # Start/Stop Log PushButton
         self.log_start_button = frame_contents.findChild(QPushButton,"start_button")
         self.log_start_button.clicked.connect(self.clicked_start_log_button)
+
+        self.config_errors_label = frame_contents.findChild(QLabel,"config_errors_label")
+        self.config_errors_label.setVisible(False)
         
         #TODO generic logging interfaces management (update SD card status message only if SD card interface is supported)
         # # SD Mounted Label
@@ -134,6 +138,12 @@ class HSDLogControlWidget(ComponentWidget):
         self.subfolder_checkbox.setChecked(True)
 
         self.ds_component_names_combo = frame_contents.findChild(QComboBox,"sensor_names_combo")
+
+        self.spectrum_radio = frame_contents.findChild(QRadioButton,"spectrum_radio")
+        self.spectrum_flag = False
+        self.spectrum_radio.toggled.connect(self.toggled_spectrum_flag)
+        self.spectrum_radio.setEnabled(False)
+        self.spectrum_radio.setVisible(False)
         
         self.debug_radio = frame_contents.findChild(QRadioButton,"debug_radio")
         self.debug_flag = False
@@ -190,10 +200,10 @@ class HSDLogControlWidget(ComponentWidget):
         self.sd_mounted = self.controller.get_sd_mounted_status()#hsd_link.get_boolean_property(0,"log_controller","sd_mounted")
         if self.sd_mounted:
             self.sd_mounted_label.setText("SD Mounted")
-            self.sd_mounted_label.setStyleSheet("color: #99FF33;")
+            self.sd_mounted_label.setStyleSheet(STDTDL_Label.valid)
         else:
             self.sd_mounted_label.setText("SD NOT Mounted")
-            self.sd_mounted_label.setStyleSheet("color: #FF5050;")
+            self.sd_mounted_label.setStyleSheet(STDTDL_Label.invalid)
     @Slot()
     def clicked_refresh_button(self):
         # ==============================================================================================================
@@ -239,6 +249,10 @@ class HSDLogControlWidget(ComponentWidget):
         self.save_config_dialog.close()
         
     @Slot()
+    def toggled_spectrum_flag(self, status):
+        self.spectrum_flag = status
+
+    @Slot()
     def toggled_debug_flag(self, status):
         self.debug_flag = status
         
@@ -259,8 +273,17 @@ class HSDLogControlWidget(ComponentWidget):
         tag_label = self.tags_label_combo.currentText()
         self.s_start = self.st_spinbox.value()
         self.s_end = self.et_spinbox.value()
-        self.controller.do_offline_plots(cb_sensor_value, tag_label, self.s_start, self.s_end, self.active_sensor_list, self.active_algorithm_list, self.debug_flag, self.sub_plots_flag, self.raw_data_flag, self.active_actuator_list)
+        self.controller.do_offline_plots(cb_sensor_value, tag_label, self.s_start, self.s_end, self.active_sensor_list, self.active_algorithm_list, self.debug_flag, self.sub_plots_flag, self.raw_data_flag, self.active_actuator_list, self.spectrum_flag)
     
+    @Slot()
+    def s_lock_start_button(self, status):
+        if status:
+            self.log_start_button.setStyleSheet(STDTDL_PushButton.invalid)
+        else:
+            self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
+        self.config_errors_label.setVisible(status)
+        self.log_start_button.setEnabled(not status)
+
     @Slot()
     def s_offline_plots_completed(self):
         self.loading_window.loadingDone()

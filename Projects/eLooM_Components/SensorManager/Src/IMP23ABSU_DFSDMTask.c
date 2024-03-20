@@ -229,27 +229,7 @@ static IMP23ABSUTaskClass_t sTheClass =
   /* MIC DESCRIPTOR */
   {
     "imp23absu",
-    COM_TYPE_MIC,
-    {
-      16000.0,
-      32000.0,
-      48000.0,
-      96000.0,
-      192000.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      130.0,
-      COM_END_OF_LIST_FLOAT,
-    },
-    {
-      "aud",
-    },
-    "Waveform",
-    {
-      0,
-      1000,
-    }
+    COM_TYPE_MIC
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -369,9 +349,9 @@ sys_error_code_t IMP23ABSUTask_vtblHardwareInit(AManagedTask *_this, void *pPara
     if (!SYS_IS_ERROR_CODE(res))
     {
       DFSDMDriverFilterRegisterCallback((DFSDMDriver_t *) p_obj->p_driver, HAL_DFSDM_FILTER_REGCONV_HALFCOMPLETE_CB_ID,
-                                      DFSDM_Filter_1_HalfComplete_Callback);
+                                        DFSDM_Filter_1_HalfComplete_Callback);
       DFSDMDriverFilterRegisterCallback((DFSDMDriver_t *) p_obj->p_driver, HAL_DFSDM_FILTER_REGCONV_COMPLETE_CB_ID,
-                                      DFSDM_Filter_1_Complete_Callback);
+                                        DFSDM_Filter_1_Complete_Callback);
     }
 
     if (!MTMap_IsInitialized(&sTheClass.task_map))
@@ -1124,9 +1104,9 @@ static sys_error_code_t IMP23ABSUTaskSensorSetFrequency(IMP23ABSUTask *_this, SM
     {
       DFSDMSetDFSDMConfig(p_obj->p_driver, ODR);
       DFSDMDriverFilterRegisterCallback((DFSDMDriver_t *) p_obj->p_driver, HAL_DFSDM_FILTER_REGCONV_HALFCOMPLETE_CB_ID,
-                                      DFSDM_Filter_1_HalfComplete_Callback);
+                                        DFSDM_Filter_1_HalfComplete_Callback);
       DFSDMDriverFilterRegisterCallback((DFSDMDriver_t *) p_obj->p_driver, HAL_DFSDM_FILTER_REGCONV_COMPLETE_CB_ID,
-                                      DFSDM_Filter_1_Complete_Callback);
+                                        DFSDM_Filter_1_Complete_Callback);
 
       _this->sensor_status.type.audio.frequency = ODR;
     }

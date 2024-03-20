@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_BinaryContent.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   BLE_BinaryContent info services APIs.
   ******************************************************************************
   * @attention
@@ -61,17 +61,17 @@ extern tBleStatus BLE_BinaryContentUpdate(uint8_t *buffer, uint8_t len);
 
 /**
   * @brief  BinaryContent Set Max Char Length
-  * @param  int32_t MaxCharLength
+  * @param  uint16_t MaxCharLength
   * @retval none
   */
-extern void BLE_BinaryContentSetMaxCharLength(int32_t MaxCharLength);
+extern void BLE_BinaryContentSetMaxCharLength(uint16_t MaxCharLength);
 
 /**
   * @brief  BinaryContent Get Max Char Length
   * @param  None
-  * @retval int32_t MaxCharLength
+  * @retval uint16_t MaxCharLength
   */
-extern int32_t BLE_BinaryContentGetMaxCharLength(void);
+extern uint16_t BLE_BinaryContentGetMaxCharLength(void);
 
 #ifdef __cplusplus
 }

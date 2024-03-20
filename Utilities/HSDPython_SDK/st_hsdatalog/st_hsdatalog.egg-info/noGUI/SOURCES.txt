@@ -55,6 +55,10 @@ st_hsdatalog/HSD_link/communication/libhs_datalog/linux/libhs_datalog_v1.so
 st_hsdatalog/HSD_link/communication/libhs_datalog/linux/libhs_datalog_v2.so
 st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi/libhs_datalog_v1.so
 st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi/libhs_datalog_v2.so
+st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_32bit/libhs_datalog_v1.so
+st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_32bit/libhs_datalog_v2.so
+st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_64bit/libhs_datalog_v1.so
+st_hsdatalog/HSD_link/communication/libhs_datalog/raspberryPi4_64bit/libhs_datalog_v2.so
 st_hsdatalog/HSD_utils/LICENSE.md
 st_hsdatalog/HSD_utils/LICENSE.txt
 st_hsdatalog/HSD_utils/__init__.py

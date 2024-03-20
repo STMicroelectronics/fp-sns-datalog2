@@ -50,7 +50,6 @@ typedef struct _AppPowerModeHelper AppPowerModeHelper_t;
 IAppPowerModeHelper *AppPowerModeHelperAlloc();
 
 
-
 /* Inline functions definition */
 /*******************************/
 

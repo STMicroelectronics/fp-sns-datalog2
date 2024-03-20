@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    BLE_FFT_AlarmSubrangeStatus.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.0
-  * @date    25-July-2023
+  * @version 1.9.1
+  * @date    10-October-2023
   * @brief   Add BLE FFT Alarm Subrange Status info services using vendor
   *          specific profiles.
   ******************************************************************************
@@ -25,7 +25,9 @@
 #include "BLE_ManagerCommon.h"
 
 /* Private define ------------------------------------------------------------*/
-#define COPY_FFT_ALARM_SUBRANGE_STATUS_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x09,0x00,0x02,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
+#define COPY_FFT_ALARM_SUBRANGE_STATUS_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x09,0x00,0x02,\
+                                                                            0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,\
+                                                                            0xc5,0x1b)
 
 /* Exported variables --------------------------------------------------------*/
 CustomNotifyEventFFT_AlarmSubrangeStatus_t CustomNotifyEventFFT_AlarmSubrangeStatus = NULL;
@@ -173,7 +175,9 @@ static void AttrMod_Request_FFT_AlarmSubrangeStatus(void *VoidCharPointer, uint1
 
   if (BLE_StdTerm_Service == BLE_SERV_ENABLE)
   {
-    BytesToWrite = (uint8_t) sprintf((char *)BufferToWrite, "--->FFT Alarm SubRangeStatus=%s\n", (att_data[0] == 01U) ? " ON" : " OFF");
+    BytesToWrite = (uint8_t) sprintf((char *)BufferToWrite,
+                                     "--->FFT Alarm SubRangeStatus=%s\n",
+                                     (att_data[0] == 01U) ? " ON" : " OFF");
     Term_Update(BufferToWrite, BytesToWrite);
   }
   else
