@@ -217,7 +217,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   if (json_object_dothas_value(tempJSONObject, "vl53l8cx_tof.resolution"))
   {
     int resolution = (int)json_object_dotget_number(tempJSONObject, "vl53l8cx_tof.resolution");
-    switch(resolution)
+    switch (resolution)
     {
       case 0:
         ret = vl53l8cx_tof_set_resolution(vl53l8cx_tof_resolution_n4x4);
@@ -228,7 +228,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
     }
     if (ret == 0)
     {
-      json_object_dotset_number(respJSONObject, "vl53l8cx_tof.resolution.value",resolution);
+      json_object_dotset_number(respJSONObject, "vl53l8cx_tof.resolution.value", resolution);
     }
     else
     {
@@ -238,7 +238,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   if (json_object_dothas_value(tempJSONObject, "vl53l8cx_tof.ranging_mode"))
   {
     int ranging_mode = (int)json_object_dotget_number(tempJSONObject, "vl53l8cx_tof.ranging_mode");
-    switch(ranging_mode)
+    switch (ranging_mode)
     {
       case 0:
         ret = vl53l8cx_tof_set_ranging_mode(vl53l8cx_tof_ranging_mode_continuous);
@@ -249,7 +249,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
     }
     if (ret == 0)
     {
-      json_object_dotset_number(respJSONObject, "vl53l8cx_tof.ranging_mode.value",ranging_mode);
+      json_object_dotset_number(respJSONObject, "vl53l8cx_tof.ranging_mode.value", ranging_mode);
     }
     else
     {

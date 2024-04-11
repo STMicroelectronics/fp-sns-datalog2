@@ -206,7 +206,7 @@ uint16_t PnPLGetComponentsNames(char **components_names)
 
 uint8_t PnPLGetComponentValue(char *comp_name, char **SerializedJSON, uint32_t *size, uint8_t pretty)
 {
-  uint8_t ret = PNPL_CMD_ERROR_CODE;
+  uint8_t ret = PNPL_BASE_ERROR_CODE;
   JSON_Object *JSON_CompObject;
   JSON_Value *tempJSON;
   JSON_Value *tempJSON_noKey;
@@ -247,7 +247,7 @@ uint8_t PnPLGetComponentValue(char *comp_name, char **SerializedJSON, uint32_t *
 
   if (comp_found > 0u)
   {
-    ret = PNPL_CMD_NO_ERROR_CODE;
+    ret = PNPL_NO_ERROR_CODE;
   }
 
   return ret;
@@ -278,7 +278,7 @@ uint8_t PnPLGetPresentationJSON(char **serializedJSON, uint32_t *size)
   *size = json_serialization_size(tempJSON);
 
   json_value_free(tempJSON);
-  return PNPL_CMD_NO_ERROR_CODE;
+  return PNPL_NO_ERROR_CODE;
 }
 
 uint8_t PnPLGetDeviceStatusJSON(char **serializedJSON, uint32_t *size, uint8_t pretty)
@@ -386,7 +386,7 @@ uint8_t PnPLGetDeviceStatusJSON(char **serializedJSON, uint32_t *size, uint8_t p
   }
 
   json_value_free(tempJSON);
-  return PNPL_CMD_NO_ERROR_CODE;
+  return PNPL_NO_ERROR_CODE;
 }
 
 
@@ -506,7 +506,7 @@ uint8_t PnPLGetFilteredDeviceStatusJSON(char **serializedJSON, uint32_t *size, c
   }
 
   json_value_free(tempJSON);
-  return PNPL_CMD_NO_ERROR_CODE;
+  return PNPL_NO_ERROR_CODE;
 }
 
 
@@ -558,7 +558,7 @@ uint8_t PnPLUpdateDeviceStatusFromJSON(char *serializedJSON)
   }
 
   json_value_free(tempJSON);
-  return PNPL_CMD_NO_ERROR_CODE;
+  return PNPL_NO_ERROR_CODE;
 }
 
 static uint8_t extract_PnPL_cmd_data(char *commandString, uint8_t *commandType, char *componentName)
@@ -576,7 +576,7 @@ static uint8_t extract_PnPL_cmd_data(char *commandString, uint8_t *commandType, 
         /* Check if extracted string is a component added to the current FW */
         *commandType = PNPL_CMD_SET;
         json_value_free(tempJSON);
-        return PNPL_CMD_NO_ERROR_CODE;
+        return PNPL_NO_ERROR_CODE;
       }
       /* in case of control commands */
       uint8_t nOfCommands = IPnPLComponentGetNCommands(p_obj);
@@ -588,7 +588,7 @@ static uint8_t extract_PnPL_cmd_data(char *commandString, uint8_t *commandType, 
           {
             *commandType = PNPL_CMD_SET;
             json_value_free(tempJSON);
-            return PNPL_CMD_NO_ERROR_CODE;
+            return PNPL_NO_ERROR_CODE;
           }
         }
       }
@@ -599,7 +599,7 @@ static uint8_t extract_PnPL_cmd_data(char *commandString, uint8_t *commandType, 
       *commandType = PNPL_CMD_GET;
       (void)strcpy(componentName, json_object_get_string(tempJSONObject, "get_status"));
       json_value_free(tempJSON);
-      return PNPL_CMD_NO_ERROR_CODE;
+      return PNPL_NO_ERROR_CODE;
     }
     else if (strcmp(componentName, "update_device_status") == 0)
     {
@@ -607,7 +607,7 @@ static uint8_t extract_PnPL_cmd_data(char *commandString, uint8_t *commandType, 
       JSON_Value *tempJSONValue = json_object_get_value(tempJSONObject, "update_device_status");
       (void)strcpy(commandString, json_serialize_to_string(tempJSONValue));
       json_value_free(tempJSONValue);
-      return PNPL_CMD_NO_ERROR_CODE;
+      return PNPL_NO_ERROR_CODE;
     }
     else if (strcmp(componentName, "system_config") == 0)
     {
@@ -615,28 +615,28 @@ static uint8_t extract_PnPL_cmd_data(char *commandString, uint8_t *commandType, 
       JSON_Object *tempJSONObject2 = json_object_get_object(tempJSONObject, "system_config");
       (void)strcpy(componentName, json_object_get_string(tempJSONObject2, "comp_name"));
       json_value_free(tempJSON);
-      return PNPL_CMD_NO_ERROR_CODE;
+      return PNPL_NO_ERROR_CODE;
     }
     else if (strcmp(componentName, "system_info") == 0)/* NOTE Used for OLD get_presentation command */
     {
       *commandType = PNPL_CMD_SYSTEM_INFO;
       (void)strcpy(componentName, "");
       json_value_free(tempJSON);
-      return PNPL_CMD_NO_ERROR_CODE;
+      return PNPL_NO_ERROR_CODE;
     }
     else if (strcmp(componentName, "get_presentation") == 0)/* NOTE New get_presentation command */
     {
       *commandType = PNPL_CMD_SYSTEM_INFO;
       (void)strcpy(componentName, "");
       json_value_free(tempJSON);
-      return PNPL_CMD_NO_ERROR_CODE;
+      return PNPL_NO_ERROR_CODE;
     }
     else if (strcmp(componentName, "get_identity") == 0)/* NOTE New get_identity command (Asked from SW-Platform) */
     {
       *commandType = PNPL_CMD_SYSTEM_INFO;
       (void)strcpy(componentName, "");
       json_value_free(tempJSON);
-      return PNPL_CMD_NO_ERROR_CODE;
+      return PNPL_NO_ERROR_CODE;
     }
     else
     {
@@ -645,7 +645,7 @@ static uint8_t extract_PnPL_cmd_data(char *commandString, uint8_t *commandType, 
   }
   json_value_free(tempJSON);
   /* Not JSON command! */
-  return PNPL_CMD_ERROR_CODE;
+  return PNPL_BASE_ERROR_CODE;
 }
 
 uint8_t PnPLParseCommand(char *commandString, PnPLCommand_t *command)
@@ -658,7 +658,7 @@ uint8_t PnPLParseCommand(char *commandString, PnPLCommand_t *command)
   command->comm_type = commandType;
   (void)strcpy(command->comp_name, componentName);
 
-  if (ret == PNPL_CMD_NO_ERROR_CODE)
+  if (ret == PNPL_NO_ERROR_CODE)
   {
     if (commandType == PNPL_CMD_SET)
     {
@@ -751,7 +751,7 @@ uint8_t PnPLParseCommand(char *commandString, PnPLCommand_t *command)
 
 uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uint32_t *size, uint8_t pretty)
 {
-  uint8_t ret = PNPL_CMD_NO_ERROR_CODE;
+  uint8_t ret = PNPL_NO_ERROR_CODE;
 
   if (command->comm_type == PNPL_CMD_SYSTEM_INFO)
   {
@@ -785,7 +785,7 @@ uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uin
       *size = 18;
       *SerializedJSON = (char*)pnpl_malloc(*size);
       (void)strcpy(*SerializedJSON, "{\"PnPL_Error\":\"\"}\0");
-      ret = PNPL_CMD_ERROR_CODE;
+      ret = PNPL_BASE_ERROR_CODE;
     }
   }
 #ifdef PNPL_RESPONSES
@@ -855,7 +855,7 @@ static uint8_t setTelemetryValue(uint8_t type, JSON_Object *json_obj, char *name
     default:
       break;
   }
-  return PNPL_CMD_NO_ERROR_CODE;
+  return PNPL_NO_ERROR_CODE;
 }
 
 /*
@@ -900,5 +900,5 @@ uint8_t PnPLSerializeTelemetry(char *compName, PnPLTelemetry_t *telemetryValue, 
   }
 
   json_value_free(root_value);
-  return PNPL_CMD_NO_ERROR_CODE;
+  return PNPL_NO_ERROR_CODE;
 }

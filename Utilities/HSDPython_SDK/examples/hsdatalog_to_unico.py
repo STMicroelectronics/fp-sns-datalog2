@@ -53,11 +53,12 @@ def show_help(ctx, param, value):
 @click.option('-f', '--out_format', help="Select exported data format", type=click.Choice(['TXT', 'CSV', 'TSV'], case_sensitive=False))
 @click.option('-cdm','--custom_device_model', help="Upload a custom Device Template Model (DTDL)", type=(int, int, str))
 @click.option('-ag','--aggregation', help="Data aggregation strategy, exported data format remains selectable by using -f parameter (default value: CSV)",  type=click.Choice(['single_file', 'split_per_tags']))
+@click.option('-cl','--columns_labels', help="Select the naming convention to be used when creating column names in exported files",  type=click.Choice(['default', 'mlc_tool']), default='default')
 @click.version_option(script_version, '-v', '--version', prog_name="HSDatalogToUnico", is_flag=True, help="HSDatalogToUnico Converter tool version number")
 @click.option('-d', '--debug', is_flag=True, help="[DEBUG] Check for corrupted data and timestamps", default=False)
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
-def hsd_toUnico(acq_folder, output_folder, sensor_name, start_time, end_time, use_datalog_tags, out_format, custom_device_model, aggregation, debug):
+def hsd_toUnico(acq_folder, output_folder, sensor_name, start_time, end_time, use_datalog_tags, out_format, custom_device_model, aggregation, columns_labels, debug):
 
     if custom_device_model is not None:
         HSDatalogDTM.upload_custom_dtm(custom_device_model)
@@ -77,7 +78,7 @@ def hsd_toUnico(acq_folder, output_folder, sensor_name, start_time, end_time, us
     df_flag = True
     while df_flag:
         if aggregation is not None:
-            convert_aggregated_data(hsd, aggregation, start_time, end_time, use_datalog_tags, output_folder, out_format)
+            convert_aggregated_data(hsd, aggregation, start_time, end_time, use_datalog_tags, output_folder, out_format, columns_labels)
             df_flag = False
         else:
             if sensor_name == 'all':
@@ -103,7 +104,7 @@ def __get_sensor_comp(hsd, component):
         s_list = HSDatalog.get_all_components(hsd, only_active=True)
         return HSDatalog.filter_sensor_list_by_name(hsd, s_list, sensor_name)
     
-def __aggregate_dataframes(hsd, component_list, start_time, end_time, use_datalog_tags, tag_classes):    
+def __aggregate_dataframes(hsd, component_list, start_time, end_time, use_datalog_tags, tag_classes, columns_labels):    
     dataframes = []
     # Loop through each component in the component list
     for i, component in enumerate(component_list):
@@ -119,16 +120,34 @@ def __aggregate_dataframes(hsd, component_list, start_time, end_time, use_datalo
             # If the current component is the last one and use_datalog_tags is True, add tag classes to the list of columns to exclude
             if i == (len(component_list)-1) and use_datalog_tags:
                 cols_to_exclude.extend(tag_classes)
-            # Define a suffix to add to column names
-            suffix = f"_{list(component.keys())[0]}"
-            # Create a dictionary of column name mappings
-            new_names = {col: col + suffix for col in df[0].columns if col not in cols_to_exclude}
+            
+            if columns_labels == "mlc_tool":
+                # Define a prefix to add to column names
+                prefix = f"{list(component.keys())[0]}_"
+                # Create a dictionary of column name mappings
+                new_names = {col: prefix + col.split(' ')[0].split('_')[-1] + " " + df[0].columns[1].split(' ')[-1] for col in df[0].columns if col not in cols_to_exclude}
+            else:
+                # Define a prefix to add to column names
+                suffix = f"_{list(component.keys())[0]}"
+                # Create a dictionary of column name mappings
+                new_names = {col: col + suffix for col in df[0].columns if col not in cols_to_exclude}
             # Rename columns in the dataframe
             df[0] = df[0].rename(columns=new_names)
             # Append the processed dataframe to the list of dataframes
             dataframes.append(df[0])
+    
+    # extract list of columns names from the dataframe list (to mantain the original order)
+    concatenated_df = pd.concat(dataframes, axis=1)
+    labels = ["Time"]+[label for label in list(concatenated_df.columns) if label != "Time"]
+
+    # sort the list of dataframes by number of rows (> ODR)
+    sorted_dfs = sorted(dataframes, key=lambda x: len(x), reverse=True)
     # return a merged single dataframe
-    return HSDatalogConverter.merge_dataframes(dataframes)
+    merged_df = HSDatalogConverter.merge_dataframes(sorted_dfs)
+
+    # reorder merged dataframes columns based on labels
+    merged_df = merged_df[labels]
+    return merged_df
 
 def __save_aggregated_file(df, file_path, out_format):
     if out_format.lower() == "txt":
@@ -138,7 +157,7 @@ def __save_aggregated_file(df, file_path, out_format):
     else:
         HSDatalogConverter.to_tsv(df, file_path)
 
-def convert_aggregated_data(hsd, aggregation, start_time, end_time, use_datalog_tags, output_folder, out_format):
+def convert_aggregated_data(hsd, aggregation, start_time, end_time, use_datalog_tags, output_folder, out_format, columns_labels):
     # Get a list of all active components the input acquisition folder
     component_list = HSDatalog.get_all_components(hsd, only_active=True)
     tag_classes = []
@@ -153,7 +172,7 @@ def convert_aggregated_data(hsd, aggregation, start_time, end_time, use_datalog_
         tag_classes = list(set([tag['Label'] for tag in data_tags]))
 
     # Merge all dataframes into a single dataframe
-    merged_df = __aggregate_dataframes(hsd, component_list, start_time, end_time, use_datalog_tags, tag_classes)
+    merged_df = __aggregate_dataframes(hsd, component_list, start_time, end_time, use_datalog_tags, tag_classes, columns_labels)
 
     # If aggregation is "single_file", save the merged dataframe as a single file
     if aggregation == "single_file":

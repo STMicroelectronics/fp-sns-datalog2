@@ -20,6 +20,23 @@ DTDL_ALGORITHMS_ID_COMP_KEY = "algorithms"
 DTDL_ACTUATORS_ID_COMP_KEY = "actuators"
 DTDL_OTHER_ID_COMP_KEY = "other"
 
+class UnitMap():
+    
+    def __init__(self) -> None:
+        self.unit_dict = {
+            "gForce":"g",
+            "gauss":"G",
+            "decibel":"dB",
+            "mdps":"mdps",
+            "degreeCelsius":"°C",
+            "hertz":"Hz",
+            "second":"s",
+            "Waveform":"Waveform",
+            "percent":"%",
+            "millisecond":"ms",
+            "microsecond":"μs"
+        }
+
 class ComponentTypeEnum(Enum):
     SENSOR = 0
     ALGORITHM = 1

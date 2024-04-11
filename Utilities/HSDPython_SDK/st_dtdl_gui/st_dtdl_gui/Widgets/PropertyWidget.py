@@ -20,8 +20,9 @@ from PySide6.QtGui import QValidator, QPixmap, QDoubleValidator, QIntValidator
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 from st_dtdl_gui.UI.styles import STDTDL_RadioButton
-from st_dtdl_gui.Utils.DataClass import TypeEnum, UnitMap
+from st_dtdl_gui.Utils.DataClass import TypeEnum
 
+from st_pnpl.DTDL.dtdl_utils import UnitMap
 from st_pnpl.DTDL.device_template_model import Content, ContentSchema, DisplayName
 
 import st_dtdl_gui.UI.icons #NOTE don't delete this! it is used from resource_filename (@row 35..38)

@@ -491,6 +491,10 @@ sys_error_code_t STHS34PF80Task_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
     }
   }
   memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
+  p_obj->IsBlocking = 0;
+  p_obj->IsContinuous = 0;
+  p_obj->tmos_swlib = NULL;
+  p_obj->tmos_swlib_instance = NULL;
   p_obj->id = 0;
   p_obj->prev_timestamp = 0.0f;
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
@@ -1832,7 +1836,7 @@ static void tmos_swlib_config(STHS34PF80Task *_this, uint16_t sensitivity_boot, 
   device_conf.sens_data = sensitivity_boot;
   device_conf.transmittance = _this->sensor_status.type.presence.Transmittance;
 
-  init_err = InfraredPD_Start(_this->tmos_swlib, &device_conf, swlib_algo_conf);
+  init_err = InfraredPD_Start(_this->tmos_swlib_instance, &device_conf, swlib_algo_conf);
 
   if (IPD_INIT_OK != init_err)
   {
@@ -2089,10 +2093,22 @@ static sys_error_code_t STHS34PF80TaskSensorInit(STHS34PF80Task *_this)
     if (_this->sensor_status.type.presence.software_compensation)
     {
       MX_CRC_Init();
+
+      if (_this->tmos_swlib_instance != NULL)
+      {
+        /* sw lib already initialized --> reset and delete before new allocation */
+        InfraredPD_ResetComp(_this->tmos_swlib_instance);
+        InfraredPD_DeleteInstance(_this->tmos_swlib_instance);
+      }
+      /* sw lib alloc and init */
       InfraredPD_Initialize(IPD_MCU_STM32);
-      _this->tmos_swlib = InfraredPD_CreateInstance(&tmos_swlib_algo_conf);
+      _this->tmos_swlib_instance = InfraredPD_CreateInstance(&tmos_swlib_algo_conf);
       tmos_swlib_config(_this, tmos_sensitivity_boot, &tmos_swlib_algo_conf);
+
     }
+
+    /* See AN5867 chapter 7.4: once setup algorithms and/or filters, algorithms must be reset */
+    sths34pf80_reset_algo(p_sensor_drv);
 
     if (_this->sensor_status.type.presence.data_frequency < 2.0f)
     {
@@ -2213,7 +2229,7 @@ static sys_error_code_t STHS34PF80TaskSensorReadData(STHS34PF80Task *_this)
     {
       swlib_in.t_amb = tambient;
       swlib_in.t_obj = tobject;
-      InfraredPD_Update(_this->tmos_swlib, &swlib_in, &swlib_out);
+      InfraredPD_Update(_this->tmos_swlib_instance, &swlib_in, &swlib_out);
     }
 
     if (sths34pf80_tpresence_raw_get(p_sensor_drv, &tpresence) != 0)
@@ -2244,8 +2260,10 @@ static sys_error_code_t STHS34PF80TaskSensorReadData(STHS34PF80Task *_this)
   uint16_t i = 0;
   int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
 
-  *p16++ = dummyDataCounter++;
-  *p16++ = dummyDataCounter++;
+  for (i = 0; i < 11; i++)
+  {
+    *p16++ = dummyDataCounter++;
+  }
 #endif
 
   return res;

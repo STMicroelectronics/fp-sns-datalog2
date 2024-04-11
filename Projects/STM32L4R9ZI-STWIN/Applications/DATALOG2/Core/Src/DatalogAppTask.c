@@ -978,7 +978,7 @@ uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(IIsm330dhcx_Mlc_t *_this, const 
   p_obj->datalog_model->s_models[id]->sensor_status.is_active = sensor_status.is_active;
   p_obj->datalog_model->s_models[id]->sensor_status.type.mems.odr = sensor_status.type.mems.odr;
   p_obj->datalog_model->s_models[id]->sensor_status.type.mems.fs = sensor_status.type.mems.fs;
-  p_obj->datalog_model->s_models[id]->stream_params.spts = (int32_t)sensor_status.type.mems.odr;
+  ism330dhcx_acc_set_samples_per_ts((int32_t)sensor_status.type.mems.odr);
 
   SQInit(&q3, SMGetSensorManager());
   id = SQNextByNameAndType(&q3, "ism330dhcx", COM_TYPE_GYRO);
@@ -986,7 +986,7 @@ uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(IIsm330dhcx_Mlc_t *_this, const 
   p_obj->datalog_model->s_models[id]->sensor_status.is_active = sensor_status.is_active;
   p_obj->datalog_model->s_models[id]->sensor_status.type.mems.odr = sensor_status.type.mems.odr;
   p_obj->datalog_model->s_models[id]->sensor_status.type.mems.fs = sensor_status.type.mems.fs;
-  p_obj->datalog_model->s_models[id]->stream_params.spts = (int32_t)sensor_status.type.mems.odr;
+  ism330dhcx_gyro_set_samples_per_ts((int32_t)sensor_status.type.mems.odr);
 
   SQInit(&q4, SMGetSensorManager());
   id = SQNextByNameAndType(&q4, "ism330dhcx", COM_TYPE_MLC);

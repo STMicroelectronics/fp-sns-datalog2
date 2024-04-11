@@ -23,7 +23,7 @@
 extern "C" {
 #endif
 
-#include "PnPLCompManager_Conf.h"
+#include "PnPLCompManager_conf.h"
 #include "IPnPLComponent.h"
 #include "IPnPLComponent_vtbl.h"
 #include "PnPLDef.h"

@@ -3,11 +3,11 @@
   * @file    platform.c
   * @author  IMG SW Application Team
   * @brief   This file provides the implementation of read/write operations for
-  * 		 VD6283TX component driver 
+  * 		 VD6283TX component driver
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file

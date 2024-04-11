@@ -4,7 +4,7 @@
     "devices": [
         {
             "board_id": 9,
-            "fw_id": 7,
+            "fw_id": 8,
             "protocol_id": 2,
             "sn": "0011002F5652500420303153",
             "pnpl_responses": true,
@@ -279,7 +279,7 @@
                     "firmware_info": {
                         "alias": "STWIN_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "2.1.0",
+                        "fw_version": "2.1.1",
                         "part_number": "FP-SNS-DATALOG2",
                         "device_url": "https://www.st.com/stwin",
                         "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
@@ -291,7 +291,7 @@
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-STWINKT1B",
-                        "swVersion": "2.1.0",
+                        "swVersion": "2.1.1",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M4",
                         "processorManufacturer": "STMicroelectronics",

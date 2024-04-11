@@ -116,59 +116,59 @@ uint8_t Vd6283tx_Als_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   float temp_f = 0;
   vd6283tx_als_get_channel1_gain(&temp_f);
   uint8_t enum_id = 0;
-  if(temp_f < vd6283tx_als_channel1_gain_n0_71 + pnpl_float_tolerance)
+  if (temp_f < vd6283tx_als_channel1_gain_n0_71 + pnpl_float_tolerance)
   {
     enum_id = 0;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n0_83 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n0_83 + pnpl_float_tolerance)
   {
     enum_id = 1;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n1 + pnpl_float_tolerance)
   {
     enum_id = 2;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n1_25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n1_25 + pnpl_float_tolerance)
   {
     enum_id = 3;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n1_67 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n1_67 + pnpl_float_tolerance)
   {
     enum_id = 4;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n2_5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n2_5 + pnpl_float_tolerance)
   {
     enum_id = 5;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n3_33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n3_33 + pnpl_float_tolerance)
   {
     enum_id = 6;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n5 + pnpl_float_tolerance)
   {
     enum_id = 7;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n7_1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n7_1 + pnpl_float_tolerance)
   {
     enum_id = 8;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n10 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n10 + pnpl_float_tolerance)
   {
     enum_id = 9;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n16 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n16 + pnpl_float_tolerance)
   {
     enum_id = 10;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n25 + pnpl_float_tolerance)
   {
     enum_id = 11;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n33 + pnpl_float_tolerance)
   {
     enum_id = 12;
   }
-  else if(temp_f < vd6283tx_als_channel1_gain_n50 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel1_gain_n50 + pnpl_float_tolerance)
   {
     enum_id = 13;
   }
@@ -179,59 +179,59 @@ uint8_t Vd6283tx_Als_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   json_object_dotset_number(JSON_Status, "vd6283tx_als.channel1_gain", enum_id);
   vd6283tx_als_get_channel2_gain(&temp_f);
   enum_id = 0;
-  if(temp_f < vd6283tx_als_channel2_gain_n0_71 + pnpl_float_tolerance)
+  if (temp_f < vd6283tx_als_channel2_gain_n0_71 + pnpl_float_tolerance)
   {
     enum_id = 0;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n0_83 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n0_83 + pnpl_float_tolerance)
   {
     enum_id = 1;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n1 + pnpl_float_tolerance)
   {
     enum_id = 2;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n1_25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n1_25 + pnpl_float_tolerance)
   {
     enum_id = 3;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n1_67 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n1_67 + pnpl_float_tolerance)
   {
     enum_id = 4;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n2_5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n2_5 + pnpl_float_tolerance)
   {
     enum_id = 5;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n3_33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n3_33 + pnpl_float_tolerance)
   {
     enum_id = 6;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n5 + pnpl_float_tolerance)
   {
     enum_id = 7;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n7_1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n7_1 + pnpl_float_tolerance)
   {
     enum_id = 8;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n10 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n10 + pnpl_float_tolerance)
   {
     enum_id = 9;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n16 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n16 + pnpl_float_tolerance)
   {
     enum_id = 10;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n25 + pnpl_float_tolerance)
   {
     enum_id = 11;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n33 + pnpl_float_tolerance)
   {
     enum_id = 12;
   }
-  else if(temp_f < vd6283tx_als_channel2_gain_n50 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel2_gain_n50 + pnpl_float_tolerance)
   {
     enum_id = 13;
   }
@@ -242,59 +242,59 @@ uint8_t Vd6283tx_Als_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   json_object_dotset_number(JSON_Status, "vd6283tx_als.channel2_gain", enum_id);
   vd6283tx_als_get_channel3_gain(&temp_f);
   enum_id = 0;
-  if(temp_f < vd6283tx_als_channel3_gain_n0_71 + pnpl_float_tolerance)
+  if (temp_f < vd6283tx_als_channel3_gain_n0_71 + pnpl_float_tolerance)
   {
     enum_id = 0;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n0_83 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n0_83 + pnpl_float_tolerance)
   {
     enum_id = 1;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n1 + pnpl_float_tolerance)
   {
     enum_id = 2;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n1_25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n1_25 + pnpl_float_tolerance)
   {
     enum_id = 3;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n1_67 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n1_67 + pnpl_float_tolerance)
   {
     enum_id = 4;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n2_5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n2_5 + pnpl_float_tolerance)
   {
     enum_id = 5;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n3_33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n3_33 + pnpl_float_tolerance)
   {
     enum_id = 6;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n5 + pnpl_float_tolerance)
   {
     enum_id = 7;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n7_1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n7_1 + pnpl_float_tolerance)
   {
     enum_id = 8;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n10 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n10 + pnpl_float_tolerance)
   {
     enum_id = 9;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n16 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n16 + pnpl_float_tolerance)
   {
     enum_id = 10;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n25 + pnpl_float_tolerance)
   {
     enum_id = 11;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n33 + pnpl_float_tolerance)
   {
     enum_id = 12;
   }
-  else if(temp_f < vd6283tx_als_channel3_gain_n50 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel3_gain_n50 + pnpl_float_tolerance)
   {
     enum_id = 13;
   }
@@ -305,59 +305,59 @@ uint8_t Vd6283tx_Als_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   json_object_dotset_number(JSON_Status, "vd6283tx_als.channel3_gain", enum_id);
   vd6283tx_als_get_channel4_gain(&temp_f);
   enum_id = 0;
-  if(temp_f < vd6283tx_als_channel4_gain_n0_71 + pnpl_float_tolerance)
+  if (temp_f < vd6283tx_als_channel4_gain_n0_71 + pnpl_float_tolerance)
   {
     enum_id = 0;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n0_83 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n0_83 + pnpl_float_tolerance)
   {
     enum_id = 1;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n1 + pnpl_float_tolerance)
   {
     enum_id = 2;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n1_25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n1_25 + pnpl_float_tolerance)
   {
     enum_id = 3;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n1_67 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n1_67 + pnpl_float_tolerance)
   {
     enum_id = 4;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n2_5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n2_5 + pnpl_float_tolerance)
   {
     enum_id = 5;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n3_33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n3_33 + pnpl_float_tolerance)
   {
     enum_id = 6;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n5 + pnpl_float_tolerance)
   {
     enum_id = 7;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n7_1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n7_1 + pnpl_float_tolerance)
   {
     enum_id = 8;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n10 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n10 + pnpl_float_tolerance)
   {
     enum_id = 9;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n16 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n16 + pnpl_float_tolerance)
   {
     enum_id = 10;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n25 + pnpl_float_tolerance)
   {
     enum_id = 11;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n33 + pnpl_float_tolerance)
   {
     enum_id = 12;
   }
-  else if(temp_f < vd6283tx_als_channel4_gain_n50 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel4_gain_n50 + pnpl_float_tolerance)
   {
     enum_id = 13;
   }
@@ -368,59 +368,59 @@ uint8_t Vd6283tx_Als_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   json_object_dotset_number(JSON_Status, "vd6283tx_als.channel4_gain", enum_id);
   vd6283tx_als_get_channel5_gain(&temp_f);
   enum_id = 0;
-  if(temp_f < vd6283tx_als_channel5_gain_n0_71 + pnpl_float_tolerance)
+  if (temp_f < vd6283tx_als_channel5_gain_n0_71 + pnpl_float_tolerance)
   {
     enum_id = 0;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n0_83 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n0_83 + pnpl_float_tolerance)
   {
     enum_id = 1;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n1 + pnpl_float_tolerance)
   {
     enum_id = 2;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n1_25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n1_25 + pnpl_float_tolerance)
   {
     enum_id = 3;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n1_67 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n1_67 + pnpl_float_tolerance)
   {
     enum_id = 4;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n2_5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n2_5 + pnpl_float_tolerance)
   {
     enum_id = 5;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n3_33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n3_33 + pnpl_float_tolerance)
   {
     enum_id = 6;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n5 + pnpl_float_tolerance)
   {
     enum_id = 7;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n7_1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n7_1 + pnpl_float_tolerance)
   {
     enum_id = 8;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n10 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n10 + pnpl_float_tolerance)
   {
     enum_id = 9;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n16 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n16 + pnpl_float_tolerance)
   {
     enum_id = 10;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n25 + pnpl_float_tolerance)
   {
     enum_id = 11;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n33 + pnpl_float_tolerance)
   {
     enum_id = 12;
   }
-  else if(temp_f < vd6283tx_als_channel5_gain_n50 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel5_gain_n50 + pnpl_float_tolerance)
   {
     enum_id = 13;
   }
@@ -431,59 +431,59 @@ uint8_t Vd6283tx_Als_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   json_object_dotset_number(JSON_Status, "vd6283tx_als.channel5_gain", enum_id);
   vd6283tx_als_get_channel6_gain(&temp_f);
   enum_id = 0;
-  if(temp_f < vd6283tx_als_channel6_gain_n0_71 + pnpl_float_tolerance)
+  if (temp_f < vd6283tx_als_channel6_gain_n0_71 + pnpl_float_tolerance)
   {
     enum_id = 0;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n0_83 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n0_83 + pnpl_float_tolerance)
   {
     enum_id = 1;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n1 + pnpl_float_tolerance)
   {
     enum_id = 2;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n1_25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n1_25 + pnpl_float_tolerance)
   {
     enum_id = 3;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n1_67 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n1_67 + pnpl_float_tolerance)
   {
     enum_id = 4;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n2_5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n2_5 + pnpl_float_tolerance)
   {
     enum_id = 5;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n3_33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n3_33 + pnpl_float_tolerance)
   {
     enum_id = 6;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n5 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n5 + pnpl_float_tolerance)
   {
     enum_id = 7;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n7_1 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n7_1 + pnpl_float_tolerance)
   {
     enum_id = 8;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n10 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n10 + pnpl_float_tolerance)
   {
     enum_id = 9;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n16 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n16 + pnpl_float_tolerance)
   {
     enum_id = 10;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n25 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n25 + pnpl_float_tolerance)
   {
     enum_id = 11;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n33 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n33 + pnpl_float_tolerance)
   {
     enum_id = 12;
   }
-  else if(temp_f < vd6283tx_als_channel6_gain_n50 + pnpl_float_tolerance)
+  else if (temp_f < vd6283tx_als_channel6_gain_n50 + pnpl_float_tolerance)
   {
     enum_id = 13;
   }

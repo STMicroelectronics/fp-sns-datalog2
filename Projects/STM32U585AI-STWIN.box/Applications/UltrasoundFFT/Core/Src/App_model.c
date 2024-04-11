@@ -337,8 +337,11 @@ uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
   //  };
 
   TMSetStartTime(t);
-  sprintf(app_model.acquisition_info_model.start_time, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1,
-          t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+  char local_timestamp[86];
+  (void) sprintf(local_timestamp, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1,
+                 t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+  (void) memcpy(app_model.acquisition_info_model.start_time, local_timestamp,
+                 sizeof(app_model.acquisition_info_model.start_time) - 1);
 
   /* last part not done in sprintf to avoid a warning  */
   app_model.acquisition_info_model.start_time[19] = '.';

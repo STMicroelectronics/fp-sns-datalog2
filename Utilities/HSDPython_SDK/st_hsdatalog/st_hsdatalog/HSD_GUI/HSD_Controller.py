@@ -28,6 +28,7 @@ from enum import Enum
 from PySide6.QtCore import Signal, QThread, QObject
 from PySide6.QtWidgets import QFileDialog
 
+from st_pnpl.DTDL.dtdl_utils import UnitMap
 import st_pnpl.DTDL.dtdl_utils as DTDLUtils
 
 from st_hsdatalog.HSD.HSDatalog import HSDatalog
@@ -35,7 +36,7 @@ from st_hsdatalog.HSD_link.HSDLink import HSDLink
 from st_hsdatalog.HSD_link.HSDLink_v1 import HSDLink_v1
 
 from st_hsdatalog.HSD_GUI.Widgets.HSDPlotLinesWidget import HSDPlotLinesWidget
-from st_dtdl_gui.Utils.DataClass import AnomalyDetectorModelPlotParams, PlotPAmbientParams, PlotPMotionParams, PlotPObjectParams, PlotPPresenceParams, SensorAudioPlotParams, SensorLightPlotParams, SensorMemsPlotParams, FFTAlgPlotParams, ClassificationModelPlotParams, DataClass, SensorPresenscePlotParams, SensorRangingPlotParams, UnitMap
+from st_dtdl_gui.Utils.DataClass import AnomalyDetectorModelPlotParams, PlotPAmbientParams, PlotPMotionParams, PlotPObjectParams, PlotPPresenceParams, SensorAudioPlotParams, SensorLightPlotParams, SensorMemsPlotParams, FFTAlgPlotParams, ClassificationModelPlotParams, DataClass, SensorPresenscePlotParams, SensorRangingPlotParams
 from st_dtdl_gui.Utils.DataReader import DataReader
 from st_dtdl_gui.STDTDL_Controller import ComponentType, STDTDL_Controller
 

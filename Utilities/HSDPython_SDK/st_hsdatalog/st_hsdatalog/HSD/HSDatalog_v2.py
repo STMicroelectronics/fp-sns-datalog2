@@ -26,13 +26,13 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 from matplotlib.widgets import CheckButtons, Slider
 import numpy as np
 import pandas as pd
-from st_dtdl_gui.Utils.DataClass import UnitMap
 
 from st_hsdatalog.HSD_utils.exceptions import *
 import st_hsdatalog.HSD_utils.logger as logger
 from st_hsdatalog.HSD.utils.cli_interaction import CLIInteraction as CLI
 from st_hsdatalog.HSD.utils.file_manager import FileManager
 from st_hsdatalog.HSD.utils.type_conversion import TypeConversion
+from st_pnpl.DTDL.dtdl_utils import UnitMap
 from st_pnpl.DTDL.device_template_manager import DeviceTemplateManager
 from st_pnpl.DTDL.device_template_model import ContentSchema, SchemaType
 from st_pnpl.DTDL.dtdl_utils import DTDL_SENSORS_ID_COMP_KEY, MC_FAST_TELEMETRY_COMP_NAME, MC_SLOW_TELEMETRY_COMP_NAME, AlgorithmTypeEnum, ComponentTypeEnum, SensorCategoryEnum
@@ -715,18 +715,19 @@ class HSDatalog_v2:
         # data protocol size:
         data_protocol_size = 4
 
-        # data packet size (0:sd card, 1:usb, 2:serial)
+        data_packet_size = 0
+        # data packet size (0:sd card, 1:usb, 2:ble, 3:serial)
         if interface == 0:
-            # s_category = s_stat.get("sensor_category")
-            # if s_category is not None:
-            #     if s_category == SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value or s_category == SensorCategoryEnum.ISENSOR_CLASS_PRESENCE.value: #TODO remove this
-            #         data_packet_size = s_stat["sd_dps"]
-            #     else:
-            #         data_packet_size = s_stat["sd_dps"] - data_protocol_size    
-            # else: 
             data_packet_size = s_stat["sd_dps"] - data_protocol_size
-        else:
+        elif interface == 1:
             data_packet_size = s_stat["usb_dps"]
+        elif interface == 2:
+            data_packet_size = s_stat["ble_dps"]
+        elif interface == 3:
+            data_packet_size = s_stat["serial_dps"]
+        else:
+            log.error(f"Unknown interface: {interface}. check your device_config.json file")
+            raise
         
         # get dat file path and size (obtained from "sensor_name + sub_sensor_type")
         file_path = self.__get_sensor_file_path(sensor_name)
@@ -889,10 +890,9 @@ class HSDatalog_v2:
             # s_samples_per_ts = 1
             
             if sensor_name == MC_SLOW_TELEMETRY_COMP_NAME or sensor_name == MC_FAST_TELEMETRY_COMP_NAME:#"slow_mc_telemetries":
-                usb_dps = s_stat.get("usb_dps")
-                if usb_dps is not None:
+                if data_packet_size is not None:
                     timestamp_byte_size = 8
-                    dataframe_byte_size = usb_dps - timestamp_byte_size
+                    dataframe_byte_size = data_packet_size - timestamp_byte_size
 
                     # n_of_samples = sample_end - sample_start
                     # blocks_before_ss = 0

@@ -124,7 +124,7 @@
 					<sourceEntries>
 						<entry excluding="User|Middlewares|Drivers" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
-						<entry excluding="ST/STM32_BLE_Manager/Src/BLE_Manager.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
+						<entry excluding="ST/usbx/core/src/ux_utility_pci_write.c|ST/usbx/core/src/ux_utility_pci_read.c|ST/usbx/core/src/ux_utility_pci_class_scan.c|ST/STM32_BLE_Manager/Src/BLE_Manager.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 						<entry excluding="eLooM_Components/SensorManager/Src/drivers/AnalogMicDriver.c|eLooM_Components/SensorManager/Src/drivers/MDFDriver.c|eLooM_Components/SensorManager/Src/IMP23ABSUTask.c|eLooM_Components/SensorManager/Src/IMP34DT05Task.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="User"/>
 					</sourceEntries>
 				</configuration>
@@ -251,7 +251,7 @@
 					<sourceEntries>
 						<entry excluding="User|Middlewares|Drivers" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
-						<entry excluding="ST/STM32_BLE_Manager/Src/BLE_Manager.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
+						<entry excluding="ST/usbx/core/src/ux_utility_pci_write.c|ST/usbx/core/src/ux_utility_pci_read.c|ST/usbx/core/src/ux_utility_pci_class_scan.c|ST/STM32_BLE_Manager/Src/BLE_Manager.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
 						<entry excluding="eLooM_Components/SensorManager/Src/drivers/AnalogMicDriver.c|eLooM_Components/SensorManager/Src/drivers/MDFDriver.c|eLooM_Components/SensorManager/Src/IMP23ABSUTask.c|eLooM_Components/SensorManager/Src/IMP34DT05Task.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="User"/>
 					</sourceEntries>
 				</configuration>

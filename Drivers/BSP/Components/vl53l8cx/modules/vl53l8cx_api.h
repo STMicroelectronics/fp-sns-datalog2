@@ -25,7 +25,7 @@
  * @brief Current driver version.
  */
 
-#define VL53L8CX_API_REVISION			"VL53L8CX_1.0.4"
+#define VL53L8CX_API_REVISION			"VL53L8CX_1.2.1"
 
 /**
  * @brief Default I2C address of VL53L8CX sensor. Can be changed using function
@@ -63,14 +63,20 @@
 #define VL53L8CX_RANGING_MODE_AUTONOMOUS	((uint8_t) 3U)
 
 /**
- * @brief The default power mode is VL53L8CX_POWER_MODE_WAKEUP. User can choose
- * the mode VL53L8CX_POWER_MODE_SLEEP to save power consumption is the device
- * is not used. The low power mode retains the firmware and the configuration.
+ * @brief The default power mode is VL53L8CX_POWER_MODE_WAKEUP. User can choose two
+ * different modes to save power consumption when is the device
+ * is not used:
+ * - VL53L8CX_POWER_MODE_SLEEP: This mode retains the firmware and the configuration. It
+ * is recommended when the device needs to quickly wake-up.
+ * - VL53L8CX_POWER_MODE_DEEP_SLEEP: This mode clears all memory, by consequence the firmware,
+ * the configuration and the calibration are lost. It is recommended when the device sleeps during
+ * a long time as it consumes a very low current consumption.
  * Both modes can be changed using function vl53l8cx_set_power_mode().
  */
 
 #define VL53L8CX_POWER_MODE_SLEEP		((uint8_t) 0U)
 #define VL53L8CX_POWER_MODE_WAKEUP		((uint8_t) 1U)
+#define VL53L8CX_POWER_MODE_DEEP_SLEEP	((uint8_t) 2U)
 
 /**
  * @brief Macro VL53L8CX_STATUS_OK indicates that VL53L5 sensor has no error.
@@ -82,6 +88,8 @@
 #define VL53L8CX_STATUS_TIMEOUT_ERROR		((uint8_t) 1U)
 #define VL53L8CX_STATUS_CORRUPTED_FRAME		((uint8_t) 2U)
 #define VL53L8CX_STATUS_LASER_SAFETY		((uint8_t) 3U)
+#define VL53L8CX_STATUS_XTALK_FAILED		((uint8_t) 4U)
+#define VL53L8CX_STATUS_FW_CHECKSUM_FAIL	((uint8_t) 5U)
 #define VL53L8CX_MCU_ERROR					((uint8_t) 66U)
 #define VL53L8CX_STATUS_INVALID_PARAM		((uint8_t) 127U)
 #define VL53L8CX_STATUS_ERROR				((uint8_t) 255U)
@@ -158,6 +166,7 @@
 #define VL53L8CX_DCI_FW_NB_TARGET		((uint16_t)0x5478)
 #define VL53L8CX_DCI_RANGING_MODE		((uint16_t)0xAD30U)
 #define VL53L8CX_DCI_DSS_CONFIG			((uint16_t)0xAD38U)
+#define VL53L8CX_DCI_VHV_CONFIG			((uint16_t)0xAD60U)
 #define VL53L8CX_DCI_TARGET_ORDER		((uint16_t)0xAE64U)
 #define VL53L8CX_DCI_SHARPENER			((uint16_t)0xAED8U)
 #define VL53L8CX_DCI_INTERNAL_CP		((uint16_t)0xB39CU)
@@ -540,7 +549,7 @@ uint8_t vl53l8cx_get_integration_time_ms(
 /**
  * @brief This function sets a new integration time in ms. Integration time must
  * be computed to be lower than the ranging period, for a selected resolution.
- * Please note that this function has no impact on ranging mode continuous.
+ * Please note that this function has no impact on ranging mode continous.
  * @param (VL53L8CX_Configuration) *p_dev : VL53L8CX configuration structure.
  * @param (uint32_t) time_ms : Contains the integration time in ms. For all
  * resolutions and frequency, the minimum value is 2ms, and the maximum is
@@ -659,8 +668,29 @@ uint8_t vl53l8cx_set_external_sync_pin_enable(
 		VL53L8CX_Configuration		*p_dev,
 		uint8_t				enable_sync_pin);
 
+/**
+ * @brief This function is used to get the number of frames between 2 temperature
+ * compensation.
+ * @param (VL53L8CX_Configuration) *p_dev : VL53L8CX configuration structure.
+ * @param (uint32_t) *p_repeat_count : Number of frames before next temperature
+ * compensation. Set to 0 to disable the feature (default configuration).
+ */
+uint8_t vl53l8cx_get_VHV_repeat_count(
+		VL53L8CX_Configuration *p_dev,
+		uint32_t *p_repeat_count);
 
-
+/**
+ * @brief This function is used to set a periodic temperature compensation. By
+ * setting a repeat count different to 0 the firmware automatically runs a
+ * temperature calibration every N frames.
+ * default the repeat count is set to 0
+ * @param (VL53L8CX_Configuration) *p_dev : VL53L8CX configuration structure.
+ * @param (uint32_t) repeat_count : Number of frames between temperature
+ * compensation. Set to 0 to disable the feature (default configuration).
+ */
+uint8_t vl53l8cx_set_VHV_repeat_count(
+		VL53L8CX_Configuration *p_dev,
+		uint32_t repeat_count);
 
 /**
  * @brief This function can be used to read 'extra data' from DCI. Using a known

@@ -4,7 +4,7 @@
     "devices": [
         {
             "board_id": 13,
-            "fw_id": 5,
+            "fw_id": 7,
             "protocol_id": 2,
             "sn": "003A00274841500520363230",
             "pnpl_responses": true,
@@ -170,7 +170,7 @@
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-MKBOXPRO",
-                        "swVersion": "2.1.0",
+                        "swVersion": "2.1.1",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M33",
                         "processorManufacturer": "STMicroelectronics",
@@ -182,7 +182,7 @@
                     "firmware_info": {
                         "alias": "STBOX_PRO_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "2.1.0",
+                        "fw_version": "2.1.1",
                         "part_number": "FP-SNS-DATALOG2",
                         "device_url": "www.st.com/sensortileboxpro",
                         "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",

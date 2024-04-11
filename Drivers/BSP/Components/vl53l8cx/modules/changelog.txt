@@ -44,3 +44,36 @@ Date : 04/24/2023
 
 
 ---------------------------------------------------------------------------------------------------------------
+
+
+Version : 1.0.5
+Date : 06/09/2023
+- Added an error code VL53L8CX_STATUS_XTALK_FAILED when Xtalk calibration fails due to too good coverglass
+- Updated stop() function as it has been wrongly implemented in v1.0.4. Fixed issues relative to sensor stopping.
+
+
+---------------------------------------------------------------------------------------------------------------
+
+Version : 1.1.0
+Date : 11/09/2023
+Comments : 
+- Added a firmware checksum. If a bit is missing during firmware download, the error status VL53L8CX_STATUS_FW_CHECKSUM_FAIL
+is raised.
+
+---------------------------------------------------------------------------------------------------------------
+
+Version : 1.2.0
+Date : 12/07/2023
+Comments : 
+- Improved wrap around filter, no false positives are reported anymore when no target is in the FoV
+- Improved rad2perp coefficients allowing to get better ranging performances in corners
+
+---------------------------------------------------------------------------------------------------------------
+
+
+Version : 1.2.1
+Date : 01/24/2024
+- Added function vl53l8cx_set_VHV_repeat_count() used to enable periodic temperature compensation 
+
+
+---------------------------------------------------------------------------------------------------------------

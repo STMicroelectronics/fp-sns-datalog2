@@ -79,7 +79,8 @@ class PlotLinesWavWidget(PlotLinesWidget):
     @Slot(bool, int)
     def s_is_logging(self, status: bool, interface: int):
         if interface == 1 or interface == 3:
-            print("Component {} is logging via USB: {}".format(self.comp_name,status))
+            if_str = "USB" if interface == 1 else "Serial"
+            print(f"Sensor {self.comp_name} is logging via {if_str}: {status}")
             if status:
                 if "_mic" in self.comp_name:# or "_acc" in self.comp_name:
                     self.convert_wav_frame.setEnabled(False)
@@ -91,7 +92,6 @@ class PlotLinesWavWidget(PlotLinesWidget):
                 self.timer.stop()
                 if "_mic" in self.comp_name: # or "_acc" in self.comp_name:
                     self.convert_wav_frame.setEnabled(True)
-                
         else: # interface == 0
             print("Component {} is logging on SD Card: {}".format(self.comp_name,status))
             

@@ -1,24 +1,24 @@
 /**
- ******************************************************************************
- * @file    TagManager.h
- * @author  SRA - MCD
- * @version 1.0.0
- * @date    25-July-2022
- * @brief   This file provides a set of functions to handle Hardware and
- *          Software Tags
- *
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2022 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
+  ******************************************************************************
+  * @file    TagManager.h
+  * @author  SRA - MCD
+  * @version 1.0.0
+  * @date    25-July-2022
+  * @brief   This file provides a set of functions to handle Hardware and
+  *          Software Tags
+  *
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2022 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 #ifndef _TAGMANAGER_H_
 #define _TAGMANAGER_H_
 
@@ -76,16 +76,16 @@ sys_error_code_t TMEnableSWTag(bool status, uint8_t id);
 sys_error_code_t TMEnableHWTag(bool status, uint8_t id);
 sys_error_code_t TMSetSWTagLabel(const char *label, uint8_t id);
 sys_error_code_t TMSetHWTagLabel(const char *label, uint8_t id);
-HSD_SW_Tag_Class_t* TMGetSWTag(uint8_t id);
-HSD_HW_Tag_Class_t* TMGetHWTag(uint8_t id);
-char* TMGetSWTagLabel(uint8_t id);
-char* TMGetHWTagLabel(uint8_t id);
+HSD_SW_Tag_Class_t *TMGetSWTag(uint8_t id);
+HSD_HW_Tag_Class_t *TMGetHWTag(uint8_t id);
+char *TMGetSWTagLabel(uint8_t id);
+char *TMGetHWTagLabel(uint8_t id);
 
 sys_error_code_t TMInitSWTagStatus(bool status, uint8_t id);
 sys_error_code_t TMInitHWTagStatus(bool status, uint8_t id);
 sys_error_code_t TMSetSWTag(bool enable, uint8_t id);
 sys_error_code_t TMSetHWTag(bool enable, uint8_t id);
-HSD_Tag_t* TMGetTagList(void);
+HSD_Tag_t *TMGetTagList(void);
 uint8_t TMGetTagListSize(void);
 sys_error_code_t TMResetTagListCounter(void);
 sys_error_code_t TMCloseAllOpenedTags(void);

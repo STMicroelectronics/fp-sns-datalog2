@@ -233,11 +233,11 @@ uint8_t iis2dlpc_acc_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  iis2dlpc_acc_model.stream_params.spts = max_v;
+    iis2dlpc_acc_model.stream_params.spts = max_v;
   }
   else
   {
-	  iis2dlpc_acc_model.stream_params.spts = min_v;
+    iis2dlpc_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -416,11 +416,11 @@ uint8_t iis2mdc_mag_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	iis2mdc_mag_model.stream_params.spts = max_v;
+    iis2mdc_mag_model.stream_params.spts = max_v;
   }
   else
   {
-	iis2mdc_mag_model.stream_params.spts = min_v;
+    iis2mdc_mag_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -616,11 +616,11 @@ uint8_t ism330dhcx_gyro_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  ism330dhcx_gyro_model.stream_params.spts = max_v;
+    ism330dhcx_gyro_model.stream_params.spts = max_v;
   }
   else
   {
-	  ism330dhcx_gyro_model.stream_params.spts = min_v;
+    ism330dhcx_gyro_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -816,11 +816,11 @@ uint8_t ism330dhcx_acc_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  ism330dhcx_acc_model.stream_params.spts = max_v;
+    ism330dhcx_acc_model.stream_params.spts = max_v;
   }
   else
   {
-	  ism330dhcx_acc_model.stream_params.spts = min_v;
+    ism330dhcx_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1103,8 +1103,11 @@ uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
 //  };
 
   TMSetStartTime(t);
-  sprintf(app_model.acquisition_info_model.start_time, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1,
-          t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+  char local_timestamp[86];
+  (void) sprintf(local_timestamp, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1,
+                 t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+  (void) memcpy(app_model.acquisition_info_model.start_time, local_timestamp,
+                 sizeof(app_model.acquisition_info_model.start_time) - 1);
 
   /* last part not done in sprintf to avoid a warning  */
   app_model.acquisition_info_model.start_time[19] = '.';

@@ -75,6 +75,11 @@ struct _STHS34PF80Task
   IPD_input_t *tmos_swlib;
 
   /**
+    * Software Compensation Library Algorithm instance.
+    */
+  IPD_Instance_t *tmos_swlib_instance;
+
+  /**
     * Implements the  ISensor interface.
     */
   ISensorPresence_t sensor_if;

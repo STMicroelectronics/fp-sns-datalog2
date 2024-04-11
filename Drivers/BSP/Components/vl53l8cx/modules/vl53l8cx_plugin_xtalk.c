@@ -234,6 +234,7 @@ uint8_t vl53l8cx_calibrate_xtalk(
 					(void)memcpy(p_dev->xtalk_data, 
 						default_xtalk_ptr,
 						sizeof(p_dev->xtalk_data));
+					status |= VL53L8CX_STATUS_XTALK_FAILED;
 				}
 				continue_loop = (uint8_t)0;
 			}

@@ -31,12 +31,12 @@
 // *********************
 
 #define BOARD_ID_BOXA           0x0E
-#define BLE_FW_ID_DATALOG2_BOXA 0x22
-#define USB_FW_ID_DATALOG2_BOXA 0x27
+#define BLE_FW_ID_DATALOG2_BOXA 0x09
+#define USB_FW_ID_DATALOG2_BOXA 0x03
 
 #define BOARD_ID_BOXB           0x12
-#define BLE_FW_ID_DATALOG2_BOXB 0x05
-#define USB_FW_ID_DATALOG2_BOXB 0x06
+#define BLE_FW_ID_DATALOG2_BOXB 0x07
+#define USB_FW_ID_DATALOG2_BOXB 0x08
 
 // Drivers configuration
 // *********************

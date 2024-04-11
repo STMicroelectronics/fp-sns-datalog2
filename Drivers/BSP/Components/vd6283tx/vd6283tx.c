@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -492,7 +492,7 @@ int32_t VD6283TX_StartFlicker(VD6283TX_Object_t *pObj, uint8_t Channel, uint8_t 
     pObj->FlickerOutputType = OutputMode;
 
     type = (OutputMode == VD6283TX_FLICKER_ANALOG) ?
-           STALS_FLICKER_OUTPUT_ANALOG_CFG_2 :
+           STALS_FLICKER_OUTPUT_ANALOG :
            STALS_FLICKER_OUTPUT_DIGITAL_PDM;
 
     if (STALS_SetFlickerOutputType(pObj->handle, type) != STALS_NO_ERROR)

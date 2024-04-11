@@ -246,6 +246,7 @@ uint8_t vl53l8cx_init(
 	uint8_t tmp, status = VL53L8CX_STATUS_OK;
 	uint8_t pipe_ctrl[] = {VL53L8CX_NB_TARGET_PER_ZONE, 0x00, 0x01, 0x00};
 	uint32_t single_range = 0x01;
+	uint32_t crc_checksum = 0x00;
 
 	p_dev->default_xtalk = (uint8_t*)VL53L8CX_DEFAULT_XTALK;
 	p_dev->default_configuration = (uint8_t*)VL53L8CX_DEFAULT_CONFIGURATION;
@@ -358,6 +359,16 @@ uint8_t vl53l8cx_init(
 
 	status |= WrByte(&(p_dev->platform), 0x7fff, 0x02);
 
+	/* Firmware checksum */
+	status |= RdMulti(&(p_dev->platform), (uint16_t)(0x812FFC & 0xFFFF),
+			p_dev->temp_buffer, 4);
+	SwapBuffer(p_dev->temp_buffer, 4);
+	memcpy((uint8_t*)&crc_checksum, &(p_dev->temp_buffer[0]), 4);
+	if (crc_checksum != (uint32_t)0x56be6b24)
+	{
+		status |= VL53L8CX_STATUS_FW_CHECKSUM_FAIL;
+	}
+
 	/* Get offset NVM data and store them into the offset buffer */
 	status |= WrMulti(&(p_dev->platform), 0x2fd8,
 		(uint8_t*)VL53L8CX_GET_NVM_CMD, sizeof(VL53L8CX_GET_NVM_CMD));
@@ -427,7 +438,15 @@ uint8_t vl53l8cx_get_power_mode(
 			*p_power_mode = VL53L8CX_POWER_MODE_WAKEUP;
 			break;
 		case 0x2:
-			*p_power_mode = VL53L8CX_POWER_MODE_SLEEP;
+			status |= RdByte(&(p_dev->platform), 0x000F, &tmp);
+			if(tmp == 0x43)
+			{
+				*p_power_mode = VL53L8CX_POWER_MODE_DEEP_SLEEP;
+			}
+			else
+			{
+				*p_power_mode = VL53L8CX_POWER_MODE_SLEEP;
+			}
 
 			break;
 		default:
@@ -445,7 +464,7 @@ uint8_t vl53l8cx_set_power_mode(
 		VL53L8CX_Configuration		*p_dev,
 		uint8_t			        power_mode)
 {
-	uint8_t current_power_mode, status = VL53L8CX_STATUS_OK;
+	uint8_t current_power_mode, stored_mode, status = VL53L8CX_STATUS_OK;
 
 	status |= vl53l8cx_get_power_mode(p_dev, &current_power_mode);
 	if(power_mode != current_power_mode)
@@ -455,8 +474,17 @@ uint8_t vl53l8cx_set_power_mode(
 		case VL53L8CX_POWER_MODE_WAKEUP:
 			status |= WrByte(&(p_dev->platform), 0x7FFF, 0x00);
 			status |= WrByte(&(p_dev->platform), 0x09, 0x04);
+			status |= RdByte(&(p_dev->platform), 0x000F, &stored_mode);
+			if(stored_mode == 0x43) /* Only for deep sleep mode */
+			{
+				status |= WrByte(&(p_dev->platform), 0x000F, 0x40);
+			}
 			status |= _vl53l8cx_poll_for_answer(
 						p_dev, 1, 0, 0x06, 0x01, 1);
+			if(stored_mode == 0x43) /* Only for deep sleep mode */
+			{
+				status |= vl53l8cx_init(p_dev);
+			}
 			break;
 
 		case VL53L8CX_POWER_MODE_SLEEP:
@@ -464,6 +492,14 @@ uint8_t vl53l8cx_set_power_mode(
 			status |= WrByte(&(p_dev->platform), 0x09, 0x02);
 			status |= _vl53l8cx_poll_for_answer(
 						p_dev, 1, 0, 0x06, 0x01, 0);
+			break;
+
+		case VL53L8CX_POWER_MODE_DEEP_SLEEP:
+			status |= WrByte(&(p_dev->platform), 0x7FFF, 0x00);
+			status |= WrByte(&(p_dev->platform), 0x09, 0x02);
+			status |= _vl53l8cx_poll_for_answer(
+					p_dev, 1, 0, 0x06, 0x01, 0);
+			status |= WrByte(&(p_dev->platform), 0x000F, 0x43);
 			break;
 
 		default:
@@ -631,7 +667,7 @@ uint8_t vl53l8cx_stop_ranging(
 	status |= RdMulti(&(p_dev->platform),
                           0x2FFC, (uint8_t*)&auto_stop_flag, 4);
 	if((auto_stop_flag != (uint32_t)0x4FF)
-			&& (p_dev->is_auto_stop_enabled == (uint8_t)1))
+			&& (p_dev->is_auto_stop_enabled == (uint8_t)0))
 	{
 	        status |= WrByte(&(p_dev->platform), 0x7fff, 0x00);
 
@@ -1195,6 +1231,32 @@ uint8_t vl53l8cx_set_external_sync_pin_enable(
 	status |= vl53l8cx_dci_write_data(p_dev, p_dev->temp_buffer,
 			VL53L8CX_DCI_SYNC_PIN, 4);
 
+	return status;
+}
+
+uint8_t vl53l8cx_get_VHV_repeat_count(
+		VL53L8CX_Configuration *p_dev,
+		uint32_t *p_repeat_count)
+{
+	uint8_t status = VL53L8CX_STATUS_OK;
+	status |= vl53l8cx_dci_read_data(p_dev, (uint8_t*)p_dev->temp_buffer,
+			VL53L8CX_DCI_VHV_CONFIG, 16);
+
+	*p_repeat_count = ((uint32_t)p_dev->temp_buffer[7] << 24)
+			| ((uint32_t)p_dev->temp_buffer[6]  << 16)
+			| ((uint32_t)p_dev->temp_buffer[5]  << 8)
+			| (uint32_t)p_dev->temp_buffer[4];
+
+	return status;
+}
+
+uint8_t vl53l8cx_set_VHV_repeat_count(
+		VL53L8CX_Configuration *p_dev,
+		uint32_t repeat_count)
+{
+	uint8_t status = VL53L8CX_STATUS_OK;
+	status |= vl53l8cx_dci_replace_data(p_dev, p_dev->temp_buffer,
+			VL53L8CX_DCI_VHV_CONFIG, 16, (uint8_t*)&repeat_count, 4, 0x4);
 	return status;
 }
 

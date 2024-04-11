@@ -1,42 +1,21 @@
-/*
-* Copyright (c) 2021, STMicroelectronics - All Rights Reserved
-*
-* This file is part "VD6283 API" and is licensed under the terms of 
-* 'BSD 3-clause "New" or "Revised" License'.
-*
-********************************************************************************
-*
-* License terms BSD 3-clause "New" or "Revised" License.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions are met
-*
-* 1. Redistributions of source code must retain the above copyright notice, this
-* list of conditions and the following disclaimer.
-*
-* 2. Redistributions in binary form must reproduce the above copyright notice,
-* this list of conditions and the following disclaimer in the documentation
-* and/or other materials provided with the distribution.
-*
-* 3. Neither the name of the copyright holder nor the names of its contributors
-* may be used to endorse or promote products derived from this software
-* without specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*
-*
-********************************************************************************
-*
-*/
+/**
+  ******************************************************************************
+  * @file    VD6283.c
+  * @author  IMG SW Application Team
+  * @brief   Driver File
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2024 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+
 #ifndef __KERNEL__
 #include <stdlib.h>
 #include <string.h>
@@ -148,7 +127,6 @@ struct VD6283_device {
 	enum STALS_FlickerOutputType_t flicker_output_type;
 	enum STALS_Control_t is_otp_usage_enable;
 	enum STALS_Control_t is_output_dark_enable;
-	uint32_t als_autogain_ctrl;
 	uint64_t otp_bits[2];
 	struct {
 		uint16_t hf_trim;
@@ -248,15 +226,10 @@ do { \
 
 #define CHECK_FILTER_MASK_VALID(d, m) \
 do { \
-	if (!is_filter_mask_valid(d, m)) \
+	if (!is_filter_mask_valid(d,m)) \
 		return STALS_ERROR_INVALID_PARAMS; \
 } while (0)
 
-/* als autogain helpers */
-#define ALS_AUTO_CHANNELS_MASK			(0x00000fff)
-#define ALS_AUTO_VALUE_2_CHANNELS(v)		(((v) >>  8) & ALS_AUTO_CHANNELS_MASK)
-#define ALS_AUTO_VALUE_2_MASTER_CHANNEL(v)	(((v) >> 20) & ALS_AUTO_CHANNELS_MASK)
-#define ALS_AUTO_ALLOWED_BITS			0xffffff01
 
 /* Fw declarations */
 static STALS_ErrCode_t set_channel_gain(struct VD6283_device *dev, int c,
@@ -270,7 +243,7 @@ static inline int channelId_2_index(enum STALS_Channel_Id_t ChannelId)
 		STALS_ALS_MAX_CHANNELS;
 }
 
-static int is_filter_mask_valid(struct VD6283_device *dev, uint8_t Channels)
+static int is_filter_mask_valid(struct VD6283_device *UNUSED_P(dev), uint8_t Channels)
 {
 	int c;
 
@@ -323,9 +296,9 @@ static STALS_ErrCode_t otp_read_bank(struct VD6283_device *dev, int bank,
 	int bit_start, int bit_end, uint32_t *opt)
 {
 	int bit_nb = bit_end - bit_start + 1;
-	uint32_t bit_mask = (1 << bit_nb) - 1;
+	uint32_t bit_mask = (uint32_t) ((1 << bit_nb) - 1);
 
-	*opt = (dev->otp_bits[bank] >> bit_start) & bit_mask;
+	*opt = (uint32_t)((dev->otp_bits[bank] >> bit_start) & bit_mask);
 
 	return STALS_NO_ERROR;
 }
@@ -365,10 +338,10 @@ static STALS_ErrCode_t otp_read(struct VD6283_device *dev, int bit_start,
 		result_swap = 0;
 		for (i = 0; i < bit_nb; i++) {
 			if ((result >> i) & 1)
-				result_swap |= 1 << (bit_nb - 1 - i);
+				result_swap |= (uint32_t)(1 << (bit_nb - 1 - i));
 		}
 	}
-	*otp = bit_swap ? result_swap : result;
+	*otp = (uint32_t)(bit_swap ? result_swap : result);
 
 	return STALS_NO_ERROR;
 }
@@ -387,7 +360,7 @@ static STALS_ErrCode_t check_supported_device(struct VD6283_device *dev)
 	if (is_cut_valid(dev))
 		return STALS_NO_ERROR;
 
-	return STALS_ERROR_INIT;
+	return STALS_ERROR_INVALID_DEVICE_ID;
 }
 
 static STALS_ErrCode_t is_data_ready(struct VD6283_device *dev,
@@ -411,24 +384,8 @@ static STALS_ErrCode_t ac_mode_update(struct VD6283_device *dev, uint8_t mask,
 	res = STALS_RdByte(dev->client, VD6283_AC_MODE, &ac_mode);
 	if (res)
 		return res;
-	ac_mode = (ac_mode & ~mask) | (data & mask);
+	ac_mode = (uint8_t)((ac_mode & ~mask) | (data & mask));
 	return STALS_WrByte(dev->client, VD6283_AC_MODE, ac_mode);
-}
-
-static STALS_ErrCode_t read_channel(struct VD6283_device *dev, int chan,
-	uint32_t *measure)
-{
-	STALS_ErrCode_t res;
-	uint8_t values[3];
-
-	res = STALS_RdMultipleBytes(dev->client, VD6283_CHANNELx_MM(chan),
-		values, 3);
-	if (res)
-		return res;
-
-	*measure = (values[0] << 16) + (values[1] << 8) + values[2];
-
-	return STALS_NO_ERROR;
 }
 
 static STALS_ErrCode_t acknowledge_irq(struct VD6283_device *dev)
@@ -483,9 +440,9 @@ static STALS_ErrCode_t otp_reset(struct VD6283_device *dev)
 
 static uint8_t byte_bit_reversal(uint8_t d)
 {
-	d = ((d & 0xaa) >> 1) | ((d & 0x55) << 1);
-	d = ((d & 0xcc) >> 2) | ((d & 0x33) << 2);
-	d = ((d & 0xf0) >> 4) | ((d & 0x0f) << 4);
+	d = (uint8_t) (((d & 0xaa) >> 1) | ((d & 0x55) << 1));
+	d = (uint8_t) (((d & 0xcc) >> 2) | ((d & 0x33) << 2));
+	d = (uint8_t) (((d & 0xf0) >> 4) | ((d & 0x0f) << 4));
 
 	return d;
 }
@@ -562,21 +519,21 @@ static STALS_ErrCode_t otp_read_param_details(struct VD6283_device *dev)
 	res = otp_read(dev, 51, 9, &otp_data, 1);
 	if (res)
 		goto error;
-	dev->otp.hf_trim = otp_data;
+	dev->otp.hf_trim = (uint16_t) otp_data;
 	res = otp_read(dev, 116, 4, &otp_data, 1);
 	if (res)
 		goto error;
-	dev->otp.lf_trim = otp_data;
+	dev->otp.lf_trim = (uint8_t) otp_data;
 	res = otp_read(dev, 48, 3, &otp_data, 1);
 	if (res)
 		goto error;
-	dev->otp.filter_config = otp_data;
+	dev->otp.filter_config =(uint8_t) otp_data;
 	for (i = 0; i < STALS_ALS_MAX_CHANNELS; i++) {
 		res = otp_read(dev, i * 8, 8, &otp_data, 1);
 		if (res)
 			goto error;
 		/* 0 is not a valid value */
-		dev->otp.gains[i] = otp_data ? otp_data : VD6283_DEFAULT_GAIN;
+		dev->otp.gains[i] =(uint8_t) (otp_data ? otp_data : VD6283_DEFAULT_GAIN);
 	}
 
 	if (fixup_otp_filter_config(dev))
@@ -609,7 +566,7 @@ static STALS_ErrCode_t otp_read_param(struct VD6283_device *dev)
 		goto error;
 	/* For Rainbow2 extend OTP Version */
 	otp_data = otp_data+0x10;
-	dev->otp.otp_version = otp_data;
+	dev->otp.otp_version = (uint8_t) otp_data;
 
 	res = otp_read_param_details(dev);
 	dev->otp.filter_index = VD6283_DEFAULT_FILTER_INDEX;
@@ -620,7 +577,7 @@ error:
 
 static char nible_to_ascii(uint8_t nible)
 {
-	return nible < 10 ? '0' + nible : 'a' + nible - 10;
+	return nible < 10 ? (char)( '0' + nible) : (char)('a' + nible - 10);
 }
 
 static char encode_nible(uint8_t nible, uint8_t *xor_reg)
@@ -644,18 +601,20 @@ static STALS_ErrCode_t otp_generate_uid(struct VD6283_device *dev)
 	/* uid will have 14 chars */
 	/* encode first nible with otp version first */
 	res = otp_read(dev, 113, 3, &otp_data, 1);
-	nible = otp_data << 1;
-	res |= otp_read(dev, 60, 1, &otp_data, 1);
 	if (res)
 		goto error;
-	nible |= otp_data;
+	nible = (uint8_t) (otp_data << 1);
+	res = otp_read(dev, 60, 1, &otp_data, 1);
+	if (res)
+		goto error;
+	nible |= (uint8_t) otp_data;
 	dev->uid[index++] = encode_nible(nible, &xor_reg);
 	/* next nibles follow otp layout */
 	for (i = 61; i < 112; i += 4) {
 		res = otp_read(dev, i, 4, &otp_data, 1);
 		if (res)
 			goto error;
-		dev->uid[index++] = encode_nible(otp_data, &xor_reg);
+		dev->uid[index++] = encode_nible((uint8_t) otp_data, &xor_reg);
 	}
 
 	return STALS_NO_ERROR;
@@ -682,7 +641,7 @@ static STALS_ErrCode_t trim_oscillators(struct VD6283_device *dev)
 	if (res)
 		return res;
 	res = STALS_WrByte(dev->client, VD6283_OSC10M_TRIM_L,
-		(hf_trim >> 0) & 0xff);
+		 (uint8_t)((hf_trim >> 0) & 0xff));
 	if (res)
 		return res;
 
@@ -720,7 +679,7 @@ static STALS_ErrCode_t select_pd(struct VD6283_device *dev)
 
 	pds[3] = 0x0d;
 	for (c = 0; c < STALS_ALS_MAX_CHANNELS; c++) {
-		res = STALS_WrByte(dev->client, VD6283_SEL_PD_x(c), pds[c]);
+		res = STALS_WrByte(dev->client, (uint8_t) VD6283_SEL_PD_x(c), pds[c]);
 		if (res)
 			return res;
 	}
@@ -844,7 +803,7 @@ static STALS_ErrCode_t set_channel_gain(struct VD6283_device *dev, int c,
 			break;
 	}
 
-	res = STALS_WrByte(dev->client, VD6283_CHANNEL_VREF(c), vref + 1);
+	res = STALS_WrByte(dev->client,(uint8_t) VD6283_CHANNEL_VREF(c), (uint8_t)(vref + 1));
 	if (res)
 		return res;
 	dev->gains[c] = GainRange[vref];
@@ -871,7 +830,7 @@ static STALS_ErrCode_t set_exposure(struct VD6283_device *dev,
 
 	/* avoid integer overflow using intermediate 64 bits arithmetics */
 	exposure_acc = ExpoTimeInUs + (uint64_t) rounding;
-	exposure = div64_u64(MIN(exposure_acc, 0xffffffffULL), step_size_us);
+	exposure = (uint32_t) div64_u64(MIN(exposure_acc, 0xffffffffULL), step_size_us);
 	exposure = MAX(exposure, 1);
 	exposure = MIN(exposure, 0x3ff);
 	res = STALS_WrByte(dev->client, VD6283_EXPOSURE_L, exposure & 0xff);
@@ -896,7 +855,7 @@ static STALS_ErrCode_t dev_enable_channels_for_mode(struct VD6283_device *dev,
 	uint8_t dc_chan_en;
 	STALS_ErrCode_t res;
 
-	dc_chan_en = (channels & VD6283_DC_CHANNELS_MASK) | dev->dc_chan_en;
+	dc_chan_en =(uint8_t) ((channels & VD6283_DC_CHANNELS_MASK) | dev->dc_chan_en);
 	if (channels & active_chan)
 		return STALS_ERROR_INVALID_PARAMS;
 
@@ -933,7 +892,7 @@ static uint8_t dev_disable_dc_chan_en_for_mode(struct VD6283_device *dev,
 	uint8_t channels = is_flk ? dev->flk.chan : dev->als.chan;
 	uint8_t res;
 
-	res = dev->dc_chan_en & ~(channels & VD6283_DC_CHANNELS_MASK);
+	res =(uint8_t)(dev->dc_chan_en & ~(channels & VD6283_DC_CHANNELS_MASK));
 
 	return res;
 }
@@ -982,35 +941,20 @@ static STALS_ErrCode_t enable_flicker_output_mode(struct VD6283_device *dev)
 	enum STALS_FlickerOutputType_t FlickerOutputType =
 		dev->flicker_output_type;
 
-	/* STALS_FLICKER_OUTPUT_ANALOG_CFG_1 : pdm data on GPIO1 pin through
-	 *internal resistance and use internal clock for sigma-delta 1 bit dac.
+	/* STALS_FLICKER_OUTPUT_ANALOG : pdm data on GPIO2 pin and use
+	 * internal clock for sigma-delta 1 bit dac.
 	 * STALS_FLICKER_OUTPUT_DIGITAL_PDM : pdm data on GPIO1 pin and use
 	 * external clock feed from GPIO2 pin to drive sigma-delta 1 bit dac.
-	 * STALS_FLICKER_OUTPUT_ANALOG_CFG_2 : pdm data on GPIO2 pin and use
-	 * internal clock for sigma-delta 1 bit dac.
-	 * STALS_FLICKER_OUTPUT_ZC_CFG_1 : zc output on GPIO1 in.
-	 * STALS_FLICKER_OUTPUT_ZC_CFG_2 : zc output on GPIO2 pin.
 	 */
 	switch (FlickerOutputType) {
-	case STALS_FLICKER_OUTPUT_ANALOG_CFG_1:
-		intr_config = 0x02;
-		sel_dig = 0x0f;
-		break;
 	case STALS_FLICKER_OUTPUT_DIGITAL_PDM:
 		pdm_select_clk = PDM_SELECT_EXTERNAL_CLK;
 		intr_config = 0x01;
 		sel_dig = 0x0f;
 		break;
-	case STALS_FLICKER_OUTPUT_ANALOG_CFG_2:
+	case STALS_FLICKER_OUTPUT_ANALOG:
 		pdm_select_output = PDM_SELECT_GPIO2;
 		spare0 = VD6283_SPARE_0_OUT_GPIO2;
-		break;
-	case STALS_FLICKER_OUTPUT_ZC_CFG_1:
-		intr_config = 0x01;
-		spare0 = VD6283_SPARE_0_IN_GPIO2 | VD6283_SPARE_0_ZC_GPIO1;
-		break;
-	case STALS_FLICKER_OUTPUT_ZC_CFG_2:
-		spare0 = VD6283_SPARE_0_OUT_GPIO2 | VD6283_SPARE_0_ZC_GPIO2;
 		break;
 	default:
 		return STALS_ERROR_INVALID_PARAMS;
@@ -1093,16 +1037,13 @@ static STALS_ErrCode_t stop_als(struct VD6283_device *dev,
 static STALS_ErrCode_t start_als(struct VD6283_device *dev, uint8_t channels,
 	enum STALS_Mode_t mode)
 {
-	STALS_ErrCode_t res;
-	uint32_t cmd = (mode == STALS_MODE_ALS_SYNCHRONOUS) ? VD6283_ALS_START |
+	STALS_ErrCode_t res=STALS_NO_ERROR;
+	uint8_t cmd = (mode == STALS_MODE_ALS_SYNCHRONOUS) ? VD6283_ALS_START |
 		VD6283_ALS_CONTINUOUS | VD6283_ALS_CONTINUOUS_SLAVED :
 		VD6283_ALS_START;
 
 	if (dev->st == DEV_ALS_RUN || dev->st == DEV_BOTH_RUN)
 		return STALS_ERROR_ALREADY_STARTED;
-
-	//if (!is_als_autogain_valid(dev, channels))
-		//return STALS_ERROR_INVALID_PARAMS;
 
 	res = dev_enable_channels_for_mode(dev, mode, channels);
 	if (res)
@@ -1127,7 +1068,7 @@ static STALS_ErrCode_t start_als(struct VD6283_device *dev, uint8_t channels,
 	dev->st = dev->st == DEV_INIT ? DEV_ALS_RUN : DEV_BOTH_RUN;
 	dev->als_started_mode = mode;
 
-	return STALS_NO_ERROR;
+	return res ;
 
 start_als_error:
 	dev_disable_channels_for_mode(dev, mode);
@@ -1170,10 +1111,10 @@ static STALS_ErrCode_t start_flicker(struct VD6283_device *dev,
 	}
 
 	/* now enable ac and select channel ac channel */
-	ac_channel_select = channels == STALS_CHANNEL_6 ? 1 :
-		channelId_2_index((enum STALS_Channel_Id_t)channels) + 2;
-	res = ac_mode_update(dev, AC_CHANNEL_SELECT | AC_EXTRACTOR,
-		(ac_channel_select << 1) | AC_EXTRACTOR_ENABLE);
+	ac_channel_select = channels == (uint8_t) STALS_CHANNEL_6 ?  (uint8_t)1 :
+		(uint8_t) (channelId_2_index((enum STALS_Channel_Id_t)channels) + 2);
+	res = ac_mode_update(dev, (uint8_t) (AC_CHANNEL_SELECT | AC_EXTRACTOR),
+		 (uint8_t) ((ac_channel_select << 1) | (uint8_t) AC_EXTRACTOR_ENABLE));
 	if (res) {
 		disable_flicker_output_mode(dev);
 		dev_disable_channels_for_mode(dev, STALS_MODE_FLICKER);
@@ -1261,7 +1202,7 @@ static STALS_ErrCode_t get_sda_drive_value(struct VD6283_device *dev,
 
 	res = STALS_RdByte(dev->client, VD6283_SDA_DRIVE, &data);
 	data &= VD6283_SDA_DRIVE_MASK;
-	*value = (data + 1) * 4;
+	*value =(uint32_t) ((data + 1) * 4);
 
 	return res;
 }
@@ -1281,18 +1222,11 @@ static STALS_ErrCode_t get_saturation_value(struct VD6283_device *dev,
 		if (res)
 			return res;
 	} while(sat_m_before != sat_m_after);
-	*value = (sat_m_before << 8) + sat_l;
+	*value = (uint32_t) ((sat_m_before << 8) + sat_l);
 
 	return STALS_NO_ERROR;
 }
 
-static STALS_ErrCode_t get_als_autogain_ctrl(struct VD6283_device *dev,
-	uint32_t *value)
-{
-	*value = dev->als_autogain_ctrl;
-
-	return STALS_NO_ERROR;
-}
 
 static STALS_ErrCode_t set_pedestal_enable(struct VD6283_device *dev,
 	uint32_t value)
@@ -1348,27 +1282,22 @@ static STALS_ErrCode_t set_sda_drive_value(struct VD6283_device *dev,
 	if (value > 20 || value == 0 || value % 4)
 		return STALS_ERROR_INVALID_PARAMS;
 
-	sda_drive_reg_value = value / 4 - 1;
+	sda_drive_reg_value = (uint8_t) ((value / 4) - 1);
 	res = STALS_RdByte(dev->client, VD6283_SDA_DRIVE, &data);
 	if (res)
 		return res;
 
-	data = (data & ~VD6283_SDA_DRIVE_MASK) | sda_drive_reg_value;
+	data = (uint8_t) ((data & ~VD6283_SDA_DRIVE_MASK) | sda_drive_reg_value );
 	return STALS_WrByte(dev->client, VD6283_SDA_DRIVE, data);
 }
 
-static STALS_ErrCode_t set_als_autogain_ctrl(struct VD6283_device *dev,
-	uint32_t value)
-{
-	return STALS_ERROR_FNCT_DEPRECATED;
-}
 
  static uint8_t calfactor( uint8_t gain)
  {
  	if (gain&BIT(3))
- 		return 0x80|(gain&0x07)<<2;
+ 		return (uint8_t) (0x80|(gain&0x07)<<2);
  	else
- 		return (0x20-gain)<<2;
+ 		return (uint8_t) ((0x20-gain)<<2);
  }
 
  static uint8_t calfactor1050(uint16_t channelgain, uint8_t gain)
@@ -1380,45 +1309,32 @@ static STALS_ErrCode_t set_als_autogain_ctrl(struct VD6283_device *dev,
  		return calfactor(gain&0x0F);
  }
 
-
- static uint32_t cook_values_slope_channel(uint8_t gain, uint32_t raw)
- {
- 	uint32_t cooked;
-
- 	/* note that no overflow can occur */
- 	cooked = (raw * gain) >> 7;
-
- 	/* be sure to not generate values greater that saturation level ... */
- 	cooked = MIN(cooked, 0x00ffffff);
- 	/* ... but also avoid value below 0x100 except for zero */
- 	cooked = cooked < 0x100 ? 0 : cooked;
-
- 	return cooked;
- }
-
- static void cook_values_slope(struct VD6283_device *dev,
+ static void apply_calfactor(struct VD6283_device *dev,
  	struct STALS_Als_t *pAlsValue)
  {
- 	uint8_t otp_gains[STALS_ALS_MAX_CHANNELS];
+	uint8_t otp_coef_cal;
+	uint32_t calibrated_count;
  	int c;
 
  	for (c = 0; c < VD6283_CHANNEL_NB; c++){
- 		otp_gains[c] = dev->is_otp_usage_enable ? calfactor1050(dev->gains[c], dev->otp.gains[c]) :
- 				VD6283_DEFAULT_GAIN;
- 	}
- 	for (c = 0; c < VD6283_CHANNEL_NB; c++) {
- 		if (!(dev->als.chan & (1 << c)))
+		if (!(dev->als.chan & (1 << c)))
  			continue;
- 		pAlsValue->CountValue[c] = cook_values_slope_channel(
- 			otp_gains[c], pAlsValue->CountValueRaw[c]);
+		// get otp_coefcal
+		otp_coef_cal = dev->is_otp_usage_enable ? calfactor1050(dev->gains[c], dev->otp.gains[c]) :
+				VD6283_DEFAULT_GAIN;
+
+		// apply
+		/* note that no overflow can occur */
+		calibrated_count =(otp_coef_cal * pAlsValue->CountValueRaw[c]) >>7;
+		/* be sure to not generate values greater that saturation level ... */
+		calibrated_count = MIN(calibrated_count, 0x00ffffff);
+		/* ... but also avoid value below 0x100 except for zero */
+		calibrated_count = calibrated_count < 0x100 ? 0 : calibrated_count;
+		// store result
+		pAlsValue->CountValue[c] = calibrated_count;
  	}
  }
 
- static void cook_values(struct VD6283_device *dev,
- 	struct STALS_Als_t *pAlsValue)
- {
- 	cook_values_slope(dev, pAlsValue);
- }
 
 /* public API */
 /* STALS_ERROR_INVALID_PARAMS */
@@ -1429,24 +1345,34 @@ STALS_ErrCode_t STALS_Init(char *UNUSED_P(pDeviceName), void *pClient,
 	struct VD6283_device *dev;
 
 	CHECK_NULL_PTR(pHandle);
+	// get an empty device structure associated to handle
 	dev = get_device(pHandle);
-	if (!dev)
+	if (!dev) {
+		// NULL POINTEUR
+		res = STALS_ERROR_INIT;
 		goto get_device_error;
+	}
+	// configure dev structure with default values
 	setup_device(dev, pClient, *pHandle);
-	// no otp read yet
+	//i2c read access no otp read
 	res = check_supported_device(dev);
 	if (res)
+		// STALS_ERROR_READ STALS_ERROR_INVALID_DEVICE_ID
 		goto check_supported_device_error;
+	// first i2c writes
 	res = dev_sw_reset(dev);
 	if (res)
+		// STALS_ERROR_WRITE
 		goto dev_sw_reset_error;
 	res = dev_configuration(dev);
 	if (res)
+		// STALS_ERROR_READ STALS_ERROR_WRITE STALS_ERROR_TIME_OUT
 		goto dev_configuration_error;
 	// now we can check otp version
-	if (dev->otp.otp_version != VD6283_DEFAULT_OTP_VERSION)
+	if (dev->otp.otp_version != VD6283_DEFAULT_OTP_VERSION) {
+		res = STALS_ERROR_INVALID_DEVICE_ID;
 		goto check_supported_device_error;
-
+	}
 	return STALS_NO_ERROR;
 
 dev_configuration_error:
@@ -1454,7 +1380,7 @@ dev_sw_reset_error:
 check_supported_device_error:
 	put_device(dev);
 get_device_error:
-	return STALS_ERROR_INIT;
+	return res;
 }
 
 STALS_ErrCode_t STALS_Term(void *pHandle)
@@ -1543,7 +1469,7 @@ STALS_ErrCode_t STALS_SetInterMeasurementTime(void *pHandle,
 	/* avoid integer overflow using intermediate 64 bits arithmetics */
 	value_acc = InterMeasurmentInUs + (uint64_t) rounding;
 	value_acc = div64_u64(MIN(value_acc, 0xffffffffULL), step_size_us);
-	value = MIN(value_acc, 0xff);
+	value = (uint8_t) MIN(value_acc, 0xff);
 	res = STALS_WrByte(dev->client, VD6283_CONTINUOUS_PERIOD, value);
 	if (res)
 		return res;
@@ -1637,15 +1563,10 @@ STALS_ErrCode_t STALS_SetFlickerOutputType(void *pHandle,
 	CHECH_DEV_ST_FLICKER_NOT_STARTED(dev);
 
 	switch (FlickerOutputType) {
-	case STALS_FLICKER_OUTPUT_ANALOG_CFG_1:
 	case STALS_FLICKER_OUTPUT_DIGITAL_PDM:
 		dev->flicker_output_type = FlickerOutputType;
 		break;
-	case STALS_FLICKER_OUTPUT_ANALOG_CFG_2:
-		dev->flicker_output_type = FlickerOutputType;
-		break;
-	case STALS_FLICKER_OUTPUT_ZC_CFG_1:
-	case STALS_FLICKER_OUTPUT_ZC_CFG_2:
+	case STALS_FLICKER_OUTPUT_ANALOG:
 		dev->flicker_output_type = FlickerOutputType;
 		break;
 	default:
@@ -1710,9 +1631,9 @@ STALS_ErrCode_t STALS_GetAlsValues(void *pHandle, uint8_t Channels,
 	struct STALS_Als_t *pAlsValue, uint8_t *pMeasureValid)
 {
 	struct VD6283_device *dev = get_active_device(pHandle);
-	uint8_t Channels_save = Channels;
-	STALS_ErrCode_t res;
+	STALS_ErrCode_t res = STALS_NO_ERROR;
 	uint8_t c;
+	uint32_t rawdata[VD6283_CHANNEL_NB];
 
 	CHECK_DEVICE_VALID(dev);
 	CHECK_NULL_PTR(pAlsValue);
@@ -1731,31 +1652,42 @@ STALS_ErrCode_t STALS_GetAlsValues(void *pHandle, uint8_t Channels,
 	if (!*pMeasureValid)
 		return STALS_NO_ERROR;
 
-	/* yes so read them */
-	 /* be sure to read als autogain channels if als autogain is enable */
-	if ((dev->als_autogain_ctrl & 1) == STALS_CONTROL_ENABLE)
-		Channels |= ALS_AUTO_VALUE_2_CHANNELS(dev->als_autogain_ctrl);
 	Channels &= dev->als.chan;
+
+
+
+	res = STALS_RdMultipleBytes(dev->client,
+								(uint8_t)VD6283_CHANNELx(0),
+								(uint8_t*) rawdata,
+								VD6283_CHANNEL_NB * 4 );
+	if (res != STALS_NO_ERROR)
+		return res;
+
 	for (c = 0; c < VD6283_CHANNEL_NB; c++) {
-		if (!(Channels & (1 << c)))
-			continue;
-		res = read_channel(dev, c, &pAlsValue->CountValueRaw[c]);
-		if (res)
-			return res;
-		pAlsValue->Gains[c] = dev->gains[c];
+		if (Channels & (1 << c)){
+			pAlsValue->CountValueRaw[c]=  ((rawdata[c] & 0xff) << 24) | ((rawdata[c] & 0xff00) << 8) | ((rawdata[c] & 0xff0000) >> 8);
+			pAlsValue->Gains[c] = dev->gains[c];
+		}
+		else{
+			pAlsValue->CountValueRaw[c] = 0;
+		}
 	}
-	pAlsValue->Channels = Channels_save;
-	cook_values(dev, pAlsValue);
+	pAlsValue->Channels = Channels;
+	apply_calfactor(dev, pAlsValue);
 
 	/* acknowledge irq */
 	return acknowledge_irq(dev);
 }
 
+
 STALS_ErrCode_t STALS_GetFlickerFrequency(void *pHandle,
 	struct STALS_FlickerInfo_t *pFlickerInfo)
 {
+	struct VD6283_device *dev = get_active_device(pHandle);
+	CHECK_DEVICE_VALID(dev);
+	CHECK_NULL_PTR(pFlickerInfo);
 	return STALS_ERROR_FNCT_DEPRECATED;
-}	
+}
 
 STALS_ErrCode_t STALS_SetControl(void *pHandle,
 	enum STALS_Control_Id_t ControlId, uint32_t ControlValue)
@@ -1790,8 +1722,7 @@ STALS_ErrCode_t STALS_SetControl(void *pHandle,
 		res = STALS_ERROR_INVALID_PARAMS;
 		break;
 	case STALS_ALS_AUTOGAIN_CTRL:
-		CHECH_DEV_ST_ALS_NOT_STARTED(dev);
-		res = set_als_autogain_ctrl(dev, ControlValue);
+		res =  STALS_ERROR_FNCT_DEPRECATED;
 		break;
 	default:
 		res = STALS_ERROR_INVALID_PARAMS;
@@ -1832,7 +1763,7 @@ STALS_ErrCode_t STALS_GetControl(void *pHandle,
 		res = get_saturation_value(dev, pControlValue);
 		break;
 	case STALS_ALS_AUTOGAIN_CTRL:
-		res = get_als_autogain_ctrl(dev, pControlValue);
+		res =  STALS_ERROR_FNCT_DEPRECATED;
 		break;
 	default:
 		res = STALS_ERROR_INVALID_PARAMS;
@@ -1858,14 +1789,14 @@ STALS_ErrCode_t STALS_RdMultipleBytes(void *pClient, uint8_t index,
 STALS_ErrCode_t STALS_RdMultipleBytes(void *pClient, uint8_t index,
 	uint8_t *data, int nb)
 {
-	STALS_ErrCode_t res;
-	int i;
+	STALS_ErrCode_t res = STALS_NO_ERROR;
+	uint8_t i = 0;
 
-	for (i = 0; i < nb; i++) {
-		res = STALS_RdByte(pClient, index + i, &data[i]);
+	for (i = 0; i < (uint8_t) nb; i++) {
+		res = STALS_RdByte(pClient, (uint8_t) (index + i), &data[i]);
 		if (res)
 			return res;
 	}
 
-	return STALS_NO_ERROR;
+	return res;
 }

@@ -71,7 +71,8 @@ class PlotLinesWidget(PlotWidget):
     @Slot(bool, int)
     def s_is_logging(self, status: bool, interface: int):
         if interface == 1 or interface == 3:
-            print("Component {} is logging via USB: {}".format(self.comp_name,status))
+            if_str = "USB" if interface == 1 else "Serial"
+            print(f"Sensor {self.comp_name} is logging via {if_str}: {status}")
             if status:
                 self.current_x = 0
                 self.update_plot_characteristics(self.plot_params)

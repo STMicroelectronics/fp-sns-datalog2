@@ -36,6 +36,13 @@
     },
     {
         "board_id": "0xd",
+        "fw_id": "0x7",
+        "az_cloud_dtmi": "",
+        "st_cloud_dtmi": "",
+        "local_dtmi": "dtmi/appconfig/steval_mkboxpro/FP_SNS_DATALOG2_Datalog2-4.json"
+    },
+    {
+        "board_id": "0xd",
         "fw_id": "0xb",
         "az_cloud_dtmi": "",
         "st_cloud_dtmi": "",
@@ -63,17 +70,11 @@
         "local_dtmi": "dtmi/appconfig/steval_mkboxpro/FP_SNS_DATALOG2_Datalog2-4.json"
     },
     {
-        "board_id": "0xe",
-        "fw_id": "0x2",
-        "st_cloud_dtmi": "",
-        "local_dtmi": "dtmi/appconfig/steval_stwinbx1/ispu_ces_demo.json"
-    },
-    {
-        "board_id": "0xe",
-        "fw_id": "0x3",
+        "board_id": "0x11",
+        "fw_id": "0x4",
         "az_cloud_dtmi": "",
         "st_cloud_dtmi": "",
-        "local_dtmi": "dtmi/appconfig/steval_stwinbx1/pnpl_ai_dpu.json"
+        "local_dtmi": "dtmi/appconfig/steval_mkboxpro/FP_SNS_DATALOG2_Datalog2-4.json"
     },
     {
         "board_id": "0xe",
@@ -200,7 +201,21 @@
     },
     {
         "board_id": "0xe",
+        "fw_id": "0x2",
+        "az_cloud_dtmi": "",
+        "st_cloud_dtmi": "",
+        "local_dtmi": "dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2-5.json"
+    },
+    {
+        "board_id": "0xe",
         "fw_id": "0x27",
+        "az_cloud_dtmi": "",
+        "st_cloud_dtmi": "",
+        "local_dtmi": "dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_PDetect-1.json"
+    },
+    {
+        "board_id": "0xe",
+        "fw_id": "0x3",
         "az_cloud_dtmi": "",
         "st_cloud_dtmi": "",
         "local_dtmi": "dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_PDetect-1.json"
@@ -241,7 +256,21 @@
     },
     {
         "board_id": "0x12",
+        "fw_id": "0x7",
+        "az_cloud_dtmi": "",
+        "st_cloud_dtmi": "",
+        "local_dtmi": "dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2-5.json"
+    },
+    {
+        "board_id": "0x12",
         "fw_id": "0x6",
+        "az_cloud_dtmi": "",
+        "st_cloud_dtmi": "",
+        "local_dtmi": "dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_PDetect-1.json"
+    },
+    {
+        "board_id": "0x12",
+        "fw_id": "0x8",
         "az_cloud_dtmi": "",
         "st_cloud_dtmi": "",
         "local_dtmi": "dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_PDetect-1.json"
@@ -333,6 +362,13 @@
     {
         "board_id": "0x9",
         "fw_id": "0x7",
+        "az_cloud_dtmi": "",
+        "st_cloud_dtmi": "",
+        "local_dtmi": "dtmi/appconfig/steval_stwinkt1b/FP_SNS_DATALOG2_Datalog2-2.json"
+    },
+    {
+        "board_id": "0x9",
+        "fw_id": "0x8",
         "az_cloud_dtmi": "",
         "st_cloud_dtmi": "",
         "local_dtmi": "dtmi/appconfig/steval_stwinkt1b/FP_SNS_DATALOG2_Datalog2-2.json"

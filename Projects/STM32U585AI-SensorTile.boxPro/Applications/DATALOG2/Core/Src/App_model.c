@@ -233,11 +233,11 @@ uint8_t lis2mdl_mag_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  lis2mdl_mag_model.stream_params.spts = max_v;
+    lis2mdl_mag_model.stream_params.spts = max_v;
   }
   else
   {
-	  lis2mdl_mag_model.stream_params.spts = min_v;
+    lis2mdl_mag_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -424,7 +424,7 @@ uint8_t lis2du12_acc_set_samples_per_ts(int32_t value)
 {
   /* User code */
   int32_t min_v = 0;
-  int32_t max_v = 1000;
+  int32_t max_v = 800;
   /* USER Code */
   if (value >= min_v && value <= max_v)
   {
@@ -432,11 +432,11 @@ uint8_t lis2du12_acc_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  lis2du12_acc_model.stream_params.spts = max_v;
+    lis2du12_acc_model.stream_params.spts = max_v;
   }
   else
   {
-	  lis2du12_acc_model.stream_params.spts = min_v;
+    lis2du12_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -643,11 +643,11 @@ uint8_t lsm6dsv16x_acc_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  lsm6dsv16x_acc_model.stream_params.spts = max_v;
+    lsm6dsv16x_acc_model.stream_params.spts = max_v;
   }
   else
   {
-	  lsm6dsv16x_acc_model.stream_params.spts = min_v;
+    lsm6dsv16x_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -853,11 +853,11 @@ uint8_t lsm6dsv16x_gyro_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  lsm6dsv16x_gyro_model.stream_params.spts = max_v;
+    lsm6dsv16x_gyro_model.stream_params.spts = max_v;
   }
   else
   {
-	  lsm6dsv16x_gyro_model.stream_params.spts = min_v;
+    lsm6dsv16x_gyro_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1003,11 +1003,11 @@ uint8_t lsm6dsv16x_mlc_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  lsm6dsv16x_mlc_model.stream_params.spts = max_v;
+    lsm6dsv16x_mlc_model.stream_params.spts = max_v;
   }
   else
   {
-	  lsm6dsv16x_mlc_model.stream_params.spts = min_v;
+    lsm6dsv16x_mlc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1197,11 +1197,11 @@ uint8_t mp23db01hp_mic_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  mp23db01hp_mic_model.stream_params.spts = max_v;
+    mp23db01hp_mic_model.stream_params.spts = max_v;
   }
   else
   {
-	  mp23db01hp_mic_model.stream_params.spts = min_v;
+    mp23db01hp_mic_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1387,11 +1387,11 @@ uint8_t stts22h_temp_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  stts22h_temp_model.stream_params.spts = max_v;
+    stts22h_temp_model.stream_params.spts = max_v;
   }
   else
   {
-	  stts22h_temp_model.stream_params.spts = min_v;
+    stts22h_temp_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1578,11 +1578,11 @@ uint8_t lps22df_press_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  lps22df_press_model.stream_params.spts = max_v;
+    lps22df_press_model.stream_params.spts = max_v;
   }
   else
   {
-	  lps22df_press_model.stream_params.spts = min_v;
+    lps22df_press_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1783,11 +1783,11 @@ uint8_t ism330is_acc_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  ism330is_acc_model.stream_params.spts = max_v;
+    ism330is_acc_model.stream_params.spts = max_v;
   }
   else
   {
-	  ism330is_acc_model.stream_params.spts = min_v;
+    ism330is_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -2003,11 +2003,11 @@ uint8_t ism330is_gyro_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  ism330is_gyro_model.stream_params.spts = max_v;
+    ism330is_gyro_model.stream_params.spts = max_v;
   }
   else
   {
-	  ism330is_gyro_model.stream_params.spts = min_v;
+    ism330is_gyro_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -2334,8 +2334,11 @@ uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
   //  };
 
   TMSetStartTime(t);
-  sprintf(app_model.acquisition_info_model.start_time, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1,
-          t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+  char local_timestamp[86];
+  (void) sprintf(local_timestamp, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1,
+                 t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+  (void) memcpy(app_model.acquisition_info_model.start_time, local_timestamp,
+                 sizeof(app_model.acquisition_info_model.start_time) - 1);
 
   /* last part not done in sprintf to avoid a warning  */
   app_model.acquisition_info_model.start_time[19] = '.';

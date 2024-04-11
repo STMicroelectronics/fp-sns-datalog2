@@ -39,15 +39,26 @@ extern "C" {
 
 #define COM_MAX_PNPL_COMPONENTS 20
 
-#define PNPL_CMD_NO_ERROR_CODE      (0x0u)
-#define PNPL_CMD_ERROR_CODE         (0x1u)
-
 #define PNPL_INT                    (0x0u)
 #define PNPL_FLOAT                  (0x1u)
 #define PNPL_STRING                 (0x2u)
 #define PNPL_BOOLEAN                (0x3u)
 #define PNPL_TELEMETRY              (0x4u)
 
+/* PnP-Like error codes */
+#define PNPL_NO_ERROR_CODE                          (uint8_t)(0x0)
+#define PNPL_BASE_ERROR_CODE                        (uint8_t)(0x1)
+#define PNPL_UNINITIALIZED_COMPONENT_ERROR_CODE     (uint8_t)(PNPL_BASE_ERROR_CODE + (uint8_t)1)
+#define PNPL_NO_COMMANDS_ERROR_CODE                 (uint8_t)(PNPL_BASE_ERROR_CODE + (uint8_t)2)
+
+/* Sensors categories */
+#define ISENSOR_CLASS_MEMS        0U
+#define ISENSOR_CLASS_AUDIO       1U
+#define ISENSOR_CLASS_RANGING     2U
+#define ISENSOR_CLASS_LIGHT       3U
+#define ISENSOR_CLASS_CAMERA      4U
+#define ISENSOR_CLASS_PRESENCE    5U
+#define ISENSOR_CLASS_UNKNOW      255U
 
 /**
   * Create type name for _PnPLCommand_t.
@@ -68,7 +79,7 @@ struct _PnPLCommand_t
   /**
     * Specifies the component name.
     */
-  char comp_name[COMP_KEY_MAX_LENGTH];
+  char comp_name[2*COMP_KEY_MAX_LENGTH];
 
   /**
    * Command string.

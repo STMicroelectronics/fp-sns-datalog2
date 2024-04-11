@@ -16,23 +16,6 @@
 import st_pnpl.DTDL.dtdl_utils as DTDLUtils
 from enum import Enum
 
-class UnitMap():
-    
-    def __init__(self) -> None:
-        self.unit_dict = {
-            "gForce":"g",
-            "gauss":"G",
-            "decibel":"dB",
-            "mdps":"mdps",
-            "degreeCelsius":"°C",
-            "hertz":"Hz",
-            "second":"s",
-            "Waveform":"Waveform",
-            "percent":"%",
-            "millisecond":"ms",
-            "microsecond":"μs"
-        }
-
 class TypeEnum(Enum):
     STRING = "string"
     INTEGER = "integer"

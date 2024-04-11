@@ -19,6 +19,6 @@ STM32_Programmer_CLI.exe -c port=SWD freq=8000 ap=0 -ob SWAP_BANK=0x0 -ob displ
 
 STM32_Programmer_CLI.exe -c port=SWD freq=8000 ap=0 -e all
 
-STM32_Programmer_CLI.exe -c port=SWD freq=8000 ap=0 -d ..\..\..\Projects\STWIN.box\Applications\DATALOG2\Binary\DATALOG2_Release.bin 0x08000000 -rst
+STM32_Programmer_CLI.exe -c port=SWD freq=8000 ap=0 -d ..\..\..\Projects\STM32U585AI-STWIN.box\Applications\DATALOG2\Binary\DATALOG2_Release.bin 0x08000000 -rst
 
 pause

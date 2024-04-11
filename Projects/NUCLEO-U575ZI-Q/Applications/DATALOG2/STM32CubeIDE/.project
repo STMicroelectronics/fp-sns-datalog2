@@ -679,9 +679,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/IUsbDelegate_vtbl.h</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Inc/PnPLCompManager_Conf.h</name>
+			<name>User/Core/Inc/PnPLCompManager_conf.h</name>
 			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/PnPLCompManager_Conf.h</locationURI>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/PnPLCompManager_conf.h</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Inc/SensorManager_conf.h</name>

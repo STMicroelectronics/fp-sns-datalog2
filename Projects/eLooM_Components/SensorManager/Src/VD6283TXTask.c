@@ -65,7 +65,7 @@
 #endif
 
 #if (HSD_USE_DUMMY_DATA == 1)
-static uint16_t dummyDataCounter = 0;
+static uint32_t dummyDataCounter = 0;
 #endif
 
 static const uint16_t GainRange[] =
@@ -1399,10 +1399,12 @@ static sys_error_code_t VD6283TXTaskSensorReadData(VD6283TXTask *_this)
 
 #if (HSD_USE_DUMMY_DATA == 1)
   uint16_t i = 0;
-  int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
+  int32_t *p32 = (int32_t *)_this->p_sensor_data_buff;
 
-  *p16++ = dummyDataCounter++;
-  *p16++ = dummyDataCounter++;
+  for (i = 0; i < VD6283TX_MAX_CHANNELS; i++)
+  {
+    *p32++ = dummyDataCounter++;
+  }
 #endif
 
   return res;

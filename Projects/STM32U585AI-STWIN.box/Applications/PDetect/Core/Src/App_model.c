@@ -394,11 +394,11 @@ uint8_t vl53l8cx_tof_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  vl53l8cx_tof_model.stream_params.spts = max_v;
+    vl53l8cx_tof_model.stream_params.spts = max_v;
   }
   else
   {
-	  vl53l8cx_tof_model.stream_params.spts = min_v;
+    vl53l8cx_tof_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -661,11 +661,11 @@ uint8_t vd6283tx_als_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  vd6283tx_als_model.stream_params.spts = max_v;
+    vd6283tx_als_model.stream_params.spts = max_v;
   }
   else
   {
-	  vd6283tx_als_model.stream_params.spts = min_v;
+    vd6283tx_als_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -975,14 +975,75 @@ uint8_t sths34pf80_tmos_set_enable(bool value)
 }
 uint8_t sths34pf80_tmos_set_odr(int32_t value)
 {
-  sys_error_code_t ret = SMSensorSetDataFrequency(sths34pf80_tmos_model.id, value);
+  /* See AN5867 chapter 3.3: In continuous mode, for each AVG_TMOS[2:0] value,
+   a maximum ODR value can be set (see table 8, where a blank space means incompatibility) */
+
+  uint16_t average_tobject = sths34pf80_tmos_model.sensor_status.type.presence.average_tobject;
+  int32_t data_frequency = 0;
+  sys_error_code_t ret = SYS_NO_ERROR_CODE;
+
+  switch (value)
+  {
+    case 1:
+      data_frequency = value;
+      break;
+    case 2:
+      if (average_tobject < 513)
+      {
+        data_frequency = value;
+      }
+      else
+      {
+        ret = SYS_INVALID_PARAMETER_ERROR_CODE;
+      }
+      break;
+    case 4:
+      if (average_tobject < 257)
+      {
+        data_frequency = value;
+      }
+      else
+      {
+        ret = SYS_INVALID_PARAMETER_ERROR_CODE;
+      }
+      break;
+    case 8:
+      if (average_tobject < 129)
+      {
+        data_frequency = value;
+      }
+      else
+      {
+        ret = SYS_INVALID_PARAMETER_ERROR_CODE;
+      }
+      break;
+    case 15:
+    case 30:
+      if (average_tobject < 33)
+      {
+        data_frequency = value;
+      }
+      else
+      {
+        ret = SYS_INVALID_PARAMETER_ERROR_CODE;
+      }
+      break;
+    default:
+      data_frequency = value;
+      ret = SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
+
   if (ret == SYS_NO_ERROR_CODE)
   {
-    sths34pf80_tmos_model.sensor_status.type.presence.data_frequency = value;
+    ret = SMSensorSetDataFrequency(sths34pf80_tmos_model.id, data_frequency);
+    if (ret == SYS_NO_ERROR_CODE)
+    {
+      sths34pf80_tmos_model.sensor_status.type.presence.data_frequency = data_frequency;
 #if (HSD_USE_DUMMY_DATA != 1)
-    sths34pf80_tmos_set_samples_per_ts((int32_t)value);
+      sths34pf80_tmos_set_samples_per_ts((int32_t) data_frequency);
 #endif
-    __stream_control(NULL, true);
+      __stream_control(NULL, true);
+    }
   }
   return ret;
 }
@@ -998,11 +1059,73 @@ uint8_t sths34pf80_tmos_set_transmittance(float value)
 }
 uint8_t sths34pf80_tmos_set_avg_tobject_num(int32_t value)
 {
-  sys_error_code_t ret = SMSensorSetAverageTObject(sths34pf80_tmos_model.id, value);
+  /* See AN5867 chapter 3.3: In continuous mode, for each AVG_TMOS[2:0] value,
+   a maximum ODR value can be set (see table 8, where a blank space means incompatibility) */
+
+  int32_t average_tobject = 0;
+  uint16_t data_frequency = (uint16_t)sths34pf80_tmos_model.sensor_status.type.presence.data_frequency;
+  sys_error_code_t ret = SYS_NO_ERROR_CODE;
+
+  switch (value)
+  {
+    case 1024:
+      if (data_frequency < 2)
+      {
+        average_tobject = value;
+      }
+      else
+      {
+        ret = SYS_INVALID_PARAMETER_ERROR_CODE;
+      }
+      break;
+    case 512:
+      if (data_frequency < 3)
+      {
+        average_tobject = value;
+      }
+      else
+      {
+        ret = SYS_INVALID_PARAMETER_ERROR_CODE;
+      }
+      break;
+    case 256:
+      if (data_frequency < 5)
+      {
+        average_tobject = value;
+      }
+      else
+      {
+        ret = SYS_INVALID_PARAMETER_ERROR_CODE;
+      }
+      break;
+    case 128:
+      if (data_frequency < 9)
+      {
+        average_tobject = value;
+      }
+      else
+      {
+        ret = SYS_INVALID_PARAMETER_ERROR_CODE;
+      }
+      break;
+    case 32:
+    case 8:
+    case 2:
+      average_tobject = value;
+      break;
+    default:
+      average_tobject = value;
+      ret = SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
+
   if (ret == SYS_NO_ERROR_CODE)
   {
-    sths34pf80_tmos_model.sensor_status.type.presence.average_tobject = value;
-    /* USER Code */
+    ret = SMSensorSetAverageTObject(sths34pf80_tmos_model.id, average_tobject);
+    if (ret == SYS_NO_ERROR_CODE)
+    {
+      sths34pf80_tmos_model.sensor_status.type.presence.average_tobject = average_tobject;
+      /* USER Code */
+    }
   }
   return ret;
 }
@@ -1225,11 +1348,11 @@ uint8_t sths34pf80_tmos_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  sths34pf80_tmos_model.stream_params.spts = max_v;
+    sths34pf80_tmos_model.stream_params.spts = max_v;
   }
   else
   {
-	  sths34pf80_tmos_model.stream_params.spts = min_v;
+    sths34pf80_tmos_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1420,11 +1543,11 @@ uint8_t imp34dt05_mic_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  imp34dt05_mic_model.stream_params.spts = max_v;
+    imp34dt05_mic_model.stream_params.spts = max_v;
   }
   else
   {
-	  imp34dt05_mic_model.stream_params.spts = min_v;
+    imp34dt05_mic_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1629,11 +1752,11 @@ uint8_t ism330dhcx_acc_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  ism330dhcx_acc_model.stream_params.spts = max_v;
+    ism330dhcx_acc_model.stream_params.spts = max_v;
   }
   else
   {
-	  ism330dhcx_acc_model.stream_params.spts = min_v;
+    ism330dhcx_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -1838,11 +1961,11 @@ uint8_t ism330dhcx_gyro_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  ism330dhcx_gyro_model.stream_params.spts = max_v;
+    ism330dhcx_gyro_model.stream_params.spts = max_v;
   }
   else
   {
-	  ism330dhcx_gyro_model.stream_params.spts = min_v;
+    ism330dhcx_gyro_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -2037,11 +2160,11 @@ uint8_t iis2iclx_acc_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  iis2iclx_acc_model.stream_params.spts = max_v;
+    iis2iclx_acc_model.stream_params.spts = max_v;
   }
   else
   {
-	  iis2iclx_acc_model.stream_params.spts = min_v;
+    iis2iclx_acc_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -2227,11 +2350,11 @@ uint8_t iis2mdc_mag_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  iis2mdc_mag_model.stream_params.spts = max_v;
+    iis2mdc_mag_model.stream_params.spts = max_v;
   }
   else
   {
-	  iis2mdc_mag_model.stream_params.spts = min_v;
+    iis2mdc_mag_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -2416,11 +2539,11 @@ uint8_t stts22h_temp_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  stts22h_temp_model.stream_params.spts = max_v;
+    stts22h_temp_model.stream_params.spts = max_v;
   }
   else
   {
-	  stts22h_temp_model.stream_params.spts = min_v;
+    stts22h_temp_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -2615,11 +2738,11 @@ uint8_t ilps22qs_press_set_samples_per_ts(int32_t value)
   }
   else if (value > max_v)
   {
-	  ilps22qs_press_model.stream_params.spts = max_v;
+    ilps22qs_press_model.stream_params.spts = max_v;
   }
   else
   {
-	  ilps22qs_press_model.stream_params.spts = min_v;
+    ilps22qs_press_model.stream_params.spts = min_v;
   }
   return 0;
 }
@@ -2752,8 +2875,7 @@ uint8_t log_controller_get_controller_type(int32_t *value)
 }
 uint8_t log_controller_save_config(ILog_Controller_t *ifn)
 {
-  ILog_Controller_save_config(ifn);
-  return 0;
+  return ILog_Controller_save_config(ifn);
 }
 uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
 {
@@ -2788,8 +2910,11 @@ uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
 //  };
 
   TMSetStartTime(t);
-  sprintf(app_model.acquisition_info_model.start_time, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1,
-          t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+  char local_timestamp[86];
+  (void) sprintf(local_timestamp, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1,
+                 t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+  (void) memcpy(app_model.acquisition_info_model.start_time, local_timestamp,
+                 sizeof(app_model.acquisition_info_model.start_time) - 1);
 
   /* last part not done in sprintf to avoid a warning  */
   app_model.acquisition_info_model.start_time[19] = '.';
@@ -2812,13 +2937,11 @@ uint8_t log_controller_stop_log(ILog_Controller_t *ifn)
 }
 uint8_t log_controller_set_time(ILog_Controller_t *ifn, const char *datetime)
 {
-  ILog_Controller_set_time(ifn, datetime);
-  return 0;
+  return ILog_Controller_set_time(ifn, datetime);
 }
 uint8_t log_controller_switch_bank(ILog_Controller_t *ifn)
 {
-  ILog_Controller_switch_bank(ifn);
-  return 0;
+  return ILog_Controller_switch_bank(ifn);
 }
 
 /* Tags Information PnPL Component -------------------------------------------*/
@@ -3319,23 +3442,23 @@ static uint8_t __stream_control(ILog_Controller_t *ifn, bool status)
           /* Get sensor's bandwidth */
           if (p_app_model->s_models[i]->sensor_status.isensor_class == ISENSOR_CLASS_MEMS)
           {
-        	p_app_model->s_models[i]->stream_params.bandwidth = p_app_model->s_models[i]->sensor_status.type.mems.odr * SMGetnBytesPerSample(i);
+            p_app_model->s_models[i]->stream_params.bandwidth = p_app_model->s_models[i]->sensor_status.type.mems.odr * SMGetnBytesPerSample(i);
           }
           else if (p_app_model->s_models[i]->sensor_status.isensor_class == ISENSOR_CLASS_AUDIO)
           {
-        	p_app_model->s_models[i]->stream_params.bandwidth = p_app_model->s_models[i]->sensor_status.type.audio.frequency * SMGetnBytesPerSample(i);
+            p_app_model->s_models[i]->stream_params.bandwidth = p_app_model->s_models[i]->sensor_status.type.audio.frequency * SMGetnBytesPerSample(i);
           }
           else if (p_app_model->s_models[i]->sensor_status.isensor_class == ISENSOR_CLASS_LIGHT)
           {
-        	p_app_model->s_models[i]->stream_params.bandwidth = (1000.0f / (float)p_app_model->s_models[i]->sensor_status.type.light.intermeasurement_time) * SMGetnBytesPerSample(i);
+            p_app_model->s_models[i]->stream_params.bandwidth = (1000.0f / (float)p_app_model->s_models[i]->sensor_status.type.light.intermeasurement_time) * SMGetnBytesPerSample(i);
           }
           else if (p_app_model->s_models[i]->sensor_status.isensor_class == ISENSOR_CLASS_PRESENCE)
           {
-        	p_app_model->s_models[i]->stream_params.bandwidth = p_app_model->s_models[i]->sensor_status.type.presence.data_frequency * SMGetnBytesPerSample(i);
+            p_app_model->s_models[i]->stream_params.bandwidth = p_app_model->s_models[i]->sensor_status.type.presence.data_frequency * SMGetnBytesPerSample(i);
           }
           else if (p_app_model->s_models[i]->sensor_status.isensor_class == ISENSOR_CLASS_RANGING)
           {
-        	p_app_model->s_models[i]->stream_params.bandwidth = p_app_model->s_models[i]->sensor_status.type.ranging.profile_config.frequency * SMGetnBytesPerSample(i);
+            p_app_model->s_models[i]->stream_params.bandwidth = p_app_model->s_models[i]->sensor_status.type.ranging.profile_config.frequency * SMGetnBytesPerSample(i);
           }
           else
           {

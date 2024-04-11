@@ -400,7 +400,13 @@ class ComponentWidget(QWidget):
             if isinstance(widget.value, QSpinBox):
                 widget.value.setValue(value)
             else:
-                widget.value.setText(str(value))
+                if widget.prop_type == TypeEnum.DOUBLE.value or widget.prop_type == TypeEnum.FLOAT.value:
+                    if widget.decimal_places is not None:
+                        widget.value.setText(str(round(value, widget.decimal_places)))
+                    else:
+                        widget.value.setText(str(value))    
+                else:
+                    widget.value.setText(str(value))
         elif widget.prop_type == TypeEnum.ENUM.value:
             item_id = 0
             for i in range(widget.value.count()):
