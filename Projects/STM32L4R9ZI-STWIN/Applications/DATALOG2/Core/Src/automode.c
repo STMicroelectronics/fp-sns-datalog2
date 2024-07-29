@@ -68,7 +68,7 @@ uint8_t automode_setup(void)
     else
     {
       /* nof_acquisition is not a valid value --> stop automode */
-      automode_set_enabled(false);
+      automode_set_enabled(false, NULL);
     }
 
     automode_get_start_delay_s(&automode_model.start_delay_s);

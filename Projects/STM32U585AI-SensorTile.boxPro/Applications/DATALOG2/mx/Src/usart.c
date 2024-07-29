@@ -128,7 +128,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
     /* USER CODE END UART4_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_UART4;
     PeriphClkInit.Uart4ClockSelection = RCC_UART4CLKSOURCE_PCLK1;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -162,7 +162,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
     /* USER CODE END USART2_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2;
     PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)

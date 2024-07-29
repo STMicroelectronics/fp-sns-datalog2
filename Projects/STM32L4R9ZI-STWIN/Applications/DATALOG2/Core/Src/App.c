@@ -142,6 +142,17 @@ static AManagedTaskEx *sIMP34DT05Obj = NULL;
   */
 static AManagedTaskEx *sDatalogAppObj = NULL;
 
+/**
+  * Pnpl mutex definition for thread safe purpose
+  */
+static TX_MUTEX pnpl_mutex;
+
+/**
+  * Private function declaration
+  */
+static void PnPL_lock_fp(void);
+static void PnPL_unlock_fp(void);
+
 
 /* eLooM framework entry points definition */
 /*******************************************/
@@ -150,6 +161,12 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 {
   assert_param(pAppContext != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  /* PnPL thread safe mutex creation */
+  tx_mutex_create(&pnpl_mutex, "PnPL Mutex", TX_INHERIT);
+
+  /* PnPL thread safe function registration */
+  PnPL_SetLockUnlockCallbacks(PnPL_lock_fp, PnPL_unlock_fp);
 
   PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
@@ -236,21 +253,23 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   IEventSrcAddEventListener(IMP23ABSUTaskGetEventSrcIF((IMP23ABSUTask *) sIMP23ABSUObj), DatalogAppListener);
   IEventSrcAddEventListener(IMP34DT05TaskGetEventSrcIF((IMP34DT05Task *) sIMP34DT05Obj), DatalogAppListener);
 
+  /************ Connect Sensor LL to be used for ucf management to the DatalogAppTask ************/
+  DatalogAppTask_SetMLCIF((AManagedTask *) sISM330DHCXObj);
+
   /* Init&Add PnPL Components */
   Iis3dwb_Acc_PnPLInit(pIis3dwb_Acc_PnPLObj);
   Iis2mdc_Mag_PnPLInit(pIis2mdc_Mag_PnPLObj);
   Imp23absu_Mic_PnPLInit(pImp23absu_Mic_PnPLObj);
   Ism330dhcx_Acc_PnPLInit(pIsm330dhcx_Acc_PnPLObj);
   Ism330dhcx_Gyro_PnPLInit(pIsm330dhcx_Gyro_PnPLObj);
-  Ism330dhcx_Mlc_PnPLInit(pIsm330dhcx_Mlc_PnPLObj, DatalogAppTask_GetIMLCControllerIF((DatalogAppTask *) sDatalogAppObj,
-                          (AManagedTask *) sISM330DHCXObj));
+  Ism330dhcx_Mlc_PnPLInit(pIsm330dhcx_Mlc_PnPLObj);
   Imp34dt05_Mic_PnPLInit(pImp34dt05_Mic_PnPLObj);
   Iis2dh_Acc_PnPLInit(pIis2dh_Acc_PnPLObj);
   Stts751_Temp_PnPLInit(pStts751_Temp_PnPLObj);
   Lps22hh_Press_PnPLInit(pLps22hh_Press_PnPLObj);
   Lps22hh_Temp_PnPLInit(pLps22hh_Temp_PnPLObj);
   Automode_PnPLInit(pAutomode_PnPLObj);
-  Log_Controller_PnPLInit(pLog_Controller_PnPLObj, DatalogAppTask_GetILogControllerIF((DatalogAppTask *) sDatalogAppObj));
+  Log_Controller_PnPLInit(pLog_Controller_PnPLObj);
   Tags_Info_PnPLInit(pTags_Info_PnPLObj);
   Acquisition_Info_PnPLInit(pAcquisition_Info_PnPLObj);
   Firmware_Info_PnPLInit(pFirmware_Info_PnPLObj);
@@ -258,20 +277,6 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
 
   return SYS_NO_ERROR_CODE;
 }
-
-/*
-IApplicationErrorDelegate *SysGetErrorDelegate(void)
-{
-  // Install the application error manager delegate.
-  static IApplicationErrorDelegate *s_pxErrDelegate = NULL;
-  if (s_pxErrDelegate == NULL)
-  {
-    s_pxErrDelegate = AEMAlloc();
-  }
-
-  return s_pxErrDelegate;
-}
-*/
 
 IAppPowerModeHelper *SysGetPowerModeHelper(void)
 {
@@ -283,5 +288,15 @@ IAppPowerModeHelper *SysGetPowerModeHelper(void)
   }
 
   return s_pxPowerModeHelper;
+}
+
+static void PnPL_lock_fp(void)
+{
+  tx_mutex_get(&pnpl_mutex, TX_NO_WAIT);
+}
+
+static void PnPL_unlock_fp(void)
+{
+  tx_mutex_put(&pnpl_mutex);
 }
 

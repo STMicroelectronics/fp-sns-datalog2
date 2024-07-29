@@ -27,13 +27,10 @@
 <a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
 </center>
 <h1 id="purpose">Purpose</h1>
-<p>The <strong>FP-SNS-DATALOG2</strong> function pack represents an evolution of FP-SNS-DATALOG1 and provides a comprehensive solution for saving data from any combination of sensors and microphones configured up to the maximum sampling rate.</p>
-<p>FP-SNS-DATALOG2 is based on application-level modules ((<strong>Sensor Manager</strong>, <strong>EMData</strong>, …) that a final user can reuse and extend easily to build up its custom application. These application modules adopt state-of-the-art design patterns, and they support natively low-power modes. To enable this solution, the function pack has been built on top of <strong>eLooM</strong>, an embedded Light object oriented fraMework for STM32 applications properly designed for embedded low power applications powered by STM32.</p>
-<p>The FP-SNS-DATALOG2 application allows to store sensor data onto a microSD™ card (secure digital High capacity - SDHC) formatted with the FAT32 file system, or stream to a PC via USB (WinUSB class) using the companion host software (cli_example) provided for Windows and Linux. It can also configure an ISM330DHCX and LSM6DSV16X Machine Learning Core unit and the ISM330IS Intelligent Sensor Processing Unit, so to read the output of the selected algorithm.</p>
-<p>This application allows downloading the selected configuration from a JSON file to the board as well as starting and controlling data acquisition. The same set of commands can be operated from a host via Command Line Interface or via Bluetooth using the STBLESensor app which lets you manage the board and sensor configurations, start/stop data acquisition on SD card and control data labeling. To read and process sensor data acquired using FP-SNS-DATALOG2, a few easy-to-use scripts in Python are provided within the software package. The scripts have been successfully tested with Python 3.10.</p>
-<p>The package also includes an example of ultrasound condition monitoring (<strong>UltrasoundFFT</strong>) for STEVAL-STWINBX1 that calculates the FFT of the IMP23ABSU analog microphone signal and streams the result to a PC GUI via USB. The microphone sampling rate is set by default to 192 kHz whereas the microphone bandwidth is up to 80 kHz.</p>
-<p>A new <strong>PDetect</strong> example for STEVAL-STWINBX1 + STEVAL-PDETECT1 for presence and motion detection has been added in FP-SNS-DATALOG2 v2.1.0.</p>
-<p>The FP-SNS-DATALOG2 software has been developed for the B-U585I-IOT02A, STEVAL-STWINBX1, STEVAL-STWINKT1B and STEVAL-MKBOXPRO development kit and X-NUCLEO-IKS02A1 with NUCLEO-U575ZI-Q or with NUCLEO-H7A3ZI-Q.</p>
+<p>The <strong>ST High Speed Datalog</strong> (<strong>FP-SNS-DATALOG2</strong>) is a comprehensive multisensor data capture and visualization toolkit, engineered to facilitate the development of embedded data science applications. The tool has been designed as an open and modular instrument, tailored for data scientists and embedded designers, that streamlines the capture of wideband and heterogeneous digital data streams from a variety of sensing and actuation platforms. It organizes the data into structured datasets that are readily compatible with mainstream data science toolchains, fostering reusability across multiple projects.</p>
+<p>ST High Speed Datalog, by virtue of its data-centric design and user-friendly <strong>Python SDK</strong>, may run with hardware boards that supply real-time data streams empowering users with full control of the data acquisition process. The included firmware is compatible with the <strong>STBLESensor</strong> app, which also lets you manage the board and sensor configurations, start/stop data acquisition on SD card, and control data labeling. Sensor data can also be streamed using a C++-based companion host software or can be stored onto a microSD™ card. Via the host PC and Bluetooth® Low Energy app, it is possible to configure the <strong>ISM330DHCX</strong> and the <strong>LSM6DSV16X</strong> machine learning core unit (MLC) and the <strong>ISM330IS</strong> intelligent sensor processing unit (ISPU) to read the output of the selected algorithm.</p>
+<p>The FP-SNS-DATALOG2 firmware can run on <strong>STEVAL-STWINBX1</strong>, <strong>STEVAL-STWINKT1B</strong>, <strong>STEVAL-MKBOXPRO</strong>, <strong>B-U585I-IOT02A</strong>, and X-NUCLEO-IKS02A1 with <strong>NUCLEO-U575ZI-Q</strong> or with <strong>NUCLEO-H7A3ZI-Q</strong>. ST high Speed datalog also natively supports <strong>STEVAL-PDETECT1</strong>, <strong>STEVAL-C34KAT1</strong>, <strong>STEVAL-C34KAT2</strong>, <strong>STEVAL-C34KPM1</strong>, <strong>STEVAL-C34DIL24</strong> and <strong>STEVAL-MKI230KA</strong> add-ons for the STEVAL-STWINBX1.</p>
+<p>The <strong>ST High Speed Datalog</strong> is part of the <strong>ST Edge AI suite</strong>, which is an integrated collection of software tools, designed to facilitate the development and deployment of embedded AI applications. This comprehensive suite supports both optimization and deployment of machine learning algorithms and neural network models, starting from data collection to final deployment on hardware, streamlining the workflow for professionals across various disciplines. The ST Edge AI suite supports various ST products: STM32 microcontrollers and microprocessors, Stellar microcontrollers and MEMS smart sensors. The ST Edge AI suite represents a strategic move to democratize edge AI technology, making it a pivotal resource for developers looking to harness the power of AI in embedded systems efficiently and effectively.</p>
 <p><img src="_htmresc/FP-SNS-DATALOG2_Software_Architecture.jpg" /></p>
 <p>Here is the list of references to user documents:</p>
 <ul>
@@ -46,19 +43,20 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section9" checked aria-hidden="true"> <label for="collapse-section9" aria-hidden="true">v2.1.1 / 12-Apr-24</label>
+<input type="checkbox" id="collapse-section10" checked aria-hidden="true"> <label for="collapse-section10" aria-hidden="true">v2.2.0 / 19-Jul-24</label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
-<h3 id="patch-release">Patch release</h3>
+<h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
 <ul>
-<li>Fixed samples_per_ts management during the load_ucf in DATALOG2 examples for SensorTile.box PRO, STWIN and STWIN.box</li>
-<li>Fixed odr/TObj dependency in TMOS sensor in PDetect example</li>
-<li>Updated .ld and fixed printf warnings in CubeIDE</li>
-<li>Updated and fixed STHS34PF80, VD6283TX and VL53L8CX tasks in SensorManager</li>
-<li>Resolved dependency issue in HSDPython_SDK in noGUI context</li>
-<li>Added ‘-cl, –columns_labels’ flag in hsdatalog_to_unico.py example script</li>
-<li>Aligned Device Template models, FWID, board catalog and regenerated PnPL files</li>
-<li>Applied mcuastyle, code cleaning and typo fixed</li>
+<li>Added support for ISM330BX, LSM6DSV16BX, TSC1641, SGP40, SHT40, LPS22 sensors and up to 3 STEVAL-PDETECT1 in daisy chain</li>
+<li>Added new mechanism in PnPL messages to enable synchronous and asynchronous responses</li>
+<li>Made PnPL FW code thread safe</li>
+<li>Managed SD card error: data loss issue managed by checking SDCard queue messages and stopping log + BLE notification</li>
+<li>Implemented sensor data streaming via BLE</li>
+<li>Increased number of SW tags (from 5 to 16)</li>
+<li>Regenerated and reshaped PnPL and App Model files</li>
+<li>Updated HSD_PythonSDK adding batch data extraction and conversion mechanism</li>
+<li>Aligned Device Template models, FWID and board catalog</li>
 </ul>
 <h2 id="contents">Contents</h2>
 <p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
@@ -74,7 +72,7 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Doxygen documentation</td>
-<td style="text-align: left;">2.1.0</td>
+<td style="text-align: left;">2.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Documentation\FP-SNS-DATALOG2_Package.chm">CHM</a></td>
 </tr>
 </tbody>
@@ -91,42 +89,42 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">B-U585I-IOT02A/DATALOG2</td>
-<td style="text-align: left;">2.1.0</td>
+<td style="text-align: left;">2.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects/B-U585I-IOT02A/Applications/DATALOG2/readme.html">Read me</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">NUCLEO-H7A3ZI-Q/DATALOG2</td>
-<td style="text-align: left;">2.1.0</td>
+<td style="text-align: left;">2.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects/NUCLEO-H7A3ZI-Q/Applications/DATALOG2/readme.html">Read me</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">NUCLEO-U575ZI-Q/DATALOG2</td>
-<td style="text-align: left;">2.1.0</td>
+<td style="text-align: left;">2.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects/NUCLEO-U575ZI-Q/Applications/DATALOG2/readme.html">Read me</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">STWIN/DATALOG2</td>
-<td style="text-align: left;">2.1.1 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">2.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects/STM32L4R9ZI-STWIN/Applications/DATALOG2/readme.html">Read me</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SensorTile.box PRO/DATALOG2</td>
-<td style="text-align: left;">2.1.1 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">2.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects/STM32U585AI-SensorTile.boxPro/Applications/DATALOG2/readme.html">Read me</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">STWIN.box/DATALOG2</td>
-<td style="text-align: left;">2.1.1 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">2.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects/STM32U585AI-STWIN.box/Applications/DATALOG2/readme.html">Read me</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">STWIN.box/PDetect</td>
-<td style="text-align: left;">2.1.1 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">2.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects/STM32U585AI-STWIN.box/Applications/PDetect/readme.html">Read me</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">STWIN.box/UltrasoundFFT</td>
-<td style="text-align: left;">2.1.0</td>
+<td style="text-align: left;">2.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects/STM32U585AI-STWIN.box/Applications/UltrasoundFFT/readme.html">Read me</a></td>
 </tr>
 </tbody>
@@ -143,7 +141,7 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">DPU</td>
-<td style="text-align: left;">2.0.3</td>
+<td style="text-align: left;">2.1.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects\eLooM_Components\DPU\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="even">
@@ -153,12 +151,12 @@
 </tr>
 <tr class="odd">
 <td style="text-align: left;">SensorManager_threadx</td>
-<td style="text-align: left;">3.1.1 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">3.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects\eLooM_Components\SensorManager\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">TagManager</td>
-<td style="text-align: left;">1.1.1 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">1.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Projects\eLooM_Components\TagManager\Release_Notes.html">Release Note</a></td>
 </tr>
 </tbody>
@@ -195,7 +193,7 @@
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ST/PnPLCompManager</td>
-<td style="text-align: left;">2.1.1 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">2.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Middlewares\ST\PnPLCompManager\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="even">
@@ -205,7 +203,7 @@
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ST/STM32_BLE_Manager</td>
-<td style="text-align: left;">1.10.0</td>
+<td style="text-align: left;">1.12.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Middlewares\ST\STM32_BLE_Manager\Release_Notes.html">Release Note</a></td>
 </tr>
 <tr class="even">
@@ -257,12 +255,12 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">STM32H7xx CMSIS</td>
-<td style="text-align: left;">1.10.3</td>
+<td style="text-align: left;">1.10.4 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Drivers\CMSIS\Device\ST\STM32H7xx\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">STM32H7xx HAL</td>
-<td style="text-align: left;">1.11.1</td>
+<td style="text-align: left;">1.11.3 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Drivers\STM32H7xx_HAL_Driver\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
@@ -277,17 +275,17 @@
 </tr>
 <tr class="odd">
 <td style="text-align: left;">STM32U5xx CMSIS</td>
-<td style="text-align: left;">1.3.1</td>
+<td style="text-align: left;">1.4.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Drivers\CMSIS\Device\ST\STM32U5xx\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">STM32U5xx HAL</td>
-<td style="text-align: left;">1.4.0</td>
+<td style="text-align: left;">1.6.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Drivers\STM32U5xx_HAL_Driver\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">BSP Sensortile.box PRO</td>
-<td style="text-align: left;">1.1.2</td>
+<td style="text-align: left;">1.2.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Drivers\BSP\SensorTileBoxPro\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
@@ -297,7 +295,7 @@
 </tr>
 <tr class="odd">
 <td style="text-align: left;">BSP STWIN.box</td>
-<td style="text-align: left;">1.0.2</td>
+<td style="text-align: left;">1.1.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Drivers\BSP\STWIN.box\Release_Notes.html">Release notes</a></td>
 </tr>
 </tbody>
@@ -329,7 +327,7 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;">iis2iclx</td>
-<td style="text-align: left;">1.3.0</td>
+<td style="text-align: left;">1.4.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\iis2iclx\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
@@ -348,44 +346,64 @@
 <td style="text-align: left;"><a href="Drivers\BSP\Components\ilps22qs\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">ism330dhcx</td>
-<td style="text-align: left;">1.4.2</td>
-<td style="text-align: left;"><a href="Drivers\BSP\Components\ism330dhcx\Release_Notes.html">Release notes</a></td>
+<td style="text-align: left;">ism330bx</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;"><a href="Drivers\BSP\Components\ism330bx\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">ism330is</td>
-<td style="text-align: left;">1.1.0</td>
-<td style="text-align: left;"><a href="Drivers\BSP\Components\ism330is\Release_Notes.html">Release notes</a></td>
+<td style="text-align: left;">ism330dhcx</td>
+<td style="text-align: left;">1.5.0 <span class="icon-st-update"></span></td>
+<td style="text-align: left;"><a href="Drivers\BSP\Components\ism330dhcx\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
+<td style="text-align: left;">ism330is</td>
+<td style="text-align: left;">1.2.0 <span class="icon-st-update"></span></td>
+<td style="text-align: left;"><a href="Drivers\BSP\Components\ism330is\Release_Notes.html">Release notes</a></td>
+</tr>
+<tr class="odd">
 <td style="text-align: left;">lis2du12</td>
 <td style="text-align: left;">1.3.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\lis2du12\Release_Notes.html">Release notes</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">lis2mdl</td>
 <td style="text-align: left;">1.6.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\lis2mdl\Release_Notes.html">Release notes</a></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;">lps22df</td>
 <td style="text-align: left;">1.3.0</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\lps22df\Release_Notes.html">Release notes</a></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;">lps22hh</td>
-<td style="text-align: left;">1.5.0</td>
+<td style="text-align: left;">1.6.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\lps22hh\Release_Notes.html">Release notes</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lsm6dsv16bx</td>
+<td style="text-align: left;">1.2.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;"><a href="Drivers\BSP\Components\lsm6dsv16bx\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">lsm6dsv16x</td>
-<td style="text-align: left;">1.4.0</td>
+<td style="text-align: left;">1.5.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\lsm6dsv16x\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">mx_wifi</td>
 <td style="text-align: left;">2.3.4</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\mx_wifi\Release_Notes.html">Release notes</a></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sgp40</td>
+<td style="text-align: left;">1.0.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;"><a href="Drivers\BSP\Components\sgp40\Release_Notes.html">Release notes</a></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sht40ad1b</td>
+<td style="text-align: left;">1.3.0 <span class="icon-st-add"></span></td>
+<td style="text-align: left;"><a href="Drivers\BSP\Components\sht40ad1b\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">sths34pf80</td>
@@ -404,12 +422,12 @@
 </tr>
 <tr class="odd">
 <td style="text-align: left;">vd6283tx</td>
-<td style="text-align: left;">1.0.3 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">1.0.3</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\vd6283tx\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">vl53l8cx</td>
-<td style="text-align: left;">1.0.3 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">1.0.3</td>
 <td style="text-align: left;"><a href="Drivers\BSP\Components\vl53l8cx\Release_Notes.html">Release notes</a></td>
 </tr>
 </tbody>
@@ -426,12 +444,12 @@
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">HSD2 Utilities</td>
-<td style="text-align: left;">1.4.1 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">1.5.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Utilities\readme.html">Read me</a></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">cli_example</td>
-<td style="text-align: left;">3.4.0</td>
+<td style="text-align: left;">3.5.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Utilities\cli_example\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
@@ -441,7 +459,7 @@
 </tr>
 <tr class="even">
 <td style="text-align: left;">HSDPython_SDK</td>
-<td style="text-align: left;">3.2.1 <span class="icon-st-update"></span></td>
+<td style="text-align: left;">3.3.0 <span class="icon-st-update"></span></td>
 <td style="text-align: left;"><a href="Utilities\HSDPython_SDK\examples\Release_Notes.html">Release notes</a></td>
 </tr>
 <tr class="odd">
@@ -460,14 +478,17 @@
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
-<li>STM32CubeIDE v1.15.0</li>
+<li>STM32CubeIDE v1.15.1</li>
 </ul>
 <h2 id="supported-devices-and-boards">Supported Devices and Boards</h2>
 <ul>
-<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
-<li><a href="https://www.st.com/en/evaluation-tools/steval-pdetect1.html">STEVAL-PDETECT1</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
 <li><a href="https://www.st.com/stwin">STEVAL-STWINKT1B</a></li>
+<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-pdetect1.html">STEVAL-PDETECT1</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kat1.html">STEVAL-C34KAT1</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kat2.html">STEVAL-C34KAT2</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kpm1.html">STEVAL-C34KPM1</a></li>
 <li><a href="https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html">B-U585I-IOT02A</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
@@ -483,10 +504,379 @@
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section8" checked aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">v2.1.0 / 16-Feb-24</label>
+<input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true">v2.1.1 / 12-Apr-24</label>
 <div>
 <h2 id="main-changes-1">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
+<h3 id="patch-release">Patch release</h3>
+<ul>
+<li>Fixed samples_per_ts management during the load_ucf in DATALOG2 examples for SensorTile.box PRO, STWIN and STWIN.box</li>
+<li>Fixed odr/TObj dependency in TMOS sensor in PDetect example</li>
+<li>Updated .ld and fixed printf warnings in CubeIDE</li>
+<li>Updated and fixed STHS34PF80, VD6283TX and VL53L8CX tasks in SensorManager</li>
+<li>Resolved dependency issue in HSDPython_SDK in noGUI context</li>
+<li>Added ‘-cl, –columns_labels’ flag in hsdatalog_to_unico.py example script</li>
+<li>Aligned Device Template models, FWID, board catalog and regenerated PnPL files</li>
+<li>Applied mcuastyle, code cleaning and typo fixed</li>
+</ul>
+<h2 id="contents-1">Contents</h2>
+<p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
+<p>Documentation</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Doxygen documentation</td>
+<td style="text-align: left;">2.1.0</td>
+</tr>
+</tbody>
+</table>
+<p>Projects</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">B-U585I-IOT02A/DATALOG2</td>
+<td style="text-align: left;">2.1.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NUCLEO-H7A3ZI-Q/DATALOG2</td>
+<td style="text-align: left;">2.1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">NUCLEO-U575ZI-Q/DATALOG2</td>
+<td style="text-align: left;">2.1.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">STWIN/DATALOG2</td>
+<td style="text-align: left;">2.1.1 <span class="icon-st-update"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SensorTile.box PRO/DATALOG2</td>
+<td style="text-align: left;">2.1.1 <span class="icon-st-update"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">STWIN.box/DATALOG2</td>
+<td style="text-align: left;">2.1.1 <span class="icon-st-update"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">STWIN.box/PDetect</td>
+<td style="text-align: left;">2.1.1 <span class="icon-st-update"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">STWIN.box/UltrasoundFFT</td>
+<td style="text-align: left;">2.1.0</td>
+</tr>
+</tbody>
+</table>
+<p>eLooM FW modules</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">DPU</td>
+<td style="text-align: left;">2.0.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">EMData</td>
+<td style="text-align: left;">2.0.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">SensorManager_threadx</td>
+<td style="text-align: left;">3.1.1 <span class="icon-st-update"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TagManager</td>
+<td style="text-align: left;">1.1.1 <span class="icon-st-update"></span></td>
+</tr>
+</tbody>
+</table>
+<p>Middlewares</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ST/BlueNRG-2</td>
+<td style="text-align: left;">3.3.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ST/BlueNRG-LP</td>
+<td style="text-align: left;">1.3.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ST/CircularBufferDL2</td>
+<td style="text-align: left;">1.0.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ST/eLooM_threadx</td>
+<td style="text-align: left;">3.4.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ST/PnPLCompManager</td>
+<td style="text-align: left;">2.1.1 <span class="icon-st-update"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ST/SensorStreaming_USBX</td>
+<td style="text-align: left;">1.2.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ST/STM32_BLE_Manager</td>
+<td style="text-align: left;">1.10.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ST/STM32_GenericFFT_Library</td>
+<td style="text-align: left;">1.2.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ST/STM32_InfraredPD_Library</td>
+<td style="text-align: left;">1.0.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ST/filex</td>
+<td style="text-align: left;">6.2.0.221223</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ST/levelx</td>
+<td style="text-align: left;">6.2.0.221223</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ST/threadx</td>
+<td style="text-align: left;">6.2.0.221223</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ST/usbx</td>
+<td style="text-align: left;">6.2.0.221223</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Third_Party/parson</td>
+<td style="text-align: left;">1.5.2</td>
+</tr>
+</tbody>
+</table>
+<p>Drivers</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">STM32H7xx CMSIS</td>
+<td style="text-align: left;">1.10.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">STM32H7xx HAL</td>
+<td style="text-align: left;">1.11.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">STM32L4xx CMSIS</td>
+<td style="text-align: left;">1.7.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">STM32L4xx HAL</td>
+<td style="text-align: left;">1.13.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">STM32U5xx CMSIS</td>
+<td style="text-align: left;">1.3.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">STM32U5xx HAL</td>
+<td style="text-align: left;">1.4.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BSP Sensortile.box PRO</td>
+<td style="text-align: left;">1.1.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">BSP STWIN</td>
+<td style="text-align: left;">1.5.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BSP STWIN.box</td>
+<td style="text-align: left;">1.0.2</td>
+</tr>
+</tbody>
+</table>
+<p>Components</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Common</td>
+<td style="text-align: left;">7.2.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">iis2dh</td>
+<td style="text-align: left;">1.1.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">iis2dlpc</td>
+<td style="text-align: left;">1.3.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">iis2iclx</td>
+<td style="text-align: left;">1.3.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">iis2mdc</td>
+<td style="text-align: left;">1.3.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">iis3dwb</td>
+<td style="text-align: left;">1.2.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ilps22qs</td>
+<td style="text-align: left;">1.2.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ism330dhcx</td>
+<td style="text-align: left;">1.4.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ism330is</td>
+<td style="text-align: left;">1.1.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lis2du12</td>
+<td style="text-align: left;">1.3.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lis2mdl</td>
+<td style="text-align: left;">1.6.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lps22df</td>
+<td style="text-align: left;">1.3.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lps22hh</td>
+<td style="text-align: left;">1.5.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lsm6dsv16x</td>
+<td style="text-align: left;">1.4.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">mx_wifi</td>
+<td style="text-align: left;">2.3.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sths34pf80</td>
+<td style="text-align: left;">1.0.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">stts22h</td>
+<td style="text-align: left;">1.5.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">stts751</td>
+<td style="text-align: left;">1.3.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">vd6283tx</td>
+<td style="text-align: left;">1.0.3 <span class="icon-st-update"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">vl53l8cx</td>
+<td style="text-align: left;">1.0.3 <span class="icon-st-update"></span></td>
+</tr>
+</tbody>
+</table>
+<p>Utilities</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Version</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">HSD2 Utilities</td>
+<td style="text-align: left;">1.4.1 <span class="icon-st-update"></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">cli_example</td>
+<td style="text-align: left;">3.4.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">nlohmann/json library</td>
+<td style="text-align: left;">3.7.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">HSDPython_SDK</td>
+<td style="text-align: left;">3.2.1 <span class="icon-st-update"></span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">WiFi_module_upgrade</td>
+<td style="text-align: left;">mx_v2.3.4</td>
+</tr>
+</tbody>
+</table>
+<h2 id="known-limitations-1">Known Limitations</h2>
+<ul>
+<li>To run properly DATALOG2 example on STWIN.box, before using those applications, WIFI module firwmare must be upgraded. The binary is available in Utilities/WiFi_module_upgrade folder.</li>
+<li>mxchip driver generates a warning at compile time in CubeIDE and in Release configuration. It is not impacting the example performance nor generating issues, so you can ignore it.</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
+<li>STM32CubeIDE v1.15.0</li>
+</ul>
+<h2 id="supported-devices-and-boards-1">Supported Devices and Boards</h2>
+<ul>
+<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-pdetect1.html">STEVAL-PDETECT1</a></li>
+<li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
+<li><a href="https://www.st.com/stwin">STEVAL-STWINKT1B</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html">B-U585I-IOT02A</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
+</ul>
+<h2 id="backward-compatibility-1">Backward Compatibility</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="dependencies-1">Dependencies</h2>
+<ul>
+<li>None</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">v2.1.0 / 16-Feb-24</label>
+<div>
+<h2 id="main-changes-2">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
 <ul>
 <li><strong>Added new PDetect example for STEVAL-STWINBX1 + STEVAL-PDETECT1 for presence and motion detection</strong></li>
 <li><strong>Updated DATALOG2 example for STEVAL-STWINBX1: enable wifi component and add the possibility to access SD card data through FTP server</strong></li>
@@ -515,7 +905,7 @@
 </ul></li>
 <li>Applied mcuastyle, code cleaning and typo fixed</li>
 </ul>
-<h2 id="contents-1">Contents</h2>
+<h2 id="contents-2">Contents</h2>
 <p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
 <p>Documentation</p>
 <table>
@@ -838,18 +1228,18 @@
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-1">Known Limitations</h2>
+<h2 id="known-limitations-2">Known Limitations</h2>
 <ul>
 <li>To run properly DATALOG2 example on STWIN.box, before using those applications, WIFI module firwmare must be upgraded. The binary is available in Utilities/WiFi_module_upgrade folder.</li>
 <li>mxchip driver generates a warning at compile time in CubeIDE and in Release configuration. It is not impacting the example performance nor generating issues, so you can ignore it.</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-2">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
 <li>STM32CubeIDE v1.14.0</li>
 </ul>
-<h2 id="supported-devices-and-boards-1">Supported Devices and Boards</h2>
+<h2 id="supported-devices-and-boards-2">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
 <li><a href="https://www.st.com/en/evaluation-tools/steval-pdetect1.html">STEVAL-PDETECT1</a></li>
@@ -859,11 +1249,11 @@
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 </ul>
-<h2 id="backward-compatibility-1">Backward Compatibility</h2>
+<h2 id="backward-compatibility-2">Backward Compatibility</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="dependencies-1">Dependencies</h2>
+<h2 id="dependencies-2">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>
@@ -872,7 +1262,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true">v2.0.1 / 27-Nov-23</label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
+<h2 id="main-changes-3">Main Changes</h2>
 <h3 id="patch-release-1">Patch release</h3>
 <ul>
 <li>Added missing Batter Charger management and fixed ADC misconfiguration in STEVAL-STWINKT1B example</li>
@@ -881,7 +1271,7 @@
 <li>Updated CLI example and HSDPython_SDK</li>
 <li>Aligned on DTMI, FWID and board catalog</li>
 </ul>
-<h2 id="contents-2">Contents</h2>
+<h2 id="contents-3">Contents</h2>
 <p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
 <p>Documentation</p>
 <table>
@@ -1192,17 +1582,17 @@
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-2">Known Limitations</h2>
+<h2 id="known-limitations-3">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-2">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-3">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
 <li>STM32CubeIDE v1.13.2</li>
 </ul>
-<h2 id="supported-devices-and-boards-2">Supported Devices and Boards</h2>
+<h2 id="supported-devices-and-boards-3">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
@@ -1211,11 +1601,11 @@
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 </ul>
-<h2 id="backward-compatibility-2">Backward Compatibility</h2>
+<h2 id="backward-compatibility-3">Backward Compatibility</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="dependencies-2">Dependencies</h2>
+<h2 id="dependencies-3">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>
@@ -1224,8 +1614,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true">v2.0.0 / 29-Sep-23</label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
+<h2 id="main-changes-4">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
 <ul>
 <li><strong>Added support for STEVAL-STWINKT1B</strong></li>
 <li><strong>SensorManagerv3 porting concluded on all examples</strong></li>
@@ -1235,7 +1625,7 @@
 <li>Updated .ioc in mx folder</li>
 <li>Aligned on DTMI, FWID and board catalog</li>
 </ul>
-<h2 id="contents-3">Contents</h2>
+<h2 id="contents-4">Contents</h2>
 <p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
 <p>Documentation</p>
 <table>
@@ -1561,17 +1951,17 @@
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-3">Known Limitations</h2>
+<h2 id="known-limitations-4">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-3">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-4">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
 <li>STM32CubeIDE v1.13.2</li>
 </ul>
-<h2 id="supported-devices-and-boards-3">Supported Devices and Boards</h2>
+<h2 id="supported-devices-and-boards-4">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
@@ -1580,11 +1970,11 @@
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 </ul>
-<h2 id="backward-compatibility-3">Backward Compatibility</h2>
+<h2 id="backward-compatibility-4">Backward Compatibility</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="dependencies-3">Dependencies</h2>
+<h2 id="dependencies-4">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>
@@ -1593,7 +1983,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true">v1.2.1 / 11-Aug-23</label>
 <div>
-<h2 id="main-changes-4">Main Changes</h2>
+<h2 id="main-changes-5">Main Changes</h2>
 <h3 id="patch-release-2">Patch release</h3>
 <ul>
 <li>Bugs fixed in STWIN.box and Sensortile.box PRO applications:
@@ -1604,7 +1994,7 @@
 </ul></li>
 <li>Updated usb catalog in HSDPython_SDK</li>
 </ul>
-<h2 id="contents-4">Contents</h2>
+<h2 id="contents-5">Contents</h2>
 <p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
 <p>Documentation</p>
 <table>
@@ -1875,17 +2265,17 @@
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-4">Known Limitations</h2>
+<h2 id="known-limitations-5">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-4">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-5">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
 <li>STM32CubeIDE v1.13.1</li>
 </ul>
-<h2 id="supported-devices-and-boards-4">Supported Devices and Boards</h2>
+<h2 id="supported-devices-and-boards-5">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
@@ -1893,11 +2283,11 @@
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 </ul>
-<h2 id="backward-compatibility-4">Backward Compatibility</h2>
+<h2 id="backward-compatibility-5">Backward Compatibility</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="dependencies-4">Dependencies</h2>
+<h2 id="dependencies-5">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>
@@ -1906,8 +2296,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true">v1.2.0 / 7-Jul-23</label>
 <div>
-<h2 id="main-changes-5">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
+<h2 id="main-changes-6">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
 <ul>
 <li><strong>Added support for B-U585I-IOT02A and X-NUCLEO-IKS02A1 with NUCLEO-H7A3ZI-Q or NUCLEO-U575ZI-Q</strong></li>
 <li><strong>Redesigned IStream interface and ble, filex and usbx IStream classes, aligning to v6.2.0 middlewares</strong></li>
@@ -1927,7 +2317,7 @@
 <li>Updated STM32 HAL and CMSIS</li>
 <li>Bug fixed and code cleaned</li>
 </ul>
-<h2 id="contents-5">Contents</h2>
+<h2 id="contents-6">Contents</h2>
 <p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
 <p>Documentation</p>
 <table>
@@ -2198,17 +2588,17 @@
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-5">Known Limitations</h2>
+<h2 id="known-limitations-6">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-5">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-6">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
 <li>STM32CubeIDE v1.12.1</li>
 </ul>
-<h2 id="supported-devices-and-boards-5">Supported Devices and Boards</h2>
+<h2 id="supported-devices-and-boards-6">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
@@ -2216,11 +2606,11 @@
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 </ul>
-<h2 id="backward-compatibility-5">Backward Compatibility</h2>
+<h2 id="backward-compatibility-6">Backward Compatibility</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="dependencies-5">Dependencies</h2>
+<h2 id="dependencies-6">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>
@@ -2229,8 +2619,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">v1.1.0 / 24-Mar-23</label>
 <div>
-<h2 id="main-changes-6">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
+<h2 id="main-changes-7">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
 <ul>
 <li><strong>Added support for Sensortile.box PRO (STEVAL-MKBOXPRO)</strong></li>
 <li>Updated USBX folder: updated defines names, descriptor format, productID, optimized USB FIFO size</li>
@@ -2241,7 +2631,7 @@
 <li>Updated BSP and middlewares</li>
 <li>Bug fixed and updates for Python SDK</li>
 </ul>
-<h2 id="contents-6">Contents</h2>
+<h2 id="contents-7">Contents</h2>
 <p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
 <p>Documentation</p>
 <table>
@@ -2488,26 +2878,26 @@
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-6">Known Limitations</h2>
+<h2 id="known-limitations-7">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-6">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-7">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
 <li>STM32CubeIDE v1.12.0</li>
 </ul>
-<h2 id="supported-devices-and-boards-6">Supported Devices and Boards</h2>
+<h2 id="supported-devices-and-boards-7">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
 </ul>
-<h2 id="backward-compatibility-6">Backward Compatibility</h2>
+<h2 id="backward-compatibility-7">Backward Compatibility</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="dependencies-6">Dependencies</h2>
+<h2 id="dependencies-7">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>
@@ -2516,7 +2906,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true">v1.0.1 / 14-Feb-23</label>
 <div>
-<h2 id="main-changes-7">Main Changes</h2>
+<h2 id="main-changes-8">Main Changes</h2>
 <h3 id="patch-release-3">Patch release</h3>
 <ul>
 <li>Fixed compilation error in Linux environment and g++</li>
@@ -2528,7 +2918,7 @@
 <li>Fixed toNanoedge converter and offline plot data for dummy data in Python SDK and updated device models</li>
 <li>Fixed typos in the code and links</li>
 </ul>
-<h2 id="contents-7">Contents</h2>
+<h2 id="contents-8">Contents</h2>
 <p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
 <p>Documentation</p>
 <table>
@@ -2747,25 +3137,25 @@
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-7">Known Limitations</h2>
+<h2 id="known-limitations-8">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-7">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-8">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
 <li>STM32CubeIDE v1.11.0</li>
 </ul>
-<h2 id="supported-devices-and-boards-7">Supported Devices and Boards</h2>
+<h2 id="supported-devices-and-boards-8">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
 </ul>
-<h2 id="backward-compatibility-7">Backward Compatibility</h2>
+<h2 id="backward-compatibility-8">Backward Compatibility</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="dependencies-7">Dependencies</h2>
+<h2 id="dependencies-8">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>
@@ -2774,9 +3164,9 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">v1.0.0 / 2-Dec-22</label>
 <div>
-<h2 id="main-changes-8">Main Changes</h2>
+<h2 id="main-changes-9">Main Changes</h2>
 <h3 id="first-official-release">First official release</h3>
-<h2 id="contents-8">Contents</h2>
+<h2 id="contents-9">Contents</h2>
 <p><small>The components flagged by “<span class="icon-st-update"></span>” have changed since the previous release. “<span class="icon-st-add"></span>” are new.</small></p>
 <p>Documentation</p>
 <table>
@@ -2995,25 +3385,25 @@
 </tr>
 </tbody>
 </table>
-<h2 id="known-limitations-8">Known Limitations</h2>
+<h2 id="known-limitations-9">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="development-toolchains-and-compilers-8">Development Toolchains and Compilers</h2>
+<h2 id="development-toolchains-and-compilers-9">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
 <li>STM32CubeIDE v1.10.1</li>
 </ul>
-<h2 id="supported-devices-and-boards-8">Supported Devices and Boards</h2>
+<h2 id="supported-devices-and-boards-9">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
 </ul>
-<h2 id="backward-compatibility-8">Backward Compatibility</h2>
+<h2 id="backward-compatibility-9">Backward Compatibility</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="dependencies-8">Dependencies</h2>
+<h2 id="dependencies-9">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>

@@ -97,7 +97,7 @@ void HAL_RTC_MspInit(RTC_HandleTypeDef *rtcHandle)
     /* USER CODE END RTC_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC;
     PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)

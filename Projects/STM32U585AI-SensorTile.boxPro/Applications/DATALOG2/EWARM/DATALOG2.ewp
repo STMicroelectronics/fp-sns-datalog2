@@ -370,12 +370,14 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lis2du12</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lis2mdl</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lps22df</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv16bx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv16x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/stts22h</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/SensorTileBoxPro</state>
                     <state>$PROJ_DIR$/../Core/Inc</state>
-                    <state>$PROJ_DIR$/../PnPL/Inc</state>
+                    <state>$PROJ_DIR$/../PnPL/AppModel/Inc</state>
+                    <state>$PROJ_DIR$/../PnPL/Components/Inc</state>
                     <state>$PROJ_DIR$/../FileX/Target</state>
                     <state>$PROJ_DIR$/../FileX/App</state>
                     <state>$PROJ_DIR$/../USBX/Target</state>
@@ -1478,12 +1480,14 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lis2du12</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lis2mdl</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lps22df</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv16bx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv16x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/stts22h</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/SensorTileBoxPro</state>
                     <state>$PROJ_DIR$/../Core/Inc</state>
-                    <state>$PROJ_DIR$/../PnPL/Inc</state>
+                    <state>$PROJ_DIR$/../PnPL/AppModel/Inc</state>
+                    <state>$PROJ_DIR$/../PnPL/Components/Inc</state>
                     <state>$PROJ_DIR$/../FileX/Target</state>
                     <state>$PROJ_DIR$/../FileX/App</state>
                     <state>$PROJ_DIR$/../USBX/Target</state>
@@ -2445,6 +2449,12 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\LPS22HHTask_vtbl.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\LSM6DSV16BXTask.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\LSM6DSV16BXTask_vtbl.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\LSM6DSV16XTask.h</name>
                     </file>
                     <file>
@@ -2538,6 +2548,9 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\LPS22DFTask.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\LSM6DSV16BXTask.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\LSM6DSV16XTask.c</name>
                     </file>
                     <file>
@@ -2622,9 +2635,6 @@
                         <name>$PROJ_DIR$\..\Core\Inc\app_messages_parser.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\App_model.h</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\app_threadx.h</name>
                     </file>
                     <file>
@@ -2676,18 +2686,6 @@
                         <name>$PROJ_DIR$\..\Core\Inc\ICommandParse_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\ILog_Controller.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\ILog_Controller_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\ILsm6dsv16x_Mlc.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\ILsm6dsv16x_Mlc_vtbl.h</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\IStream.h</name>
                     </file>
                     <file>
@@ -2697,7 +2695,7 @@
                         <name>$PROJ_DIR$\..\Core\Inc\OTA.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\PnPLCompManager_Conf.h</name>
+                        <name>$PROJ_DIR$\..\Core\Inc\PnPLCompManager_conf.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Inc\SensorManager_conf.h</name>
@@ -2757,9 +2755,6 @@
                         <name>$PROJ_DIR$\..\Core\Src\App.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Src\App_model.c</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\Core\Src\AppPowerModeHelper.c</name>
                     </file>
                     <file>
@@ -2785,15 +2780,6 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\ICommandParse.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Src\IIsm330is_Ispu.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Src\ILog_Controller.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Src\ILsm6dsv16x_Mlc.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\IStream.c</name>
@@ -2962,163 +2948,268 @@
             <group>
                 <name>PnPL</name>
                 <group>
-                    <name>Inc</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Acquisition_Info_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Acquisition_Info_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Automode_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Automode_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Deviceinformation_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Deviceinformation_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Firmware_Info_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Firmware_Info_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Acc_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Acc_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Gyro_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Gyro_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Ispu_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330is_Ispu_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lis2du12_Acc_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lis2du12_Acc_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lis2mdl_Mag_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lis2mdl_Mag_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Log_Controller_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Log_Controller_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lps22df_Press_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lps22df_Press_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lsm6dsv16x_Acc_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lsm6dsv16x_Acc_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lsm6dsv16x_Gyro_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lsm6dsv16x_Gyro_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lsm6dsv16x_Mlc_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Lsm6dsv16x_Mlc_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Mp23db01hp_Mic_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Mp23db01hp_Mic_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Stts22h_Temp_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Stts22h_Temp_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Tags_Info_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Tags_Info_PnPL_vtbl.h</name>
-                    </file>
+                    <name>AppModel</name>
+                    <group>
+                        <name>Inc</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Acquisition_Info.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Automode.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Deviceinformation.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Firmware_Info.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism330is_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism330is_Gyro.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism330is_Ispu.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lis2du12_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lis2mdl_Mag.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Log_Controller.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lps22df_Press.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lsm6dsv16bx_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lsm6dsv16bx_Gyro.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lsm6dsv16bx_Mlc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lsm6dsv16x_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lsm6dsv16x_Gyro.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lsm6dsv16x_Mlc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Mp23db01hp_Mic.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Stts22h_Temp.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Tags_Info.h</name>
+                        </file>
+                    </group>
+                    <group>
+                        <name>Src</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Acquisition_Info.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Automode.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Deviceinformation.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Firmware_Info.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism330is_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism330is_Gyro.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism330is_Ispu.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lis2du12_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lis2mdl_Mag.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Log_Controller.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lps22df_Press.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lsm6dsv16bx_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lsm6dsv16bx_Gyro.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lsm6dsv16bx_Mlc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lsm6dsv16x_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lsm6dsv16x_Gyro.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lsm6dsv16x_Mlc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Mp23db01hp_Mic.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Stts22h_Temp.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Tags_Info.c</name>
+                        </file>
+                    </group>
                 </group>
                 <group>
-                    <name>Src</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Acquisition_Info_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Automode_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Deviceinformation_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Firmware_Info_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330is_Acc_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330is_Gyro_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330is_Ispu_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Lis2du12_Acc_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Lis2mdl_Mag_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Log_Controller_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Lps22df_Press_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Lsm6dsv16x_Acc_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Lsm6dsv16x_Gyro_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Lsm6dsv16x_Mlc_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Mp23db01hp_Mic_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Stts22h_Temp_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Tags_Info_PnPL.c</name>
-                    </file>
+                    <name>Components</name>
+                    <group>
+                        <name>Inc</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Acquisition_Info_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Automode_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Deviceinformation_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Firmware_Info_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism330is_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism330is_Gyro_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism330is_Ispu_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lis2du12_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lis2mdl_Mag_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Log_Controller_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lps22df_Press_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lsm6dsv16bx_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lsm6dsv16bx_Gyro_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lsm6dsv16bx_Mlc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lsm6dsv16x_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lsm6dsv16x_Gyro_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lsm6dsv16x_Mlc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Mp23db01hp_Mic_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Stts22h_Temp_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Tags_Info_PnPL.h</name>
+                        </file>
+                    </group>
+                    <group>
+                        <name>Src</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Acquisition_Info_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Automode_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Deviceinformation_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Firmware_Info_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism330is_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism330is_Gyro_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism330is_Ispu_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lis2du12_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lis2mdl_Mag_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Log_Controller_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lps22df_Press_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lsm6dsv16bx_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lsm6dsv16bx_Gyro_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lsm6dsv16bx_Mlc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lsm6dsv16x_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lsm6dsv16x_Gyro_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lsm6dsv16x_Mlc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Mp23db01hp_Mic_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Stts22h_Temp_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Tags_Info_PnPL.c</name>
+                        </file>
+                    </group>
                 </group>
             </group>
             <group>
@@ -3191,6 +3282,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\lps22df\lps22df_reg.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16bx\lsm6dsv16bx_reg.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x\lsm6dsv16x_reg.c</name>
@@ -4337,6 +4431,9 @@
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\BLE_PnPLike.h</name>
                     </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\BLE_RawPnPLControlled.h</name>
+                    </file>
                 </group>
                 <group>
                     <name>Src</name>
@@ -4351,6 +4448,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_PnPLike.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_RawPnPLControlled.c</name>
                     </file>
                 </group>
             </group>

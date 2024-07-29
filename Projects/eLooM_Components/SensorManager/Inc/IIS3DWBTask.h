@@ -131,6 +131,11 @@ struct _IIS3DWBTask
     * Used to update the instantaneous odr.
     */
   double prev_timestamp;
+
+  /*
+    * First data ready flag: fist data must be discarded, see sensor AN
+    * */
+  uint8_t first_data_ready;
 };
 
 

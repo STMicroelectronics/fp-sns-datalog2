@@ -29,6 +29,7 @@ extern "C" {
 #include "drivers/IIODriver.h"
 #include "drivers/IIODriver_vtbl.h"
 #include "I2CBusIF.h"
+#include "I2CBSBusIF.h"
 #include "IBus.h"
 #include "IBus_vtbl.h"
 

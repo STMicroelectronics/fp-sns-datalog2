@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_MotionIntensity.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add Motion Intensity service using vendor specific profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -108,7 +108,7 @@ tBleStatus BLE_MotionIntensityUpdate(BLE_ID_output_t MotionIntensityCode)
   tBleStatus ret;
   uint8_t buff[2 + 1];
 
-  STORE_LE_16(buff, (HAL_GetTick() >> 3));
+  STORE_LE_16(buff, (HAL_GetTick() / 10));
   buff[2] = (uint8_t)MotionIntensityCode;
 
   ret = ACI_GATT_UPDATE_CHAR_VALUE(&BleMotionIntensity, 0, 2 + 1, buff);
@@ -213,7 +213,7 @@ static void Read_Request_MotionIntensity(void *BleCharPointer,
 
     CustomReadRequestMotionIntensity(&MotionIntensityCode);
 
-    STORE_LE_16(buff, (HAL_GetTick() >> 3));
+    STORE_LE_16(buff, (HAL_GetTick() / 10));
     buff[2] = (uint8_t)MotionIntensityCode;
 
     ret = aci_gatt_srv_write_handle_value_nwk(handle, 0, 2 + 1, buff);

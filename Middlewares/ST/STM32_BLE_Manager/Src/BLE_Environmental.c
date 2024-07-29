@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_Environmental.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add environmental info services using vendor specific profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -207,7 +207,7 @@ tBleStatus BLE_EnvironmentalUpdate(int32_t Press, uint16_t Hum, int16_t Temp1, i
   uint8_t buff[2 + 4/*Press*/ + 2/*Hum*/ + 2/*Temp1*/ + 2/*Temp2*/];
 
   /* Time Stamp */
-  STORE_LE_16(buff, (HAL_GetTick() >> 3));
+  STORE_LE_16(buff, (HAL_GetTick() / 10));
   BuffPos = 2;
 
   if (EnvFeaturesEnabled.PressureIsEnable == 1U)
@@ -353,7 +353,7 @@ static void Read_Request_Env(void *BleCharPointer,
     CustomReadRequestEnv(&Press, &Hum, &Temp1, &Temp2);
 
     /* Time Stamp */
-    STORE_LE_16(buff, (HAL_GetTick() >> 3));
+    STORE_LE_16(buff, (HAL_GetTick() / 10));
     BuffPos = 2;
 
     if (EnvFeaturesEnabled.PressureIsEnable == 1U)

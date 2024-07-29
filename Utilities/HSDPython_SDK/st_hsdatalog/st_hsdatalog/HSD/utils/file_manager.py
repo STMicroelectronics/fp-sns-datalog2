@@ -55,3 +55,19 @@ class FileManager:
                     if entry.name.endswith('.dat') and "_checked" not in entry.name:
                         file_names.append(entry.name)
         return file_names
+    
+    def find_file(name:str, path:str):
+        """
+        Private method to find a file by name within a given path.
+
+        :param name: The name of the file to find.
+        :param path: The directory path to search for the file.
+        :return: The full path to the file if found, otherwise None.
+        """
+        # Walk through the directory tree starting at 'path'.
+        for root, dirs, files in os.walk(path):
+            # If the file is found, return the full path to the file.
+            if name in files:
+                return os.path.join(root, name)
+        # If the file is not found, return None.
+        return None

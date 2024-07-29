@@ -120,6 +120,20 @@ SensorStatus_t SMSensorGetStatus(uint8_t id)
   }
 }
 
+SensorStatus_t *SMSensorGetStatusPointer(uint8_t id)
+{
+  if (id < SMGetNsensor())
+  {
+    ISensor_t *p_obj = (ISensor_t *)(spSMObj.Sensors[id]);
+    return ISensorGetStatusPointer(p_obj);
+  }
+  else
+  {
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+    return NULL;
+  }
+}
+
 sys_error_code_t SMDeviceGetDescription(SensorDescriptor_t *device_description)
 {
   uint16_t ii;
@@ -1009,6 +1023,59 @@ sys_error_code_t SMSensorSetLightGain(uint8_t id, float LightGain, uint8_t chann
     {
       ISensorLight_t *p_obj = (ISensorLight_t *)(spSMObj.Sensors[id]);
       res = ISensorSetLightGain(p_obj, LightGain, channel);
+    }
+    else
+    {
+      res = SYS_INVALID_PARAMETER_ERROR_CODE;
+      SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+    }
+  }
+  else
+  {
+    res = SYS_INVALID_PARAMETER_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+  }
+
+  return res;
+}
+
+/* Specialized for ISensorPowerMeter class */
+sys_error_code_t SMSensorSetADCConversionTime(uint8_t id, uint32_t adc_conversion_time)
+{
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  if (id < SMGetNsensor())
+  {
+    if (SMSensorGetStatus(id).isensor_class == ISENSOR_CLASS_POWERMONITOR)
+    {
+      ISensorPowerMeter_t *p_obj = (ISensorPowerMeter_t *)(spSMObj.Sensors[id]);
+      res = ISensorSetADCConversionTime(p_obj, adc_conversion_time);
+    }
+    else
+    {
+      res = SYS_INVALID_PARAMETER_ERROR_CODE;
+      SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+    }
+  }
+  else
+  {
+    res = SYS_INVALID_PARAMETER_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+  }
+
+  return res;
+}
+
+sys_error_code_t SMSensorSetRShunt(uint8_t id, uint32_t r_shunt)
+{
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  if (id < SMGetNsensor())
+  {
+    if (SMSensorGetStatus(id).isensor_class == ISENSOR_CLASS_POWERMONITOR)
+    {
+      ISensorPowerMeter_t *p_obj = (ISensorPowerMeter_t *)(spSMObj.Sensors[id]);
+      res = ISensorSetRShunt(p_obj, r_shunt);
     }
     else
     {

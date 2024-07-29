@@ -26,21 +26,15 @@
 #include "services/SQuery.h"
 
 /* Private Types ------------------------------------------------------------*/
-typedef struct
+
+typedef struct _BLE_MLCStream_t
 {
-
   uint8_t mlc_id;
-  BLE_NotifyEvent_t mlc_enabled;
   uint8_t mlc_out[9];
-  uint8_t mlc_data_ready;
+  bool mlc_data_ready;
+} BLE_MLCStream_t;
 
-  uint8_t pnpl_id;
-
-  /* for sensor data define circular buffer to accumulate until it's able to send it */
-
-} BLE_stream;
-
-BLE_stream customStream;
+BLE_MLCStream_t ble_mlc_stream;
 
 
 /* Exported Variables --------------------------------------------------------*/
@@ -48,10 +42,14 @@ volatile uint8_t paired = FALSE;
 uint32_t SizeOfUpdateBlueFW = 0;
 volatile uint32_t NeedToClearSecureDB = 0;
 
+extern AppModel_t app_model;
+
 /* Private variables ---------------------------------------------------------*/
 static uint32_t NeedToRebootBoard = 0;
 static uint32_t NeedToSwapBanks = 0;
 
+BLE_NotifyEvent_t raw_pnpl_char_enabled = BLE_NOTIFY_UNSUB;
+BLE_NotifyEvent_t mlc_char_enabled = BLE_NOTIFY_UNSUB;
 
 /* Imported Variables --------------------------------------------------------*/
 uint8_t CurrentActiveBank = 0;
@@ -63,8 +61,6 @@ static void DisconnectionCompletedFunction(void);
 static void PairingCompletedFunction(uint8_t PairingStatus);
 static uint32_t DebugConsoleCommandParsing(uint8_t *att_data, uint8_t data_length);
 static void MTUExcahngeRespEvent(int32_t MaxCharLength);
-
-static void MLCisNotificationSubscribed(BLE_NotifyEvent_t Event);
 
 /* Private defines -----------------------------------------------------------*/
 
@@ -87,9 +83,12 @@ static void ExtConfigSetNameCommandCallback(uint8_t *NewName);
 static void ExtConfigReadBanksFwIdCommandCallback(uint8_t *CurBank, uint16_t *FwId1, uint16_t *FwId2);
 static void ExtConfigBanksSwapCommandCallback(void);
 
+static void MLCisNotificationSubscribed(BLE_NotifyEvent_t Event);
+static void RawPnPLControlledisNotifySubscribed(BLE_NotifyEvent_t Event);
+
 static void BLE_SetCustomStreamID(void);
-static sys_error_code_t BLE_PostCustomData(uint8_t id_stream, uint8_t *buf, uint32_t size);
-static void BLE_SendCustomData(uint8_t id_stream);
+static sys_error_code_t BLE_PostCustomData(uint8_t sId, uint8_t *buf, uint32_t size);
+static void BLE_SendCustomData(uint8_t sId);
 static void BLE_SendCommand(char *buf, uint32_t size);
 
 /**
@@ -222,7 +221,9 @@ void BLE_InitCustomService(void)
   CustomPairingCompleted = &PairingCompletedFunction;
 
   /* Enable notification callback */
+  CustomNotifyEventRawPnPLControlled = &RawPnPLControlledisNotifySubscribed;
 
+  /* Enable notification callback */
   CustomNotifyEventMachineLearningCore = &MLCisNotificationSubscribed;
 
   /* Define Custom Function for Write Request PnPLike */
@@ -230,7 +231,6 @@ void BLE_InitCustomService(void)
 
   /* For Receiving information on Response Event for a MTU Exchange Event */
   CustomMTUExchangeRespEvent = MTUExcahngeRespEvent;
-
 
   /***************************************/
 
@@ -246,10 +246,16 @@ void BLE_InitCustomService(void)
     PRINT_DBG("Error adding Machine Learning Core characteristic\r\n");
   }
 
-  /* Service initialization for Machine Learning Core feature */
+  /* Service initialization for High Speed Datalog Core feature */
   if (BleManagerAddChar(BLE_InitHighSpeedDataLogService()) == 0)
   {
     PRINT_DBG("Error adding HSD characteristic\r\n");
+  }
+
+  /* Service initialization RawPnPLControlled feature: 1byte for ID + n sensor data depending on the MTU */
+  if (BleManagerAddChar(BLE_InitRawPnPLControlledService(DEFAULT_MAX_RAW_NOTIFICATION_CHAR_LEN, 1)) == 0)
+  {
+    PRINT_DBG("Error adding RAW PnP Controlled characteristic\r\n");
   }
 
   /***************************************/
@@ -282,9 +288,7 @@ void BLE_InitCustomService(void)
   ble_stream_SendCustomDataCallback = &BLE_SendCustomData;
   ble_stream_SendCommandCallback = &BLE_SendCommand;
 
-  /* Custom stream initialization */
-  customStream.mlc_enabled = BLE_NOTIFY_UNSUB;
-  customStream.mlc_data_ready = 0;
+  ble_mlc_stream.mlc_data_ready = false;
 
 }
 
@@ -300,7 +304,6 @@ uint8_t BLE_GetFWID(void)
   }
 }
 
-
 /**
   * @brief Assign ID to each stream
   * @param  None
@@ -310,7 +313,7 @@ static void BLE_SetCustomStreamID(void)
 {
   SQuery_t querySM;
   SQInit(&querySM, SMGetSensorManager());
-  customStream.mlc_id = SQNextByNameAndType(&querySM, "lsm6dsv16x", COM_TYPE_MLC);
+  ble_mlc_stream.mlc_id = SQNextByNameAndType(&querySM, "lsm6dsv16x", COM_TYPE_MLC);
 }
 
 /**
@@ -320,19 +323,56 @@ static void BLE_SetCustomStreamID(void)
   * @param  uint32_t size number of byte to be saved
   * @retval None
   */
-static sys_error_code_t BLE_PostCustomData(uint8_t id_stream, uint8_t *buf, uint32_t size)
+static sys_error_code_t BLE_PostCustomData(uint8_t sId, uint8_t *buf, uint32_t size)
 {
   sys_error_code_t res = SYS_NOT_IMPLEMENTED_ERROR_CODE;
+  bool item_ready;
+  uint16_t down_samplied_size = 0;
+  uint8_t stream_id;
 
-  if (id_stream == customStream.mlc_id)
+  if (raw_pnpl_char_enabled == BLE_NOTIFY_SUB)
   {
-    memcpy(customStream.mlc_out, buf, size);
-    customStream.mlc_data_ready = 1;
+    stream_id = app_model.s_models[sId]->stream_params.stream_id;
+
+    CircularBufferDL2 *cbdl2 = ble_cbdl2[stream_id];
+
+    if (app_model.s_models[sId]->st_ble_stream.st_ble_stream_objects.status == true)
+    {
+      if (app_model.s_models[sId]->stream_params.bandwidth > MAX_BLE_BANDWIDTH)
+      {
+        down_samplied_size = (uint16_t)(floor((size * MAX_BLE_BANDWIDTH) / app_model.s_models[sId]->stream_params.bandwidth));
+        down_samplied_size = down_samplied_size - (down_samplied_size % SMGetnBytesPerSample(sId));
+
+        if (CBDL2_FillCurrentItem(cbdl2, sId, buf, down_samplied_size, &item_ready) != SYS_NO_ERROR_CODE)
+        {
+          res = SYS_BASE_ERROR_CODE;
+        }
+      }
+      else
+      {
+        if (CBDL2_FillCurrentItem(cbdl2, sId, buf, size, &item_ready) != SYS_NO_ERROR_CODE)
+        {
+          res = SYS_BASE_ERROR_CODE;
+        }
+      }
+
+      /* Check if the item is ready */
+      if (item_ready == true)
+      {
+        res = SYS_NO_ERROR_CODE;
+      }
+
+    }
+  }
+
+  if ((sId == ble_mlc_stream.mlc_id) && (mlc_char_enabled == BLE_NOTIFY_SUB))
+  {
+    memcpy(ble_mlc_stream.mlc_out, buf, size);
+    ble_mlc_stream.mlc_data_ready = true;
     res = SYS_NO_ERROR_CODE;
   }
 
   return res;
-
 }
 
 /**
@@ -340,13 +380,68 @@ static sys_error_code_t BLE_PostCustomData(uint8_t id_stream, uint8_t *buf, uint
   * @param  uint8_t id_stream indicates the correct stream to be sent
   * @retval None
   */
-static void BLE_SendCustomData(uint8_t id_stream)
+static void BLE_SendCustomData(uint8_t sId)
 {
-  if (id_stream == customStream.mlc_id)
+  CircularBufferDL2 *cbdl2;
+  CBItem *p_item;
+  uint16_t data_size = 0;
+  uint8_t ble_packet[DEFAULT_MAX_RAW_NOTIFICATION_CHAR_LEN];
+  uint16_t ble_packet_size = 0;
+  uint16_t data_chuck_size = 0;
+  uint16_t temp_size = 0;
+  tBleStatus ret;
+  uint8_t stream_id;
+
+  stream_id = app_model.s_models[sId]->stream_params.stream_id;
+  cbdl2 = ble_cbdl2[stream_id];
+
+  if (ble_mlc_stream.mlc_data_ready && (mlc_char_enabled == BLE_NOTIFY_SUB))
   {
-    if (customStream.mlc_data_ready && (customStream.mlc_enabled == BLE_NOTIFY_SUB))
+    BLE_MachineLearningCoreUpdate((uint8_t *) &ble_mlc_stream.mlc_out, (uint8_t *) &ble_mlc_stream.mlc_out[8]);
+    ble_mlc_stream.mlc_data_ready = false;
+  }
+
+  if (cbdl2 != NULL)
+  {
+    if (CB_GetReadyItemFromTail((CircularBuffer *) cbdl2, &p_item) == SYS_NO_ERROR_CODE)
     {
-      BLE_MachineLearningCoreUpdate((uint8_t *) &customStream.mlc_out, (uint8_t *) &customStream.mlc_out[8]);
+      /* total data size to be sent */
+      /* -4 to remove header */
+      data_size = CB_GetItemSize((CircularBuffer *)cbdl2) - 4;
+      /* BLE sensor data packet size + 1Byte for stream ID */
+      ble_packet_size = app_model.s_models[sId]->st_ble_stream.st_ble_stream_objects.elements * SMGetnBytesPerSample(sId) + 1;
+      /* size of data includeded in a BLE packet (without 1Byte for stream ID) */
+      data_chuck_size = ble_packet_size - 1;
+
+      if (data_size >= ble_packet_size)
+      {
+        while ((data_size - temp_size) >= data_chuck_size)
+        {
+          ble_packet[0] = sId;
+          /* temp_size +4 byte to remove the header */
+          memcpy(&ble_packet[1], &((uint8_t *) CB_GetItemData(p_item))[temp_size + 4], data_chuck_size);
+          ret = BLE_RawPnPLControlledStatusUpdate(ble_packet, ble_packet_size);
+
+          if (ret == BLE_STATUS_INSUFFICIENT_RESOURCES)
+          {
+            ble_sendMSG_wait();
+          }
+          else if (ret == BLE_STATUS_SUCCESS)
+          {
+            temp_size += data_chuck_size;
+          }
+        }
+      }
+      else
+      {
+        ble_packet[0] = sId;
+        /* start reading from 4th byte to remove the header */
+        memcpy(&ble_packet[1], &((uint8_t *) CB_GetItemData(p_item))[4], data_size);
+        BLE_RawPnPLControlledStatusUpdate(ble_packet, (data_size + 1));
+      }
+
+      /* Release the buffer item and reset tx_state */
+      CB_ReleaseItem((CircularBuffer *)cbdl2, p_item);
     }
   }
 
@@ -681,7 +776,17 @@ static void PairingCompletedFunction(uint8_t PairingStatus)
   */
 static void MLCisNotificationSubscribed(BLE_NotifyEvent_t Event)
 {
-  customStream.mlc_enabled = Event;
+  mlc_char_enabled = Event;
+}
+
+/**
+  * @brief  This function is called when the characteristic is subscribed or unsubscribed
+  * @param  event Enum type for Service Notification Change
+  * @retval None
+  */
+static void RawPnPLControlledisNotifySubscribed(BLE_NotifyEvent_t Event)
+{
+  raw_pnpl_char_enabled = Event;
 }
 
 /***********************************************************************************

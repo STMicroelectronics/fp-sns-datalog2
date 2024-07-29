@@ -34,7 +34,7 @@ class SubTelemetryWidget(QWidget):
         comp_config_widget = loader.load(os.path.join(os.path.dirname(st_dtdl_gui.__file__),"UI","component_config_widget.ui"), parent)
         title_frame = comp_config_widget.frame_component_config.findChild(QFrame,"frame_title")
 
-        title_label = title_frame.findChild(QLabel,"label_title")
+        title_label = title_frame.findChild(QPushButton,"label_title")
         title_label.setText(prop_name.upper())
         self.annotation_label = title_frame.findChild(QLabel,"label_annotation")
         self.annotation_label.setVisible(False)

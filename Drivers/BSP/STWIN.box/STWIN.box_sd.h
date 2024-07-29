@@ -26,7 +26,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "STWIN.box_conf.h"
-#include "STWIN.box_errno.h"
 
 /** @addtogroup BSP
   * @{
@@ -85,12 +84,12 @@ typedef struct
 #define SD_PRESENT               1U
 #define SD_NOT_PRESENT           0U
 
-#define SD_DETECT_PIN                        GPIO_PIN_1
-#define SD_DETECT_GPIO_PORT                  GPIOG
-#define SD_DETECT_GPIO_CLK_ENABLE()          __HAL_RCC_GPIOG_CLK_ENABLE()
-#define SD_DETECT_GPIO_CLK_DISABLE()         __HAL_RCC_GPIOG_CLK_DISABLE()
-#define SD_DETECT_EXTI_IRQn                  EXTI1_IRQn
-#define SD_DETECT_EXTI_LINE                  EXTI_LINE_1
+#define SD_DETECT_PIN                        BSP_SD_DETECT_PIN
+#define SD_DETECT_GPIO_PORT                  BSP_SD_DETECT_GPIO_PORT
+#define SD_DETECT_GPIO_CLK_ENABLE()          BSP_SD_DETECT_GPIO_CLK_ENABLE()
+#define SD_DETECT_GPIO_CLK_DISABLE()         BSP_SD_DETECT_GPIO_CLK_DISABLE()
+#define SD_DETECT_EXTI_IRQn                  BSP_SD_DETECT_EXTI_IRQN
+#define SD_DETECT_EXTI_LINE                  BSP_SD_DETECT_EXTI_LINE
 /**
   * @}
   */

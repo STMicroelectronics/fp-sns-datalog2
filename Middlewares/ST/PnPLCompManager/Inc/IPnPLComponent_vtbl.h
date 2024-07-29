@@ -33,7 +33,7 @@ struct _IPnPLComponent_vtbl
   uint8_t (*PnPLComponentGetNCommands)(IPnPLComponent_t *_this);
   char *(*PnPLComponentGetCommandsKey)(IPnPLComponent_t *_this, uint8_t id);
   uint8_t (*PnPLComponentGetStatus)(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty);
-#ifdef PNPL_RESPONSES
+#if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
   uint8_t (*PnPLComponentSetProperty)(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
   uint8_t (*PnPLCommandExecuteFunction)(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
 #else
@@ -73,7 +73,7 @@ static inline uint8_t IPnPLComponentGetStatus(IPnPLComponent_t *_this, char **se
   return _this->vptr->PnPLComponentGetStatus(_this, serializedJSON, size, pretty);
 }
 
-#ifdef PNPL_RESPONSES
+#if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
   static inline uint8_t IPnPLComponentSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty)
   {
     return _this->vptr->PnPLComponentSetProperty(_this, serializedJSON, response, size, pretty);

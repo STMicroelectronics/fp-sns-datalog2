@@ -57,6 +57,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define SAI1_MCLK_A_Pin GPIO_PIN_2
+#define SAI1_MCLK_A_GPIO_Port GPIOE
 #define CS_DHCX_Pin GPIO_PIN_15
 #define CS_DHCX_GPIO_Port GPIOH
 #define DCDC_2_EN_Pin GPIO_PIN_5
@@ -67,6 +69,8 @@ void Error_Handler(void);
 #define EX_SPI_NSS_GPIO_Port GPIOI
 #define LED1_Pin GPIO_PIN_12
 #define LED1_GPIO_Port GPIOH
+#define SAI1_FS_A_Pin GPIO_PIN_4
+#define SAI1_FS_A_GPIO_Port GPIOE
 #define CS_ICLX_Pin GPIO_PIN_7
 #define CS_ICLX_GPIO_Port GPIOI
 #define BLE_SPI_CS_Pin GPIO_PIN_1
@@ -75,11 +79,17 @@ void Error_Handler(void);
 #define BOOT0_GPIO_Port GPIOH
 #define LED2_Pin GPIO_PIN_10
 #define LED2_GPIO_Port GPIOH
+#define SAI1_SCK_A_Pin GPIO_PIN_5
+#define SAI1_SCK_A_GPIO_Port GPIOE
+#define SAI1_SD_A_Pin GPIO_PIN_3
+#define SAI1_SD_A_GPIO_Port GPIOE
 #define USR_BUTTON_Pin GPIO_PIN_0
 #define USR_BUTTON_GPIO_Port GPIOE
 #define USR_BUTTON_EXTI_IRQn EXTI0_IRQn
 #define SPI2_MISO_p2_Pin GPIO_PIN_2
 #define SPI2_MISO_p2_GPIO_Port GPIOI
+#define SAI1_SD_B_Pin GPIO_PIN_6
+#define SAI1_SD_B_GPIO_Port GPIOE
 #define INT1_DHCX_Pin GPIO_PIN_8
 #define INT1_DHCX_GPIO_Port GPIOB
 #define INT1_DHCX_EXTI_IRQn EXTI8_IRQn
@@ -126,6 +136,8 @@ void Error_Handler(void);
 #define TIM3_PWM_GPIO_Port GPIOC
 #define uC_ADC_BATT_Pin GPIO_PIN_2
 #define uC_ADC_BATT_GPIO_Port GPIOC
+#define USART3_TX_Pin GPIO_PIN_7
+#define USART3_TX_GPIO_Port GPIOA
 #define INT_EXG5_Pin GPIO_PIN_5
 #define INT_EXG5_GPIO_Port GPIOG
 #define INT_EXD15_Pin GPIO_PIN_15
@@ -134,8 +146,12 @@ void Error_Handler(void);
 #define ADC_EX_GPIO_Port GPIOC
 #define CHRG_Pin GPIO_PIN_0
 #define CHRG_GPIO_Port GPIOA
+#define USART3_RX_Pin GPIO_PIN_5
+#define USART3_RX_GPIO_Port GPIOA
 #define CS_DWB_Pin GPIO_PIN_12
 #define CS_DWB_GPIO_Port GPIOF
+#define USART3_RTS_Pin GPIO_PIN_12
+#define USART3_RTS_GPIO_Port GPIOD
 #define BUTTON_PWR_Pin GPIO_PIN_10
 #define BUTTON_PWR_GPIO_Port GPIOD
 #define BUTTON_PWR_EXTI_IRQn EXTI10_IRQn
@@ -156,6 +172,8 @@ void Error_Handler(void);
 #define INT2_ICLX_EXTI_IRQn EXTI11_IRQn
 #define LDO_EN_Pin GPIO_PIN_15
 #define LDO_EN_GPIO_Port GPIOE
+#define USART3_CTS_Pin GPIO_PIN_11
+#define USART3_CTS_GPIO_Port GPIOD
 #define GPIO1_EX_Pin GPIO_PIN_1
 #define GPIO1_EX_GPIO_Port GPIOB
 #define INT1_DWB_Pin GPIO_PIN_15

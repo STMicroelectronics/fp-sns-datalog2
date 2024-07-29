@@ -17,6 +17,24 @@
 # ******************************************************************************
 #
 
+"""
+This script, `hsdatalog_cli.py`, is a command-line interface (CLI) tool designed to manage data logging
+for devices using STMicroelectronics' HSDatalog tool. It supports various options for configuring
+the data logging process, including setting acquisition parameters, uploading configuration files, 
+labeling acquired data and more.
+It uses Click for command-line interface options and logs information and errors during execution.
+The script can be run from the command line with various options to tailor the data logging
+to the user's needs.
+
+Key Features:
+- Manage data logging for specific sensors or all active components.
+- Set acquisition parameters such as name, description, and duration.
+- Specify the output folder for logged data.
+- Upload and use custom configuration files (JSON, UCF).
+- Enable interactive mode for device selection and acquisition management.
+- Save ISPU output format description JSON in the acquisition folder.
+"""
+
 from asciimatics.scene import Scene
 from asciimatics.screen import Screen
 from asciimatics.exceptions import ResizeScreenError
@@ -182,12 +200,6 @@ class HSDInfo():
         if self.cli_flags.ispu_out_fmt is not None:
             shutil.copyfile(self.cli_flags.ispu_out_fmt, os.path.join(self.output_acquisition_path,"ispu_output_format.json"))
             log.info("ispu_output_format.json File correctly saved")
-    
-
-    # def upload_mlc_ucf_file(self):
-    #     if self.selected_mlc_id is not None:
-    #         HSDLink.upload_mlc_ucf_file(self.hsd_link, self.selected_device_id, self.cli_flags.ucf_file)
-    #         self.update_sensor_list()
 
     def update_tag_list(self):
         if self.selected_device_id is not None:

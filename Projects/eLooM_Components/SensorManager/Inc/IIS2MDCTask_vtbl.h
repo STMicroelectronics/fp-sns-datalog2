@@ -48,6 +48,7 @@ sys_error_code_t IIS2MDCTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t IIS2MDCTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t IIS2MDCTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t IIS2MDCTask_vtblSensorGetStatus(ISensor_t *_this);
+SensorStatus_t *IIS2MDCTask_vtblSensorGetStatusPointer(ISensor_t *_this);
 sys_error_code_t IIS2MDCTask_vtblMagGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
 float IIS2MDCTask_vtblMagGetFS(ISensorMems_t *_this);
 float IIS2MDCTask_vtblMagGetSensitivity(ISensorMems_t *_this);

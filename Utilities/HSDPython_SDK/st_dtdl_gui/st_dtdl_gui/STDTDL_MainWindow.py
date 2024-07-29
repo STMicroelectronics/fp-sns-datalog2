@@ -19,9 +19,10 @@ import sys
 import os
 from datetime import datetime
 
-from PySide6.QtWidgets import QMainWindow, QStackedWidget, QTextEdit, QLabel, QPushButton, QWidget, QFrame
+from PySide6.QtWidgets import QMainWindow, QStackedWidget, QTextEdit, QLabel, QPushButton, QWidget, QFrame, QFileDialog, QGroupBox, QLineEdit
 from PySide6.QtCore import Slot
 
+from st_dtdl_gui.STDTDL_ExperimentalFeaturesPage import STDTDL_ExperimentalFeaturesPage
 from st_dtdl_gui.UI.styles import STDTDL_MenuButton
 from st_dtdl_gui.UI.Ui_MainWindow import Ui_MainWindow
 from st_dtdl_gui.Widgets.LoadingWindow import LoadingWindow
@@ -53,6 +54,8 @@ class STDTDL_MainWindow(QMainWindow):
         self.ui.label_app_title.setText(self.app_title)
         self.ui.label_credits.setText(self.app_credit)
         self.ui.label_version.setText(self.app_version)
+
+        self.plugin_folder = ""
         
         self.loading_window = None
         
@@ -60,11 +63,12 @@ class STDTDL_MainWindow(QMainWindow):
 
         # Find the widgets in the xml file
         # Main stacked widget (Application page manager)
-        self.page_manager = self.findChild(QStackedWidget, "stacked_widget")
+        self.page_manager = self.findChild(QStackedWidget, "stacked_widget")        
         
         # Connection page
         self.connection_page = self.findChild(QWidget, "page_connection")
         frame_log_file_options = self.findChild(QFrame, "frame_log_file_options")
+        
         app_log_file_label = QLabel("Enable application log file")
         app_log_file_label.setStyleSheet("font: 700 10pt \"Segoe UI\";")
         frame_log_file_options.layout().addWidget(app_log_file_label)
@@ -87,6 +91,10 @@ class STDTDL_MainWindow(QMainWindow):
         self.widget_plots = self.findChild(QWidget, "widget_plots")
         self.widget_header = self.findChild(QWidget, "widget_header")
 
+        #Acquisitions upload page
+        self.page_experimental_features = self.findChild(QWidget, "page_experimental_features")
+        self.page_experimental_features = STDTDL_ExperimentalFeaturesPage(self.page_experimental_features, self.controller)
+
         # Application Log file display page
         self.show_log_file_page = self.findChild(QWidget, "page_app_log_file")
         self.log_file_text_edit:QTextEdit = self.show_log_file_page.findChild(QTextEdit, "log_file_textEdit")
@@ -102,6 +110,8 @@ class STDTDL_MainWindow(QMainWindow):
         self.menu_btn_connection.clicked.connect(self.clicked_menu_connection)
         self.menu_btn_device_conf = self.findChild(QPushButton, "menu_btn_device_conf")
         self.menu_btn_device_conf.clicked.connect(self.clicked_menu_device_conf)
+        self.menu_btn_experimental_features = self.findChild(QPushButton, "menu_btn_experimental_features")
+        self.menu_btn_experimental_features.clicked.connect(self.clicked_menu_experimental_features)
         self.menu_btn_about = self.findChild(QPushButton, "menu_btn_about")
         self.menu_btn_about.clicked.connect(self.clicked_menu_about)
         self.menu_btn_show_log_file = self.findChild(QPushButton, "menu_btn_show_log_file")
@@ -117,13 +127,23 @@ class STDTDL_MainWindow(QMainWindow):
 
     def clicked_menu_connection(self):
         self.page_manager.setCurrentWidget(self.connection_page)
-        self.menu_btn_device_conf.setStyleSheet(STDTDL_MenuButton.unselected_device_conf_stylesheet)        
+        self.menu_btn_device_conf.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_DEVICE_CONFIG, False))
+        self.menu_btn_show_log_file.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_LOG_INFO, False))
+        self.menu_btn_experimental_features.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_EXPERIMENTAL_FEATURES, False))
     
     def clicked_menu_device_conf(self):
         self.page_manager.setCurrentWidget(self.device_conf_page.page_widget)
-        self.menu_btn_device_conf.setStyleSheet(STDTDL_MenuButton.selected_device_conf_stylesheet)
+        self.menu_btn_device_conf.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_DEVICE_CONFIG, True))
+        self.menu_btn_show_log_file.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_LOG_INFO, False))
+        self.menu_btn_experimental_features.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_EXPERIMENTAL_FEATURES, False))
         if self.loading_window is not None:
             self.loading_window.loadingDone()
+    
+    def clicked_menu_experimental_features(self):
+        self.page_manager.setCurrentWidget(self.page_experimental_features.page_widget)
+        self.menu_btn_device_conf.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_DEVICE_CONFIG, False))
+        self.menu_btn_experimental_features.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_EXPERIMENTAL_FEATURES, True))
+        self.menu_btn_show_log_file.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_LOG_INFO, False))
 
     def clicked_menu_about(self):
         print("WARNING - About screen will be available soon.")
@@ -132,7 +152,9 @@ class STDTDL_MainWindow(QMainWindow):
 
     def clicked_menu_btn_show_log_file(self):
         self.page_manager.setCurrentWidget(self.show_log_file_page)
-        self.menu_btn_device_conf.setStyleSheet(STDTDL_MenuButton.unselected_device_conf_stylesheet)
+        self.menu_btn_device_conf.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_DEVICE_CONFIG, False))
+        self.menu_btn_show_log_file.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_LOG_INFO, True))
+        self.menu_btn_experimental_features.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_EXPERIMENTAL_FEATURES, False))
         for handler in log.parent.handlers:
             if hasattr(handler, "baseFilename"):
                 log_file_name = getattr(handler, 'baseFilename')
@@ -163,10 +185,10 @@ class STDTDL_MainWindow(QMainWindow):
     def s_device_connected(self, status):
         if status:
             self.menu_btn_device_conf.setVisible(True)
-            self.menu_btn_connection.setStyleSheet(STDTDL_MenuButton.connected_stylesheet)
+            self.menu_btn_connection.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_CONNECTION, True))
         else:
             self.menu_btn_device_conf.setVisible(False)
-            self.menu_btn_connection.setStyleSheet(STDTDL_MenuButton.unconnected_stylesheet)
+            self.menu_btn_connection.setStyleSheet(STDTDL_MenuButton.get_stylesheet(STDTDL_MenuButton.STDTDL_Page.PAGE_CONNECTION, False))
             
             for i in reversed(range(self.widget_header.layout().count())): 
                 self.widget_header.layout().itemAt(i).widget().setParent(None)

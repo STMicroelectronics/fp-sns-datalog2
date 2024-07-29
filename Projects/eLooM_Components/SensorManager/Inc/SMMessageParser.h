@@ -35,6 +35,7 @@ extern "C" {
 
 #include "SPIBusIF.h"
 #include "I2CBusIF.h"
+#include "I2CBSBusIF.h"
 
 #define SM_MESSAGE_ID_DATA_READY                0x01  ///< Sensor data ready report
 #define SM_MESSAGE_ID_DATA_READY_MLC            0x02  ///< MLC data ready report
@@ -109,7 +110,7 @@ typedef union _SMMessage
   struct i2cIOMessage_t
   {
     uint8_t messageId;                                // Report ID = 0x08 / 0x09 (8 / 9)
-    uint8_t nAddrSize;
+    uint8_t nTransmitReceive;
     uint16_t nRegAddr;
     uint16_t nDataSize;
     uint8_t *pnData;

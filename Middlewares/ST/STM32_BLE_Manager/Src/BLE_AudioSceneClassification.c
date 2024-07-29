@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_AudioSceneClasssification.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add Audio Scene Classification service using vendor specific profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -108,7 +108,7 @@ tBleStatus BLE_AudioSceneClassUpdate(BLE_ASC_output_t ASC_Code, BLE_ASC_Algorith
   tBleStatus ret;
   uint8_t buff[2 + 1 + 1];
 
-  STORE_LE_16(buff, (HAL_GetTick() >> 3));
+  STORE_LE_16(buff, (HAL_GetTick() / 10));
   buff[2] = (uint8_t) ASC_Code;
 
   if (BleSendAlgorithmCode)
@@ -218,7 +218,7 @@ static void Read_Request_AudioSceneClass(void *BleCharPointer,
 
     CustomReadRequestAudioSceneClass(&ASC_Code, &ASC_AlgId);
 
-    STORE_LE_16(buff, (HAL_GetTick() >> 3));
+    STORE_LE_16(buff, (HAL_GetTick() / 10));
     buff[2] = (uint8_t) ASC_Code;
 
     if (BleSendAlgorithmCode)

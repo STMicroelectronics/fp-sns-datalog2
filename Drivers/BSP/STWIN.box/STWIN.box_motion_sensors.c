@@ -19,6 +19,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "STWIN.box_motion_sensors.h"
 
+EXTI_HandleTypeDef H_EXTI_INT1_ISM330DHCX = {.Line = ISM330DHCX_INT1_EXTI_LINE};
+EXTI_HandleTypeDef H_EXTI_INT2_ISM330DHCX = {.Line = ISM330DHCX_INT2_EXTI_LINE};
+EXTI_HandleTypeDef H_EXTI_INT1_IIS2DLPC = {.Line = IIS2DLPC_INT1_EXTI_LINE};
+EXTI_HandleTypeDef H_EXTI_INT2_IIS2DLPC = {.Line = IIS2DLPC_INT2_EXTI_LINE};
+EXTI_HandleTypeDef H_EXTI_INT1_IIS3DWB = {.Line = IIS3DWB_INT1_EXTI_LINE};
+EXTI_HandleTypeDef H_EXTI_INT1_IIS2ICLX = {.Line = IIS2ICLX_INT1_EXTI_LINE};
+EXTI_HandleTypeDef H_EXTI_INT2_IIS2ICLX = {.Line = IIS2ICLX_INT2_EXTI_LINE};
+
 extern void *MotionCompObj[MOTION_INSTANCES_NBR]; /* This "redundant" line is here to fulfil MISRA C-2012 rule 8.4 */
 void *MotionCompObj[MOTION_INSTANCES_NBR];
 
@@ -783,7 +791,6 @@ static int32_t BSP_IIS2DLPC_Init(void)
   HAL_NVIC_SetPriority(BSP_IIS2DLPC_INT2_EXTI_IRQn, BSP_IIS2DLPC_INT2_EXTI_IRQ_PP, BSP_IIS2DLPC_INT2_EXTI_IRQ_SP);
   HAL_NVIC_EnableIRQ(BSP_IIS2DLPC_INT2_EXTI_IRQn);
 
-  BSP_IIS2DLPC_CS_GPIO_CLK_ENABLE();
   /* Configure IIS2DLPC CS pin */
   HAL_GPIO_WritePin(BSP_IIS2DLPC_CS_PORT, BSP_IIS2DLPC_CS_PIN, GPIO_PIN_SET);
 
@@ -795,7 +802,7 @@ static int32_t BSP_IIS2DLPC_Init(void)
   HAL_GPIO_Init(BSP_IIS2DLPC_CS_PORT, &GPIO_InitStruct);
 
   /* Configure SPI */
-  if(BSP_SPI2_Init() == BSP_ERROR_NONE)
+  if(BSP_IIS2DLPC_0_SPI_INIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -807,7 +814,7 @@ static int32_t BSP_IIS2DLPC_DeInit(void)
 {
   int32_t ret = BSP_ERROR_UNKNOWN_FAILURE;
 
-  if(BSP_SPI2_DeInit() == BSP_ERROR_NONE)
+  if(BSP_IIS2DLPC_0_SPI_DEINIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -824,11 +831,11 @@ static int32_t BSP_IIS2DLPC_WriteReg(uint16_t Addr, uint16_t Reg, uint8_t *pdata
   /* CS Enable */
   HAL_GPIO_WritePin(BSP_IIS2DLPC_CS_PORT, BSP_IIS2DLPC_CS_PIN, GPIO_PIN_RESET);
 
-  ret = BSP_SPI2_Send(&dataReg, 1);
+  ret = BSP_IIS2DLPC_0_SPI_SEND(&dataReg, 1);
 
   if(ret == BSP_ERROR_NONE)
   {
-    ret = BSP_SPI2_Send(pdata, len);
+    ret = BSP_IIS2DLPC_0_SPI_SEND(pdata, len);
   }
 
   /* CS Disable */
@@ -848,11 +855,11 @@ static int32_t BSP_IIS2DLPC_ReadReg(uint16_t Addr, uint16_t Reg, uint8_t *pdata,
   /* CS Enable */
   HAL_GPIO_WritePin(BSP_IIS2DLPC_CS_PORT, BSP_IIS2DLPC_CS_PIN, GPIO_PIN_RESET);
 
-  ret = BSP_SPI2_Send(&dataReg, 1);
+  ret = BSP_IIS2DLPC_0_SPI_SEND(&dataReg, 1);
 
   if(ret == BSP_ERROR_NONE)
   {
-    ret = BSP_SPI2_Recv(pdata, len);
+    ret = BSP_IIS2DLPC_0_SPI_RECV(pdata, len);
   }
 
   /* CS Disable */
@@ -878,8 +885,8 @@ static int32_t IIS2MDC_0_Probe(uint32_t Functions)
   /* Configure the accelero driver */
   io_ctx.BusType = IIS2MDC_I2C_BUS; /* I2C */
   io_ctx.Address = IIS2MDC_I2C_ADD;
-  io_ctx.Init = BSP_I2C2_Init;
-  io_ctx.DeInit = BSP_I2C2_DeInit;
+  io_ctx.Init = BSP_IIS2MDC_0_I2C_INIT;
+  io_ctx.DeInit = BSP_IIS2MDC_0_I2C_DEINIT;
   io_ctx.ReadReg = BSP_IIS2MDC_ReadReg;
   io_ctx.WriteReg = BSP_IIS2MDC_WriteReg;
   io_ctx.GetTick = BSP_GetTick;
@@ -937,7 +944,7 @@ int32_t BSP_IIS2MDC_WriteReg(uint16_t Addr, uint16_t Reg, uint8_t *pdata, uint16
   int32_t ret = BSP_ERROR_NONE;
   uint16_t dataReg = (uint16_t) Reg;
 
-  if(BSP_I2C2_WriteReg(Addr, dataReg, pdata, len) != BSP_ERROR_NONE)
+  if(BSP_IIS2MDC_0_I2C_WRITE_REG(Addr, dataReg, pdata, len) != BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_BUS_FAILURE;
   }
@@ -952,7 +959,7 @@ int32_t BSP_IIS2MDC_ReadReg(uint16_t Addr, uint16_t Reg, uint8_t *pdata, uint16_
 
   dataReg |= 0x80U;
 
-  if(BSP_I2C2_ReadReg(Addr, dataReg, pdata, len) != BSP_ERROR_NONE)
+  if(BSP_IIS2MDC_0_I2C_READ_REG(Addr, dataReg, pdata, len) != BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_BUS_FAILURE;
   }
@@ -1050,7 +1057,6 @@ static int32_t BSP_IIS3DWB_Init(void)
   HAL_NVIC_SetPriority(BSP_IIS3DWB_INT1_EXTI_IRQn, BSP_IIS3DWB_INT1_EXTI_IRQ_PP, BSP_IIS3DWB_INT1_EXTI_IRQ_SP);
   HAL_NVIC_EnableIRQ(BSP_IIS3DWB_INT1_EXTI_IRQn);
 
-  BSP_IIS3DWB_CS_GPIO_CLK_ENABLE();
   /* Configure IIS3DWB CS pin */
   HAL_GPIO_WritePin(BSP_IIS3DWB_CS_PORT, BSP_IIS3DWB_CS_PIN, GPIO_PIN_SET);
 
@@ -1063,7 +1069,7 @@ static int32_t BSP_IIS3DWB_Init(void)
   HAL_GPIO_WritePin(BSP_IIS3DWB_CS_PORT, BSP_IIS3DWB_CS_PIN, GPIO_PIN_SET);
 
   /* Configure SPI */
-  if(BSP_SPI2_Init() == BSP_ERROR_NONE)
+  if(BSP_IIS3DWB_0_SPI_INIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -1075,7 +1081,7 @@ static int32_t BSP_IIS3DWB_DeInit(void)
 {
   int32_t ret = BSP_ERROR_UNKNOWN_FAILURE;
 
-  if(BSP_SPI2_DeInit() == BSP_ERROR_NONE)
+  if(BSP_IIS3DWB_0_SPI_DEINIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -1092,11 +1098,11 @@ static int32_t BSP_IIS3DWB_WriteReg(uint16_t Addr, uint16_t Reg, uint8_t *pdata,
   /* CS Enable */
   HAL_GPIO_WritePin(BSP_IIS3DWB_CS_PORT, BSP_IIS3DWB_CS_PIN, GPIO_PIN_RESET);
 
-  ret = BSP_SPI2_Send(&dataReg, 1);
+  ret = BSP_IIS3DWB_0_SPI_SEND(&dataReg, 1);
 
   if(ret == BSP_ERROR_NONE)
   {
-    ret = BSP_SPI2_Send(pdata, len);
+    ret = BSP_IIS3DWB_0_SPI_SEND(pdata, len);
   }
 
   /* CS Disable */
@@ -1116,11 +1122,11 @@ static int32_t BSP_IIS3DWB_ReadReg(uint16_t Addr, uint16_t Reg, uint8_t *pdata, 
   /* CS Enable */
   HAL_GPIO_WritePin(BSP_IIS3DWB_CS_PORT, BSP_IIS3DWB_CS_PIN, GPIO_PIN_RESET);
 
-  ret = BSP_SPI2_Send(&dataReg, 1);
+  ret = BSP_IIS3DWB_0_SPI_SEND(&dataReg, 1);
 
   if(ret == BSP_ERROR_NONE)
   {
-    ret = BSP_SPI2_Recv(pdata, len);
+    ret = BSP_IIS3DWB_0_SPI_RECV(pdata, len);
   }
 
   /* CS Disable */
@@ -1246,7 +1252,6 @@ static int32_t BSP_ISM330DHCX_Init(void)
   HAL_NVIC_EnableIRQ(BSP_ISM330DHCX_INT2_EXTI_IRQn);
 
   /* Configure ISM330DHCX CS pin */
-  BSP_ISM330DHCX_CS_GPIO_CLK_ENABLE();
   HAL_GPIO_WritePin(BSP_ISM330DHCX_CS_PORT, BSP_ISM330DHCX_CS_PIN, GPIO_PIN_SET);
 
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -1256,7 +1261,7 @@ static int32_t BSP_ISM330DHCX_Init(void)
   GPIO_InitStruct.Pin = BSP_ISM330DHCX_CS_PIN;
   HAL_GPIO_Init(BSP_ISM330DHCX_CS_PORT, &GPIO_InitStruct);
 
-  if(BSP_SPI2_Init() == BSP_ERROR_NONE)
+  if(BSP_ISM330DHCX_0_SPI_INIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -1268,7 +1273,7 @@ static int32_t BSP_ISM330DHCX_DeInit(void)
 {
   int32_t ret = BSP_ERROR_UNKNOWN_FAILURE;
 
-  if(BSP_SPI2_DeInit() == BSP_ERROR_NONE)
+  if(BSP_ISM330DHCX_0_SPI_DEINIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -1285,11 +1290,11 @@ static int32_t BSP_ISM330DHCX_WriteReg(uint16_t Addr, uint16_t Reg, uint8_t *pda
   /* CS Enable */
   HAL_GPIO_WritePin(BSP_ISM330DHCX_CS_PORT, BSP_ISM330DHCX_CS_PIN, GPIO_PIN_RESET);
 
-  ret = BSP_SPI2_Send(&dataReg, 1);
+  ret = BSP_ISM330DHCX_0_SPI_SEND(&dataReg, 1);
 
   if(ret == BSP_ERROR_NONE)
   {
-    ret = BSP_SPI2_Send(pdata, len);
+    ret = BSP_ISM330DHCX_0_SPI_SEND(pdata, len);
   }
 
   /* CS Disable */
@@ -1309,11 +1314,11 @@ static int32_t BSP_ISM330DHCX_ReadReg(uint16_t Addr, uint16_t Reg, uint8_t *pdat
   /* CS Enable */
   HAL_GPIO_WritePin(BSP_ISM330DHCX_CS_PORT, BSP_ISM330DHCX_CS_PIN, GPIO_PIN_RESET);
 
-  ret = BSP_SPI2_Send(&dataReg, 1);
+  ret = BSP_ISM330DHCX_0_SPI_SEND(&dataReg, 1);
 
   if(ret == BSP_ERROR_NONE)
   {
-    ret = BSP_SPI2_Recv(pdata, len);
+    ret = BSP_ISM330DHCX_0_SPI_RECV(pdata, len);
   }
 
   /* CS Disable */
@@ -1427,7 +1432,6 @@ static int32_t BSP_IIS2ICLX_Init(void)
   HAL_NVIC_EnableIRQ(BSP_IIS2ICLX_INT2_EXTI_IRQn);
 
   /* Configure IIS2ICLX CS pin */
-  BSP_IIS2ICLX_CS_GPIO_CLK_ENABLE();
   HAL_GPIO_WritePin(BSP_IIS2ICLX_CS_PORT, BSP_IIS2ICLX_CS_PIN, GPIO_PIN_SET);
 
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
@@ -1437,7 +1441,7 @@ static int32_t BSP_IIS2ICLX_Init(void)
   GPIO_InitStruct.Pin = BSP_IIS2ICLX_CS_PIN;
   HAL_GPIO_Init(BSP_IIS2ICLX_CS_PORT, &GPIO_InitStruct);
 
-  if(BSP_SPI2_Init() == BSP_ERROR_NONE)
+  if(BSP_IIS2ICLX_0_SPI_INIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -1449,7 +1453,7 @@ static int32_t BSP_IIS2ICLX_DeInit(void)
 {
   int32_t ret = BSP_ERROR_UNKNOWN_FAILURE;
 
-  if(BSP_SPI2_DeInit() == BSP_ERROR_NONE)
+  if(BSP_IIS2ICLX_0_SPI_DEINIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -1466,11 +1470,11 @@ static int32_t BSP_IIS2ICLX_WriteReg(uint16_t Addr, uint16_t Reg, uint8_t *pdata
   /* CS Enable */
   HAL_GPIO_WritePin(BSP_IIS2ICLX_CS_PORT, BSP_IIS2ICLX_CS_PIN, GPIO_PIN_RESET);
 
-  ret = BSP_SPI2_Send(&dataReg, 1);
+  ret = BSP_IIS2ICLX_0_SPI_SEND(&dataReg, 1);
 
   if(ret == BSP_ERROR_NONE)
   {
-    ret = BSP_SPI2_Send(pdata, len);
+    ret = BSP_IIS2ICLX_0_SPI_SEND(pdata, len);
   }
 
   /* CS Disable */
@@ -1490,11 +1494,11 @@ static int32_t BSP_IIS2ICLX_ReadReg(uint16_t Addr, uint16_t Reg, uint8_t *pdata,
   /* CS Enable */
   HAL_GPIO_WritePin(BSP_IIS2ICLX_CS_PORT, BSP_IIS2ICLX_CS_PIN, GPIO_PIN_RESET);
 
-  ret = BSP_SPI2_Send(&dataReg, 1);
+  ret = BSP_IIS2ICLX_0_SPI_SEND(&dataReg, 1);
 
   if(ret == BSP_ERROR_NONE)
   {
-    ret = BSP_SPI2_Recv(pdata, len);
+    ret = BSP_IIS2ICLX_0_SPI_RECV(pdata, len);
   }
 
   /* CS Disable */

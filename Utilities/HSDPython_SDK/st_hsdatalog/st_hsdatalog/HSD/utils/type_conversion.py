@@ -33,6 +33,7 @@ class TypeConversion:
             'int32': 'int32',
             'float': 'float32',
             'double': 'double',
+            'enum': 'uint8'
         }
         return switcher.get(check_type, "error")
 
@@ -54,6 +55,7 @@ class TypeConversion:
             'float': 4,
             'float32': 4,
             'double': 8,
+            'enum':1
         }
         return switcher.get(check_type, "error")
     
@@ -75,6 +77,7 @@ class TypeConversion:
             'float': 'f',
             'float32': 'f',
             'double': 'd',
+            'enum': 'B'
         }
         return switcher.get(check_type, "error")
     

@@ -342,7 +342,7 @@ typedef enum
 #include "core_cm4.h"                     /*!< Cortex-M4 processor and core peripherals      */
 #else  /* CORE_CM7 */
 #ifdef CORE_CM7
-#define __CM7_REV               0x0100U   /*!< Cortex-M7 revision r1p0                       */
+#define __CM7_REV               0x0101U   /*!< Cortex-M7 revision r1p1                       */
 #define __MPU_PRESENT             1U       /*!< CM7 provides an MPU                           */
 #define __NVIC_PRIO_BITS          4U       /*!< CM7 uses 4 Bits for the Priority Levels       */
 #define __Vendor_SysTickConfig    0U       /*!< Set to 1 if different SysTick Config is used  */
@@ -358,14 +358,30 @@ typedef enum
 /**
   * @}
   */
+#endif /*DUAL_CORE*/
 
-
-#else  /* SINGLE_CORE */
-
+#if !$DUAL_CORE$ && ($H7_SHARK$ || $H7_VALUE_LINE$)
 /**
   * @brief Configuration of the Cortex-M7 Processor and Core Peripherals
    */
-#define __CM7_REV               0x0100U   /*!< Cortex-M7 revision r1p0                       */
+#define __CM7_REV               0x0101U   /*!< Cortex-M7 revision r1p1                       */
+#define __MPU_PRESENT             1U       /*!< CM7 provides an MPU                           */
+#define __NVIC_PRIO_BITS          4U       /*!< CM7 uses 4 Bits for the Priority Levels       */
+#define __Vendor_SysTickConfig    0U       /*!< Set to 1 if different SysTick Config is used  */
+#define __FPU_PRESENT             1U       /*!< FPU present                                   */
+#define __ICACHE_PRESENT          1U       /*!< CM7 instruction cache present                 */
+#define __DCACHE_PRESENT          1U       /*!< CM7 data cache present                        */
+#include "core_cm7.h"                     /*!< Cortex-M7 processor and core peripherals      */
+
+/**
+  * @}
+  */
+#endif /* !DUAL_CORE && (H7_SHARK || H7_VALUE_LINE) */
+#if $H7_LITTLE_SHARK$ || $H7_TINY_SHARK$
+/**
+  * @brief Configuration of the Cortex-M7 Processor and Core Peripherals
+   */
+#define __CM7_REV               0x0110U   /*!< Cortex-M7 revision r1p2                       */
 #define __MPU_PRESENT             1U       /*!< CM7 provides an MPU                           */
 #define __NVIC_PRIO_BITS          4U       /*!< CM7 uses 4 Bits for the Priority Levels       */
 #define __Vendor_SysTickConfig    0U       /*!< Set to 1 if different SysTick Config is used  */
@@ -378,7 +394,7 @@ typedef enum
   * @}
   */
 
-#endif /*DUAL_CORE*/
+#endif /* H7_LITTLE_SHARK || H7_TINY_SHARK */
 
 
 
@@ -2980,7 +2996,7 @@ typedef struct
 #define D1_ITCMRAM_BASE           (0x00000000UL) /*!< Base address of : 64KB RAM reserved for CPU execution/instruction accessible over ITCM  */
 #define D1_ITCMICP_BASE           (0x00100000UL) /*!< Base address of : (up to 128KB) embedded Test FLASH memory accessible over ITCM         */
 #define D1_DTCMRAM_BASE           (0x20000000UL) /*!< Base address of : 128KB system data RAM accessible over DTCM                            */
-#if $H7_VALUE_LINE$ || $H7_LITTLE_VALUE_LINE$ 
+#if $H7_VALUE_LINE$ || $H7_LITTLE_VALUE_LINE$
 #define D1_AXIFLASH_BASE          (0x08000000UL) /*!< Base address of : (up to 128 KB) embedded FLASH memory accessible over AXI      */
 #elif $H7_LITTLE_SHARK$
 #define D1_AXIFLASH_BASE          (0x08000000UL) /*!< Base address of : (up to 1 MB) embedded FLASH memory accessible over AXI                */
@@ -3046,7 +3062,7 @@ typedef struct
 #define FLASH_BANK2_BASE          (0x08100000UL) /*!< Base address of : (up to 1 MB) Flash Bank2 accessible over AXI                          */
 #define FLASH_END                 (0x081FFFFFUL) /*!< FLASH end address                                                                       */
 #endif /* H7_VALUE_LINE */
-#endif /* H7_LITTLE_SHARK */ 
+#endif /* H7_LITTLE_SHARK */
 
 /* Legacy define */
 #define FLASH_BASE                FLASH_BANK1_BASE
@@ -3389,7 +3405,6 @@ typedef struct
 #define MDMA_Channel13_BASE   (MDMA_BASE + 0x00000380UL)
 #define MDMA_Channel14_BASE   (MDMA_BASE + 0x000003C0UL)
 #define MDMA_Channel15_BASE   (MDMA_BASE + 0x00000400UL)
-#define MDMA_Channel16_BASE   (MDMA_BASE + 0x00000440UL)
 
 /* GFXMMU virtual buffers base address */
 #define GFXMMU_VIRTUAL_BUFFERS_BASE  (0x25000000UL)
@@ -5435,6 +5450,12 @@ typedef struct
 #define ADC_AWD2CR_AWD2CH_18              (0x40000UL << ADC_AWD2CR_AWD2CH_Pos)  /*!< 0x00040000 */
 #define ADC_AWD2CR_AWD2CH_19              (0x80000UL << ADC_AWD2CR_AWD2CH_Pos)  /*!< 0x00080000 */
 
+#if $H7_LITTLE_SHARK$
+#define ADC3_AWD2CR_AWD2CH_Pos             (0U)
+#define ADC3_AWD2CR_AWD2CH_Msk             (0x7FFFFUL << ADC3_AWD2CR_AWD2CH_Pos)  /*!< 0x0007FFFF */
+#define ADC3_AWD2CR_AWD2CH                  ADC3_AWD2CR_AWD2CH_Msk                 /*!< ADC Analog watchdog 2 channel selection */
+#endif /* H7_LITTLE_SHARK */
+
 /********************  Bit definition for ADC_AWD3CR register  ********************/
 #define ADC_AWD3CR_AWD3CH_Pos             (0U)
 #define ADC_AWD3CR_AWD3CH_Msk             (0xFFFFFUL << ADC_AWD3CR_AWD3CH_Pos)  /*!< 0x000FFFFF */
@@ -5459,6 +5480,12 @@ typedef struct
 #define ADC_AWD3CR_AWD3CH_17              (0x20000UL << ADC_AWD3CR_AWD3CH_Pos)  /*!< 0x00020000 */
 #define ADC_AWD3CR_AWD3CH_18              (0x40000UL << ADC_AWD3CR_AWD3CH_Pos)  /*!< 0x00040000 */
 #define ADC_AWD3CR_AWD3CH_19              (0x80000UL << ADC_AWD3CR_AWD3CH_Pos)  /*!< 0x00080000 */
+
+#if $H7_LITTLE_SHARK$
+#define ADC3_AWD3CR_AWD3CH_Pos             (0U)
+#define ADC3_AWD3CR_AWD3CH_Msk             (0x7FFFFUL << ADC3_AWD3CR_AWD3CH_Pos)  /*!< 0x0007FFFF */
+#define ADC3_AWD3CR_AWD3CH                  ADC3_AWD3CR_AWD3CH_Msk                 /*!< ADC Analog watchdog 3 channel selection */
+#endif /* H7_LITTLE_SHARK */
 
 /********************  Bit definition for ADC_DIFSEL register  ********************/
 #define ADC_DIFSEL_DIFSEL_Pos             (0U)
@@ -16911,7 +16938,7 @@ typedef struct
 #define FMC_SDCMR_MODE             FMC_SDCMR_MODE_Msk                          /*!<MODE[2:0] bits (Command mode) */
 #define FMC_SDCMR_MODE_0           (0x1UL << FMC_SDCMR_MODE_Pos)                /*!< 0x00000001 */
 #define FMC_SDCMR_MODE_1           (0x2UL << FMC_SDCMR_MODE_Pos)                /*!< 0x00000002 */
-#define FMC_SDCMR_MODE_2           (0x3UL << FMC_SDCMR_MODE_Pos)                /*!< 0x00000003 */
+#define FMC_SDCMR_MODE_2           (0x4UL << FMC_SDCMR_MODE_Pos)                /*!< 0x00000004 */
 
 #define FMC_SDCMR_CTB2_Pos         (3U)
 #define FMC_SDCMR_CTB2_Msk         (0x1UL << FMC_SDCMR_CTB2_Pos)               /*!< 0x00000008 */
@@ -19275,7 +19302,7 @@ typedef struct
 /********************  Bit definition for SR register  ********************/
 #define JPEG_SR_IFTF_Pos                (1U)
 #define JPEG_SR_IFTF_Msk                (0x1UL << JPEG_SR_IFTF_Pos)            /*!< 0x00000002 */
-#define JPEG_SR_IFTF                    JPEG_SR_IFTF_Msk                       /*!<Input FIFO is not full and is bellow its threshold flag */
+#define JPEG_SR_IFTF                    JPEG_SR_IFTF_Msk                       /*!<Input FIFO is not full and is below its threshold flag */
 #define JPEG_SR_IFNFF_Pos               (2U)
 #define JPEG_SR_IFNFF_Msk               (0x1UL << JPEG_SR_IFNFF_Pos)           /*!< 0x00000004 */
 #define JPEG_SR_IFNFF                   JPEG_SR_IFNFF_Msk                      /*!<Input FIFO Not Full Flag, a data can be written */
@@ -26309,9 +26336,9 @@ typedef struct
 /*                   Serial Peripheral Interface (SPI/I2S)                    */
 /*                                                                            */
 /******************************************************************************/
-#if $H7_TINY_SHARK$
+#if $H7_TINY_SHARK$ || $H7_LITTLE_SHARK$
 #define SPI_SPI6I2S_SUPPORT       /*!<SPI6 I2S support feature */
-#endif /* H7_TINY_SHARK  */
+#endif /* H7_TINY_SHARK || H7_LITTLE_SHARK */
 /*******************  Bit definition for SPI_CR1 register  ********************/
 #define SPI_CR1_SPE_Pos             (0U)
 #define SPI_CR1_SPE_Msk             (0x1UL << SPI_CR1_SPE_Pos)                 /*!< 0x00000001 */
@@ -30560,7 +30587,7 @@ typedef struct
 
 #define HRTIM_MCR_DACSYNC_Pos         (25U)
 #define HRTIM_MCR_DACSYNC_Msk         (0x3UL << HRTIM_MCR_DACSYNC_Pos)         /*!< 0x06000000 */
-#define HRTIM_MCR_DACSYNC             HRTIM_MCR_DACSYNC_Msk                    /*!< DAC sychronization mask */
+#define HRTIM_MCR_DACSYNC             HRTIM_MCR_DACSYNC_Msk                    /*!< DAC synchronization mask */
 #define HRTIM_MCR_DACSYNC_0           (0x1UL << HRTIM_MCR_DACSYNC_Pos)          /*!< 0x02000000 */
 #define HRTIM_MCR_DACSYNC_1           (0x2UL << HRTIM_MCR_DACSYNC_Pos)          /*!< 0x04000000 */
 
@@ -30769,7 +30796,7 @@ typedef struct
 
 #define HRTIM_TIMCR_DACSYNC_Pos       (25U)
 #define HRTIM_TIMCR_DACSYNC_Msk       (0x3UL << HRTIM_TIMCR_DACSYNC_Pos)       /*!< 0x06000000 */
-#define HRTIM_TIMCR_DACSYNC           HRTIM_TIMCR_DACSYNC_Msk                  /*!< DAC sychronization mask */
+#define HRTIM_TIMCR_DACSYNC           HRTIM_TIMCR_DACSYNC_Msk                  /*!< DAC synchronization mask */
 #define HRTIM_TIMCR_DACSYNC_0         (0x1UL << HRTIM_TIMCR_DACSYNC_Pos)        /*!< 0x02000000 */
 #define HRTIM_TIMCR_DACSYNC_1         (0x2UL << HRTIM_TIMCR_DACSYNC_Pos)        /*!< 0x04000000 */
 #define HRTIM_TIMCR_PREEN_Pos         (27U)
@@ -33545,6 +33572,9 @@ typedef struct
 #define USB_OTG_GOTGCTL_OTGVER_Pos               (20U)
 #define USB_OTG_GOTGCTL_OTGVER_Msk               (0x1UL << USB_OTG_GOTGCTL_OTGVER_Pos) /*!< 0x00100000 */
 #define USB_OTG_GOTGCTL_OTGVER                   USB_OTG_GOTGCTL_OTGVER_Msk    /*!< OTG version  */
+#define USB_OTG_GOTGCTL_CURMOD_Pos               (21U)
+#define USB_OTG_GOTGCTL_CURMOD_Msk               (0x1UL << USB_OTG_GOTGCTL_CURMOD_Pos) /*!< 0x00200000 */
+#define USB_OTG_GOTGCTL_CURMOD                   USB_OTG_GOTGCTL_CURMOD_Msk    /*!< Current mode of operation */
 
 /********************  Bit definition forUSB_OTG_HCFG register  ********************/
 
@@ -33570,7 +33600,7 @@ typedef struct
 
 #define USB_OTG_DCFG_DAD_Pos                     (4U)
 #define USB_OTG_DCFG_DAD_Msk                     (0x7FUL << USB_OTG_DCFG_DAD_Pos) /*!< 0x000007F0 */
-#define USB_OTG_DCFG_DAD                         USB_OTG_DCFG_DAD_Msk          /*!< Device address */
+#define USB_OTG_DCFG_DAD                         USB_OTG_DCFG_DAD_Msk             /*!< Device address */
 #define USB_OTG_DCFG_DAD_0                       (0x01UL << USB_OTG_DCFG_DAD_Pos) /*!< 0x00000010 */
 #define USB_OTG_DCFG_DAD_1                       (0x02UL << USB_OTG_DCFG_DAD_Pos) /*!< 0x00000020 */
 #define USB_OTG_DCFG_DAD_2                       (0x04UL << USB_OTG_DCFG_DAD_Pos) /*!< 0x00000040 */
@@ -33581,13 +33611,21 @@ typedef struct
 
 #define USB_OTG_DCFG_PFIVL_Pos                   (11U)
 #define USB_OTG_DCFG_PFIVL_Msk                   (0x3UL << USB_OTG_DCFG_PFIVL_Pos) /*!< 0x00001800 */
-#define USB_OTG_DCFG_PFIVL                       USB_OTG_DCFG_PFIVL_Msk        /*!< Periodic (micro)frame interval */
+#define USB_OTG_DCFG_PFIVL                       USB_OTG_DCFG_PFIVL_Msk            /*!< Periodic (micro)frame interval */
 #define USB_OTG_DCFG_PFIVL_0                     (0x1UL << USB_OTG_DCFG_PFIVL_Pos) /*!< 0x00000800 */
 #define USB_OTG_DCFG_PFIVL_1                     (0x2UL << USB_OTG_DCFG_PFIVL_Pos) /*!< 0x00001000 */
 
+#define USB_OTG_DCFG_XCVRDLY_Pos                 (14U)
+#define USB_OTG_DCFG_XCVRDLY_Msk                 (0x1UL << USB_OTG_DCFG_XCVRDLY_Pos) /*!< 0x00004000 */
+#define USB_OTG_DCFG_XCVRDLY                     USB_OTG_DCFG_XCVRDLY_Msk            /*!< Transceiver delay */
+
+#define USB_OTG_DCFG_ERRATIM_Pos                 (15U)
+#define USB_OTG_DCFG_ERRATIM_Msk                 (0x1UL << USB_OTG_DCFG_ERRATIM_Pos) /*!< 0x00008000 */
+#define USB_OTG_DCFG_ERRATIM                     USB_OTG_DCFG_ERRATIM_Msk            /*!< Erratic error interrupt mask */
+
 #define USB_OTG_DCFG_PERSCHIVL_Pos               (24U)
 #define USB_OTG_DCFG_PERSCHIVL_Msk               (0x3UL << USB_OTG_DCFG_PERSCHIVL_Pos) /*!< 0x03000000 */
-#define USB_OTG_DCFG_PERSCHIVL                   USB_OTG_DCFG_PERSCHIVL_Msk    /*!< Periodic scheduling interval */
+#define USB_OTG_DCFG_PERSCHIVL                   USB_OTG_DCFG_PERSCHIVL_Msk            /*!< Periodic scheduling interval */
 #define USB_OTG_DCFG_PERSCHIVL_0                 (0x1UL << USB_OTG_DCFG_PERSCHIVL_Pos) /*!< 0x01000000 */
 #define USB_OTG_DCFG_PERSCHIVL_1                 (0x2UL << USB_OTG_DCFG_PERSCHIVL_Pos) /*!< 0x02000000 */
 
@@ -33657,6 +33695,12 @@ typedef struct
 #define USB_OTG_DCTL_POPRGDNE_Pos                (11U)
 #define USB_OTG_DCTL_POPRGDNE_Msk                (0x1UL << USB_OTG_DCTL_POPRGDNE_Pos) /*!< 0x00000800 */
 #define USB_OTG_DCTL_POPRGDNE                    USB_OTG_DCTL_POPRGDNE_Msk     /*!< Power-on programming done */
+#define USB_OTG_DCTL_ENCONTONBNA_Pos             (17U)
+#define USB_OTG_DCTL_ENCONTONBNA_Msk             (0x1UL << USB_OTG_DCTL_ENCONTONBNA_Pos) /*!< 0x00020000 */
+#define USB_OTG_DCTL_ENCONTONBNA                 USB_OTG_DCTL_ENCONTONBNA_Msk  /*!< Enable continue on BNA */
+#define USB_OTG_DCTL_DSBESLRJCT_Pos              (18U)
+#define USB_OTG_DCTL_DSBESLRJCT_Msk              (0x1UL << USB_OTG_DCTL_DSBESLRJCT_Pos) /*!< 0x00040000 */
+#define USB_OTG_DCTL_DSBESLRJCT                  USB_OTG_DCTL_DSBESLRJCT_Msk  /*!< Deep sleep BESL reject */
 
 /********************  Bit definition forUSB_OTG_HFIR register  ********************/
 #define USB_OTG_HFIR_FRIVL_Pos                   (0U)
@@ -33774,7 +33818,7 @@ typedef struct
 #define USB_OTG_GUSBCFG_FDMOD                    USB_OTG_GUSBCFG_FDMOD_Msk     /*!< Forced peripheral mode          */
 #define USB_OTG_GUSBCFG_CTXPKT_Pos               (31U)
 #define USB_OTG_GUSBCFG_CTXPKT_Msk               (0x1UL << USB_OTG_GUSBCFG_CTXPKT_Pos) /*!< 0x80000000 */
-#define USB_OTG_GUSBCFG_CTXPKT                   USB_OTG_GUSBCFG_CTXPKT_Msk    /*!< Corrupt Tx packet               */
+#define USB_OTG_GUSBCFG_CTXPKT                   USB_OTG_GUSBCFG_CTXPKT_Msk    /*!< Corrupt Tx packet for debug propose only; must be kept at reset value */
 
 /********************  Bit definition forUSB_OTG_GRSTCTL register  ********************/
 #define USB_OTG_GRSTCTL_CSRST_Pos                (0U)

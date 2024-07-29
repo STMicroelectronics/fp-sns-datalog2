@@ -240,7 +240,8 @@ static IIS2DHTaskClass_t sTheClass =
       IIS2DHTask_vtblSensorDisable,
       IIS2DHTask_vtblSensorIsEnabled,
       IIS2DHTask_vtblSensorGetDescription,
-      IIS2DHTask_vtblSensorGetStatus
+      IIS2DHTask_vtblSensorGetStatus,
+      IIS2DHTask_vtblSensorGetStatusPointer
     },
     IIS2DHTask_vtblAccGetODR,
     IIS2DHTask_vtblAccGetFS,
@@ -462,6 +463,7 @@ sys_error_code_t IIS2DHTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_funct
   p_obj->prev_timestamp = 0.0f;
   p_obj->fifo_level = 0;
   p_obj->samples_per_it = 0;
+  p_obj->first_data_ready = 0;
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
 
   *pTaskCode = AMTExRun;
@@ -526,10 +528,14 @@ sys_error_code_t IIS2DHTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPow
   {
     if (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
     {
-      /* Deactivate the sensor */
-      iis2dh_data_rate_set(p_sensor_drv, IIS2DH_POWER_DOWN);
-      iis2dh_fifo_mode_set(p_sensor_drv, IIS2DH_BYPASS_MODE);
+      if (IIS2DHTaskSensorIsActive(p_obj))
+      {
+        /* Deactivate the sensor */
+        iis2dh_data_rate_set(p_sensor_drv, IIS2DH_POWER_DOWN);
+        iis2dh_fifo_mode_set(p_sensor_drv, IIS2DH_BYPASS_MODE);
+      }
       p_obj->samples_per_it = 0;
+      p_obj->first_data_ready = 0;
 
       /* Empty the task queue and disable INT or timer */
       tx_queue_flush(&p_obj->in_queue);
@@ -588,7 +594,7 @@ sys_error_code_t IIS2DHTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2DH: start.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("IIS2DH: start.\r\n"));
 
 #if defined(ENABLE_THREADX_DBG_PIN) && defined (IIS2DH_TASK_CFG_TAG)
   IIS2DHTask *p_obj = (IIS2DHTask *) _this;
@@ -734,6 +740,14 @@ sys_error_code_t IIS2DHTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   }
   else
   {
+    if (odr > 1.0f)
+    {
+      /* ODR = 0 sends only message to switch off the sensor.
+       * Do not update the model in case of odr = 0 */
+
+      p_if_owner->sensor_status.type.mems.odr = odr;
+      p_if_owner->sensor_status.type.mems.measured_odr = 0.0f;
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -762,6 +776,15 @@ sys_error_code_t IIS2DHTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
   }
   else
   {
+    p_if_owner->sensor_status.type.mems.fs = fs;
+    if (fs < 9.0f)
+    {
+      p_if_owner->sensor_status.type.mems.sensitivity = 0.0000305f * p_if_owner->sensor_status.type.mems.fs;
+    }
+    else
+    {
+      p_if_owner->sensor_status.type.mems.sensitivity = 0.000731f;
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -822,6 +845,7 @@ sys_error_code_t IIS2DHTask_vtblSensorEnable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = TRUE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -849,6 +873,7 @@ sys_error_code_t IIS2DHTask_vtblSensorDisable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = FALSE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -893,6 +918,14 @@ SensorStatus_t IIS2DHTask_vtblSensorGetStatus(ISensor_t *_this)
   IIS2DHTask *p_if_owner = (IIS2DHTask *)((uint32_t) _this - offsetof(IIS2DHTask, sensor_if));
 
   return p_if_owner->sensor_status;
+}
+
+SensorStatus_t *IIS2DHTask_vtblSensorGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  IIS2DHTask *p_if_owner = (IIS2DHTask *)((uint32_t) _this - offsetof(IIS2DHTask, sensor_if));
+
+  return &p_if_owner->sensor_status;
 }
 
 /* Private function definition */
@@ -990,55 +1023,45 @@ static sys_error_code_t IIS2DHTaskExecuteStepDatalog(AManagedTask *_this)
       case SM_MESSAGE_ID_DATA_READY:
       {
         SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2DH: new data.\r\n"));
-//          if(p_obj->pIRQConfig == NULL)
-//          {
-//            if(TX_SUCCESS
-//                != tx_timer_change(&p_obj->read_timer, AMT_MS_TO_TICKS(p_obj->iis2dh_task_cfg_timer_period_ms),
-//                                   AMT_MS_TO_TICKS(p_obj->iis2dh_task_cfg_timer_period_ms)))
-//            {
-//              return SYS_UNDEFINED_ERROR_CODE;
-//            }
-//          }
-
         res = IIS2DHTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
-#if IIS2DH_FIFO_ENABLED
-          if (p_obj->fifo_level != 0)
+          if (p_obj->first_data_ready == 3)
           {
-#endif
-            // notify the listeners...
-            double timestamp = report.sensorDataReadyMessage.fTimestamp;
-            double delta_timestamp = timestamp - p_obj->prev_timestamp;
-            p_obj->prev_timestamp = timestamp;
-
-            /* update measuredODR */
-            p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
-
-            /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
-             * [X0, Y0, Z0]
-             * [X1, Y1, Z1]
-             * ...
-             * [Xm-1, Ym-1, Zm-1]
-             */
-            EMD_Init(&p_obj->data, p_obj->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->samples_per_it, 3);
-
-            DataEvent_t evt;
-
-            DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
-            IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
-            SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2DH: ts = %f\r\n", (float)timestamp));
 #if IIS2DH_FIFO_ENABLED
-          }
+            if (p_obj->fifo_level != 0)
+            {
 #endif
+              // notify the listeners...
+              double timestamp = report.sensorDataReadyMessage.fTimestamp;
+              double delta_timestamp = timestamp - p_obj->prev_timestamp;
+              p_obj->prev_timestamp = timestamp;
+
+              /* update measuredODR */
+              p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
+
+              /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
+               * [X0, Y0, Z0]
+               * [X1, Y1, Z1]
+               * ...
+               * [Xm-1, Ym-1, Zm-1]
+               */
+              EMD_Init(&p_obj->data, p_obj->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->samples_per_it, 3);
+
+              DataEvent_t evt;
+
+              DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
+              IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
+              SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2DH: ts = %f\r\n", (float)timestamp));
+#if IIS2DH_FIFO_ENABLED
+            }
+#endif
+          }
+          else
+          {
+            p_obj->first_data_ready++;
+          }
         }
-//            if(p_obj->pIRQConfig == NULL)
-//            {
-//              if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
-//              {
-//                res = SYS_UNDEFINED_ERROR_CODE;
-//              }
-//            }
         break;
       }
       case SM_MESSAGE_ID_SENSOR_CMD:

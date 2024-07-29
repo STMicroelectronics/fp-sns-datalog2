@@ -96,6 +96,8 @@ struct _I2CMasterDriver_t
 
   uint8_t address_size;
 
+  uint8_t transmit_receive;
+
 };
 
 
@@ -122,6 +124,8 @@ IIODriver *I2CMasterDriverAlloc(void);
 sys_error_code_t I2CMasterDriverSetDeviceAddr(I2CMasterDriver_t *_this, uint16_t nAddress);
 
 sys_error_code_t I2CMasterDriverSetAddrSize(I2CMasterDriver_t *_this, uint8_t nAddressSize);
+
+sys_error_code_t I2CMasterDriverSetTransmitReceive(I2CMasterDriver_t *_this, uint8_t nTransmitReceive);
 
 
 /* Inline functions definition */

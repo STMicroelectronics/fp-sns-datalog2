@@ -2,14 +2,14 @@
   ******************************************************************************
   * @file    SensorTileBoxPro_audio.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.1.0
-  * @date    20-July-2023
+  * @version V1.2.0
+  * @date    03-Jun-2024
   * @brief   This file contains the common defines and functions prototypes for
   *          SensorTileBoxPro_audio.c driver.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,7 +17,7 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-*/
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef SENSORTILEBOXPRO_AUDIO_H
@@ -25,27 +25,27 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif 
+#endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "SensorTileBoxPro_conf.h"
-#include "SensorTileBoxPro.h"
+#include "audio.h"
 
 /** @addtogroup BSP
   * @{
-  */ 
+  */
 
 /** @addtogroup SENSORTILEBOXPRO
   * @{
   */
-    
-/** @addtogroup SENSORTILEBOXPRO_AUDIO 
+
+/** @addtogroup SENSORTILEBOXPRO_AUDIO
   * @{
   */
-   
+
 /** @defgroup SENSORTILEBOXPRO_AUDIO_Exported_Variables
- * @{
- */
+  * @{
+  */
 
 /* DMic OnBoard */
 extern MDF_HandleTypeDef DMic_OnBoard_MDFFilter;
@@ -62,32 +62,33 @@ extern MDF_HandleTypeDef DMic_OnBoard_MDFFilter;
 #define SaturaLH(N, L, H) (((N)<(L))?(L):(((N)>(H))?(H):(N)))
 
 /**
- * @}
- */   
+  * @}
+  */
 
 /** @defgroup SENSORTILEBOXPRO_AUDIO_Exported_Types SENSORTILEBOXPRO_AUDIO Exported Types
   * @{
   */
 
-typedef struct {
-	int32_t Z; 
-	int32_t oldOut; 
-	int32_t oldIn; 
-}HP_FilterState_TypeDef;  
-  
 typedef struct
-{                                   
-  uint32_t                    Device;                                           
-  uint32_t                    SampleRate;                                         
-  uint32_t                    BitsPerSample;                                          
-  uint32_t                    ChannelsNbr;                                         
-  uint32_t                    Volume;
-}BSP_AUDIO_Init_t;
+{
+  int32_t Z;
+  int32_t oldOut;
+  int32_t oldIn;
+} HP_FilterState_TypeDef;
 
 typedef struct
 {
-  uint32_t                    Instance;            /* Audio IN instance              */  
-  uint32_t                    Device;              /* Audio IN device to be used     */ 
+  uint32_t                    Device;
+  uint32_t                    SampleRate;
+  uint32_t                    BitsPerSample;
+  uint32_t                    ChannelsNbr;
+  uint32_t                    Volume;
+} BSP_AUDIO_Init_t;
+
+typedef struct
+{
+  uint32_t                    Instance;            /* Audio IN instance              */
+  uint32_t                    Device;              /* Audio IN device to be used     */
   uint32_t                    SampleRate;          /* Audio IN Sample rate           */
   uint32_t                    BitsPerSample;       /* Audio IN Sample resolution     */
   uint32_t                    ChannelsNbr;         /* Audio IN number of channel     */
@@ -97,27 +98,27 @@ typedef struct
   uint32_t                    Volume;              /* Audio IN volume                */
   uint32_t                    State;               /* Audio IN State                 */
   uint32_t                    IsMultiBuff;         /* Audio IN multi-buffer usage    */
-  uint32_t                    IsMspCallbacksValid; /* Is Msp Callbacks registred     */
-  HP_FilterState_TypeDef 	  HP_Filters[2];       /*!< HP filter state for each channel*/
+  uint32_t                    IsMspCallbacksValid; /* Is Msp Callbacks registered     */
+  HP_FilterState_TypeDef    HP_Filters[2];       /*!< HP filter state for each channel*/
   uint32_t DecimationFactor;
-}AUDIO_IN_Ctx_t;
+} AUDIO_IN_Ctx_t;
 
 typedef struct
 {
-  uint32_t                    Instance;            /* Audio OUT instance              */  
-  uint32_t                    Device;              /* Audio OUT device to be used     */ 
+  uint32_t                    Instance;            /* Audio OUT instance              */
+  uint32_t                    Device;              /* Audio OUT device to be used     */
   uint32_t                    SampleRate;          /* Audio OUT Sample rate           */
   uint32_t                    BitsPerSample;       /* Audio OUT Sample Bit Per Sample */
   uint32_t                    Volume;              /* Audio OUT volume                */
   uint32_t                    ChannelsNbr;         /* Audio OUT number of channel     */
-  uint32_t                    IsMute;              /* Mute state                      */   
+  uint32_t                    IsMute;              /* Mute state                      */
   uint32_t                    State;               /* Audio OUT State                 */
-  uint32_t                    IsMspCallbacksValid; /* Is Msp Callbacks registred      */ 
-}AUDIO_OUT_Ctx_t;
+  uint32_t                    IsMspCallbacksValid; /* Is Msp Callbacks registered      */
+} AUDIO_OUT_Ctx_t;
 
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup SENSORTILEBOXPRO_AUDIO_Exported_Constants STWIN_AUDIO Exported Constants
   * @{
@@ -130,99 +131,99 @@ typedef struct
 /* AUDIO FREQUENCY */
 #ifndef AUDIO_FREQUENCY_192K
 #define AUDIO_FREQUENCY_192K    192000U
-#endif
-#ifndef AUDIO_FREQUENCY_176K  
+#endif /* AUDIO_FREQUENCY_192K */
+#ifndef AUDIO_FREQUENCY_176K
 #define AUDIO_FREQUENCY_176K    176400U
-#endif
+#endif /* AUDIO_FREQUENCY_176K */
 #ifndef AUDIO_FREQUENCY_96K
 #define AUDIO_FREQUENCY_96K     96000U
-#endif
+#endif /* AUDIO_FREQUENCY_96K */
 #ifndef AUDIO_FREQUENCY_88K
 #define AUDIO_FREQUENCY_88K     88200U
-#endif
+#endif /* AUDIO_FREQUENCY_88K */
 #ifndef AUDIO_FREQUENCY_48K
 #define AUDIO_FREQUENCY_48K     48000U
-#endif
-#ifndef AUDIO_FREQUENCY_44K  
+#endif /* AUDIO_FREQUENCY_48K */
+#ifndef AUDIO_FREQUENCY_44K
 #define AUDIO_FREQUENCY_44K     44100U
-#endif
+#endif /* AUDIO_FREQUENCY_44K */
 #ifndef AUDIO_FREQUENCY_32K
 #define AUDIO_FREQUENCY_32K     32000U
-#endif
+#endif /* AUDIO_FREQUENCY_32K */
 #ifndef AUDIO_FREQUENCY_22K
 #define AUDIO_FREQUENCY_22K     22050U
-#endif
+#endif /* AUDIO_FREQUENCY_22K */
 #ifndef AUDIO_FREQUENCY_16K
 #define AUDIO_FREQUENCY_16K     16000U
-#endif
+#endif /* AUDIO_FREQUENCY_16K */
 #ifndef AUDIO_FREQUENCY_11K
 #define AUDIO_FREQUENCY_11K     11025U
-#endif
+#endif /* AUDIO_FREQUENCY_11K */
 #ifndef AUDIO_FREQUENCY_8K
-#define AUDIO_FREQUENCY_8K      8000U 
-#endif
-   
-/* AUDIO RESOLUTION */   
+#define AUDIO_FREQUENCY_8K      8000U
+#endif /* AUDIO_FREQUENCY_8K */
+
+/* AUDIO RESOLUTION */
 #ifndef AUDIO_RESOLUTION_16b
 #define AUDIO_RESOLUTION_16b                16U
-#endif
+#endif /* AUDIO_RESOLUTION_16b */
 #ifndef AUDIO_RESOLUTION_24b
 #define AUDIO_RESOLUTION_24b                24U
-#endif
+#endif /* AUDIO_RESOLUTION_24b */
 #ifndef AUDIO_RESOLUTION_32b
 #define AUDIO_RESOLUTION_32b                32U
-#endif
+#endif /* AUDIO_RESOLUTION_32b */
 
 
 #define ONBOARD_DIGITAL_MIC 1
 #define ACTIVE_MICROPHONES_MASK   (ONBOARD_DIGITAL_MIC_MASK)
 
 #if (ONBOARD_DIGITAL_MIC == 1 && AUDIO_IN_SAMPLING_FREQUENCY > AUDIO_FREQUENCY_48K)
- #error "If the digital microphone is enabled then the max frequency is 48000Hz"
-#endif
+#error "If the digital microphone is enabled then the max frequency is 48000Hz"
+#endif /* ONBOARD_DIGITAL_MIC == 1 && AUDIO_IN_SAMPLING_FREQUENCY > AUDIO_FREQUENCY_48K */
 
 
 #ifndef AUDIO_IN_CHANNELS
 #define AUDIO_IN_CHANNELS 1
-#endif
+#endif /* AUDIO_IN_CHANNELS */
 
 #ifndef AUDIO_IN_SAMPLING_FREQUENCY
 #define AUDIO_IN_SAMPLING_FREQUENCY     AUDIO_FREQUENCY_16K
-#endif
+#endif /* AUDIO_IN_SAMPLING_FREQUENCY */
 
 #ifndef AUDIO_VOLUME_INPUT
 #define AUDIO_VOLUME_INPUT              64U
-#endif
+#endif /* AUDIO_VOLUME_INPUT */
 
 #ifndef BSP_AUDIO_IN_IT_PRIORITY
 #define BSP_AUDIO_IN_IT_PRIORITY        6U
-#endif
+#endif /* BSP_AUDIO_IN_IT_PRIORITY */
 
 /* Buffer size defines*/
-#define CHANNEL_DEMUX_MASK                    	0x55U
-    
+#define CHANNEL_DEMUX_MASK                      0x55U
+
 #define MAX_CH_NUMBER           (4)
 #define MAX_FS                  (192000)
-#define MAX_SAMPLES_PER_CH      ((MAX_FS/1000)*2)	
+#define MAX_SAMPLES_PER_CH      ((MAX_FS/1000)*2)
 
-#define MAX_MIC_FREQ                 	  3072  /*KHz*/
-#define MAX_AUDIO_IN_CHANNEL_NBR_PER_IF   2 
-#define MAX_AUDIO_IN_CHANNEL_NBR_TOTAL    4 
+#define MAX_MIC_FREQ                    3072  /*KHz*/
+#define MAX_AUDIO_IN_CHANNEL_NBR_PER_IF   2
+#define MAX_AUDIO_IN_CHANNEL_NBR_TOTAL    4
 
 #ifndef PDM_FREQ_16K
 #define PDM_FREQ_16K 1280
-#endif
+#endif /* PDM_FREQ_16K */
 
 /*Number of millisecond of audio at each DMA interrupt*/
 #ifndef N_MS_PER_INTERRUPT
 #define N_MS_PER_INTERRUPT               (1U)
-#endif
+#endif /* N_MS_PER_INTERRUPT */
 
-/* Default Audio IN internal buffer size */   
-#define DEFAULT_AUDIO_IN_BUFFER_SIZE        (AUDIO_IN_SAMPLING_FREQUENCY/1000U)*2U*N_MS_PER_INTERRUPT    
-    
-/*BSP internal buffer size in half words (16 bits)*/  
-#define PDM_INTERNAL_BUFFER_SIZE_I2S          ((MAX_MIC_FREQ / 8) * MAX_AUDIO_IN_CHANNEL_NBR_PER_IF * N_MS_PER_INTERRUPT)
+/* Default Audio IN internal buffer size */
+#define DEFAULT_AUDIO_IN_BUFFER_SIZE (AUDIO_IN_SAMPLING_FREQUENCY/1000U)*2U*N_MS_PER_INTERRUPT
+
+/*BSP internal buffer size in half words (16 bits)*/
+#define PDM_INTERNAL_BUFFER_SIZE_I2S ((MAX_MIC_FREQ / 8) * MAX_AUDIO_IN_CHANNEL_NBR_PER_IF * N_MS_PER_INTERRUPT)
 
 /* Audio In states */
 #define AUDIO_IN_STATE_RESET               0U
@@ -233,7 +234,7 @@ typedef struct
 /* Audio In instances available in SensorTileBoxPro */
 #define AUDIO_IN_INSTANCES_NBR  1U
 /* Define used for communication with AD1978 */
-//#define AUDIO_OUT_INSTANCES_NBR 1U 
+/* #define AUDIO_OUT_INSTANCES_NBR 1U */
 
 #endif /* AUDIO_SHARED_TYPES */
 
@@ -246,7 +247,7 @@ typedef struct
 #define DMIC_ONBOARD_DMAx_CLK_ENABLE()          __HAL_RCC_GPDMA1_CLK_ENABLE()
 
 #define DMIC_ONBAORD_DMA_REQUEST                GPDMA1_REQUEST_ADF1_FLT0
-#define DMIC_ONBAORD_DMA_IRQn                   GPDMA1_Channel1_IRQn  
+#define DMIC_ONBAORD_DMA_IRQn                   GPDMA1_Channel1_IRQn
 
 #define DMIC_ONBOARD_CKOUT_GPIO_CLK_ENABLE()    __HAL_RCC_GPIOE_CLK_ENABLE()
 #define DMIC_ONBOARD_CKOUT_GPIO_PORT            GPIOE
@@ -257,7 +258,7 @@ typedef struct
 #define DMIC_ONBOARD_DATIN_GPIO_PORT            GPIOE
 #define DMIC_ONBOARD_DATAIN_AF                  GPIO_AF3_ADF1
 #define DMIC_ONBOARD_DATIN_PIN                  GPIO_PIN_10
-  
+
 
 /*************************************************************************/
 
@@ -265,16 +266,16 @@ typedef struct
 /**
   * @}
   */
-   
+
 /** @defgroup SENSORTILEBOXPRO_AUDIO_Exported_Macros SENSORTILEBOXPRO_AUDIO Exported Macros
   * @{
   */
 #define POS_VAL(VAL)                  (POSITION_VAL(VAL) - 4)
 #define VOLUME_OUT_CONVERT(Volume)    (((Volume) > 100)? 63:((uint8_t)(((Volume) * 63) / 100)))
-#define VOLUME_IN_CONVERT(Volume)     (((Volume) >= 100)? 239:((uint8_t)(((Volume) * 239) / 100)))   
+#define VOLUME_IN_CONVERT(Volume)     (((Volume) >= 100)? 239:((uint8_t)(((Volume) * 239) / 100)))
 /**
   * @}
-  */ 
+  */
 /** @addtogroup SENSORTILEBOXPRO_AUDIO_Exported_Variables
   * @{
   */
@@ -287,9 +288,9 @@ extern AUDIO_IN_Ctx_t                         AudioInCtx[];
 /** @defgroup SENSORTILEBOXPRO_AUDIO_IN_Exported_Functions SENSORTILEBOXPRO_AUDIO_IN Exported Functions
   * @{
   */
-int32_t BSP_AUDIO_IN_Init(uint32_t Instance, BSP_AUDIO_Init_t* AudioInit);    
+int32_t BSP_AUDIO_IN_Init(uint32_t Instance, BSP_AUDIO_Init_t *AudioInit);
 int32_t BSP_AUDIO_IN_DeInit(uint32_t Instance);
-int32_t BSP_AUDIO_IN_Record(uint32_t Instance, uint8_t* pBuf, uint32_t NbrOfBytes);
+int32_t BSP_AUDIO_IN_Record(uint32_t Instance, uint8_t *pBuf, uint32_t NbrOfBytes);
 int32_t BSP_AUDIO_IN_Stop(uint32_t Instance);
 int32_t BSP_AUDIO_IN_Pause(uint32_t Instance);
 int32_t BSP_AUDIO_IN_Resume(uint32_t Instance);
@@ -302,9 +303,9 @@ int32_t BSP_AUDIO_IN_ResumeChannels(uint32_t Instance, uint32_t Device);
 int32_t BSP_AUDIO_IN_SetDevice(uint32_t Instance, uint32_t Device);
 int32_t BSP_AUDIO_IN_GetDevice(uint32_t Instance, uint32_t *Device);
 int32_t BSP_AUDIO_IN_SetSampleRate(uint32_t Instance, uint32_t SampleRate);
-int32_t BSP_AUDIO_IN_GetSampleRate(uint32_t Instance, uint32_t *SampleRate);                 
+int32_t BSP_AUDIO_IN_GetSampleRate(uint32_t Instance, uint32_t *SampleRate);
 int32_t BSP_AUDIO_IN_SetBitsPerSample(uint32_t Instance, uint32_t BitsPerSample);
-int32_t BSP_AUDIO_IN_GetBitsPerSample(uint32_t Instance, uint32_t *BitsPerSample);                
+int32_t BSP_AUDIO_IN_GetBitsPerSample(uint32_t Instance, uint32_t *BitsPerSample);
 int32_t BSP_AUDIO_IN_SetChannelsNbr(uint32_t Instance, uint32_t ChannelNbr);
 int32_t BSP_AUDIO_IN_GetChannelsNbr(uint32_t Instance, uint32_t *ChannelNbr);
 int32_t BSP_AUDIO_IN_SetVolume(uint32_t Instance, uint32_t Volume);
@@ -325,11 +326,11 @@ void BSP_AUDIO_IN_Error_CallBack(uint32_t Instance);
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}

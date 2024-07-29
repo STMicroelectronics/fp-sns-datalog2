@@ -59,13 +59,6 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_serialize_response(ICommandP
 sys_error_code_t DatalogAppTask_vtblICommandParse_t_send_ctrl_msg(ICommandParse_t *_this,  uint32_t *msg,
                                                                   uint32_t length);
 
-// ILogController_t virtual functions
-uint8_t DatalogAppTask_start_vtbl(ILog_Controller_t *_this, int32_t interface);
-uint8_t DatalogAppTask_stop_vtbl(ILog_Controller_t *_this);
-uint8_t DatalogAppTask_save_config_vtbl(ILog_Controller_t *_this);
-uint8_t DatalogAppTask_set_time_vtbl(ILog_Controller_t *_this, const char *datetime);
-uint8_t DatalogAppTask_switch_bank_vtbl(ILog_Controller_t *_this);
-
 #ifdef __cplusplus
 }
 #endif

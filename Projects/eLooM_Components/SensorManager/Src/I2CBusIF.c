@@ -41,6 +41,7 @@ ABusIF *I2CBusIFAlloc(uint16_t who_am_i, uint8_t address, uint8_t auto_inc)
     _this->address = address;
     _this->auto_inc = auto_inc;
     _this->address_size = I2C_MEMADD_SIZE_8BIT;
+    _this->transmit_receive = 0;
 
     // initialize the software resources
     if (TX_SUCCESS != tx_semaphore_create(&_this->sync_obj, "I2C_IP_S", 0))
@@ -68,6 +69,35 @@ ABusIF *I2CBusIFAlloc16(uint16_t who_am_i, uint16_t address, uint8_t auto_inc)
     _this->address = address;
     _this->auto_inc = auto_inc;
     _this->address_size = I2C_MEMADD_SIZE_16BIT;
+    _this->transmit_receive = 0;
+
+    // initialize the software resources
+    if (TX_SUCCESS != tx_semaphore_create(&_this->sync_obj, "I2C_IP_S", 0))
+    {
+      SysFree(_this);
+      _this = NULL;
+    }
+    else
+    {
+      ABusIFSetHandle(&_this->super, _this);
+    }
+  }
+  return (ABusIF *)_this;
+}
+
+ABusIF *I2CBusIFAllocTransmitReceive(uint16_t who_am_i, uint8_t address, uint8_t auto_inc)
+{
+  I2CBusIF *_this = NULL;
+
+  _this = (I2CBusIF *)SysAlloc(sizeof(I2CBusIF));
+  if (_this != NULL)
+  {
+    ABusIFInit(&_this->super, who_am_i);
+
+    _this->address = address;
+    _this->auto_inc = auto_inc;
+    _this->address_size = I2C_MEMADD_SIZE_8BIT;
+    _this->transmit_receive = 1;
 
     // initialize the software resources
     if (TX_SUCCESS != tx_semaphore_create(&_this->sync_obj, "I2C_IP_S", 0))

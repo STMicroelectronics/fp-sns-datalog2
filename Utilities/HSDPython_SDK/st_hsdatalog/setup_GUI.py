@@ -21,7 +21,7 @@ with open("LICENSE.md", "r") as fh:
 
 setuptools.setup(
     name="st_hsdatalog",
-    version="3.1.1",
+    version="3.3.0",
     author="SRA-ASP",
     author_email="matteo.ronchi@st.com",
     description="STMicroelectronics High Speed Datalog python package",
@@ -48,12 +48,14 @@ setuptools.setup(
     install_requires=[
        "st_pnpl",
        "st_dtdl_gui",
-       "numpy",
+       "numpy==1.26.4",
+       "pyserial",
        "pandas",
+       "fastparquet",
        "colorama",
        "click",
        "pyqtgraph",
-       "PySide6",
+       "PySide6==6.6.1",
        "setuptools",
        "matplotlib"
     ]

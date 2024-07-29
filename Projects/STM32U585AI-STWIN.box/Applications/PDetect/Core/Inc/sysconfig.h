@@ -31,8 +31,8 @@
 // *********************
 
 #define BOARD_ID_BOXA           0x0E
-#define BLE_FW_ID_DATALOG2_BOXA 0x09
-#define USB_FW_ID_DATALOG2_BOXA 0x03
+#define BLE_FW_ID_DATALOG2_BOXA 0x24
+#define USB_FW_ID_DATALOG2_BOXA 0x0D
 
 #define BOARD_ID_BOXB           0x12
 #define BLE_FW_ID_DATALOG2_BOXB 0x07
@@ -78,12 +78,14 @@
 
 
 /* SensorManager configuration */
-#define SM_MAX_SENSORS                            13U
-
+#define SM_MAX_SENSORS                            21U
+/* Enable support for multiple VD6283 components */
+#define VD6283_CONFIG_DEVICES_MAX                 3
 
 // file UtilTask.c
 #define UTIL_TASK_CFG_STACK_DEPTH                 (TX_MINIMUM_STACK*7)
 #define UTIL_TASK_CFG_PRIORITY                    (14)
+#define UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT          20
 #ifdef ENABLE_THREADX_DBG_PIN
 #define UTIL_TASK_CFG_TAG                         (CON34_PIN_24)
 #endif
@@ -100,7 +102,7 @@
 #endif
 
 // file filex_dctrl_class.c
-#define FILEX_CFG_STACK_DEPTH                     (TX_MINIMUM_STACK*12)
+#define FILEX_CFG_STACK_DEPTH                     (TX_MINIMUM_STACK*13)
 #define FILEX_SEND_CFG_PRIORITY                   (10)
 #define FILEX_CFG_PREEMPTION_THRESHOLD            FILEX_SEND_CFG_PRIORITY
 #ifdef ENABLE_THREADX_DBG_PIN

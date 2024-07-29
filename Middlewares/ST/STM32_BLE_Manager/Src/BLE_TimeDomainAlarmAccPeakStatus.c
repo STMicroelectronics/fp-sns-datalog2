@@ -2,14 +2,14 @@
   ******************************************************************************
   * @file    BLE_TimeDomainAlarmAccPeakStatus.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add BLE Time Domain Alarm Acc Peak Status info services using vendor
   *          specific profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -90,7 +90,7 @@ tBleStatus BLE_TD_AlarmAccPeakStatusUpdate(sBLE_Manager_TD_AlarmAccPeakStatusAla
   uint8_t Alarm_Z = (uint8_t)Alarm.STATUS_AXIS_Z;
 
   /* Timestamp */
-  STORE_LE_16(Buff, (HAL_GetTick() >> 3));
+  STORE_LE_16(Buff, (HAL_GetTick() / 10));
 
   /* Acceleration peak global status */
   Buff[2] = (Alarm_X << 4) | (Alarm_Y  << 2) | (Alarm_Z);

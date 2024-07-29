@@ -76,8 +76,6 @@ static sys_error_code_t SPIBusTaskExecuteStep(AManagedTask *_this);
 static int32_t SPIBusTaskWrite(void *p_sensor, uint16_t reg, uint8_t *p_data, uint16_t size);
 static int32_t SPIBusTaskRead(void *p_sensor, uint16_t reg, uint8_t *p_data, uint16_t size);
 
-static sys_error_code_t SPIBusTaskCtrl(ABusIF *_this, EBusCtrlCmd eCtrlCmd, uint32_t nParams);
-
 /* Inline function forward declaration */
 
 
@@ -279,7 +277,7 @@ sys_error_code_t SPIBusTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("SPI: start.\r\n"));
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("SPIBUS: start the driver.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("SPIBUS: start the driver.\r\n"));
 
 #if defined(ENABLE_THREADX_DBG_PIN) && defined (SPIBUS_TASK_CFG_TAG)
   p_obj->super.m_xTaskHandle.pxTaskTag = SPIBUS_TASK_CFG_TAG;
@@ -371,7 +369,8 @@ sys_error_code_t SPIBusTask_vtblConnectDevice(IBus *_this, ABusIF *pxBusIF)
   {
     pxBusIF->m_xConnector.pfReadReg = SPIBusTaskRead;
     pxBusIF->m_xConnector.pfWriteReg = SPIBusTaskWrite;
-    pxBusIF->m_pfBusCtrl = SPIBusTaskCtrl;
+    pxBusIF->m_xConnector.pfDelay = (ABusDelayF)tx_thread_sleep;
+//    pxBusIF->m_pfBusCtrl = SPIBusTaskCtrl;
     pxBusIF->m_pxBus = _this;
     ((SPIBusTaskIBus *) _this)->m_pxOwner->connected_devices++;
 
@@ -396,6 +395,7 @@ sys_error_code_t SPIBusTask_vtblDisconnectDevice(IBus *_this, ABusIF *pxBusIF)
   {
     pxBusIF->m_xConnector.pfReadReg = ABusIFNullRW;
     pxBusIF->m_xConnector.pfWriteReg = ABusIFNullRW;
+    pxBusIF->m_xConnector.pfDelay = NULL;
     pxBusIF->m_pfBusCtrl = NULL;
     pxBusIF->m_pxBus = NULL;
     pxBusIF->p_request_queue = NULL;
@@ -415,11 +415,6 @@ sys_error_code_t SPIBusTask_vtblDisconnectDevice(IBus *_this, ABusIF *pxBusIF)
 
 /* Private function definition */
 // ***************************
-
-static sys_error_code_t SPIBusTaskCtrl(ABusIF *_this, EBusCtrlCmd eCtrlCmd, uint32_t nParams)
-{
-  return IBusCtrl(_this->m_pxBus, eCtrlCmd, nParams);
-}
 
 static sys_error_code_t SPIBusTaskExecuteStep(AManagedTask *_this)
 {

@@ -41,6 +41,7 @@ extern "C" {
 
 /****************** PnPL Responses ***********************/
 #define PNPL_RESPONSES
+#define PNPL_BLE_RESPONSES
 
 
 #ifdef __cplusplus

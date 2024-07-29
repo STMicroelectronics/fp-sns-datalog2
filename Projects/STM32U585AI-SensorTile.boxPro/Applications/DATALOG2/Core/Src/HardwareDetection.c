@@ -25,6 +25,7 @@
 #include "services/systypes.h"
 #include "HardwareDetection.h"
 #include "ism330is_reg.h"
+#include "lsm6dsv16bx_reg.h"
 
 #define HW_DETECTION_I2C_TIMEOUT  500U
 
@@ -46,6 +47,33 @@ static int32_t ext_sensor_spi_write(void *handle, uint8_t reg, uint8_t *p_data, 
 /* Public functions declaration */
 /*********************************/
 
+
+/**
+  * Detect an external LSM6DSV16BX sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_LSM6DSV16BX(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+
+  MX_SPI3_Init();
+
+  lsm6dsv16bx_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi3);
+
+  if (whoami_val == LSM6DSV16BX_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
 
 /**
   * Detect an external ISM330IS(N) sensor

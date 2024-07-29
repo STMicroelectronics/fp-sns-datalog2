@@ -37,15 +37,9 @@ extern "C" {
 #include "ICommandParse_vtbl.h"
 #include "PnPLCompManager.h"
 
-#include "ILog_Controller.h"
-#include "ILog_Controller_vtbl.h"
-#include "ILsm6dsv16x_Mlc.h"
-#include "ILsm6dsv16x_Mlc_vtbl.h"
-#include "IIsm330is_Ispu.h"
-#include "IIsm330is_Ispu_vtbl.h"
-
 #include "App_model.h"
 
+#include "LSM6DSV16BXTask.h"
 #include "LSM6DSV16XTask.h"
 #include "ISM330ISTask.h"
 #include "services/SQuery.h"
@@ -100,15 +94,6 @@ struct _DatalogAppTask
 //TODO could be more useful to have a CommandParse Class? (ICommandParse + PnPLCommand_t)
   PnPLCommand_t outPnPLCommand;
 
-  /** PnPL interface for Log Control **/
-  ILog_Controller_t pnplLogCtrl;
-
-  /** PnPL interface for MLC **/
-  ILsm6dsv16x_Mlc_t pnplMLCCtrl;
-
-  /** PnPL interface for ISPU **/
-  IIsm330is_Ispu_t pnplISPUCtrl;
-
   /** SensorLL interface for MLC **/
   ISensorLL_t *mlc_sensor_ll;
 
@@ -120,6 +105,8 @@ struct _DatalogAppTask
   SensorContext_t sensorContext[SM_MAX_SENSORS];
 
   uint32_t mode;  /* logging interface */
+
+  filex_threshold_config_t filex_threshold_config;
 
 };
 
@@ -134,15 +121,29 @@ struct _DatalogAppTask
   */
 AManagedTaskEx *DatalogAppTaskAlloc(void);
 
+DatalogAppTask *getDatalogAppTask(void);
+
 IEventListener *DatalogAppTask_GetEventListenerIF(DatalogAppTask *_this);
 
 ICommandParse_t *DatalogAppTask_GetICommandParseIF(DatalogAppTask *_this);
 
-ILog_Controller_t *DatalogAppTask_GetILogControllerIF(DatalogAppTask *_this);
+uint8_t DatalogAppTask_start_vtbl(int32_t interface);
+uint8_t DatalogAppTask_stop_vtbl(void);
+uint8_t DatalogAppTask_save_config_vtbl(void);
+uint8_t DatalogAppTask_set_time_vtbl(const char *datetime);
+uint8_t DatalogAppTask_switch_bank_vtbl(void);
+uint8_t DatalogAppTask_set_dfu_mode(void);
+uint8_t DatalogAppTask_enable_all(bool);
 
-ILsm6dsv16x_Mlc_t *DatalogAppTask_GetIMLCControllerIF(DatalogAppTask *_this, AManagedTask *taskObj);
+void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
 
-IIsm330is_Ispu_t *DatalogAppTask_GetIIspuControllerIF(DatalogAppTask *_this, AManagedTask *task_obj);
+uint8_t DatalogAppTask_SetMLCIF(AManagedTask *task_obj);
+uint8_t DatalogAppTask_load_lsm6dsv16x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
+uint8_t DatalogAppTask_load_lsm6dsv16bx_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
+
+uint8_t DatalogAppTask_SetIspuIF(AManagedTask *task_obj);
+uint8_t DatalogAppTask_load_ism330is_ucf_vtbl(const char *ucf_data, int32_t ucf_size,
+                                              const char *output_data, int32_t output_size);
 
 sys_error_code_t DatalogAppTask_msg(ULONG msg);
 

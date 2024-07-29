@@ -13,6 +13,7 @@
 # ******************************************************************************
 #
 
+from collections import deque
 import time
 import numpy as np
 from functools import partial
@@ -318,6 +319,8 @@ class PlotHeatmapWidget(PlotWidget):
         self.global_presence_status = False
         
         self.data = np.zeros(shape=(self.heatmap_shape), dtype='i')
+        self._data = deque(maxlen=200000)
+
         self.validity_mask = np.zeros(shape=(self.heatmap_shape), dtype='i')
         self.zones = PlotHeatmapWidget.create_matrix(self.heatmap_shape[0])
         self.rois = {i: {} for i in range(ROI_NUMBER)}
@@ -400,13 +403,15 @@ class PlotHeatmapWidget(PlotWidget):
         self.heatmap_shape = heatmap_shape
         self.zones = PlotHeatmapWidget.create_matrix(self.heatmap_shape[0])
         self.data = np.zeros(shape=(self.heatmap_shape),dtype='i')
+        self._data.clear()
         self.global_underthresh = np.zeros(shape=(self.heatmap_shape), dtype='i')
         self.validity_mask = np.zeros(shape=(self.heatmap_shape), dtype='i')
         self.heatmap_img.setImage(self.data, levels=[MIN_DIST, MAX_DIST])
         self.graph_widget.getPlotItem()._updateView()
         # Add text items for each pixel
         self.fill_with_text_items()
-        self.app_qt.processEvents()
+        if self.app_qt is not None:
+            self.app_qt.processEvents()
 
     @Slot(bool, int)
     def s_is_logging(self, status: bool, interface: int):
@@ -422,79 +427,85 @@ class PlotHeatmapWidget(PlotWidget):
             print("Component {} is logging on SD Card: {}".format(self.comp_name,status))
 
     def update_plot(self):
-        self.heatmap_img.setImage(self.data, levels=[MIN_DIST, MAX_DIST]) 
-            
-        for i in range(self.heatmap_shape[0]):
-            for j in range(self.heatmap_shape[1]):
-                curr_data = self.data[i][j]
-                curr_valid_mask = self.validity_mask[i][j]
-                if curr_data > MAX_DIST:
-                    self.text_items[j][i].setText("X")
-                    curr_valid_mask = VALIDITY_MASK_INVALID_VALUE
-                    self.global_underthresh[i][j] = 0
-                else:                    
-                    self.text_items[j][i].setText(str(curr_data))
+        # Extract all data from the queue (pop)    
+        if len(self._data) > 0 :
+            l_data = self._data.popleft()
+            self.heatmap_img.setImage(l_data, levels=[MIN_DIST, MAX_DIST]) 
                 
-                if curr_valid_mask == VALIDITY_MASK_INVALID_VALUE:
-                    self.text_items[j][i].setColor(self.red_color) #red, invalid
-                    self.global_underthresh[i][j] = 0
-                else:
-                    self.text_items[j][i].setColor(self.green_color) #green, valid
-                    if curr_data < self.presence_threshold:
-                        self.global_underthresh[i][j] = 1
-                    else:
+            for i in range(self.heatmap_shape[0]):
+                for j in range(self.heatmap_shape[1]):
+                    curr_data = l_data[i][j]
+                    curr_valid_mask = self.validity_mask[i][j]
+                    if curr_data > MAX_DIST:
+                        self.text_items[j][i].setText("X")
+                        curr_valid_mask = VALIDITY_MASK_INVALID_VALUE
                         self.global_underthresh[i][j] = 0
-                for k in range(ROI_NUMBER):
-                    if len(self.rois[k].keys()) == 0:
-                        self.underthresh[k] = []
-                    elif (i,j) in self.rois[k].keys():
-
-                        if curr_valid_mask == VALIDITY_MASK_INVALID_VALUE:
-                            if (i,j) in self.underthresh[k]:
-                                self.underthresh[k].remove((i,j))
+                    else:                    
+                        self.text_items[j][i].setText(str(curr_data))
+                    
+                    if curr_valid_mask == VALIDITY_MASK_INVALID_VALUE:
+                        self.text_items[j][i].setColor(self.red_color) #red, invalid
+                        self.global_underthresh[i][j] = 0
+                    else:
+                        self.text_items[j][i].setColor(self.green_color) #green, valid
+                        if curr_data != 0 and curr_data < self.presence_threshold:
+                            self.global_underthresh[i][j] = 1
                         else:
-                            if curr_data < self.roi_thresolds[k]:
-                                if (i,j) not in self.underthresh[k]:
-                                    self.underthresh[k].append((i,j))
-                            else:
+                            self.global_underthresh[i][j] = 0
+                    for k in range(ROI_NUMBER):
+                        if len(self.rois[k].keys()) == 0:
+                            self.underthresh[k] = []
+                        elif (i,j) in self.rois[k].keys():
+
+                            if curr_valid_mask == VALIDITY_MASK_INVALID_VALUE:
                                 if (i,j) in self.underthresh[k]:
                                     self.underthresh[k].remove((i,j))
-        
-        if bool(np.any(self.global_underthresh)) == True and self.global_presence_status == False:
-            self.global_presence_status = True
-            self.controller.sig_tof_presence_detected.emit(self.global_presence_status, "tof_presence")
-        elif bool(np.any(self.global_underthresh)) == False and self.global_presence_status == True:
-            self.global_presence_status = False
-            self.controller.sig_tof_presence_detected.emit(self.global_presence_status, "tof_presence")
-        
-        for x in range(ROI_NUMBER):
-            if x in self.underthresh and self.underthresh[x] != []:
-                 if not self.is_roi_flashing[x]: 
-                    roi_chip = self.rois_frame.rois_chips[x]
-                    self.is_roi_flashing[x] = True
-                    roi_chip.start_flash()
-                    self.controller.sig_tof_presence_detected_in_roi.emit(True,x+1,"Target {}".format(x+1))
-                    # self.controller.setPresenceInRoiFlag()
-            else:
-                if self.is_roi_flashing[x]: 
-                    roi_chip = self.rois_frame.rois_chips[x]
-                    self.is_roi_flashing[x] = False
-                    roi_chip.stop_flash()
-                    self.controller.sig_tof_presence_detected_in_roi.emit(False,x+1,"Target {}".format(x+1))
-                    # self.controller.setPresenceInRoiFlag()
+                            else:
+                                if curr_data < self.roi_thresolds[k]:
+                                    if (i,j) not in self.underthresh[k]:
+                                        self.underthresh[k].append((i,j))
+                                else:
+                                    if (i,j) in self.underthresh[k]:
+                                        self.underthresh[k].remove((i,j))
+            
+            if bool(np.any(self.global_underthresh)) == True and not np.all(0) and self.global_presence_status == False:
+                self.global_presence_status = True
+                self.controller.sig_tof_presence_detected.emit(self.global_presence_status, "tof_presence")
+            elif bool(np.any(self.global_underthresh)) == False and not np.all(0) and self.global_presence_status == True:
+                self.global_presence_status = False
+                self.controller.sig_tof_presence_detected.emit(self.global_presence_status, "tof_presence")
+            
+            for x in range(ROI_NUMBER):
+                if x in self.underthresh and self.underthresh[x] != []:
+                    if not self.is_roi_flashing[x]: 
+                        roi_chip = self.rois_frame.rois_chips[x]
+                        self.is_roi_flashing[x] = True
+                        roi_chip.start_flash()
+                        self.controller.sig_tof_presence_detected_in_roi.emit(True,x+1,"Target {}".format(x+1))
+                        # self.controller.setPresenceInRoiFlag()
+                else:
+                    if self.is_roi_flashing[x]: 
+                        roi_chip = self.rois_frame.rois_chips[x]
+                        self.is_roi_flashing[x] = False
+                        roi_chip.stop_flash()
+                        self.controller.sig_tof_presence_detected_in_roi.emit(False,x+1,"Target {}".format(x+1))
+                        # self.controller.setPresenceInRoiFlag()
+        self._data.clear()
         
     def add_data(self, data):
-        if len(data[0]) == self.heatmap_shape[0]*self.heatmap_shape[1]:
-            self.data = data[0].reshape(self.heatmap_shape)
-            self.data = np.rot90(self.data, k=self.heatmap_rotation % 4)
+        data_shape = self.heatmap_shape[0]*self.heatmap_shape[1]
+        if len(data[0]) % (data_shape) == 0 and len(data[0]) != 0:
+            l_data = data[0][-data_shape:].reshape(self.heatmap_shape)
+            l_data = np.rot90(l_data, k=self.heatmap_rotation % 4)
             if self.heatmap_is_flipped:
-                self.data = np.flip(self.data)
+                l_data = np.flip(l_data) 
+            self._data.append(l_data)
         
-        if len(data[1]) == self.heatmap_shape[0]*self.heatmap_shape[1]:
-            self.validity_mask = data[1].reshape(self.heatmap_shape)
+        if len(data[1]) % (data_shape) == 0 and len(data[1]) != 0:
+            self.validity_mask = data[1][-data_shape:].reshape(self.heatmap_shape)
             self.validity_mask = np.rot90(self.validity_mask, k=self.heatmap_rotation % 4)
             if self.heatmap_is_flipped:
-                self.validity_mask = np.flip(self.validity_mask)
+                self.validity_mask = np.flip(self.validity_mask)       
 
     @staticmethod
     def create_matrix(size):

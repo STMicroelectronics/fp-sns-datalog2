@@ -1,15 +1,14 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    SensorTileBoxPro_DIL24.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V0.1
-  * @date    
+  * @version V1.2.0
+  * @date    03-Jun-2024
   * @brief   header file for the BSP _DIL24 Common driver
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,15 +16,14 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-*/
-/* USER CODE END Header */
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SENSORTILEBOXPRO_DIL24_H
 #define __SENSORTILEBOXPRO_DIL24_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -34,32 +32,47 @@
 #include "SensorTileBoxPro_motion_sensors.h"
 
 /* includes for DIL24 supported sensors */
-   
-#define  N_SUPPORTED_ADAPTERS  3
+
+#define  N_SUPPORTED_ADAPTERS  6 // updated for LSM6DSV32X 
+
+#define ONBOARD_ENV_SENSORS     2
+#define ONBOARD_MOTION_SENSORS  3
 
 /* ENVIRONMENTAL (AND TMOS) */
 #if (USE_DIL_SENSOR_SHT40AD1B_0 == 1)
-  #include "sht40ad1b.h"
-  #define SHT40AD1B_0 (0)
+#include "sht40ad1b.h"
+#define SHT40AD1B_0 (0)
 #endif
 
 #if (USE_DIL_SENSOR_STHS34PF80_0 == 1)
-  #include "sths34pf80.h"
-  #define STHS34PF80_0 (USE_DIL_SENSOR_SHT40AD1B_0)
-  #include "tmos_sensor.h"
+#include "sths34pf80.h"
+#define STHS34PF80_0 (USE_DIL_SENSOR_SHT40AD1B_0)
+#include "tmos_sensor.h"
 #endif
 
 /* MOTION */
 #if (USE_DIL_SENSOR_LSM6DSO32_0 == 1)
-  #include "lsm6dso32.h"
-  #define LSM6DSO32_0 (0)
+#include "lsm6dso32.h"
+#define LSM6DSO32_0 (0)
 #endif
 
-#if (USE_DIL_SENSOR_LSM6DSV16B_0 == 1)
-  #include "lsm6dsv16b.h"
-  #define LSM6DSV16B_0 (USE_DIL_SENSOR_LSM6DSO32_0)
+#if (USE_DIL_SENSOR_LSM6DSV16BX_0 == 1)
+#include "lsm6dsv16bx.h"
+#define LSM6DSV16BX_0 (USE_DIL_SENSOR_LSM6DSO32_0)
 #endif
 
+
+// LSM6DSO16IS
+#if (USE_DIL_SENSOR_LSM6DSO16IS_0 == 1)
+#include "lsm6dso16is.h"
+#define LSM6DSO16IS_0 (USE_DIL_SENSOR_LSM6DSO32_0 + USE_DIL_SENSOR_LSM6DSV16BX_0)
+#endif
+
+// LSM6DSV32X
+#if (USE_DIL_SENSOR_LSM6DSV32X_0 == 1)
+#include "lsm6dsv32x.h"
+#define LSM6DSV32X_0 (USE_DIL_SENSOR_LSM6DSO32_0 + USE_DIL_SENSOR_LSM6DSV16BX_0 + USE_DIL_SENSOR_LSM6DSO16IS_0)
+#endif
 
 /// example on how to implement new sensors
 //#if (USE_DIL_SENSOR_ENVIRONMENTAL_XXX_0 == 1)
@@ -71,7 +84,7 @@
 
 #define DIL24_OK        0
 #define DIL24_ERROR     -1
-   
+
 #define NO_COM_SEL      0
 #define DIL24_SPI       1
 #define DIL24_I2C       2
@@ -79,7 +92,7 @@
 #define ENVIRONMENTAL   1
 #define MOTION          2
 
-   
+
 
 
 typedef struct
@@ -94,18 +107,29 @@ typedef enum
   DILOTHER = 2
 } sensortype_t;
 
-typedef struct{
+typedef struct
+{
   uint32_t sensorhandle;
   uint8_t function;
   uint8_t uid;
   sensortype_t type;
+  uint8_t sensor_0;
+  uint8_t json_id[3];
+  uint8_t devAddr;
 } adapter_data_t;
 
 
 typedef struct
 {
-  float_t env;
-  BSP_MOTION_SENSOR_Axes_t motion;
+  BSP_MOTION_SENSOR_Axes_t gyro;
+  BSP_MOTION_SENSOR_Axes_t acc;
+  BSP_MOTION_SENSOR_Axes_t mag;
+  BSP_MOTION_SENSOR_Axes_t quat[3]; // this is because I know that someone in the future will ask for the quaternions from SFLP...
+  uint16_t temp;
+  uint32_t press;
+  uint16_t hum;
+//  float_t env;
+//  BSP_MOTION_SENSOR_Axes_t motion;
   BSP_TMOS_Data_t tmos;
 } BSP_DIL24_Data_t;
 
@@ -134,10 +158,17 @@ typedef struct
 #endif
 
 
+#define DIL_ENV_HANDLE  2U
+#define DIL_MOTION_HANDLE 3U
+
+#define DIL_POSSIBLE_SENSOR_INSTANCES_NBR 1U
+#define DIL_INDEX 0         /// in the future, if a single adapter has more than one sensor, a second index should be defined and managed
 #define BSP_DIL_ENV_FUNCTIONS_NBR    3U
 #define BSP_DIL_ENV_INSTANCES_NBR    (USE_DIL_SENSOR_SHT40AD1B_0 + USE_DIL_SENSOR_STHS34PF80_0)
 #define BSP_DIL_MOTION_FUNCTIONS_NBR    3U
-#define BSP_DIL_MOTION_INSTANCES_NBR    (USE_DIL_SENSOR_LSM6DSO32_0 + USE_DIL_SENSOR_LSM6DSV16B_0)
+
+#define BSP_DIL_MOTION_INSTANCES_NBR    (USE_DIL_SENSOR_LSM6DSO32_0\
+                                         + USE_DIL_SENSOR_LSM6DSV16BX_0 + USE_DIL_SENSOR_LSM6DSO16IS_0 + USE_DIL_SENSOR_LSM6DSV32X_0)// with LSM6DSV32X
 
 
 /* comm functions */
@@ -152,12 +183,15 @@ int32_t BSP_DIL24_SPI_Write(void);
 int32_t BSP_DIL24_Read(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
 int32_t BSP_DIL24_Write(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length);
 int32_t BSP_I2C_Sensirion_Read(uint16_t DevAddr, uint8_t *pData, uint16_t Length);
+int32_t BSP_I2C_Sensirion_GetSerial(uint16_t DevAddr, uint32_t *pData, uint16_t Length);
+
 
 
 int32_t BSP_DIL_SENSOR_Init(uint32_t Instance, uint32_t Functions);
 int32_t BSP_DIL_SENSOR_Enable(uint32_t Instance, uint32_t Functions);
 int32_t BSP_DIL_SENSOR_Disable(uint32_t Instance, uint32_t Functions);
 int32_t BSP_DIL_SENSOR_SetOutputDataRate(uint32_t Instance, uint32_t Functions, float_t Odr);
+int32_t BSP_DIL_SENSOR_GetOutputDataRate(uint32_t Instance, uint32_t Functions, float_t *Odr);
 int32_t BSP_DIL_SENSOR_GetData(uint32_t Instance, uint32_t Functions, BSP_DIL24_Data_t *Data);
 int32_t BSP_DIL_ENV_SENSOR_GetValue(uint32_t Instance, uint32_t Function, float *Value);
 int32_t BSP_DIL_MOTION_SENSOR_GetAxes(uint32_t Instance, uint32_t Function, BSP_MOTION_SENSOR_Axes_t *Axes);
@@ -173,6 +207,11 @@ int32_t BSP_DIL_MOTION_SENSOR_GetAxes(uint32_t Instance, uint32_t Function, BSP_
 static int32_t SHT40AD1B_0_Probe(uint32_t Functions);
 static int32_t LSM6DSO32_0_Probe(uint32_t Functions);
 static int32_t STHS34PF80_0_Probe(uint32_t Functions);
+static int32_t LSM6DSV16BX_0_Probe(uint32_t Functions);
+static int32_t LSM6DSO16IS_0_Probe(uint32_t Functions); // LSM6DSO16IS
+static int32_t LSM6DSV32X_0_Probe(uint32_t Functions); // LSM6DSV32X
+
+
 int32_t BSP_DIL_TMOS_SENSOR_GetData(uint32_t Instance, BSP_TMOS_Data_t *OutData);
 int32_t BSP_DIL_TMOS_SENSOR_CompensationInit(uint32_t Instance);
 int32_t BSP_DIL_TMOS_SENSOR_CompensationDeInit(uint32_t Instance);
@@ -222,8 +261,8 @@ int32_t BSP_DIL_TMOS_SENSOR_CompensationDeInit(uint32_t Instance);
 //} DIL24_Drv_t;
 
 /**
- * @}
- */
+  * @}
+  */
 #ifdef __cplusplus
 }
 #endif

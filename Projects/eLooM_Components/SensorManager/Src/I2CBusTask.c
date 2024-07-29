@@ -95,12 +95,8 @@ static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this);
 static int32_t I2CBusTaskWrite(void *p_sensor, uint16_t reg, uint8_t *data, uint16_t size);
 static int32_t I2CBusTaskRead(void *p_sensor, uint16_t reg, uint8_t *data, uint16_t size);
 
-static sys_error_code_t I2CBusTaskCtrl(ABusIF *_this, EBusCtrlCmd ctrl_cmd, uint32_t params);
-
 /* Inline function forward declaration */
 // ***********************************
-
-
 /**
   * The class object.
   */
@@ -127,7 +123,6 @@ static const I2CBusTaskClass_t sTheClass =
 
 /* Public API definition */
 // *********************
-
 AManagedTaskEx *I2CBusTaskAlloc(const void *p_mx_drv_cfg)
 {
   I2CBusTask *p_task = SysAlloc(sizeof(I2CBusTask));
@@ -145,7 +140,7 @@ sys_error_code_t I2CBusTaskConnectDevice(I2CBusTask *_this, I2CBusIF *p_bus_if)
 {
   assert_param(_this);
 
-  ((ABusIF *)p_bus_if)->p_request_queue = &_this->in_queue;
+  ((ABusIF *) p_bus_if)->p_request_queue = &_this->in_queue;
 
   return IBusConnectDevice(_this->p_bus_if, &p_bus_if->super);
 }
@@ -195,7 +190,6 @@ sys_error_code_t I2CBusTask_vtblHardwareInit(AManagedTask *_this, void *p_params
   return res;
 }
 
-
 sys_error_code_t I2CBusTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pvTaskCode, CHAR **pcName,
                                              VOID **pvStackStart,
                                              ULONG *pnStackDepth, UINT *pxPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart,
@@ -208,7 +202,7 @@ sys_error_code_t I2CBusTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_funct
 
   // initialize the software resources.
 
-  uint32_t item_size = (uint32_t)SMMessageGetSize(SM_MESSAGE_ID_I2C_BUS_READ);
+  uint32_t item_size = (uint32_t) SMMessageGetSize(SM_MESSAGE_ID_I2C_BUS_READ);
   VOID *p_queue_items_buff = SysAlloc(I2CBUS_TASK_CFG_INQUEUE_LENGTH * item_size);
 
   if (p_queue_items_buff != NULL)
@@ -291,7 +285,7 @@ sys_error_code_t I2CBusTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("I2C: start.\r\n"));
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("I2CBUS: start the driver.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("I2CBUS: start the driver.\r\n"));
 
 #if defined(ENABLE_THREADX_DBG_PIN) && defined (I2CBUS_TASK_CFG_TAG)
   p_obj->super.m_xTaskHandle.pxTaskTag = I2CBUS_TASK_CFG_TAG;
@@ -340,7 +334,8 @@ sys_error_code_t I2CBusTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowerMo
   {
     UINT state;
     if (TX_SUCCESS == tx_thread_info_get(&_this->m_xTaskHandle, TX_NULL, &state, TX_NULL, TX_NULL, TX_NULL, TX_NULL,
-                                         TX_NULL, TX_NULL))
+                                         TX_NULL,
+                                         TX_NULL))
     {
       if (state == TX_SUSPENDED)
       {
@@ -378,12 +373,12 @@ sys_error_code_t I2CBusTask_vtblConnectDevice(IBus *_this, ABusIF *pxBusIF)
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-
   if (pxBusIF != NULL)
   {
     pxBusIF->m_xConnector.pfReadReg = I2CBusTaskRead;
     pxBusIF->m_xConnector.pfWriteReg = I2CBusTaskWrite;
-    pxBusIF->m_pfBusCtrl = I2CBusTaskCtrl;
+    pxBusIF->m_xConnector.pfDelay = (ABusDelayF) tx_thread_sleep;
+//    pxBusIF->m_pfBusCtrl = NULL;
     pxBusIF->m_pxBus = _this;
     ((I2CBusTaskIBus *) _this)->p_owner->connected_devices++;
 
@@ -408,6 +403,7 @@ sys_error_code_t I2CBusTask_vtblDisconnectDevice(IBus *_this, ABusIF *pxBusIF)
   {
     pxBusIF->m_xConnector.pfReadReg = ABusIFNullRW;
     pxBusIF->m_xConnector.pfWriteReg = ABusIFNullRW;
+    pxBusIF->m_xConnector.pfDelay = NULL;
     pxBusIF->m_pfBusCtrl = NULL;
     pxBusIF->m_pxBus = NULL;
     pxBusIF->p_request_queue = NULL;
@@ -426,11 +422,6 @@ sys_error_code_t I2CBusTask_vtblDisconnectDevice(IBus *_this, ABusIF *pxBusIF)
 }
 
 /* Private function definition */
-
-static sys_error_code_t I2CBusTaskCtrl(ABusIF *_this, EBusCtrlCmd ctrl_cmd, uint32_t params)
-{
-  return IBusCtrl(_this->m_pxBus, ctrl_cmd, params);
-}
 
 static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this)
 {
@@ -454,7 +445,12 @@ static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this)
         break;
 
       case SM_MESSAGE_ID_I2C_BUS_READ:
-
+        if (msg.pxSensor->super.m_pfBusCtrl != NULL)
+        {
+          I2CBSBusIF *px_sensor = (I2CBSBusIF *)msg.pxSensor;
+          HAL_GPIO_WritePin(px_sensor->p_bs_gpio_port, px_sensor->bs_gpio_pin, GPIO_PIN_SET);
+        }
+        I2CMasterDriverSetTransmitReceive((I2CMasterDriver_t *) p_obj->p_driver, msg.pxSensor->transmit_receive);
         I2CMasterDriverSetDeviceAddr((I2CMasterDriver_t *) p_obj->p_driver, msg.pxSensor->address);
         I2CMasterDriverSetAddrSize((I2CMasterDriver_t *) p_obj->p_driver, msg.pxSensor->address_size);
         res = IIODrvRead(p_obj->p_driver, msg.pnData, msg.nDataSize, msg.nRegAddr);
@@ -462,9 +458,20 @@ static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this)
         {
           res = I2CBusIFNotifyIOComplete(msg.pxSensor);
         }
+        if (msg.pxSensor->super.m_pfBusCtrl != NULL)
+        {
+          I2CBSBusIF *px_sensor = (I2CBSBusIF *)msg.pxSensor;
+          HAL_GPIO_WritePin(px_sensor->p_bs_gpio_port, px_sensor->bs_gpio_pin, GPIO_PIN_RESET);
+        }
         break;
 
       case SM_MESSAGE_ID_I2C_BUS_WRITE:
+        if (msg.pxSensor->super.m_pfBusCtrl != NULL)
+        {
+          I2CBSBusIF *px_sensor = (I2CBSBusIF *)msg.pxSensor;
+          HAL_GPIO_WritePin(px_sensor->p_bs_gpio_port, px_sensor->bs_gpio_pin, GPIO_PIN_SET);
+        }
+        I2CMasterDriverSetTransmitReceive((I2CMasterDriver_t *) p_obj->p_driver, msg.pxSensor->transmit_receive);
         I2CMasterDriverSetDeviceAddr((I2CMasterDriver_t *) p_obj->p_driver, msg.pxSensor->address);
         I2CMasterDriverSetAddrSize((I2CMasterDriver_t *) p_obj->p_driver, msg.pxSensor->address_size);
         res = IIODrvWrite(p_obj->p_driver, msg.pnData, msg.nDataSize, msg.nRegAddr);
@@ -472,12 +479,18 @@ static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this)
         {
           res = I2CBusIFNotifyIOComplete(msg.pxSensor);
         }
+        if (msg.pxSensor->super.m_pfBusCtrl != NULL)
+        {
+          I2CBSBusIF *px_sensor = (I2CBSBusIF *)msg.pxSensor;
+          HAL_GPIO_WritePin(px_sensor->p_bs_gpio_port, px_sensor->bs_gpio_pin, GPIO_PIN_RESET);
+        }
         break;
 
       default:
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2C: unsupported message id:%d\r\n", msg.messageId));
         res = SYS_I2CBUS_TASK_UNSUPPORTED_CMD_ERROR_CODE;
-        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_I2CBUS_TASK_UNSUPPORTED_CMD_ERROR_CODE);
+        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_I2CBUS_TASK_UNSUPPORTED_CMD_ERROR_CODE)
+        ;
         break;
     }
   }
@@ -491,7 +504,7 @@ static int32_t I2CBusTaskWrite(void *p_sensor, uint16_t reg, uint8_t *data, uint
   I2CBusIF *p_i2c_sensor = (I2CBusIF *) p_sensor;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   uint16_t auto_inc = p_i2c_sensor->auto_inc;
-  uint8_t address_size = p_i2c_sensor->address_size;
+  uint8_t transmit_receive = p_i2c_sensor->transmit_receive;
 
   struct i2cIOMessage_t msg =
   {
@@ -500,7 +513,7 @@ static int32_t I2CBusTaskWrite(void *p_sensor, uint16_t reg, uint8_t *data, uint
     .nRegAddr = reg | auto_inc,
     .pnData = data,
     .nDataSize = size,
-    .nAddrSize = address_size
+    .nTransmitReceive = transmit_receive
   };
 
   // if (s_xI2cTaskObj.m_xInQueue != NULL) {//TODO: STF.Port - how to know if the task has been initialized ??
@@ -535,7 +548,7 @@ static int32_t I2CBusTaskRead(void *p_sensor, uint16_t reg, uint8_t *data, uint1
   I2CBusIF *p_i2c_sensor = (I2CBusIF *) p_sensor;
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   uint16_t auto_inc = p_i2c_sensor->auto_inc;
-  uint8_t address_size = p_i2c_sensor->address_size;
+  uint8_t transmit_receive = p_i2c_sensor->transmit_receive;
 
   struct i2cIOMessage_t msg =
   {
@@ -544,7 +557,7 @@ static int32_t I2CBusTaskRead(void *p_sensor, uint16_t reg, uint8_t *data, uint1
     .nRegAddr = reg | auto_inc,
     .pnData = data,
     .nDataSize = size,
-    .nAddrSize = address_size
+    .nTransmitReceive = transmit_receive
   };
 
   // if (s_xI2cTaskObj.m_xInQueue != NULL) { //TODO: STF.Port - how to know if the task has been initialized ??

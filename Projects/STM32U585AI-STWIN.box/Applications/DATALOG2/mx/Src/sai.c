@@ -125,7 +125,7 @@ void HAL_SAI_MspInit(SAI_HandleTypeDef *saiHandle)
     /* SAI1 clock enable */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_SAI1;
     PeriphClkInit.Sai1ClockSelection = RCC_SAI1CLKSOURCE_PLL1;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -158,7 +158,7 @@ void HAL_SAI_MspInit(SAI_HandleTypeDef *saiHandle)
     /* SAI1 clock enable */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_SAI1;
     PeriphClkInit.Sai1ClockSelection = RCC_SAI1CLKSOURCE_PLL1;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)

@@ -330,7 +330,7 @@ sys_error_code_t UtilTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
     HAL_NVIC_EnableIRQ(p_sw1_params->irq_n);
   }
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("UTIL: start.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("UTIL: start.\r\n"));
 
   return xRes;
 }

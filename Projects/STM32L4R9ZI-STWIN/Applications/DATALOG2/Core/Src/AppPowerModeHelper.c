@@ -212,7 +212,7 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
 
       /* before put the MCU in STOP check if there are event pending in the system queue*/
 
-      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("PMH: try SLEEP_1\r\n"));
+      SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("PMH: try SLEEP_1\r\n"));
 
       /* disable the IRQ*/
       __asm volatile("cpsid i");
@@ -264,7 +264,7 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
 
       /*TODO: STF.Debug*/
 //    GPIOD->BSRR = GPIO_PIN_0;
-      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("PMH: STATE1\r\n"));
+      SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("PMH: STATE1\r\n"));
 
 #if defined(DEBUG) || defined(SYS_DEBUG)
       //TODO: STF.Port - do define the get free heap size
@@ -279,7 +279,7 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
 
       /*TODO: STF.Debug*/
 //    GPIOD->BSRR = GPIO_PIN_0;
-      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("PMH: DATALOG\r\n"));
+      SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("PMH: DATALOG\r\n"));
 
 #if defined(DEBUG) || defined(SYS_DEBUG)
       //TODO: STF.Port - do define the get free heap size

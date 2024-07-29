@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_PnPLike.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   BLE_PnPLike info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -70,6 +70,13 @@ extern void BLE_PnPLikeSetMaxCharLength(uint16_t MaxCharLength);
   * @retval uint16_t MaxCharLength
   */
 extern uint16_t BLE_PnPLikeGetMaxCharLength(void);
+
+/**
+  * @brief  PnPLike Reset Status
+  * @param  None
+  * @retval None
+  */
+extern void BLE_PnPLikeReset(void);
 
 #ifdef __cplusplus
 }

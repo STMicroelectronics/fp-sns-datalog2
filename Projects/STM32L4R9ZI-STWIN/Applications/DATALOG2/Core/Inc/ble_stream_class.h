@@ -30,6 +30,7 @@ extern "C" {
 #include "ICommandParse_vtbl.h"
 #include "tx_api.h"
 #include "sysconfig.h"
+#include "CircularBufferDL2.h"
 
 
 #define DEFAULT_BLE_QUEUE_SIZE                  20
@@ -41,6 +42,12 @@ extern "C" {
 #define BLE_ISTREAM_MSG_STOP_ADV_OB             (0x0005)  // stop timer for option bytes advertise updated
 #define BLE_ISTREAM_MSG_SEND_CMD                (0x0010)
 #define BLE_ISTREAM_MSG_SEND_CUSTOM_DATA        (0x0020)
+
+
+/* Number of BLE data buffer */
+#define BLE_DATA_BUFFER_COUNT             SM_MAX_SENSORS
+
+#define BLE_DATA_BUFFER_ITEMS   2U
 
 /**
   * Create  type name for _ble_stream_class_t.
@@ -96,6 +103,12 @@ typedef struct
   uint8_t  messageId;
   uint8_t  streamID;
 } streamMsg_t;
+
+
+/* Data buffers sent via BLE */
+extern CircularBufferDL2 *ble_cbdl2[];
+extern uint8_t *ble_write_buffer[];
+
 
 /* Exported Function prototypes --------------------------------------------- */
 

@@ -56,6 +56,7 @@ inline sys_error_code_t IStream_alloc_resource(IStream_t *_this, uint8_t id_stre
 inline sys_error_code_t IStream_set_mode(IStream_t *_this, IStreamMode_t mode);
 inline sys_error_code_t IStream_dealloc(IStream_t *_this, uint8_t id_stream);
 inline sys_error_code_t IStream_set_parse_IF(IStream_t *_this, ICommandParse_t *ifn);
+inline sys_error_code_t IStream_send_async(IStream_t *_this, uint8_t *buf, uint32_t size);
 #ifdef __cplusplus
 }
 #endif

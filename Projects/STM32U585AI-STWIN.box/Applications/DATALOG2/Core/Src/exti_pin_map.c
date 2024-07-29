@@ -24,11 +24,10 @@
 // Forward function declaration.
 void Def_EXTI_Callback(uint16_t nPin) {};
 void Util_USR_EXTI_Callback(uint16_t nPin);
-void INT2_ISM330IS_EXTI_Callback(uint16_t nPin);
+void EXT_INT2_EXTI_Callback(uint16_t nPin);
 void IIS2DLPCTask_EXTI_Callback(uint16_t nPin);
 void IIS2ICLXTask_EXTI_Callback(uint16_t nPin);
 void INT2_DHCX_EXTI_Callback(uint16_t nPin);
-void ISM330ISTask_EXTI_Callback(uint16_t nPin);
 void ISM330DHCXTask_EXTI_Callback(uint16_t nPin);
 void IIS2MDCTask_EXTI_Callback(uint16_t nPin);
 void Util_PWR_EXTI_Callback(uint16_t nPin);
@@ -39,7 +38,7 @@ void WIFI_NOTIFY_EXTI_Callback(uint16_t nPin);
 
 EXTI_BEGIN_P2F_MAP()
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_0, Util_USR_EXTI_Callback)
-EXTI_P2F_MAP_ENTRY(GPIO_PIN_1, INT2_ISM330IS_EXTI_Callback)
+EXTI_P2F_MAP_ENTRY(GPIO_PIN_1, EXT_INT2_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_2, IIS2DLPCTask_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_3, IIS2ICLXTask_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_4, INT2_DHCX_EXTI_Callback)

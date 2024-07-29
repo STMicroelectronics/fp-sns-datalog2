@@ -37,6 +37,9 @@
     <file>icons/outline_settings_input_com_white_18dp.png</file>
     <file>icons/outline_stop_white_18dp.png</file>
     <file>icons/outline_zoom_in_white_18dp.png</file>
+    <file>icons/outline_cloud_upload_white_18dp.png</file>
+    <file>icons/science_18dp_E8EAED.svg</file>
+    <file>icons/power_18dp_E8EAED.svg</file>
     <file>icons/ST16418_ST-Logo-Ico_3.ico</file>
   </qresource>
 </RCC>

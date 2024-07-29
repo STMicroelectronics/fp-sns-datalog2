@@ -241,7 +241,8 @@ static IIS3DWBTaskClass_t sTheClass =
       IIS3DWBTask_vtblSensorDisable,
       IIS3DWBTask_vtblSensorIsEnabled,
       IIS3DWBTask_vtblSensorGetDescription,
-      IIS3DWBTask_vtblSensorGetStatus
+      IIS3DWBTask_vtblSensorGetStatus,
+      IIS3DWBTask_vtblSensorGetStatusPointer
     },
     IIS3DWBTask_vtblAccGetODR,
     IIS3DWBTask_vtblAccGetFS,
@@ -467,6 +468,7 @@ sys_error_code_t IIS3DWBTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
   p_obj->acc_id = 0;
   p_obj->prev_timestamp = 0.0f;
   p_obj->samples_per_it = 0;
+  p_obj->first_data_ready = 0;
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
 
   *pTaskCode = AMTExRun;
@@ -531,11 +533,14 @@ sys_error_code_t IIS3DWBTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
   {
     if (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
     {
-      /* Deactivate the sensor */
-      iis3dwb_xl_data_rate_set(p_sensor_drv, IIS3DWB_XL_ODR_OFF);
-      iis3dwb_fifo_xl_batch_set(p_sensor_drv, IIS3DWB_XL_NOT_BATCHED);
-      iis3dwb_fifo_mode_set(p_sensor_drv, IIS3DWB_BYPASS_MODE);
-
+      if (IIS3DWBTaskSensorIsActive(p_obj))
+      {
+        /* Deactivate the sensor */
+        iis3dwb_xl_data_rate_set(p_sensor_drv, IIS3DWB_XL_ODR_OFF);
+        iis3dwb_fifo_xl_batch_set(p_sensor_drv, IIS3DWB_XL_NOT_BATCHED);
+        iis3dwb_fifo_mode_set(p_sensor_drv, IIS3DWB_BYPASS_MODE);
+      }
+      p_obj->first_data_ready = 0;
       /* Empty the task queue and disable INT or timer */
       tx_queue_flush(&p_obj->in_queue);
       if (p_obj->pIRQConfig == NULL)
@@ -739,6 +744,14 @@ sys_error_code_t IIS3DWBTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   }
   else
   {
+    if (odr > 1.0f)
+    {
+      /* ODR = 0 sends only message to switch off the sensor.
+       * Do not update the model in case of odr = 0 */
+
+      p_if_owner->sensor_status.type.mems.odr = odr;
+      p_if_owner->sensor_status.type.mems.measured_odr = 0.0f;
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -767,6 +780,8 @@ sys_error_code_t IIS3DWBTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
   }
   else
   {
+    p_if_owner->sensor_status.type.mems.fs = fs;
+    p_if_owner->sensor_status.type.mems.sensitivity = 0.0000305f * p_if_owner->sensor_status.type.mems.fs;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -827,6 +842,7 @@ sys_error_code_t IIS3DWBTask_vtblSensorEnable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = TRUE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -854,6 +870,7 @@ sys_error_code_t IIS3DWBTask_vtblSensorDisable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = FALSE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -898,6 +915,14 @@ SensorStatus_t IIS3DWBTask_vtblSensorGetStatus(ISensor_t *_this)
   IIS3DWBTask *p_if_owner = (IIS3DWBTask *)((uint32_t) _this - offsetof(IIS3DWBTask, sensor_if));
 
   return p_if_owner->sensor_status;
+}
+
+SensorStatus_t *IIS3DWBTask_vtblSensorGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  IIS3DWBTask *p_if_owner = (IIS3DWBTask *)((uint32_t) _this - offsetof(IIS3DWBTask, sensor_if));
+
+  return &p_if_owner->sensor_status;
 }
 
 /* Private function definition */
@@ -994,48 +1019,39 @@ static sys_error_code_t IIS3DWBTaskExecuteStepDatalog(AManagedTask *_this)
       case SM_MESSAGE_ID_DATA_READY:
       {
         SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS3DWB: new data.\r\n"));
-//          if(p_obj->pIRQConfig == NULL)
-//          {
-//            if(TX_SUCCESS
-//                != tx_timer_change(&p_obj->read_timer, AMT_MS_TO_TICKS(IIS3DWB_TASK_CFG_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(IIS3DWB_TASK_CFG_TIMER_PERIOD_MS)))
-//            {
-//              return SYS_UNDEFINED_ERROR_CODE;
-//            }
-//          }
-
         res = IIS3DWBTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
-          // notify the listeners...
-          double timestamp = report.sensorDataReadyMessage.fTimestamp;
-          double delta_timestamp = timestamp - p_obj->prev_timestamp;
-          p_obj->prev_timestamp = timestamp;
+          if (p_obj->first_data_ready == 1)
+          {
+            // notify the listeners...
+            double timestamp = report.sensorDataReadyMessage.fTimestamp;
+            double delta_timestamp = timestamp - p_obj->prev_timestamp;
+            p_obj->prev_timestamp = timestamp;
 
-          /* update measuredODR */
-          p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
+            /* update measuredODR */
+            p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
 
-          /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
-           * [X0, Y0, Z0]
-           * [X1, Y1, Z1]
-           * ...
-           * [Xm-1, Ym-1, Zm-1]
-           */
-          EMD_Init(&p_obj->data, p_obj->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->samples_per_it, 3);
+            /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
+             * [X0, Y0, Z0]
+             * [X1, Y1, Z1]
+             * ...
+             * [Xm-1, Ym-1, Zm-1]
+             */
+            EMD_Init(&p_obj->data, p_obj->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->samples_per_it, 3);
 
-          DataEvent_t evt;
+            DataEvent_t evt;
 
-          DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
-          IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
+            DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
+            IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS3DWB: ts = %f\r\n", (float)timestamp));
+            SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS3DWB: ts = %f\r\n", (float)timestamp));
+          }
+          else
+          {
+            p_obj->first_data_ready = 1;
+          }
         }
-//            if(p_obj->pIRQConfig == NULL)
-//            {
-//              if(TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
-//              {
-//                res = SYS_UNDEFINED_ERROR_CODE;
-//              }
-//            }
         break;
       }
       case SM_MESSAGE_ID_SENSOR_CMD:

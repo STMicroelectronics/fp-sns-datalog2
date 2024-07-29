@@ -44,6 +44,10 @@
 #include "STHS34PF80Task.h"
 #include "VD6283TXTask.h"
 
+#include "SHT40Task.h"
+#include "SGP40Task.h"
+#include "LPS22DFTask.h"
+
 #include "DatalogAppTask.h"
 #include "App_model.h"
 
@@ -66,6 +70,17 @@
 #include "Vl53l8cx_Tof_PnPL.h"
 #include "Vd6283tx_Als_PnPL.h"
 #include "Sths34pf80_Tmos_PnPL.h"
+#include "Vl53l8cx_2_Tof_PnPL.h"
+#include "Vd6283tx_2_Als_PnPL.h"
+#include "Sths34pf80_2_Tmos_PnPL.h"
+#include "Vl53l8cx_3_Tof_PnPL.h"
+#include "Vd6283tx_3_Als_PnPL.h"
+#include "Sths34pf80_3_Tmos_PnPL.h"
+
+#include "Sgp40_Temp_PnPL.h"
+#include "Sht40_Hum_PnPL.h"
+#include "Sht40_Temp_PnPL.h"
+#include "Lps22df_Press_PnPL.h"
 
 static uint8_t BoardId = BOARD_ID_BOXA;
 static uint8_t FwId = USB_FW_ID_DATALOG2_BOXA;
@@ -83,10 +98,23 @@ static IPnPLComponent_t *pILPS22QS_PRESS_PnPLObj = NULL;
 static IPnPLComponent_t *pIMP34DT05_MIC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2ICLX_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pAutomodePnPLObj = NULL;
-
+/* PDETECT 1 */
 static IPnPLComponent_t *pVl53l8cx_Tof_PnPLObj = NULL;
 static IPnPLComponent_t *pVd6283tx_Als_PnPLObj = NULL;
 static IPnPLComponent_t *pSths34pf80_Tmos_PnPLObj = NULL;
+/* PDETECT 2 */
+static IPnPLComponent_t *pVl53l8cx_2_Tof_PnPLObj = NULL;
+static IPnPLComponent_t *pVd6283tx_2_Als_PnPLObj = NULL;
+static IPnPLComponent_t *pSths34pf80_2_Tmos_PnPLObj = NULL;
+/* PDETECT 3 */
+static IPnPLComponent_t *pVl53l8cx_3_Tof_PnPLObj = NULL;
+static IPnPLComponent_t *pVd6283tx_3_Als_PnPLObj = NULL;
+static IPnPLComponent_t *pSths34pf80_3_Tmos_PnPLObj = NULL;
+
+static IPnPLComponent_t *pSgp40_Temp_PnPLObj = NULL;
+static IPnPLComponent_t *pSht40_Hum_PnPLObj = NULL;
+static IPnPLComponent_t *pSht40_Temp_PnPLObj = NULL;
+static IPnPLComponent_t *pLps22df_Press_PnPLObj = NULL;
 
 #if (DATALOG2_USE_WIFI == 1)
 static IPnPLComponent_t *pWifiConfigPnPLObj = NULL;
@@ -113,14 +141,37 @@ static AManagedTaskEx *sILPS22QSObj = NULL;
 static AManagedTaskEx *sSTTS22HObj = NULL;
 static AManagedTaskEx *sIMP34DT05Obj = NULL;
 static AManagedTaskEx *sIIS2ICLXObj = NULL;
-
+/* PDETECT 1 */
 static AManagedTaskEx *spVL53L8CXObj = NULL;
 static AManagedTaskEx *spSTHS34PF80Obj = NULL;
 static AManagedTaskEx *spVD6283TXObj = NULL;
+/* PDETECT 2 */
+static AManagedTaskEx *spVL53L8CX_2Obj = NULL;
+static AManagedTaskEx *spSTHS34PF80_2Obj = NULL;
+static AManagedTaskEx *spVD6283TX_2Obj = NULL;
+/* PDETECT 3 */
+static AManagedTaskEx *spVL53L8CX_3Obj = NULL;
+static AManagedTaskEx *spSTHS34PF80_3Obj = NULL;
+static AManagedTaskEx *spVD6283TX_3Obj = NULL;
+
+static AManagedTaskEx *spSHT40Obj = NULL;
+static AManagedTaskEx *spSGP40Obj = NULL;
+static AManagedTaskEx *spLPS22DFObj = NULL;
 /**
   * DatalogApp
   */
 static AManagedTaskEx *sDatalogAppObj = NULL;
+
+/**
+  * Pnpl mutex definition for thread safe purpose
+  */
+static TX_MUTEX pnpl_mutex;
+
+/**
+  * Private function declaration
+  */
+static void PnPL_lock_fp(void);
+static void PnPL_unlock_fp(void);
 
 
 /* eLooM framework entry points definition */
@@ -133,12 +184,24 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   uint8_t sths34pf80_address;
   boolean_t ext_pdetect = FALSE;
+  boolean_t ext_pdetect2 = FALSE;
+  boolean_t ext_pdetect3 = FALSE;
+  boolean_t ext_sensirion = FALSE;
   hwd_st25dv_version st25dv_version;
+
+  /* PnPL thread safe mutex creation */
+  tx_mutex_create(&pnpl_mutex, "PnPL Mutex", TX_INHERIT);
+
+  /* PnPL thread safe function registration */
+  PnPL_SetLockUnlockCallbacks(PnPL_lock_fp, PnPL_unlock_fp);
 
   PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
   /* Check if PDETECT is connected */
   ext_pdetect = HardwareDetection_Check_Ext_PDETECT(&sths34pf80_address);
+  ext_pdetect2 = HardwareDetection_Check_Ext_PDETECT2(&sths34pf80_address);
+  ext_pdetect3 = HardwareDetection_Check_Ext_PDETECT3(&sths34pf80_address);
+  ext_sensirion = HardwareDetection_Check_Ext_SENSIRION();
 
   /* Check NFC chip version */
   st25dv_version = HardwareDetection_Check_ST25DV();
@@ -154,19 +217,48 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   sDatalogAppObj = DatalogAppTaskAlloc();
   sI2C2BusObj = I2CBusTaskAlloc(&MX_I2C2InitParams);
   sSPI2BusObj = SPIBusTaskAlloc(&MX_SPI2InitParams);
-  sIIS2ICLXObj = IIS2ICLXTaskAlloc(&MX_GPIO_INT1_ICLXInitParams, &MX_GPIO_CS_ICLXInitParams);
+  sIIS2ICLXObj = IIS2ICLXTaskAlloc(NULL, &MX_GPIO_CS_ICLXInitParams);
   sIIS2MDCObj = IIS2MDCTaskAlloc(&MX_GPIO_INT_MAGInitParams, NULL);
-  sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams, &MX_GPIO_CS_DHCXInitParams);
+  sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, NULL, &MX_GPIO_CS_DHCXInitParams);
   sSTTS22HObj = STTS22HTaskAlloc(NULL, NULL, STTS22H_I2C_ADD_L);
   sILPS22QSObj = ILPS22QSTaskAlloc(NULL, NULL);
   sIMP34DT05Obj = IMP34DT05TaskAlloc(&MX_ADF1InitParams);
-  if (ext_pdetect)
+  if (ext_pdetect == true)
   {
     sI2C3BusObj = I2CBusTaskAlloc(&MX_I2C3InitParams);
-    spVL53L8CXObj = VL53L8CXTaskAlloc(NULL, NULL);
-    spSTHS34PF80Obj = STHS34PF80TaskAlloc(NULL, NULL);
-    spVD6283TXObj = VD6283TXTaskAlloc(NULL, NULL);
+    if (ext_pdetect2 == false && ext_pdetect3 == false && ext_sensirion == false)
+    {
+      HAL_GPIO_WritePin(GPIO3_EX_GPIO_Port, GPIO3_EX_Pin, GPIO_PIN_SET);
+      spVL53L8CXObj = VL53L8CXTaskAlloc(&MX_GPIO_INT_TOFInitParams, NULL, NULL);
+      spSTHS34PF80Obj = STHS34PF80TaskAlloc(&MX_GPIO_INT_TMOSInitParams, NULL, NULL);
+      spVD6283TXObj = VD6283TXTaskAlloc(NULL, NULL, NULL);
+    }
+    else
+    {
+      spVL53L8CXObj = VL53L8CXTaskAlloc(NULL, NULL, &MX_GPIO3_EXInitParams);
+      spSTHS34PF80Obj = STHS34PF80TaskAlloc(NULL, NULL, &MX_GPIO3_EXInitParams);
+      spVD6283TXObj = VD6283TXTaskAlloc(NULL, NULL, &MX_GPIO3_EXInitParams);
+      if (ext_pdetect2 == true)
+      {
+        spVL53L8CX_2Obj = VL53L8CXTaskAllocSetName(NULL, NULL, &MX_GPIO2_EXInitParams, "vl53l8cx_2");
+        spSTHS34PF80_2Obj = STHS34PF80TaskAllocSetName(NULL, NULL, &MX_GPIO2_EXInitParams, "sths34pf80_2");
+        spVD6283TX_2Obj = VD6283TXTaskAllocSetName(NULL, NULL, &MX_GPIO2_EXInitParams, "vd6283tx_2");
+      }
+      if (ext_pdetect3 == true)
+      {
+        spVL53L8CX_3Obj = VL53L8CXTaskAllocSetName(NULL, NULL, &MX_GPIO1_EXInitParams, "vl53l8cx_3");
+        spSTHS34PF80_3Obj = STHS34PF80TaskAllocSetName(NULL, NULL, &MX_GPIO1_EXInitParams, "sths34pf80_3");
+        spVD6283TX_3Obj = VD6283TXTaskAllocSetName(NULL, NULL, &MX_GPIO1_EXInitParams, "vd6283tx_3");
+      }
+      if (ext_sensirion == true)
+      {
+        spSHT40Obj = SHT40TaskAlloc(NULL, NULL);
+        spSGP40Obj = SGP40TaskAlloc(NULL, NULL);
+        spLPS22DFObj = LPS22DFTaskAlloc(NULL, NULL);
+      }
+    }
   }
+
 
   /************ Add the task object to the context ************/
   res = ACAddTask(pAppContext, (AManagedTask *) sUtilObj);
@@ -186,6 +278,24 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
     res = ACAddTask(pAppContext, (AManagedTask *)spSTHS34PF80Obj);
     res = ACAddTask(pAppContext, (AManagedTask *)spVD6283TXObj);
   }
+  if (spSTHS34PF80_2Obj)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *)spVL53L8CX_2Obj);
+    res = ACAddTask(pAppContext, (AManagedTask *)spSTHS34PF80_2Obj);
+    res = ACAddTask(pAppContext, (AManagedTask *)spVD6283TX_2Obj);
+  }
+  if (spSTHS34PF80_3Obj)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *)spVL53L8CX_3Obj);
+    res = ACAddTask(pAppContext, (AManagedTask *)spSTHS34PF80_3Obj);
+    res = ACAddTask(pAppContext, (AManagedTask *)spVD6283TX_3Obj);
+  }
+  if (spLPS22DFObj)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) spSHT40Obj);
+    res = ACAddTask(pAppContext, (AManagedTask *) spSGP40Obj);
+    res = ACAddTask(pAppContext, (AManagedTask *) spLPS22DFObj);
+  }
 
   pIIS2ICLX_ACC_PnPLObj = Iis2iclx_Acc_PnPLAlloc();
   pIIS2MDC_MAG_PnPLObj = Iis2mdc_Mag_PnPLAlloc();
@@ -200,6 +310,26 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
     pSths34pf80_Tmos_PnPLObj = Sths34pf80_Tmos_PnPLAlloc();
     pVd6283tx_Als_PnPLObj = Vd6283tx_Als_PnPLAlloc();
   }
+  if (spSTHS34PF80_2Obj)
+  {
+    pVl53l8cx_2_Tof_PnPLObj = Vl53l8cx_2_Tof_PnPLAlloc();
+    pSths34pf80_2_Tmos_PnPLObj = Sths34pf80_2_Tmos_PnPLAlloc();
+    pVd6283tx_2_Als_PnPLObj = Vd6283tx_2_Als_PnPLAlloc();
+  }
+  if (spSTHS34PF80_3Obj)
+  {
+    pVl53l8cx_3_Tof_PnPLObj = Vl53l8cx_3_Tof_PnPLAlloc();
+    pSths34pf80_3_Tmos_PnPLObj = Sths34pf80_3_Tmos_PnPLAlloc();
+    pVd6283tx_3_Als_PnPLObj = Vd6283tx_3_Als_PnPLAlloc();
+  }
+  if (spLPS22DFObj)
+  {
+    pSgp40_Temp_PnPLObj = Sgp40_Temp_PnPLAlloc();
+    pSht40_Hum_PnPLObj = Sht40_Hum_PnPLAlloc();
+    pSht40_Temp_PnPLObj = Sht40_Temp_PnPLAlloc();
+    pLps22df_Press_PnPLObj = Lps22df_Press_PnPLAlloc();
+  }
+
   pDeviceInfoPnPLObj = Deviceinformation_PnPLAlloc();
   pAcquisitionInfoPnPLObj = Acquisition_Info_PnPLAlloc();
   pTagsInfoPnPLObj = Tags_Info_PnPLAlloc();
@@ -237,6 +367,30 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
                             (I2CBusIF *)STHS34PF80TaskGetSensorIF((STHS34PF80Task *)spSTHS34PF80Obj));
     I2CBusTaskConnectDevice((I2CBusTask *)sI2C3BusObj, (I2CBusIF *)VD6283TXTaskGetSensorIF((VD6283TXTask *)spVD6283TXObj));
   }
+  if (spSTHS34PF80_2Obj)
+  {
+    I2CBusTaskConnectDevice((I2CBusTask *)sI2C3BusObj,
+                            (I2CBusIF *)VL53L8CXTaskGetSensorIF((VL53L8CXTask *)spVL53L8CX_2Obj));
+    I2CBusTaskConnectDevice((I2CBusTask *)sI2C3BusObj,
+                            (I2CBusIF *)STHS34PF80TaskGetSensorIF((STHS34PF80Task *)spSTHS34PF80_2Obj));
+    I2CBusTaskConnectDevice((I2CBusTask *)sI2C3BusObj,
+                            (I2CBusIF *)VD6283TXTaskGetSensorIF((VD6283TXTask *)spVD6283TX_2Obj));
+  }
+  if (spSTHS34PF80_3Obj)
+  {
+    I2CBusTaskConnectDevice((I2CBusTask *)sI2C3BusObj,
+                            (I2CBusIF *)VL53L8CXTaskGetSensorIF((VL53L8CXTask *)spVL53L8CX_3Obj));
+    I2CBusTaskConnectDevice((I2CBusTask *)sI2C3BusObj,
+                            (I2CBusIF *)STHS34PF80TaskGetSensorIF((STHS34PF80Task *)spSTHS34PF80_3Obj));
+    I2CBusTaskConnectDevice((I2CBusTask *)sI2C3BusObj,
+                            (I2CBusIF *)VD6283TXTaskGetSensorIF((VD6283TXTask *)spVD6283TX_3Obj));
+  }
+  if (spLPS22DFObj)
+  {
+    I2CBusTaskConnectDevice((I2CBusTask *)sI2C3BusObj, (I2CBusIF *)SHT40TaskGetSensorIF((SHT40Task *)spSHT40Obj));
+    I2CBusTaskConnectDevice((I2CBusTask *)sI2C3BusObj, (I2CBusIF *)SGP40TaskGetSensorIF((SGP40Task *)spSGP40Obj));
+    I2CBusTaskConnectDevice((I2CBusTask *)sI2C3BusObj, (I2CBusIF *)LPS22DFTaskGetSensorIF((LPS22DFTask *)spLPS22DFObj));
+  }
 
   /************ Connect the Sensor events to the DatalogAppTask ************/
   IEventListener *DatalogAppListener = DatalogAppTask_GetEventListenerIF((DatalogAppTask *) sDatalogAppObj);
@@ -253,6 +407,25 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     IEventSrcAddEventListener(STHS34PF80TaskGetEventSrcIF((STHS34PF80Task *)spSTHS34PF80Obj), DatalogAppListener);
     IEventSrcAddEventListener(VD6283TXTaskGetEventSrcIF((VD6283TXTask *)spVD6283TXObj), DatalogAppListener);
   }
+  if (spSTHS34PF80_2Obj)
+  {
+    IEventSrcAddEventListener(VL53L8CXTaskGetEventSrcIF((VL53L8CXTask *)spVL53L8CX_2Obj), DatalogAppListener);
+    IEventSrcAddEventListener(STHS34PF80TaskGetEventSrcIF((STHS34PF80Task *)spSTHS34PF80_2Obj), DatalogAppListener);
+    IEventSrcAddEventListener(VD6283TXTaskGetEventSrcIF((VD6283TXTask *)spVD6283TX_2Obj), DatalogAppListener);
+  }
+  if (spSTHS34PF80_3Obj)
+  {
+    IEventSrcAddEventListener(VL53L8CXTaskGetEventSrcIF((VL53L8CXTask *)spVL53L8CX_3Obj), DatalogAppListener);
+    IEventSrcAddEventListener(STHS34PF80TaskGetEventSrcIF((STHS34PF80Task *)spSTHS34PF80_3Obj), DatalogAppListener);
+    IEventSrcAddEventListener(VD6283TXTaskGetEventSrcIF((VD6283TXTask *)spVD6283TX_3Obj), DatalogAppListener);
+  }
+  if (spLPS22DFObj)
+  {
+    IEventSrcAddEventListener(SGP40TaskGetTempEventSrcIF((SGP40Task *)spSGP40Obj), DatalogAppListener);
+    IEventSrcAddEventListener(SHT40TaskGetHumEventSrcIF((SHT40Task *)spSHT40Obj), DatalogAppListener);
+    IEventSrcAddEventListener(SHT40TaskGetTempEventSrcIF((SHT40Task *)spSHT40Obj), DatalogAppListener);
+    IEventSrcAddEventListener(LPS22DFTaskGetPressEventSrcIF((LPS22DFTask *)spLPS22DFObj), DatalogAppListener);
+  }
 
   /************ Sensor PnPL Components ************/
   Iis2iclx_Acc_PnPLInit(pIIS2ICLX_ACC_PnPLObj);
@@ -268,13 +441,32 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     Sths34pf80_Tmos_PnPLInit(pSths34pf80_Tmos_PnPLObj);
     Vd6283tx_Als_PnPLInit(pVd6283tx_Als_PnPLObj);
   }
+  if (spSTHS34PF80_2Obj)
+  {
+    Vl53l8cx_2_Tof_PnPLInit(pVl53l8cx_2_Tof_PnPLObj);
+    Sths34pf80_2_Tmos_PnPLInit(pSths34pf80_2_Tmos_PnPLObj);
+    Vd6283tx_2_Als_PnPLInit(pVd6283tx_2_Als_PnPLObj);
+  }
+  if (spSTHS34PF80_3Obj)
+  {
+    Vl53l8cx_3_Tof_PnPLInit(pVl53l8cx_3_Tof_PnPLObj);
+    Sths34pf80_3_Tmos_PnPLInit(pSths34pf80_3_Tmos_PnPLObj);
+    Vd6283tx_3_Als_PnPLInit(pVd6283tx_3_Als_PnPLObj);
+  }
+  if (spLPS22DFObj)
+  {
+    Sgp40_Temp_PnPLInit(pSgp40_Temp_PnPLObj);
+    Sht40_Hum_PnPLInit(pSht40_Hum_PnPLObj);
+    Sht40_Temp_PnPLInit(pSht40_Temp_PnPLObj);
+    Lps22df_Press_PnPLInit(pLps22df_Press_PnPLObj);
+  }
 
   /************ Other PnPL Components ************/
   Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
   Firmware_Info_PnPLInit(pFirmwareInfoPnPLObj);
   Acquisition_Info_PnPLInit(pAcquisitionInfoPnPLObj);
   Tags_Info_PnPLInit(pTagsInfoPnPLObj);
-  Log_Controller_PnPLInit(pLogControllerPnPLObj, DatalogAppTask_GetILogControllerIF((DatalogAppTask *) sDatalogAppObj));
+  Log_Controller_PnPLInit(pLogControllerPnPLObj);
   Automode_PnPLInit(pAutomodePnPLObj);
 
 #if (DATALOG2_USE_WIFI == 1)
@@ -294,5 +486,15 @@ IAppPowerModeHelper *SysGetPowerModeHelper(void)
   }
 
   return s_pxPowerModeHelper;
+}
+
+static void PnPL_lock_fp(void)
+{
+  tx_mutex_get(&pnpl_mutex, TX_NO_WAIT);
+}
+
+static void PnPL_unlock_fp(void)
+{
+  tx_mutex_put(&pnpl_mutex);
 }
 

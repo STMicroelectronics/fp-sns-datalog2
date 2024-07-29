@@ -70,8 +70,10 @@ class CommandWidget(QWidget):
         command_widget = loader.load(os.path.join(os.path.dirname(st_dtdl_gui.__file__),"UI","send_command_widget.ui"), parent)
         command_title_frame = command_widget.frame_component_config.findChild(QFrame,"frame_title")
         command_fields_widget = command_widget.frame_component_config.findChild(QFrame,"frame_contents")
-        command_send_button = command_widget.findChild(QPushButton,"pushButton")
-        command_send_button.clicked.connect(partial(self.clicked_send_command_button, self, self.file_id_list))
+        self.command_send_button = command_widget.findChild(QPushButton,"pushButton")
+        self.command_send_button.clicked.connect(partial(self.clicked_send_command_button, self, self.file_id_list))
+        self.command_send_button.setEnabled(False)
+        self.command_send_button.setStyleSheet(STDTDL_PushButton.invalid)
         
         if command_label is not None:
             command_title_label = command_title_frame.findChild(QLabel,"label_title")
@@ -294,11 +296,24 @@ class CommandWidget(QWidget):
             filepath = QFileDialog.getOpenFileName(filter=ucf_filter)
             self.loaded_file_path[file_id] = filepath[0]
             self.loaded_file_value[file_id].setText(self.loaded_file_path[file_id])
+            if MLC_CmdValues.mlc_ucf in self.loaded_file_path and self.loaded_file_path[MLC_CmdValues.mlc_ucf] != "":
+                self.command_send_button.setEnabled(True)
+                self.command_send_button.setStyleSheet(STDTDL_PushButton.green)
+            else:
+                self.command_send_button.setEnabled(False)
+                self.command_send_button.setStyleSheet(STDTDL_PushButton.invalid)
         elif "_ispu" in self.comp_name:
             ext_filter = filter
             filepath = QFileDialog.getOpenFileName(filter=ext_filter)
             self.loaded_file_path[file_id] = filepath[0]
             self.loaded_file_value[file_id].setText(self.loaded_file_path[file_id])
+            if ISPU_CmdValues.ispu_ucf in self.loaded_file_path and self.loaded_file_path[ISPU_CmdValues.ispu_ucf] != "" and \
+               ISPU_CmdValues.ispu_json in self.loaded_file_path and self.loaded_file_path[ISPU_CmdValues.ispu_json] != "":
+                self.command_send_button.setEnabled(True)
+                self.command_send_button.setStyleSheet(STDTDL_PushButton.green)
+            else:
+                self.command_send_button.setEnabled(False)
+                self.command_send_button.setStyleSheet(STDTDL_PushButton.invalid)
         else:
             filepath = QFileDialog.getOpenFileName()
             self.loaded_file_path[file_id] = filepath[0]

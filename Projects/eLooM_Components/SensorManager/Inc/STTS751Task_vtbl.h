@@ -48,6 +48,7 @@ sys_error_code_t STTS751Task_vtblSensorDisable(ISensor_t *_this);
 boolean_t STTS751Task_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t STTS751Task_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t STTS751Task_vtblSensorGetStatus(ISensor_t *_this);
+SensorStatus_t *STTS751Task_vtblSensorGetStatusPointer(ISensor_t *_this);
 sys_error_code_t STTS751Task_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
 float STTS751Task_vtblTempGetFS(ISensorMems_t *_this);
 float STTS751Task_vtblTempGetSensitivity(ISensorMems_t *_this);

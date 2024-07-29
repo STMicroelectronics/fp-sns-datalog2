@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: st_hsdatalog
-Version: 3.1.1
+Version: 3.3.0
 Summary: STMicroelectronics High Speed Datalog python package (NO GUI)
 Home-page: 
 Author: SRA-ASP
@@ -21,8 +21,10 @@ Description-Content-Type: text\markdown
 License-File: LICENSE.md
 License-File: LICENSE.txt
 Requires-Dist: st_pnpl
-Requires-Dist: numpy
+Requires-Dist: numpy==1.26.4
+Requires-Dist: pyserial
 Requires-Dist: pandas
+Requires-Dist: fastparquet
 Requires-Dist: colorama
 Requires-Dist: click
 Requires-Dist: matplotlib

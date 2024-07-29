@@ -340,7 +340,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>DEBUG, SYS_DEBUG, SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\threadx\utility\execution_profile_kit;..\..\..\..\..\Middlewares\ST\STM32_InfraredPD_Library\Inc;..\..\..\..\..\Drivers\BSP\Components\sths34pf80;..\..\..\..\..\Drivers\BSP\Components\vd6283tx;..\..\..\..\..\Drivers\BSP\Components\vd6283tx\modules;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx\modules;..\..\..\..\eLooM_Components\SensorManager\Inc\drivers</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\threadx\utility\execution_profile_kit;..\..\..\..\..\Middlewares\ST\STM32_InfraredPD_Library\Inc;..\..\..\..\..\Drivers\BSP\Components\sths34pf80;..\..\..\..\..\Drivers\BSP\Components\vd6283tx;..\..\..\..\..\Drivers\BSP\Components\vd6283tx\modules;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx\modules;..\..\..\..\eLooM_Components\SensorManager\Inc\drivers;..\..\..\..\..\Drivers\BSP\Components\sgp40;..\..\..\..\..\Drivers\BSP\Components\sht40ad1b;..\..\..\..\..\Drivers\BSP\Components\lps22df</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -400,11 +400,6 @@
               <FilePath>..\Core\Src\App.c</FilePath>
             </File>
             <File>
-              <FileName>App_model.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\App_model.c</FilePath>
-            </File>
-            <File>
               <FileName>AppPowerModeHelper.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\AppPowerModeHelper.c</FilePath>
@@ -448,11 +443,6 @@
               <FileName>ICommandParse.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\ICommandParse.c</FilePath>
-            </File>
-            <File>
-              <FileName>ILog_Controller.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ILog_Controller.c</FilePath>
             </File>
             <File>
               <FileName>IStream.c</FileName>
@@ -585,11 +575,6 @@
               <FilePath>..\mx\Src\mx.c</FilePath>
             </File>
             <File>
-              <FileName>sai.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\mx\Src\sai.c</FilePath>
-            </File>
-            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\mx\Src\spi.c</FilePath>
@@ -637,87 +622,277 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Application/PnPL</GroupName>
+          <GroupName>Application/PnPL/AppModel</GroupName>
+          <Files>
+            <File>
+              <FileName>App_model.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Acquisition_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Acquisition_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Automode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Automode.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Deviceinformation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Deviceinformation.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Firmware_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Firmware_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2iclx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2iclx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2mdc_Mag.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2mdc_Mag.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ilps22qs_Press.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ilps22qs_Press.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Imp34dt05_Mic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Imp34dt05_Mic.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330dhcx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330dhcx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330dhcx_Gyro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330dhcx_Gyro.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Log_Controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Log_Controller.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sths34pf80_2_Tmos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_2_Tmos.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sths34pf80_3_Tmos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_3_Tmos.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sths34pf80_Tmos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_Tmos.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Stts22h_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Stts22h_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Tags_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Tags_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vd6283tx_2_Als.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vd6283tx_2_Als.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vd6283tx_3_Als.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vd6283tx_3_Als.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vd6283tx_Als.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vd6283tx_Als.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vl53l8cx_2_Tof.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vl53l8cx_2_Tof.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vl53l8cx_3_Tof.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vl53l8cx_3_Tof.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vl53l8cx_Tof.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vl53l8cx_Tof.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Lps22df_Press.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Lps22df_Press.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sgp40_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sgp40_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sht40_Hum.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sht40_Hum.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sht40_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sht40_Temp.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Application/PnPL/Components</GroupName>
           <Files>
             <File>
               <FileName>Acquisition_Info_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Acquisition_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Acquisition_Info_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Automode_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Automode_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Automode_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Deviceinformation_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Deviceinformation_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Deviceinformation_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Firmware_Info_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Firmware_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Firmware_Info_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis2iclx_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis2iclx_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis2iclx_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis2mdc_Mag_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis2mdc_Mag_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis2mdc_Mag_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ilps22qs_Press_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ilps22qs_Press_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ilps22qs_Press_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Imp34dt05_Mic_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Imp34dt05_Mic_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Imp34dt05_Mic_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330dhcx_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330dhcx_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330dhcx_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330dhcx_Gyro_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330dhcx_Gyro_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330dhcx_Gyro_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Log_Controller_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Log_Controller_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Log_Controller_PnPL.c</FilePath>
             </File>
             <File>
-              <FileName>Stts22h_Temp_PnPL.c</FileName>
+              <FileName>Sths34pf80_2_Tmos_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Stts22h_Temp_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Sths34pf80_2_Tmos_PnPL.c</FilePath>
             </File>
             <File>
-              <FileName>Tags_Info_PnPL.c</FileName>
+              <FileName>Sths34pf80_3_Tmos_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Tags_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Sths34pf80_3_Tmos_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Sths34pf80_Tmos_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Sths34pf80_Tmos_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Sths34pf80_Tmos_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Stts22h_Temp_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Stts22h_Temp_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Tags_Info_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Tags_Info_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Vd6283tx_2_Als_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Vd6283tx_2_Als_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Vd6283tx_3_Als_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Vd6283tx_3_Als_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Vd6283tx_Als_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Vd6283tx_Als_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Vd6283tx_Als_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Vl53l8cx_2_Tof_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Vl53l8cx_2_Tof_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Vl53l8cx_3_Tof_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Vl53l8cx_3_Tof_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Vl53l8cx_Tof_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Vl53l8cx_Tof_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Vl53l8cx_Tof_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Lps22df_Press_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Lps22df_Press_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Sgp40_Temp_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Sgp40_Temp_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Sht40_Hum_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Sht40_Hum_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Sht40_Temp_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Sht40_Temp_PnPL.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -783,6 +958,11 @@
               <FileName>ABusIF.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ABusIF.c</FilePath>
+            </File>
+            <File>
+              <FileName>I2CBSBusIF.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\I2CBSBusIF.c</FilePath>
             </File>
             <File>
               <FileName>I2CBusIF.c</FileName>
@@ -893,6 +1073,21 @@
               <FileName>VL53L8CXTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\VL53L8CXTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>LPS22DFTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\LPS22DFTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>SGP40Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\SGP40Task.c</FilePath>
+            </File>
+            <File>
+              <FileName>SHT40Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\SHT40Task.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1013,6 +1208,31 @@
               <FileName>vl53l8cx_plugin_xtalk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\vl53l8cx\modules\vl53l8cx_plugin_xtalk.c</FilePath>
+            </File>
+            <File>
+              <FileName>sgp40_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sgp40\sgp40_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>sgp40.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sgp40\sgp40.c</FilePath>
+            </File>
+            <File>
+              <FileName>sht40ad1b_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sht40ad1b\sht40ad1b_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>sht40ad1b.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sht40ad1b\sht40ad1b.c</FilePath>
+            </File>
+            <File>
+              <FileName>lps22df_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\lps22df\lps22df_reg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3953,7 +4173,7 @@
       <TargetName>Datalog2_Release</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6180000::V6.18::ARMCLANG</pCCUsed>
+      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -4283,7 +4503,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\STM32_InfraredPD_Library\Inc;..\..\..\..\..\Drivers\BSP\Components\sths34pf80;..\..\..\..\..\Drivers\BSP\Components\vd6283tx;..\..\..\..\..\Drivers\BSP\Components\vd6283tx\modules;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx\modules;..\..\..\..\eLooM_Components\SensorManager\Inc\drivers</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\STM32_InfraredPD_Library\Inc;..\..\..\..\..\Drivers\BSP\Components\sths34pf80;..\..\..\..\..\Drivers\BSP\Components\vd6283tx;..\..\..\..\..\Drivers\BSP\Components\vd6283tx\modules;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx\modules;..\..\..\..\eLooM_Components\SensorManager\Inc\drivers;..\..\..\..\..\Drivers\BSP\Components\sgp40;..\..\..\..\..\Drivers\BSP\Components\sht40ad1b;..\..\..\..\..\Drivers\BSP\Components\lps22df</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -4343,11 +4563,6 @@
               <FilePath>..\Core\Src\App.c</FilePath>
             </File>
             <File>
-              <FileName>App_model.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\App_model.c</FilePath>
-            </File>
-            <File>
               <FileName>AppPowerModeHelper.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\AppPowerModeHelper.c</FilePath>
@@ -4391,11 +4606,6 @@
               <FileName>ICommandParse.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\ICommandParse.c</FilePath>
-            </File>
-            <File>
-              <FileName>ILog_Controller.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ILog_Controller.c</FilePath>
             </File>
             <File>
               <FileName>IStream.c</FileName>
@@ -4528,11 +4738,6 @@
               <FilePath>..\mx\Src\mx.c</FilePath>
             </File>
             <File>
-              <FileName>sai.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\mx\Src\sai.c</FilePath>
-            </File>
-            <File>
               <FileName>spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\mx\Src\spi.c</FilePath>
@@ -4580,87 +4785,277 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Application/PnPL</GroupName>
+          <GroupName>Application/PnPL/AppModel</GroupName>
+          <Files>
+            <File>
+              <FileName>App_model.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Acquisition_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Acquisition_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Automode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Automode.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Deviceinformation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Deviceinformation.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Firmware_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Firmware_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2iclx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2iclx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2mdc_Mag.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2mdc_Mag.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ilps22qs_Press.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ilps22qs_Press.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Imp34dt05_Mic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Imp34dt05_Mic.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330dhcx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330dhcx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330dhcx_Gyro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330dhcx_Gyro.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Log_Controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Log_Controller.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sths34pf80_2_Tmos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_2_Tmos.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sths34pf80_3_Tmos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_3_Tmos.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sths34pf80_Tmos.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_Tmos.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Stts22h_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Stts22h_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Tags_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Tags_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vd6283tx_2_Als.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vd6283tx_2_Als.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vd6283tx_3_Als.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vd6283tx_3_Als.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vd6283tx_Als.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vd6283tx_Als.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vl53l8cx_2_Tof.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vl53l8cx_2_Tof.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vl53l8cx_3_Tof.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vl53l8cx_3_Tof.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Vl53l8cx_Tof.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Vl53l8cx_Tof.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Lps22df_Press.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Lps22df_Press.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sgp40_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sgp40_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sht40_Hum.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sht40_Hum.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Sht40_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Sht40_Temp.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Application/PnPL/Components</GroupName>
           <Files>
             <File>
               <FileName>Acquisition_Info_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Acquisition_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Acquisition_Info_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Automode_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Automode_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Automode_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Deviceinformation_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Deviceinformation_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Deviceinformation_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Firmware_Info_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Firmware_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Firmware_Info_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis2iclx_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis2iclx_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis2iclx_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis2mdc_Mag_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis2mdc_Mag_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis2mdc_Mag_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ilps22qs_Press_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ilps22qs_Press_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ilps22qs_Press_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Imp34dt05_Mic_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Imp34dt05_Mic_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Imp34dt05_Mic_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330dhcx_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330dhcx_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330dhcx_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330dhcx_Gyro_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330dhcx_Gyro_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330dhcx_Gyro_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Log_Controller_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Log_Controller_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Log_Controller_PnPL.c</FilePath>
             </File>
             <File>
-              <FileName>Stts22h_Temp_PnPL.c</FileName>
+              <FileName>Sths34pf80_2_Tmos_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Stts22h_Temp_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Sths34pf80_2_Tmos_PnPL.c</FilePath>
             </File>
             <File>
-              <FileName>Tags_Info_PnPL.c</FileName>
+              <FileName>Sths34pf80_3_Tmos_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Tags_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Sths34pf80_3_Tmos_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Sths34pf80_Tmos_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Sths34pf80_Tmos_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Sths34pf80_Tmos_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Stts22h_Temp_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Stts22h_Temp_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Tags_Info_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Tags_Info_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Vd6283tx_2_Als_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Vd6283tx_2_Als_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Vd6283tx_3_Als_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Vd6283tx_3_Als_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Vd6283tx_Als_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Vd6283tx_Als_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Vd6283tx_Als_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Vl53l8cx_2_Tof_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Vl53l8cx_2_Tof_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Vl53l8cx_3_Tof_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Vl53l8cx_3_Tof_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Vl53l8cx_Tof_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Vl53l8cx_Tof_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Vl53l8cx_Tof_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Lps22df_Press_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Lps22df_Press_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Sgp40_Temp_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Sgp40_Temp_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Sht40_Hum_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Sht40_Hum_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Sht40_Temp_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Sht40_Temp_PnPL.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4726,6 +5121,11 @@
               <FileName>ABusIF.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ABusIF.c</FilePath>
+            </File>
+            <File>
+              <FileName>I2CBSBusIF.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\I2CBSBusIF.c</FilePath>
             </File>
             <File>
               <FileName>I2CBusIF.c</FileName>
@@ -4836,6 +5236,21 @@
               <FileName>VL53L8CXTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\VL53L8CXTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>LPS22DFTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\LPS22DFTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>SGP40Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\SGP40Task.c</FilePath>
+            </File>
+            <File>
+              <FileName>SHT40Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\SHT40Task.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4956,6 +5371,31 @@
               <FileName>vl53l8cx_plugin_xtalk.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\vl53l8cx\modules\vl53l8cx_plugin_xtalk.c</FilePath>
+            </File>
+            <File>
+              <FileName>sgp40_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sgp40\sgp40_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>sgp40.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sgp40\sgp40.c</FilePath>
+            </File>
+            <File>
+              <FileName>sht40ad1b_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sht40ad1b\sht40ad1b_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>sht40ad1b.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sht40ad1b\sht40ad1b.c</FilePath>
+            </File>
+            <File>
+              <FileName>lps22df_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\lps22df\lps22df_reg.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -48,6 +48,7 @@ sys_error_code_t VL53L8CXTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t VL53L8CXTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t VL53L8CXTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t VL53L8CXTask_vtblSensorGetStatus(ISensor_t *_this);
+SensorStatus_t *VL53L8CXTask_vtblSensorGetStatusPointer(ISensor_t *_this);
 sys_error_code_t VL53L8CXTask_vtblTofGetProfile(ISensorRanging_t *_this, ProfileConfig_t *p_config);
 sys_error_code_t VL53L8CXTask_vtblTofGetIT(ISensorRanging_t *_this, ITConfig_t *p_it_config);
 uint32_t VL53L8CXTask_vtblTofGetAddress(ISensorRanging_t *_this);

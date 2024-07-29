@@ -2,14 +2,14 @@
   ******************************************************************************
   * @file    SensorTileBoxPro_env_sensors_ex.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.1.0
-  * @date    20-July-2023
+  * @version V1.2.0
+  * @date    03-Jun-2024
   * @brief   This file contains definitions for the BSP Environmental Sensors
   *          Extended interface for SensorTileBoxPro
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,7 +17,7 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-*/
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SENSORTILEBOXPRO_ENV_SENSORS_EX_H__
@@ -46,7 +46,8 @@ int32_t BSP_ENV_SENSOR_FIFO_Stop_On_Watermark(uint32_t Instance, uint8_t Stop);
 int32_t BSP_ENV_SENSOR_FIFO_Usage(uint32_t Instance, uint8_t Status);
 int32_t BSP_ENV_SENSOR_Set_High_Temperature_Threshold(uint32_t Instance, float Value);
 int32_t BSP_ENV_SENSOR_Set_Low_Temperature_Threshold(uint32_t Instance, float Value);
-int32_t BSP_ENV_SENSOR_Get_Temperature_Limit_Status(uint32_t Instance, uint8_t *HighLimit, uint8_t *LowLimit, uint8_t *ThermLimit);
+int32_t BSP_ENV_SENSOR_Get_Temperature_Limit_Status(uint32_t Instance, uint8_t *HighLimit, uint8_t *LowLimit,
+                                                    uint8_t *ThermLimit);
 int32_t BSP_ENV_SENSOR_Set_Event_Pin(uint32_t Instance, uint8_t Enable);
 int32_t BSP_ENV_SENSOR_Set_One_Shot(uint32_t Instance);
 int32_t BSP_ENV_SENSOR_Get_One_Shot_Status(uint32_t Instance, uint8_t *Status);

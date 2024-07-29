@@ -37,7 +37,7 @@ extern "C" {
 
 /* Define the Max dimension of the Bluetooth characteristics for Debug Console services  */
 #define DEFAULT_MAX_STDOUT_CHAR_LEN     244
-#define DEFAULT_MAX_STDERR_CHAR_LEN     244
+#define DEFAULT_MAX_STDERR_CHAR_LEN     20
 
 #define BLE_MANAGER_MAX_ALLOCABLE_CHARS 7U
 
@@ -45,7 +45,10 @@ extern "C" {
 #define ACC_BLUENRG_CONGESTION
 
 /* Define the Max Dimension of the Bluetooth characteristics for PnPL (only for Notification) */
-#define DEFAULT_MAX_PNPL_NOTIFICATION_CHAR_LEN 217
+#define DEFAULT_MAX_PNPL_NOTIFICATION_CHAR_LEN 244
+
+/* Define the Max Dimension of the Bluetooth characteristics for PnPL Raw controlled (only for Notification) */
+#define DEFAULT_MAX_RAW_NOTIFICATION_CHAR_LEN 244
 
 /* Define the Delay function to use inside the BLE Manager (HAL_Delay/osDelay) */
 #define BLE_MANAGER_DELAY tx_thread_sleep

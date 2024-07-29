@@ -143,7 +143,7 @@ class DeviceTemplateManager:
                         print("{} - HSDatalogApp.{} - INFO - dtmi: {}".format(generate_datetime_string(), __name__, dtdl_model_id))
                     elif "local_dtmi" in entry and entry["local_dtmi"] != "":
                         # print("dtmi found in locally in base supported models")
-                        print("{} - HSDatalogApp.{} - INFO - dtmi found in locally in base supported models".format(generate_datetime_string(), __name__))
+                        print("{} - HSDatalogApp.{} - INFO - dtmi found locally in base supported models".format(generate_datetime_string(), __name__))
                         dtdl_model_id = entry["local_dtmi"]
                         dtdl_model_ids.append(dtdl_model_id)
                         # print("dtmi: {}".format(dtdl_model_id))

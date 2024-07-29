@@ -47,7 +47,7 @@ class PlotLinesWidget(PlotWidget):
         self.plot_params = plot_params
 
         for i in range(self.plot_params.dimension):
-           self.one_t_interval_resampled[i] = np.zeros(self.plot_t_interval_size)
+            self.one_t_interval_resampled[i] = np.zeros(self.plot_t_interval_size)
         
         self.x_data = np.linspace(-(plot_params.time_window) + self.current_x, self.current_x, self.plot_len)
         for i in range(self.plot_params.dimension):
@@ -59,7 +59,8 @@ class PlotLinesWidget(PlotWidget):
                 self.graph_curves[i] = pg.PlotDataItem(pen=({'color': self.lines_colors[i - (len(self.lines_colors)* int(i / len(self.lines_colors)))], 'width': 1}), skipFiniteCheck=True, ignoreBounds=True)
                 self.graph_widget.addItem(self.graph_curves[i])
             
-        self.app_qt.processEvents()
+        if self.app_qt is not None:
+            self.app_qt.processEvents()
         
         self.plot_t_interval_size = int(self.plot_len/(plot_params.time_window / self.timer_interval))
             

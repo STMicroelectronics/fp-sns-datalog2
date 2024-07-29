@@ -60,7 +60,7 @@ void HAL_RNG_MspInit(RNG_HandleTypeDef *rngHandle)
     /* USER CODE END RNG_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RNG;
     PeriphClkInitStruct.RngClockSelection = RCC_RNGCLKSOURCE_HSI48;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)

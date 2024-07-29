@@ -48,6 +48,7 @@ sys_error_code_t IIS3DWBTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t IIS3DWBTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t IIS3DWBTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t IIS3DWBTask_vtblSensorGetStatus(ISensor_t *_this);
+SensorStatus_t *IIS3DWBTask_vtblSensorGetStatusPointer(ISensor_t *_this);
 sys_error_code_t IIS3DWBTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
 float IIS3DWBTask_vtblAccGetFS(ISensorMems_t *_this);
 float IIS3DWBTask_vtblAccGetSensitivity(ISensorMems_t *_this);

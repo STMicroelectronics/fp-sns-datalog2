@@ -65,6 +65,11 @@ struct _STHS34PF80Task
   const MX_GPIOParams_t *pCSConfig;
 
   /**
+    * I2C BS GPIO configuration parameters.
+    */
+  const MX_GPIOParams_t *pBSConfig;
+
+  /**
     * Bus IF object used to connect the sensor task to the specific bus.
     */
   ABusIF *p_sensor_bus_if;
@@ -160,10 +165,12 @@ ISourceObservable *STHS34PF80TaskGetTofSensorIF(STHS34PF80Task *_this);
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *STHS34PF80TaskAlloc(const void *pIRQConfig, const void *pCSConfig);
+AManagedTaskEx *STHS34PF80TaskAlloc(const void *pIRQConfig, const void *pCSConfig, const void *pBSConfig);
 
 /**
   * Call the default ::STHS34PF80TaskAlloc and then it overwrite sensor name
@@ -173,10 +180,13 @@ AManagedTaskEx *STHS34PF80TaskAlloc(const void *pIRQConfig, const void *pCSConfi
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *STHS34PF80TaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name);
+AManagedTaskEx *STHS34PF80TaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const void *pBSConfig,
+                                           const char *p_name);
 
 /**
   * Allocate an instance of ::STHS34PF80Task in a memory block specified by the application.
@@ -195,10 +205,13 @@ AManagedTaskEx *STHS34PF80TaskAllocSetName(const void *pIRQConfig, const void *p
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx_t if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *STHS34PF80TaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig);
+AManagedTaskEx *STHS34PF80TaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                          const void *pBSConfig);
 
 /**
   * Call the default ::STHS34PF80TaskAlloc and then it overwrite sensor name
@@ -215,10 +228,13 @@ AManagedTaskEx *STHS34PF80TaskStaticAlloc(void *p_mem_block, const void *pIRQCon
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx_t if success,
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *STHS34PF80TaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                                 const void *pBSConfig,
                                                  const char *p_name);
 
 /**

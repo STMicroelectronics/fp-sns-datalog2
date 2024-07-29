@@ -28,7 +28,7 @@
 extern "C" {
 #endif
 
-#define SYS_DBG_LEVEL                      SYS_DBG_LEVEL_VERBOSE /*!< set the level of the system log: all log messages with minor level are discharged. */
+#define SYS_DBG_LEVEL                      SYS_DBG_LEVEL_LLA /*!< set the level of the system log: all log messages with minor level are discharged. */
 
 /* Example */
 /*#define SYS_DBG_MODULE1     SYS_DBG_ON|GTS_DBG_HALT  */
@@ -54,6 +54,9 @@ extern "C" {
 #define SYS_DBG_VL53L8CX                   SYS_DBG_ON                 ///< VL53L8CX task debug control byte
 #define SYS_DBG_STHS34PF80                 SYS_DBG_ON                 ///< STHS34PF80 task debug control byte
 #define SYS_DBG_VD6283TX                   SYS_DBG_ON                 ///< VD6283TX task debug control byte
+#define SYS_DBG_SHT40                      SYS_DBG_ON                 ///< SHT40 task debug control byte
+#define SYS_DBG_SGP40                      SYS_DBG_ON                 ///< SGP40 task debug control byte
+#define SYS_DBG_LPS22DF                    SYS_DBG_ON                 ///< LPS22DF task debug control byte
 #define SYS_DBG_SMUTIL                     SYS_DBG_ON                 ///< Utility task debug control byte
 #define SYS_DBG_SDC                        SYS_DBG_ON                 ///< SDCARD task debug control byte
 #define SYS_DBG_UTIL                       SYS_DBG_ON                 ///< UTIL task debug control byte

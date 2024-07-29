@@ -48,6 +48,7 @@ sys_error_code_t VD6283TXTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t VD6283TXTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t VD6283TXTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t VD6283TXTask_vtblSensorGetStatus(ISensor_t *_this);
+SensorStatus_t *VD6283TXTask_vtblSensorGetStatusPointer(ISensor_t *_this);
 sys_error_code_t VD6283TXTask_vtblLightGetIntermeasurementTime(ISensorLight_t *_this, uint32_t *p_measured,
                                                                uint32_t *p_nominal);
 uint32_t VD6283TXTask_vtblLightGetExposureTime(ISensorLight_t *_this);

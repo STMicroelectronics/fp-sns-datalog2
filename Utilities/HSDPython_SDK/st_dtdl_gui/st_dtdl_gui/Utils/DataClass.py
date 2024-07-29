@@ -29,7 +29,6 @@ class DataClass(object):
     def __init__(self, comp_name, data):
         self.comp_name = comp_name
         self.data = data
-
 class RawDataClass(object):
     def __init__(self, p_id, ssd, sss, data):
         self.p_id = p_id
@@ -78,9 +77,10 @@ class SensorAudioPlotParams(SensorPlotParams):
         self.odr = odr
 
 class SensorRangingPlotParams(SensorPlotParams):
-    def __init__(self, comp_name, enabled, dimension, resolution, unit="", time_window=30) -> None:
+    def __init__(self, comp_name, enabled, dimension, resolution, output_format = None, unit="", time_window=30) -> None:
         super().__init__(comp_name, enabled, dimension, unit, time_window)
         self.resolution = resolution
+        self.output_format = output_format
 
 class SensorLightPlotParams(SensorPlotParams):
     def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
@@ -89,6 +89,11 @@ class SensorLightPlotParams(SensorPlotParams):
 class SensorCameraPlotParams(SensorPlotParams):
     def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
         super().__init__(comp_name, enabled, dimension, unit, time_window)
+
+class SensorPowerPlotParams(SensorPlotParams):
+    def __init__(self, comp_name, enabled, plots_params_dict, unit="", time_window=30) -> None:
+        super().__init__(comp_name, enabled, 1, unit, time_window)
+        self.plots_params_dict = plots_params_dict
 
 class SensorPresenscePlotParams(SensorPlotParams):
     def __init__(self, comp_name, enabled, plots_params_dict, unit="", time_window=30) -> None:
@@ -100,15 +105,21 @@ class PlotPAmbientParams(SensorPlotParams):
         super().__init__(comp_name, enabled, dimension, unit, time_window)
 
 class PlotPObjectParams(SensorPlotParams):
-    def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
+    def __init__(self, comp_name, enabled, dimension, embedded_compensation, software_compensation, unit="", time_window=30) -> None:
+        self.embedded_compensation = embedded_compensation
+        self.software_compensation = software_compensation
         super().__init__(comp_name, enabled, dimension, unit, time_window)
 
 class PlotPPresenceParams(SensorPlotParams):
-    def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
+    def __init__(self, comp_name, enabled, dimension, embedded_compensation, software_compensation, unit="", time_window=30) -> None:
+        self.embedded_compensation = embedded_compensation
+        self.software_compensation = software_compensation
         super().__init__(comp_name, enabled, dimension, unit, time_window)
 
 class PlotPMotionParams(SensorPlotParams):
-    def __init__(self, comp_name, enabled, dimension, unit="", time_window=30) -> None:
+    def __init__(self, comp_name, enabled, dimension, embedded_compensation, software_compensation, unit="", time_window=30) -> None:
+        self.embedded_compensation = embedded_compensation
+        self.software_compensation = software_compensation
         super().__init__(comp_name, enabled, dimension, unit, time_window)
         
 class ActuatorPlotParams(PlotParams):

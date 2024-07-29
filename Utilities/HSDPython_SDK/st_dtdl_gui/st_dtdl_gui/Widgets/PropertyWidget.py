@@ -69,7 +69,7 @@ class SubPropertyWidget(QWidget):
         comp_frame_contents.layout().setContentsMargins(3,0,3,0)
         comp_config_widget.layout().setContentsMargins(0,0,0,0)
         
-        title_label = title_frame.findChild(QLabel,"label_title")
+        title_label = title_frame.findChild(QPushButton,"label_title")
         title_label.setText(self.label.upper())
         self.annotation_label = title_frame.findChild(QLabel,"label_annotation")
         self.annotation_label.setVisible(False)

@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_QVAR.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add QVAR info services using vendor specific profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -87,7 +87,7 @@ tBleStatus BLE_QVARUpdate(int32_t QVAR, uint8_t Flag, int32_t DQVAR, uint32_t Pa
   uint8_t buff[2 + 4 + 1 + 4 + 4];
 
   /* Time Stamp */
-  STORE_LE_16(buff, (HAL_GetTick() >> 3));
+  STORE_LE_16(buff, (HAL_GetTick() / 10));
   BuffPos = 2U;
 
   STORE_LE_32(buff + BuffPos, QVAR);
@@ -95,7 +95,7 @@ tBleStatus BLE_QVARUpdate(int32_t QVAR, uint8_t Flag, int32_t DQVAR, uint32_t Pa
 
   if (NumberElement > 1)
   {
-    buff[2 + BuffPos] = Flag;
+    buff[2U + BuffPos] = Flag;
     BuffPos += 1U;
     if (NumberElement > 2)
     {

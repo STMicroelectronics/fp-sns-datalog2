@@ -62,6 +62,11 @@ struct _VD6283TXTask
   const MX_GPIOParams_t *pCSConfig;
 
   /**
+    * I2C BS GPIO configuration parameters.
+    */
+  const MX_GPIOParams_t *pBSConfig;
+
+  /**
     * Bus IF object used to connect the sensor task to the specific bus.
     */
   ABusIF *p_sensor_bus_if;
@@ -150,10 +155,12 @@ ISourceObservable *VD6283TXTaskGetTofSensorIF(VD6283TXTask *_this);
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *VD6283TXTaskAlloc(const void *pIRQConfig, const void *pCSConfig);
+AManagedTaskEx *VD6283TXTaskAlloc(const void *pIRQConfig, const void *pCSConfig, const void *pBSConfig);
 
 /**
   * Call the default ::VD6283TXTaskAlloc and then it overwrite sensor name
@@ -163,10 +170,13 @@ AManagedTaskEx *VD6283TXTaskAlloc(const void *pIRQConfig, const void *pCSConfig)
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *VD6283TXTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name);
+AManagedTaskEx *VD6283TXTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const void *pBSConfig,
+                                         const char *p_name);
 
 /**
   * Allocate an instance of ::VD6283TXTask in a memory block specified by the application.
@@ -185,10 +195,13 @@ AManagedTaskEx *VD6283TXTaskAllocSetName(const void *pIRQConfig, const void *pCS
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx_t if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *VD6283TXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig);
+AManagedTaskEx *VD6283TXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                        const void *pBSConfig);
 
 /**
   * Call the default ::VD6283TXTaskAlloc and then it overwrite sensor name
@@ -205,10 +218,13 @@ AManagedTaskEx *VD6283TXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfi
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx_t if success,
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *VD6283TXTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                               const void *pBSConfig,
                                                const char *p_name);
 
 /**

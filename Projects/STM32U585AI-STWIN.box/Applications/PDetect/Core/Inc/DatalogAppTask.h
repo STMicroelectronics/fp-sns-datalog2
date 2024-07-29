@@ -36,9 +36,6 @@ extern "C" {
 #include "ICommandParse_vtbl.h"
 #include "PnPLCompManager.h"
 
-#include "ILog_Controller.h"
-#include "ILog_Controller_vtbl.h"
-
 /* Datalog messages ID */
 #define DT_USER_BUTTON                            (0x0010)
 #define DT_SWITCH_BANK                            (0x0020)
@@ -68,11 +65,18 @@ typedef struct _DatalogAppTask DatalogAppTask;
   */
 AManagedTaskEx *DatalogAppTaskAlloc(void);
 
+DatalogAppTask *getDatalogAppTask(void);
+
 IEventListener *DatalogAppTask_GetEventListenerIF(DatalogAppTask *_this);
 
 ICommandParse_t *DatalogAppTask_GetICommandParseIF(DatalogAppTask *_this);
 
-ILog_Controller_t *DatalogAppTask_GetILogControllerIF(DatalogAppTask *_this);
+uint8_t DatalogAppTask_start_vtbl(int32_t interface);
+uint8_t DatalogAppTask_stop_vtbl(void);
+uint8_t DatalogAppTask_save_config_vtbl(void);
+uint8_t DatalogAppTask_set_time_vtbl(const char *datetime);
+uint8_t DatalogAppTask_switch_bank_vtbl(void);
+void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
 
 sys_error_code_t DatalogAppTask_msg(ULONG msg);
 

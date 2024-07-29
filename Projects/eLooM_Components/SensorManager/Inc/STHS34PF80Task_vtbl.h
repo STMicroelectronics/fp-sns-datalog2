@@ -48,6 +48,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorDisable(ISensor_t *_this);
 boolean_t STHS34PF80Task_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t STHS34PF80Task_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t STHS34PF80Task_vtblSensorGetStatus(ISensor_t *_this);
+SensorStatus_t *STHS34PF80Task_vtblSensorGetStatusPointer(ISensor_t *_this);
 sys_error_code_t STHS34PF80Task_vtblPresenceGetDataFrequency(ISensorPresence_t *_this, float *p_measured,
                                                              float *p_nominal);
 float STHS34PF80Task_vtblPresenceGetTransmittance(ISensorPresence_t *_this);

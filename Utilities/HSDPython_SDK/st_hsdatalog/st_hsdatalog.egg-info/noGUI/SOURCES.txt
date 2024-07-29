@@ -21,6 +21,7 @@ st_hsdatalog/HSD/model/__init__.py
 st_hsdatalog/HSD/utils/__init__.py
 st_hsdatalog/HSD/utils/cli_interaction.py
 st_hsdatalog/HSD/utils/file_manager.py
+st_hsdatalog/HSD/utils/plot_utils.py
 st_hsdatalog/HSD/utils/sensors_utils.py
 st_hsdatalog/HSD/utils/type_conversion.py
 st_hsdatalog/HSD_link/HSDLink.py
@@ -35,6 +36,10 @@ st_hsdatalog/HSD_link/communication/ADEV_HSD/__init__.py
 st_hsdatalog/HSD_link/communication/PnPL_HSD/PnPLHSD_com_manager.py
 st_hsdatalog/HSD_link/communication/PnPL_HSD/__init__.py
 st_hsdatalog/HSD_link/communication/PnPL_HSD/hsd_dll.py
+st_hsdatalog/HSD_link/communication/PnPL_STSRL/ASPEP.py
+st_hsdatalog/HSD_link/communication/PnPL_STSRL/PnPLSTSRL_com_manager.py
+st_hsdatalog/HSD_link/communication/PnPL_STSRL/SSTL.py
+st_hsdatalog/HSD_link/communication/PnPL_STSRL/__init__.py
 st_hsdatalog/HSD_link/communication/STWIN_HSD/STWINHSD_CMD_com_manager.py
 st_hsdatalog/HSD_link/communication/STWIN_HSD/STWINHSD_DLL_com_manager.py
 st_hsdatalog/HSD_link/communication/STWIN_HSD/STWINHSD_com_manager.py

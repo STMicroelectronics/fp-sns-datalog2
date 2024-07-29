@@ -29,8 +29,193 @@ extern "C" {
 #include "STWIN.box_bus.h"
 #include "STWIN.box_errno.h"
 
-/* Analog and digital mics */
+/* ILPS22QS Pressure-Temperature-Qvar Sensor */
+#define BSP_ILPS22QS_0_I2C_INIT                 BSP_I2C2_Init
+#define BSP_ILPS22QS_0_I2C_DEINIT               BSP_I2C2_DeInit
+#define BSP_ILPS22QS_0_I2C_READ_REG             BSP_I2C2_ReadReg
+#define BSP_ILPS22QS_0_I2C_WRITE_REG            BSP_I2C2_WriteReg
 
+/* STTS22H Temperature Sensor */
+extern EXTI_HandleTypeDef hexti5;
+#define H_EXTI_5         hexti5
+#define H_EXTI_INT_STTS22H                      hexti5
+#define STTS22H_INT_EXTI_LINE                   EXTI_LINE_5
+#define BSP_STTS22H_INT_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOF_CLK_ENABLE()
+#define BSP_STTS22H_INT_PORT                    GPIOF
+#define BSP_STTS22H_INT_PIN                     GPIO_PIN_5
+#define BSP_STTS22H_INT_EXTI_IRQn               EXTI5_IRQn
+#ifndef BSP_STTS22H_INT_EXTI_IRQ_PP
+#define BSP_STTS22H_INT_EXTI_IRQ_PP             7
+#endif
+#ifndef BSP_STTS22H_INT_EXTI_IRQ_SP
+#define BSP_STTS22H_INT_EXTI_IRQ_SP             0
+#endif
+#define BSP_STTS22H_0_I2C_INIT                  BSP_I2C2_Init
+#define BSP_STTS22H_0_I2C_DEINIT                BSP_I2C2_DeInit
+#define BSP_STTS22H_0_I2C_READ_REG              BSP_I2C2_ReadReg
+#define BSP_STTS22H_0_I2C_WRITE_REG             BSP_I2C2_WriteReg
+
+/* IIS2MDC magneto Sensor */
+#define BSP_IIS2MDC_0_I2C_INIT                  BSP_I2C2_Init
+#define BSP_IIS2MDC_0_I2C_DEINIT                BSP_I2C2_DeInit
+#define BSP_IIS2MDC_0_I2C_READ_REG              BSP_I2C2_ReadReg
+#define BSP_IIS2MDC_0_I2C_WRITE_REG             BSP_I2C2_WriteReg
+
+/* IIS2DLPC acc Sensor */
+extern EXTI_HandleTypeDef hexti1;
+#define H_EXTI_1         hexti1
+#define H_EXTI_INT1_IIS2DLPC                      hexti1
+#define IIS2DLPC_INT1_EXTI_LINE                   EXTI_LINE_1
+#define BSP_IIS2DLPC_INT1_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOF_CLK_ENABLE()
+#define BSP_IIS2DLPC_INT1_PORT                    GPIOF
+#define BSP_IIS2DLPC_INT1_PIN                     GPIO_PIN_1
+#define BSP_IIS2DLPC_INT1_EXTI_IRQn               EXTI1_IRQn
+#ifndef BSP_IIS2DLPC_INT1_EXTI_IRQ_PP
+#define BSP_IIS2DLPC_INT1_EXTI_IRQ_PP             7
+#endif
+#ifndef BSP_IIS2DLPC_INT1_EXTI_IRQ_SP
+#define BSP_IIS2DLPC_INT1_EXTI_IRQ_SP             0
+#endif
+extern EXTI_HandleTypeDef hexti2;
+#define H_EXTI_2         hexti2
+#define H_EXTI_INT2_IIS2DLPC                      hexti2
+#define IIS2DLPC_INT2_EXTI_LINE                   EXTI_LINE_2
+#define BSP_IIS2DLPC_INT2_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOF_CLK_ENABLE()
+#define BSP_IIS2DLPC_INT2_PORT                    GPIOF
+#define BSP_IIS2DLPC_INT2_PIN                     GPIO_PIN_2
+#define BSP_IIS2DLPC_INT2_EXTI_IRQn               EXTI2_IRQn
+#ifndef BSP_IIS2DLPC_INT2_EXTI_IRQ_PP
+#define BSP_IIS2DLPC_INT2_EXTI_IRQ_PP             7
+#endif
+#ifndef BSP_IIS2DLPC_INT2_EXTI_IRQ_SP
+#define BSP_IIS2DLPC_INT2_EXTI_IRQ_SP             0
+#endif
+#define BSP_IIS2DLPC_0_SPI_INIT                  BSP_SPI2_Init
+#define BSP_IIS2DLPC_0_SPI_DEINIT                BSP_SPI2_DeInit
+#define BSP_IIS2DLPC_0_SPI_SEND                  BSP_SPI2_Send
+#define BSP_IIS2DLPC_0_SPI_RECV                  BSP_SPI2_Recv
+#define BSP_IIS2DLPC_CS_PORT                     GPIOH
+#define BSP_IIS2DLPC_CS_PIN                      GPIO_PIN_6
+
+/* IIS3DWB acc Sensor */
+extern EXTI_HandleTypeDef hexti15;
+#define H_EXTI_15          hexti15
+#define H_EXTI_INT1_IIS3DWB                       hexti15
+#define IIS3DWB_INT1_EXTI_LINE                    EXTI_LINE_15
+#define BSP_IIS3DWB_INT1_GPIO_CLK_ENABLE()        __HAL_RCC_GPIOF_CLK_ENABLE()
+#define BSP_IIS3DWB_INT1_PORT                     GPIOF
+#define BSP_IIS3DWB_INT1_PIN                      GPIO_PIN_15
+#define BSP_IIS3DWB_INT1_EXTI_IRQn                EXTI15_IRQn
+#ifndef BSP_IIS3DWB_INT1_EXTI_IRQ_PP
+#define BSP_IIS3DWB_INT1_EXTI_IRQ_PP              7
+#endif
+#ifndef BSP_IIS3DWB_INT1_EXTI_IRQ_SP
+#define BSP_IIS3DWB_INT1_EXTI_IRQ_SP              0
+#endif
+#define BSP_IIS3DWB_0_SPI_INIT                   BSP_SPI2_Init
+#define BSP_IIS3DWB_0_SPI_DEINIT                 BSP_SPI2_DeInit
+#define BSP_IIS3DWB_0_SPI_SEND                   BSP_SPI2_Send
+#define BSP_IIS3DWB_0_SPI_RECV                   BSP_SPI2_Recv
+#define BSP_IIS3DWB_CS_PORT                      GPIOF
+#define BSP_IIS3DWB_CS_PIN                       GPIO_PIN_12
+
+/* ISM330DHCX acc - gyro Sensor */
+extern EXTI_HandleTypeDef hexti8;
+#define H_EXTI_8         hexti8
+#define H_EXTI_INT1_ISM330DHCX                      hexti8
+#define ISM330DHCX_INT1_EXTI_LINE                   EXTI_LINE_8
+#define BSP_ISM330DHCX_INT1_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOB_CLK_ENABLE()
+#define BSP_ISM330DHCX_INT1_PORT                    GPIOB
+#define BSP_ISM330DHCX_INT1_PIN                     GPIO_PIN_8
+#define BSP_ISM330DHCX_INT1_EXTI_IRQn               EXTI8_IRQn
+#ifndef BSP_ISM330DHCX_INT1_EXTI_IRQ_PP
+#define BSP_ISM330DHCX_INT1_EXTI_IRQ_PP             7
+#endif
+#ifndef BSP_ISM330DHCX_INT1_EXTI_IRQ_SP
+#define BSP_ISM330DHCX_INT1_EXTI_IRQ_SP             0
+#endif
+extern EXTI_HandleTypeDef hexti4;
+#define H_EXTI_4         hexti4
+#define H_EXTI_INT2_ISM330DHCX                      hexti4
+#define ISM330DHCX_INT2_EXTI_LINE                   EXTI_LINE_4
+#define BSP_ISM330DHCX_INT2_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOF_CLK_ENABLE()
+#define BSP_ISM330DHCX_INT2_PORT                    GPIOF
+#define BSP_ISM330DHCX_INT2_PIN                     GPIO_PIN_4
+#define BSP_ISM330DHCX_INT2_EXTI_IRQn               EXTI4_IRQn
+#ifndef BSP_ISM330DHCX_INT2_EXTI_IRQ_PP
+#define BSP_ISM330DHCX_INT2_EXTI_IRQ_PP             7
+#endif
+#ifndef BSP_ISM330DHCX_INT2_EXTI_IRQ_SP
+#define BSP_ISM330DHCX_INT2_EXTI_IRQ_SP             0
+#endif
+#define BSP_ISM330DHCX_0_SPI_INIT                  BSP_SPI2_Init
+#define BSP_ISM330DHCX_0_SPI_DEINIT                BSP_SPI2_DeInit
+#define BSP_ISM330DHCX_0_SPI_SEND                  BSP_SPI2_Send
+#define BSP_ISM330DHCX_0_SPI_RECV                  BSP_SPI2_Recv
+#define BSP_ISM330DHCX_CS_PORT                     GPIOH
+#define BSP_ISM330DHCX_CS_PIN                      GPIO_PIN_15
+
+/* IIS2ICLX acc Sensor */
+extern EXTI_HandleTypeDef hexti3;
+#define H_EXTI_3           hexti3
+#define H_EXTI_INT1_IIS2ICLX                        hexti3
+#define IIS2ICLX_INT1_EXTI_LINE                     EXTI_LINE_3
+#define BSP_IIS2ICLX_INT1_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOF_CLK_ENABLE()
+#define BSP_IIS2ICLX_INT1_PORT                      GPIOF
+#define BSP_IIS2ICLX_INT1_PIN                       GPIO_PIN_3
+#define BSP_IIS2ICLX_INT1_EXTI_IRQn                 EXTI3_IRQn
+#ifndef BSP_IIS2ICLX_INT1_EXTI_IRQ_PP
+#define BSP_IIS2ICLX_INT1_EXTI_IRQ_PP               7
+#endif
+#ifndef BSP_IIS2ICLX_INT1_EXTI_IRQ_SP
+#define BSP_IIS2ICLX_INT1_EXTI_IRQ_SP               0
+#endif
+extern EXTI_HandleTypeDef hexti11;
+#define H_EXTI_11           hexti11
+#define H_EXTI_INT2_IIS2ICLX                        hexti11
+#define IIS2ICLX_INT2_EXTI_LINE                     EXTI_LINE_11
+#define BSP_IIS2ICLX_INT2_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOF_CLK_ENABLE()
+#define BSP_IIS2ICLX_INT2_PORT                      GPIOF
+#define BSP_IIS2ICLX_INT2_PIN                       GPIO_PIN_11
+#define BSP_IIS2ICLX_INT2_EXTI_IRQn                 EXTI11_IRQn
+#ifndef BSP_IIS2ICLX_INT2_EXTI_IRQ_PP
+#define BSP_IIS2ICLX_INT2_EXTI_IRQ_PP               7
+#endif
+#ifndef BSP_IIS2ICLX_INT2_EXTI_IRQ_SP
+#define BSP_IIS2ICLX_INT2_EXTI_IRQ_SP               0
+#endif
+#define BSP_IIS2ICLX_0_SPI_INIT                    BSP_SPI2_Init
+#define BSP_IIS2ICLX_0_SPI_DEINIT                  BSP_SPI2_DeInit
+#define BSP_IIS2ICLX_0_SPI_SEND                    BSP_SPI2_Send
+#define BSP_IIS2ICLX_0_SPI_RECV                    BSP_SPI2_Recv
+#define BSP_IIS2ICLX_CS_PORT                       GPIOI
+#define BSP_IIS2ICLX_CS_PIN                        GPIO_PIN_7
+
+/* EXT_SPI */
+#define BSP_EXT_SPI_CS_GPIO_CLK_ENABLE()           __GPIOA_CLK_ENABLE()
+#define BSP_EXT_SPI_CS_PORT                        GPIOA
+#define BSP_EXT_SPI_CS_PIN                         GPIO_PIN_15
+
+/* ST25DV nfc Device */
+#define BSP_ST25DV_I2C_INIT                     BSP_I2C2_Init
+#define BSP_ST25DV_I2C_DEINIT                   BSP_I2C2_DeInit
+#define BSP_ST25DV_I2C_READ_REG_16              BSP_I2C2_ReadReg16
+#define BSP_ST25DV_I2C_WRITE_REG_16             BSP_I2C2_WriteReg16
+#define BSP_ST25DV_I2C_RECV                     BSP_I2C2_Recv
+#define BSP_ST25DV_I2C_IS_READY                 BSP_I2C2_IsReady
+
+/* nfctag GPO pin */
+extern EXTI_HandleTypeDef                       hexti13;
+#define H_EXTI_13                               hexti13
+#define GPO_EXTI                                hexti13
+#define BSP_GPO_PIN                             GPIO_PIN_13
+#define BSP_GPO_GPIO_PORT                       GPIOB
+#define BSP_GPO_EXTI_LINE                       EXTI_LINE_13
+#define BSP_GPO_EXTI_IRQN                       EXTI13_IRQn
+#define BSP_GPO_CLK_ENABLE()                    __HAL_RCC_GPIOB_CLK_ENABLE()
+#define BSP_GPO_EXTI_IRQHANDLER                 EXTI13_IRQHandler
+
+/* Analog and digital mics */
 #define ONBOARD_ANALOG_MIC          1
 #define ONBOARD_DIGITAL_MIC         1
 
@@ -60,6 +245,7 @@ modification in the application layer developed with older versions of the drive
 /* BSP COM Port */
 #define USE_BSP_COM_FEATURE             1U
 #define USE_COM_LOG                     1U
+#define BSP_COM_BAUDRATE      115200
 
 /* SD card interrupt priority */
 #define BSP_SD_IT_PRIORITY              14U  /* Default is lowest priority level */
@@ -75,9 +261,23 @@ modification in the application layer developed with older versions of the drive
 
 /* Define 1 to use already implemented callback; 0 to implement callback
    into an application file */
-#define USE_BC_TIM_IRQ_CALLBACK         0U  
-#define USE_BC_GPIO_IRQ_HANDLER         1U  
-#define USE_BC_GPIO_IRQ_CALLBACK        1U  
+#define USE_BC_TIM_IRQ_CALLBACK         0U
+#define USE_BC_GPIO_IRQ_HANDLER         1U
+#define USE_BC_GPIO_IRQ_CALLBACK        1U
+
+
+/**  Definition for SD DETECT INTERRUPT PIN  **/
+#define BSP_SD_DETECT_PIN                       GPIO_PIN_1
+#define BSP_SD_DETECT_GPIO_PORT                 GPIOG
+#define BSP_SD_DETECT_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOG_CLK_ENABLE()
+#define BSP_SD_DETECT_GPIO_CLK_DISABLE()        __HAL_RCC_GPIOG_CLK_DISABLE()
+#define BSP_SD_DETECT_EXTI_LINE                 EXTI_LINE_1
+#define BSP_SD_DETECT_EXTI_IRQN                 EXTI1_IRQn
+#define BSP_SD_DETECT_IRQHANDLER                EXTI1_IRQHandler
+
+
+/* Define 1 to use already implemented callback; 0 to implement callback
+   into an application file */
 
 #define USE_MOTION_SENSOR_IIS2DLPC_0    1U
 #define USE_MOTION_SENSOR_IIS2MDC_0     1U
@@ -87,37 +287,19 @@ modification in the application layer developed with older versions of the drive
 
 #define USE_ENV_SENSOR_ILPS22QS_0       1U
 #define USE_ENV_SENSOR_STTS22H_0        1U
-  
-/* IIS2DLPC */
-#define BSP_IIS2DLPC_INT1_EXTI_IRQ_PP           7
-#define BSP_IIS2DLPC_INT1_EXTI_IRQ_SP           0
-#define BSP_IIS2DLPC_INT2_EXTI_IRQ_PP           7
-#define BSP_IIS2DLPC_INT2_EXTI_IRQ_SP           0
 
-/* IIS3DWB */
-#define BSP_IIS3DWB_INT1_EXTI_IRQ_PP            7
-#define BSP_IIS3DWB_INT1_EXTI_IRQ_SP            0
-  
-/* ISM330DHCX */
-#define BSP_ISM330DHCX_INT1_EXTI_IRQ_PP         7
-#define BSP_ISM330DHCX_INT1_EXTI_IRQ_SP         0
-#define BSP_ISM330DHCX_INT2_EXTI_IRQ_PP         7
-#define BSP_ISM330DHCX_INT2_EXTI_IRQ_SP         0  
-  
-/* IIS2ICLX */
-#define BSP_IIS2ICLX_INT1_EXTI_IRQ_PP           7
-#define BSP_IIS2ICLX_INT1_EXTI_IRQ_SP           0
-#define BSP_IIS2ICLX_INT2_EXTI_IRQ_PP           7
-#define BSP_IIS2ICLX_INT2_EXTI_IRQ_SP           0
+#define BSP_NFCTAG_INSTANCE             1U
 
-/* ILPS22QS */  
-#define BSP_ILPS22QS_INT_EXTI_IRQ_PP            7
-#define BSP_ILPS22QS_INT_EXTI_IRQ_SP            0
+#if (USE_MOTION_SENSOR_IIS2DLPC_0 + USE_MOTION_SENSOR_ISM330DHCX_0 + USE_MOTION_SENSOR_IIS2MDC_0 + USE_MOTION_SENSOR_IIS3DWB_0 + USE_MOTION_SENSOR_IIS2ICLX_0 == 0)
+#undef USE_MOTION_SENSOR_ISM330DHCX_0
+#define USE_MOTION_SENSOR_ISM330DHCX_0     1U
+#endif
 
-/* STTS22H */  
-#define BSP_STTS22H_INT_EXTI_IRQ_PP             7
-#define BSP_STTS22H_INT_EXTI_IRQ_SP             0
- 
+#if (USE_ENV_SENSOR_STTS22H_0 + USE_ENV_SENSOR_ILPS22QS_0 == 0)
+#undef USE_ENV_SENSOR_STTS22H_0
+#define USE_ENV_SENSOR_STTS22H_0     1U
+#endif
+
 #ifdef __cplusplus
 }
 #endif

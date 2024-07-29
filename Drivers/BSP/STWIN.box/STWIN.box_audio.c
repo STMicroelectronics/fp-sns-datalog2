@@ -18,8 +18,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "STWIN.box_audio.h"
-#include "STWIN.box_bus.h"
-#include "audio.h"
 
 /** @addtogroup BSP
 * @{
@@ -633,7 +631,7 @@ int32_t BSP_AUDIO_IN_RecordChannels(uint32_t Instance, uint8_t **pBuf, uint32_t 
   UNUSED(Instance);
   UNUSED(pBuf);
   UNUSED(NbrOfBytes);
-  return BSP_NOT_IMPLEMENTED;
+  return BSP_ERROR_FEATURE_NOT_SUPPORTED;
 }
 
 
@@ -647,7 +645,7 @@ int32_t BSP_AUDIO_IN_StopChannels(uint32_t Instance, uint32_t Device)
 {
   UNUSED(Instance);
   UNUSED(Device);
-  return BSP_NOT_IMPLEMENTED;
+  return BSP_ERROR_FEATURE_NOT_SUPPORTED;
 }
 
 
@@ -661,7 +659,7 @@ int32_t BSP_AUDIO_IN_PauseChannels(uint32_t Instance, uint32_t Device)
 {
   UNUSED(Instance);
   UNUSED(Device);
-  return BSP_NOT_IMPLEMENTED;
+  return BSP_ERROR_FEATURE_NOT_SUPPORTED;
 }
 
 
@@ -675,7 +673,7 @@ int32_t BSP_AUDIO_IN_ResumeChannels(uint32_t Instance, uint32_t Device)
 {
   UNUSED(Instance);
   UNUSED(Device);
-  return BSP_NOT_IMPLEMENTED;
+  return BSP_ERROR_FEATURE_NOT_SUPPORTED;
 }
 
 
@@ -1419,66 +1417,66 @@ void HAL_MDF_MspInit(MDF_HandleTypeDef *hmdf)
 */
 void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
 {
-  if (HAL_ADC_Counter == 0)
-  {
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-    
-    if(adcHandle->Instance==ADC1)
-    {
-    /** Initializes the peripherals clock */
-      PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADCDAC;  // 768kHz
-      PeriphClkInit.AdcDacClockSelection = RCC_ADCDACCLKSOURCE_PLL2;
-      PeriphClkInit.PLL2.PLL2Source = RCC_PLLSOURCE_HSE;
-      PeriphClkInit.PLL2.PLL2M = 2;
-      PeriphClkInit.PLL2.PLL2N = 48;
-      PeriphClkInit.PLL2.PLL2P = 2;
-      PeriphClkInit.PLL2.PLL2Q = 7;
-  #ifdef ADC_TEST_IRQ
-      PeriphClkInit.PLL2.PLL2R = 50;
-  #else
-      PeriphClkInit.PLL2.PLL2R = 25;
-  #endif
-      PeriphClkInit.PLL2.PLL2RGE = RCC_PLLVCIRANGE_1;
-      PeriphClkInit.PLL2.PLL2FRACN = 0;
-      PeriphClkInit.PLL2.PLL2ClockOut = RCC_PLL2_DIVR;
-      if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
-      {
+ if (HAL_ADC_Counter == 0)
+ {
+   GPIO_InitTypeDef GPIO_InitStruct = {0};
+   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
-      }
+   if(adcHandle->Instance==ADC1)
+   {
+   /** Initializes the peripherals clock */
+     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADCDAC;  // 768kHz
+     PeriphClkInit.AdcDacClockSelection = RCC_ADCDACCLKSOURCE_PLL2;
+     PeriphClkInit.PLL2.PLL2Source = RCC_PLLSOURCE_HSE;
+     PeriphClkInit.PLL2.PLL2M = 2;
+     PeriphClkInit.PLL2.PLL2N = 48;
+     PeriphClkInit.PLL2.PLL2P = 2;
+     PeriphClkInit.PLL2.PLL2Q = 7;
+ #ifdef ADC_TEST_IRQ
+     PeriphClkInit.PLL2.PLL2R = 50;
+ #else
+     PeriphClkInit.PLL2.PLL2R = 25;
+ #endif
+     PeriphClkInit.PLL2.PLL2RGE = RCC_PLLVCIRANGE_1;
+     PeriphClkInit.PLL2.PLL2FRACN = 0;
+     PeriphClkInit.PLL2.PLL2ClockOut = RCC_PLL2_DIVR;
+     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+     {
 
-      __HAL_RCC_ADCDAC_CONFIG(RCC_ADCDACCLKSOURCE_PLL2);
-      
-      /* ADC1 clock enable */
-      __HAL_RCC_ADC1_CLK_ENABLE();
+     }
 
-      __HAL_RCC_GPIOC_CLK_ENABLE();
-      /**ADC1 GPIO Configuration
-      PC1     ------> ADC1_IN2
-      */
-      GPIO_InitStruct.Pin = AMIC_ONBOARD_ADC1_IN2_PIN;
-      GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-      GPIO_InitStruct.Pull = GPIO_NOPULL;
-      HAL_GPIO_Init(AMIC_ONBOARD_ADC1_IN2_GPIO_PORT, &GPIO_InitStruct);
-    }
-  }
-  
-  HAL_ADC_Counter++;
+     __HAL_RCC_ADCDAC_CONFIG(RCC_ADCDACCLKSOURCE_PLL2);
+
+     /* ADC1 clock enable */
+     __HAL_RCC_ADC1_CLK_ENABLE();
+
+     __HAL_RCC_GPIOC_CLK_ENABLE();
+     /**ADC1 GPIO Configuration
+     PC1     ------> ADC1_IN2
+     */
+     GPIO_InitStruct.Pin = AMIC_ONBOARD_ADC1_IN2_PIN;
+     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+     GPIO_InitStruct.Pull = GPIO_NOPULL;
+     HAL_GPIO_Init(AMIC_ONBOARD_ADC1_IN2_GPIO_PORT, &GPIO_InitStruct);
+   }
+ }
+
+ HAL_ADC_Counter++;
 }
 
 
 void HAL_ADC_MspDeInit(ADC_HandleTypeDef* adcHandle)
 {
-  if(adcHandle->Instance==ADC1)
-  {
-    /* Peripheral clock disable */
-    __HAL_RCC_ADC1_CLK_DISABLE();
+ if(adcHandle->Instance==ADC1)
+ {
+   /* Peripheral clock disable */
+   __HAL_RCC_ADC1_CLK_DISABLE();
 
-    /**ADC1 GPIO Configuration
-    PC1     ------> ADC1_IN2
-    */
-    HAL_GPIO_DeInit(GPIOC, GPIO_PIN_1);
-  }
+   /**ADC1 GPIO Configuration
+   PC1     ------> ADC1_IN2
+   */
+   HAL_GPIO_DeInit(GPIOC, GPIO_PIN_1);
+ }
 }
 
 /**

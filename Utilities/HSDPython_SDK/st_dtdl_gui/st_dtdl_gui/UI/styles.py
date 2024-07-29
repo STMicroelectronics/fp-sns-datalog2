@@ -13,78 +13,58 @@
 # ******************************************************************************
 #
 
+import enum
+
 class STDTDL_MenuButton():
 
-    connected_stylesheet = '''
-            QPushButton {	
-            background-image: url(:/icons/icons/outline_settings_input_com_white_18dp.png);
+    class STDTDL_Page(enum.Enum):
+        PAGE_CONNECTION = 1
+        PAGE_DEVICE_CONFIG = 2
+        PAGE_EXPERIMENTAL_FEATURES = 3
+        PAGE_LOG_INFO = 4
+        PAGE_ABOUT = 5
+
+    def get_stylesheet(page:STDTDL_Page, status:bool):
+        
+        icon = ""
+        if status:
+            status_text = "border-right: 5px solid rgb(44, 49, 60);"
+        else:
+            status_text = ""
+        if page == STDTDL_MenuButton.STDTDL_Page.PAGE_CONNECTION:
+            icon = "outline_settings_input_com_white_18dp.png"
+            if status:
+                status_text = "border-right: 5px solid rgb(32, 133, 25);"
+            else:
+                status_text = "border-right: 5px solid rgb(134, 26, 34);"
+        elif page == STDTDL_MenuButton.STDTDL_Page.PAGE_DEVICE_CONFIG:
+            icon = "baseline_tune_white_18dp.png"
+        elif page == STDTDL_MenuButton.STDTDL_Page.PAGE_EXPERIMENTAL_FEATURES:
+            icon = "science_18dp_E8EAED.svg"
+        elif page == STDTDL_MenuButton.STDTDL_Page.PAGE_LOG_INFO:
+            icon = "outline_description_white_18dp.png"
+        elif page == STDTDL_MenuButton.STDTDL_Page.PAGE_ABOUT:
+            icon = "outline_info_white_18dp.png"
+        else:
+            return None
+
+        return f"""
+            QPushButton {{	
+            background-image: url(:/icons/icons/{icon});
             background-position: center;
             background-repeat: no-repeat;
             border: none;
-            border-right: 5px solid rgb(32, 133, 25);
+            {status_text}
             background-color: rgb(27, 29, 35);
             text-align: left;
-        }
-        QPushButton:hover {
+        }}
+        QPushButton:hover {{
             background-color: rgb(33, 37, 43);
-        }
-        QPushButton:pressed {	
+        }}
+        QPushButton:pressed {{
             background-color: rgb(32, 178, 170);
-        }
-        '''
-    
-    unconnected_stylesheet = '''
-        QPushButton {	
-        background-image: url(:/icons/icons/outline_settings_input_com_white_18dp.png);
-        background-position: center;
-        background-repeat: no-repeat;
-        border: none;
-        border-right: 5px solid rgb(134, 26, 34);
-        background-color: rgb(27, 29, 35);
-        text-align: left;
-        }
-        QPushButton:hover {
-            background-color: rgb(33, 37, 43);
-        }
-        QPushButton:pressed {	
-            background-color: rgb(32, 178, 170);
-        }
-        '''
-    
-    selected_device_conf_stylesheet = '''
-            QPushButton {	
-            background-image: url(:/icons/icons/baseline_tune_white_18dp.png);
-            background-position: center;
-            background-repeat: no-repeat;
-            border: none;
-            border-right: 5px solid rgb(44, 49, 60);
-            background-color: rgb(27, 29, 35);
-            text-align: left;
-        }
-        QPushButton:hover {
-            background-color: rgb(33, 37, 43);
-        }
-        QPushButton:pressed {	
-            background-color: rgb(32, 178, 170);
-        }
-        '''
-    
-    unselected_device_conf_stylesheet = '''
-        QPushButton {	
-        background-image: url(:/icons/icons/baseline_tune_white_18dp.png);
-        background-position: center;
-        background-repeat: no-repeat;
-        border: none;
-        background-color: rgb(27, 29, 35);
-        text-align: left;
-        }
-        QPushButton:hover {
-            background-color: rgb(33, 37, 43);
-        }
-        QPushButton:pressed {	
-            background-color: rgb(32, 178, 170);
-        }
-        '''
+        }}
+        """
 
 class STDTDL_LineEdit():
 
@@ -210,6 +190,16 @@ class STDTDL_PushButton():
             border-radius: 5px;	
             background-color: rgb(29,33,41);
             font: 700 9pt "Segoe UI";
+        }
+    '''
+
+    selected = '''
+        QPushButton {
+            color: rgb(120,120,120);
+            border: 2px solid rgb(42, 60, 42);
+            border-radius: 7px;	
+            background-color: rgb(32, 178, 170);
+            padding: 3px;
         }
     '''
     

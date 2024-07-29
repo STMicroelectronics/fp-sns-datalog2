@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_Battery.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add battery info services using vendor specific profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -95,7 +95,7 @@ tBleStatus BLE_BatteryUpdate(uint32_t BatteryLevel, uint32_t Voltage, uint32_t C
 
   uint8_t buff[2 + 2 + 2 + 2 + 1];
 
-  STORE_LE_16(buff, (HAL_GetTick() >> 3));
+  STORE_LE_16(buff, (HAL_GetTick() / 10));
   STORE_LE_16(buff + 2, (BatteryLevel * 10U));
   STORE_LE_16(buff + 4, (Voltage));
   STORE_LE_16(buff + 6, (Current));

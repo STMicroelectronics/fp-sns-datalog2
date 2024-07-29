@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: st_dtdl_gui
-Version: 2.2.1
+Version: 2.3.0
 Summary: STMicroelectronics UI Toolkit based on DTDL and PySide6.
 Home-page: 
 Author: SRA-ASP
@@ -21,10 +21,10 @@ Description-Content-Type: text\markdown
 License-File: LICENSE.md
 License-File: LICENSE.txt
 Requires-Dist: st_pnpl
-Requires-Dist: numpy
+Requires-Dist: numpy==1.26.4
 Requires-Dist: pyqtgraph
 Requires-Dist: setuptools
-Requires-Dist: PySide6
+Requires-Dist: PySide6==6.6.1
 Requires-Dist: pyaudio
 
 Copyright (c) 2022 STMicroelectronics.

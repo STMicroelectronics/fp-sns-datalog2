@@ -70,17 +70,6 @@ const MX_GPIOParams_t MX_GPIO_LED2InitParams =
 };
 
 /**
-  * (INT_EX) Initialization parameters.
-  */
-const MX_GPIOParams_t MX_GPIO_INT_EXInitParams =
-{
-  MX_GPIO_PG6_Init,
-  INT_EX_EXTI_IRQn,
-  INT_EX_Pin,
-  INT_EX_GPIO_Port
-};
-
-/**
   * (INT2_EX) Initialization parameters.
   */
 const MX_GPIOParams_t MX_GPIO_INT2_EXInitParams =
@@ -169,9 +158,9 @@ const MX_GPIOParams_t MX_GPIO_INT1_DWBInitParams =
 };
 
 /**
-  * (INT1_EXTERNAL_DWB) Initialization parameters.
+  * (INT1_EXTERNAL) Initialization parameters.
   */
-const MX_GPIOParams_t MX_GPIO_INT1_EXTERNAL_DWBInitParams =
+const MX_GPIOParams_t MX_GPIO_INT1_EXTERNAL_InitParams =
 {
   MX_GPIO_PG6_Init,
   INT_EX_EXTI_IRQn,
@@ -180,11 +169,11 @@ const MX_GPIOParams_t MX_GPIO_INT1_EXTERNAL_DWBInitParams =
 };
 
 /**
-  * (INT1_EXTERNAL_ISPU) Initialization parameters.
+  * (INT_POW) Initialization parameters.
   */
-const MX_GPIOParams_t MX_GPIO_INT1_EXTERNAL_ISPUInitParams =
+const MX_GPIOParams_t MX_GPIO_INT_POW_InitParams =
 {
-  MX_GPIO_PG6_Init,
+  MX_GPIO_PG6_POW_Init,
   INT_EX_EXTI_IRQn,
   INT_EX_Pin,
   INT_EX_GPIO_Port

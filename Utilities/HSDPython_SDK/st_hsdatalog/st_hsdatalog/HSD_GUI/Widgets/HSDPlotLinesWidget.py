@@ -163,6 +163,8 @@ class HSDPlotLinesWidget(PlotLinesWavWidget):
                     self.legend.addItem(self.graph_curves[gc_id], "Temperature")
                 elif "_pres" in self.plot_params.comp_name:
                     self.legend.addItem(self.graph_curves[gc_id], "Pressure")
+                elif "_hum" in self.plot_params.comp_name:
+                    self.legend.addItem(self.graph_curves[gc_id], "Humidity")
                 elif "_mlc" in self.plot_params.comp_name:
                     self.legend.addItem(self.graph_curves[gc_id], "reg_{}".format(gc_id))
                 elif "_ispu" in self.plot_params.comp_name:

@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    SensorTileBoxPro_nfctag_ex.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.1.0
-  * @date    20-July-2023
+  * @version V1.2.0
+  * @date    03-Jun-2024
   * @brief   This file contains definitions for the SensorTileBoxPro_nfctag_ex.c
   *          specific functions.
   ******************************************************************************
@@ -17,27 +17,31 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SENSORTILEBOXPRO_NFCTAG_EX_H__
 #define __SENSORTILEBOXPRO_NFCTAG_EX_H__
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "SensorTileBoxPro_conf.h"
 #include "st25dv.h"
 
-/* Exported function	--------------------------------------------------------*/
+/* Exported function  --------------------------------------------------------*/
 
-int32_t BSP_NFCTAG_ChangeITPulse(uint32_t MsbPasswd,uint32_t LsbPasswd,const uint8_t ITtime);
-int32_t BSP_NFCTAG_ChangeMBMode(uint32_t MsbPasswd,uint32_t LsbPasswd,const uint8_t MB_mode);
-int32_t BSP_NFCTAG_ChangeI2CPassword(uint32_t MsbPasswd,uint32_t LsbPasswd);
-int32_t BSP_NFCTAG_WriteConfigIT(uint32_t MsbPasswd,uint32_t LsbPasswd,const uint16_t ITConfig);
-int32_t BSP_NFCTAG_ChangeMBWDG(uint32_t MsbPasswd,uint32_t LsbPasswd,const uint8_t WdgDelay);
+int32_t BSP_NFCTAG_ChangeITPulse(uint32_t MsbPasswd, uint32_t LsbPasswd, const uint8_t ITtime);
+int32_t BSP_NFCTAG_ChangeMBMode(uint32_t MsbPasswd, uint32_t LsbPasswd, const uint8_t MB_mode);
+int32_t BSP_NFCTAG_ChangeI2CPassword(uint32_t MsbPasswd, uint32_t LsbPasswd);
+int32_t BSP_NFCTAG_WriteConfigIT(uint32_t MsbPasswd, uint32_t LsbPasswd, const uint16_t ITConfig);
+int32_t BSP_NFCTAG_ChangeMBWDG(uint32_t MsbPasswd, uint32_t LsbPasswd, const uint8_t WdgDelay);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __SENSORTILEBOXPRO_NFCTAG_EX_H__ */
 

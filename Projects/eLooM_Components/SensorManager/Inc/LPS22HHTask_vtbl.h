@@ -75,6 +75,8 @@ SensorDescriptor_t LPS22HHTask_vtblTempGetDescription(ISensor_t *_this);
 SensorDescriptor_t LPS22HHTask_vtblPressGetDescription(ISensor_t *_this);
 SensorStatus_t LPS22HHTask_vtblTempGetStatus(ISensor_t *_this);
 SensorStatus_t LPS22HHTask_vtblPressGetStatus(ISensor_t *_this);
+SensorStatus_t *LPS22HHTask_vtblTempGetStatusPointer(ISensor_t *_this);
+SensorStatus_t *LPS22HHTask_vtblPressGetStatusPointer(ISensor_t *_this);
 
 #ifdef __cplusplus
 }

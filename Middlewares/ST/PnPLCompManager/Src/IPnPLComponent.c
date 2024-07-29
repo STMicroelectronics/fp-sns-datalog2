@@ -26,7 +26,7 @@ extern char *IPnPLComponentGetKey(IPnPLComponent_t *_this);
 extern uint8_t IPnPLComponentGetNCommands(IPnPLComponent_t *_this);
 extern char *IPnPLComponentGetCommandKey(IPnPLComponent_t *_this, uint8_t id);
 extern uint8_t IPnPLComponentGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty);
-#ifdef PNPL_RESPONSES
+#if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
   extern uint8_t IPnPLComponentSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
   extern uint8_t IPnPLCommandExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
 #else

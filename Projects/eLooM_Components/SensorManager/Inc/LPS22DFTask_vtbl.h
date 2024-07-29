@@ -67,6 +67,7 @@ sys_error_code_t LPS22DFTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t LPS22DFTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t LPS22DFTask_vtblPressGetDescription(ISensor_t *_this);
 SensorStatus_t LPS22DFTask_vtblPressGetStatus(ISensor_t *_this);
+SensorStatus_t *LPS22DFTask_vtblPressGetStatusPointer(ISensor_t *_this);
 
 #ifdef __cplusplus
 }

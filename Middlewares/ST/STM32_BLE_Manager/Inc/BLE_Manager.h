@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_Manager.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   BLE Manager services APIs
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -112,6 +112,8 @@ extern "C" {
 #define BLE_MANAGER_SENSOR_TILE_BOX_PRO_B_PLATFORM 0x11U
 #define BLE_MANAGER_STEVAL_STWINBX1_B_PLATFORM     0x12U
 #define BLE_MANAGER_NUCLEO_PLATFORM                0x80U
+#define BLE_MANAGER_STM32U5A5ZJ_NUCLEO_PLATFORM    0x7AU
+#define BLE_MANAGER_STM32U575ZI_NUCLEO_PLATFORM    0x7BU
 #define BLE_MANAGER_STM32F446RE_NUCLEO_PLATFORM    0x7CU
 #define BLE_MANAGER_STM32L053R8_NUCLEO_PLATFORM    0x7DU
 #define BLE_MANAGER_STM32L476RG_NUCLEO_PLATFORM    0x7EU
@@ -336,6 +338,21 @@ typedef struct
   int32_t IntValue;
   uint8_t *StringValue;
 } BLE_CustomCommadResult_t;
+
+typedef enum
+{
+  BLE_COMM_TP_START_PACKET = 0x00,
+  BLE_COMM_TP_START_END_PACKET = 0x20,
+  BLE_COMM_TP_MIDDLE_PACKET = 0x40,
+  BLE_COMM_TP_END_PACKET = 0x80,
+  BLE_COMM_TP_START_LONG_PACKET = 0x10
+} BLE_COMM_TP_Packet_Typedef;
+
+typedef enum
+{
+  BLE_COMM_TP_WAIT_START = 0,
+  BLE_COMM_TP_WAIT_END = 1
+} BLE_COMM_TP_Status_Typedef;
 
 /* Exported Variables ------------------------------------------------------- */
 
@@ -593,7 +610,7 @@ extern uint32_t BLE_Command_TP_Parse(uint8_t **buffer_out, uint8_t *buffer_in, u
   * @retval Buffer out length.
   */
 extern uint32_t BLE_Command_TP_Encapsulate(uint8_t *buffer_out, uint8_t *buffer_in, uint32_t len,
-                                           int32_t BytePacketSize);
+                                           uint32_t BytePacketSize);
 
 extern tBleStatus BLE_ExtConfiguration_Update(uint8_t *data, uint32_t length);
 

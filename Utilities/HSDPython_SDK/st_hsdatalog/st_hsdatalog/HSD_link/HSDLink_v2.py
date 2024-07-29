@@ -19,10 +19,11 @@ import os
 import json
 from datetime import datetime
 
-from st_hsdatalog.HSD_utils.exceptions import InvalidCommandSetError
+from st_hsdatalog.HSD_utils.exceptions import InvalidCommandSetError, NoDeviceConnectedError
 import st_hsdatalog.HSD_utils.logger as logger
 from st_pnpl.PnPLCmd import PnPLCMDManager
 from .communication.PnPL_HSD.PnPLHSD_com_manager import PnPLHSD_CommandManager, PnPLHSD_Creator
+from st_hsdatalog.HSD_link.communication.PnPL_STSRL.PnPLSTSRL_com_manager import PnPLSTSRL_Creator
 from st_pnpl.DTDL.device_template_manager import DeviceTemplateManager
 
 from st_hsdatalog.HSD_utils.exceptions import *
@@ -35,11 +36,12 @@ class HSDLink_v2:
     __base_acquisition_folder = None
     __acquisition_folder = None
     
-    def __init__(self, dev_com_type: str = 'pnpl', acquisition_folder = None, plug_callback = None, unplug_callback = None):
+    def __init__(self, dev_com_type: str = 'st_hsd', acquisition_folder = None, plug_callback = None, unplug_callback = None):
         self.__create_com_manager(dev_com_type, plug_callback, unplug_callback)
         
         self.sensor_data_counts = {}
         self.nof_connected_devices = 0
+        self.save_files = True
                 
         self.__dt_manager = None
         if acquisition_folder is None:
@@ -64,18 +66,30 @@ class HSDLink_v2:
     def open(self):
         return self.__com_manager.open()
     
+    def open(self, com_id, com_speed):
+        return self.__com_manager.open(com_id, com_speed)
+    
     def close(self):
         return self.__com_manager.close()
 
     def __create_com_manager(self,dev_com_type, plug_callback = None, unplug_callback = None):
         if dev_com_type == 'pnpl':
             factory = PnPLHSD_Creator()
+            self.__com_manager = factory.create_cmd_manager(plug_callback, unplug_callback)
+        if dev_com_type == 'st_hsd':
+            factory = PnPLHSD_Creator()
+            self.__com_manager = factory.create_cmd_manager(plug_callback, unplug_callback)
+        elif dev_com_type == 'st_serial_datalog':
+            factory = PnPLSTSRL_Creator()
+            self.__com_manager = factory.create_cmd_manager()
         else:
             log.error("Invalid Command Set selected: {}".format(dev_com_type))
             raise InvalidCommandSetError(dev_com_type)
-        self.__com_manager:PnPLHSD_CommandManager = factory.create_cmd_manager(plug_callback, unplug_callback)
         #Command set presentation
         log.info(self.get_cmd_set_presentation_string())
+    
+    def get_com_manager(self):
+        return self.__com_manager
 
     def get_device_presentation_string(self, d_id:int):
         return self.__com_manager.get_device_presentation_string(d_id)
@@ -191,7 +205,23 @@ class HSDLink_v2:
                     sw_tags[t] = res["tags_info"][t]
         return sw_tags
 
-    def get_sw_tag_class(self, d_id: int, tag_class_id: int):
+    def get_sw_tag_class(self, d_id: int, tag_class_name: str):
+        ret = self.__com_manager.get_string_property(d_id, "tags_info", tag_class_name)
+        return ret
+    
+    def get_sw_tag_class_label(self, d_id: int, tag_class_name: str):
+        ret = self.__com_manager.get_string_property(d_id, "tags_info", tag_class_name, "label")
+        return ret
+    
+    def get_sw_tag_class_enabled(self, d_id: int, tag_class_name: str):
+        ret = self.__com_manager.get_boolean_property(d_id, "tags_info", tag_class_name, "enabled")
+        return ret
+    
+    def get_sw_tag_class_status(self, d_id: int, tag_class_name: str):
+        ret = self.__com_manager.get_boolean_property(d_id, "tags_info", tag_class_name, "status")
+        return ret
+
+    def get_sw_tag_class_by_id(self, d_id: int, tag_class_id: int):
         ret = self.__com_manager.get_string_property(d_id, "tags_info", "sw_tag{}".format(tag_class_id))
         return ret
     
@@ -207,18 +237,6 @@ class HSDLink_v2:
         ret = self.__com_manager.get_boolean_property(d_id, "tags_info", "sw_tag{}".format(tag_class_id), "status")
         return ret
     
-    def get_sw_tag_class_label(self, d_id: int, tag_class_name: str):
-        ret = self.__com_manager.get_string_property(d_id, "tags_info", tag_class_name, "label")
-        return ret
-    
-    def get_sw_tag_class_enabled(self, d_id: int, tag_class_name: str):
-        ret = self.__com_manager.get_boolean_property(d_id, "tags_info", tag_class_name, "enabled")
-        return ret
-    
-    def get_sw_tag_class_status(self, d_id: int, tag_class_name: str):
-        ret = self.__com_manager.get_boolean_property(d_id, "tags_info", tag_class_name, "status")
-        return ret
-
     # def get_hw_tag_classes(self, d_id: int):
     #     hw_tags = dict()
     #     res = self.get_tags_info(d_id)
@@ -272,9 +290,6 @@ class HSDLink_v2:
         self.set_acquisition_name(d_id, name)
         return self.set_acquisition_description(d_id, description)
 
-    def set_acquisition_description(self, d_id:int, description:str):
-        return self.__com_manager.set_property(d_id, description, "acquisition_info", "description")
-
     def set_sensor_enable(self, d_id: int, new_status: bool, comp_name: str):        
         return self.__com_manager.set_property(d_id, new_status, comp_name, "enable")
     
@@ -290,7 +305,7 @@ class HSDLink_v2:
     def set_sensor_samples_per_ts(self, d_id: int, new_spts: int, comp_name: str):
         return self.__com_manager.set_property(d_id, new_spts, comp_name, "samples_per_ts", "val")
 
-    def set_property(self, d_id: int, new_value, comp_name: str, prop_name: str, sub_prop_name: str = None):        
+    def set_property(self, d_id: int, new_value, comp_name: str, prop_name: str, sub_prop_name: str = None):
         return self.__com_manager.set_property(d_id, new_value, comp_name, prop_name, sub_prop_name)
 
     def set_sw_tag_class_enabled(self, d_id:int, tag_class_name:str, new_status: bool):
@@ -339,8 +354,9 @@ class HSDLink_v2:
         message = PnPLCMDManager.create_command_cmd("log_controller","set_time","datetime", time if dtime is None else dtime)
         return self.send_command(d_id, message)
     
-    def start_log(self, d_id:int, interface:int = 1, acq_folder = None, sub_folder = True):
+    def start_log(self, d_id:int, interface:int = 1, acq_folder = None, sub_folder = True, save_files = True):
         log.info("Log Started")
+        self.save_files = save_files
         if acq_folder is not None:
             self.update_base_acquisition_folder(acq_folder)
         if sub_folder == True:
@@ -348,7 +364,7 @@ class HSDLink_v2:
         else:
             self.__acquisition_folder = self.__base_acquisition_folder
                 
-        if not os.path.exists(self.__acquisition_folder):
+        if self.save_files and not os.path.exists(self.__acquisition_folder):
             os.makedirs(self.__acquisition_folder)
         return self.__com_manager.start_log(d_id, interface)
     
@@ -365,46 +381,52 @@ class HSDLink_v2:
         return self.send_command(d_id, message)
     
     def save_json_device_file(self, d_id: int, out_acq_path = None):
-        json_save_path = self.__acquisition_folder
-        if out_acq_path is not None:
-            if not os.path.exists(out_acq_path):
-                os.makedirs(out_acq_path)
-            json_save_path = out_acq_path
-        try:
-            res = self.get_device_status(d_id)
-            if res is not None:
-                for i, c in enumerate(res["devices"][0]["components"]):
-                    if "acquisition_info" in c:
-                        acq_uuid = c["acquisition_info"]["uuid"]
-                        res["devices"][0]["components"].pop(i)
-                        res["uuid"] = acq_uuid
-                device_status_filename = os.path.join(json_save_path, "device_config.json")
-                sensor_data_file = open(device_status_filename, "w+")
-                sensor_data_file.write(json.dumps(res, indent = 4))
-                sensor_data_file.close()
-                log.info("device_config.json Configuration file correctly saved")
-                return True
-        except:
-            raise
+        if self.save_files:
+            json_save_path = self.__acquisition_folder
+            if out_acq_path is not None:
+                if not os.path.exists(out_acq_path):
+                    os.makedirs(out_acq_path)
+                json_save_path = out_acq_path
+            try:
+                res = self.get_device_status(d_id)
+                if res is not None:
+                    for i, c in enumerate(res["devices"][0]["components"]):
+                        if "acquisition_info" in c:
+                            acq_uuid = c["acquisition_info"]["uuid"]
+                            res["devices"][0]["components"].pop(i)
+                            res["uuid"] = acq_uuid
+                    device_status_filename = os.path.join(json_save_path, "device_config.json")
+                    sensor_data_file = open(device_status_filename, "w+")
+                    sensor_data_file.write(json.dumps(res, indent = 4))
+                    sensor_data_file.close()
+                    log.info("device_config.json Configuration file correctly saved")
+                    return True
+            except:
+                raise
     
-    def save_json_acq_info_file(self, d_id: int, out_acq_path = None):
-        json_save_path = self.__acquisition_folder
-        if out_acq_path is not None:
-            if not os.path.exists(out_acq_path):
-                os.makedirs(out_acq_path)
-            json_save_path = out_acq_path
-        try:
-            res = self.get_acquisition_info(d_id)
-            if res is not None:
-                acq_info_filename = os.path.join(json_save_path,"acquisition_info.json")
-                acq_info_file = open(acq_info_filename, "w+")
+    def save_json_acq_info_file(self, d_id: int, out_acq_path = None, manual_tags = None):
+        if self.save_files:
+            json_save_path = self.__acquisition_folder
+            if out_acq_path is not None:
+                if not os.path.exists(out_acq_path):
+                    os.makedirs(out_acq_path)
+                json_save_path = out_acq_path
+            try:
+                res = self.get_acquisition_info(d_id)
+                if res is not None:
+                    acq_info_filename = os.path.join(json_save_path,"acquisition_info.json")
+                    acq_info_file = open(acq_info_filename, "w+")
 
-                acq_info_file.write(json.dumps(res["acquisition_info"], indent = 4))
-                acq_info_file.close()
-                log.info("acquisition_info.json file correctly saved")
-                return True
-        except:
-            raise
+                    if manual_tags is None:
+                        acq_info_file.write(json.dumps(res["acquisition_info"], indent = 4))
+                    else:
+                        res["acquisition_info"]["tags"] = manual_tags
+                        acq_info_file.write(json.dumps(res["acquisition_info"], indent = 4))
+                    acq_info_file.close()
+                    log.info("acquisition_info.json file correctly saved")
+                    return True
+            except:
+                raise
 
     def update_device(self, d_id:int, device_json_file_path): #device_config.json
         try:
@@ -447,12 +469,11 @@ class HSDLink_v2:
                 time = line[4:]
                 time_digit = len(time)
                 missing_digit = 3-time_digit
-                for i in range(missing_digit):
-                    time = "0" + time
+                time = "0" * missing_digit + time
                 time = "W" + time
-                ucf_buffer = ucf_buffer + time
+                ucf_buffer += time
             else:
-                ucf_buffer = ucf_buffer + line[2:]
+                ucf_buffer += line[2:]
         ucf_size = len(ucf_buffer)
         ucf = {"size" : ucf_size, "data" : ucf_buffer}
         message = PnPLCMDManager.create_command_cmd(comp_name,"load_file","ucf_data", ucf)
@@ -477,12 +498,11 @@ class HSDLink_v2:
                 time = line[4:]
                 time_digit = len(time)
                 missing_digit = 3-time_digit
-                for i in range(missing_digit):
-                    time = "0" + time
+                time = "0" * missing_digit + time
                 time = "W" + time
-                ucf_buffer = ucf_buffer + time
+                ucf_buffer += time
             else:
-                ucf_buffer = ucf_buffer + line[2:]
+                ucf_buffer += line[2:]
         ucf_size = len(ucf_buffer)
         #NOTE OUTPUT FORMAT JSON File # It will be available in next release
         # with open(output_json_file_path, "r") as f:
@@ -498,3 +518,40 @@ class HSDLink_v2:
             log.error("Error loading UCF file [\"{}\"] in {} Component".format(ucf_file_path, comp_name))
         return res
 
+class HSDLink_v2_Serial(HSDLink_v2):
+    
+    def __init__(self, dev_com_type: str = 'st_serial_datalog', acquisition_folder=None, plug_callback=None, unplug_callback=None):
+        super().__init__(dev_com_type, acquisition_folder, plug_callback, unplug_callback)
+        self.__com_manager = self.get_com_manager()
+
+    #@override
+    def set_rtc_time(self, d_id:int, dtime=None):
+        if dtime is None:
+            now = datetime.now()
+            time = now.strftime("%Y%m%d_%H_%M_%S")
+        message = PnPLCMDManager.create_command_cmd("log_controller","set_time","datetime", time if dtime is None else dtime)
+        return self.send_command(d_id, message)
+
+    def send_command(self, d_id:int, message):
+        return self.__com_manager.send_pnpl_msg(message)
+    
+    def get_serial_data(self):
+        return self.__com_manager.get_serial_data()
+    
+    def flush(self):
+        return self.__com_manager.flush()
+    
+    def get_components_count(self, d_id:int):
+        return self.__com_manager.get_components_count(d_id)
+    
+    def get_actuator_components_count(self, d_id:int, only_active:bool=False):
+        return self.__com_manager.get_actuator_components_count(d_id, only_active)
+    
+    def get_components_names(self, d_id:int):
+        return self.__com_manager.get_components_names(d_id)
+    
+    def get_actuator_components_names(self, d_id:int, only_active:bool=False):
+        return self.__com_manager.get_actuator_components_names(d_id, only_active)
+    
+    def get_actuators_status(self, d_id:int, only_active:bool=False):
+        return self.__com_manager.get_actuator_components_status(d_id, only_active)

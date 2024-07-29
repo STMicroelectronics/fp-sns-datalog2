@@ -488,7 +488,7 @@ sys_error_code_t UtilTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   UtilTask_t *p_obj = (UtilTask_t *) _this;
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("UTIL: start.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("UTIL: start.\r\n"));
 
   /* Enable User button interrupt */
   if (p_obj->p_mx_ub_drv_cfg != NULL)

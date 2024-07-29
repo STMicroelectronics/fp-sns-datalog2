@@ -37,6 +37,9 @@ typedef enum
 } hwd_st25dv_version;
 
 boolean_t HardwareDetection_Check_Ext_PDETECT(uint8_t *device_address);
+boolean_t HardwareDetection_Check_Ext_PDETECT2(uint8_t *device_address);
+boolean_t HardwareDetection_Check_Ext_PDETECT3(uint8_t *device_address);
+boolean_t HardwareDetection_Check_Ext_SENSIRION(void);
 hwd_st25dv_version HardwareDetection_Check_ST25DV(void);
 
 #ifdef __cplusplus

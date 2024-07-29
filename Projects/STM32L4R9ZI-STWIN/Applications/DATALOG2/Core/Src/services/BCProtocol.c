@@ -175,7 +175,7 @@ sys_error_code_t BCPInit(BCProtocol_t *_this, IDriver *p_bc_tim_sw_driver, IDriv
     /* Enable Li-Ion battery measurement */
     BCPSendCmd(_this, E_BATMS_ON);
 
-    SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("BCP: initialization done.\r\n"));
+    SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("BCP: initialization done.\r\n"));
   }
 
   return res;

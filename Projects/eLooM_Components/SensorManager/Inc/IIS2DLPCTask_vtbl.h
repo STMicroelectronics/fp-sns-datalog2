@@ -48,6 +48,7 @@ sys_error_code_t IIS2DLPCTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t IIS2DLPCTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t IIS2DLPCTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t IIS2DLPCTask_vtblSensorGetStatus(ISensor_t *_this);
+SensorStatus_t *IIS2DLPCTask_vtblSensorGetStatusPointer(ISensor_t *_this);
 sys_error_code_t IIS2DLPCTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
 float IIS2DLPCTask_vtblAccGetFS(ISensorMems_t *_this);
 float IIS2DLPCTask_vtblAccGetSensitivity(ISensorMems_t *_this);

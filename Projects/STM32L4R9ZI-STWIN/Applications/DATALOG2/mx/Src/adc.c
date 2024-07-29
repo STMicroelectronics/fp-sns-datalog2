@@ -198,7 +198,7 @@ void MX_ADC1_CustomInit(ADC_InitUsedDef ADC_InitFor)
     }
   }
 
-  /* Set that we had Initiliazed the ADC for Audio or For Battery Charger */
+  /* Set that we had Initialized the ADC for Audio or For Battery Charger */
   ADC_UsedFor |= ADC_InitFor;
 
   if (ADC_InitFor == ADC1_FOR_AUDIO)

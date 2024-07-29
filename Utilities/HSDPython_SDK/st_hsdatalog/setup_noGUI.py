@@ -14,14 +14,13 @@
 #
 
 import setuptools
-import os
 
 with open("LICENSE.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="st_hsdatalog",
-    version="3.1.1",
+    version="3.3.0",
     author="SRA-ASP",
     author_email="matteo.ronchi@st.com",
     description="STMicroelectronics High Speed Datalog python package (NO GUI)",
@@ -47,8 +46,10 @@ setuptools.setup(
     ],
     install_requires=[
        "st_pnpl",
-       "numpy",
+       "numpy==1.26.4",
+       "pyserial",
        "pandas",
+       "fastparquet",
        "colorama",
        "click",
        "matplotlib",

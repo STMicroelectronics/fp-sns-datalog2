@@ -36,7 +36,31 @@
 #define BSP_ERROR_BUS_FAILURE            -8
 #define BSP_ERROR_CLOCK_FAILURE          -9
 #define BSP_ERROR_MSP_FAILURE            -10
-#define BSP_NOT_IMPLEMENTED              -11   
+#define BSP_ERROR_FEATURE_NOT_SUPPORTED      -11
+
+/* BSP BUS error codes */
+
+#define BSP_ERROR_BUS_TRANSACTION_FAILURE    -100
+#define BSP_ERROR_BUS_ARBITRATION_LOSS       -101
+#define BSP_ERROR_BUS_ACKNOWLEDGE_FAILURE    -102
+#define BSP_ERROR_BUS_PROTOCOL_FAILURE       -103
+
+#define BSP_ERROR_BUS_MODE_FAULT             -104
+#define BSP_ERROR_BUS_FRAME_ERROR            -105
+#define BSP_ERROR_BUS_CRC_ERROR              -106
+#define BSP_ERROR_BUS_DMA_FAILURE            -107 
+
+/* BSP BUS error codes */
+
+#define BSP_ERROR_BUS_TRANSACTION_FAILURE    -100
+#define BSP_ERROR_BUS_ARBITRATION_LOSS       -101
+#define BSP_ERROR_BUS_ACKNOWLEDGE_FAILURE    -102
+#define BSP_ERROR_BUS_PROTOCOL_FAILURE       -103
+
+#define BSP_ERROR_BUS_MODE_FAULT             -104
+#define BSP_ERROR_BUS_FRAME_ERROR            -105
+#define BSP_ERROR_BUS_CRC_ERROR              -106
+#define BSP_ERROR_BUS_DMA_FAILURE            -107
 
 #ifdef __cplusplus
 }

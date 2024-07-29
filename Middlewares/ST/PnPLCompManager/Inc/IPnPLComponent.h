@@ -36,7 +36,7 @@ static inline char *IPnPLComponentGetKey(IPnPLComponent_t *_this);
 static inline uint8_t IPnPLComponentGetNCommands(IPnPLComponent_t *_this);
 static inline char *IPnPLComponentGetCommandKey(IPnPLComponent_t *_this, uint8_t id);
 static inline uint8_t IPnPLComponentGetStatus(IPnPLComponent_t *_this, char **serializedJSON, uint32_t *size, uint8_t pretty);
-#ifdef PNPL_RESPONSES
+#if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
   static inline uint8_t IPnPLComponentSetProperty(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
   static inline uint8_t IPnPLCommandExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response, uint32_t *size, uint8_t pretty);
 #else

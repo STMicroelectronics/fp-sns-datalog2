@@ -34,11 +34,12 @@ class HSDLink_v1:
     __com_manager = None
     __acquisition_folder = "."
     
-    def __init__(self, dev_com_type: str = 'stwin_hsd', acquisition_folder = None):
+    def __init__(self, dev_com_type: str = 'st_hsd', acquisition_folder = None, save_files = True):
         self.__create_com_manager(dev_com_type)
         
         self.sensor_data_counts = {}
         self.nof_connected_devices = 0
+        self.save_files = save_files
         
         #check that there is at least one connected device
         self.nof_connected_devices = self.get_nof_devices()
@@ -47,19 +48,20 @@ class HSDLink_v1:
 
         #acquisition folder creation
         if acquisition_folder is not None:
-            if not os.path.exists(acquisition_folder):
+            if self.save_files and not os.path.exists(acquisition_folder):
                 os.makedirs(acquisition_folder)
             self.__acquisition_folder = acquisition_folder
         else:
-            self.__acquisition_folder = os.path.join(self.__acquisition_folder, "{}".format(datetime.today().strftime('%Y%m%d_%H_%M_%S')))
-            os.makedirs(self.__acquisition_folder)
+            if self.save_files:
+                self.__acquisition_folder = os.path.join(self.__acquisition_folder, "{}".format(datetime.today().strftime('%Y%m%d_%H_%M_%S')))
+                os.makedirs(self.__acquisition_folder)
 
     def __create_com_manager(self,dev_com_type):
-        if dev_com_type == 'stwin_hsd':
+        if dev_com_type == 'st_hsd':
             factory = STWINHSD_Creator()
-        elif dev_com_type == 'stwin_hsd_dll':
+        elif dev_com_type == 'st_hsd_dll':
             factory = STWINHSD_DLL_Creator()
-        elif dev_com_type == 'stwin_hsd_cmd':
+        elif dev_com_type == 'st_hsd_cmd':
             factory = STWINHSD_CMD_Creator()
         elif dev_com_type == 'adev_hsd':
             factory = ADEVHSD_Creator()
@@ -231,39 +233,44 @@ class HSDLink_v1:
         return self.__com_manager.get_acquisition_header(d_id)
 
     def save_json_device_file(self, d_id: int, out_acq_path = None):
-        json_save_path = self.__acquisition_folder
-        if out_acq_path is not None:
-            if not os.path.exists(out_acq_path):
-                os.makedirs(out_acq_path)
-            json_save_path = out_acq_path
-        try:
-            res = self.__com_manager.get_device(d_id)
-            if res is not None:
-                res_header = self.__com_manager.get_acquisition_header(d_id)
-                dev_conf_dict = { res_header[0][0] : res_header[0][1], res_header[1][0] : res_header[1][1], "device" : res.to_dict()}
-                device_config_filename = os.path.join(json_save_path, "DeviceConfig.json")
-                sensor_data_file = open(device_config_filename, "w+")
-                sensor_data_file.write(json.dumps(dev_conf_dict, indent = 4))
-                sensor_data_file.close()
-                log.info("DeviceConfig.json Configuration file correctly saved")
-                return True
-        except:
-            raise
+        if self.save_files:
+            json_save_path = self.__acquisition_folder
+            if out_acq_path is not None:
+                if not os.path.exists(out_acq_path):
+                    os.makedirs(out_acq_path)
+                json_save_path = out_acq_path
+            try:
+                res = self.__com_manager.get_device(d_id)
+                if res is not None:
+                    res_header = self.__com_manager.get_acquisition_header(d_id)
+                    dev_conf_dict = { res_header[0][0] : res_header[0][1], res_header[1][0] : res_header[1][1], "device" : res.to_dict()}
+                    device_config_filename = os.path.join(json_save_path, "DeviceConfig.json")
+                    sensor_data_file = open(device_config_filename, "w+")
+                    sensor_data_file.write(json.dumps(dev_conf_dict, indent = 4))
+                    sensor_data_file.close()
+                    log.info("DeviceConfig.json Configuration file correctly saved")
+                    return True
+            except:
+                raise
 
-    def save_json_acq_info_file(self, d_id: int, out_acq_path = None):
-        json_save_path = self.__acquisition_folder
-        if out_acq_path is not None:
-            if not os.path.exists(out_acq_path):
-                os.makedirs(out_acq_path)
-            json_save_path = out_acq_path
-        try:
-            res = self.__com_manager.get_acquisition_info(d_id)
-            if res is not None:
-                acq_info_filename = os.path.join(json_save_path,"AcquisitionInfo.json")
-                acq_info_file = open(acq_info_filename, "w+")
-                acq_info_file.write(json.dumps(res.to_dict(), indent = 4))
-                acq_info_file.close()
-                log.info("AcquisitionInfo.json file correctly saved")
-                return True
-        except:
-            raise
+    def save_json_acq_info_file(self, d_id: int, out_acq_path = None, manual_tags = None):
+        if manual_tags is not None:
+            log.warning("Manual tags not supported in Datalog1. Manual tags Ignored.")
+
+        if self.save_files:    
+            json_save_path = self.__acquisition_folder
+            if out_acq_path is not None:
+                if self.save_files and not os.path.exists(out_acq_path):
+                    os.makedirs(out_acq_path)
+                json_save_path = out_acq_path
+            try:
+                res = self.__com_manager.get_acquisition_info(d_id)
+                if res is not None:
+                    acq_info_filename = os.path.join(json_save_path,"AcquisitionInfo.json")
+                    acq_info_file = open(acq_info_filename, "w+")
+                    acq_info_file.write(json.dumps(res.to_dict(), indent = 4))
+                    acq_info_file.close()
+                    log.info("AcquisitionInfo.json file correctly saved")
+                    return True
+            except:
+                raise

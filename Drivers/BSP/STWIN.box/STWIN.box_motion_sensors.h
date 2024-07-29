@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "STWIN.box.h"
+#include "STWIN.box_conf.h"
 #include "motion_sensor.h"
 
 #ifndef USE_MOTION_SENSOR_IIS2DLPC_0

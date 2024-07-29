@@ -171,59 +171,59 @@ ISourceObservable *LPS22DFTaskGetPressSensorIF(LPS22DFTask *_this);
 AManagedTaskEx *LPS22DFTaskAlloc(const void *pIRQConfig, const void *pCSConfig);
 
 /**
-  * Call the default ::LIS2MDLTaskAlloc and then it overwrite sensor name
+  * Call the default ::LPS22DfTaskAlloc and then it overwrite sensor name
   *
   * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
-  *        It must be a GPIO connected to the LIS2MDL sensor and configured in EXTI mode.
+  *        It must be a GPIO connected to the LPS22DF sensor and configured in EXTI mode.
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *LIS2MDLTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name);
+AManagedTaskEx *LPS22DFTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name);
 
 /**
-  * Allocate an instance of ::LIS2MDLTask in a memory block specified by the application.
-  * The size of the memory block must be greater or equal to `sizeof(LIS2MDLTask)`.
+  * Allocate an instance of ::LPS22DFTask in a memory block specified by the application.
+  * The size of the memory block must be greater or equal to `sizeof(LPS22DFTask)`.
   * This allocator allows the application to avoid the dynamic allocation.
   *
   * \code
-  * LIS2MDLTask sensor_task;
-  * LIS2MDLTaskStaticAlloc(&sensor_task);
+  * LPS22DFTask sensor_task;
+  * LPS22DFTaskStaticAlloc(&sensor_task);
   * \endcode
   *
   * @param p_mem_block [IN] specify a memory block allocated by the application.
-  *        The size of the memory block must be greater or equal to `sizeof(LIS2MDLTask)`.
+  *        The size of the memory block must be greater or equal to `sizeof(LPS22DFTask)`.
   * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
-  *        It must be a GPIO connected to the LIS2MDL sensor and configured in EXTI mode.
+  *        It must be a GPIO connected to the LPS22DF sensor and configured in EXTI mode.
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx_t if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *LIS2MDLTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig);
+AManagedTaskEx *LPS22DFTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig);
 
 /**
-  * Call the default ::LIS2MDLTaskAlloc and then it overwrite sensor name
+  * Call the default ::LPS22DFTaskAlloc and then it overwrite sensor name
   *
   * \code
-  * LIS2MDLTask sensor_task;
-  * LIS2MDLTaskStaticAlloc(&sensor_task);
+  * LPS22DFTask sensor_task;
+  * LPS22DFTaskStaticAlloc(&sensor_task);
   * \endcode
   *
   * @param p_mem_block [IN] specify a memory block allocated by the application.
-  *        The size of the memory block must be greater or equal to `sizeof(LIS2MDLTask)`.
+  *        The size of the memory block must be greater or equal to `sizeof(LPS22DFTask)`.
   * @param pIRQConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
-  *        It must be a GPIO connected to the LIS2MDL sensor and configured in EXTI mode.
+  *        It must be a GPIO connected to the LPS22DF sensor and configured in EXTI mode.
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx_t if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *LIS2MDLTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+AManagedTaskEx *LPS22DFTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
                                               const char *p_name);
 
 /**

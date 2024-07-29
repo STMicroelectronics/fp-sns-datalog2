@@ -37,6 +37,8 @@ extern "C" {
 #include "ISensorRanging_vtbl.h"
 #include "ISensorPresence.h"
 #include "ISensorPresence_vtbl.h"
+#include "ISensorPowerMeter.h"
+#include "ISensorPowerMeter_vtbl.h"
 #include "SensorDef.h"
 
 
@@ -97,6 +99,7 @@ sys_error_code_t   SMSensorDisable(uint8_t id);
 
 SensorDescriptor_t SMSensorGetDescription(uint8_t id);
 SensorStatus_t     SMSensorGetStatus(uint8_t id);
+SensorStatus_t    *SMSensorGetStatusPointer(uint8_t id);
 
 sys_error_code_t   SMDeviceGetDescription(SensorDescriptor_t *device_description);  /* DEPRECATED */
 
@@ -154,6 +157,11 @@ sys_error_code_t SMSensorSetSoftwareCompensationAlgorithmConfig(uint8_t id,
 sys_error_code_t SMSensorSetIntermeasurementTime(uint8_t id, uint32_t intermeasurement_time);
 sys_error_code_t SMSensorSetExposureTime(uint8_t id, uint32_t exposure_time);
 sys_error_code_t SMSensorSetLightGain(uint8_t id, float LightGain, uint8_t channel);
+
+/* Specialized for ISensorPowerMeter class */
+sys_error_code_t SMSensorSetADCConversionTime(uint8_t id, uint32_t adc_conversion_time);
+sys_error_code_t SMSensorSetRShunt(uint8_t id, uint32_t r_shunt);
+
 
 /* Inline functions definition */
 /*******************************/

@@ -43,7 +43,6 @@ void MX_GPIO_Init(void);
 void MX_GPIO_PE0_Init(void);
 void MX_GPIO_PH12_Init(void);
 void MX_GPIO_PH10_Init(void);
-void MX_GPIO_PB1_Init(void);
 void MX_GPIO_PG6_Init(void);
 void MX_GPIO_PF5_Init(void);
 void MX_GPIO_PF9_Init(void);
@@ -64,6 +63,11 @@ void MX_GPIO_PD0_Init(void);
 void MX_GPIO_PE7_Init(void);
 void MX_GPIO_PE12_Init(void);
 void MX_GPIO_PH7_Init(void);
+void MX_GPIO_PB1_Init(void);
+void MX_GPIO_PF8_Init(void);
+void MX_GPIO_PF10_Init(void);
+void MX_GPIO_PC3_Init(void);
+void MX_GPIO_PG5_Init(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

@@ -2,14 +2,14 @@
   ******************************************************************************
   * @file    SensorTileBoxPro_motion_sensors.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.1.0
-  * @date    20-July-2023
+  * @version V1.2.0
+  * @date    03-Jun-2024
   * @brief   This file contains definitions for the BSP Motion Sensors
   *          interface for SensorTileBoxPro
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,7 +17,7 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-*/
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SENSORTILEBOXPRO_MOTION_SENSORS_H__
@@ -34,39 +34,39 @@ extern "C" {
 
 #ifndef USE_MOTION_SENSOR_LIS2MDL_0
 #define USE_MOTION_SENSOR_LIS2MDL_0          1
-#endif
-  
+#endif /* USE_MOTION_SENSOR_LIS2MDL_0 */
+
 #ifndef USE_MOTION_SENSOR_LIS2DU12_0
 #define USE_MOTION_SENSOR_LIS2DU12_0          0
-#endif
-  
+#endif /* USE_MOTION_SENSOR_LIS2DU12_0 */
+
 #ifndef USE_MOTION_SENSOR_LSM6DSV16X_0
 #define USE_MOTION_SENSOR_LSM6DSV16X_0        0
-#endif
+#endif /* USE_MOTION_SENSOR_LSM6DSV16X_0 */
 
 #if (USE_MOTION_SENSOR_LIS2MDL_0 == 1)
 #include "lis2mdl.h"
-#endif
+#endif /* USE_MOTION_SENSOR_LIS2MDL_0 == 1 */
 
 #if (USE_MOTION_SENSOR_LIS2DU12_0 == 1)
 #include "lis2du12.h"
-#endif
+#endif /* USE_MOTION_SENSOR_LIS2DU12_0 == 1 */
 
 #if (USE_MOTION_SENSOR_LSM6DSV16X_0 == 1)
 #include "lsm6dsv16x.h"
-#endif
+#endif /* USE_MOTION_SENSOR_LSM6DSV16X_0 == 1 */
 
 #if (USE_MOTION_SENSOR_LIS2MDL_0 == 1)
 #define LIS2MDL_0 (0)
-#endif
+#endif /* USE_MOTION_SENSOR_LSM6DSV16X_0 == 1 */
 
 #if (USE_MOTION_SENSOR_LIS2DU12_0 == 1)
 #define LIS2DU12_0 (USE_MOTION_SENSOR_LIS2MDL_0)
-#endif
+#endif /* USE_MOTION_SENSOR_LIS2DU12_0 == 1 */
 
 #if (USE_MOTION_SENSOR_LSM6DSV16X_0 == 1)
 #define LSM6DSV16X_0 (USE_MOTION_SENSOR_LIS2MDL_0 + USE_MOTION_SENSOR_LIS2DU12_0)
-#endif
+#endif /* USE_MOTION_SENSOR_LSM6DSV16X_0 == 1 */
 
 typedef struct
 {
@@ -107,11 +107,12 @@ typedef struct
 #define MOTION_MAGNETO          4U
 
 #define BSP_MOTION_FUNCTIONS_NBR    3U
-#define BSP_MOTION_INSTANCES_NBR    (USE_MOTION_SENSOR_LIS2MDL_0 + USE_MOTION_SENSOR_LIS2DU12_0 + USE_MOTION_SENSOR_LSM6DSV16X_0)
+#define BSP_MOTION_INSTANCES_NBR    (USE_MOTION_SENSOR_LIS2MDL_0\
+                                     + USE_MOTION_SENSOR_LIS2DU12_0 + USE_MOTION_SENSOR_LSM6DSV16X_0)
 
 #if (BSP_MOTION_INSTANCES_NBR == 0)
 #error "No motion sensor instance has been selected"
-#endif
+#endif /* BSP_MOTION_INSTANCES_NBR == 0 */
 
 int32_t BSP_MOTION_SENSOR_Init(uint32_t Instance, uint32_t Functions);
 int32_t BSP_MOTION_SENSOR_DeInit(uint32_t Instance);

@@ -22,19 +22,113 @@
 <div class="col-sm-12 col-lg-4">
 <center>
 <h1 id="release-notes-for-hsdatalog-python-sdk">Release Notes for <mark>HSDatalog Python SDK</mark></h1>
-<p>Copyright © 2023 STMicroelectronics</p>
+<p>Copyright © 2024 STMicroelectronics</p>
 <a href="https://www.st.com" class="logo"><img src="_htmresc/st_logo_2020.png" alt="ST logo" /></a>
 </center>
 <h1 id="purpose">Purpose</h1>
-<p>The High-Speed DataLog firmware provides an easy way to save data from any combination of sensors and microphones configured at their maximum sampling rate. Sensor data can be either stored on a micro SD Card, SDHC (Secure Digital High Capacity) formatted with the FAT32 file system, or streamed to a PC via USB (WinUSB class).</p>
-<p>This folder contains different Python scripts and classes that can be used to handle the datasets obtained by the HSDatalog firmware.</p>
+<p>The <strong>ST High Speed Datalog</strong> is a comprehensive multisensor data capture and visualization toolkit, engineered to facilitate the development of embedded data science applications. The tool has been designed as an open and modular instrument, tailored for data scientists and embedded designers, that streamlines the capture of wideband and heterogeneous digital data streams from a variety of sensing and actuation platforms. It organizes the data into structured datasets that are readily compatible with mainstream data science toolchains, fostering reusability across multiple projects.</p>
+<p>ST High Speed Datalog, by virtue of its data-centric design and user-friendly <strong>Python SDK</strong>, may run with hardware boards that supply real-time data streams empowering users with full control of the data acquisition process.</p>
 </div>
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section16" checked aria-hidden="true"> <label for="collapse-section16" aria-hidden="true">v3.2.1 / 12-Apr-24</label>
+<input type="checkbox" id="collapse-section17" checked aria-hidden="true"> <label for="collapse-section17" aria-hidden="true">v3.3.0 / 19-Jul-24</label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
+<ul>
+<li>New Features:
+<ul>
+<li>Batch Data Extraction and Conversion: Now supports selectable chunk size.</li>
+<li>Data Toolkit Experimental Feature: Introduced a data processing pipeline with configurable plugins.</li>
+<li>Aggregation Feature: Added to hsdatalog_to_unico.py script.</li>
+<li>New Flags in example scripts:
+<ul>
+<li>-wu: Export a folder with “untagged” data for hsdatalog_data_export_by_tags.py and hsdatalog_to_unico.py.</li>
+<li>-tl: Filter acquisition tags with a list of tag labels and include only the corresponding entries in the converted output.</li>
+</ul></li>
+<li>Apache Parquet Support: Added to hsdatalog_data_export.py.</li>
+<li>Reshaped Test/How-to Scripts: Added new API examples and redesigned how-to notebooks.</li>
+<li>Improved Helper Messages: Enhanced in all scripts.</li>
+</ul></li>
+<li>New examples:
+<ul>
+<li>FP-IND-DATALOGMC AI demo</li>
+<li>hsdatalog_plot_large.py: Example script with out-of-core data management and dynamic resampling.</li>
+</ul></li>
+<li>Updates and bug fixed in st_dtdl_gui
+<ul>
+<li>Widgets:
+<ul>
+<li>Updated TOF and TMOS widgets to support up to 3 STEVAL-PDETECT simultaneously.</li>
+<li>Added support for Power Meter sensor (plot parameters and widget).</li>
+</ul></li>
+<li>Experimental Features Page: Added in MainWindow.
+<ul>
+<li>DataToolkit section.</li>
+</ul></li>
+<li>Enable/Disable All Button: Added select/unselect all toggle button.</li>
+<li>Graphic Issue fixed: pop-out/pop-in issue in config components.</li>
+<li>Disabled “Send command” button in load_ucf command (ISPU and MLC) when not all fields are filled.</li>
+<li>New icons, resources_rc updated</li>
+</ul></li>
+<li>Updates and bug fixed in st_hsdatalog
+<ul>
+<li>HSD
+<ul>
+<li>HSDatalog API updated: Added new sensors and tags property APIs</li>
+<li>Improved batch data extraction and redesigned data extraction algorithm:
+<ul>
+<li>Memory Optimized (selectable chunk size)</li>
+<li>Removed “_checked.dat” files creation</li>
+<li>Batched execution to allow out-of-core computations (save and append converted data chunks)</li>
+<li>Online data integrity protocol check (raises DataCorruptedException when missing packets detected in file)</li>
+</ul></li>
+<li>Updated TOF and TMOS plot methods</li>
+<li>Added support for Power Meter sensor</li>
+<li>Added MissingTagsException exception</li>
+<li>Fixed data and timestamp extraction</li>
+<li>Added missing ‘enum’ type in TypeConversion class</li>
+<li>Code cleaning and load device refactoring</li>
+<li>Fixed ISPU and tags plot labels</li>
+</ul></li>
+<li>HSD_GUI
+<ul>
+<li>Updated TOF, TMOS and ALS widgets</li>
+<li>Added support for Power Meter sensor</li>
+<li>Added DataToolkit Pipeline class</li>
+<li>Added save_files_flag checkbox in LogControlWidget</li>
+<li>Fixed:
+<ul>
+<li>get_algorithm_plot</li>
+<li>Stop sequence commands with automode component</li>
+<li>get_wav_file_path</li>
+</ul></li>
+</ul></li>
+<li>HSD_link
+<ul>
+<li>HSDLink_v2 expanded with new PnPLSTSRL_com_manager (ASPEP + SSTL + PnPL)</li>
+<li>Optimized WAIT management in UCF file compression function</li>
+<li>Added device_status parsing error exception check</li>
+<li>Fixed get_algorithm_components_status component type value</li>
+</ul></li>
+<li>HSD_utils
+<ul>
+<li>Improved batch data extraction and redesigned data extraction algorithm</li>
+<li>Added new exceptions: MissingTagsException and DataCorruptedException</li>
+<li>Added to_parquet and to_xsv_numpy converter functions</li>
+<li>Updated to_unico converter function</li>
+<li>Removed old converters functions</li>
+</ul></li>
+</ul></li>
+<li>Updated Device Template models and board catalog in st_pnpl</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section16" aria-hidden="true"> <label for="collapse-section16" aria-hidden="true">v3.2.1 / 12-Apr-24</label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
 <h3 id="patch-release">Patch release</h3>
 <ul>
 <li>hsdatalog_to_unico.py example script updated with ‘-cl, –columns_labels’ flag (mlc_tool customized exported file header)</li>
@@ -56,10 +150,10 @@
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section15" checked aria-hidden="true"> <label for="collapse-section15" aria-hidden="true">v3.2.0 / 16-Feb-24</label>
+<input type="checkbox" id="collapse-section15" aria-hidden="true"> <label for="collapse-section15" aria-hidden="true">v3.2.0 / 16-Feb-24</label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
+<h2 id="main-changes-2">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
 <ul>
 <li>Python3.12 and RaspberryPI4 (aarch64) 32 and 64 bit support</li>
 <li>New -ag option in hsdatalog_to_unico.py: enable data aggregation in a single csv file</li>
@@ -119,8 +213,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section14" aria-hidden="true"> <label for="collapse-section14" aria-hidden="true">v3.1.0 / 27-Nov-23</label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
+<h2 id="main-changes-3">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
 <ul>
 <li>HOTFIX: missing acq_folder arguments passed to converter functions</li>
 <li>Added export data by tags example in nb_hsdatalog_converters notebook</li>
@@ -173,8 +267,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section13" aria-hidden="true"> <label for="collapse-section13" aria-hidden="true">v3.0.0 / 29-Sep-23</label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
+<h2 id="main-changes-4">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
 <ul>
 <li>Redesigned Linux Setup files and README</li>
 <li>Examples updated catching MissingISPUOutputDescriptorException exception</li>
@@ -235,7 +329,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section12" aria-hidden="true"> <label for="collapse-section12" aria-hidden="true">v2.2.1 / 11-Aug-23</label>
 <div>
-<h2 id="main-changes-4">Main Changes</h2>
+<h2 id="main-changes-5">Main Changes</h2>
 <h3 id="patch-release-1">Patch release</h3>
 <ul>
 <li>Included DATALOG2 v1.2.1 patch in local USB catalog</li>
@@ -246,8 +340,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true">v2.2.0 / 7-Jul-23</label>
 <div>
-<h2 id="main-changes-5">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
+<h2 id="main-changes-6">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
 <ul>
 <li>Reshaped hsdatalog_to_unico script to convert any kind of sensor</li>
 <li>Fixed hsdatalog_cli
@@ -312,8 +406,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section10" aria-hidden="true"> <label for="collapse-section10" aria-hidden="true">v2.1.0 / 24-Mar-23</label>
 <div>
-<h2 id="main-changes-6">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
+<h2 id="main-changes-7">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-5">Maintenance release and product update</h3>
 <ul>
 <li>Refactored HSDPython_SDK Install/uninstall batch scripts</li>
 <li>Fixed setup issues in Linux environment</li>
@@ -341,7 +435,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true">v2.0.1 / 14-Feb-23</label>
 <div>
-<h2 id="main-changes-7">Main Changes</h2>
+<h2 id="main-changes-8">Main Changes</h2>
 <h3 id="patch-release-2">Patch release</h3>
 <ul>
 <li>Fixed toNanoedge converter and offline plot data for dummy data</li>
@@ -352,8 +446,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">v2.0.0 / 30-Sep-22</label>
 <div>
-<h2 id="main-changes-8">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-5">Maintenance release and product update</h3>
+<h2 id="main-changes-9">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-6">Maintenance release and product update</h3>
 <ul>
 <li>Added support for both DATALOG1 and DATALOG2</li>
 </ul>
@@ -362,8 +456,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true">v1.4.0 / 8-Jul-2022</label>
 <div>
-<h2 id="main-changes-9">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-6">Maintenance release and product update</h3>
+<h2 id="main-changes-10">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-7">Maintenance release and product update</h3>
 <ul>
 <li>Added support to SensorTile.box and LSM6DSOX</li>
 <li>Bug fixed in plot function:
@@ -402,7 +496,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true">v1.3.0 / 5-Nov-2021</label>
 <div>
-<h2 id="main-changes-10">Main Changes</h2>
+<h2 id="main-changes-11">Main Changes</h2>
 <h3 id="maintenance-release">Maintenance release</h3>
 <ul>
 <li><strong>Updated requirements.txt for Linux and Raspberry pi 3B compatibility</strong></li>
@@ -437,8 +531,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true">v1.2.0 / 25-Jun-2021</label>
 <div>
-<h2 id="main-changes-11">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-7">Maintenance release and product update</h3>
+<h2 id="main-changes-12">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-8">Maintenance release and product update</h3>
 <ul>
 <li><strong>Updated requirements.txt - import missing</strong></li>
 <li><strong>Hotfix in nb_hsdatalog_communication notebook</strong></li>
@@ -454,8 +548,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true">v1.1.0 / 29-Jan-2021</label>
 <div>
-<h2 id="main-changes-12">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-8">Maintenance release and product update</h3>
+<h2 id="main-changes-13">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-9">Maintenance release and product update</h3>
 <ul>
 <li><strong>Updated core module and code cleaning</strong></li>
 <li>Add BSD 3 Clause license disclaimer</li>
@@ -469,7 +563,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">v1.0.0 / 13-Nov-2020</label>
 <div>
-<h2 id="main-changes-13">Main Changes</h2>
+<h2 id="main-changes-14">Main Changes</h2>
 <h3 id="first-official-release">First official release</h3>
 </div>
 </div>

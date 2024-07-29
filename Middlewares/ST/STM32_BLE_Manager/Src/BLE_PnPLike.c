@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_PnPLike.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add PnPLike info services using vendor specific profile.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -160,7 +160,7 @@ static void Write_Request_PnPLike(void *BleCharPointer, uint16_t handle, uint16_
       CustomWriteRequestPnPLike(ble_command_buffer, CommandBufLen);
 
 #if (BLE_DEBUG_LEVEL>1)
-      BLE_MANAGER_PRINTF("\r\n%s\r\n", ble_command_buffer);
+      BLE_MANAGER_PRINTF("\r\n%.*s\r\n", CommandBufLen,ble_command_buffer);
 #endif /* (BLE_DEBUG_LEVEL>1) */
 
       BLE_FREE_FUNCTION(ble_command_buffer);
@@ -193,6 +193,19 @@ void BLE_PnPLikeSetMaxCharLength(uint16_t MaxCharLength)
 uint16_t BLE_PnPLikeGetMaxCharLength(void)
 {
   return PnPLikeContentMaxCharLength;
+}
+
+/**
+  * @brief  PnPLike Reset Status
+  * @param  None
+  * @retval None
+  */
+void BLE_PnPLikeReset(void)
+{
+  if(ble_command_buffer!=NULL) {
+    BLE_FREE_FUNCTION(ble_command_buffer);
+    ble_command_buffer = NULL;
+  }
 }
 
 

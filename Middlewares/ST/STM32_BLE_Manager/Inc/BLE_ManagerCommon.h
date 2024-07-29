@@ -2,14 +2,14 @@
   ******************************************************************************
   * @file    BLE_ManagerCommon.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Macros used for exporting the BLE Characteristics
   *          and Services
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -59,6 +59,10 @@ extern "C" {
                                    ((buf)[1] =  (uint8_t) (((uint32_t )0xFF)&(((uint32_t)(val))>>((uint32_t)8)))  ) , \
                                    ((buf)[2] =  (uint8_t) (((uint32_t )0xFF)&(((uint32_t)(val))>>((uint32_t)16))) ) , \
                                    ((buf)[3] =  (uint8_t) (((uint32_t )0xFF)&(((uint32_t)(val))>>((uint32_t)24))) ) )
+
+#define STORE_LE_24(buf, val)    ( ((buf)[0] =  (uint8_t) (((uint32_t )0xFF)&(((uint32_t)(val))      ) )) , \
+                                   ((buf)[1] =  (uint8_t) (((uint32_t )0xFF)&(((uint32_t)(val))>>((uint32_t)8)))  ) , \
+                                   ((buf)[2] =  (uint8_t) (((uint32_t )0xFF)&(((uint32_t)(val))>>((uint32_t)16))) ))
 
 #define STORE_BE_32(buf, val)    ( ((buf)[3] =  (uint8_t) (0xFFU&(val)     )) , \
                                    ((buf)[2] =  (uint8_t) (0xFFU&((val)>>8))  ) , \

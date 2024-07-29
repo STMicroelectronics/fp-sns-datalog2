@@ -27,7 +27,6 @@
 #include "services/sysmem.h"
 #include "services/SUcfProtocol.h"
 
-#include "PnPLDef.h"
 #include "PnPLCompManager.h"
 
 #include "App_model.h"
@@ -49,6 +48,8 @@
 #define OTHER_FILES_ID                    (FILEX_DCTRL_DAT_FILES_COUNT - 1)
 
 #define SKIP_LIST_SIZE            (1)
+
+#define CHECK_STOP_SEND_QUEUE_PARAM(param)  ((param > 0) && (param < FILEX_DCTRL_DEFAULT_QUEUE_SIZE))
 
 /* Private variable ------------------------------------------------------------*/
 
@@ -135,6 +136,7 @@ sys_error_code_t filex_dctrl_vtblStream_init(IStream_t *_this, uint8_t comm_inte
   /* Create the message queue */
   tx_queue_create(&obj->fx_app_queue, "FileX App queue", TX_1_ULONG, obj->queue_memory_pointer,
                   FILEX_DCTRL_DEFAULT_QUEUE_SIZE * sizeof(uint32_t));
+
   /* Initialize FILEX Memory */
   fx_system_initialize();
 
@@ -192,7 +194,6 @@ sys_error_code_t filex_dctrl_vtblStream_enable(IStream_t *_this)
   {
     res = SYS_BASE_ERROR_CODE;
   }
-
   return res;
 }
 
@@ -202,6 +203,9 @@ sys_error_code_t filex_dctrl_vtblStream_disable(IStream_t *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   filex_dctrl_class_t *obj = (filex_dctrl_class_t *) _this;
 
+  /* Close the SD disk driver */
+  fx_media_close(&obj->sdio_disk);
+  obj->fx_opened = FX_INVALID_STATE;
   obj->fx_stream_enabled = false;
 
   return res;
@@ -311,11 +315,7 @@ sys_error_code_t filex_dctrl_vtblStream_stop(IStream_t *_this)
         filex_data_flush(obj, ii);
         fx_media_flush(&obj->sdio_disk);
         /*close the file*/
-        if (TX_SUCCESS != fx_file_close(&obj->file_dat[ii]))
-        {
-          return SYS_BASE_ERROR_CODE;
-        }
-
+        fx_file_close(&obj->file_dat[ii]);
         fx_file_date_time_set(&obj->sdio_disk, obj->file_dat_name[ii], ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month,
                               (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
                               (uint32_t) sTime.Minutes, (uint32_t) sTime.Seconds);
@@ -440,6 +440,7 @@ sys_error_code_t filex_dctrl_vtblStream_dealloc(IStream_t *_this, uint8_t id_str
   filex_dctrl_class_t *obj = (filex_dctrl_class_t *) _this;
 
   CBDL2_Free(obj->cbdl2[id_stream]);
+  obj->cbdl2[id_stream] = NULL;
 
   if (obj->sd_write_buffer[id_stream] != NULL)
   {
@@ -465,12 +466,85 @@ sys_error_code_t filex_dctrl_msg(filex_dctrl_class_t *_this, unsigned long *msg)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-
   uint32_t message = *msg;
 
-  if (tx_queue_send(&_this->fx_app_queue, &message, TX_NO_WAIT) != TX_SUCCESS)
+  /* Check if the callback function is set */
+  if (_this->filex_msg_queue_not_send_cb)
   {
-    while (1);
+    ULONG enqueued = 0;
+    ULONG available_storage = 0;
+
+    /** Get Queue info */
+    tx_queue_info_get(&_this->fx_app_queue, NULL, &enqueued, &available_storage, NULL, NULL, NULL);
+
+    if (available_storage <= _this->queue_available_storage_thr)
+    {
+      /* Notify application level through the callback */
+      _this->filex_msg_queue_not_send_cb();
+    }
+    else
+    {
+      if (tx_queue_send(&_this->fx_app_queue, &message, TX_NO_WAIT) != TX_SUCCESS)
+      {
+        /* Handle the error condition if necessary */
+        ;
+      }
+    }
+  }
+
+  else
+  {
+    /* Attempt to send the message to the queue */
+    if (tx_queue_send(&_this->fx_app_queue, &message, TX_NO_WAIT) != TX_SUCCESS)
+    {
+      /* Handle the error condition if necessary */
+      ;
+    }
+  }
+  return res;
+}
+
+/**
+  * @brief Configures the threshold for suspending message queueing.
+  *
+  * This function sets a threshold for the available storage in the message queue and associates
+  * a callback function that will be invoked when the available storage falls below the set threshold.
+  * The purpose of this is to prevent the queue from being overwhelmed by temporarily suspending
+  * the enqueuing of new messages.
+  *
+  * @param _this A pointer to the instance of filex_dctrl_class_t that represents
+  *              the message queue controller.
+  * @param threshold_config A pointer to a filex_threshold_config_t structure that contains
+  *                         the threshold value and the callback function.
+  *
+  * @retval SYS_NO_ERROR_CODE Configuration was successful and the threshold is set.
+  * @retval SYS_SD_TASK_INPUT_ARG_ERROR_CODE The threshold parameter provided is invalid.
+  * @retval SYS_SD_TASK_NULL_PTR_ARG_ERROR_CODE The callback function pointer provided is NULL.
+  */
+sys_error_code_t filex_dctrl_configure_stop_threshold(filex_dctrl_class_t *_this,
+                                                      filex_threshold_config_t *threshold_config)
+{
+  assert_param(_this != NULL);
+  assert_param(threshold_config != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  /* Validate the callback function pointer */
+  if (NULL != threshold_config->filex_msg_queue_not_send_cb)
+  {
+    /* Validate the threshold parameter */
+    if (CHECK_STOP_SEND_QUEUE_PARAM(threshold_config->queue_available_storage_thr))
+    {
+      _this->filex_msg_queue_not_send_cb = threshold_config->filex_msg_queue_not_send_cb;
+      _this->queue_available_storage_thr = threshold_config->queue_available_storage_thr;
+    }
+    else
+    {
+      res = SYS_SD_TASK_INPUT_ARG_ERROR_CODE;
+    }
+  }
+  else
+  {
+    res = SYS_SD_TASK_NULL_PTR_ARG_ERROR_CODE;
   }
 
   return res;
@@ -562,7 +636,14 @@ sys_error_code_t filex_write_config_file(filex_dctrl_class_t *_this, char *file,
       return SYS_BASE_ERROR_CODE;
     }
     fx_file_open(&_this->sdio_disk, &_this->file_tmp, FILEX_DCTRL_DEVICE_JSON_FILE_NAME, FX_OPEN_FOR_WRITE);
-    fx_file_write(&_this->file_tmp, file, size);
+    if (file[size - 1] == '\0')
+    {
+      fx_file_write(&_this->file_tmp, file, (size - 1));
+    }
+    else
+    {
+      fx_file_write(&_this->file_tmp, file, size);
+    }
     fx_media_flush(&_this->sdio_disk);
     fx_file_close(&_this->file_tmp);
 
@@ -573,7 +654,14 @@ sys_error_code_t filex_write_config_file(filex_dctrl_class_t *_this, char *file,
   else if (fx_ret == FX_SUCCESS)
   {
     fx_file_open(&_this->sdio_disk, &_this->file_tmp, FILEX_DCTRL_DEVICE_JSON_FILE_NAME, FX_OPEN_FOR_WRITE);
-    fx_file_write(&_this->file_tmp, file, size);
+    if (file[size - 1] == '\0')
+    {
+      fx_file_write(&_this->file_tmp, file, (size - 1));
+    }
+    else
+    {
+      fx_file_write(&_this->file_tmp, file, size);
+    }
     fx_media_flush(&_this->sdio_disk);
     fx_file_close(&_this->file_tmp);
 
@@ -644,7 +732,14 @@ sys_error_code_t filex_write_acquisition_info(filex_dctrl_class_t *_this, char *
   }
 
   fx_file_open(&_this->sdio_disk, &_this->file_tmp, FILEX_DCTRL_ACQUISITION_INFO_FILE_NAME, FX_OPEN_FOR_WRITE);
-  fx_file_write(&_this->file_tmp, acquisition_info, size);
+  if (acquisition_info[size - 1] == '\0')
+  {
+    fx_file_write(&_this->file_tmp, acquisition_info, (size - 1));
+  }
+  else
+  {
+    fx_file_write(&_this->file_tmp, acquisition_info, size);
+  }
   fx_media_flush(&_this->sdio_disk);
   fx_file_close(&_this->file_tmp);
 
@@ -704,6 +799,7 @@ void fx_thread_entry(unsigned long thread_input)
             PnPLGenerateAcquisitionUUID(uuid);
             PnPLGetFilteredDeviceStatusJSON(&deviceConfig, &deviceConfigSize, skip_list, SKIP_LIST_SIZE, 1);
             filex_write_config_file(p_obj, deviceConfig, deviceConfigSize);
+
             SysFree(deviceConfig);
             break;
           }
@@ -740,7 +836,7 @@ void filex_data_ready(filex_dctrl_class_t *_this, uint32_t data_ready_mask)
     BSP_DEBUG_PIN_On(CON34_PIN_22);
 #endif
     if (FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t *) CB_GetItemData(p_item),
-                                    CB_GetItemSize((CircularBuffer *)cbdl2)))
+                                    CB_GetItemSize((CircularBuffer *) cbdl2)))
     {
       SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
     }
@@ -748,35 +844,38 @@ void filex_data_ready(filex_dctrl_class_t *_this, uint32_t data_ready_mask)
     BSP_DEBUG_PIN_Off(CON34_PIN_22);
 #endif
     /* Release the buffer item and reset tx_state */
-    CB_ReleaseItem((CircularBuffer *)cbdl2, p_item);
+    CB_ReleaseItem((CircularBuffer *) cbdl2, p_item);
   }
 }
 
 void filex_data_flush(filex_dctrl_class_t *_this, uint8_t stream_id)
 {
   CircularBufferDL2 *cbdl2 = _this->cbdl2[stream_id];
-  CBItem *p_item;
-  uint32_t item_size = CB_GetItemSize((CircularBuffer *)cbdl2);
-
-  if (item_size != 0)
+  if (cbdl2 != NULL)
   {
-    if (CB_GetReadyItemFromTail((CircularBuffer *) cbdl2, &p_item) == SYS_NO_ERROR_CODE)
-    {
-      if (FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t *) CB_GetItemData(p_item), item_size))
-      {
-        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
-      }
-      /* Release the buffer item and reset tx_state */
-      CB_ReleaseItem((CircularBuffer *)cbdl2, p_item);
-    }
+    CBItem *p_item;
+    uint32_t item_size = CB_GetItemSize((CircularBuffer *)cbdl2);
 
-    uint32_t byte_counter = cbdl2->byte_counter;
-    if (byte_counter > 0 && byte_counter < item_size)
+    if (item_size != 0)
     {
-      if (FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t *) CB_GetItemData(cbdl2->p_current_item),
-                                      byte_counter))
+      if (CB_GetReadyItemFromTail((CircularBuffer *) cbdl2, &p_item) == SYS_NO_ERROR_CODE)
       {
-        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+        if (FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t *) CB_GetItemData(p_item), item_size))
+        {
+          SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+        }
+        /* Release the buffer item and reset tx_state */
+        CB_ReleaseItem((CircularBuffer *)cbdl2, p_item);
+      }
+
+      uint32_t byte_counter = cbdl2->byte_counter;
+      if (byte_counter > 0 && byte_counter < item_size)
+      {
+        if (FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t *) CB_GetItemData(cbdl2->p_current_item),
+                                        byte_counter))
+        {
+          SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+        }
       }
     }
   }

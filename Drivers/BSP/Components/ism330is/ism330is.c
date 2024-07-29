@@ -158,6 +158,12 @@ int32_t ISM330IS_Init(ISM330IS_Object_t *pObj)
 {
   int32_t ret = ISM330IS_OK;
 
+  /* Set main memory bank */
+  if (ISM330IS_Set_Mem_Bank(pObj, (uint8_t)ISM330IS_MAIN_MEM_BANK) != ISM330IS_OK)
+  {
+    ret = ISM330IS_ERROR;
+  }
+
   /* Enable register address automatically incremented during a multiple byte
   access with a serial interface. */
   if (ism330is_auto_increment_set(&(pObj->Ctx), PROPERTY_ENABLE) != ISM330IS_OK)
@@ -413,42 +419,56 @@ int32_t ISM330IS_ACC_GetOutputDataRate(ISM330IS_Object_t *pObj, float_t *Odr)
       *Odr = 0.0f;
       break;
 
+    case ISM330IS_XL_ODR_AT_1Hz6_LP:
+      *Odr = 1.6f;
+      break;
+
+    case ISM330IS_XL_ODR_AT_12Hz5_LP:
     case ISM330IS_XL_ODR_AT_12Hz5_HP:
       *Odr = 12.5f;
       break;
 
+    case ISM330IS_XL_ODR_AT_26H_LP:
     case ISM330IS_XL_ODR_AT_26H_HP:
       *Odr = 26.0f;
       break;
 
+    case ISM330IS_XL_ODR_AT_52Hz_LP:
     case ISM330IS_XL_ODR_AT_52Hz_HP:
       *Odr = 52.0f;
       break;
 
+    case ISM330IS_XL_ODR_AT_104Hz_LP:
     case ISM330IS_XL_ODR_AT_104Hz_HP:
       *Odr = 104.0f;
       break;
 
+    case ISM330IS_XL_ODR_AT_208Hz_LP:
     case ISM330IS_XL_ODR_AT_208Hz_HP:
       *Odr = 208.0f;
       break;
 
+    case ISM330IS_XL_ODR_AT_416Hz_LP:
     case ISM330IS_XL_ODR_AT_416Hz_HP:
       *Odr = 416.0f;
       break;
 
+    case ISM330IS_XL_ODR_AT_833Hz_LP:
     case ISM330IS_XL_ODR_AT_833Hz_HP:
       *Odr = 833.0f;
       break;
 
+    case ISM330IS_XL_ODR_AT_1667Hz_LP:
     case ISM330IS_XL_ODR_AT_1667Hz_HP:
       *Odr = 1667.0f;
       break;
 
+    case ISM330IS_XL_ODR_AT_3333Hz_LP:
     case ISM330IS_XL_ODR_AT_3333Hz_HP:
       *Odr = 3333.0f;
       break;
 
+    case ISM330IS_XL_ODR_AT_6667Hz_LP:
     case ISM330IS_XL_ODR_AT_6667Hz_HP:
       *Odr = 6667.0f;
       break;
@@ -741,42 +761,52 @@ int32_t ISM330IS_GYRO_GetOutputDataRate(ISM330IS_Object_t *pObj, float_t *Odr)
       *Odr = 0.0f;
       break;
 
+    case ISM330IS_GY_ODR_AT_12Hz5_LP:
     case ISM330IS_GY_ODR_AT_12Hz5_HP:
       *Odr = 12.5f;
       break;
 
+    case ISM330IS_GY_ODR_AT_26H_LP:
     case ISM330IS_GY_ODR_AT_26H_HP:
       *Odr = 26.0f;
       break;
 
+    case ISM330IS_GY_ODR_AT_52Hz_LP:
     case ISM330IS_GY_ODR_AT_52Hz_HP:
       *Odr = 52.0f;
       break;
 
+    case ISM330IS_GY_ODR_AT_104Hz_LP:
     case ISM330IS_GY_ODR_AT_104Hz_HP:
       *Odr = 104.0f;
       break;
 
+    case ISM330IS_GY_ODR_AT_208Hz_LP:
     case ISM330IS_GY_ODR_AT_208Hz_HP:
       *Odr = 208.0f;
       break;
 
+    case ISM330IS_GY_ODR_AT_416Hz_LP:
     case ISM330IS_GY_ODR_AT_416Hz_HP:
       *Odr = 416.0f;
       break;
 
+    case ISM330IS_GY_ODR_AT_833Hz_LP:
     case ISM330IS_GY_ODR_AT_833Hz_HP:
       *Odr = 833.0f;
       break;
 
+    case ISM330IS_GY_ODR_AT_1667Hz_LP:
     case ISM330IS_GY_ODR_AT_1667Hz_HP:
       *Odr =  1667.0f;
       break;
 
+    case ISM330IS_GY_ODR_AT_3333Hz_LP:
     case ISM330IS_GY_ODR_AT_3333Hz_HP:
       *Odr =  3333.0f;
       break;
 
+    case ISM330IS_GY_ODR_AT_6667Hz_LP:
     case ISM330IS_GY_ODR_AT_6667Hz_HP:
       *Odr =  6667.0f;
       break;
@@ -919,7 +949,7 @@ int32_t ISM330IS_GYRO_GetAxes(ISM330IS_Object_t *pObj, ISM330IS_Axes_t *AngularR
 {
   int32_t ret = ISM330IS_OK;
   int16_t data_raw[3];
-  float_t sensitivity;
+  float_t sensitivity = 0.0f;
 
   /* Read raw data values. */
   if (ism330is_angular_rate_raw_get(&(pObj->Ctx), data_raw) != ISM330IS_OK)
@@ -1183,6 +1213,30 @@ int32_t ISM330IS_Set_DRDY_Mode(ISM330IS_Object_t *pObj, uint8_t Val)
         :                ISM330IS_DRDY_PULSED;
 
   if (ism330is_data_ready_mode_set(&(pObj->Ctx), reg) != ISM330IS_OK)
+  {
+    ret = ISM330IS_ERROR;
+  }
+
+  return ret;
+}
+
+/**
+  * @brief  Set memory bank
+  * @param  pObj the device pObj
+  * @param  Val the value of memory bank in reg FUNC_CFG_ACCESS
+  *         0 - ISM330IS_MAIN_MEM_BANK, 2 - ISM330IS_SENSOR_HUB_MEM_BANK, 3 - ISM330IS_ISPU_MEM_BANK
+  * @retval 0 in case of success, an error code otherwise
+  */
+int32_t ISM330IS_Set_Mem_Bank(ISM330IS_Object_t *pObj, uint8_t Val)
+{
+  int32_t ret = ISM330IS_OK;
+  ism330is_mem_bank_t reg;
+
+  reg = (Val == 2U) ? ISM330IS_SENSOR_HUB_MEM_BANK
+        : (Val == 3U) ? ISM330IS_ISPU_MEM_BANK
+        :               ISM330IS_MAIN_MEM_BANK;
+
+  if (ism330is_mem_bank_set(&(pObj->Ctx), reg) != ISM330IS_OK)
   {
     ret = ISM330IS_ERROR;
   }

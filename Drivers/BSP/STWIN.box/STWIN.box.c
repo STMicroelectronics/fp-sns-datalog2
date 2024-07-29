@@ -665,17 +665,49 @@ int32_t BSP_COM_SelectLogPort(COM_TypeDef COM)
   return BSP_ERROR_NONE;
 }
 
-#ifdef __GNUC__
-int __io_putchar(int ch)
+#if defined(__CC_ARM) /* For arm compiler 5 */
+#if !defined(__MICROLIB) /* If not Microlib */
+
+struct __FILE
 {
-#else
-int32_t fputc(int32_t ch, FILE *f)
+  int dummyVar; //Just for the sake of redefining __FILE, we won't we using it anyways ;)
+};
+
+FILE __stdout;
+
+#endif /* If not Microlib */
+#elif defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050) /* For arm compiler 6 */
+#if !defined(__MICROLIB) /* If not Microlib */
+
+FILE __stdout;
+
+#endif /* If not Microlib */
+#endif /* For arm compiler 5 */
+#if defined(__ICCARM__) /* For IAR */
+size_t __write(int Handle, const unsigned char *Buf, size_t Bufsize)
 {
-  UNUSED(f);
-#endif /* __GNUC__ */
-  (void) HAL_UART_Transmit(&hcom_uart[COM_ActiveLogPort], (uint8_t*) &ch, 1, COM_POLL_TIMEOUT);
+  int i;
+
+  for(i=0; i<Bufsize; i++)
+  {
+    (void)HAL_UART_Transmit(&hcom_uart[COM_ActiveLogPort], (uint8_t *)&Buf[i], 1, COM_POLL_TIMEOUT);
+  }
+
+  return Bufsize;
+}
+#elif defined(__CC_ARM) || (defined(__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)) /* For ARM Compiler 5 and 6 */
+int fputc (int ch, FILE *f)
+{
+  (void)HAL_UART_Transmit(&hcom_uart[COM_ActiveLogPort], (uint8_t *)&ch, 1, COM_POLL_TIMEOUT);
   return ch;
 }
+#else /* For GCC Toolchains */
+int __io_putchar (int ch)
+{
+  (void)HAL_UART_Transmit(&hcom_uart[COM_ActiveLogPort], (uint8_t *)&ch, 1, COM_POLL_TIMEOUT);
+  return ch;
+}
+#endif /* For IAR */
 #endif /* USE_COM_LOG */
 #endif /* USE_BSP_COM_FEATURE */
 

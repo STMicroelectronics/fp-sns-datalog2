@@ -29,7 +29,6 @@
 
 #define SYS_DEBUGF(level, message)              SYS_DEBUGF3(SYS_DBG_DRIVERS, level, message)
 
-
 /**
   * Class object declaration
   */
@@ -52,7 +51,6 @@ typedef struct _I2CMasterDriverClass
 
 } I2CMasterDriverClass_t;
 
-
 /* Private objects definition.*/
 /******************************/
 
@@ -74,10 +72,15 @@ static I2CMasterDriverClass_t sTheClass =
     I2CMasterDriver_vtblRead
   },
 
-  {{0}}, /* ip_drv_map_elements */
-  {0}  /* ip_drv_map */
+  {
+    {
+      0
+    }
+  }, /* ip_drv_map_elements */
+  {
+    0
+  } /* ip_drv_map */
 };
-
 
 /* Private member function declaration */
 /***************************************/
@@ -94,7 +97,7 @@ sys_error_code_t I2CMasterDriverSetDeviceAddr(I2CMasterDriver_t *_this, uint16_t
 
   _this->target_device_addr = address;
 
-  return SYS_NO_ERROR_CODE;
+  return SYS_NO_ERROR_CODE ;
 }
 
 sys_error_code_t I2CMasterDriverSetAddrSize(I2CMasterDriver_t *_this, uint8_t nAddressSize)
@@ -103,7 +106,16 @@ sys_error_code_t I2CMasterDriverSetAddrSize(I2CMasterDriver_t *_this, uint8_t nA
 
   _this->address_size = nAddressSize;
 
-  return SYS_NO_ERROR_CODE;
+  return SYS_NO_ERROR_CODE ;
+}
+
+sys_error_code_t I2CMasterDriverSetTransmitReceive(I2CMasterDriver_t *_this, uint8_t nTransmitReceive)
+{
+  assert_param(_this);
+
+  _this->transmit_receive = nTransmitReceive;
+
+  return SYS_NO_ERROR_CODE ;
 }
 
 /* IIODriver virtual function definition */
@@ -111,7 +123,8 @@ sys_error_code_t I2CMasterDriverSetAddrSize(I2CMasterDriver_t *_this, uint8_t nA
 
 IIODriver *I2CMasterDriverAlloc(void)
 {
-  IIODriver *p_new_driver = (IIODriver *) SysAlloc(sizeof(I2CMasterDriver_t));;
+  IIODriver *p_new_driver = (IIODriver *) SysAlloc(sizeof(I2CMasterDriver_t));
+  ;
 
   if (p_new_driver == NULL)
   {
@@ -146,6 +159,16 @@ sys_error_code_t I2CMasterDriver_vtblInit(IDriver *_this, void *p_params)
     res = SYS_UNDEFINED_ERROR_CODE;
   }
   else if (HAL_OK != HAL_I2C_RegisterCallback(p_i2c, HAL_I2C_MEM_TX_COMPLETE_CB_ID, I2CMasterDrvMemTxRxCpltCallback))
+  {
+    SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
+    res = SYS_UNDEFINED_ERROR_CODE;
+  }
+  else if (HAL_OK != HAL_I2C_RegisterCallback(p_i2c, HAL_I2C_MASTER_RX_COMPLETE_CB_ID, I2CMasterDrvMemTxRxCpltCallback))
+  {
+    SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
+    res = SYS_UNDEFINED_ERROR_CODE;
+  }
+  else if (HAL_OK != HAL_I2C_RegisterCallback(p_i2c, HAL_I2C_MASTER_TX_COMPLETE_CB_ID, I2CMasterDrvMemTxRxCpltCallback))
   {
     SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
     res = SYS_UNDEFINED_ERROR_CODE;
@@ -186,7 +209,7 @@ sys_error_code_t I2CMasterDriver_vtblInit(IDriver *_this, void *p_params)
     }
   }
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("I2CMasterDriver: initialization done: %d.\r\n", res));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("I2CMasterDriver: initialization done: %d.\r\n", res));
 
   return res;
 }
@@ -252,13 +275,27 @@ sys_error_code_t I2CMasterDriver_vtblWrite(IIODriver *_this, uint8_t *p_data_buf
   I2CMasterDriver_t *p_obj = (I2CMasterDriver_t *) _this;
   I2C_HandleTypeDef *p_i2c = p_obj->mx_handle.p_mx_i2c_cfg->p_i2c_handle;
 
-  if (HAL_I2C_Mem_Write_DMA(p_i2c, p_obj->target_device_addr, channel, p_obj->address_size, p_data_buffer,
-                            data_size) != HAL_OK)
+  if (p_obj->transmit_receive)
   {
-    if (HAL_I2C_GetError(p_i2c) != (uint32_t)HAL_BUSY)
+    if (HAL_I2C_Master_Transmit_DMA(p_i2c, p_obj->target_device_addr, p_data_buffer, data_size) != HAL_OK)
     {
-      SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I2C_M_WRITE_ERROR_CODE);
-      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Write failed.\r\n"));
+      if (HAL_I2C_GetError(p_i2c) != (uint32_t) HAL_BUSY)
+      {
+        SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I2C_M_WRITE_ERROR_CODE);
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Write failed.\r\n"));
+      }
+    }
+  }
+  else
+  {
+    if (HAL_I2C_Mem_Write_DMA(p_i2c, p_obj->target_device_addr, channel, p_obj->address_size, p_data_buffer,
+                              data_size) != HAL_OK)
+    {
+      if (HAL_I2C_GetError(p_i2c) != (uint32_t) HAL_BUSY)
+      {
+        SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I2C_M_WRITE_ERROR_CODE);
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Write failed.\r\n"));
+      }
     }
   }
   /* Suspend the calling task until the operation is completed.*/
@@ -275,13 +312,27 @@ sys_error_code_t I2CMasterDriver_vtblRead(IIODriver *_this, uint8_t *p_data_buff
   I2CMasterDriver_t *p_obj = (I2CMasterDriver_t *) _this;
   I2C_HandleTypeDef *p_i2c = p_obj->mx_handle.p_mx_i2c_cfg->p_i2c_handle;
 
-  if (HAL_I2C_Mem_Read_DMA(p_i2c, p_obj->target_device_addr, channel, p_obj->address_size, p_data_buffer,
-                           data_size) != HAL_OK)
+  if (p_obj->transmit_receive)
   {
-    if (HAL_I2C_GetError(p_i2c) != (uint32_t)HAL_BUSY)
+    if (HAL_I2C_Master_Receive_DMA(p_i2c, p_obj->target_device_addr, p_data_buffer, data_size) != HAL_OK)
     {
-      SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I2C_M_READ_ERROR_CODE);
-      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Read failed.\r\n"));
+      if (HAL_I2C_GetError(p_i2c) != (uint32_t) HAL_BUSY)
+      {
+        SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I2C_M_WRITE_ERROR_CODE);
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Read failed.\r\n"));
+      }
+    }
+  }
+  else
+  {
+    if (HAL_I2C_Mem_Read_DMA(p_i2c, p_obj->target_device_addr, channel, p_obj->address_size, p_data_buffer,
+                             data_size) != HAL_OK)
+    {
+      if (HAL_I2C_GetError(p_i2c) != (uint32_t) HAL_BUSY)
+      {
+        SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I2C_M_READ_ERROR_CODE);
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Read failed.\r\n"));
+      }
     }
   }
   /* Suspend the calling task until the operation is completed.*/
@@ -305,7 +356,7 @@ static void I2CMasterDrvMemTxRxCpltCallback(I2C_HandleTypeDef *p_i2c)
 
   if (p_val != NULL)
   {
-    sync_obj = &((I2CMasterDriver_t *)p_val->p_driver_obj)->sync_obj;
+    sync_obj = &((I2CMasterDriver_t *) p_val->p_driver_obj)->sync_obj;
 
     if (sync_obj != NULL)
     {
@@ -313,7 +364,6 @@ static void I2CMasterDrvMemTxRxCpltCallback(I2C_HandleTypeDef *p_i2c)
     }
   }
 }
-
 
 static void I2CMasterDrvErrorCallback(I2C_HandleTypeDef *p_i2c)
 {

@@ -488,7 +488,7 @@ sys_error_code_t UtilTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   UtilTask_t *p_obj = (UtilTask_t *) _this;
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("UTIL: start.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("UTIL: start.\r\n"));
 
   /* Enable User button interrupt */
   if (p_obj->p_mx_ub_drv_cfg != NULL)
@@ -518,20 +518,27 @@ sys_error_code_t UtilTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowerMode
 
   struct utilMessage_t msg = { .msgId = APP_REPORT_ID_FORCE_STEP };
 
-  if (active_power_mode == E_POWER_MODE_STATE1)
+  if ((active_power_mode == E_POWER_MODE_STATE1) || (active_power_mode == E_POWER_MODE_SENSORS_ACTIVE))
   {
-    if (TX_SUCCESS != tx_queue_front_send(&p_obj->in_queue, &msg, AMT_MS_TO_TICKS(100)))
+    if (AMTExIsTaskInactive(_this))
     {
-      res = SYS_TASK_QUEUE_FULL_ERROR_CODE;
+      if (tx_queue_front_send(&p_obj->in_queue, &msg, AMT_MS_TO_TICKS(100)) != TX_SUCCESS)
+      {
+        res = SYS_TASK_QUEUE_FULL_ERROR_CODE;
+      }
     }
-  }
-  else if (active_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
-  {
-    tx_thread_wait_abort(&_this->m_xTaskHandle);
   }
   else
   {
-    tx_thread_resume(&_this->m_xTaskHandle);
+    UINT state;
+    if (TX_SUCCESS == tx_thread_info_get(&_this->m_xTaskHandle, TX_NULL, &state, TX_NULL, TX_NULL, TX_NULL, TX_NULL,
+                                         TX_NULL, TX_NULL))
+    {
+      if (state == TX_SUSPENDED)
+      {
+        tx_thread_resume(&_this->m_xTaskHandle);
+      }
+    }
   }
 
   return res;
@@ -549,7 +556,7 @@ sys_error_code_t UtilTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPow
 
 /* Private function definition */
 /*******************************/
-
+uint32_t ledcounter = 0;
 static sys_error_code_t UtilTaskExecuteStepState1(AManagedTask *_this)
 {
   assert_param(_this != NULL);
@@ -581,6 +588,7 @@ static sys_error_code_t UtilTaskExecuteStepState1(AManagedTask *_this)
       }
       else if (msg.nCmdID == UTIL_CMD_ID_DATALOG_LED)
       {
+        ledcounter--;
         led_count_state1++;
         if (led_count_state1 == 4)
         {
@@ -615,10 +623,16 @@ static sys_error_code_t UtilTaskExecuteStepSensorsActive(AManagedTask *_this)
   if (TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &msg, TX_WAIT_FOREVER))
   {
     AMTExSetInactiveState((AManagedTaskEx *) _this, FALSE);
-    if (msg.msgId == APP_MESSAGE_ID_UTIL)
+
+    if (msg.msgId == APP_REPORT_ID_FORCE_STEP)
+    {
+      __NOP();
+    }
+    else if (msg.msgId == APP_MESSAGE_ID_UTIL)
     {
       if (msg.nCmdID == UTIL_CMD_ID_DATALOG_LED)
       {
+        ledcounter--;
         if (p_obj->p_mx_led1_drv_cfg != NULL)
         {
           MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t *)p_obj->p_mx_led1_drv_cfg;
@@ -647,6 +661,7 @@ static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer)
     // unable to send the report. Signal the error
     sys_error_handler();
   }
+  ledcounter++;
 
   bool sd_detected;
   log_controller_get_sd_mounted(&sd_detected);

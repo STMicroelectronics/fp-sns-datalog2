@@ -37,9 +37,8 @@ sys_error_code_t ble_stream_vtblStream_alloc_resource(IStream_t *_this, uint8_t 
                                                       const char *stream_name);
 sys_error_code_t ble_stream_vtblStream_set_mode(IStream_t *_this, IStreamMode_t mode);
 sys_error_code_t ble_stream_vtblStream_dealloc(IStream_t *_this, uint8_t id_stream);
-
 sys_error_code_t ble_stream_vtblStream_set_parse_IF(IStream_t *_this, ICommandParse_t *ifn);
-
+sys_error_code_t ble_stream_vtblStream_send_async(IStream_t *_this, uint8_t *buf, uint32_t size);
 /** Inline functions definition */
 /********************************/
 

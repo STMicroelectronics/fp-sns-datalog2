@@ -26,7 +26,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <string.h>
-#include "STWIN.box.h"
+#include "STWIN.box_conf.h"
 
 /** @addtogroup BSP
  * @{

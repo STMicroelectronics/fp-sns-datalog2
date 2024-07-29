@@ -1,0 +1,26 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>20</x><y>294</y><w>210</w><h>110</h></coordinates><panel_attributes>ABusIF
+--
++ who_am_i
++ queue
++ p_BusCtrl(e_cmd, param): err
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>20</x><y>464</y><w>210</w><h>110</h></coordinates><panel_attributes>I2CBusIF
+--
++ address
++ auto_inc
++ sync_obj
++ address_size
++ transmit_receive
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>110</x><y>394</y><w>30</w><h>90</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;70</additional_attributes></element><element><id>UMLClass</id><coordinates><x>320</x><y>344</y><w>110</w><h>100</h></coordinates><panel_attributes>ABusConnector
+--
++ handle
+--
++ write()
++ read()
++ delay()</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>220</x><y>344</y><w>120</w><h>40</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;20;100;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>220</x><y>134</y><w>260</w><h>90</h></coordinates><panel_attributes>IBus
+--
+/+ Ctrl(e_cmd, param): err/
+/+ ConnectDevice(dev:ABusIF): err/
+/+ DisconnectDevice(dev:ABusIF): err/</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>144</y><w>120</w><h>170</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;150;100;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>130</x><y>34</y><w>310</w><h>60</h></coordinates><panel_attributes>I2CBusTak
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>280</x><y>84</y><w>80</w><h>70</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>60;50;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>80</x><y>624</y><w>100</w><h>50</h></coordinates><panel_attributes>I2CBusIFx
+--
++ pin</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>564</y><w>30</w><h>80</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;60</additional_attributes></element><element><id>UMLClass</id><coordinates><x>270</x><y>614</y><w>100</w><h>30</h></coordinates><panel_attributes>SensorPippo</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>170</x><y>624</y><w>120</w><h>50</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>100;10;10;30</additional_attributes></element></diagram>

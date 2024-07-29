@@ -243,7 +243,8 @@ static STTS22HTaskClass_t sTheClass =
       STTS22HTask_vtblSensorDisable,
       STTS22HTask_vtblSensorIsEnabled,
       STTS22HTask_vtblSensorGetDescription,
-      STTS22HTask_vtblSensorGetStatus
+      STTS22HTask_vtblSensorGetStatus,
+      STTS22HTask_vtblSensorGetStatusPointer
     },
     STTS22HTask_vtblTempGetODR,
     STTS22HTask_vtblTempGetFS,
@@ -545,9 +546,11 @@ sys_error_code_t STTS22HTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
   {
     if (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
     {
-      /* Deactivate the sensor */
-      stts22h_temp_data_rate_set(p_sensor_drv, STTS22H_POWER_DOWN);
-
+      if (STTS22HTaskSensorIsActive(p_obj))
+      {
+        /* Deactivate the sensor */
+        stts22h_temp_data_rate_set(p_sensor_drv, STTS22H_POWER_DOWN);
+      }
       /* Empty the task queue and disable INT or timer */
       tx_queue_flush(&p_obj->in_queue);
       if (p_obj->pIRQConfig == NULL)
@@ -604,7 +607,7 @@ sys_error_code_t STTS22HTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("STTS22H: start.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("STTS22H: start.\r\n"));
 
 #if defined(ENABLE_THREADX_DBG_PIN) && defined (STTS22H_TASK_CFG_TAG)
   STTS22HTask *p_obj = (STTS22HTask *) _this;
@@ -750,6 +753,11 @@ sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   }
   else
   {
+    if (odr > 0.0f)
+    {
+      p_if_owner->sensor_status.type.mems.odr = odr;
+      p_if_owner->sensor_status.type.mems.measured_odr = 0.0f;
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -779,6 +787,10 @@ sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
   }
   else
   {
+    if (fs == 100.0f)
+    {
+      p_if_owner->sensor_status.type.mems.fs = fs;
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -818,6 +830,7 @@ sys_error_code_t STTS22HTask_vtblSensorEnable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = TRUE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -846,6 +859,7 @@ sys_error_code_t STTS22HTask_vtblSensorDisable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = FALSE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -891,6 +905,14 @@ SensorStatus_t STTS22HTask_vtblSensorGetStatus(ISensor_t *_this)
   STTS22HTask *p_if_owner = (STTS22HTask *)((uint32_t) _this - offsetof(STTS22HTask, sensor_if));
 
   return p_if_owner->sensor_status;
+}
+
+SensorStatus_t *STTS22HTask_vtblSensorGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  STTS22HTask *p_if_owner = (STTS22HTask *)((uint32_t) _this - offsetof(STTS22HTask, sensor_if));
+
+  return &p_if_owner->sensor_status;
 }
 
 /* Private function definition */

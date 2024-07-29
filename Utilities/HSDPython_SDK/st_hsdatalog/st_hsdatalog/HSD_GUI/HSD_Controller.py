@@ -14,20 +14,24 @@
 # *
 # ******************************************************************************
 #
+from collections import deque
 import shutil
 import struct
 import time
 import os
 import json
+import copy
 
 from datetime import datetime
-from threading import Thread, Event
+from threading import Condition, Thread, Event
 
 from enum import Enum
+import numpy as np
 
 from PySide6.QtCore import Signal, QThread, QObject
 from PySide6.QtWidgets import QFileDialog
 
+from st_hsdatalog.HSD_GUI.HSD_DataToolkit_Pipeline import HSD_DataToolkit_Pipeline
 from st_pnpl.DTDL.dtdl_utils import UnitMap
 import st_pnpl.DTDL.dtdl_utils as DTDLUtils
 
@@ -36,7 +40,7 @@ from st_hsdatalog.HSD_link.HSDLink import HSDLink
 from st_hsdatalog.HSD_link.HSDLink_v1 import HSDLink_v1
 
 from st_hsdatalog.HSD_GUI.Widgets.HSDPlotLinesWidget import HSDPlotLinesWidget
-from st_dtdl_gui.Utils.DataClass import AnomalyDetectorModelPlotParams, PlotPAmbientParams, PlotPMotionParams, PlotPObjectParams, PlotPPresenceParams, SensorAudioPlotParams, SensorLightPlotParams, SensorMemsPlotParams, FFTAlgPlotParams, ClassificationModelPlotParams, DataClass, SensorPresenscePlotParams, SensorRangingPlotParams
+from st_dtdl_gui.Utils.DataClass import AnomalyDetectorModelPlotParams, PlotPAmbientParams, PlotPMotionParams, PlotPObjectParams, PlotPPresenceParams, SensorAudioPlotParams, SensorLightPlotParams, SensorMemsPlotParams, FFTAlgPlotParams, ClassificationModelPlotParams, DataClass, SensorPlotParams, SensorPowerPlotParams, SensorPresenscePlotParams, SensorRangingPlotParams
 from st_dtdl_gui.Utils.DataReader import DataReader
 from st_dtdl_gui.STDTDL_Controller import ComponentType, STDTDL_Controller
 
@@ -57,6 +61,61 @@ class AutomodeStatus(Enum):
 
 class HSD_Controller(STDTDL_Controller):
 
+    class DataConsumerThread(Thread):
+        def __init__(self, controller, data_pipeline):
+            Thread.__init__(self)
+            self.controller = controller
+            self.data_pipeline = data_pipeline
+
+            self.missing_bytes = {}
+            self.incoming_data = {}
+            self.stop_thread = False
+
+        def extract_data(self, data):
+            if data.comp_name in self.incoming_data:
+                self.incoming_data[data.comp_name] += data.data
+            else:
+                self.incoming_data[data.comp_name] = data.data
+            
+            comp_status = self.controller.components_status[data.comp_name]
+            dim = comp_status.get("dim")
+            data_type = comp_status.get("data_type")
+            data_sample_bytes_len = dim * TypeConversion.check_type_length(data_type)
+            spts = comp_status.get("samples_per_ts")
+            sensitivity = comp_status.get("sensitivity")
+            timestamp_bytes_len = 8 if spts != 0 else 0
+            data_packet_len = (spts * data_sample_bytes_len) if spts != 0 else data_sample_bytes_len
+
+            nof_cmplt_packets = len(self.incoming_data[data.comp_name]) // (data_packet_len + timestamp_bytes_len)
+            
+            for i in range(nof_cmplt_packets):
+                if spts != 0:
+                    d = self.incoming_data[data.comp_name][:data_packet_len]
+                    timestamp = struct.unpack('<d', self.incoming_data[data.comp_name][data_packet_len:data_packet_len + timestamp_bytes_len])
+                    self.incoming_data[data.comp_name] = self.incoming_data[data.comp_name][data_packet_len + timestamp_bytes_len:]
+                    data_buffer = np.frombuffer(d, dtype=TypeConversion.get_np_dtype(data_type)) * sensitivity
+                    self.data_pipeline.process_data({data.comp_name:{"data":data_buffer, "timestamp":timestamp}})
+                else:
+                    #TODO: Implement the case when spts = 0 (no timestamps)
+                    # missing_bytes_num = len(data.data)%(data_packet_len)
+                    
+                    # d = data.data[:-missing_bytes_num]
+                    # data_buffer = np.frombuffer(d, dtype=TypeConversion.get_np_dtype(data_type))
+                    
+                    # missing_d = data.data[len(d):]
+                    # self.missing_bytes[data.comp_name] = missing_d
+                    pass
+
+        def run(self):
+            while not self.stop_thread:
+                with self.controller.queue_evt:
+                    self.controller.queue_evt.wait()
+                data = self.controller.get_data_from_queue()
+                self.extract_data(data)
+
+        def stop(self):
+            self.stop_thread = True
+
     MAX_HSD_BANDWIDTH = 6000000
     # Signals
     sig_is_waiting_auto_start = Signal(bool)
@@ -64,14 +123,24 @@ class HSD_Controller(STDTDL_Controller):
     sig_is_auto_started = Signal(bool)
     sig_tag_done = Signal(bool, str) #(on|off),tag_label
     sig_hsd_bandwidth_exceeded = Signal(bool)
-    sig_lock_start_button = Signal(bool)
+    sig_lock_start_button = Signal(bool, str)
     sig_streaming_error = Signal(bool, str)
     # TODO: Next version --> Hotplug events notification support
     # sig_usb_hotplug = Signal(bool)
     # TODO: Next version --> Hotplug events notification support
 
-    class SensorAcquisitionThread(Thread):    
-        def __init__(self, event, hsd_link, data_reader, d_id, comp_name, sensor_data_file, usb_dps, sig_streaming_error = None):            
+    class DataReader(DataReader):
+        def __init__(self, controller, comp_name, samples_per_ts, dimensions, sample_size, data_format, sensitivity=1, interleaved_data=True, flat_raw_data=False):
+            super().__init__(controller, comp_name, samples_per_ts, dimensions, sample_size, data_format, sensitivity, interleaved_data, flat_raw_data)
+
+        def feed_data(self, data):
+            if self.controller.dt_plugins_folder_path is not None:
+                a_data = copy.copy(data)
+                self.controller.add_data_to_queue(a_data)
+            super().feed_data(data)
+
+    class SensorAcquisitionThread(Thread):
+        def __init__(self, event, hsd_link, data_reader, d_id, comp_name, sensor_data_file, usb_dps, sig_streaming_error = None):
 
             class EmptyDataTimer(QObject):
                 timeout_signal = Signal()
@@ -132,15 +201,16 @@ class HSD_Controller(STDTDL_Controller):
                         self.prev_cnt = curr_cnt
 
                         self.data_reader.feed_data(DataClass(self.comp_name, sensor_data[1][p*(self.usb_dps + 4)+4: (p+1)*(self.usb_dps+4)]))
-                    self.sensor_data_file.write(sensor_data[1])
+                    if self.sensor_data_file is not None:
+                        self.sensor_data_file.write(sensor_data[1])
                 else:
                     self.objThread.start()
             if self.objThread.isRunning():
                 self.obj.interrupt_event.set()
 
     class SensorAcquisitionThread_test_v1(SensorAcquisitionThread):
-
-        def __init__(self, event, hsd_link, data_reader, d_id, s_id, ss_id, comp_name, sensor_data_file):            
+        
+        def __init__(self, event, hsd_link, data_reader, d_id, s_id, ss_id, comp_name, sensor_data_file):     
             self.s_id = s_id
             self.ss_id = ss_id
             super().__init__(self, event, hsd_link, data_reader, d_id, comp_name, sensor_data_file)
@@ -150,7 +220,8 @@ class HSD_Controller(STDTDL_Controller):
                 sensor_data = self.hsd_link.get_sensor_data(self.d_id, self.s_id, self.ss_id)
                 if sensor_data is not None:
                     self.data_reader.feed_data(DataClass(self.comp_name, sensor_data[1]))
-                    self.sensor_data_file.write(sensor_data[1])
+                    if self.sensor_data_file is not None:
+                        self.sensor_data_file.write(sensor_data[1])
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -163,7 +234,13 @@ class HSD_Controller(STDTDL_Controller):
         self.automode_status = AutomodeStatus.AUTOMODE_UNSTARTED
         self.curr_bandwidth = 0
         self.config_error_dict = {}
-
+        self.enabled_stream_comp_set = set()
+        self.save_files_flag = True
+        #DataToolkit
+        self.dt_plugins_folder_path = None
+        self.data_queue = deque(maxlen=200000)
+        self.queue_evt = Condition()
+        
         # TODO: Next version --> Hotplug events notification support
         # self.plugged_flag = False
         # self.unplugged_flag = False
@@ -227,6 +304,12 @@ class HSD_Controller(STDTDL_Controller):
         message = {"log_controller*set_time":{"datetime":time}}
         return self.send_command(json.dumps(message))
     
+    def enable_start_log_button(self):
+        self.sig_lock_start_button.emit(False, "")
+
+    def disable_start_log_button(self):
+        self.sig_lock_start_button.emit(True, "no sensors enabled")
+
     def refresh(self):
         try:
             if self.hsd_link is not None:
@@ -324,6 +407,15 @@ class HSD_Controller(STDTDL_Controller):
             itime_value = comp_status["intermeasurement_time"]
             return float(1/itime_value)
         return None
+    
+    def __get_powermeter_sensor_odr(self, comp_status, comp_interface):
+        if "adc_conversion_time" in comp_status:
+            odr_index = comp_status["adc_conversion_time"]
+            odr_enum_dname = [c for c in comp_interface.contents if c.name == "adc_conversion_time"][0].schema.enum_values[odr_index].display_name
+            odr_value = odr_enum_dname if isinstance(odr_enum_dname,str) else odr_enum_dname.en
+            odr_value = odr_value.replace(',','.')
+            return float(1000000/float(odr_value))
+        return None
 
     def __get_audio_sensor_odr(self, comp_status, comp_interface):
         return self.__get_mems_sensor_odr(comp_status, comp_interface)
@@ -354,7 +446,7 @@ class HSD_Controller(STDTDL_Controller):
         return self.__get_sensor_unit("aop", comp_status, comp_interface)
     
     def __get_ranging_sensor_unit(self, comp_status, comp_interface):
-        return "" #self.__get_sensor_unit("aaa", comp_status, comp_interface)
+        return ""
     
     def __get_mc_telemetry_unit(self, telemetry_status, comp_interface):
         print(telemetry_status)
@@ -384,18 +476,28 @@ class HSD_Controller(STDTDL_Controller):
                     return SensorAudioPlotParams(comp_name, enabled, odr, dimension, unit)
                 elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_RANGING.value:
                     resolution = comp_status_value.get("resolution")
-                    return SensorRangingPlotParams(comp_name, enabled, dimension, resolution)
+                    output_format = comp_status_value.get("output_format")
+                    return SensorRangingPlotParams(comp_name, enabled, dimension, resolution, output_format)
                 elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
                     return SensorLightPlotParams(comp_name, enabled, dimension)
                 elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_PRESENCE.value:
                     plots_params_dict = {}
+                    embedded_compensation = comp_status[comp_name].get("embedded_compensation")
+                    software_compensation = comp_status[comp_name].get("software_compensation")
                     plots_params_dict["Ambient"] = PlotPAmbientParams(comp_name, enabled, 1)
-                    plots_params_dict["Object"] = PlotPObjectParams(comp_name, enabled, 4)
-                    plots_params_dict["Presence"] = PlotPPresenceParams(comp_name, enabled, 3)
-                    plots_params_dict["Motion"] = PlotPMotionParams(comp_name, enabled, 3)
+                    plots_params_dict["Object"] = PlotPObjectParams(comp_name, enabled, 4, embedded_compensation, software_compensation)
+                    plots_params_dict["Presence"] = PlotPPresenceParams(comp_name, enabled, 1, embedded_compensation, software_compensation)
+                    plots_params_dict["Motion"] = PlotPMotionParams(comp_name, enabled, 1, embedded_compensation, software_compensation)
                     return SensorPresenscePlotParams(comp_name, enabled, plots_params_dict)
                 elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_CAMERA.value:
                     log.warning("ISENSOR_CLASS_CAMERA category not supported yet")
+                elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_POWERMETER.value:
+                    plots_params_dict = {}
+                    plots_params_dict["Voltage"] = SensorPlotParams(comp_name, enabled, 1, "mV")
+                    plots_params_dict["Voltage(VShunt)"] = SensorPlotParams(comp_name, enabled, 1, "mV")
+                    plots_params_dict["Current"] = SensorPlotParams(comp_name, enabled, 1, "A")
+                    plots_params_dict["Power"] = SensorPlotParams(comp_name, enabled, 1, "mW")
+                    return SensorPowerPlotParams(comp_name, enabled, plots_params_dict)
                 else: #Maintain compatibility with OLD versions (< SensorManager v3 [NO SENSOR CATEGORIES])
                     odr = self.__get_mems_sensor_odr(comp_status_value, comp_interface)
                     unit = self.__get_mems_sensor_unit(comp_status_value, comp_interface)
@@ -465,6 +567,9 @@ class HSD_Controller(STDTDL_Controller):
                 comp_status = self.get_component_status(comp_name)
                 self.sig_actuator_component_updated.emit(comp_name, plot_params)
             self.sig_component_updated.emit(comp_name, comp_status[comp_name])
+            
+            if self.data_pipeline is not None:
+                self.data_pipeline.update_components_status(self.components_status)
         else:
             log.warning("The component [{}] defined in DeviceTemplate has not a Twin in Device Status from the FW".format(comp_name))
             self.sig_component_updated.emit(comp_name, None)
@@ -487,11 +592,13 @@ class HSD_Controller(STDTDL_Controller):
     
     def start_log(self, interface=1, acq_folder = None, sub_folder=True):
         if type(self.hsd_link) == HSDLink_v1:
-            res = self.hsd_link.start_log(self.device_id)
+            res = self.hsd_link.start_log(self.device_id, save_files=self.save_files_flag)
         else:
-            res = self.hsd_link.start_log(self.device_id, interface, acq_folder=acq_folder, sub_folder=sub_folder)
+            res = self.hsd_link.start_log(self.device_id, interface, acq_folder=acq_folder, sub_folder=sub_folder, save_files=self.save_files_flag)
         if res:
             self.sig_logging.emit(True,interface)
+            if self.data_pipeline is not None:
+                self.data_pipeline.start()
             self.sig_streaming_error.emit(False, "")
             self.is_logging = True
     
@@ -520,14 +627,27 @@ class HSD_Controller(STDTDL_Controller):
             self.sig_detecting.emit(True)
             self.is_detecting = True
 
+    def get_save_files_flag(self):
+        return self.save_files_flag
+
+    def set_save_files_flag(self, status):
+        self.save_files_flag = status
+
     def start_plots(self):
-         for s in self.plot_widgets:
+        if self.dt_plugins_folder_path is not None:
+            # Create and start the consumer thread
+            self.consumer_thread = self.DataConsumerThread(self, self.data_pipeline)
+            # self.consumer_thread.daemon = True
+            self.consumer_thread.start()
+
+        for s in self.plot_widgets:
             s_plot = self.plot_widgets[s]
             
             if type(self.hsd_link) == HSDLink_v1:
-                    sensor_data_file_path = os.path.join(self.hsd_link.get_acquisition_folder(),(str(s_plot.comp_name) + ".dat"))
-                    sensor_data_file = open(sensor_data_file_path, "wb+")
-                    self.sensor_data_files.append(sensor_data_file)
+                    if self.save_files_flag:
+                        sensor_data_file_path = os.path.join(self.hsd_link.get_acquisition_folder(),(str(s_plot.comp_name) + ".dat"))
+                        sensor_data_file = open(sensor_data_file_path, "wb+")
+                        self.sensor_data_files.append(sensor_data_file)
                     stopFlag = Event()
                     self.threads_stop_flags.append(stopFlag)
 
@@ -550,9 +670,10 @@ class HSD_Controller(STDTDL_Controller):
                 c_enable = c_status_value["enable"] 
                 
                 if c_enable == True:
-                    sensor_data_file_path = os.path.join(self.hsd_link.get_acquisition_folder(),(str(s_plot.comp_name) + ".dat"))
-                    sensor_data_file = open(sensor_data_file_path, "wb+")
-                    self.sensor_data_files.append(sensor_data_file)
+                    if self.save_files_flag:
+                        sensor_data_file_path = os.path.join(self.hsd_link.get_acquisition_folder(),(str(s_plot.comp_name) + ".dat"))
+                        sensor_data_file = open(sensor_data_file_path, "wb+")
+                        self.sensor_data_files.append(sensor_data_file)
                     stopFlag = Event()
                     self.threads_stop_flags.append(stopFlag)
                     
@@ -596,83 +717,100 @@ class HSD_Controller(STDTDL_Controller):
                         if s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_RANGING.value:
                             raw_flat_data = True
                     
-                    dr = DataReader(self, s_plot.comp_name, spts, dimensions, sample_size, data_format, sensitivity, interleaved_data, raw_flat_data)
+                    dr = HSD_Controller.DataReader(self, s_plot.comp_name, spts, dimensions, sample_size, data_format, sensitivity, interleaved_data, raw_flat_data)
                     self.data_readers.append(dr)
-                
-                    thread = self.SensorAcquisitionThread(stopFlag, self.hsd_link, dr, self.device_id, s_plot.comp_name, sensor_data_file, usb_dps, self.sig_streaming_error)
+
+                    if self.save_files_flag:
+                        thread = self.SensorAcquisitionThread(stopFlag, self.hsd_link, dr, self.device_id, s_plot.comp_name, sensor_data_file, usb_dps, self.sig_streaming_error)
+                    else:
+                        thread = self.SensorAcquisitionThread(stopFlag, self.hsd_link, dr, self.device_id, s_plot.comp_name, None, usb_dps, self.sig_streaming_error)
                     thread.start()
                     self.sensors_threads.append(thread)
 
-    
-    
     def stop_log(self, interface=1):
         if self.is_logging == True:
             self.hsd_link.stop_log(self.device_id)
             if type(self.hsd_link) == HSDLink_v1:
-                self.hsd_link.save_json_device_file(self.device_id)
-                self.hsd_link.save_json_acq_info_file(self.device_id)
+                if self.save_files_flag:
+                    self.hsd_link.save_json_device_file(self.device_id)
+                    self.hsd_link.save_json_acq_info_file(self.device_id)
             else:
                 #TODO put here a "File saving..." loading window!
                 time.sleep(0.5)
-                self.hsd_link.save_json_acq_info_file(self.device_id)
-                self.hsd_link.save_json_device_file(self.device_id)
-                if self.ispu_output_format_path is not None:
-                    shutil.copyfile(self.ispu_output_format_path, os.path.join(self.hsd_link.get_acquisition_folder(),"ispu_output_format.json"))
-                    log.info("ispu_output_format.json File correctly saved")
-                if self.ispu_ucf_file_path is not None:
-                    ucf_filename = os.path.basename(self.ispu_ucf_file_path)
-                    shutil.copyfile(self.ispu_ucf_file_path, os.path.join(self.hsd_link.get_acquisition_folder(),ucf_filename))
-                    log.info("{} File correctly saved".format(ucf_filename))
+                if self.save_files_flag:
+                    self.hsd_link.save_json_acq_info_file(self.device_id)
+                    self.hsd_link.save_json_device_file(self.device_id)
+                    if self.ispu_output_format_path is not None:
+                        shutil.copyfile(self.ispu_output_format_path, os.path.join(self.hsd_link.get_acquisition_folder(),"ispu_output_format.json"))
+                        log.info("ispu_output_format.json File correctly saved")
+                    if self.ispu_ucf_file_path is not None:
+                        ucf_filename = os.path.basename(self.ispu_ucf_file_path)
+                        shutil.copyfile(self.ispu_ucf_file_path, os.path.join(self.hsd_link.get_acquisition_folder(),ucf_filename))
+                        log.info("{} File correctly saved".format(ucf_filename))
                 self.sig_logging.emit(False, interface)
+                if self.data_pipeline is not None:
+                    self.data_pipeline.stop()
                 self.is_logging = False
     
     def stop_auto_log(self, interface=1):
         if self.is_logging == True:
+            self.sig_autologging_is_stopping.emit(True)
             self.hsd_link.stop_log(self.device_id)
             if type(self.hsd_link) == HSDLink_v1:
-                self.hsd_link.save_json_device_file(self.device_id)
-                self.hsd_link.save_json_acq_info_file(self.device_id)
+                if self.save_files_flag:
+                    self.hsd_link.save_json_device_file(self.device_id)
+                    self.hsd_link.save_json_acq_info_file(self.device_id)
             else:
-                #TODO put here a "File saving..." loading window!
                 time.sleep(0.5)
-                self.hsd_link.save_json_acq_info_file(self.device_id)
-                self.hsd_link.save_json_device_file(self.device_id)
-                if self.ispu_output_format_path is not None:
-                    shutil.copyfile(self.ispu_output_format_path, os.path.join(self.hsd_link.get_acquisition_folder(),"ispu_output_format.json"))
-                    log.info("ispu_output_format.json File correctly saved")
-                if self.ispu_ucf_file_path is not None:
-                    ucf_filename = os.path.basename(self.ispu_ucf_file_path)
-                    shutil.copyfile(self.ispu_ucf_file_path, os.path.join(self.hsd_link.get_acquisition_folder(),ucf_filename))
-                    log.info("{} File correctly saved".format(ucf_filename))
+                #TODO put here a "File saving..." loading window!
+                if self.save_files_flag:
+                    self.hsd_link.save_json_acq_info_file(self.device_id)
+                    self.hsd_link.save_json_device_file(self.device_id)
+                    if self.ispu_output_format_path is not None:
+                        shutil.copyfile(self.ispu_output_format_path, os.path.join(self.hsd_link.get_acquisition_folder(),"ispu_output_format.json"))
+                        log.info("ispu_output_format.json File correctly saved")
+                    if self.ispu_ucf_file_path is not None:
+                        ucf_filename = os.path.basename(self.ispu_ucf_file_path)
+                        shutil.copyfile(self.ispu_ucf_file_path, os.path.join(self.hsd_link.get_acquisition_folder(),ucf_filename))
+                        log.info("{} File correctly saved".format(ucf_filename))
                 self.sig_logging.emit(False, interface)
+                if self.data_pipeline is not None:
+                    self.data_pipeline.stop()
+                self.is_logging = False
+                self.sig_autologging_is_stopping.emit(False)
         self.sig_is_auto_started.emit(False)
         self.is_logging = False
 
-    
     def stop_detect(self):
         if self.is_detecting == True:
             self.hsd_link.stop_log(self.device_id)
             if type(self.hsd_link) == HSDLink_v1:
-                self.hsd_link.save_json_device_file(self.device_id)
-                self.hsd_link.save_json_acq_info_file(self.device_id)
+                if self.save_files_flag:
+                    self.hsd_link.save_json_device_file(self.device_id)
+                    self.hsd_link.save_json_acq_info_file(self.device_id)
             else:
-                self.hsd_link.save_json_device_file(self.device_id)
-                self.hsd_link.save_json_acq_info_file(self.device_id)
-                if self.ispu_output_format_path is not None:
-                    shutil.copyfile(self.ispu_output_format_path, os.path.join(self.hsd_link.get_acquisition_folder(),"ispu_output_format.json"))
-                    log.info("ispu_output_format.json File correctly saved")
-                if self.ispu_ucf_file_path is not None:
-                    ucf_filename = os.path.basename(self.ispu_ucf_file_path)
-                    shutil.copyfile(self.ispu_ucf_file_path, os.path.join(self.hsd_link.get_acquisition_folder(),ucf_filename))
-                    log.info("{} File correctly saved".format(ucf_filename))
+                if self.save_files_flag:
+                    self.hsd_link.save_json_device_file(self.device_id)
+                    self.hsd_link.save_json_acq_info_file(self.device_id)
+                    if self.ispu_output_format_path is not None:
+                        shutil.copyfile(self.ispu_output_format_path, os.path.join(self.hsd_link.get_acquisition_folder(),"ispu_output_format.json"))
+                        log.info("ispu_output_format.json File correctly saved")
+                    if self.ispu_ucf_file_path is not None:
+                        ucf_filename = os.path.basename(self.ispu_ucf_file_path)
+                        shutil.copyfile(self.ispu_ucf_file_path, os.path.join(self.hsd_link.get_acquisition_folder(),ucf_filename))
+                        log.info("{} File correctly saved".format(ucf_filename))
             self.sig_detecting.emit(False)
             self.is_detecting = False
     
     def stop_plots(self):
+        if self.dt_plugins_folder_path is not None:
+            # stop the consumer thread
+            self.consumer_thread.stop()
         for sf in self.threads_stop_flags:
             sf.set()
-        for f in self.sensor_data_files:
-            f.close()
+        if self.save_files_flag:
+            for f in self.sensor_data_files:
+                f.close()
     
     def plot_window_changed(self, plot_window_time):
         self.sig_plot_window_time_updated.emit(plot_window_time)
@@ -703,6 +841,8 @@ class HSD_Controller(STDTDL_Controller):
                     odr = self.__get_ranging_sensor_odr(ss_status)
                 elif ss_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
                     odr = self.__get_light_sensor_odr(ss_status)
+                elif ss_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_POWERMETER.value:
+                    odr = self.__get_powermeter_sensor_odr(ss_status, ss_dtdl_comp)
                 data_byte_len = TypeConversion.check_type_length(ss_status.get("data_type"))
                 dim = ss_status.get("dim")                                                             
                 self.curr_bandwidth += odr * data_byte_len * dim * 8  
@@ -716,8 +856,11 @@ class HSD_Controller(STDTDL_Controller):
         return self.hsd_link.get_boolean_property(0,"log_controller","sd_mounted")
 
     def update_plot_widget(self, comp_name, plot_params, visible):
-        self.plot_widgets[comp_name].update_plot_characteristics(plot_params)
-        self.plot_widgets[comp_name].setVisible(visible)
+        if comp_name in self.plot_widgets:
+            self.plot_widgets[comp_name].update_plot_characteristics(plot_params)
+            self.plot_widgets[comp_name].setVisible(visible)
+        else:
+            log.warning(f"{comp_name} is not in plot widget list yet")
 
     def remove_plot_widget(self, comp_name) -> HSDPlotLinesWidget:
         if comp_name in self.plot_widgets:
@@ -813,6 +956,8 @@ class HSD_Controller(STDTDL_Controller):
             self.hsd_link.set_sw_tag_off(self.device_id, sw_tag_name)
         self.update_component_status("tags_info")
         tag_label = self.components_status["tags_info"][sw_tag_name]["label"]
+        if self.data_pipeline is not None:
+            self.data_pipeline.do_tag(status, tag_label)
         self.sig_tag_done.emit(status, tag_label)
 
     def changeSWTagClassEnabled(self, sw_tag_name, new_status):
@@ -865,14 +1010,20 @@ class HSD_Controller(STDTDL_Controller):
         if cb_sensor_value == "all":
             for s in active_sensor_list:
                 s_key = list(s.keys())[0]
-                hsd.get_sensor_plot(s_key, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag, fft_flag)
+                s[s_key]["is_first_chunk"] = True
+                ioffset = s[s_key].get("ioffset",0)
+                try:
+                    hsd.get_sensor_plot(s_key, s[s_key], start_time, end_time, tag_label if tag_label != "None" else None, [], sub_plots_flag, raw_data_flag, fft_flag)
+                except Exception as e:
+                    log.error(f"Error in {s_key} get_sensor_plot: {e}")
+                HSDatalog.reset_status_conversion_side_info(s[s_key], ioffset)
             for a in active_algorithm_list:
                 a_key = list(a.keys())[0]
-                hsd.get_algorithm_plot(a_key, start_time, end_time)
+                hsd.get_algorithm_plot(a_key, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
             if active_actuator_list is not None:
                 for act in active_actuator_list:
                     act_key = list(act.keys())[0]
-                    hsd.get_sensor_plot(act_key, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag, fft_flag)
+                    hsd.get_sensor_plot(act_key, act[act_key], start_time, end_time, tag_label if tag_label != "None" else None, [], sub_plots_flag, raw_data_flag, fft_flag)
         else:
             s_list = hsd.get_sensor_list(only_active=True)
             a_list = hsd.get_algorithm_list(only_active=True)
@@ -881,12 +1032,20 @@ class HSD_Controller(STDTDL_Controller):
             algo_comp = [a for a in a_list if cb_sensor_value in a]
             act_comp = [act for act in act_list if cb_sensor_value in act]
             if len(sensor_comp) > 0: # == 1
-                hsd.get_sensor_plot(cb_sensor_value, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag, fft_flag)
+                sensor_comp = sensor_comp[0][cb_sensor_value]
+                sensor_comp["is_first_chunk"] = True
+                ioffset = sensor_comp.get("ioffset",0)
+                try:
+                    hsd.get_sensor_plot(cb_sensor_value, sensor_comp, start_time, end_time, tag_label if tag_label != "None" else None, [], sub_plots_flag, raw_data_flag, fft_flag)
+                except Exception as e:
+                    log.error(f"Error in {sensor_comp} get_sensor_plot: {e}")
+                HSDatalog.reset_status_conversion_side_info(sensor_comp, ioffset)
             elif len(algo_comp) > 0: # == 1
                 a_key = list(algo_comp[0].keys())[0]
-                hsd.get_algorithm_plot(a_key, start_time, end_time)
+                hsd.get_algorithm_plot(a_key, algo_comp, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
             elif len(act_comp) > 0: # == 1
-                 hsd.get_sensor_plot(cb_sensor_value, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag, fft_flag)
+                act_comp = act_comp[0][cb_sensor_value]
+                hsd.get_sensor_plot(cb_sensor_value, act_comp, start_time, end_time, tag_label if tag_label != "None" else None, [], sub_plots_flag, raw_data_flag, fft_flag)
         
         self.sig_offline_plots_completed.emit()
     
@@ -904,7 +1063,7 @@ class HSD_Controller(STDTDL_Controller):
         if component is not None:
             HSDatalog.convert_dat_to_wav(hsd, component, start_time, end_time, output_folder)
         
-        wav_file_name = HSDatalog.get_wav_file_name(hsd, comp_name, None, output_folder)
+        wav_file_name = HSDatalog.get_wav_file_path(hsd, comp_name, output_folder)
         self.sig_wav_conversion_completed.emit(comp_name, wav_file_name)
 
     def set_automode_enabled(self, status):
@@ -936,12 +1095,25 @@ class HSD_Controller(STDTDL_Controller):
     def add_error_in_configuration(self, error_key):
         if not error_key in self.config_error_dict:
             self.config_error_dict[error_key] = True
-            self.sig_lock_start_button.emit(True)
+            self.sig_lock_start_button.emit(True,"Errors in config")
 
     def remove_error_in_configuration(self, error_key):
         if error_key in self.config_error_dict:
             del self.config_error_dict[error_key]
             if len(self.config_error_dict) == 0:
-                self.sig_lock_start_button.emit(False)
+                self.sig_lock_start_button.emit(False,"")
+    
+    #Data Toolkit functions
+    def set_dt_plugins_folder(self, path:str):
+        self.dt_plugins_folder_path = path
 
-        
+    def get_dt_plugin_folder_path(self):
+        return self.dt_plugins_folder_path
+
+    def add_data_to_queue(self, data:DataClass):
+        with self.queue_evt:
+            self.data_queue.append(data)
+            self.queue_evt.notify()
+
+    def get_data_from_queue(self):
+        return self.data_queue.popleft()

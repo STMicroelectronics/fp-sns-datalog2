@@ -63,6 +63,41 @@ extern "C" {
 #define FILEX_DCTRL_TERMINATOR                  "}"
 
 
+/* sensor error code */
+/*********************/
+#ifndef SYS_NO_ERROR_CODE
+#define SYS_NO_ERROR_CODE                   0
+#endif
+#ifndef SYS_SD_TASK_BASE_ERROR_CODE
+#define SYS_SD_TASK_BASE_ERROR_CODE         1
+#endif
+#define SYS_SD_TASK_INIT_ERROR_CODE         SYS_SD_TASK_BASE_ERROR_CODE + 1
+#define SYS_SD_TASK_NO_SDCARD_ERROR_CODE    SYS_SD_TASK_BASE_ERROR_CODE + 2
+#define SYS_SD_TASK_FILE_OPEN_ERROR_CODE    SYS_SD_TASK_BASE_ERROR_CODE + 3
+#define SYS_SD_TASK_FILE_CLOSE_ERROR_CODE   SYS_SD_TASK_BASE_ERROR_CODE + 4
+#define SYS_SD_TASK_FILE_OP_ERROR_CODE      SYS_SD_TASK_BASE_ERROR_CODE + 5
+#define SYS_SD_TASK_DATA_LOST_ERROR_CODE    SYS_SD_TASK_BASE_ERROR_CODE + 6
+#define SYS_SD_TASK_INPUT_ARG_ERROR_CODE    SYS_SD_TASK_BASE_ERROR_CODE + 7
+#define SYS_SD_TASK_NULL_PTR_ARG_ERROR_CODE SYS_SD_TASK_BASE_ERROR_CODE + 8
+
+/**
+  * @brief Pointer to a function that will be called when the message queue's available storage falls below a threshold.
+  */
+typedef void (*filex_msg_queue_not_send_fp)(void);
+
+/**
+  * @brief Structure to hold the configuration for the message queue threshold.
+  *
+  * This structure contains the callback function that will be called when the message queue's
+  * available storage falls below the specified threshold, as well as the threshold value itself.
+  */
+typedef struct _filex_threshold_config_t
+{
+  filex_msg_queue_not_send_fp
+  filex_msg_queue_not_send_cb;  /**< Callback function pointer to be invoked when the threshold is reached. */
+  UINT queue_available_storage_thr;                         /**< Threshold value for the available storage in the message queue. */
+} filex_threshold_config_t;
+
 /**
   * Create  type name for _filex_dctrl_class_t.
   */
@@ -125,11 +160,17 @@ struct _filex_dctrl_class_t
   /* Command */
   ICommandParse_t *cmd_parser;
 
+  filex_msg_queue_not_send_fp filex_msg_queue_not_send_cb;
+  UINT queue_available_storage_thr;
+
   /**
     * HAL driver configuration parameters.
     */
   const void *mx_drv_cfg;
 };
+
+//typedef void(*save_dtdl_fp)(char *response_msg, uint32_t size);
+typedef void(*create_cmd_response_fp)(char *response_msg, uint32_t size);
 
 /** Public API declaration */
 /***************************/
@@ -144,6 +185,9 @@ IStream_t *filex_dctrl_class_alloc(void);
 sys_error_code_t filex_dctrl_set_ICommandParseIF(filex_dctrl_class_t *_this, ICommandParse_t *inf);
 
 sys_error_code_t filex_dctrl_msg(filex_dctrl_class_t *_this, unsigned long *msg);
+
+sys_error_code_t filex_dctrl_configure_stop_threshold(filex_dctrl_class_t *_this,
+                                                      filex_threshold_config_t *threshold_config);
 
 sys_error_code_t filex_dctrl_write_ucf(filex_dctrl_class_t *_this, uint32_t ucf_size, const char *ucf_data);
 

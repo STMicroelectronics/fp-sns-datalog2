@@ -48,6 +48,7 @@ sys_error_code_t STTS22HTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t STTS22HTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t STTS22HTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t STTS22HTask_vtblSensorGetStatus(ISensor_t *_this);
+SensorStatus_t *STTS22HTask_vtblSensorGetStatusPointer(ISensor_t *_this);
 sys_error_code_t STTS22HTask_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
 float STTS22HTask_vtblTempGetFS(ISensorMems_t *_this);
 float STTS22HTask_vtblTempGetSensitivity(ISensorMems_t *_this);

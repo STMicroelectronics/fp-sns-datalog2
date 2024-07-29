@@ -216,7 +216,8 @@ static IMP23ABSUTaskClass_t sTheClass =
       IMP23ABSUTask_vtblSensorDisable,
       IMP23ABSUTask_vtblSensorIsEnabled,
       IMP23ABSUTask_vtblSensorGetDescription,
-      IMP23ABSUTask_vtblSensorGetStatus
+      IMP23ABSUTask_vtblSensorGetStatus,
+      IMP23ABSUTask_vtblSensorGetStatusPointer
     },
     IMP23ABSUTask_vtblMicGetFrequency,
     IMP23ABSUTask_vtblMicGetVolume,
@@ -516,7 +517,7 @@ sys_error_code_t IMP23ABSUTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IMP23ABSU: start.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("IMP23ABSU: start.\r\n"));
 
 #if defined(ENABLE_THREADX_DBG_PIN) && defined (IMP23ABSU_TASK_CFG_TAG)
   IMP23ABSUTask *p_obj = (IMP23ABSUTask *) _this;
@@ -659,6 +660,7 @@ sys_error_code_t IMP23ABSUTask_vtblSensorSetFrequency(ISensorAudio_t *_this, uin
   }
   else
   {
+    p_if_owner->sensor_status.type.audio.frequency = frequency;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -687,6 +689,10 @@ sys_error_code_t IMP23ABSUTask_vtblSensorSetVolume(ISensorAudio_t *_this, uint8_
   }
   else
   {
+    if (volume <= 100)
+    {
+      p_if_owner->sensor_status.type.audio.volume = volume;
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -724,6 +730,7 @@ sys_error_code_t IMP23ABSUTask_vtblSensorEnable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = TRUE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -751,6 +758,7 @@ sys_error_code_t IMP23ABSUTask_vtblSensorDisable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = FALSE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -795,6 +803,14 @@ SensorStatus_t IMP23ABSUTask_vtblSensorGetStatus(ISensor_t *_this)
   IMP23ABSUTask *p_if_owner = (IMP23ABSUTask *)((uint32_t) _this - offsetof(IMP23ABSUTask, sensor_if));
 
   return p_if_owner->sensor_status;
+}
+
+SensorStatus_t *IMP23ABSUTask_vtblSensorGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  IMP23ABSUTask *p_if_owner = (IMP23ABSUTask *)((uint32_t) _this - offsetof(IMP23ABSUTask, sensor_if));
+
+  return &p_if_owner->sensor_status;
 }
 
 /* Private function definition */
@@ -897,21 +913,26 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
 
         uint16_t samples = (uint16_t)(p_obj->sensor_status.type.audio.frequency / 1000u);
 
-//        if (timestamp > 0.3f)
-//        {
+        if (timestamp > 0.3f)
+        {
 #if (HSD_USE_DUMMY_DATA == 1)
-        IMP23ABSUTaskWriteDummyData(p_obj);
-        EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
+          IMP23ABSUTaskWriteDummyData(p_obj);
+          EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
 #else
-        EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[(p_obj->half - 1) * samples], E_EM_INT16, samples);
+          float gain = (float)p_obj->sensor_status.type.audio.volume * 0.01f; /*volume is expressed as percentage*/
+          for (int i = 0; i < samples; i++)
+          {
+            p_obj->p_sensor_data_buff[((p_obj->half - 1) * samples) + i] *= gain;
+          }
+          EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[(p_obj->half - 1) * samples], E_EM_INT16, samples);
 #endif
-        DataEvent_t evt;
+          DataEvent_t evt;
 
-        DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
-        IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
+          DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
+          IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-        SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP23ABSU: ts = %f\r\n", (float)timestamp));
-//        }
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP23ABSU: ts = %f\r\n", (float)timestamp));
+        }
         break;
       }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -1115,7 +1136,7 @@ static sys_error_code_t IMP23ABSUTaskSensorSetVolume(IMP23ABSUTask *_this, SMMes
 
   if (id == _this->mic_id)
   {
-    if (FS != 100.0f)
+    if (FS <= 100.0f)
     {
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
     }

@@ -25,8 +25,10 @@
 #include "services/systypes.h"
 #include "HardwareDetection.h"
 #include "iis3dwb_reg.h"
+#include "ism330bx_reg.h"
 #include "ism330is_reg.h"
 #include "stts22h_reg.h"
+#include "TSC1641.h"
 
 #define HW_DETECTION_I2C_TIMEOUT  500U
 
@@ -79,6 +81,35 @@ boolean_t HardwareDetection_Check_Ext_IIS3DWB(void)
   HardwareDetection_SPI2_CS_DeInit();
 
   if (whoami_val == IIS3DWB_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
+
+/**
+  * Detect an external ISM330BX sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_ISM330BX(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+
+  HardwareDetection_SPI2_CS_Init();
+  MX_SPI2_Init();
+
+  ism330bx_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi2);
+  HardwareDetection_SPI2_CS_DeInit();
+
+  if (whoami_val == ISM330BX_ID)
   {
     found = TRUE;
   }
@@ -155,6 +186,30 @@ boolean_t HardwareDetection_Check_Ext_STTS22H(uint8_t *device_address)
   HAL_I2C_DeInit(&hi2c3);
 
   *device_address = addr;
+  return found;
+}
+
+/**
+  * Detect an external TSC1641 sensor
+  *
+  * @param device_address: return the address of the device, if found. [output]
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_TSC1641(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+
+  MX_I2C3_Init();
+
+  HAL_I2C_Mem_Read(&hi2c3, I2C_TSC1641_ADD_R, TSC1641_RegAdd_DieID, I2C_MEMADD_SIZE_8BIT, &whoami_val, 2,
+                   HW_DETECTION_I2C_TIMEOUT);
+
+  if (whoami_val == 0x10)
+  {
+    found = TRUE;
+  }
+  HAL_I2C_DeInit(&hi2c3);
   return found;
 }
 

@@ -340,7 +340,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>DEBUG, SYS_DEBUG, SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, NX_INCLUDE_USER_DEFINE_FILE, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\threadx\utility\execution_profile_kit;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;..\..\..\..\..\Drivers\BSP\Components\ism330bx;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\threadx\utility\execution_profile_kit;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -400,11 +400,6 @@
               <FilePath>..\Core\Src\App.c</FilePath>
             </File>
             <File>
-              <FileName>App_model.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\App_model.c</FilePath>
-            </File>
-            <File>
               <FileName>AppPowerModeHelper.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\AppPowerModeHelper.c</FilePath>
@@ -448,21 +443,6 @@
               <FileName>ICommandParse.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\ICommandParse.c</FilePath>
-            </File>
-            <File>
-              <FileName>IIsm330dhcx_Mlc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\IIsm330dhcx_Mlc.c</FilePath>
-            </File>
-            <File>
-              <FileName>IIsm330is_Ispu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\IIsm330is_Ispu.c</FilePath>
-            </File>
-            <File>
-              <FileName>ILog_Controller.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ILog_Controller.c</FilePath>
             </File>
             <File>
               <FileName>IStream.c</FileName>
@@ -538,6 +518,11 @@
               <FileName>IWifi_Config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\IWifi_Config.c</FilePath>
+            </File>
+            <File>
+              <FileName>TSC1641.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\TSC1641.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -667,122 +652,287 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Application/PnPL</GroupName>
+          <GroupName>Application/PnPL/AppModel</GroupName>
+          <Files>
+            <File>
+              <FileName>App_model.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Acquisition_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Acquisition_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Automode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Automode.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Deviceinformation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Deviceinformation.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Firmware_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Firmware_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2dlpc_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2dlpc_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2iclx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2iclx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2mdc_Mag.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2mdc_Mag.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis3dwb_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis3dwb_Ext_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb_Ext_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ilps22qs_Press.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ilps22qs_Press.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Imp23absu_Mic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Imp23absu_Mic.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Imp34dt05_Mic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Imp34dt05_Mic.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330bx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330bx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330bx_Gyro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330bx_Gyro.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330bx_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330bx_Mlc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330dhcx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330dhcx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330dhcx_Gyro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330dhcx_Gyro.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330dhcx_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330dhcx_Mlc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330is_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330is_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330is_Gyro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330is_Gyro.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330is_Ispu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330is_Ispu.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Log_Controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Log_Controller.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Stts22h_Ext_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Stts22h_Ext_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Stts22h_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Stts22h_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Tags_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Tags_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Tsc1641_Pow.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Tsc1641_Pow.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Wifi_Config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Wifi_Config.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Application/PnPL/Components</GroupName>
           <Files>
             <File>
               <FileName>Acquisition_Info_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Acquisition_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Acquisition_Info_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Automode_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Automode_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Automode_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Deviceinformation_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Deviceinformation_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Deviceinformation_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Firmware_Info_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Firmware_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Firmware_Info_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis2dlpc_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis2dlpc_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis2dlpc_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis2iclx_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis2iclx_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis2iclx_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis2mdc_Mag_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis2mdc_Mag_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis2mdc_Mag_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis3dwb_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis3dwb_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis3dwb_Ext_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis3dwb_Ext_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb_Ext_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ilps22qs_Press_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ilps22qs_Press_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ilps22qs_Press_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Imp23absu_Mic_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Imp23absu_Mic_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Imp23absu_Mic_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Imp34dt05_Mic_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Imp34dt05_Mic_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Imp34dt05_Mic_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism330bx_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism330bx_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism330bx_Gyro_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism330bx_Gyro_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism330bx_Mlc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism330bx_Mlc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330dhcx_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330dhcx_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330dhcx_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330dhcx_Gyro_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330dhcx_Gyro_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330dhcx_Gyro_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330dhcx_Mlc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330dhcx_Mlc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330dhcx_Mlc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330is_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330is_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330is_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330is_Gyro_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330is_Gyro_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330is_Gyro_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330is_Ispu_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330is_Ispu_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330is_Ispu_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Log_Controller_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Log_Controller_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Log_Controller_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Stts22h_Ext_Temp_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Stts22h_Ext_Temp_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Stts22h_Ext_Temp_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Stts22h_Temp_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Stts22h_Temp_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Stts22h_Temp_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Tags_Info_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Tags_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Tags_Info_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Tsc1641_Pow_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Tsc1641_Pow_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Wifi_Config_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Wifi_Config_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Wifi_Config_PnPL.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -939,6 +1089,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ISM330ISTask.c</FilePath>
             </File>
+            <File>
+              <FileName>ISM330BXTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ISM330BXTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>TSC1641Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\TSC1641Task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1000,9 +1160,19 @@
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\ilps22qs\ilps22qs_reg.c</FilePath>
             </File>
             <File>
+              <FileName>ism330bx_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330bx\ism330bx_reg.c</FilePath>
+            </File>
+            <File>
               <FileName>ism330dhcx_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330dhcx\ism330dhcx_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>ism330is_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330is\ism330is_reg.c</FilePath>
             </File>
             <File>
               <FileName>lps22hh_reg.c</FileName>
@@ -1013,11 +1183,6 @@
               <FileName>stts22h_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\stts22h\stts22h_reg.c</FilePath>
-            </File>
-            <File>
-              <FileName>ism330is_reg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330is\ism330is_reg.c</FilePath>
             </File>
             <File>
               <FileName>mx_address.c</FileName>
@@ -2433,6 +2598,11 @@
               <FileName>BLE_HighSpeedDataLog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_HighSpeedDataLog.c</FilePath>
+            </File>
+            <File>
+              <FileName>BLE_RawPnPLControlled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_RawPnPLControlled.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5953,7 +6123,7 @@
       <TargetName>Datalog2_Release</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6180000::V6.18::ARMCLANG</pCCUsed>
+      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -6283,7 +6453,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, NX_INCLUDE_USER_DEFINE_FILE, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;..\..\..\..\..\Drivers\BSP\Components\ism330bx;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -6343,11 +6513,6 @@
               <FilePath>..\Core\Src\App.c</FilePath>
             </File>
             <File>
-              <FileName>App_model.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\App_model.c</FilePath>
-            </File>
-            <File>
               <FileName>AppPowerModeHelper.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\AppPowerModeHelper.c</FilePath>
@@ -6391,21 +6556,6 @@
               <FileName>ICommandParse.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\ICommandParse.c</FilePath>
-            </File>
-            <File>
-              <FileName>IIsm330dhcx_Mlc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\IIsm330dhcx_Mlc.c</FilePath>
-            </File>
-            <File>
-              <FileName>IIsm330is_Ispu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\IIsm330is_Ispu.c</FilePath>
-            </File>
-            <File>
-              <FileName>ILog_Controller.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\ILog_Controller.c</FilePath>
             </File>
             <File>
               <FileName>IStream.c</FileName>
@@ -6481,6 +6631,11 @@
               <FileName>IWifi_Config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\IWifi_Config.c</FilePath>
+            </File>
+            <File>
+              <FileName>TSC1641.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\TSC1641.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6610,122 +6765,287 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Application/PnPL</GroupName>
+          <GroupName>Application/PnPL/AppModel</GroupName>
+          <Files>
+            <File>
+              <FileName>App_model.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Acquisition_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Acquisition_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Automode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Automode.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Deviceinformation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Deviceinformation.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Firmware_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Firmware_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2dlpc_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2dlpc_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2iclx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2iclx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2mdc_Mag.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2mdc_Mag.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis3dwb_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis3dwb_Ext_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb_Ext_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ilps22qs_Press.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ilps22qs_Press.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Imp23absu_Mic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Imp23absu_Mic.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Imp34dt05_Mic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Imp34dt05_Mic.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330bx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330bx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330bx_Gyro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330bx_Gyro.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330bx_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330bx_Mlc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330dhcx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330dhcx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330dhcx_Gyro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330dhcx_Gyro.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330dhcx_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330dhcx_Mlc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330is_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330is_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330is_Gyro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330is_Gyro.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism330is_Ispu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism330is_Ispu.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Log_Controller.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Log_Controller.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Stts22h_Ext_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Stts22h_Ext_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Stts22h_Temp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Stts22h_Temp.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Tags_Info.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Tags_Info.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Tsc1641_Pow.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Tsc1641_Pow.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Wifi_Config.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Wifi_Config.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Application/PnPL/Components</GroupName>
           <Files>
             <File>
               <FileName>Acquisition_Info_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Acquisition_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Acquisition_Info_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Automode_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Automode_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Automode_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Deviceinformation_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Deviceinformation_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Deviceinformation_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Firmware_Info_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Firmware_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Firmware_Info_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis2dlpc_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis2dlpc_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis2dlpc_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis2iclx_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis2iclx_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis2iclx_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis2mdc_Mag_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis2mdc_Mag_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis2mdc_Mag_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis3dwb_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis3dwb_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Iis3dwb_Ext_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Iis3dwb_Ext_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb_Ext_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ilps22qs_Press_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ilps22qs_Press_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ilps22qs_Press_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Imp23absu_Mic_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Imp23absu_Mic_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Imp23absu_Mic_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Imp34dt05_Mic_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Imp34dt05_Mic_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Imp34dt05_Mic_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism330bx_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism330bx_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism330bx_Gyro_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism330bx_Gyro_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism330bx_Mlc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism330bx_Mlc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330dhcx_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330dhcx_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330dhcx_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330dhcx_Gyro_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330dhcx_Gyro_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330dhcx_Gyro_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330dhcx_Mlc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330dhcx_Mlc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330dhcx_Mlc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330is_Acc_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330is_Acc_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330is_Acc_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330is_Gyro_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330is_Gyro_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330is_Gyro_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Ism330is_Ispu_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Ism330is_Ispu_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Ism330is_Ispu_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Log_Controller_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Log_Controller_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Log_Controller_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Stts22h_Ext_Temp_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Stts22h_Ext_Temp_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Stts22h_Ext_Temp_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Stts22h_Temp_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Stts22h_Temp_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Stts22h_Temp_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Tags_Info_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Tags_Info_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Tags_Info_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Tsc1641_Pow_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Tsc1641_Pow_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Wifi_Config_PnPL.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\PnPL\Src\Wifi_Config_PnPL.c</FilePath>
+              <FilePath>..\PnPL\Components\Src\Wifi_Config_PnPL.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6882,6 +7202,16 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ISM330ISTask.c</FilePath>
             </File>
+            <File>
+              <FileName>ISM330BXTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ISM330BXTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>TSC1641Task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\TSC1641Task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -6943,9 +7273,19 @@
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\ilps22qs\ilps22qs_reg.c</FilePath>
             </File>
             <File>
+              <FileName>ism330bx_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330bx\ism330bx_reg.c</FilePath>
+            </File>
+            <File>
               <FileName>ism330dhcx_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330dhcx\ism330dhcx_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>ism330is_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330is\ism330is_reg.c</FilePath>
             </File>
             <File>
               <FileName>lps22hh_reg.c</FileName>
@@ -6956,11 +7296,6 @@
               <FileName>stts22h_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\stts22h\stts22h_reg.c</FilePath>
-            </File>
-            <File>
-              <FileName>ism330is_reg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330is\ism330is_reg.c</FilePath>
             </File>
             <File>
               <FileName>mx_address.c</FileName>
@@ -8376,6 +8711,11 @@
               <FileName>BLE_HighSpeedDataLog.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_HighSpeedDataLog.c</FilePath>
+            </File>
+            <File>
+              <FileName>BLE_RawPnPLControlled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_RawPnPLControlled.c</FilePath>
             </File>
           </Files>
         </Group>

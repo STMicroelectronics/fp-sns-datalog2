@@ -18,6 +18,7 @@ from enum import Enum
 
 from PySide6.QtCore import QObject, Signal
 
+from st_hsdatalog.HSD_GUI.HSD_DataToolkit_Pipeline import HSD_DataToolkit_Pipeline
 from st_pnpl.DTDL.device_template_manager import DeviceTemplateManager
 from st_pnpl.DTDL.device_template_model import InterfaceElement
 from st_dtdl_gui.Utils.DataClass import SensorPlotParams, AlgorithmPlotParams, ActuatorPlotParams
@@ -62,28 +63,36 @@ class STDTDL_Controller(QObject):
     sig_wav_conversion_completed = Signal(str, str)
     sig_offline_plots_completed = Signal()
 
-    sig_tmos_presence_detected = Signal(bool,str)
-    sig_tmos_motion_detected = Signal(bool,str)
+    sig_tmos_presence_detected = Signal(bool,str,str)
+    sig_tmos_motion_detected = Signal(bool,str,str)
 
     sig_tof_presence_detected = Signal(bool,str)
     sig_tof_presence_detected_in_roi = Signal(bool,int,str)
     
+    sig_autologging_is_stopping = Signal(bool)
     sig_logging = Signal(bool, int)
     sig_detecting = Signal(bool)
     
     def __init__(self, parent=None):
         super().__init__(parent)
         self.device_id = 0 #default device id
+        self.plots_layout = None
         self.components_dtdl = dict() #From DTDL DeviceModel 
         self.components_status = dict() #From FW
         self.cconfig_widgets = dict() #{comp_name:CConfigWidget}
         self.plot_widgets = dict()
+        self.plugin_plot_widgets = dict()
         self.__dt_manager = None
         self.log_msg = ""
         self.detect_msg = ""
+        self.data_pipeline = None
+        self.qt_app = None
 
     def set_Qt_app(self, qt_app):
         self.qt_app = qt_app
+
+    def set_plots_layout(self, plots_layout):
+        self.plots_layout = plots_layout
     
     def add_dtdl_model(self, board_id, fw_id, dtdl_model_json):
         DeviceTemplateManager.add_dtdl_model(board_id, fw_id, dtdl_model_json)
@@ -118,6 +127,23 @@ class STDTDL_Controller(QObject):
         self.cconfig_widgets[comp_name].setVisible(False)
         self.cconfig_widgets[comp_name].deleteLater()
         self.cconfig_widgets.pop(comp_name)
+
+    def add_plugin_plot_widget(self, plot_widget):
+        self.plots_layout.addWidget(plot_widget)
+        self.plugin_plot_widgets[plot_widget.comp_name] = plot_widget
+
+    def remove_plugin_plot_widget(self, plot_widget):
+        plot_widget.setVisible(False)
+        plot_widget.deleteLater()
+        self.pugin_plot_widgets.pop(plot_widget.comp_name)
+        self.plots_layout.removeWidget(plot_widget)
+
+    def clear_all_plugin_plot_widgets(self):
+        for plot_widget in self.plugin_plot_widgets.values():
+            plot_widget.setVisible(False)
+            plot_widget.deleteLater()
+            self.plots_layout.removeWidget(plot_widget)
+        self.plugin_plot_widgets.clear()
         
     def set_log_msg(self, log_msg):
         self.log_msg = log_msg
@@ -127,6 +153,13 @@ class STDTDL_Controller(QObject):
         
     def set_component_config_width(self, width):
         self.sig_component_config_widget_width_updated.emit(width)
+
+    def create_data_pipeline(self):
+        self.data_pipeline = HSD_DataToolkit_Pipeline(self)
+        # self.data_pipeline.update_components_status(self.components_status)
+    
+    def destroy_data_pipeline(self):
+        self.data_pipeline = None
     
     def get_log_msg(self):
         return self.log_msg

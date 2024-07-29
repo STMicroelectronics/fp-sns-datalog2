@@ -2,14 +2,14 @@
   ******************************************************************************
   * @file    BLE_MachineLearningCore.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add Machine Learning Core info services using vendor specific
   *          profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -142,7 +142,7 @@ static void Read_Request_MachineLearningCore(void *BleCharPointer,
     uint8_t buff[2 + 8 + 1];
     CustomReadMachineLearningCore(mlc_out, &mlc_status_mainpage);
 
-    STORE_LE_16(buff, (HAL_GetTick() >> 3));
+    STORE_LE_16(buff, (HAL_GetTick() / 10));
 
     if (BleNumReg == BLE_MLC_8_REG)
     {
@@ -204,7 +204,7 @@ tBleStatus BLE_MachineLearningCoreUpdate(uint8_t *mlc_out, uint8_t *mlc_status_m
   uint8_t buff[2 + 8 + 1];
 
   /* TimeStamp */
-  STORE_LE_16(buff, (HAL_GetTick() >> 3));
+  STORE_LE_16(buff, (HAL_GetTick() / 10));
 
   if (BleNumReg == BLE_MLC_8_REG)
   {

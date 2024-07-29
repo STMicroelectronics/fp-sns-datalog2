@@ -147,10 +147,16 @@ extern const MX_GPIOParams_t MX_GPIO_PA8InitParams;
 extern const MX_GPIOParams_t MX_GPIO_PA0InitParams;
 extern const MX_GPIOParams_t MX_GPIO_PD0InitParams;
 extern const MX_GPIOParams_t MX_GPIO_INT_EXInitParams;
-extern const MX_GPIOParams_t MX_GPIO_INT2_EXInitParams;
+//extern const MX_GPIOParams_t MX_GPIO_INT2_EXInitParams;
 extern const MX_GPIOParams_t MX_GPIO_MXCHIP_NOTIFYInitParams;
 extern const MX_GPIOParams_t MX_GPIO_MXCHIP_NSSInitParams;
 extern const MX_GPIOParams_t MX_GPIO_MXCHIP_RESETInitParams;
+extern const MX_GPIOParams_t MX_GPIO_INT_TOFInitParams;
+extern const MX_GPIOParams_t MX_GPIO_INT_TMOSInitParams;
+
+extern const MX_GPIOParams_t MX_GPIO1_EXInitParams;
+extern const MX_GPIOParams_t MX_GPIO2_EXInitParams;
+extern const MX_GPIOParams_t MX_GPIO3_EXInitParams;
 
 /**
   * SPI2 configuration parameters.

@@ -97,6 +97,7 @@
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis2mdc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis3dwb"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ilps22qs"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism330bx"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism330dhcx"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism330is"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lps22hh"/>
@@ -107,7 +108,8 @@
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/STWIN.box"/>
 									<listOptionValue builtIn="false" value="../../Core/Inc"/>
 									<listOptionValue builtIn="false" value="../../FileX/Target"/>
-									<listOptionValue builtIn="false" value="../../PnPL/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/Components/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/AppModel/Inc"/>
 									<listOptionValue builtIn="false" value="../../FileX/App"/>
 									<listOptionValue builtIn="false" value="../../USBX/Target"/>
 									<listOptionValue builtIn="false" value="../../USBX/App"/>
@@ -245,6 +247,7 @@
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis2mdc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis3dwb"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ilps22qs"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism330bx"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism330dhcx"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism330is"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lps22hh"/>
@@ -255,7 +258,8 @@
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/STWIN.box"/>
 									<listOptionValue builtIn="false" value="../../Core/Inc"/>
 									<listOptionValue builtIn="false" value="../../FileX/Target"/>
-									<listOptionValue builtIn="false" value="../../PnPL/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/Components/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/AppModel/Inc"/>
 									<listOptionValue builtIn="false" value="../../FileX/App"/>
 									<listOptionValue builtIn="false" value="../../USBX/Target"/>
 									<listOptionValue builtIn="false" value="../../USBX/App"/>

@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    PnPLCompManager_Conf.h
+  * @file    PnPLCompManager_conf.h
   * @author  SRA
   * @brief   PnPL Components Manager configuration template file.
   ******************************************************************************
@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect;1
+  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect;2
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.3
+  * Created by: DTDL2PnPL_cGen version 2.0.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -37,13 +37,10 @@ extern "C" {
 #endif
 
 #include "stm32u5xx_hal.h"
-#include <stdlib.h>
-
 /****************** PnPL Responses ***********************/
 #define PNPL_RESPONSES
-
-/**************** Float tolerance ************************/
-#define pnpl_float_tolerance 0.05f
+#define PNPL_BLE_RESPONSES
+#define COM_MAX_PNPL_COMPONENTS 22
 
 
 #ifdef __cplusplus

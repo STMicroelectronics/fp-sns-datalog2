@@ -35,7 +35,7 @@ int32_t BSP_MOTION_SENSOR_Enable_HP_Filter(uint32_t Instance, uint8_t CutOff)
   {
 #if (USE_MOTION_SENSOR_IIS3DWB_0 == 1)
     case IIS3DWB_0:
-      if(IIS3DWB_Filter_Set(MotionCompObj[Instance], (iis3dwb_hp_slope_xl_en_t) CutOff) != BSP_ERROR_NONE)
+      if(IIS3DWB_Filter_Set(MotionCompObj[Instance], (iis3dwb_filt_xl_en_t) CutOff) != BSP_ERROR_NONE)
       {
         ret = BSP_ERROR_COMPONENT_FAILURE;
       }
@@ -1380,7 +1380,7 @@ int32_t BSP_MOTION_SENSOR_FIFO_TS_Decimation(uint32_t Instance, uint32_t Functio
     case IIS3DWB_0:
       if((Function & MOTION_ACCELERO) == MOTION_ACCELERO)
       {
-        if(IIS3DWB_FIFO_Set_TS_Decimation(MotionCompObj[Instance], (iis3dwb_odr_ts_batch_t) Decimation) != BSP_ERROR_NONE)
+        if(IIS3DWB_FIFO_Set_TS_Decimation(MotionCompObj[Instance], Decimation) != BSP_ERROR_NONE)
         {
           ret = BSP_ERROR_COMPONENT_FAILURE;
         }

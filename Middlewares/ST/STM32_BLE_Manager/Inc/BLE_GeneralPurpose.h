@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_GeneralPurpose.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   General Purpose info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -36,7 +36,7 @@ extern "C" {
 #endif /* BLE_GENERAL_PURPOSE_MAX_CHARS_DIM */
 
 /* Exported typedef --------------------------------------------------------- */
-typedef void (*CustomNotifyEventGeneralPurpose_t)(uint8_t GP_CharNum, BLE_NotifyEvent_t Event);
+typedef void (*CustomNotifyEventGeneralPurpose_t)(uint8_t BLE_CharUuid, BLE_NotifyEvent_t Event);
 
 /* Exported Variables ------------------------------------------------------- */
 extern CustomNotifyEventGeneralPurpose_t CustomNotifyEventGeneralPurpose;
@@ -45,19 +45,19 @@ extern CustomNotifyEventGeneralPurpose_t CustomNotifyEventGeneralPurpose;
 
 /**
   * @brief  Init General Purpose Service
-  * @param  uint8_t GP_CharNum General Purpose char number to create
+  * @brief  uint8_t BLE_CharUuid Number of General Purpose Char (UUID[14] byte)
+  * @param  uint8_t Size Dimensions of the BLE chars without couting the 2 bytes used for TimeStamp
   * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for General Purpose info service
   */
-extern BleCharTypeDef *BLE_InitGeneralPurposeService(uint8_t Size);
-
+extern BleCharTypeDef *BLE_InitGeneralPurposeService(uint8_t BLE_CharUuid,uint8_t Size);
 
 /**
-  * @brief  Update GeneralPurpose characteristic value
-  * @param  uint8_t GP_CharNum General Purpose char number to update
+  * @brief  Update General Purpose characteristic value
+  * @param  uint8_t BLE_CharUuid Number of General Purpose Char (UUID[14] byte)
   * @param  uint8_t *Data data to Update
   * @retval tBleStatus   Status
   */
-tBleStatus BLE_GeneralPurposeStatusUpdate(uint8_t GP_CharNum, uint8_t *Data);
+tBleStatus BLE_GeneralPurposeStatusUpdate(uint8_t BLE_CharUuid, uint8_t *Data);
 
 #ifdef __cplusplus
 }

@@ -86,16 +86,6 @@ typedef struct _DatalogAppTaskClass
   IDataEventListener_vtbl Listener_vtbl;
 
   /**
-    * ILogController virtual table.
-    */
-  ILog_Controller_vtbl logCtrl_vtbl;
-
-  /**
-    * IIsm330dhcx_Mlc virtual table.
-    */
-  IIsm330dhcx_Mlc_vtbl MLCCtrl_vtbl;
-
-  /**
     * DatalogAppTask (PM_STATE, ExecuteStepFunc) map.
     */
   pExecuteStepFunc_t p_pm_state2func_map[];
@@ -139,6 +129,7 @@ static void DatalogAppTaskAdvOBTimerCallbackFunction(ULONG timer);
 static sys_error_code_t DatalogAppTask_UpdateStreamingStatus(DatalogAppTask *p_obj, IStream_t *p_istream,
                                                              bool streaming_status, int8_t interface);
 
+static void DatalogAppTask_filex_queue_full_cb(void);
 
 /* Objects instance */
 /********************/
@@ -176,17 +167,6 @@ static const DatalogAppTaskClass_t sTheClass =
     DatalogAppTask_GetOwner_vtbl,
     DatalogAppTask_OnNewDataReady_vtbl
   },
-  {
-    DatalogAppTask_save_config_vtbl,
-    DatalogAppTask_start_vtbl,
-    DatalogAppTask_stop_vtbl,
-    DatalogAppTask_set_time_vtbl,
-    DatalogAppTask_switch_bank_vtbl,
-    DatalogAppTask_set_dfu_mode
-  },
-  {
-    DatalogAppTask_load_ism330dhcx_ucf_vtbl
-  },
   /* class (PM_STATE, ExecuteStepFunc) map */
   {
     DatalogAppTaskExecuteStepState1,
@@ -209,12 +189,15 @@ AManagedTaskEx *DatalogAppTaskAlloc()
   sTaskObj.super.vptr = &sTheClass.vtbl;
   sTaskObj.parser.vptr = &sTheClass.parser_vtbl;
   sTaskObj.sensorListener.vptr = &sTheClass.Listener_vtbl;
-  sTaskObj.pnplLogCtrl.vptr = &sTheClass.logCtrl_vtbl;
-  sTaskObj.pnplMLCCtrl.vptr = &sTheClass.MLCCtrl_vtbl;
 
   memset(&sTaskObj.outPnPLCommand, 0, sizeof(PnPLCommand_t));
 
   return (AManagedTaskEx *) &sTaskObj;
+}
+
+DatalogAppTask *getDatalogAppTask(void)
+{
+  return (DatalogAppTask *) &sTaskObj;
 }
 
 IEventListener *DatalogAppTask_GetEventListenerIF(DatalogAppTask *_this)
@@ -233,23 +216,12 @@ ICommandParse_t *DatalogAppTask_GetICommandParseIF(DatalogAppTask *_this)
 
 }
 
-ILog_Controller_t *DatalogAppTask_GetILogControllerIF(DatalogAppTask *_this)
+uint8_t DatalogAppTask_SetMLCIF(AManagedTask *task_obj)
 {
-  assert_param(_this != NULL);
-  DatalogAppTask *p_obj = (DatalogAppTask *) _this;
-
-  return &p_obj->pnplLogCtrl;
-}
-
-IIsm330dhcx_Mlc_t *DatalogAppTask_GetIMLCControllerIF(DatalogAppTask *_this, AManagedTask *task_obj)
-{
-  assert_param(_this != NULL);
-  DatalogAppTask *p_obj = (DatalogAppTask *) _this;
-
+  DatalogAppTask *p_obj = getDatalogAppTask();
   /* Store SensorLL interface for ISM330DHCX Sensor */
   p_obj->mlc_sensor_ll = ISM330DHCXTaskGetSensorLLIF((ISM330DHCXTask *) task_obj);
-
-  return &p_obj->pnplMLCCtrl;
+  return 0;
 }
 
 sys_error_code_t DatalogAppTask_msg(ULONG msg)
@@ -376,6 +348,18 @@ sys_error_code_t DatalogAppTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
   IStream_init((IStream_t *) p_obj->ble_device, COMM_ID_BLE, 0);
   IStream_set_parse_IF((IStream_t *) p_obj->ble_device, DatalogAppTask_GetICommandParseIF(p_obj));
 
+  /* Configures filex threshold for suspending message queueing */
+  p_obj->filex_threshold_config.queue_available_storage_thr = 2;
+  p_obj->filex_threshold_config.filex_msg_queue_not_send_cb = DatalogAppTask_filex_queue_full_cb;
+
+
+  if (SYS_NO_ERROR_CODE != filex_dctrl_configure_stop_threshold(p_obj->filex_device, &p_obj->filex_threshold_config))
+  {
+    res = SYS_APP_TASK_INIT_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    return res;
+  }
+
   return res;
 }
 
@@ -397,6 +381,11 @@ sys_error_code_t DatalogAppTask_vtblDoEnterPowerMode(AManagedTask *_this, const 
       DatalogAppTask_UpdateStreamingStatus(p_obj, (IStream_t *) p_obj->filex_device, FALSE, interface);
 
       p_obj->datalog_model->log_controller_model.interface = -1;
+
+      /* Stop the BLE data streaming interface */
+      IStream_stop((IStream_t *) p_obj->ble_device);
+      DatalogAppTask_UpdateStreamingStatus(p_obj, (IStream_t *) p_obj->ble_device, FALSE, interface);
+
       /* Reactivate USB interface */
       IStream_enable((IStream_t *) p_obj->usbx_device);
     }
@@ -445,7 +434,7 @@ sys_error_code_t DatalogAppTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 
   filex_dctrl_msg(p_obj->filex_device, &msg);
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("DatalogApp: start.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("DatalogApp: start.\r\n"));
 
   // At this point all system has been initialized.
   // Execute task specific delayed one time initialization.
@@ -563,6 +552,12 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
         if (IStream_is_enabled((IStream_t *) p_obj->filex_device))
         {
           res = IStream_post_data((IStream_t *) p_obj->filex_device, stream_id, data_buf, samplesToSend * nBytesPerSample);
+          if (res != 0)
+          {
+            SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+            DatalogAppTask_filex_queue_full_cb();
+            return res;
+          }
         }
         if (IStream_is_enabled((IStream_t *) p_obj->ble_device))
         {
@@ -583,6 +578,12 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
         if (IStream_is_enabled((IStream_t *) p_obj->filex_device))
         {
           res = IStream_post_data((IStream_t *) p_obj->filex_device, stream_id, data_buf, p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample);
+          if (res != 0)
+          {
+            SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+            DatalogAppTask_filex_queue_full_cb();
+            return res;
+          }
         }
         if (IStream_is_enabled((IStream_t *) p_obj->ble_device))
         {
@@ -627,11 +628,6 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
         {
           res = IStream_post_data((IStream_t *) p_obj->filex_device, stream_id, (uint8_t *) &newTS, 8);
         }
-        if (res != 0)
-        {
-          SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
-          return res;
-        }
         p_obj->sensorContext[sId].n_samples_to_timestamp = p_obj->datalog_model->s_models[sId]->stream_params.spts;
       }
     }
@@ -649,11 +645,16 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_
   DatalogAppTask *p_obj = (DatalogAppTask *)((uint32_t) _this - offsetof(DatalogAppTask, parser));
 
   int pnp_res = PnPLParseCommand(commandString, &p_obj->outPnPLCommand);
+  p_obj->outPnPLCommand.comm_interface_id = comm_interface_id;
+
   if (pnp_res == SYS_NO_ERROR_CODE)
   {
     if (IStream_is_enabled((IStream_t *) p_obj->usbx_device) && (comm_interface_id == COMM_ID_USB))
     {
-      IStream_set_mode((IStream_t *) p_obj->usbx_device, TRANSMIT);
+      if (p_obj->outPnPLCommand.comm_type != PNPL_CMD_COMMAND)
+      {
+        IStream_set_mode((IStream_t *) p_obj->usbx_device, TRANSMIT);
+      }
     }
     else if (IStream_is_enabled((IStream_t *) p_obj->filex_device) && (comm_interface_id == COMM_ID_SDCARD))
     {
@@ -661,13 +662,7 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_
     }
     else if (IStream_is_enabled((IStream_t *) p_obj->ble_device) && (comm_interface_id == COMM_ID_BLE))
     {
-      if (p_obj->outPnPLCommand.comm_type != PNPL_CMD_GET && p_obj->outPnPLCommand.comm_type != PNPL_CMD_SYSTEM_INFO)
-      {
-        /* No need to send response to SET or COMMAND messages, with the current version of the BLE App */
-        /* Since the serialize_response is not called in this case, the outPnPLCommand.response is deallocated here */
-        pnpl_free(p_obj->outPnPLCommand.response);
-      }
-      else
+      if (p_obj->outPnPLCommand.comm_type != PNPL_CMD_COMMAND)
       {
         IStream_set_mode((IStream_t *) p_obj->ble_device, TRANSMIT);
       }
@@ -681,7 +676,14 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_
   {
     if (p_obj->outPnPLCommand.comm_type == PNPL_CMD_ERROR)
     {
-      IStream_set_mode((IStream_t *) p_obj->usbx_device, TRANSMIT);
+      if (IStream_is_enabled((IStream_t *) p_obj->usbx_device) && (comm_interface_id == COMM_ID_USB))
+      {
+        IStream_set_mode((IStream_t *) p_obj->usbx_device, TRANSMIT);
+      }
+      else if (IStream_is_enabled((IStream_t *) p_obj->ble_device) && (comm_interface_id == COMM_ID_BLE))
+      {
+        IStream_set_mode((IStream_t *) p_obj->ble_device, TRANSMIT);
+      }
     }
   }
 
@@ -742,35 +744,62 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_send_ctrl_msg(ICommandParse_
 }
 
 // ILogController_t virtual functions
-uint8_t DatalogAppTask_start_vtbl(ILog_Controller_t *_this, int32_t interface)
+uint8_t DatalogAppTask_start_vtbl(int32_t interface)
 {
-  DatalogAppTask *p_obj = (DatalogAppTask *)((uint32_t) _this - offsetof(DatalogAppTask, pnplLogCtrl));
+  DatalogAppTask *p_obj = getDatalogAppTask();
   bool status;
-
   log_controller_get_log_status(&status);
 
   if (!status)
   {
+    /* Check if sd card failed in a previous acquisition */
+    if (p_obj->datalog_model->log_controller_model.sd_failed == true)
+    {
+      /* Notify BLE App */
+      PnPLCommand_t pnpl_cmd;
+      char *p_serialized;
+      uint32_t size;
+      sprintf(pnpl_cmd.comp_name, "%s", "SD card failed in previous log");
+      pnpl_cmd.comm_type = PNPL_CMD_ERROR;
+      PnPLSerializeResponse(&pnpl_cmd, &p_serialized, &size, 0);
+      IStream_send_async((IStream_t *) p_obj->ble_device, (uint8_t *)p_serialized, size);
+    }
+    /* Reset sd_failed status in log_controller */
+    p_obj->datalog_model->log_controller_model.sd_failed = false;
 
     p_obj->datalog_model->acquisition_info_model.interface = interface;
 
+    char *responseJSON;
+    uint32_t size;
+    char *message = "";
+
     if (interface == LOG_CTRL_MODE_SD) /*Start log on SD*/
     {
-
       IStream_disable((IStream_t *) p_obj->usbx_device);
       if (IStream_is_enabled((IStream_t *) p_obj->filex_device) == FALSE)
       {
         if (IStream_enable((IStream_t *) p_obj->filex_device) != SYS_NO_ERROR_CODE)
         {
+          message = "Error: Acquisition Start Failure";
+          PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
+          DatalogApp_Task_command_response_cb(responseJSON, size);
           /* TODO: send msg to util task or error led;*/
           return 1;
         }
       }
-
       IStream_start((IStream_t *) p_obj->filex_device, 0);
+
+      PnPLSerializeCommandResponse(&responseJSON, &size, 0, "", true);
+      DatalogApp_Task_command_response_cb(responseJSON, size);
 
       DatalogAppTask_UpdateStreamingStatus(p_obj, (IStream_t *) p_obj->filex_device, TRUE, interface);
       p_obj->datalog_model->log_controller_model.status = TRUE;
+
+      /* Enabled data streaming via BLE */
+      if (IStream_start((IStream_t *) p_obj->ble_device, 0) == SYS_NO_ERROR_CODE)
+      {
+        DatalogAppTask_UpdateStreamingStatus(p_obj, (IStream_t *)p_obj->ble_device, TRUE, LOG_CTRL_MODE_BLE);
+      }
 
       /* generate the system event.*/
       SysEvent evt =
@@ -781,20 +810,24 @@ uint8_t DatalogAppTask_start_vtbl(ILog_Controller_t *_this, int32_t interface)
     }
     else if (interface == LOG_CTRL_MODE_USB) /*Start log on USB*/
     {
-
       IStream_disable((IStream_t *) p_obj->filex_device);
       if (IStream_is_enabled((IStream_t *) p_obj->usbx_device) == FALSE)
       {
         if (IStream_enable((IStream_t *) p_obj->usbx_device) != SYS_NO_ERROR_CODE)
         {
+          message = "Error: Acquisition start failure";
+          PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
+          DatalogApp_Task_command_response_cb(responseJSON, size);
           /* TODO: send msg to util task or error led;*/
           return 1;
         }
       }
-
       IStream_start((IStream_t *) p_obj->usbx_device, 0);
-      DatalogAppTask_UpdateStreamingStatus(p_obj, (IStream_t *) p_obj->usbx_device, TRUE, interface);
 
+      PnPLSerializeCommandResponse(&responseJSON, &size, 0, "", true);
+      DatalogApp_Task_command_response_cb(responseJSON, size);
+
+      DatalogAppTask_UpdateStreamingStatus(p_obj, (IStream_t *) p_obj->usbx_device, TRUE, interface);
       p_obj->datalog_model->log_controller_model.status = TRUE;
 
       /* generate the system event.*/
@@ -813,12 +846,16 @@ uint8_t DatalogAppTask_start_vtbl(ILog_Controller_t *_this, int32_t interface)
   return 0;
 }
 
-uint8_t DatalogAppTask_stop_vtbl(ILog_Controller_t *_this)
+uint8_t DatalogAppTask_stop_vtbl(void)
 {
-  DatalogAppTask *p_obj = (DatalogAppTask *)((uint32_t) _this - offsetof(DatalogAppTask, pnplLogCtrl));
+  DatalogAppTask *p_obj = getDatalogAppTask();
   bool status;
   log_controller_get_log_status(&status);
   int8_t interface = p_obj->datalog_model->log_controller_model.interface;
+
+  char *responseJSON;
+  uint32_t size;
+  char *message = "";
 
   if (status)
   {
@@ -839,23 +876,58 @@ uint8_t DatalogAppTask_stop_vtbl(ILog_Controller_t *_this)
     SysPostPowerModeEvent(evt);
   }
 
+  else
+  {
+    message = "Error: Acquisition stop failure. Already stopped.";
+  }
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, status);
+  DatalogApp_Task_command_response_cb(responseJSON, size);
   return 0;
 }
 
-uint8_t DatalogAppTask_save_config_vtbl(ILog_Controller_t *_this)
+void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size)
 {
-  assert_param(_this != NULL);
-  DatalogAppTask *p_obj = (DatalogAppTask *)((uint32_t) _this - offsetof(DatalogAppTask, pnplLogCtrl));
-  //TODO Save current board configuration into the mounted SD Card
+  DatalogAppTask *p_obj = getDatalogAppTask();
+  uint8_t comm_interface_id = p_obj->outPnPLCommand.comm_interface_id;
+  if (IStream_is_enabled((IStream_t *) p_obj->usbx_device) && (comm_interface_id == COMM_ID_USB))
+  {
+    p_obj->outPnPLCommand.comm_type = PNPL_CMD_COMMAND;
+    p_obj->outPnPLCommand.response = (char *)pnpl_malloc(size + 1);
+    strncpy(p_obj->outPnPLCommand.response, response_msg, size + 1);
+    IStream_set_mode((IStream_t *) p_obj->usbx_device, TRANSMIT);
+  }
+  else if (IStream_is_enabled((IStream_t *) p_obj->ble_device) && (comm_interface_id == COMM_ID_BLE))
+  {
+    IStream_send_async((IStream_t *) sTaskObj.ble_device, (uint8_t *)response_msg, size);
+  }
+  else
+  {
+    /**/
+  }
+
+  /* Clear response_msg after sending */
+  pnpl_free(response_msg);
+}
+
+uint8_t DatalogAppTask_save_config_vtbl(void)
+{
+  //TODO register a callback in FileX to be called as soon as the file is saved
+
+  DatalogAppTask *p_obj = getDatalogAppTask();
+  char *responseJSON;
+  uint32_t size;
+
   ULONG msg = FILEX_DCTRL_CMD_SET_DEFAULT_STATUS;
   filex_dctrl_msg(p_obj->filex_device, &msg);
+
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, "", true);
+  DatalogApp_Task_command_response_cb(responseJSON, size);
+
   return 0;
 }
 
-uint8_t DatalogAppTask_set_time_vtbl(ILog_Controller_t *_this, const char *datetime)
+uint8_t DatalogAppTask_set_time_vtbl(const char *datetime)
 {
-  assert_param(_this != NULL);
-
   char datetimeStr[3];
 
   //internal input format: yyyyMMdd_hh_mm_ss
@@ -903,30 +975,47 @@ uint8_t DatalogAppTask_set_time_vtbl(ILog_Controller_t *_this, const char *datet
   stime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   stime.StoreOperation = RTC_STOREOPERATION_RESET;
 
+  char *responseJSON;
+  uint32_t size;
+  char *message = "";
+
   if (HAL_RTC_SetTime(&hrtc, &stime, RTC_FORMAT_BIN) != HAL_OK)
   {
+    message = "Error: Failed to set RTC time";
+    PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
+    DatalogApp_Task_command_response_cb(responseJSON, size);
     while (1)
       ;
   }
   if (HAL_RTC_SetDate(&hrtc, &sdate, RTC_FORMAT_BIN) != HAL_OK)
   {
+    message = "Error: Failed to set RTC date";
+    PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
+    DatalogApp_Task_command_response_cb(responseJSON, size);
     while (1)
       ;
   }
 
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, true);
+  DatalogApp_Task_command_response_cb(responseJSON, size);
+
   return 0;
 }
 
-uint8_t DatalogAppTask_switch_bank_vtbl(ILog_Controller_t *_this)
+uint8_t DatalogAppTask_switch_bank_vtbl(void)
 {
-  assert_param(_this != NULL);
   SwitchBank();
   HAL_NVIC_SystemReset();
   return 0;
 }
 
-uint8_t DatalogAppTask_set_dfu_mode(ILog_Controller_t *_this)
+uint8_t DatalogAppTask_set_dfu_mode(void)
 {
+  char *responseJSON;
+  uint32_t size;
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, "", true);
+  DatalogApp_Task_command_response_cb(responseJSON, size);
+
   /*  Disable interrupts for timers */
   HAL_NVIC_DisableIRQ(TIM6_DAC_IRQn);
   HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
@@ -950,48 +1039,83 @@ uint8_t DatalogAppTask_set_dfu_mode(ILog_Controller_t *_this)
   return 0;
 }
 
-/* IMLCController_t virtual functions */
-uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(IIsm330dhcx_Mlc_t *_this, const char *ucf_data, int32_t ucf_size)
+uint8_t DatalogAppTask_enable_all(bool status)
 {
-  assert_param(_this != NULL);
-  DatalogAppTask *p_obj = (DatalogAppTask *)((uint32_t) _this - offsetof(DatalogAppTask, pnplMLCCtrl));
+  //TODO: To be implemented
+  uint16_t i;
+  uint16_t sensors = SMGetNsensor();
+  for (i = 0; i < sensors; i++)
+  {
+    if (status)
+    {
+      SMSensorEnable(i);
+    }
+    else
+    {
+      SMSensorDisable(i);
+    }
+  }
+
+  char *responseJSON;
+  uint32_t size;
+  char *message = "OK";
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, true);
+  DatalogApp_Task_command_response_cb(responseJSON, size);
+
+  return 0;
+}
+
+// IMLCController_t virtual functions
+uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(const char *ucf_data, int32_t ucf_size)
+{
+  DatalogAppTask *p_obj = getDatalogAppTask();
   SQuery_t q1, q2, q3, q4;
   uint16_t id;
   SensorStatus_t sensor_status;
+  char *responseJSON;
+  uint32_t size;
+  char *message = "";
+  bool status = true;
+  uint8_t res = SYS_NO_ERROR_CODE;
 
   /* Create and initialize a new instance of UCF Protocol service */
   SUcfProtocol_t ucf_protocol;
   UCFP_Init(&ucf_protocol, p_obj->mlc_sensor_ll);
 
   /* Load the compressed UCF using the specified ISensorLL interface */
-  UCFP_LoadCompressedUcf(&ucf_protocol, ucf_data, ucf_size);
+  res = UCFP_LoadCompressedUcf(&ucf_protocol, ucf_data, ucf_size);
+  if (res != SYS_NO_ERROR_CODE)
+  {
+    message = "Error: MLC programming failed";
+    status = false;
+  }
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, status);
+  DatalogApp_Task_command_response_cb(responseJSON, size);
 
   /* Enable MLC */
   SQInit(&q1, SMGetSensorManager());
   id = SQNextByNameAndType(&q1, "ism330dhcx", COM_TYPE_MLC);
   SMSensorEnable((uint8_t)id);
 
+  if (IStream_is_enabled((IStream_t *)p_obj->filex_device)) /* Save UCF into SDCard, if available */
+  {
+    filex_dctrl_write_ucf(p_obj->filex_device, ucf_size, ucf_data);
+  }
+
   /* Get ISM330DHCX status from SM and update app_model */
   SQInit(&q2, SMGetSensorManager());
   id = SQNextByNameAndType(&q2, "ism330dhcx", COM_TYPE_ACC);
   sensor_status = SMSensorGetStatus(id);
-  p_obj->datalog_model->s_models[id]->sensor_status.is_active = sensor_status.is_active;
-  p_obj->datalog_model->s_models[id]->sensor_status.type.mems.odr = sensor_status.type.mems.odr;
-  p_obj->datalog_model->s_models[id]->sensor_status.type.mems.fs = sensor_status.type.mems.fs;
-  ism330dhcx_acc_set_samples_per_ts((int32_t)sensor_status.type.mems.odr);
+  ism330dhcx_acc_set_samples_per_ts((int32_t)sensor_status.type.mems.odr, NULL);
 
   SQInit(&q3, SMGetSensorManager());
   id = SQNextByNameAndType(&q3, "ism330dhcx", COM_TYPE_GYRO);
   sensor_status = SMSensorGetStatus(id);
-  p_obj->datalog_model->s_models[id]->sensor_status.is_active = sensor_status.is_active;
-  p_obj->datalog_model->s_models[id]->sensor_status.type.mems.odr = sensor_status.type.mems.odr;
-  p_obj->datalog_model->s_models[id]->sensor_status.type.mems.fs = sensor_status.type.mems.fs;
-  ism330dhcx_gyro_set_samples_per_ts((int32_t)sensor_status.type.mems.odr);
+  ism330dhcx_gyro_set_samples_per_ts((int32_t)sensor_status.type.mems.odr, NULL);
 
   SQInit(&q4, SMGetSensorManager());
   id = SQNextByNameAndType(&q4, "ism330dhcx", COM_TYPE_MLC);
   sensor_status = SMSensorGetStatus(id);
-  p_obj->datalog_model->s_models[id]->sensor_status.is_active = sensor_status.is_active;
 
   return 0;
 }
@@ -1000,7 +1124,7 @@ uint8_t DatalogAppTask_load_ucf(const char *p_ucf_data, uint32_t ucf_size, const
                                 int32_t output_size)
 {
 
-  ism330dhcx_mlc_load_file(&sTaskObj.pnplMLCCtrl, p_ucf_data, ucf_size);
+  ism330dhcx_mlc_load_file(p_ucf_data, ucf_size);
 
   return 0;
 }
@@ -1022,7 +1146,7 @@ static sys_error_code_t DatalogAppTaskExecuteStepState1(AManagedTask *_this)
     {
       res = SYS_NO_ERROR_CODE;
 
-      log_controller_start_log(&p_obj->pnplLogCtrl, LOG_CTRL_MODE_SD);
+      log_controller_start_log(LOG_CTRL_MODE_SD);
     }
     else if (message == DT_FORCE_STEP)
     {
@@ -1052,7 +1176,7 @@ static sys_error_code_t DatalogAppTaskExecuteStepDatalog(AManagedTask *_this)
 
         p_obj->mode = 0;
 
-        log_controller_stop_log(&p_obj->pnplLogCtrl);
+        log_controller_stop_log();
       }
     }
     else if (message == DT_FORCE_STEP)
@@ -1092,7 +1216,7 @@ static VOID DatalogAppTaskAdvOBTimerCallbackFunction(ULONG timer)
       if (automode_state) /* If automode is running, force automode stopping */
       {
         automode_forced_stop();
-        automode_set_enabled(false);
+        automode_set_enabled(false, NULL);
       }
 
       DatalogAppTask_msg((ULONG) DT_USER_BUTTON);
@@ -1177,13 +1301,14 @@ static sys_error_code_t DatalogAppTask_UpdateStreamingStatus(DatalogAppTask *p_o
   {
     if (p_obj->datalog_model->s_models[i] != NULL)
     {
-      if (p_obj->datalog_model->s_models[i]->sensor_status.is_active)
+      if (p_obj->datalog_model->s_models[i]->sensor_status->is_active)
       {
         stream_id = p_obj->datalog_model->s_models[i]->stream_params.stream_id;
         if (streaming_status) /* Start */
         {
           if (interface == LOG_CTRL_MODE_SD)
           {
+            /* alloc SDCard resources to store data */
             dps = p_obj->datalog_model->s_models[i]->stream_params.sd_dps;
             IStream_alloc_resource(p_istream, stream_id, dps, p_obj->datalog_model->s_models[i]->comp_name);
           }
@@ -1195,6 +1320,15 @@ static sys_error_code_t DatalogAppTask_UpdateStreamingStatus(DatalogAppTask *p_o
             /* Set USB endpoint for the current stream */
             usbx_dctrl_class_set_ep(p_obj->usbx_device, stream_id, p_obj->datalog_model->s_models[i]->stream_params.usb_ep);
             IStream_alloc_resource((IStream_t *) p_obj->usbx_device, stream_id, dps, p_obj->datalog_model->s_models[i]->comp_name);
+          }
+          else if (interface == LOG_CTRL_MODE_BLE)
+          {
+            /* Alloc resources to send data via BLE */
+            dps = p_obj->datalog_model->s_models[i]->stream_params.ble_dps;
+            if (dps != 0)
+            {
+              IStream_alloc_resource(p_istream, stream_id, dps, NULL);
+            }
           }
           else
           {
@@ -1240,6 +1374,24 @@ static sys_error_code_t DatalogAppTask_UpdateStreamingStatus(DatalogAppTask *p_o
 }
 
 
+static void DatalogAppTask_filex_queue_full_cb(void)
+{
+  /* Stop Log to avoid losing data */
+  log_controller_stop_log();
+
+  /* Notify BLE App */
+  PnPLCommand_t pnpl_cmd;
+  char *p_serialized;
+  uint32_t size;
+  sprintf(pnpl_cmd.comp_name, "%s", "SD card failed. Consider to change the SD");
+  pnpl_cmd.comm_type = PNPL_CMD_ERROR;
+  PnPLSerializeResponse(&pnpl_cmd, &p_serialized, &size, 0);
+  IStream_send_async((IStream_t *) sTaskObj.ble_device, (uint8_t *)p_serialized, size);
+
+  /* Record sd_failed status in log_controller */
+  sTaskObj.datalog_model->log_controller_model.sd_failed = true;
+}
+
 // Interrupt callback
 // ***************************
 void Util_USR_EXTI_Callback(uint16_t pin)
@@ -1259,7 +1411,7 @@ void Util_USR_EXTI_Callback(uint16_t pin)
         if (automode_state) /* if button is pressed during automode, force automode stopping */
         {
           automode_forced_stop();
-          automode_set_enabled(false);
+          automode_set_enabled(false, NULL);
         }
 
         DatalogAppTask_msg((ULONG) DT_USER_BUTTON);

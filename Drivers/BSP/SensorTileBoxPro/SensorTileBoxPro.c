@@ -1,15 +1,14 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    SensorTileBoxPro.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.1.0
-  * @date    20-July-2023
+  * @version V1.2.0
+  * @date    03-Jun-2024
   * @brief   Source file for the BSP Common driver
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,8 +16,7 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-*/
-/* USER CODE END Header */
+  */
 
 /* Includes ------------------------------------------------------------------*/
 #include "SensorTileBoxPro.h"
@@ -60,8 +58,12 @@ typedef void (* BSP_BUTTON_GPIO_Init) (void);
  * @{
  */
 typedef void (* BSP_LED_GPIO_Init) (void);
-static GPIO_TypeDef*  LED_PORT[LEDn] = {LED1_GPIO_PORT,LED2_GPIO_PORT,LED3_GPIO_PORT,LED4_GPIO_PORT};
-static const uint16_t LED_PIN[LEDn]  = {LED1_PIN,LED2_PIN,LED3_PIN,LED4_PIN};
+static void LED_USER__BLUE_GPIO_Init(void);
+static void LED_USER__RED_GPIO_Init(void);
+static void LED_USER__YELLOW_GPIO_Init(void);
+static void LED_USER__GREEN_GPIO_Init(void);
+static GPIO_TypeDef*  LED_PORT[LEDn] = {LED_BLUE_GPIO_PORT,LED_RED_GPIO_PORT,LED_YELLOW_GPIO_PORT,LED_GREEN_GPIO_PORT,};
+static const uint16_t LED_PIN[LEDn]  = {LED_BLUE_PIN,LED_RED_PIN,LED_YELLOW_PIN,LED_GREEN_PIN,};
 
 static GPIO_TypeDef*   BUTTON_PORT[BUTTONn] = {USER_BUTTON_GPIO_PORT};
 static const uint16_t  BUTTON_PIN[BUTTONn]  = {USER_BUTTON_PIN};
@@ -76,10 +78,6 @@ static COM_TypeDef COM_ActiveLogPort;
 static uint32_t IsUart4MspCbValid = 0;
 #endif
 __weak HAL_StatusTypeDef MX_UART4_Init(UART_HandleTypeDef* huart);
-
-#ifndef BUS_UART4_BAUDRATE
-  #define BUS_UART4_BAUDRATE                  115200U
-#endif /* BUS_UART4_BAUDRATE */
 /**
  * @}
  */
@@ -103,47 +101,6 @@ int32_t BSP_GetVersion(void)
 }
 
 /**
- * @brief  This method the Finish Good type
- * @retval FinishGood value
- */
-FinishGood_TypeDef BSP_CheckFinishGood(void) {
-  
-  #define ST25_ADDR_DATA_I2C                ((uint8_t)0xAE)
-  #define ST25_ICREF_REG                    ((uint16_t)0x0017)
-  /* ST25DVxxKC 4Kbits ICref */
-  #define IAM_ST25DV04KC                        0x50U
-  /* ST25DVxxKC 16/64Kbits ICref */
-  #define IAM_ST25DV64KC                        0x51U
-  /* @brief ST25DV 4Kbits ICref */
-  #define IAM_ST25DV04                        0x24
-  /* @brief ST25DV 16/64Kbits ICref */
-  #define IAM_ST25DV64                        0x26
-  
-  FinishGood_TypeDef FinishGood = FINISH_ERROR;
-  uint8_t nfctag_id;
-  BSP_I2C2_Init();
-  
-  BSP_I2C2_ReadReg16(ST25_ADDR_DATA_I2C, ST25_ICREF_REG, &nfctag_id, 1);
-  
-  if((nfctag_id == IAM_ST25DV04KC) | (nfctag_id == IAM_ST25DV64KC)) {
-    FinishGood = FINISHB;
-  } else if((nfctag_id == IAM_ST25DV04) | (nfctag_id == IAM_ST25DV64)) {
-    FinishGood = FINISHA;
-  }
-     
-  BSP_I2C2_DeInit();
-  
-  #undef ST25_ADDR_DATA_I2C
-  #undef ST25_ICREF_REG
-  #undef IAM_ST25DV04KC
-  #undef IAM_ST25DV64KC
-  #undef IAM_ST25DV04
-  #undef IAM_ST25DV64
-  
-  return FinishGood;
-}
-
-/**
  * @brief  Configures LED on GPIO and/or on MFX.
  * @param  Led: LED to be configured.
  *              This parameter can be one of the following values:
@@ -152,61 +109,8 @@ FinishGood_TypeDef BSP_CheckFinishGood(void) {
  */
 int32_t BSP_LED_Init(Led_TypeDef Led)
 {
-  GPIO_InitTypeDef  GPIO_InitStruct;
-  switch(Led) {
-  case LED1:
-
-    /* Enable the GPIO_LED clock */
-    LED1_GPIO_CLK_ENABLE();
-
-    /* Configure the GPIO_LED pin */
-    GPIO_InitStruct.Pin = LED1_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-    HAL_GPIO_Init(LED1_GPIO_PORT, &GPIO_InitStruct);
-    break;
-  case LED2:
-
-    /* Enable the GPIO_LED clock */
-    LED2_GPIO_CLK_ENABLE();
-
-    /* Configure the GPIO_LED pin */
-    GPIO_InitStruct.Pin = LED2_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-    HAL_GPIO_Init(LED2_GPIO_PORT, &GPIO_InitStruct);
-    break;
-  case LED3:
-
-    /* Enable the GPIO_LED clock */
-    LED3_GPIO_CLK_ENABLE();
-
-    /* Configure the GPIO_LED pin */
-    GPIO_InitStruct.Pin = LED3_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-    HAL_GPIO_Init(LED3_GPIO_PORT, &GPIO_InitStruct);
-    break;
-  case LED4:
-
-    /* Enable the GPIO_LED clock */
-    LED3_GPIO_CLK_ENABLE();
-
-    /* Configure the GPIO_LED pin */
-    GPIO_InitStruct.Pin = LED4_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-
-    HAL_GPIO_Init(LED4_GPIO_PORT, &GPIO_InitStruct);
-    break;
-  }
+  static const BSP_LED_GPIO_Init LedGpioInit[LEDn] = {LED_USER__BLUE_GPIO_Init,LED_USER__RED_GPIO_Init,LED_USER__YELLOW_GPIO_Init,LED_USER__GREEN_GPIO_Init,};
+  LedGpioInit[Led]();
   return BSP_ERROR_NONE;
 }
 
@@ -235,15 +139,14 @@ int32_t BSP_LED_DeInit(Led_TypeDef Led)
  * @brief  Turns selected LED On.
  * @param  Led: LED to be set on
  *              This parameter can be one of the following values:
- *              @arg  LED_GREEN
- *              @arg  LED_BLUE
- *              @arg  LED_YELLOW
- *              @arg  LED_RED
+ *              @arg  LED1
+ *              @arg  LED2
+ *              @arg  LED3
+ *              @arg  LED4
  * @retval HAL status
  */
 int32_t BSP_LED_On(Led_TypeDef Led)
 {
-
   HAL_GPIO_WritePin(LED_PORT [Led], LED_PIN [Led], GPIO_PIN_SET);
 
   return BSP_ERROR_NONE;
@@ -253,10 +156,10 @@ int32_t BSP_LED_On(Led_TypeDef Led)
  * @brief  Turns selected LED Off.
  * @param  Led: LED to be set off
  *              This parameter can be one of the following values:
- *              @arg  LED_GREEN
- *              @arg  LED_BLUE
- *              @arg  LED_YELLOW
- *              @arg  LED_RED
+ *              @arg  LED1
+ *              @arg  LED2
+ *              @arg  LED3
+ *              @arg  LED4
  * @retval HAL status
  */
 int32_t BSP_LED_Off(Led_TypeDef Led)
@@ -270,10 +173,10 @@ int32_t BSP_LED_Off(Led_TypeDef Led)
  * @brief  Toggles the selected LED.
  * @param  Led: LED to be toggled
  *              This parameter can be one of the following values:
- *              @arg  LED_GREEN
- *              @arg  LED_BLUE
- *              @arg  LED_YELLOW
- *              @arg  LED_RED
+ *              @arg  LED1
+ *              @arg  LED2
+ *              @arg  LED3
+ *              @arg  LED4
  * @retval HAL status
  */
 int32_t BSP_LED_Toggle(Led_TypeDef Led)
@@ -283,50 +186,126 @@ int32_t BSP_LED_Toggle(Led_TypeDef Led)
   return BSP_ERROR_NONE;
 }
 
-
-/**
- * @brief  Turns All LED On.
- * @retval HAL status
- */
-int32_t BSP_LED_AllOn(void)
-{
-  BSP_LED_On(LED_GREEN);
-  BSP_LED_On(LED_RED);
-  BSP_LED_On(LED_BLUE);
-  BSP_LED_On(LED_YELLOW);
-
-  return BSP_ERROR_NONE;
-}
-
-
-/**
- * @brief  Turns All LED On.
- * @retval HAL status
- */
-int32_t BSP_LED_AllOff(void)
-{
-  BSP_LED_Off(LED_GREEN);
-  BSP_LED_Off(LED_RED);
-  BSP_LED_Off(LED_BLUE);
-  BSP_LED_Off(LED_YELLOW);
-
-  return BSP_ERROR_NONE;
-}
-
-
 /**
  * @brief  Get the status of the LED.
  * @param  Led: LED for which get the status
  *              This parameter can be one of the following values:
- *              @arg  LED_GREEN
- *              @arg  LED_BLUE
- *              @arg  LED_YELLOW
- *              @arg  LED_RED
+ *              @arg  LED1
+ *              @arg  LED2
+ *              @arg  LED3
+ *              @arg  LED4
  * @retval HAL status (1=high, 0=low)
  */
 int32_t BSP_LED_GetState(Led_TypeDef Led)
 {
   return (int32_t)(HAL_GPIO_ReadPin (LED_PORT [Led], LED_PIN [Led]) == GPIO_PIN_RESET);
+}
+/**
+  * @brief
+  * @retval None
+  */
+/**
+  * @brief
+  * @retval None
+  */
+static void LED_USER__BLUE_GPIO_Init(void) {
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOF_CLK_ENABLE();
+
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOF_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(BUS_BSP_LED__BLUE_GPIO_PORT, BUS_BSP_LED__BLUE_GPIO_PIN, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PTPIN */
+  GPIO_InitStruct.Pin = BUS_BSP_LED__BLUE_GPIO_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(BUS_BSP_LED__BLUE_GPIO_PORT, &GPIO_InitStruct);
+
+}
+
+/**
+  * @brief
+  * @retval None
+  */
+static void LED_USER__RED_GPIO_Init(void) {
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(BUS_BSP_LED__RED_GPIO_PORT, BUS_BSP_LED__RED_GPIO_PIN, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PTPIN */
+  GPIO_InitStruct.Pin = BUS_BSP_LED__RED_GPIO_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(BUS_BSP_LED__RED_GPIO_PORT, &GPIO_InitStruct);
+
+}
+
+/**
+  * @brief
+  * @retval None
+  */
+static void LED_USER__YELLOW_GPIO_Init(void) {
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(BUS_BSP_LED__YELLOW_GPIO_PORT, BUS_BSP_LED__YELLOW_GPIO_PIN, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PTPIN */
+  GPIO_InitStruct.Pin = BUS_BSP_LED__YELLOW_GPIO_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(BUS_BSP_LED__YELLOW_GPIO_PORT, &GPIO_InitStruct);
+
+}
+
+/**
+  * @brief
+  * @retval None
+  */
+static void LED_USER__GREEN_GPIO_Init(void) {
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOF_CLK_ENABLE();
+
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOF_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(BUS_BSP_LED__GREEN_GPIO_PORT, BUS_BSP_LED__GREEN_GPIO_PIN, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PTPIN */
+  GPIO_InitStruct.Pin = BUS_BSP_LED__GREEN_GPIO_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(BUS_BSP_LED__GREEN_GPIO_PORT, &GPIO_InitStruct);
+
 }
 
 /**
@@ -361,7 +340,9 @@ int32_t BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode)
     else if (HAL_EXTI_RegisterCallback(&hpb_exti[Button],  HAL_EXTI_COMMON_CB_ID, ButtonCallback[Button]) != HAL_OK)
     {
       ret = BSP_ERROR_PERIPH_FAILURE;
-    }else {
+    }
+	else
+    {
       /* Enable and set Button EXTI Interrupt to the lowest priority */
       HAL_NVIC_SetPriority((BUTTON_IRQn[Button]), BSP_BUTTON_PRIO[Button], 0x00);
       HAL_NVIC_EnableIRQ((BUTTON_IRQn[Button]));
@@ -435,22 +416,33 @@ static void BUTTON_USER_EXTI_Callback(void)
 }
 
 /**
-  * @brief Enable the User Button GPIO
+  * @brief
   * @retval None
   */
 static void BUTTON_USER_GPIO_Init(void) {
 
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI13_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI13_IRQn);
+
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+
   /*Configure GPIO pin : PTPIN */
   GPIO_InitStruct.Pin = BUS_BSP_BUTTON_GPIO_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(BUS_BSP_BUTTON_GPIO_PORT, &GPIO_InitStruct);
+
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI13_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI13_IRQn);
+
 }
 
 #if (USE_BSP_COM_FEATURE > 0)
@@ -466,23 +458,29 @@ int32_t BSP_COM_Init(COM_TypeDef COM)
 {
   int32_t ret = BSP_ERROR_NONE;
 
-   hcom_uart[COM].Instance = COM_USART[COM];
-#if (USE_HAL_UART_REGISTER_CALLBACKS == 0U)
-  /* Init the UART Msp */
-  UART4_MspInit(&hcom_uart[COM]);
-#else
-  if(IsUart4MspCbValid == 0U)
+  if(COM > COMn)
   {
-    if(BSP_COM_RegisterDefaultMspCallbacks(COM) != BSP_ERROR_NONE)
-    {
-      return BSP_ERROR_MSP_FAILURE;
-    }
+    ret = BSP_ERROR_WRONG_PARAM;
   }
-#endif
-
-  if (MX_UART4_Init(&hcom_uart[COM]))
+  else
   {
-    ret = BSP_ERROR_PERIPH_FAILURE;
+     hcom_uart[COM].Instance = COM_USART[COM];
+#if (USE_HAL_UART_REGISTER_CALLBACKS == 0U)
+    /* Init the UART Msp */
+    UART4_MspInit(&hcom_uart[COM]);
+#else
+    if(IsUart4MspCbValid == 0U)
+    {
+      if(BSP_COM_RegisterDefaultMspCallbacks(COM) != BSP_ERROR_NONE)
+      {
+        return BSP_ERROR_MSP_FAILURE;
+      }
+    }
+#endif
+    if (MX_UART4_Init(&hcom_uart[COM]))
+    {
+      ret = BSP_ERROR_PERIPH_FAILURE;
+    }
   }
 
   return ret;
@@ -498,16 +496,23 @@ int32_t BSP_COM_DeInit(COM_TypeDef COM)
 {
   int32_t ret = BSP_ERROR_NONE;
 
-  /* USART configuration */
-  hcom_uart[COM].Instance = COM_USART[COM];
-
-  #if (USE_HAL_UART_REGISTER_CALLBACKS == 0U)
-    UART4_MspDeInit(&hcom_uart[COM]);
-  #endif /* (USE_HAL_UART_REGISTER_CALLBACKS == 0U) */
-
-  if(HAL_UART_DeInit(&hcom_uart[COM]) != HAL_OK)
+  if(COM > COMn)
   {
-    ret = BSP_ERROR_PERIPH_FAILURE;
+    ret = BSP_ERROR_WRONG_PARAM;
+  }
+  else
+  {
+    /* USART configuration */
+    hcom_uart[COM].Instance = COM_USART[COM];
+
+    #if (USE_HAL_UART_REGISTER_CALLBACKS == 0U)
+      UART4_MspDeInit(&hcom_uart[COM]);
+    #endif /* (USE_HAL_UART_REGISTER_CALLBACKS == 0U) */
+
+    if(HAL_UART_DeInit(&hcom_uart[COM]) != HAL_OK)
+    {
+      ret = BSP_ERROR_PERIPH_FAILURE;
+    }
   }
 
   return ret;
@@ -529,7 +534,7 @@ __weak HAL_StatusTypeDef MX_UART4_Init(UART_HandleTypeDef* huart)
   HAL_StatusTypeDef ret = HAL_OK;
 
   huart->Instance = BUS_UART4_INSTANCE;
-  huart->Init.BaudRate = BUS_UART4_BAUDRATE;
+  huart->Init.BaudRate = 115200;
   huart->Init.WordLength = UART_WORDLENGTH_8B;
   huart->Init.StopBits = UART_STOPBITS_1;
   huart->Init.Parity = UART_PARITY_NONE;
@@ -674,7 +679,7 @@ FILE __stdout;
 #if defined(__ICCARM__) /* For IAR */
 size_t __write(int Handle, const unsigned char *Buf, size_t Bufsize)
 {
-  size_t i;
+  int i;
 
   for(i=0; i<Bufsize; i++)
   {
@@ -707,14 +712,16 @@ static void UART4_MspInit(UART_HandleTypeDef* uartHandle)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
-    /** Initializes the peripherals clock
-    */
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_UART4;
-    PeriphClkInit.Uart4ClockSelection = RCC_UART4CLKSOURCE_PCLK1;
-    HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
   /* USER CODE BEGIN UART4_MspInit 0 */
 
   /* USER CODE END UART4_MspInit 0 */
+
+  /** Initializes the peripherals clock
+  */
+    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_UART4;
+    PeriphClkInit.Uart4ClockSelection = RCC_UART4CLKSOURCE_PCLK1;
+    HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit);
+
     /* Enable Peripheral clock */
     __HAL_RCC_UART4_CLK_ENABLE();
 
@@ -762,7 +769,6 @@ static void UART4_MspDeInit(UART_HandleTypeDef* uartHandle)
 
   /* USER CODE END UART4_MspDeInit 1 */
 }
-
 
 /**
  * @}

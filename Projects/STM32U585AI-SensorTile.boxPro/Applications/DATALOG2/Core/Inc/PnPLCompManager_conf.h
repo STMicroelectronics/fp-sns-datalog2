@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:vespucci:steval_mkboxpro:FP_SNS_DATALOG2_Datalog2;4
+  * dtmi:vespucci:steval_mkboxpro:FP_SNS_DATALOG2_Datalog2;5
   *
-  * Created by: DTDL2PnPL_cGen version 1.2.3
+  * Created by: DTDL2PnPL_cGen version 2.0.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -41,6 +41,7 @@ extern "C" {
 
 /****************** PnPL Responses ***********************/
 #define PNPL_RESPONSES
+#define PNPL_BLE_RESPONSES
 
 
 #ifdef __cplusplus

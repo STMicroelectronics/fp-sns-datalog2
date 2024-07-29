@@ -19,6 +19,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "STWIN.box_env_sensors.h"
 
+EXTI_HandleTypeDef H_EXTI_INT_STTS22H = {.Line = STTS22H_INT_EXTI_LINE};
+
 extern void *EnvCompObj[ENV_INSTANCES_NBR]; /* This "redundant" line is here to fulfil MISRA C-2012 rule 8.4 */
 void *EnvCompObj[ENV_INSTANCES_NBR];
 
@@ -40,6 +42,10 @@ static int32_t STTS22H_0_Probe(uint32_t Functions);
 static int32_t BSP_STTS22H_Init(void);
 static int32_t BSP_STTS22H_DeInit(void);
 #endif
+
+/* Private function prototypes -----------------------------------------------*/
+static void STTS22H_GPIO_EXTI_Callback(void);
+
 
 /**
  * @brief  Initializes the env sensors
@@ -412,8 +418,8 @@ static int32_t ILPS22QS_0_Probe(uint32_t Functions)
   io_ctx.Address = ILPS22QS_I2C_ADD;
   io_ctx.Init = BSP_ILPS22QS_Init;
   io_ctx.DeInit = BSP_ILPS22QS_DeInit;
-  io_ctx.ReadReg = BSP_I2C2_ReadReg;
-  io_ctx.WriteReg = BSP_I2C2_WriteReg;
+  io_ctx.ReadReg = BSP_ILPS22QS_0_I2C_READ_REG;
+  io_ctx.WriteReg = BSP_ILPS22QS_0_I2C_WRITE_REG;
   io_ctx.GetTick = BSP_GetTick;
 
   if(ILPS22QS_RegisterBusIO(&ilps22qs_obj_0, &io_ctx) != ILPS22QS_OK)
@@ -474,7 +480,7 @@ static int32_t BSP_ILPS22QS_Init(void)
 {
   int32_t ret = BSP_ERROR_UNKNOWN_FAILURE;
 
-  if(BSP_I2C2_Init() == BSP_ERROR_NONE)
+  if(BSP_ILPS22QS_0_I2C_INIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -486,7 +492,7 @@ static int32_t BSP_ILPS22QS_DeInit(void)
 {
   int32_t ret = BSP_ERROR_UNKNOWN_FAILURE;
 
-  if(BSP_I2C2_DeInit() == BSP_ERROR_NONE)
+  if(BSP_ILPS22QS_0_I2C_DEINIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -519,8 +525,8 @@ static int32_t STTS22H_0_Probe(uint32_t Functions)
   io_ctx.Address = STTS22H_I2C_ADD_L;
   io_ctx.Init = BSP_STTS22H_Init;
   io_ctx.DeInit = BSP_STTS22H_DeInit;
-  io_ctx.ReadReg = BSP_I2C2_ReadReg;
-  io_ctx.WriteReg = BSP_I2C2_WriteReg;
+  io_ctx.ReadReg = BSP_STTS22H_0_I2C_READ_REG;
+  io_ctx.WriteReg = BSP_STTS22H_0_I2C_WRITE_REG;
 #else
   // add-on 
   io_ctx.Address     = STTS22H_I2C_ADD_H;
@@ -580,7 +586,7 @@ static int32_t BSP_STTS22H_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct;
   int32_t ret = BSP_ERROR_UNKNOWN_FAILURE;
 
-  if(BSP_I2C2_Init() == BSP_ERROR_NONE)
+  if(BSP_STTS22H_0_I2C_INIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }
@@ -600,14 +606,39 @@ static int32_t BSP_STTS22H_Init(void)
   HAL_NVIC_SetPriority(BSP_STTS22H_INT_EXTI_IRQn, BSP_STTS22H_INT_EXTI_IRQ_PP, BSP_STTS22H_INT_EXTI_IRQ_SP);
   HAL_NVIC_EnableIRQ(BSP_STTS22H_INT_EXTI_IRQn);
 
+  if (HAL_EXTI_RegisterCallback(&H_EXTI_INT_STTS22H,  HAL_EXTI_COMMON_CB_ID, STTS22H_GPIO_EXTI_Callback) != HAL_OK)
+  {
+    ret = BSP_ERROR_PERIPH_FAILURE;
+  }
+
   return ret;
+}
+
+/**
+  * @brief  User EXTI line detection callbacks.
+  * @retval None
+  */
+static void STTS22H_GPIO_EXTI_Callback(void)
+{
+  BSP_STTS22H_GPIO_Callback();
+}
+
+/**
+  * @brief  BSP STTS22H GPIO callback
+  * @param  Node
+  * @retval None.
+  */
+__weak void BSP_STTS22H_GPIO_Callback(void)
+{
+  /* This function should be implemented by the user application.
+     It is called into this driver when an event is triggered. */
 }
 
 static int32_t BSP_STTS22H_DeInit(void)
 {
   int32_t ret = BSP_ERROR_UNKNOWN_FAILURE;
 
-  if(BSP_I2C2_DeInit() == BSP_ERROR_NONE)
+  if(BSP_STTS22H_0_I2C_DEINIT() == BSP_ERROR_NONE)
   {
     ret = BSP_ERROR_NONE;
   }

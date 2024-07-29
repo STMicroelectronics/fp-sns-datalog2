@@ -163,7 +163,7 @@ sys_error_code_t SPIMasterDriver_vtblInit(IDriver *_this, void *p_params)
     }
   }
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("SPIMasterDriver: initialization done: %d.\r\n", res));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("SPIMasterDriver: initialization done: %d.\r\n", res));
 
   return res;
 }

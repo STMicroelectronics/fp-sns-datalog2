@@ -32,7 +32,7 @@
 static NFCTAG_DrvTypeDef *Nfctag_Drv = NULL;
 static ST25DV_Object_t NfcTagObj;
 /* Global variables ----------------------------------------------------------*/
-EXTI_HandleTypeDef nfc_exti = {.Line = EXTI_LINE_13};
+EXTI_HandleTypeDef GPO_EXTI = {.Line = BSP_GPO_EXTI_LINE};
 
 /* Private function prototypes -----------------------------------------------*/
 static uint32_t NFC_GetTick();
@@ -46,11 +46,11 @@ int32_t BSP_NFCTAG_Init (uint32_t Instance)
   UNUSED(Instance);
 
   /* Configure the component */
-  IO.Init         = BSP_I2C2_Init;
-  IO.DeInit       = BSP_I2C2_DeInit;
-  IO.IsReady      = BSP_I2C2_IsReady;
-  IO.Read         = BSP_I2C2_ReadReg16;
-  IO.Write        = (ST25DV_Write_Func)BSP_I2C2_WriteReg16;
+  IO.Init         = BSP_ST25DV_I2C_INIT;
+  IO.DeInit       = BSP_ST25DV_I2C_DEINIT;
+  IO.IsReady      = BSP_ST25DV_I2C_IS_READY;
+  IO.Read         = BSP_ST25DV_I2C_READ_REG_16;
+  IO.Write        = (ST25DV_Write_Func)BSP_ST25DV_I2C_WRITE_REG_16;
   IO.GetTick      = NFC_GetTick;
 
   status = ST25DV_RegisterBusIO (&NfcTagObj, &IO);
@@ -145,17 +145,17 @@ int32_t BSP_NFCTAG_GPIO_Init(void)
   HAL_GPIO_Init(BSP_NFCTAG_GPO_PORT, &GPIO_InitStruct);
   
   /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(EXTI13_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI13_IRQn);
+  HAL_NVIC_SetPriority(BSP_GPO_EXTI_IRQN, 0, 0);
+  HAL_NVIC_EnableIRQ(BSP_GPO_EXTI_IRQN);
   
-  if (HAL_EXTI_RegisterCallback(&nfc_exti,  HAL_EXTI_COMMON_CB_ID, NFCTAG_GPIO_EXTI_Callback) != HAL_OK)
+  if (HAL_EXTI_RegisterCallback(&GPO_EXTI,  HAL_EXTI_COMMON_CB_ID, NFCTAG_GPIO_EXTI_Callback) != HAL_OK)
   {
     ret = BSP_ERROR_PERIPH_FAILURE;
   }
   else
   {
-    HAL_NVIC_SetPriority(EXTI13_IRQn,  BSP_NFCTAG_GPO_PRIO, 0x00);
-    HAL_NVIC_EnableIRQ(EXTI13_IRQn);
+    HAL_NVIC_SetPriority(BSP_GPO_EXTI_IRQN,  BSP_NFCTAG_GPO_PRIO, 0x00);
+    HAL_NVIC_EnableIRQ(BSP_GPO_EXTI_IRQN);
   }
   
   return ret;

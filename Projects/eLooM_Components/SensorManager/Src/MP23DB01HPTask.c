@@ -217,7 +217,8 @@ static MP23DB01HPTaskClass_t sTheClass =
       MP23DB01HPTask_vtblSensorDisable,
       MP23DB01HPTask_vtblSensorIsEnabled,
       MP23DB01HPTask_vtblSensorGetDescription,
-      MP23DB01HPTask_vtblSensorGetStatus
+      MP23DB01HPTask_vtblSensorGetStatus,
+      MP23DB01HPTask_vtblSensorGetStatusPointer
     },
     MP23DB01HPTask_vtblMicGetFrequency,
     MP23DB01HPTask_vtblMicGetVolume,
@@ -514,7 +515,7 @@ sys_error_code_t MP23DB01HPTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("MP23DB01HP: start.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("MP23DB01HP: start.\r\n"));
 
 #if defined(ENABLE_THREADX_DBG_PIN) && defined (MP23DB01HP_TASK_CFG_TAG)
   MP23DB01HPTask *p_obj = (MP23DB01HPTask *) _this;
@@ -657,6 +658,7 @@ sys_error_code_t MP23DB01HPTask_vtblSensorSetFrequency(ISensorAudio_t *_this, ui
   }
   else
   {
+    p_if_owner->sensor_status.type.audio.frequency = frequency;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -685,6 +687,10 @@ sys_error_code_t MP23DB01HPTask_vtblSensorSetVolume(ISensorAudio_t *_this, uint8
   }
   else
   {
+    if (volume <= 100)
+    {
+      p_if_owner->sensor_status.type.audio.volume = volume;
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -722,6 +728,7 @@ sys_error_code_t MP23DB01HPTask_vtblSensorEnable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = TRUE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -749,6 +756,7 @@ sys_error_code_t MP23DB01HPTask_vtblSensorDisable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = FALSE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -793,6 +801,14 @@ SensorStatus_t MP23DB01HPTask_vtblSensorGetStatus(ISensor_t *_this)
   MP23DB01HPTask *p_if_owner = (MP23DB01HPTask *)((uint32_t) _this - offsetof(MP23DB01HPTask, sensor_if));
 
   return p_if_owner->sensor_status;
+}
+
+SensorStatus_t *MP23DB01HPTask_vtblSensorGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  MP23DB01HPTask *p_if_owner = (MP23DB01HPTask *)((uint32_t) _this - offsetof(MP23DB01HPTask, sensor_if));
+
+  return &p_if_owner->sensor_status;
 }
 
 /* Private function definition */
@@ -896,21 +912,26 @@ static sys_error_code_t MP23DB01HPTaskExecuteStepDatalog(AManagedTask *_this)
         uint16_t samples = (uint16_t)(p_obj->sensor_status.type.audio.frequency / 1000u);
 
         /* Workaround: MP23DB01HP data are unstable for the first samples -> avoid sending data */
-//        if (timestamp > 0.3f)
-//        {
+        if (timestamp > 0.3f)
+        {
 #if (HSD_USE_DUMMY_DATA == 1)
-        MP23DB01HPTaskWriteDummyData(p_obj);
-        EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
+          MP23DB01HPTaskWriteDummyData(p_obj);
+          EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
 #else
-        EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[(p_obj->half - 1) * samples], E_EM_INT16, samples);
+          float gain = (float)p_obj->sensor_status.type.audio.volume * 0.01f; /*volume is expressed as percentage*/
+          for (int i = 0; i < samples; i++)
+          {
+            p_obj->p_sensor_data_buff[((p_obj->half - 1) * samples) + i] *= gain;
+          }
+          EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[(p_obj->half - 1) * samples], E_EM_INT16, samples);
 #endif
-        DataEvent_t evt;
+          DataEvent_t evt;
 
-        DataEventInit((IEvent *)&evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
-        IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
+          DataEventInit((IEvent *)&evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
+          IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-        SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("MP23DB01HP: ts = %f\r\n", (float)timestamp));
-//        }
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("MP23DB01HP: ts = %f\r\n", (float)timestamp));
+        }
         break;
       }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -1111,7 +1132,7 @@ static sys_error_code_t MP23DB01HPTaskSensorSetVolume(MP23DB01HPTask *_this, SMM
 
   if (id == _this->mic_id)
   {
-    if (FS != 100.0f)
+    if (FS <= 100.0f)
     {
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
     }

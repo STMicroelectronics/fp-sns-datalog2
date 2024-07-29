@@ -199,7 +199,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle)
     /* USER CODE END SPI1_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_SPI1;
     PeriphClkInit.Spi1ClockSelection = RCC_SPI1CLKSOURCE_SYSCLK;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -241,7 +241,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle)
     /* USER CODE END SPI2_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_SPI2;
     PeriphClkInit.Spi2ClockSelection = RCC_SPI2CLKSOURCE_PCLK1;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
@@ -347,7 +347,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle)
     /* USER CODE END SPI3_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_SPI3;
     PeriphClkInit.Spi3ClockSelection = RCC_SPI3CLKSOURCE_SYSCLK;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)

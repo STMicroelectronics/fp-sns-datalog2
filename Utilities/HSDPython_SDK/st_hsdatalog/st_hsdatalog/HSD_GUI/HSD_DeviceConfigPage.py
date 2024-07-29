@@ -22,6 +22,7 @@ from st_dtdl_gui.STDTDL_DeviceConfigPage import STDTDL_DeviceConfigPage
 from st_dtdl_gui.Widgets.Plots.AnomalyDetectorWidget import AnomalyDetectorWidget
 from st_hsdatalog.HSD_GUI.Widgets.HSDMLCConfigurationWidget import HSDMCLConfigurationWidget
 from st_hsdatalog.HSD_GUI.Widgets.HSDPlotALSWidget import HSDPlotALSWidget
+from st_hsdatalog.HSD_GUI.Widgets.HSDPlotPOWWidget import HSDPlotPOWWidget
 from st_hsdatalog.HSD_GUI.Widgets.HSDPlotTMOSWidget import HSDPlotTMOSWidget
 from st_hsdatalog.HSD_GUI.Widgets.HSDPlotToFWidget import HSDPlotToFWidget
 
@@ -37,7 +38,7 @@ from st_hsdatalog.HSD_GUI.Widgets.HSDPlotLinesWidget import HSDPlotLinesWidget
 
 from st_dtdl_gui.Widgets.Plots.PlotBarFFTWidget import PlotBarFFTWidget
 from st_dtdl_gui.Widgets.Plots.ClassifierOutputWidget import ClassifierOutputWidget
-from st_dtdl_gui.Utils.DataClass import ActuatorPlotParams, PlotPAmbientParams, PlotPMotionParams, PlotPObjectParams, PlotPPresenceParams, SensorLightPlotParams, SensorPlotParams, AlgorithmPlotParams, SensorPresenscePlotParams, SensorRangingPlotParams
+from st_dtdl_gui.Utils.DataClass import ActuatorPlotParams, PlotPAmbientParams, PlotPMotionParams, PlotPObjectParams, PlotPPresenceParams, SensorLightPlotParams, SensorPlotParams, AlgorithmPlotParams, SensorPowerPlotParams, SensorPresenscePlotParams, SensorRangingPlotParams
 
 from st_dtdl_gui.STDTDL_Controller import ComponentType
 import st_pnpl.DTDL.dtdl_utils as DTDLUtils
@@ -138,14 +139,19 @@ class HSD_DeviceConfigPage(STDTDL_DeviceConfigPage):
                 elif isinstance(sensor_plot_params, SensorPresenscePlotParams):
                     plots_params_dict = {}
                     s_enabled = comp_status[comp_name].get("enable")
+                    embedded_compensation = comp_status[comp_name].get("embedded_compensation")
+                    software_compensation = comp_status[comp_name].get("software_compensation")
+                    
                     plots_params_dict["Ambient"] = PlotPAmbientParams(comp_name, s_enabled, 1)
-                    plots_params_dict["Object"] = PlotPObjectParams(comp_name, s_enabled, 4)
-                    plots_params_dict["Presence"] = PlotPPresenceParams(comp_name, s_enabled, 3)
-                    plots_params_dict["Motion"] = PlotPMotionParams(comp_name, s_enabled, 3)
+                    plots_params_dict["Object"] = PlotPObjectParams(comp_name, s_enabled, 4, embedded_compensation, software_compensation)
+                    plots_params_dict["Presence"] = PlotPPresenceParams(comp_name, s_enabled, 1, embedded_compensation, software_compensation)
+                    plots_params_dict["Motion"] = PlotPMotionParams(comp_name, s_enabled, 1, embedded_compensation, software_compensation)
                     sensor_plot_params.plots_params_dict = plots_params_dict
                     sensor_plot_widget = HSDPlotTMOSWidget(self.controller, comp_name, comp_display_name, sensor_plot_params, self.graph_id, self.plots_widget) 
                 elif isinstance(sensor_plot_params, SensorLightPlotParams):
                     sensor_plot_widget = HSDPlotALSWidget(self.controller, comp_name, comp_display_name, sensor_plot_params, self.graph_id, self.plots_widget)
+                elif isinstance(sensor_plot_params, SensorPowerPlotParams):
+                    sensor_plot_widget = HSDPlotPOWWidget(self.controller, comp_name, comp_display_name, sensor_plot_params, self.graph_id, self.plots_widget)
                 else:
                     sensor_plot_widget = HSDPlotLinesWidget(self.controller, comp_name, comp_display_name, sensor_plot_params, self.graph_id, self.plots_widget)
                 self.graph_id +=1

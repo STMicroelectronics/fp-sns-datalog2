@@ -85,8 +85,8 @@ class PlotWidget(QWidget):
         self.plot_widget = loader.load(os.path.join(os.path.dirname(st_dtdl_gui.__file__),"UI","plot_widget.ui"), parent)
         self.title_frame = self.plot_widget.frame_plot.findChild(QFrame,"frame_title")
         self.contents_frame = self.plot_widget.frame_plot.findChild(QFrame,"frame_contents")
-        pushButton_pop_out = self.title_frame.findChild(QPushButton, "pushButton_pop_out")
-        pushButton_pop_out.clicked.connect(self.clicked_pop_out_button)
+        self.pushButton_pop_out = self.title_frame.findChild(QPushButton, "pushButton_pop_out")
+        self.pushButton_pop_out.clicked.connect(self.clicked_pop_out_button)
         self.pushButton_plot_settings = self.title_frame.findChild(QPushButton, "pushButton_plot_settings")
         
         #Hide Output format description file loading frame

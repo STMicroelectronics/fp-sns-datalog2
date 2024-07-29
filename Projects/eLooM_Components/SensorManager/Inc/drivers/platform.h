@@ -43,6 +43,33 @@ typedef struct
 } VL53L8CX_Platform;
 
 /*
+ * @brief All macro below are used to configure the sensor output. User can
+ * define some macros if he wants to disable selected output, in order to reduce
+ * I2C access.
+ */
+
+/* Not interested in SPAD signals and more targets, so by default they are disabled.
+ * User interested in expanded output can recompile the code defining TOF_EXTENDED macro
+ */
+#ifndef TOF_EXTENDED
+#define VL53L8CX_NB_TARGET_PER_ZONE (1U)
+#define VL53L8CX_DISABLE_AMBIENT_PER_SPAD
+#define VL53L8CX_DISABLE_SIGNAL_PER_SPAD
+#endif
+
+/* Never interested in, so those outputs are always disabled */
+#define VL53L8CX_DISABLE_NB_SPADS_ENABLED
+#define VL53L8CX_DISABLE_AMBIENT_DMAX
+#define VL53L8CX_DISABLE_RANGE_SIGMA_MM
+#define VL53L8CX_DISABLE_REFLECTANCE_PERCENT
+#define VL53L8CX_DISABLE_MOTION_INDICATOR
+/* Always interested in */
+// #define VL53L8CX_DISABLE_DISTANCE_MM
+// #define VL53L8CX_DISABLE_TARGET_STATUS
+/* Not interested in, but enabled to avoid compilation warning in TOF driver */
+// #define VL53L8CX_DISABLE_NB_TARGET_DETECTED
+
+/*
  * @brief The macro below is used to define the number of target per zone sent
  * through I2C. This value can be changed by user, in order to tune I2C
  * transaction, and also the total memory size (a lower number of target per
@@ -51,20 +78,6 @@ typedef struct
 #ifndef VL53L8CX_NB_TARGET_PER_ZONE
 #define   VL53L8CX_NB_TARGET_PER_ZONE   (2U)
 #endif
-/*
- * @brief All macro below are used to configure the sensor output. User can
- * define some macros if he wants to disable selected output, in order to reduce
- * I2C access.
- */
-
-// #define VL53L8CX_DISABLE_AMBIENT_PER_SPAD
-#define VL53L8CX_DISABLE_NB_SPADS_ENABLED
-#define VL53L8CX_DISABLE_AMBIENT_DMAX
-// #define VL53L8CX_DISABLE_NB_TARGET_DETECTED
-// #define VL53L8CX_DISABLE_SIGNAL_PER_SPAD
-#define VL53L8CX_DISABLE_RANGE_SIGMA_MM
-// #define VL53L8CX_DISABLE_DISTANCE_MM
-// #define VL53L8CX_DISABLE_TARGET_STATUS
 
 /*
  * @brief The macro below can be changed to switch between little and big

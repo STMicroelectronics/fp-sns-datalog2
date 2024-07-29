@@ -25,6 +25,7 @@ class HSDPlotToFWidget(PlotWidget):
         super().__init__(controller, comp_name, comp_display_name, p_id, parent)
         self.active_tags = dict()
         self.plot_params = plot_params
+        self.output_format = self.plot_params.output_format
         self.heatmaps = {}
         self.RESOLUTION_4x4 = 0
         self.RESOLUTION_8x8 = 1
@@ -58,16 +59,27 @@ class HSDPlotToFWidget(PlotWidget):
         heatmaps_shape = (4,4) if plot_params.resolution == self.RESOLUTION_4x4 else (8,8)
         self.t1_out.update_plot_characteristics(heatmaps_shape)
         # self.t2_out.update_plot_characteristics(heatmaps_shape)
+        self.plot_params = plot_params
+        self.output_format = self.plot_params.output_format
 
     def add_data(self, data):
-        start_t1_dist_id = 4
-        # start_t2_dist_id = 7
-        #extract targets matrices
-        t1_data = data[0][start_t1_dist_id::8]
-        t1_status_mask = data[0][start_t1_dist_id-1::8]
-        # t2_data = data[0][start_t2_dist_id::8]
+        if self.output_format:
+            start_t1_dist_id = self.output_format.get("target_distance").get("start_id")
+            start_t1_status_id = self.output_format.get("target_status").get("start_id")
+            out_data_step = self.output_format.get("nof_outputs")
+            t1_data = data[0][start_t1_dist_id::out_data_step]
+            t1_status_mask = data[0][start_t1_status_id::out_data_step]
+        else:
+            start_t1_dist_id = 4
+            #extract targets matrices
+            t1_data = data[0][start_t1_dist_id::8]
+            t1_status_mask = data[0][start_t1_dist_id-1::8]
+            # #NOTE! Demo Sensor converge
+            # start_t1_dist_id = 1
+            # #extract targets matrices
+            # t1_data = data[0][start_t1_dist_id::2]
+            # t1_status_mask = data[0][start_t1_dist_id-1::2]
         #then:
         self.heatmaps["target1"].add_data((t1_data,t1_status_mask))
-        # self.heatmaps["target2"].add_data(t2_data)
 
     

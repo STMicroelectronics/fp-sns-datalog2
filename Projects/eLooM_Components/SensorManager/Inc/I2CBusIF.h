@@ -59,6 +59,9 @@ struct _I2CBusIF
   TX_SEMAPHORE sync_obj;
 
   uint8_t address_size;
+
+  uint8_t transmit_receive;
+
 };
 
 
@@ -75,6 +78,7 @@ struct _I2CBusIF
   */
 ABusIF *I2CBusIFAlloc(uint16_t who_am_i, uint8_t address, uint8_t auto_inc);
 ABusIF *I2CBusIFAlloc16(uint16_t who_am_i, uint16_t address, uint8_t auto_inc);
+ABusIF *I2CBusIFAllocTransmitReceive(uint16_t who_am_i, uint8_t address, uint8_t auto_inc);
 
 sys_error_code_t I2CBusIFWaitIOComplete(I2CBusIF *_this);
 sys_error_code_t I2CBusIFNotifyIOComplete(I2CBusIF *_this);

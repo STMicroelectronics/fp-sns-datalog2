@@ -42,6 +42,7 @@ struct _ISensor_vtbl
   boolean_t (*SensorIsEnabled)(ISensor_t *_this);
   SensorDescriptor_t (*SensorGetDescription)(ISensor_t *_this);
   SensorStatus_t (*SensorGetStatus)(ISensor_t *_this);
+  SensorStatus_t *(*SensorGetStatusPointer)(ISensor_t *_this);
 };
 
 
@@ -80,6 +81,11 @@ static inline SensorDescriptor_t ISensorGetDescription(ISensor_t *_this)
 static inline SensorStatus_t ISensorGetStatus(ISensor_t *_this)
 {
   return _this->vptr->SensorGetStatus(_this);
+}
+
+static inline SensorStatus_t *ISensorGetStatusPointer(ISensor_t *_this)
+{
+  return _this->vptr->SensorGetStatusPointer(_this);
 }
 
 

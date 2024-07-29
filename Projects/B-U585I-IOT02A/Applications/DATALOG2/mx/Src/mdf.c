@@ -104,7 +104,7 @@ void HAL_MDF_MspInit(MDF_HandleTypeDef *mdfHandle)
     /* USER CODE END ADF1_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_ADF1;
     PeriphClkInit.Adf1ClockSelection = RCC_ADF1CLKSOURCE_PLL3;
     PeriphClkInit.PLL3.PLL3Source = RCC_PLLSOURCE_MSI;

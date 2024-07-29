@@ -149,4 +149,4 @@ class ConnectionWidget(QWidget):
     @Slot()
     def s_com_init_error(self):
         self.empty_COM_combo_box()
-        self.show_error_message("ERROR: Empty device list. Please try to connect a compatible device and click the refresh button")
+        self.show_error_message("Empty device list. Please try to connect a compatible device and click the refresh button")

@@ -41,6 +41,7 @@ class HSDLogControlWidget(ComponentWidget):
     def __init__(self, controller, comp_contents, comp_name="log_controller", comp_display_name = "Log Controller" ,comp_sem_type="other", c_id=0, parent=None):
         super().__init__(controller, comp_name, comp_display_name, comp_sem_type, comp_contents, c_id, parent)
         
+        self.controller.sig_autologging_is_stopping.connect(self.s_is_autologging_stopping)
         self.controller.sig_offline_plots_completed.connect(self.s_offline_plots_completed)
         self.controller.sig_lock_start_button.connect(self.s_lock_start_button)
         
@@ -49,6 +50,8 @@ class HSDLogControlWidget(ComponentWidget):
         self.is_logging = False
         self.parent_widget = parent
         self.hsd = None
+
+        self.curr_start_log_button_statue = True
 
         self.sd_mounted_label = QLabel()
         # clear all widgets in contents_widget layout (contents)
@@ -92,6 +95,9 @@ class HSDLogControlWidget(ComponentWidget):
         self.refresh_sd_button.setEnabled(False)
         self.refresh_sd_button.setVisible(False)
         #TODO end todo
+
+        self.save_files_checkbox = frame_contents.findChild(QCheckBox,"save_files_checkbox")
+        self.save_files_checkbox.stateChanged.connect(self.checkBox_save_files_checked)
 
         # Log Interfaces ComboBox
         # self.interface_combobox = frame_contents.findChild(QComboBox,"interface_combobox")
@@ -276,18 +282,25 @@ class HSDLogControlWidget(ComponentWidget):
         self.controller.do_offline_plots(cb_sensor_value, tag_label, self.s_start, self.s_end, self.active_sensor_list, self.active_algorithm_list, self.debug_flag, self.sub_plots_flag, self.raw_data_flag, self.active_actuator_list, self.spectrum_flag)
     
     @Slot()
-    def s_lock_start_button(self, status):
-        if status:
-            self.log_start_button.setStyleSheet(STDTDL_PushButton.invalid)
-        else:
-            self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
-        self.config_errors_label.setVisible(status)
-        self.log_start_button.setEnabled(not status)
+    def s_lock_start_button(self, status, msg):
+        if status != self.curr_start_log_button_statue:
+            if status:
+                self.log_start_button.setStyleSheet(STDTDL_PushButton.invalid)
+            else:
+                self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
+            self.config_errors_label.setVisible(status)
+            self.config_errors_label.setText(msg)
+            self.log_start_button.setEnabled(not status)
+            self.curr_start_log_button_statue = status
 
     @Slot()
     def s_offline_plots_completed(self):
         self.loading_window.loadingDone()
         plt.show()
+
+    @Slot()
+    def s_is_autologging_stopping(self, status):
+        self.log_start_button.setEnabled(not status)
         
     @Slot()
     def clicked_load_config_button(self):
@@ -318,6 +331,13 @@ class HSDLogControlWidget(ComponentWidget):
             self.acq_folder = folder
 
     @Slot()
+    def checkBox_save_files_checked(self, state):
+        if state == Qt.Unchecked.value:
+            self.controller.set_save_files_flag(False)
+        elif state == Qt.Checked.value:
+            self.controller.set_save_files_flag(True)
+
+    @Slot()
     def checkBox_subfolder_checked(self, state):
         if state == Qt.Unchecked.value:
             self.sub_folder = False
@@ -346,28 +366,33 @@ class HSDLogControlWidget(ComponentWidget):
                         x = auto_settings[2] # Execute for X seconds
                         y = auto_settings[3] # Wait Y seconds before the next execution
                         if m != 0:
+                            self.save_files_checkbox.setEnabled(False)
                             self.log_start_button.setText("Stop Log")
                             self.log_start_button.setStyleSheet(STDTDL_PushButton.red)
                         self.automode_timer, self.stop_automode_timer = self.run_timer(n, m, x, y)
                     elif automode_status == AutomodeStatus.AUTOMODE_IDLE:
+                        self.save_files_checkbox.setEnabled(True)
                         self.log_start_button.setText("Start Log")
                         self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
                         self.stop_automode_timer()
                         self.controller.stop_idle_auto_log()
                         self.controller.set_automode_status(AutomodeStatus.AUTOMODE_UNSTARTED)
                     else: #automode_status == AutomodeStatus.AUTOMODE_LOGGING:
+                        self.save_files_checkbox.setEnabled(True)
                         self.log_start_button.setText("Start Log")
                         self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
                         self.stop_automode_timer()
                         self.controller.set_automode_status(AutomodeStatus.AUTOMODE_UNSTARTED)
                 else:
                     self.acq_folder = self.acq_folder_lineEdit.text()
+                    self.save_files_checkbox.setEnabled(False)
                     self.controller.start_log(interface, self.acq_folder, self.sub_folder)
             else:
                 if self.controller.is_automode_enabled():
                     self.stop_automode_timer()
                     self.controller.stop_auto_log(1)
                     self.controller.stop_waiting_auto_log()
+                    self.save_files_checkbox.setEnabled(True)
                     self.log_start_button.setText("Start Log")
                     self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
                     self.is_waiting_to_start = False
@@ -376,6 +401,7 @@ class HSDLogControlWidget(ComponentWidget):
             if self.controller.is_automode_enabled():
                 self.stop_automode_timer()
                 self.controller.set_automode_status(AutomodeStatus.AUTOMODE_UNSTARTED)
+            self.save_files_checkbox.setEnabled(True)
             self.controller.stop_log(interface)
 
     @Slot(bool)
@@ -386,7 +412,7 @@ class HSDLogControlWidget(ComponentWidget):
             self.is_logging = True
             if interface == 1:
                 self.controller.start_plots()
-                
+            
             self.groupBox_offline_plot.setEnabled(False)
             self.offline_plot_button.setEnabled(False)
             self.st_spinbox.setEnabled(False)
@@ -402,43 +428,45 @@ class HSDLogControlWidget(ComponentWidget):
                 self.log_start_button.setText("Start Log")
                 self.log_start_button.setStyleSheet(STDTDL_PushButton.green)
 
-            self.groupBox_offline_plot.setEnabled(True)
-            self.offline_plot_button.setEnabled(True)
-            self.st_spinbox.setEnabled(True)
-            self.et_spinbox.setEnabled(True)
+            if self.controller.get_save_files_flag():
+                self.groupBox_offline_plot.setEnabled(True)
+                self.offline_plot_button.setEnabled(True)
+                self.st_spinbox.setEnabled(True)
+                self.et_spinbox.setEnabled(True)
 
-            acquisition_folder = self.controller.get_acquisition_folder()
-            hsd_factory = HSDatalog()
-            self.hsd= hsd_factory.create_hsd(acquisition_folder)
-            
-            self.active_sensor_list = self.hsd.get_sensor_list(only_active=True)
-            self.active_algorithm_list = self.hsd.get_algorithm_list(only_active=True)
-            self.active_actuator_list = self.hsd.get_actuator_list(only_active=True)
-            self.ds_component_names_combo.clear()
-            self.ds_component_names_combo.addItem("all")
-            for s in self.active_sensor_list:
-                self.ds_component_names_combo.addItem(list(s.keys())[0])
-            for a in self.active_algorithm_list:
-                self.ds_component_names_combo.addItem(list(a.keys())[0])
-            for act in self.active_actuator_list:
-                self.ds_component_names_combo.addItem(list(act.keys())[0])
-            self.ds_component_names_combo.setCurrentIndex(0)
-            
-            tags_label_list = self.hsd.get_acquisition_label_classes()
-            self.tags_label_combo.clear()
-            self.tags_label_combo.addItem("None")
-            if tags_label_list is not None:
-                for t in tags_label_list:
-                    self.tags_label_combo.addItem(t)
-                self.tags_label_combo.setCurrentIndex(0)
-            
-            acq_info_model = self.hsd.get_acquisition_info()
-            start_time = acq_info_model["start_time"]
-            end_time = acq_info_model["end_time"]            
-            st_date = datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S.%fZ")
-            et_date = datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S.%fZ")
-            acq_duration_in_sec = (et_date - st_date).total_seconds()
-            self.et_spinbox.setMaximum(math.ceil(acq_duration_in_sec))
+                acquisition_folder = self.controller.get_acquisition_folder()
+                
+                hsd_factory = HSDatalog()
+                self.hsd= hsd_factory.create_hsd(acquisition_folder)
+                
+                self.active_sensor_list = self.hsd.get_sensor_list(only_active=True)
+                self.active_algorithm_list = self.hsd.get_algorithm_list(only_active=True)
+                self.active_actuator_list = self.hsd.get_actuator_list(only_active=True)
+                self.ds_component_names_combo.clear()
+                self.ds_component_names_combo.addItem("all")
+                for s in self.active_sensor_list:
+                    self.ds_component_names_combo.addItem(list(s.keys())[0])
+                for a in self.active_algorithm_list:
+                    self.ds_component_names_combo.addItem(list(a.keys())[0])
+                for act in self.active_actuator_list:
+                    self.ds_component_names_combo.addItem(list(act.keys())[0])
+                self.ds_component_names_combo.setCurrentIndex(0)
+                
+                tags_label_list = self.hsd.get_acquisition_label_classes()
+                self.tags_label_combo.clear()
+                self.tags_label_combo.addItem("None")
+                if tags_label_list is not None:
+                    for t in tags_label_list:
+                        self.tags_label_combo.addItem(t)
+                    self.tags_label_combo.setCurrentIndex(0)
+                
+                acq_info_model = self.hsd.get_acquisition_info()
+                start_time = acq_info_model["start_time"]
+                end_time = acq_info_model["end_time"]            
+                st_date = datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S.%fZ")
+                et_date = datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S.%fZ")
+                acq_duration_in_sec = (et_date - st_date).total_seconds()
+                self.et_spinbox.setMaximum(math.ceil(acq_duration_in_sec))
             
     
     @Slot()

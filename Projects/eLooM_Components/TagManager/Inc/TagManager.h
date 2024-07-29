@@ -26,6 +26,7 @@
 extern "C" {
 #endif
 
+#include "TagManager_conf.h"
 #include "services/syserror.h"
 #include "services/sysmem.h"
 #include <time.h>
@@ -35,9 +36,15 @@ extern "C" {
 #define HSD_TAGS_PINDESC_LENGTH   8U
 #define HSD_TAGS_TIMESTAMP_LENGTH 25U
 
+#ifndef HSD_SW_TAG_CLASS_NUM
 #define HSD_SW_TAG_CLASS_NUM      5U //automatically counted from "sw_tag" key in Comment Property field
+#endif
+#ifndef HSD_HW_TAG_CLASS_NUM
 #define HSD_HW_TAG_CLASS_NUM      5U //automatically counted from "hw_tag" key in Comment Property field
+#endif
+#ifndef HSD_MAX_TAGS_NUM
 #define HSD_MAX_TAGS_NUM          100U
+#endif
 
 #define HSD_TAGS_DEFAULT_SW       "SW_TAG_%d"
 #define HSD_TAGS_DEFAULT_HW       "HW_TAG_%d"

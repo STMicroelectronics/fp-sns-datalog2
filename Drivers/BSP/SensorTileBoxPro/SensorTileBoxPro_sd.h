@@ -2,14 +2,14 @@
   ******************************************************************************
   * @file    SensorTileBoxPro_sd.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.1.0
-  * @date    20-July-2023
+  * @version V1.2.0
+  * @date    03-Jun-2024
   * @brief   This file contains the common defines and functions prototypes for
   *          the SensorTileBoxPro_sd.c driver.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -28,9 +28,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32u5xx_hal.h"
 #include "SensorTileBoxPro_conf.h"
-#include "SensorTileBoxPro_errno.h"
 
 /** @addtogroup BSP
   * @{
@@ -93,12 +91,11 @@ typedef struct
 #define SD_PRESENT               1U
 #define SD_NOT_PRESENT           0U
 
-#define SD_DETECT_PIN                        GPIO_PIN_5
-#define SD_DETECT_GPIO_PORT                  GPIOC
-#define SD_DETECT_GPIO_CLK_ENABLE()          __HAL_RCC_GPIOC_CLK_ENABLE()
-#define SD_DETECT_GPIO_CLK_DISABLE()         __HAL_RCC_GPIOC_CLK_DISABLE()
-#define SD_DETECT_EXTI_IRQn                  EXTI5_IRQn
-#define SD_DETECT_EXTI_LINE                  EXTI_LINE_5
+#define SD_DETECT_PIN                        BSP_SD_DETECT_PIN
+#define SD_DETECT_GPIO_PORT                  BSP_SD_DETECT_GPIO_PORT
+#define SD_DETECT_GPIO_CLK_ENABLE()          BSP_SD_DETECT_GPIO_CLK_ENABLE()
+#define SD_DETECT_GPIO_CLK_DISABLE()         BSP_SD_DETECT_GPIO_CLK_DISABLE()
+#define SD_DETECT_EXTI_LINE                  BSP_SD_DETECT_EXTI_LINE
 /**
   * @}
   */

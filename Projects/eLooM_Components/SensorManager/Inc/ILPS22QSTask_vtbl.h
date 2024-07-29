@@ -60,6 +60,7 @@ sys_error_code_t ILPS22QSTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t ILPS22QSTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t ILPS22QSTask_vtblPressGetDescription(ISensor_t *_this);
 SensorStatus_t ILPS22QSTask_vtblPressGetStatus(ISensor_t *_this);
+SensorStatus_t *ILPS22QSTask_vtblPressGetStatusPointer(ISensor_t *_this);
 sys_error_code_t ILPS22QSTask_vtblPressGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
 float ILPS22QSTask_vtblPressGetFS(ISensorMems_t *_this);
 float ILPS22QSTask_vtblPressGetSensitivity(ISensorMems_t *_this);

@@ -43,6 +43,7 @@ static inline sys_error_code_t ISensorDisable(ISensor_t *_this);
 static inline boolean_t ISensorIsEnabled(ISensor_t *_this);
 static inline SensorDescriptor_t ISensorGetDescription(ISensor_t *_this);
 static inline SensorStatus_t ISensorGetStatus(ISensor_t *_this);
+static inline SensorStatus_t *ISensorGetStatusPointer(ISensor_t *_this);
 
 
 #ifdef __cplusplus

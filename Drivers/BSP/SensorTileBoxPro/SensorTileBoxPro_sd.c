@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    SensorTileBoxPro_sd.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.1.0
-  * @date    20-July-2023
+  * @version V1.2.0
+  * @date    03-Jun-2024
   * @brief   This file contains functions for the SensorTileBoxPro_sd.c driver.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -72,6 +72,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "SensorTileBoxPro_sd.h"
+
+/* Global variables ----------------------------------------------------------*/
+EXTI_HandleTypeDef H_EXTI_SD_DETECT = {.Line = BSP_SD_DETECT_EXTI_LINE};
 
 /** @addtogroup BSP
   * @{
@@ -143,7 +146,7 @@ int32_t BSP_SD_Init(uint32_t Instance)
 {
   int32_t ret = BSP_ERROR_NONE;
   GPIO_InitTypeDef gpio_init_structure;
- 
+
   if (Instance >= SD_INSTANCES_NBR)
   {
     ret = BSP_ERROR_WRONG_PARAM;
@@ -279,21 +282,22 @@ __weak HAL_StatusTypeDef MX_SDMMC1_SD_Init(SD_HandleTypeDef *hsd)
   hsd->Init.ClockEdge           = SDMMC_CLOCK_EDGE_RISING;
   hsd->Init.ClockPowerSave      = SDMMC_CLOCK_POWER_SAVE_DISABLE;
   hsd->Init.BusWide             = SDMMC_BUS_WIDE_4B;
-  hsd->Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_ENABLE; /// disable because there is the transceiver (?)
-//  hsd->Init.ClockDiv            = SDMMC_NSpeed_CLK_DIV;
-  hsd->Init.ClockDiv            = SDMMC_HSpeed_CLK_DIV; /// CLK sdcard clock
+  hsd->Init.HardwareFlowControl = SDMMC_HARDWARE_FLOW_CONTROL_ENABLE; /* disable because there is the transceiver (?) */
+  /*  hsd->Init.ClockDiv            = SDMMC_NSpeed_CLK_DIV; */
+  hsd->Init.ClockDiv            = SDMMC_HSpeed_CLK_DIV; /* CLK sdcard clock */
 
 #if (USE_SD_TRANSCEIVER != 0U)
   hsd->Init.TranceiverPresent = SDMMC_TRANSCEIVER_PRESENT;
 #endif /* USE_SD_TRANSCEIVER */
-  
-  
+
+
   /* HAL SD initialization */
   if (HAL_SD_Init(hsd) != HAL_OK)
   {
     ret = HAL_ERROR;
   }
-  return ret;   /// SDebug qui ho tutti i parametri in SdCard e State e' HAL_SD_STATE_READ, buffers puntano a 0x0
+  /* SDebug: here trere are all parameters in SdCard and State is HAL_SD_STATE_READ, buffers point to 0x0 */
+  return ret;
 }
 
 #if (USE_HAL_SD_REGISTER_CALLBACKS > 0)
@@ -375,7 +379,7 @@ int32_t BSP_SD_DetectITConfig(uint32_t Instance)
   int32_t ret;
   GPIO_InitTypeDef gpio_init_structure;
   static BSP_EXTI_LineCallback SdCallback[SD_INSTANCES_NBR] = {SD_EXTI_Callback};
-  static IRQn_Type SD_EXTI_IRQn[SD_INSTANCES_NBR] = {SD_DETECT_EXTI_IRQn};
+  static IRQn_Type SD_EXTI_IRQn[SD_INSTANCES_NBR] = {BSP_SD_DETECT_EXTI_IRQN};
 
   if (Instance >= SD_INSTANCES_NBR)
   {
@@ -389,7 +393,7 @@ int32_t BSP_SD_DetectITConfig(uint32_t Instance)
 
     /* Configure Interrupt mode for SD detection pin */
     gpio_init_structure.Pin     = PinDetect[Instance];
-    gpio_init_structure.Pull    = GPIO_PULLUP; //GPIO_NOPULL; mod fabio
+    gpio_init_structure.Pull    = GPIO_PULLUP;
     gpio_init_structure.Speed   = GPIO_SPEED_FREQ_VERY_HIGH;
     gpio_init_structure.Mode    = GPIO_MODE_IT_RISING_FALLING;
     HAL_GPIO_Init(SD_GPIO_PORT[Instance], &gpio_init_structure);
@@ -852,7 +856,7 @@ static void SD_MspInit(SD_HandleTypeDef *hsd)
 #define ENABLE_SD_GPIO_Port GPIOH
 #define SEL_SD_V_Pin GPIO_PIN_8
 #define SEL_SD_V_GPIO_Port GPIOH
-  
+
   HAL_StatusTypeDef ret = HAL_OK;
   GPIO_InitTypeDef gpioinitstruct = {0};
   RCC_OscInitTypeDef       RCC_OscInitStruct;
@@ -860,19 +864,19 @@ static void SD_MspInit(SD_HandleTypeDef *hsd)
 
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hsd);
-  
+
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOH_CLK_ENABLE();
-   
+
   /*Configure GPIO pins : ENABLE_SD_Pin SEL_SD_V_Pin */
-  gpioinitstruct.Pin = ENABLE_SD_Pin|SEL_SD_V_Pin;
+  gpioinitstruct.Pin = ENABLE_SD_Pin | SEL_SD_V_Pin;
   gpioinitstruct.Mode = GPIO_MODE_OUTPUT_PP;
   gpioinitstruct.Pull = GPIO_NOPULL;
   gpioinitstruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(ENABLE_SD_GPIO_Port, &gpioinitstruct);
-  
-  HAL_GPIO_WritePin(ENABLE_SD_GPIO_Port, ENABLE_SD_Pin, GPIO_PIN_SET);  //sd card
-  HAL_GPIO_WritePin(SEL_SD_V_GPIO_Port, SEL_SD_V_Pin, GPIO_PIN_RESET); //sd card
+
+  HAL_GPIO_WritePin(ENABLE_SD_GPIO_Port, ENABLE_SD_Pin, GPIO_PIN_SET);  /* sd card */
+  HAL_GPIO_WritePin(SEL_SD_V_GPIO_Port, SEL_SD_V_Pin, GPIO_PIN_RESET);  /* sd card */
 
   /* Check whether HSI48 is enabled or not */
   HAL_RCC_GetOscConfig(&RCC_OscInitStruct);
@@ -914,20 +918,20 @@ static void SD_MspInit(SD_HandleTypeDef *hsd)
       /* GPIOD configuration */
       gpioinitstruct.Pin = GPIO_PIN_2;
       HAL_GPIO_Init(GPIOD, &gpioinitstruct);
-      
+
       /*mod fabio for transceiver*/
-      gpioinitstruct.Pin = GPIO_PIN_7|GPIO_PIN_6;
+      gpioinitstruct.Pin = GPIO_PIN_7 | GPIO_PIN_6;
       gpioinitstruct.Mode = GPIO_MODE_AF_PP;
-      gpioinitstruct.Pull = GPIO_NOPULL;//GPIO_PULLUP;
-      gpioinitstruct.Speed = GPIO_SPEED_FREQ_HIGH;//GPIO_SPEED_FREQ_VERY_HIGH;
-      gpioinitstruct.Alternate = GPIO_AF8_SDMMC1;//GPIO_AF12_SDMMC1;
+      gpioinitstruct.Pull = GPIO_NOPULL; /* GPIO_PULLUP; */
+      gpioinitstruct.Speed = GPIO_SPEED_FREQ_HIGH; /* GPIO_SPEED_FREQ_VERY_HIGH; */
+      gpioinitstruct.Alternate = GPIO_AF8_SDMMC1; /*GPIO_AF12_SDMMC1; */
       HAL_GPIO_Init(GPIOC, &gpioinitstruct);
-      
-      gpioinitstruct.Pin = GPIO_PIN_9|GPIO_PIN_8;//GPIO_PIN_7|GPIO_PIN_6;
+
+      gpioinitstruct.Pin = GPIO_PIN_9 | GPIO_PIN_8; /* GPIO_PIN_7|GPIO_PIN_6; */
       gpioinitstruct.Mode = GPIO_MODE_AF_PP;
-      gpioinitstruct.Pull = GPIO_NOPULL;//GPIO_PULLUP;
-      gpioinitstruct.Speed = GPIO_SPEED_FREQ_HIGH;//GPIO_SPEED_FREQ_VERY_HIGH;
-      gpioinitstruct.Alternate = GPIO_AF8_SDMMC1;//GPIO_AF12_SDMMC1;
+      gpioinitstruct.Pull = GPIO_NOPULL; /* GPIO_PULLUP; */
+      gpioinitstruct.Speed = GPIO_SPEED_FREQ_HIGH; /* GPIO_SPEED_FREQ_VERY_HIGH; */
+      gpioinitstruct.Alternate = GPIO_AF8_SDMMC1; /* GPIO_AF12_SDMMC1; */
       HAL_GPIO_Init(GPIOB, &gpioinitstruct);
       /*end mod fabio for transceiver*/
 

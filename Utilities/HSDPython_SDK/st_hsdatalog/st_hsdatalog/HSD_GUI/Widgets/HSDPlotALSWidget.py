@@ -21,3 +21,4 @@ class HSDPlotALSWidget(HSDPlotLinesWidget):
             self.graph_curves[gc_id].setPen(({'color': self.lines_params[gc_id]["color"], 'width': 1}))
             self.legend.addItem(self.graph_curves[gc_id], self.lines_params[gc_id]["label"])
         
+        self.graph_widget.setMinimumHeight(180)

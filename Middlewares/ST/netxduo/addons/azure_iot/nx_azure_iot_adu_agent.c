@@ -2232,44 +2232,21 @@ NX_AZURE_IOT_ADU_AGENT_WORKFLOW *workflow = &(adu_agent_ptr -> nx_azure_iot_adu_
                                                                 file_buffer_ptr, file_buffer_size);
 
                             /* Get file url.  */
-                            if (nx_azure_iot_json_reader_next_token(json_reader_ptr))
+                            if (nx_azure_iot_json_reader_next_token(json_reader_ptr) ||
+                                nx_azure_iot_json_reader_token_string_get(json_reader_ptr,
+                                                                            file_buffer_ptr,
+                                                                            file_buffer_size,
+                                                                            &(file_urls -> file_urls[file_urls -> file_urls_count].file_url_length)))
                             {
                                 return(NX_NOT_SUCCESSFUL);
                             }
 
-                            switch(nx_azure_iot_json_reader_token_type(json_reader_ptr))
-                            {
-                                case AZ_JSON_TOKEN_STRING:
-                                    if(nx_azure_iot_json_reader_token_string_get(json_reader_ptr,
-                                                                                file_buffer_ptr,
-                                                                                file_buffer_size,
-                                                                                &(file_urls -> file_urls[file_urls -> file_urls_count].file_url_length)))
-                                    {
-                                        return(NX_NOT_SUCCESSFUL);
-                                    }
+                            /* Set file url pointer and update the buffer size.  */
+                            NX_AZURE_IOT_ADU_AGENT_PTR_UPDATE(file_urls -> file_urls[file_urls -> file_urls_count].file_url,
+                                                                file_urls -> file_urls[file_urls -> file_urls_count].file_url_length,
+                                                                file_buffer_ptr, file_buffer_size);
 
-                                    /* Set file url pointer and update the buffer size.  */
-                                    NX_AZURE_IOT_ADU_AGENT_PTR_UPDATE(file_urls -> file_urls[file_urls -> file_urls_count].file_url,
-                                                                        file_urls -> file_urls[file_urls -> file_urls_count].file_url_length,
-                                                                        file_buffer_ptr, file_buffer_size);
-
-                                    file_urls -> file_urls_count++;
-
-                                    break;
-                                case AZ_JSON_TOKEN_NULL:
-                                    /* Ignore 'null' file url. */
-                                    /* Revert already processed variables */
-                                    file_buffer_ptr  -= file_urls -> file_urls[file_urls -> file_urls_count].file_id_length ;
-                                    file_buffer_size += file_urls -> file_urls[file_urls -> file_urls_count].file_id_length ;
-                                    file_urls -> file_urls[file_urls -> file_urls_count].file_id = NULL;
-                                    file_urls -> file_urls[file_urls -> file_urls_count].file_id_length = 0;
-                                    file_urls -> file_urls[file_urls -> file_urls_count].file_url = NULL;
-                                    file_urls -> file_urls[file_urls -> file_urls_count].file_url_length = 0;
-                                    break;
-                                default:
-                                    return(NX_NOT_SUCCESSFUL);
-                            }
-
+                            file_urls -> file_urls_count++;
                         }
                         else
                         {
@@ -2492,8 +2469,8 @@ NX_AZURE_IOT_ADU_AGENT_COMPATIBILITY *compatibility = &(update_manifest_content 
 
                         /* Device manufacturer.  */
                         if (nx_azure_iot_json_reader_token_is_text_equal(&json_reader,
-                                                                         (UCHAR *)NX_AZURE_IOT_ADU_AGENT_PROPERTY_NAME_MANUFACTURER,
-                                                                         sizeof(NX_AZURE_IOT_ADU_AGENT_PROPERTY_NAME_MANUFACTURER) - 1))
+                                                                         (UCHAR *)NX_AZURE_IOT_ADU_AGENT_PROPERTY_NAME_DEVICE_MANUFACTURER,
+                                                                         sizeof(NX_AZURE_IOT_ADU_AGENT_PROPERTY_NAME_DEVICE_MANUFACTURER) - 1))
                         {
                             if (nx_azure_iot_json_reader_next_token(&json_reader) ||
                                 nx_azure_iot_json_reader_token_string_get(&json_reader,
@@ -2511,8 +2488,8 @@ NX_AZURE_IOT_ADU_AGENT_COMPATIBILITY *compatibility = &(update_manifest_content 
 
                         /* Device model.  */
                         else if (nx_azure_iot_json_reader_token_is_text_equal(&json_reader,
-                                                                              (UCHAR *)NX_AZURE_IOT_ADU_AGENT_PROPERTY_NAME_MODEL,
-                                                                              sizeof(NX_AZURE_IOT_ADU_AGENT_PROPERTY_NAME_MODEL) - 1))
+                                                                              (UCHAR *)NX_AZURE_IOT_ADU_AGENT_PROPERTY_NAME_DEVICE_MODEL,
+                                                                              sizeof(NX_AZURE_IOT_ADU_AGENT_PROPERTY_NAME_DEVICE_MODEL) - 1))
                         {
                             if (nx_azure_iot_json_reader_next_token(&json_reader) ||
                                 nx_azure_iot_json_reader_token_string_get(&json_reader,

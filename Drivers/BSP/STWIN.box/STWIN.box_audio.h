@@ -27,7 +27,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "STWIN.box_conf.h"
-#include "STWIN.box.h"
+#include "audio.h"
 
 /** @addtogroup BSP
   * @{

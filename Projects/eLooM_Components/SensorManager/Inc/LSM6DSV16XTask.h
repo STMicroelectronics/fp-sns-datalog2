@@ -270,6 +270,11 @@ struct _LSM6DSV16XTask
     * Internal model (FW) is in sync with the component (HW registers)
     */
   bool sync;
+
+  /*
+    * First data ready flag: fist data must be discarded, see sensor AN
+    * */
+  uint8_t first_data_ready;
 };
 
 // Public API declaration

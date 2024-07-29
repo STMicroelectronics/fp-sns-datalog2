@@ -62,6 +62,11 @@ struct _VL53L8CXTask
   const MX_GPIOParams_t *pCSConfig;
 
   /**
+    * I2C BS GPIO configuration parameters.
+    */
+  const MX_GPIOParams_t *pBSConfig;
+
+  /**
     * Bus IF object used to connect the sensor task to the specific bus.
     */
   ABusIF *p_sensor_bus_if;
@@ -97,7 +102,11 @@ struct _VL53L8CXTask
   /**
     * Buffer to store the data read from the sensor
     */
+#ifdef TOF_EXTENDED
   uint32_t p_sensor_data_buff[VL53L8CX_MAX_NB_ZONES][8];
+#else
+  uint32_t p_sensor_data_buff[VL53L8CX_MAX_NB_ZONES][2];
+#endif
 
   /**
     * ::IEventSrc interface implementation for this class.
@@ -118,17 +127,6 @@ struct _VL53L8CXTask
     * Used to update the instantaneous ODR.
     */
   double prev_timestamp;
-
-  /**
-    * !< Interrupt: 0, Polling: 1
-    */
-  uint8_t IsBlocking;
-
-  /**
-    * !< One shot: 0, Continuous: 1
-    */
-  uint8_t IsContinuous;
-
 };
 
 // Public API declaration
@@ -150,10 +148,12 @@ ISourceObservable *VL53L8CXTaskGetTofSensorIF(VL53L8CXTask *_this);
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *VL53L8CXTaskAlloc(const void *pIRQConfig, const void *pCSConfig);
+AManagedTaskEx *VL53L8CXTaskAlloc(const void *pIRQConfig, const void *pCSConfig, const void *pBSConfig);
 
 /**
   * Call the default ::VL53L8CXTaskAlloc and then it overwrite sensor name
@@ -163,10 +163,13 @@ AManagedTaskEx *VL53L8CXTaskAlloc(const void *pIRQConfig, const void *pCSConfig)
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *VL53L8CXTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name);
+AManagedTaskEx *VL53L8CXTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const void *pBSConfig,
+                                         const char *p_name);
 
 /**
   * Allocate an instance of ::VL53L8CXTask in a memory block specified by the application.
@@ -185,10 +188,13 @@ AManagedTaskEx *VL53L8CXTaskAllocSetName(const void *pIRQConfig, const void *pCS
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx_t if success,
   * or NULL if out of memory error occurs.
   */
-AManagedTaskEx *VL53L8CXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig);
+AManagedTaskEx *VL53L8CXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                        const void *pBSConfig);
 
 /**
   * Call the default ::VL53L8CXTaskAlloc and then it overwrite sensor name
@@ -205,10 +211,13 @@ AManagedTaskEx *VL53L8CXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfi
   *        If it is NULL then the sensor is configured in polling mode.
   * @param pCSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
   *        It must be a GPIO identifying the SPI CS Pin.
+  * @param pBSConfig [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  *        It must be a GPIO identifying the I2C BS Pin.
   * @return a pointer to the generic object ::AManagedTaskEx_t if success,
   * or NULL if out of memory error occurs.
   */
 AManagedTaskEx *VL53L8CXTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                               const void *pBSConfig,
                                                const char *p_name);
 
 /**

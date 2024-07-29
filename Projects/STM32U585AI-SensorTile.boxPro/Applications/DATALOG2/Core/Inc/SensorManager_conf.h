@@ -31,9 +31,14 @@
 #define LPS22DF_FIFO_ENABLED  1
 #define LIS2DU12_FIFO_ENABLED 1
 #define LSM6DSV16X_FIFO_ENABLED 1
+#define LSM6DSV16BX_FIFO_ENABLED 1
 
 //#define HSD_USE_DUMMY_DATA 1
 
+
+// file LSM6DSV16BXTask.c
+#define LSM6DSV16BX_TASK_CFG_STACK_DEPTH          (TX_MINIMUM_STACK*8)
+#define LSM6DSV16BX_TASK_CFG_PRIORITY             (8)
 
 // file LSM6DSV16XTask.c
 #define LSM6DSV16X_TASK_CFG_STACK_DEPTH           (TX_MINIMUM_STACK*8)
@@ -63,16 +68,16 @@
 #define STTS22H_TASK_CFG_PRIORITY                 (8)
 #define STTS22H_TASK_CFG_I2C_ADDRESS              STTS22H_I2C_ADD_H
 
-// file STTS22HTask.c
+// file ISM330ISTask.c
 #define ISM330IS_TASK_CFG_STACK_DEPTH             (TX_MINIMUM_STACK*7)
 #define ISM330IS_TASK_CFG_PRIORITY                (8)
 
 // file MP23DB01HPTask.c
-#define MP23DB01HP_TASK_CFG_STACK_DEPTH            (TX_MINIMUM_STACK*7)
-#define MP23DB01HP_TASK_CFG_PRIORITY               (8)
+#define MP23DB01HP_TASK_CFG_STACK_DEPTH           (TX_MINIMUM_STACK*7)
+#define MP23DB01HP_TASK_CFG_PRIORITY              (8)
 #ifdef ENABLE_THREADX_DBG_PIN
-//#define IMP34DT05_TASK_CFG_TAG                    (CON34_PIN_22)
-#define MP23DB01HP_TASK_CFG_TAG                    (CON34_PIN_5)
+//#define IMP34DT05_TASK_CFG_TAG                  (CON34_PIN_22)
+#define MP23DB01HP_TASK_CFG_TAG                   (CON34_PIN_5)
 #endif
 
 // file I2CBusTask.c

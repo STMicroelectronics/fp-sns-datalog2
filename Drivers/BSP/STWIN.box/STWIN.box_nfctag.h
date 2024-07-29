@@ -25,7 +25,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "STWIN.box.h"
+#include "STWIN.box_conf.h"
 #include "st25dv.h"
 
 /* Exported types ------------------------------------------------------------*/
@@ -35,15 +35,13 @@
 #define NFCTAG_16K_SIZE             ((uint32_t) 0x800)
 #define NFCTAG_64K_SIZE             ((uint32_t) 0x2000)
    
-#define BSP_NFCTAG_GPO_CLK_ENABLE() __HAL_RCC_GPIOB_CLK_ENABLE()
-#define BSP_NFCTAG_GPO_PIN          GPIO_PIN_13
-#define BSP_NFCTAG_GPO_PORT         GPIOB
+#define BSP_NFCTAG_GPO_CLK_ENABLE() BSP_GPO_CLK_ENABLE()
+#define BSP_NFCTAG_GPO_PIN          BSP_GPO_PIN
+#define BSP_NFCTAG_GPO_PORT         BSP_GPO_GPIO_PORT
 #define BSP_NFCTAG_GPO_PRIO         8U
 
-#define H_EXTI_13                   nfc_exti
 
 /* External variables --------------------------------------------------------*/
-extern EXTI_HandleTypeDef nfc_exti;
 /* Exported macro ------------------------------------------------------------*/
 /* Exported function	--------------------------------------------------------*/
 

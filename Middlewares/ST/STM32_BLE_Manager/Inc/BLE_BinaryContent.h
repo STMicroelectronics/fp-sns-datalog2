@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_BinaryContent.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   BLE_BinaryContent info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -41,8 +41,26 @@ extern CustomNotifyEventBinaryContent_t CustomNotifyEventBinaryContent;
 
 /* Exported functions ------------------------------------------------------- */
 
-__weak void Write_Request_BinaryContent(void *BleCharPointer, uint16_t handle, uint16_t Offset, uint8_t data_length,
+/**
+  * @brief  This event is given when a read request is received by the server from the client.
+  * @param  void *BleCharPointer
+  * @param  uint16_t handle Handle of the attribute
+  * @param  uint16_t Offset
+  * @param  uint8_t data_length
+  * @param  uint8_t *att_data
+  * @retval None
+  */
+extern __weak void Write_Request_BinaryContent(void *BleCharPointer, uint16_t handle, uint16_t Offset, uint8_t data_length,
                                         uint8_t *att_data);
+
+/**
+  * @brief  This function is called to parse a Binary Content packet.
+  * @param  buffer_out: pointer to the output buffer.
+  * @param  buffer_in: pointer to the input data.
+  * @param  len: buffer in length
+  * @retval Buffer out length.
+  */
+extern __weak uint32_t BLE_BinaryContent_Parse(uint8_t **buffer_out, uint8_t *buffer_in, uint32_t len);
 
 /**
   * @brief  Init BinaryContent info service
@@ -72,6 +90,15 @@ extern void BLE_BinaryContentSetMaxCharLength(uint16_t MaxCharLength);
   * @retval uint16_t MaxCharLength
   */
 extern uint16_t BLE_BinaryContentGetMaxCharLength(void);
+
+
+/**
+  * @brief  BinaryContent Reset Status
+  * @param  None
+  * @retval None
+  */
+extern void BLE_BinaryContentReset(void);
+
 
 #ifdef __cplusplus
 }

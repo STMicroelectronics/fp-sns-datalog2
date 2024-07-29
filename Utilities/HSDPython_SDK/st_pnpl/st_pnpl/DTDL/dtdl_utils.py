@@ -27,6 +27,7 @@ class UnitMap():
             "gForce":"g",
             "gauss":"G",
             "decibel":"dB",
+            "degreePerSecond":"dps",
             "mdps":"mdps",
             "degreeCelsius":"°C",
             "hertz":"Hz",
@@ -71,11 +72,12 @@ class GraphTypeEnum(Enum):
     CHECKBOX = 12
     UNKWONW = -1
 
+#DatalogMC Utilities 
 MC_SLOW_TELEMETRY_STRING = "slow_mc_telemetry"
 MC_FAST_TELEMETRY_STRING = "fast_mc_telemetry"
-
 MC_SLOW_TELEMETRY_COMP_NAME = "slow_mc_telemetries"
 MC_FAST_TELEMETRY_COMP_NAME = "fast_mc_telemetries"
+AI_CLASSIFIER_COMP_NAME = "ai_motor_classifier"
 
 ST_BLE_STREAM = "st_ble_stream"
 
@@ -86,3 +88,5 @@ class SensorCategoryEnum(Enum):
     ISENSOR_CLASS_LIGHT = 3
     ISENSOR_CLASS_CAMERA = 4
     ISENSOR_CLASS_PRESENCE = 5
+    ISENSOR_CLASS_POWERMETER = 6
+    

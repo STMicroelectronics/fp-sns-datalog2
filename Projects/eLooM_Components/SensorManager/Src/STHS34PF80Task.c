@@ -249,7 +249,8 @@ static STHS34PF80TaskClass_t sTheClass =
       STHS34PF80Task_vtblSensorDisable,
       STHS34PF80Task_vtblSensorIsEnabled,
       STHS34PF80Task_vtblSensorGetDescription,
-      STHS34PF80Task_vtblSensorGetStatus
+      STHS34PF80Task_vtblSensorGetStatus,
+      STHS34PF80Task_vtblSensorGetStatusPointer
     },
 
     STHS34PF80Task_vtblPresenceGetDataFrequency,
@@ -307,7 +308,7 @@ ISourceObservable *STHS34PF80TaskGetPresenceSensorIF(STHS34PF80Task *_this)
   return (ISourceObservable *) & (_this->sensor_if);
 }
 
-AManagedTaskEx *STHS34PF80TaskAlloc(const void *pIRQConfig, const void *pCSConfig)
+AManagedTaskEx *STHS34PF80TaskAlloc(const void *pIRQConfig, const void *pCSConfig, const void *pBSConfig)
 {
   STHS34PF80Task *p_new_obj = SysAlloc(sizeof(STHS34PF80Task));
 
@@ -322,15 +323,17 @@ AManagedTaskEx *STHS34PF80TaskAlloc(const void *pIRQConfig, const void *pCSConfi
 
     p_new_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
     p_new_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
+    p_new_obj->pBSConfig = (MX_GPIOParams_t *) pBSConfig;
 
     strcpy(p_new_obj->sensor_status.p_name, sTheClass.class_descriptor.p_name);
   }
   return (AManagedTaskEx *) p_new_obj;
 }
 
-AManagedTaskEx *STHS34PF80TaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name)
+AManagedTaskEx *STHS34PF80TaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const void *pBSConfig,
+                                           const char *p_name)
 {
-  STHS34PF80Task *p_new_obj = (STHS34PF80Task *)STHS34PF80TaskAlloc(pIRQConfig, pCSConfig);
+  STHS34PF80Task *p_new_obj = (STHS34PF80Task *)STHS34PF80TaskAlloc(pIRQConfig, pCSConfig, pBSConfig);
 
   /* Overwrite default name with the one selected by the application */
   strcpy(p_new_obj->sensor_status.p_name, p_name);
@@ -338,7 +341,8 @@ AManagedTaskEx *STHS34PF80TaskAllocSetName(const void *pIRQConfig, const void *p
   return (AManagedTaskEx *) p_new_obj;
 }
 
-AManagedTaskEx *STHS34PF80TaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig)
+AManagedTaskEx *STHS34PF80TaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                          const void *pBSConfig)
 {
   STHS34PF80Task *p_obj = (STHS34PF80Task *)p_mem_block;
 
@@ -354,15 +358,17 @@ AManagedTaskEx *STHS34PF80TaskStaticAlloc(void *p_mem_block, const void *pIRQCon
 
     p_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
     p_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
+    p_obj->pBSConfig = (MX_GPIOParams_t *) pBSConfig;
   }
 
   return (AManagedTaskEx *)p_obj;
 }
 
 AManagedTaskEx *STHS34PF80TaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+                                                 const void *pBSConfig,
                                                  const char *p_name)
 {
-  STHS34PF80Task *p_obj = (STHS34PF80Task *)STHS34PF80TaskStaticAlloc(p_mem_block, pIRQConfig, pCSConfig);
+  STHS34PF80Task *p_obj = (STHS34PF80Task *)STHS34PF80TaskStaticAlloc(p_mem_block, pIRQConfig, pCSConfig, pBSConfig);
 
   /* Overwrite default name with the one selected by the application */
   strcpy(p_obj->sensor_status.p_name, p_name);
@@ -397,6 +403,14 @@ sys_error_code_t STHS34PF80Task_vtblHardwareInit(AManagedTask *_this, void *pPar
   if (p_obj->pCSConfig != NULL)
   {
     p_obj->pCSConfig->p_mx_init_f();
+  }
+  else if (p_obj->pBSConfig != NULL)
+  {
+    p_obj->pBSConfig->p_mx_init_f();
+  }
+  else
+  {
+    /**/
   }
 
   return res;
@@ -449,11 +463,23 @@ sys_error_code_t STHS34PF80Task_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
   }
   else
   {
-    p_obj->p_sensor_bus_if = I2CBusIFAlloc(STHS34PF80_ID, STHS34PF80_I2C_ADD, 0);
-    if (p_obj->p_sensor_bus_if == NULL)
+    if (p_obj->pBSConfig != NULL)
     {
-      res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
-      SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+      p_obj->p_sensor_bus_if = I2CBSBusIFAlloc(STHS34PF80_ID, STHS34PF80_I2C_ADD, p_obj->pBSConfig->port, (uint16_t) p_obj->pBSConfig->pin, 0);
+      if (p_obj->p_sensor_bus_if == NULL)
+      {
+        res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+        SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+      }
+    }
+    else
+    {
+      p_obj->p_sensor_bus_if = I2CBusIFAlloc(STHS34PF80_ID, STHS34PF80_I2C_ADD, 0);
+      if (p_obj->p_sensor_bus_if == NULL)
+      {
+        res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+        SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+      }
     }
   }
 
@@ -560,14 +586,16 @@ sys_error_code_t STHS34PF80Task_vtblDoEnterPowerMode(AManagedTask *_this, const 
   {
     if (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
     {
-      /* Deactivate the sensor */
-      sths34pf80_tmos_func_status_t tmos_func_status;
-      if (0 == sths34pf80_tmos_odr_set(p_sensor_drv, STHS34PF80_TMOS_ODR_OFF))
+      if (STHS34PF80TaskSensorIsActive(p_obj))
       {
-        /* Clear DRDY */
-        sths34pf80_tmos_func_status_get(p_sensor_drv, &tmos_func_status);
+        /* Deactivate the sensor */
+        sths34pf80_tmos_func_status_t tmos_func_status;
+        if (0 == sths34pf80_tmos_odr_set(p_sensor_drv, STHS34PF80_TMOS_ODR_OFF))
+        {
+          /* Clear DRDY */
+          sths34pf80_tmos_func_status_get(p_sensor_drv, &tmos_func_status);
+        }
       }
-
       /* Empty the task queue and disable INT or timer */
       tx_queue_flush(&p_obj->in_queue);
       if (p_obj->pIRQConfig == NULL)
@@ -625,7 +653,7 @@ sys_error_code_t STHS34PF80Task_vtblOnEnterTaskControlLoop(AManagedTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("STHS34PF80: start.\r\n"));
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("STHS34PF80: start.\r\n"));
 
 #if defined(ENABLE_THREADX_DBG_PIN) && defined (STHS34PF80_TASK_CFG_TAG)
   STHS34PF80Task *p_obj = (STHS34PF80Task *) _this;
@@ -891,6 +919,8 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetDataFrequency(ISensorPresence_t *_t
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.data_frequency = data_frequency;
+    p_if_owner->sensor_status.type.presence.measured_data_frequency = 0.0f;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -920,6 +950,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetTransmittance(ISensorPresence_t *_t
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.Transmittance = Transmittance;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -949,6 +980,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetAverageTObject(ISensorPresence_t *_
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.average_tobject = average_tobject;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -978,6 +1010,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetAverageTAmbient(ISensorPresence_t *
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.average_tambient = average_tambient;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1007,6 +1040,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetPresenceThreshold(ISensorPresence_t
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.presence_threshold = presence_threshold;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1036,6 +1070,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetPresenceHysteresis(ISensorPresence_
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.presence_hysteresis = presence_hysteresis;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1066,6 +1101,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetMotionThreshold(ISensorPresence_t *
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.motion_threshold = motion_threshold;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1095,6 +1131,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetMotionHysteresis(ISensorPresence_t 
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.motion_hysteresis = motion_hysteresis;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1126,6 +1163,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetTAmbientShockThreshold(ISensorPrese
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.tambient_shock_threshold = tambient_shock_threshold;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1156,6 +1194,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetTAmbientShockHysteresis(ISensorPres
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.tambient_shock_hysteresis = tambient_shock_hysteresis;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1186,6 +1225,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetLPF_P_M_Bandwidth(ISensorPresence_t
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.lpf_p_m_bandwidth = Bandwidth;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1215,6 +1255,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetLPF_P_Bandwidth(ISensorPresence_t *
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.lpf_p_bandwidth = Bandwidth;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1244,6 +1285,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetLPF_M_Bandwidth(ISensorPresence_t *
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.lpf_m_bandwidth = Bandwidth;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1274,6 +1316,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetEmbeddedCompensation(ISensorPresenc
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.embedded_compensation = embedded_compensation;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1304,6 +1347,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetSoftwareCompensation(ISensorPresenc
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.software_compensation = software_compensation;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1334,6 +1378,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorSetSoftwareCompensationAlgorithmConfig
   }
   else
   {
+    p_if_owner->sensor_status.type.presence.AlgorithmConfig = *pAlgorithmConfig;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1363,6 +1408,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorEnable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = TRUE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1391,6 +1437,7 @@ sys_error_code_t STHS34PF80Task_vtblSensorDisable(ISensor_t *_this)
   }
   else
   {
+    p_if_owner->sensor_status.is_active = FALSE;
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1437,6 +1484,14 @@ SensorStatus_t STHS34PF80Task_vtblSensorGetStatus(ISensor_t *_this)
   STHS34PF80Task *p_if_owner = (STHS34PF80Task *)((uint32_t) _this - offsetof(STHS34PF80Task, sensor_if));
 
   return p_if_owner->sensor_status;
+}
+
+SensorStatus_t *STHS34PF80Task_vtblSensorGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  STHS34PF80Task *p_if_owner = (STHS34PF80Task *)((uint32_t) _this - offsetof(STHS34PF80Task, sensor_if));
+
+  return &p_if_owner->sensor_status;
 }
 
 /* Private function definition */
@@ -1575,17 +1630,6 @@ static sys_error_code_t STHS34PF80TaskExecuteStepDatalog(AManagedTask *_this)
       case SM_MESSAGE_ID_DATA_READY:
       {
         SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("STHS34PF80: new data.\r\n"));
-//        if (p_obj->pIRQConfig == NULL)
-//        {
-//          //if(TX_SUCCESS != tx_timer_change(&p_obj->read_timer, AMT_MS_TO_TICKS(STHS34PF80_TASK_CFG_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(STHS34PF80_TASK_CFG_TIMER_PERIOD_MS)))
-//          if (TX_SUCCESS
-//              != tx_timer_change(&p_obj->read_timer, AMT_MS_TO_TICKS(p_obj->sths34pf80_task_cfg_timer_period_ms),
-//                                 AMT_MS_TO_TICKS(p_obj->sths34pf80_task_cfg_timer_period_ms)))
-//          {
-//            return SYS_UNDEFINED_ERROR_CODE;
-//          }
-//        }
-
         res = STHS34PF80TaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
@@ -1603,13 +1647,6 @@ static sys_error_code_t STHS34PF80TaskExecuteStepDatalog(AManagedTask *_this)
           DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->id);
           IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
           SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("STHS34PF80: ts = %f\r\n", (float)timestamp));
-//          if (p_obj->pIRQConfig == NULL)
-//          {
-//            if (TX_SUCCESS != tx_timer_activate(&p_obj->read_timer))
-//            {
-//              res = SYS_UNDEFINED_ERROR_CODE;
-//            }
-//          }
         }
         break;
       }
@@ -1963,6 +2000,17 @@ static sys_error_code_t STHS34PF80TaskSensorInit(STHS34PF80Task *_this)
 
     /* Set BDU */
     sths34pf80_block_data_update_set(p_sensor_drv, 1);
+
+    if (_this->pIRQConfig != NULL)
+    {
+      sths34pf80_tmos_route_int_set(p_sensor_drv, STHS34PF80_TMOS_INT_DRDY);
+
+      sths34pf80_int_mode_t val;
+      val.pin = STHS34PF80_PUSH_PULL;
+      val.polarity = STHS34PF80_ACTIVE_HIGH;
+      sths34pf80_int_mode_set(p_sensor_drv, val);
+      sths34pf80_drdy_mode_set(p_sensor_drv, STHS34PF80_DRDY_LATCHED);
+    }
 
     /* Select presence algo mode */
     sths34pf80_presence_abs_value_set(p_sensor_drv, 0);

@@ -30,6 +30,7 @@ extern "C" {
 typedef enum _EBusCtrlCmd
 {
   E_BUS_CTRL_DEV_NOTIFY_POWER_MODE,
+  E_BUS_CTRL_DEV_REPORT_TYPE
 } EBusCtrlCmd;
 
 /**
@@ -180,6 +181,7 @@ sys_error_code_t ABusIFInit(ABusIF *_this, uint16_t nWhoAmI)
   _this->m_pfBusCtrl = NULL;
   _this->m_xConnector.pfReadReg = ABusIFNullRW;
   _this->m_xConnector.pfWriteReg = ABusIFNullRW;
+  _this->m_xConnector.pfDelay = NULL;
   _this->m_xConnector.pxHandle = NULL;
 
   return SYS_NO_ERROR_CODE;

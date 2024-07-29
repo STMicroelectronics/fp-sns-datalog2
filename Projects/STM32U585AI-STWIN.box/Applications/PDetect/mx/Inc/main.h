@@ -57,6 +57,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define EN_D1V8_Pin GPIO_PIN_2
+#define EN_D1V8_GPIO_Port GPIOE
 #define CS_DHCX_Pin GPIO_PIN_15
 #define CS_DHCX_GPIO_Port GPIOH
 #define DCDC_2_EN_Pin GPIO_PIN_5
@@ -67,6 +69,8 @@ void Error_Handler(void);
 #define EX_SPI_NSS_GPIO_Port GPIOI
 #define LED1_Pin GPIO_PIN_12
 #define LED1_GPIO_Port GPIOH
+#define EN_A3V3_Pin GPIO_PIN_4
+#define EN_A3V3_GPIO_Port GPIOE
 #define CS_ICLX_Pin GPIO_PIN_7
 #define CS_ICLX_GPIO_Port GPIOI
 #define BLE_SPI_CS_Pin GPIO_PIN_1
@@ -80,8 +84,8 @@ void Error_Handler(void);
 #define USR_BUTTON_Pin GPIO_PIN_0
 #define USR_BUTTON_GPIO_Port GPIOE
 #define USR_BUTTON_EXTI_IRQn EXTI0_IRQn
-#define SPI2_MISO_p2_Pin GPIO_PIN_2
-#define SPI2_MISO_p2_GPIO_Port GPIOI
+#define EN_A1V8_Pin GPIO_PIN_2
+#define EN_A1V8_GPIO_Port GPIOI
 #define INT1_DHCX_Pin GPIO_PIN_8
 #define INT1_DHCX_GPIO_Port GPIOB
 #define INT1_DHCX_EXTI_IRQn EXTI8_IRQn
@@ -104,12 +108,6 @@ void Error_Handler(void);
 #define INT_MAG_Pin GPIO_PIN_9
 #define INT_MAG_GPIO_Port GPIOF
 #define INT_MAG_EXTI_IRQn EXTI9_IRQn
-#define INT_STT_Pin GPIO_PIN_5
-#define INT_STT_GPIO_Port GPIOF
-#define INT_STT_EXTI_IRQn EXTI5_IRQn
-#define INT1_ICLX_Pin GPIO_PIN_3
-#define INT1_ICLX_GPIO_Port GPIOF
-#define INT1_ICLX_EXTI_IRQn EXTI3_IRQn
 #define INT2_DHCX_Pin GPIO_PIN_4
 #define INT2_DHCX_GPIO_Port GPIOF
 #define INT2_DHCX_EXTI_IRQn EXTI4_IRQn
@@ -128,16 +126,24 @@ void Error_Handler(void);
 #define TIM3_PWM_GPIO_Port GPIOC
 #define uC_ADC_BATT_Pin GPIO_PIN_2
 #define uC_ADC_BATT_GPIO_Port GPIOC
-#define INT_EXG5_Pin GPIO_PIN_5
-#define INT_EXG5_GPIO_Port GPIOG
+#define USART3_TX_Pin GPIO_PIN_7
+#define USART3_TX_GPIO_Port GPIOA
+#define INT_TMOS_Pin GPIO_PIN_5
+#define INT_TMOS_GPIO_Port GPIOG
+#define INT_TMOS_EXTI_IRQn EXTI5_IRQn
 #define INT_EXD15_Pin GPIO_PIN_15
 #define INT_EXD15_GPIO_Port GPIOD
-#define ADC_EX_Pin GPIO_PIN_3
-#define ADC_EX_GPIO_Port GPIOC
+#define INT_TOF_Pin GPIO_PIN_3
+#define INT_TOF_GPIO_Port GPIOC
+#define INT_TOF_EXTI_IRQn EXTI3_IRQn
 #define CHRG_Pin GPIO_PIN_0
 #define CHRG_GPIO_Port GPIOA
+#define USART3_RX_Pin GPIO_PIN_5
+#define USART3_RX_GPIO_Port GPIOA
 #define CS_DWB_Pin GPIO_PIN_12
 #define CS_DWB_GPIO_Port GPIOF
+#define USART3_RTS_Pin GPIO_PIN_12
+#define USART3_RTS_GPIO_Port GPIOD
 #define BUTTON_PWR_Pin GPIO_PIN_10
 #define BUTTON_PWR_GPIO_Port GPIOD
 #define BUTTON_PWR_EXTI_IRQn EXTI10_IRQn
@@ -158,6 +164,8 @@ void Error_Handler(void);
 #define INT2_ICLX_EXTI_IRQn EXTI11_IRQn
 #define LDO_EN_Pin GPIO_PIN_15
 #define LDO_EN_GPIO_Port GPIOE
+#define USART3_CTS_Pin GPIO_PIN_11
+#define USART3_CTS_GPIO_Port GPIOD
 #define GPIO1_EX_Pin GPIO_PIN_1
 #define GPIO1_EX_GPIO_Port GPIOB
 #define INT1_DWB_Pin GPIO_PIN_15
@@ -168,19 +176,6 @@ void Error_Handler(void);
 #define NFC_INT_Pin GPIO_PIN_13
 #define NFC_INT_GPIO_Port GPIOB
 #define NFC_INT_EXTI_IRQn EXTI13_IRQn
-#define INT_TMOS_Pin GPIO_PIN_5
-#define INT_TMOS_GPIO_Port GPIOG
-#define INT_TMOS_EXTI_IRQn EXTI5_IRQn
-#define INT_TOF_Pin GPIO_PIN_3
-#define INT_TOF_GPIO_Port GPIOC
-#define INT_TOF_EXTI_IRQn EXTI3_IRQn
-
-#define EN_A1V8_Pin GPIO_PIN_2
-#define EN_A1V8_GPIO_Port GPIOI
-#define EN_A3V3_Pin GPIO_PIN_4
-#define EN_A3V3_GPIO_Port GPIOE
-#define EN_D1V8_Pin GPIO_PIN_2
-#define EN_D1V8_GPIO_Port GPIOE
 
 /* USER CODE BEGIN Private defines */
 

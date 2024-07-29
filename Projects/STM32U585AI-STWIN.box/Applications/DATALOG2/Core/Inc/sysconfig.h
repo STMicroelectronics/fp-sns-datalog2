@@ -31,8 +31,8 @@
 // *********************
 
 #define BOARD_ID_BOXA           0x0E
-#define BLE_FW_ID_DATALOG2_BOXA 0x05
-#define USB_FW_ID_DATALOG2_BOXA 0x02
+#define BLE_FW_ID_DATALOG2_BOXA 0x23
+#define USB_FW_ID_DATALOG2_BOXA 0x06
 
 #define BOARD_ID_BOXB           0x12
 #define BLE_FW_ID_DATALOG2_BOXB 0x06
@@ -87,6 +87,7 @@
 #ifdef ENABLE_THREADX_DBG_PIN
 #define UTIL_TASK_CFG_TAG                         (CON34_PIN_24)
 #endif
+#define UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT         20
 
 // App configuration
 
@@ -100,7 +101,7 @@
 #endif
 
 // file filex_dctrl_class.c
-#define FILEX_CFG_STACK_DEPTH                     (TX_MINIMUM_STACK*12)
+#define FILEX_CFG_STACK_DEPTH                     (TX_MINIMUM_STACK*13)
 #define FILEX_SEND_CFG_PRIORITY                   (10)
 #define FILEX_CFG_PREEMPTION_THRESHOLD            FILEX_SEND_CFG_PRIORITY
 #ifdef ENABLE_THREADX_DBG_PIN

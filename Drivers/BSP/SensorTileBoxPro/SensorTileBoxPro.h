@@ -1,15 +1,14 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    SensorTileBoxPro.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.1.0
-  * @date    20-July-2023
+  * @version V1.2.0
+  * @date    03-Jun-2024
   * @brief   header file for the BSP Common driver
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,8 +16,7 @@
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
-*/
-/* USER CODE END Header */
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SENSORTILEBOXPRO_H
@@ -31,6 +29,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "SensorTileBoxPro_conf.h"
 #include "SensorTileBoxPro_errno.h"
+#include "main.h"
 
 #if (USE_BSP_COM_FEATURE > 0)
   #if (USE_COM_LOG > 0)
@@ -58,8 +57,8 @@
  * @brief STM32U5XX NUCLEO BSP Driver version number V1.0.0
  */
 #define __SENSORTILEBOXPRO_BSP_VERSION_MAIN   (uint32_t)(0x01) /*!< [31:24] main version */
-#define __SENSORTILEBOXPRO_BSP_VERSION_SUB1   (uint32_t)(0x01) /*!< [23:16] sub1 version */
-#define __SENSORTILEBOXPRO_BSP_VERSION_SUB2   (uint32_t)(0x02) /*!< [15:8]  sub2 version */
+#define __SENSORTILEBOXPRO_BSP_VERSION_SUB1   (uint32_t)(0x00) /*!< [23:16] sub1 version */
+#define __SENSORTILEBOXPRO_BSP_VERSION_SUB2   (uint32_t)(0x00) /*!< [15:8]  sub2 version */
 #define __SENSORTILEBOXPRO_BSP_VERSION_RC     (uint32_t)(0x00) /*!< [7:0]  release candidate */
 #define __SENSORTILEBOXPRO_BSP_VERSION        ((__SENSORTILEBOXPRO_BSP_VERSION_MAIN << 24)\
                                                     |(__SENSORTILEBOXPRO_BSP_VERSION_SUB1 << 16)\
@@ -83,28 +82,61 @@
 /** @defgroup SENSORTILEBOXPRO_LOW_LEVEL_LED SENSORTILEBOXPRO LOW LEVEL LED
  * @{
  */
+
 /** Define number of LED            **/
 #define LEDn                              4U
-/**  Definition for BSP USER LED 2   **/
-#define LED1_PIN                     	  GPIO_PIN_6
-#define LED1_GPIO_PORT                    GPIOF
-#define LED1_GPIO_CLK_ENABLE()            __HAL_RCC_GPIOF_CLK_ENABLE()
-#define LED1_GPIO_CLK_DISABLE()           __HAL_RCC_GPIOF_CLK_DISABLE()
 
-#define LED2_PIN                     	  GPIO_PIN_11
-#define LED2_GPIO_PORT                    GPIOH
-#define LED2_GPIO_CLK_ENABLE()            __HAL_RCC_GPIOH_CLK_ENABLE()
-#define LED2_GPIO_CLK_DISABLE()           __HAL_RCC_GPIOH_CLK_DISABLE()
+/**  Definition for BSP USER LED _BLUE   **/
 
-#define LED3_PIN                     	  GPIO_PIN_12
-#define LED3_GPIO_PORT                    GPIOH
-#define LED3_GPIO_CLK_ENABLE()            __HAL_RCC_GPIOH_CLK_ENABLE()
-#define LED3_GPIO_CLK_DISABLE()           __HAL_RCC_GPIOH_CLK_DISABLE())
+#define BUS_GPIO_INSTANCE GPIO
+#define BUS_BSP_LED__BLUE_GPIO_PIN GPIO_PIN_9
+#define BUS_BSP_LED__BLUE_GPIO_CLK_ENABLE() __HAL_RCC_GPIOF_CLK_ENABLE()
+#define BUS_BSP_LED__BLUE_GPIO_CLK_DISABLE() __HAL_RCC_GPIOF_CLK_DISABLE()
+#define BUS_BSP_LED__BLUE_GPIO_PORT GPIOF
 
-#define LED4_PIN                     	  GPIO_PIN_9
-#define LED4_GPIO_PORT                    GPIOF
-#define LED4_GPIO_CLK_ENABLE()            __HAL_RCC_GPIOF_CLK_ENABLE()
-#define LED4_GPIO_CLK_DISABLE()           __HAL_RCC_GPIOF_CLK_DISABLE())
+#define LED_BLUE_PIN                          GPIO_PIN_9
+#define LED_BLUE_GPIO_PORT                    GPIOF
+#define LED_BLUE_GPIO_CLK_ENABLE()            __HAL_RCC_GPIOF_CLK_ENABLE()
+#define LED_BLUE_GPIO_CLK_DISABLE()           __HAL_RCC_GPIOF_CLK_DISABLE()
+
+/**  Definition for BSP USER LED _RED   **/
+
+#define BUS_GPIO_INSTANCE GPIO
+#define BUS_BSP_LED__RED_GPIO_CLK_DISABLE() __HAL_RCC_GPIOH_CLK_DISABLE()
+#define BUS_BSP_LED__RED_GPIO_PORT GPIOH
+#define BUS_BSP_LED__RED_GPIO_PIN GPIO_PIN_11
+#define BUS_BSP_LED__RED_GPIO_CLK_ENABLE() __HAL_RCC_GPIOH_CLK_ENABLE()
+
+#define LED_RED_PIN                          GPIO_PIN_11
+#define LED_RED_GPIO_PORT                    GPIOH
+#define LED_RED_GPIO_CLK_ENABLE()            __HAL_RCC_GPIOH_CLK_ENABLE()
+#define LED_RED_GPIO_CLK_DISABLE()           __HAL_RCC_GPIOH_CLK_DISABLE()
+
+/**  Definition for BSP USER LED _YELLOW   **/
+
+#define BUS_GPIO_INSTANCE GPIO
+#define BUS_BSP_LED__YELLOW_GPIO_CLK_ENABLE() __HAL_RCC_GPIOH_CLK_ENABLE()
+#define BUS_BSP_LED__YELLOW_GPIO_CLK_DISABLE() __HAL_RCC_GPIOH_CLK_DISABLE()
+#define BUS_BSP_LED__YELLOW_GPIO_PIN GPIO_PIN_12
+#define BUS_BSP_LED__YELLOW_GPIO_PORT GPIOH
+
+#define LED_YELLOW_PIN                          GPIO_PIN_12
+#define LED_YELLOW_GPIO_PORT                    GPIOH
+#define LED_YELLOW_GPIO_CLK_ENABLE()            __HAL_RCC_GPIOH_CLK_ENABLE()
+#define LED_YELLOW_GPIO_CLK_DISABLE()           __HAL_RCC_GPIOH_CLK_DISABLE()
+
+/**  Definition for BSP USER LED _GREEN   **/
+
+#define BUS_GPIO_INSTANCE GPIO
+#define BUS_BSP_LED__GREEN_GPIO_CLK_ENABLE() __HAL_RCC_GPIOF_CLK_ENABLE()
+#define BUS_BSP_LED__GREEN_GPIO_PORT GPIOF
+#define BUS_BSP_LED__GREEN_GPIO_PIN GPIO_PIN_6
+#define BUS_BSP_LED__GREEN_GPIO_CLK_DISABLE() __HAL_RCC_GPIOF_CLK_DISABLE()
+
+#define LED_GREEN_PIN                          GPIO_PIN_6
+#define LED_GREEN_GPIO_PORT                    GPIOF
+#define LED_GREEN_GPIO_CLK_ENABLE()            __HAL_RCC_GPIOF_CLK_ENABLE()
+#define LED_GREEN_GPIO_CLK_DISABLE()           __HAL_RCC_GPIOF_CLK_DISABLE()
 
 /**
  * @}
@@ -178,24 +210,11 @@
 
 typedef enum
 {
-  LED1 = 0,
-  LED2 = 1,
-  LED3 = 2,
-  LED4 = 3,
-  LED_GREEN = LED1,
-  LED_RED = LED2,
-  LED_YELLOW = LED3,
-  LED_BLUE = LED4
+  LED_BLUE = 0,
+  LED_RED = 1,
+  LED_YELLOW = 2,
+  LED_GREEN = 3,
 }Led_TypeDef;
-
-/* FINISHA --> BOARD_ID = 0x0DU
-// FINISHB --> BOARD_ID = 0x11U */
-typedef enum
-{
-  FINISHA = 0,
-  FINISHB = 1,
-  FINISH_ERROR =2
-}FinishGood_TypeDef;
 
 typedef enum
 {
@@ -308,16 +327,12 @@ int32_t  BSP_LED_DeInit(Led_TypeDef Led);
 int32_t  BSP_LED_On(Led_TypeDef Led);
 int32_t  BSP_LED_Off(Led_TypeDef Led);
 int32_t  BSP_LED_Toggle(Led_TypeDef Led);
-int32_t  BSP_LED_AllOn(void);
-int32_t  BSP_LED_AllOff(void);
 int32_t  BSP_LED_GetState(Led_TypeDef Led);
 int32_t  BSP_PB_Init(Button_TypeDef Button, ButtonMode_TypeDef ButtonMode);
 int32_t  BSP_PB_DeInit(Button_TypeDef Button);
 int32_t  BSP_PB_GetState(Button_TypeDef Button);
 void     BSP_PB_Callback(Button_TypeDef Button);
 void     BSP_PB_IRQHandler (Button_TypeDef Button);
-FinishGood_TypeDef BSP_CheckFinishGood(void);
-
 #if (USE_BSP_COM_FEATURE > 0)
 int32_t  BSP_COM_Init(COM_TypeDef COM);
 int32_t  BSP_COM_DeInit(COM_TypeDef COM);
@@ -331,7 +346,6 @@ int32_t  BSP_COM_SelectLogPort(COM_TypeDef COM);
 int32_t BSP_COM_RegisterDefaultMspCallbacks(COM_TypeDef COM);
 int32_t BSP_COM_RegisterMspCallbacks(COM_TypeDef COM , BSP_COM_Cb_t *Callback);
 #endif /* USE_HAL_UART_REGISTER_CALLBACKS */
-
 
 /**
  * @}

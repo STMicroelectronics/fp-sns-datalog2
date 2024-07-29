@@ -50,6 +50,7 @@ class ComponentWidget(QWidget):
         self.is_docked = True
         self.is_packed = True
 
+        self.original_idx = 0 
         self.c_id = c_id
         self.comp_name = comp_name
         self.comp_display_name = comp_display_name
@@ -63,9 +64,11 @@ class ComponentWidget(QWidget):
         comp_config_widget = loader.load(os.path.join(os.path.dirname(st_dtdl_gui.__file__),"UI","component_config_widget.ui"), parent)
         self.frame_component_config = comp_config_widget.frame_component_config
         self.title_frame = comp_config_widget.frame_component_config.findChild(QFrame,"frame_title")
-        self.title_label = self.title_frame.findChild(QLabel,"label_title")
+        self.title_label = self.title_frame.findChild(QPushButton,"label_title")
         self.title_label.setText(comp_name.upper())
         self.title_label.setText(self.comp_display_name)
+        self.title_label.clicked.connect(self.clicked_show_button)
+        self.title_label.setCursor(Qt.PointingHandCursor)
         self.annotation_label = self.title_frame.findChild(QLabel,"label_annotation")
         self.annotation_label.setVisible(False)
         self.pushButton_show = self.title_frame.findChild(QPushButton, "pushButton_show")
@@ -101,25 +104,26 @@ class ComponentWidget(QWidget):
             
             if cont_type == 'PROPERTY':
                 
-                widget = PropertyWidget(comp_name, comp_sem_type, p)
-                
-                enum_values = None
-                if isinstance(p.schema, ContentSchema):
-                    schema_type = p.schema.type.value.lower()
-                    if p.schema.type.value == "Enum":
-                        enum_values = p.schema.enum_values
-                else:
-                    schema_type = p.schema
+                if p.name != "st_ble_stream":
+                    widget = PropertyWidget(comp_name, comp_sem_type, p)
+                    
+                    enum_values = None
+                    if isinstance(p.schema, ContentSchema):
+                        schema_type = p.schema.type.value.lower()
+                        if p.schema.type.value == "Enum":
+                            enum_values = p.schema.enum_values
+                    else:
+                        schema_type = p.schema
 
-                self.assign_callbacks(controller, widget, schema_type, p.schema.value_schema if schema_type == TypeEnum.ENUM.value else None, enum_values)
-                
-                if (comp_sem_type == ComponentType.SENSOR or comp_sem_type == ComponentType.ALGORITHM or comp_sem_type == ComponentType.ACTUATOR) and p.name == "enable":
-                    self.radioButton_enable.setVisible(True)
-                    self.radioButton_enable.toggled.connect(partial(self.sensor_component_enabled, widget))
-                
-                component_props_layout.addWidget(widget, i,0)
-                #add widget to the Property widget dictionary
-                self.property_widgets[p.name] = widget
+                    self.assign_callbacks(controller, widget, schema_type, p.schema.value_schema if schema_type == TypeEnum.ENUM.value else None, enum_values)
+                    
+                    if (comp_sem_type == ComponentType.SENSOR or comp_sem_type == ComponentType.ALGORITHM or comp_sem_type == ComponentType.ACTUATOR) and p.name == "enable":
+                        self.radioButton_enable.setVisible(True)
+                        self.radioButton_enable.toggled.connect(partial(self.sensor_component_enabled, widget))
+                    
+                    component_props_layout.addWidget(widget, i,0)
+                    #add widget to the Property widget dictionary
+                    self.property_widgets[p.name] = widget
             
             elif cont_type == 'COMMAND':
                 req_fields = []
@@ -310,8 +314,23 @@ class ComponentWidget(QWidget):
     @Slot(int, str, dict)
     def s_component_updated(self, comp_name: str, comp_status: dict):
         if comp_name == self.comp_name:
-            log.debug("Component:", comp_name)
+            log.debug(f"Component: {comp_name}")
             if comp_status is not None:
+                comp_type = comp_status.get("c_type")
+                if comp_type is not None:
+                    if comp_type == ComponentType.SENSOR.value or comp_type == ComponentType.ALGORITHM.value or comp_type == ComponentType.ACTUATOR.value:            
+                        enable = comp_status.get("enable")
+                        if enable is not None:                        
+                            if enable == True:
+                                self.controller.enabled_stream_comp_set.add(comp_name)
+                            else:
+                                self.controller.enabled_stream_comp_set.discard(comp_name)
+                            
+                            if len(self.controller.enabled_stream_comp_set) == 0:
+                                self.controller.disable_start_log_button()
+                            else:
+                                self.controller.enable_start_log_button()
+                
                 for cont_name, cont_value in comp_status.items():
                     cont_dtdl = next((c for c in self.comp_contents if c.name == cont_name), None)
                     if cont_dtdl is not None:
@@ -329,9 +348,9 @@ class ComponentWidget(QWidget):
                             #     for cont_name, cont_value in comp_status[cont_name].items():
                             #         self.s_component_updated()
                     if type(cont_value) is dict:
-                        log.debug(" - Content:", cont_name)
+                        log.debug(f" - Content: {cont_name}")
                         for key in cont_value:
-                            log.debug('  -- ' + key + ':', cont_value[key])
+                            log.debug(f"  -- {key}: {cont_value[key]}")
                             self.update_property_widget(comp_name, self.comp_sem_type, cont_name, key, cont_value[key])
                     elif type(cont_value) is list:
                         log.warning("Property type not supported. (comp: {}, cont:{}) status not updated".format(comp_name, cont_name))
@@ -524,6 +543,7 @@ class ComponentWidget(QWidget):
         self.is_docked = True
 
     def pop_out_widget(self):
+        self.original_idx = self.parent.layout().indexOf(self)
         self.setWindowFlags(Qt.Dialog | Qt.WindowMaximizeButtonHint | Qt.WindowMinimizeButtonHint)
         center = QScreen.availableGeometry(QApplication.primaryScreen()).center()
         geo = self.frameGeometry()
@@ -535,7 +555,7 @@ class ComponentWidget(QWidget):
 
     def pop_in_widget(self):
         self.setWindowFlags(Qt.Widget)
-        self.parent.layout().insertWidget(self.c_id, self)
+        self.parent.layout().insertWidget(self.original_idx, self)
 
     def unpack_contents_widget(self):
         self.contents_widget.setVisible(True)

@@ -153,18 +153,36 @@ QRadioButton::indicator:checked:hover {
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_title">
+          <widget class="QPushButton" name="label_title">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>10</pointsize>
              <bold>true</bold>
             </font>
            </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
+	text-align: left
+}
+QPushButton:hover {
+	font-size: 11pt;
+	font-weight: bold;
+}</string>
+           </property>
            <property name="text">
             <string>Dummy_Component</string>
-           </property>
-           <property name="textInteractionFlags">
-            <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
            </property>
           </widget>
          </item>

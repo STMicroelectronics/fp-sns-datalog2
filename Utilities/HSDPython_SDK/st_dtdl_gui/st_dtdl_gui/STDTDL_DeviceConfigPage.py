@@ -21,6 +21,7 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Slot, Qt
 from st_dtdl_gui.Utils.DataClass import ActuatorPlotParams, AlgorithmPlotParams, SensorPlotParams
 from st_dtdl_gui.Widgets.ComponentWidget import ComponentWidget
+from st_dtdl_gui.Widgets.ToggleButton import ToggleButton
 from st_dtdl_gui.STDTDL_Controller import ComponentType
 
 import st_dtdl_gui.UI.images #NOTE don't delete this! it is used from resource_filename (@row 35)
@@ -28,6 +29,7 @@ import st_dtdl_gui.UI.images #NOTE don't delete this! it is used from resource_f
 from pkg_resources import resource_filename
 
 import st_hsdatalog.HSD_utils.logger as logger
+from st_pnpl.PnPLCmd import PnPLCMDManager
 log = logger.get_logger(__name__)
 
 class STDTDL_DeviceConfigPage():
@@ -61,6 +63,13 @@ class STDTDL_DeviceConfigPage():
         self.scrollArea_device_config = self.main_layout.findChild(QScrollArea, "scrollArea_device_config")
         self.widget_special_componenents = self.main_layout.findChild(QWidget,"widget_special_components")
         self.device_config_widget = self.main_layout.findChild(QWidget,"widget_device_config")
+        self.select_all_button = ToggleButton()
+        self.select_all_button.toggle()
+        self.select_all_frame = self.device_config_widget.findChild(QFrame,"select_all_frame")
+        self.select_all_frame.layout().addWidget(self.select_all_button)
+        self.select_all_button.toggled.connect(self.select_all_button_toggled)
+        self.select_all_label = self.select_all_frame.findChild(QFrame,"select_all_label")
+        self.select_all_label.setText("Unselect all")
         self.logging_message = QLabel(self.controller.get_log_msg())
         self.logging_message.setContentsMargins(12,6,12,6)
         self.logging_message.hide()
@@ -71,6 +80,7 @@ class STDTDL_DeviceConfigPage():
         self.error_message.hide()
         self.device_config_widget.layout().addWidget(self.error_message)
         self.plots_widget = self.main_layout.findChild(QWidget,"widget_plots")
+        self.controller.set_plots_layout(self.plots_widget.layout())
 
         self.comp_id = 0
         
@@ -84,6 +94,22 @@ class STDTDL_DeviceConfigPage():
             return len(self.controller.get_device_status()["devices"][self.controller.device_id]["components"])
         return 0
     
+    @Slot()
+    def select_all_button_toggled(self, status):
+        if status:
+            self.select_all_label.setText("Unselect all")
+        else:
+            self.select_all_label.setText("Select all")
+        cstatus_dict = self.controller.components_status
+        for c in cstatus_dict:
+            c_type = cstatus_dict[c].get("c_type")
+            if c_type == ComponentType.SENSOR.value or \
+                c_type == ComponentType.ALGORITHM.value or \
+                c_type == ComponentType.ACTUATOR.value:
+                    json_string = PnPLCMDManager.create_set_property_cmd(c, "enable", status)
+                    self.controller.send_command(json_string)
+                    self.controller.update_component_status(c, ComponentType(c_type))
+
     @Slot(int)
     def s_update_comp_config_width(self, width):
         self.scrollArea_device_config.setMinimumWidth(width+6)

@@ -58,9 +58,13 @@ class MissingFileForSensorError(HSDError):
     def __init__(self, file_path, sensor_name):
         super().__init__("{} --x {}".format(file_path, sensor_name))
 
+class MissingTagsException(HSDError):
+    def __init__(self, msg="No Tags found in your acquisition"):
+        super().__init__(msg)
+
 class MissingISPUOutputDescriptorException(HSDError):
     def __init__(self, ispu_sensor_name):
-        super().__init__("Missing ISPU output description file for {} sensor".format(ispu_sensor_name))
+        super().__init__(f"Missing ISPU output description file for {ispu_sensor_name} sensor")
 
 class DataExtractionError(HSDError):
     def __init__(self, sensor_name, sensor_type= None):
@@ -68,6 +72,10 @@ class DataExtractionError(HSDError):
             super().__init__("{}_{}".format(sensor_name,sensor_type))
         else:
             super().__init__("{}".format(sensor_name))
+
+class DataCorruptedException(HSDError):
+    def __init__(self, dat_file_path):
+         super().__init__(f"Error extracting data from {dat_file_path} file. Missing packets revealed, data corrupted.")
 
 class NoDataAtIndexError(HSDError):
     def __init__(self, index, file_path, size):

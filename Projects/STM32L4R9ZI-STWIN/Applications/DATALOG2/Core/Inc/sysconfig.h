@@ -31,8 +31,8 @@
 // *********************
 
 #define BOARD_ID           0x09
-#define BLE_FW_ID_DATALOG2 0x07
-#define USB_FW_ID_DATALOG2 0x08
+#define BLE_FW_ID_DATALOG2 0x0E
+#define USB_FW_ID_DATALOG2 0x09
 
 // Other hardware configuration
 // ****************************
@@ -68,7 +68,7 @@
 #endif
 
 // file filex_dctrl_class.c
-#define FILEX_CFG_STACK_DEPTH                     (TX_MINIMUM_STACK*12)
+#define FILEX_CFG_STACK_DEPTH                     (TX_MINIMUM_STACK*13)
 #define FILEX_SEND_CFG_PRIORITY                   (10)
 #define FILEX_CFG_PREEMPTION_THRESHOLD            FILEX_SEND_CFG_PRIORITY
 #ifdef ENABLE_THREADX_DBG_PIN

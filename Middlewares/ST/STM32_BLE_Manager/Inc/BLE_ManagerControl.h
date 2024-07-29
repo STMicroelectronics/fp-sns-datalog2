@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_ManagerControl.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Control Compilation defines
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -33,6 +33,18 @@ extern "C" {
 #error "Valid 0<BLE_DEBUG_LEVEL <3"
 #endif /* Check the define value) */
 #endif /* BLE_DEBUG_LEVEL */
+
+#ifndef BLE_FREE_FUNCTION
+#error "BLE_FREE_FUNCTION Not Defined"
+#endif /* BLE_FREE_FUNCTION */
+
+#ifndef BLE_MALLOC_FUNCTION
+#error "BLE_MALLOC_FUNCTION Not Defined"
+#endif /* BLE_MALLOC_FUNCTION */
+
+#ifndef BLE_MEM_CPY
+#error "BLE_MEM_CPY Not Defined"
+#endif /* BLE_MEM_CPY */
 
 #if ((!defined BLUE_CORE) || ((BLUE_CORE < 0x00) || (BLUE_CORE > 0x03)))
 #error "It's necessary to set the of the BlueNRG type: BLUENRG_1_2/BLUENRG_MS/BLUENRG_LP/BLUE_WB"

@@ -749,6 +749,36 @@ QPushButton:disabled {
                    </widget>
                   </item>
                   <item>
+                   <widget class="QCheckBox" name="save_files_checkbox">
+                    <property name="styleSheet">
+                     <string notr="true">/* CHECKBOX */
+QCheckBox::indicator {
+    border: 3px solid rgb(27, 29, 35);
+	width: 15px;
+	height: 15px;
+	border-radius: 10px;
+    background: rgb(44, 49, 60);
+}
+QCheckBox::indicator:hover {
+    border: 3px solid rgb(58, 66, 81);
+}
+QCheckBox::indicator:checked {
+    background: rgb(32, 178, 170);
+	border: 3px solid rgb(27, 29, 35);
+}
+QCheckBox::indicator:checked:hover {
+    border: 3px solid rgb(58, 66, 81);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Save files </string>
+                    </property>
+                    <property name="checked">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
                    <widget class="QLabel" name="config_errors_label">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">

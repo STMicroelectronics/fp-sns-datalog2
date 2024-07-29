@@ -37,11 +37,6 @@ extern "C" {
 #include "ICommandParse_vtbl.h"
 #include "PnPLCompManager.h"
 
-#include "ILog_Controller.h"
-#include "ILog_Controller_vtbl.h"
-#include "IIsm330dhcx_Mlc.h"
-#include "IIsm330dhcx_Mlc_vtbl.h"
-
 #include "App_model.h"
 
 #include "ISM330DHCXTask.h"
@@ -104,16 +99,6 @@ struct _DatalogAppTask
 //TODO could be more useful to have a CommandParse Class? (ICommandParse + PnPLCommand_t)
   PnPLCommand_t outPnPLCommand;
 
-  /**
-    * PnPL interface for Log Control
-    */
-  ILog_Controller_t pnplLogCtrl;
-
-  /**
-    * PnPL interface for MLC
-    */
-  IIsm330dhcx_Mlc_t pnplMLCCtrl;
-
   /** SensorLL interface for MLC
    */
   ISensorLL_t *mlc_sensor_ll;
@@ -123,6 +108,8 @@ struct _DatalogAppTask
   SensorContext_t sensorContext[SM_MAX_SENSORS];
 
   uint32_t mode;  /* logging interface */
+
+  filex_threshold_config_t filex_threshold_config;
 
 };
 
@@ -142,13 +129,23 @@ IEventListener *DatalogAppTask_GetEventListenerIF(DatalogAppTask *_this);
 
 ICommandParse_t *DatalogAppTask_GetICommandParseIF(DatalogAppTask *_this);
 
-ILog_Controller_t *DatalogAppTask_GetILogControllerIF(DatalogAppTask *_this);
+uint8_t DatalogAppTask_start_vtbl(int32_t interface);
+uint8_t DatalogAppTask_stop_vtbl(void);
+uint8_t DatalogAppTask_save_config_vtbl(void);
+uint8_t DatalogAppTask_set_time_vtbl(const char *datetime);
+uint8_t DatalogAppTask_switch_bank_vtbl(void);
+uint8_t DatalogAppTask_set_dfu_mode(void);
+uint8_t DatalogAppTask_enable_all(bool);
 
-IIsm330dhcx_Mlc_t *DatalogAppTask_GetIMLCControllerIF(DatalogAppTask *_this, AManagedTask *task_obj);
+void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
+
+uint8_t DatalogAppTask_SetMLCIF(AManagedTask *task_obj);
+uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 
 sys_error_code_t DatalogAppTask_msg(ULONG msg);
 
 uint8_t DatalogAppTask_load_ucf(const char *ucf_data, uint32_t ucf_size, const char *output_data, int32_t output_size);
+
 // Inline functions definition
 // ***************************
 

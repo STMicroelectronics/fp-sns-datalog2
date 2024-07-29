@@ -28,7 +28,7 @@
 extern "C" {
 #endif
 
-#define SYS_DBG_LEVEL                      SYS_DBG_LEVEL_VERBOSE /*!< set the level of the system log: all log messages with minor level are discharged. */
+#define SYS_DBG_LEVEL                      SYS_DBG_LEVEL_LLA /*!< set the level of the system log: all log messages with minor level are discharged. */
 
 /* Example */
 /*#define SYS_DBG_MODULE1     SYS_DBG_ON|GTS_DBG_HALT  */
@@ -41,6 +41,7 @@ extern "C" {
 #define SYS_DBG_APMH                       SYS_DBG_ON                 ///< Application Power Mode Helper debug control byte
 #define SYS_DBG_SPIBUS                     SYS_DBG_ON                 ///< SPIBus task debug control byte
 #define SYS_DBG_I2CBUS                     SYS_DBG_ON                 ///< I2CBus task debug control byte
+#define SYS_DBG_ISM330BX                   SYS_DBG_ON                 ///< ISM330BX sensor task debug control byte
 #define SYS_DBG_ISM330DHCX                 SYS_DBG_ON                 ///< ISM330DHCX sensor task debug control byte
 #define SYS_DBG_ISM330IS                   SYS_DBG_ON                 ///< ISM330IS sensor task debug control byte
 #define SYS_DBG_IIS3DWB                    SYS_DBG_ON                 ///< IIS3DWB sensor task debug control byte
@@ -59,6 +60,7 @@ extern "C" {
 #define SYS_DBG_SYSTS                      SYS_DBG_ON                 ///< SysTimestamp debug control byte
 #define SYS_DBG_BCP                        SYS_DBG_ON                 ///< Battery Charger Protocol debug control byte
 
+#define SYS_DBG_TSC1641                    SYS_DBG_ON                 ///< TSC1641 sensor task debug control byte
 
 #include "mx.h"
 /* ODeV - hardware configuration for the debug services provided by the framework */

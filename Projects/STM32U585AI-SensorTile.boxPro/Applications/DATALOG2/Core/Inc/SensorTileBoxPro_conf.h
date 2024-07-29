@@ -26,6 +26,8 @@ extern "C" {
 #endif
 /* Includes ------------------------------------------------------------------*/
 #include "stm32u5xx_hal.h"
+#include "SensorTileBoxPro_bus.h"
+#include "SensorTileBoxPro_errno.h"
 
 /** @addtogroup BSP
   * @{
@@ -69,7 +71,17 @@ extern "C" {
 //For using LSM6DSV16X and LIS2DU12 with I2C
 #define ALL_SENSORS_I2C
 
-#include "SensorTileBoxPro_bus.h"
+/**  Definition for SD DETECT INTERRUPT PIN  **/
+extern EXTI_HandleTypeDef hexti5;
+#define H_EXTI_5                                hexti5
+#define H_EXTI_SD_DETECT                        hexti5
+#define BSP_SD_DETECT_PIN                       GPIO_PIN_5
+#define BSP_SD_DETECT_GPIO_PORT                 GPIOC
+#define BSP_SD_DETECT_GPIO_CLK_ENABLE()         __HAL_RCC_GPIOC_CLK_ENABLE()
+#define BSP_SD_DETECT_GPIO_CLK_DISABLE()        __HAL_RCC_GPIOC_CLK_DISABLE()
+#define BSP_SD_DETECT_EXTI_LINE                 EXTI_LINE_5
+#define BSP_SD_DETECT_EXTI_IRQN                 EXTI5_IRQn
+#define BSP_SD_DETECT_IRQHANDLER                EXTI5_IRQHandler
 
 
 /**

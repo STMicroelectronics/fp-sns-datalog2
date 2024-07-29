@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_Manager.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add bluetooth services using vendor specific profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -52,19 +52,6 @@
                                                               0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
 /* Private Types ----------------------------------------------------------------*/
-typedef enum
-{
-  BLE_COMM_TP_START_PACKET = 0x00,
-  BLE_COMM_TP_START_END_PACKET = 0x20,
-  BLE_COMM_TP_MIDDLE_PACKET = 0x40,
-  BLE_COMM_TP_END_PACKET = 0x80
-} BLE_COMM_TP_Packet_Typedef;
-
-typedef enum
-{
-  BLE_COMM_TP_WAIT_START = 0,
-  BLE_COMM_TP_WAIT_END = 1
-} BLE_COMM_TP_Status_Typedef;
 
 /* Typedef for Standard Command types */
 typedef enum
@@ -242,6 +229,9 @@ static uint8_t *hs_command_buffer = NULL;
 static BleCharTypeDef *BleCharsArray[BLE_MANAGER_MAX_ALLOCABLE_CHARS];
 static uint8_t UsedBleChars;
 static uint8_t UsedStandardBleChars;
+
+static uint32_t TotLenBLEParse = 0;
+static BLE_COMM_TP_Status_Typedef StatusBLEParse = BLE_COMM_TP_WAIT_START;
 
 #if (BLUE_CORE == BLUENRG_MS)
 /* ***************** BlueNRG-MS Stack functions prototype ***********************/
@@ -2296,7 +2286,7 @@ tBleStatus Config_Update(uint32_t Feature, uint8_t Command, uint8_t data)
 {
   uint8_t buff[2 + 4 + 1 + 1];
 
-  STORE_LE_16(buff, (HAL_GetTick() >> 3));
+  STORE_LE_16(buff, (HAL_GetTick() / 10));
   STORE_BE_32(buff + 2, Feature);
   buff[6] = Command;
   buff[7] = data;
@@ -2320,7 +2310,7 @@ tBleStatus Config_Update_32(uint32_t Feature, uint8_t Command, uint32_t data)
 {
   uint8_t buff[2 + 4 + 1 + 4];
 
-  STORE_LE_16(buff, (HAL_GetTick() >> 3));
+  STORE_LE_16(buff, (HAL_GetTick() / 10));
   STORE_BE_32(buff + 2, Feature);
   buff[6] = Command;
   buff[7]  = (uint8_t)((data) & 0xFFU);
@@ -2749,7 +2739,7 @@ tBleStatus InitBleManager(void)
 {
   tBleStatus ret = BLE_STATUS_SUCCESS;
 
-  if (BLE_StackValue.BoardId == 0)
+  if (BLE_StackValue.BoardId == 0U)
   {
     BLE_MANAGER_PRINTF("Error BLE_StackValue.BoardId Not Defined\r\n");
     return BLE_ERROR_UNSPECIFIED;
@@ -3689,21 +3679,19 @@ static tBleStatus InitBleManagerServices(void)
   */
 uint32_t BLE_Command_TP_Parse(uint8_t **buffer_out, uint8_t *buffer_in, uint32_t len)
 {
-  static uint32_t tot_len = 0;
   uint32_t buff_out_len = 0;
-  static BLE_COMM_TP_Status_Typedef status = BLE_COMM_TP_WAIT_START;
   BLE_COMM_TP_Packet_Typedef packet_type;
 
   packet_type = (BLE_COMM_TP_Packet_Typedef) buffer_in[0];
 
-  switch (status)
+  switch (StatusBLEParse)
   {
     case BLE_COMM_TP_WAIT_START:
       if (packet_type == BLE_COMM_TP_START_PACKET)
       {
         /*First part of an BLE Command packet*/
         /*packet is enqueued*/
-        uint16_t message_length = buffer_in[1];
+        uint32_t message_length = buffer_in[1];
         message_length = message_length << 8;
         message_length |= buffer_in[2];
 
@@ -3719,40 +3707,75 @@ uint32_t BLE_Command_TP_Parse(uint8_t **buffer_out, uint8_t *buffer_in, uint32_t
 
         if (*buffer_out == NULL)
         {
-          BLE_MANAGER_PRINTF("Error: Mem alloc error [%d]: %d@%s\r\n", message_length, __LINE__, __FILE__);
+          BLE_MANAGER_PRINTF("Error: Mem alloc error [%ld]: %d@%s\r\n", message_length, __LINE__, __FILE__);
         }
 
-        memcpy(*buffer_out + tot_len, (uint8_t *) &buffer_in[3], (len - 3U));
+        memcpy(*buffer_out + TotLenBLEParse, (uint8_t *) &buffer_in[3], (len - 3U));
 
 
-        tot_len += len - 3U;
-        status = BLE_COMM_TP_WAIT_END;
+        TotLenBLEParse += len - 3U;
+        StatusBLEParse = BLE_COMM_TP_WAIT_END;
+        buff_out_len = 0;
+      }
+      else if (packet_type == BLE_COMM_TP_START_LONG_PACKET)
+      {
+        /*First part of an BLE Command packet*/
+        /*packet is enqueued*/
+        uint32_t message_length = buffer_in[1];
+        message_length = message_length << 8;
+        message_length |= buffer_in[2];
+        message_length = message_length << 8;
+        message_length |= buffer_in[3];
+        message_length = message_length << 8;
+        message_length |= buffer_in[4];
+
+
+        /*
+                To check
+                if (*buffer_out != NULL)
+                {
+                  BLE_FREE_FUNCTION(*buffer_out);
+                }
+        */
+
+        *buffer_out = (uint8_t *)BLE_MALLOC_FUNCTION((message_length) * sizeof(uint8_t));
+
+        if (*buffer_out == NULL)
+        {
+          BLE_MANAGER_PRINTF("Error: Mem alloc error [%ld]: %d@%s\r\n", message_length, __LINE__, __FILE__);
+        }
+
+        memcpy(*buffer_out + TotLenBLEParse, (uint8_t *) &buffer_in[5], (len - 5U));
+
+
+        TotLenBLEParse += len - 5U;
+        StatusBLEParse = BLE_COMM_TP_WAIT_END;
         buff_out_len = 0;
       }
       else if (packet_type == BLE_COMM_TP_START_END_PACKET)
       {
         /*Final part of an BLE Command packet*/
         /*packet is enqueued*/
-        uint16_t message_length = buffer_in[1];
+        uint32_t message_length = buffer_in[1];
         message_length = message_length << 8;
         message_length |= buffer_in[2];
 
         *buffer_out = (uint8_t *)BLE_MALLOC_FUNCTION((message_length) * sizeof(uint8_t));
         if (*buffer_out == NULL)
         {
-          BLE_MANAGER_PRINTF("Error: Mem alloc error [%d]: %d@%s\r\n", message_length, __LINE__, __FILE__);
+          BLE_MANAGER_PRINTF("Error: Mem alloc error [%ld]: %d@%s\r\n", message_length, __LINE__, __FILE__);
         }
 
-        memcpy(*buffer_out + tot_len, (uint8_t *) &buffer_in[3], (len - 3U));
+        memcpy(*buffer_out + TotLenBLEParse, (uint8_t *) &buffer_in[3], (len - 3U));
 
 
-        tot_len += len - 3U;
+        TotLenBLEParse += len - 3U;
         /*number of bytes of the output packet*/
-        buff_out_len = tot_len;
+        buff_out_len = TotLenBLEParse;
         /*total length set to zero*/
-        tot_len = 0;
-        /*reset status*/
-        status = BLE_COMM_TP_WAIT_START;
+        TotLenBLEParse = 0;
+        /*reset StatusBLEParse*/
+        StatusBLEParse = BLE_COMM_TP_WAIT_START;
       }
       else
       {
@@ -3766,9 +3789,9 @@ uint32_t BLE_Command_TP_Parse(uint8_t **buffer_out, uint8_t *buffer_in, uint32_t
         /*Central part of an BLE Command packet*/
         /*packet is enqueued*/
 
-        memcpy(*buffer_out + tot_len, (uint8_t *) &buffer_in[1], (len - 1U));
+        memcpy(*buffer_out + TotLenBLEParse, (uint8_t *) &buffer_in[1], (len - 1U));
 
-        tot_len += len - 1U;
+        TotLenBLEParse += len - 1U;
 
         buff_out_len = 0;
       }
@@ -3776,22 +3799,22 @@ uint32_t BLE_Command_TP_Parse(uint8_t **buffer_out, uint8_t *buffer_in, uint32_t
       {
         /*Final part of an BLE Command packet*/
         /*packet is enqueued*/
-        memcpy(*buffer_out + tot_len, (uint8_t *) &buffer_in[1], (len - 1U));
+        memcpy(*buffer_out + TotLenBLEParse, (uint8_t *) &buffer_in[1], (len - 1U));
 
-        tot_len += len - 1U;
+        TotLenBLEParse += len - 1U;
         /*number of bytes of the output packet*/
-        buff_out_len = tot_len;
+        buff_out_len = TotLenBLEParse;
         /*total length set to zero*/
-        tot_len = 0;
-        /*reset status*/
-        status = BLE_COMM_TP_WAIT_START;
+        TotLenBLEParse = 0;
+        /*reset StatusBLEParse*/
+        StatusBLEParse = BLE_COMM_TP_WAIT_START;
       }
       else
       {
-        /*reset status*/
-        status = BLE_COMM_TP_WAIT_START;
+        /*reset StatusBLEParse*/
+        StatusBLEParse = BLE_COMM_TP_WAIT_START;
         /*total length set to zero*/
-        tot_len = 0;
+        TotLenBLEParse = 0;
 
         buff_out_len = 0; /* error */
       }
@@ -3808,13 +3831,13 @@ uint32_t BLE_Command_TP_Parse(uint8_t **buffer_out, uint8_t *buffer_in, uint32_t
   * @param  BytePacketSize: Packet Size in Bytes
   * @retval Buffer out length.
   */
-uint32_t BLE_Command_TP_Encapsulate(uint8_t *buffer_out, uint8_t *buffer_in, uint32_t len, int32_t BytePacketSize)
+uint32_t BLE_Command_TP_Encapsulate(uint8_t *buffer_out, uint8_t *buffer_in, uint32_t len, uint32_t BytePacketSize)
 {
   uint32_t size = 0;
   uint32_t tot_size = 0;
   uint32_t counter = 0;
   BLE_COMM_TP_Packet_Typedef packet_type = BLE_COMM_TP_START_PACKET;
-  int32_t BytePacketSizeMinus1 = BytePacketSize - 1;
+  uint32_t BytePacketSizeMinus1 = BytePacketSize - 1U;
 
   /* One byte header is added to each BLE packet */
   while (counter < len)
@@ -3835,29 +3858,31 @@ uint32_t BLE_Command_TP_Encapsulate(uint8_t *buffer_out, uint8_t *buffer_in, uin
 
     switch (packet_type)
     {
-      case BLE_COMM_TP_START_PACKET:
-        /*First part of an BLE Command packet*/
-        buffer_out[tot_size] = ((uint8_t)(BLE_COMM_TP_START_PACKET));
-        tot_size++;
-        packet_type = BLE_COMM_TP_MIDDLE_PACKET;
-        break;
-      case BLE_COMM_TP_START_END_PACKET:
-        /*First and last part of an BLE Command packet*/
-        buffer_out[tot_size] = ((uint8_t)(BLE_COMM_TP_START_END_PACKET));
-        tot_size++;
-        packet_type = BLE_COMM_TP_START_PACKET;
-        break;
-      case BLE_COMM_TP_MIDDLE_PACKET:
-        /*Central part of an BLE Command packet*/
-        buffer_out[tot_size] = ((uint8_t)(BLE_COMM_TP_MIDDLE_PACKET));
-        tot_size++;
-        break;
-      case BLE_COMM_TP_END_PACKET:
-        /*Last part of an BLE Command packet*/
-        buffer_out[tot_size] = ((uint8_t)(BLE_COMM_TP_END_PACKET));
-        tot_size++;
-        packet_type = BLE_COMM_TP_START_PACKET;
-        break;
+    case BLE_COMM_TP_START_PACKET:
+      /*First part of an BLE Command packet*/
+      buffer_out[tot_size] = ((uint8_t)(BLE_COMM_TP_START_PACKET));
+      tot_size++;
+      packet_type = BLE_COMM_TP_MIDDLE_PACKET;
+      break;
+    case BLE_COMM_TP_START_END_PACKET:
+      /*First and last part of an BLE Command packet*/
+      buffer_out[tot_size] = ((uint8_t)(BLE_COMM_TP_START_END_PACKET));
+      tot_size++;
+      packet_type = BLE_COMM_TP_START_PACKET;
+      break;
+    case BLE_COMM_TP_MIDDLE_PACKET:
+      /*Central part of an BLE Command packet*/
+      buffer_out[tot_size] = ((uint8_t)(BLE_COMM_TP_MIDDLE_PACKET));
+      tot_size++;
+      break;
+    case BLE_COMM_TP_END_PACKET:
+      /*Last part of an BLE Command packet*/
+      buffer_out[tot_size] = ((uint8_t)(BLE_COMM_TP_END_PACKET));
+      tot_size++;
+      packet_type = BLE_COMM_TP_START_PACKET;
+      break;
+    case BLE_COMM_TP_START_LONG_PACKET:
+      break;
     }
 
     /*Input data is incapsulated*/
@@ -3958,6 +3983,10 @@ void hci_disconnection_complete_event(uint8_t Status,
 {
   /* No Device Connected */
   connection_handle = 0;
+  
+  /* Reset the BLE Parse State */
+  TotLenBLEParse = 0;
+  StatusBLEParse = BLE_COMM_TP_WAIT_START;
 
   BLE_MANAGER_PRINTF("<<<<<<DISCONNECTED\r\n");
 

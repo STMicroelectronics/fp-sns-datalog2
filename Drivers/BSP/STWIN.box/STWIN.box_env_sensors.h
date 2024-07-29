@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "STWIN.box.h"
+#include "STWIN.box_conf.h"
 #include "env_sensor.h"
 
 #ifndef USE_ENV_SENSOR_ILPS22QS_0
@@ -88,6 +88,7 @@ int32_t BSP_ENV_SENSOR_Disable(uint32_t Instance, uint32_t Function);
 int32_t BSP_ENV_SENSOR_GetOutputDataRate(uint32_t Instance, uint32_t Function, float_t *Odr);
 int32_t BSP_ENV_SENSOR_SetOutputDataRate(uint32_t Instance, uint32_t Function, float_t Odr);
 int32_t BSP_ENV_SENSOR_GetValue(uint32_t Instance, uint32_t Function, float_t *Value);
+void BSP_STTS22H_GPIO_Callback(void);
 
 #ifdef __cplusplus
 }

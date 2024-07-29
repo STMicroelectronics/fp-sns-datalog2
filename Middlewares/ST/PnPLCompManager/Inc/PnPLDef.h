@@ -37,7 +37,9 @@ extern "C" {
 #define COMP_KEY_MAX_LENGTH     32
 #endif
 
+#ifndef COM_MAX_PNPL_COMPONENTS
 #define COM_MAX_PNPL_COMPONENTS 20
+#endif
 
 #define PNPL_INT                    (0x0u)
 #define PNPL_FLOAT                  (0x1u)
@@ -50,6 +52,7 @@ extern "C" {
 #define PNPL_BASE_ERROR_CODE                        (uint8_t)(0x1)
 #define PNPL_UNINITIALIZED_COMPONENT_ERROR_CODE     (uint8_t)(PNPL_BASE_ERROR_CODE + (uint8_t)1)
 #define PNPL_NO_COMMANDS_ERROR_CODE                 (uint8_t)(PNPL_BASE_ERROR_CODE + (uint8_t)2)
+#define PNPL_NULL_PTR_ARG_CODE                      (uint8_t)(PNPL_BASE_ERROR_CODE + (uint8_t)3)
 
 /* Sensors categories */
 #define ISENSOR_CLASS_MEMS        0U
@@ -85,6 +88,11 @@ struct _PnPLCommand_t
    * Command string.
    */
   //???
+
+  /**
+   * Command interface id.
+   */
+  uint8_t comm_interface_id;
 
   /**
    * Command response.

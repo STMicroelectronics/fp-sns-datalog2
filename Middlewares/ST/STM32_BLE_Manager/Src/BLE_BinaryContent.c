@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_BinaryContent.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add BinaryContent info services using vendor specific profile.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -39,6 +39,9 @@ static BleCharTypeDef BleCharBinaryContent;
 static uint8_t *ble_command_buffer = NULL;
 
 static uint16_t BinaryContentMaxCharLength = DEFAULT_MAX_BINARY_CONTENT_CHAR_LEN;
+
+static uint32_t TotalLenDecodePacket = 0;
+static BLE_COMM_TP_Status_Typedef StatusDecodingPacket = BLE_COMM_TP_WAIT_START;
 
 /* Private functions ---------------------------------------------------------*/
 static void AttrMod_Request_BinaryContent(void *BleCharPointer, uint16_t attr_handle, uint16_t Offset,
@@ -154,8 +157,11 @@ static void AttrMod_Request_BinaryContent(void *VoidCharPointer, uint16_t attr_h
 
 /**
   * @brief  This event is given when a read request is received by the server from the client.
-  * @param  void *VoidCharPointer
+  * @param  void *BleCharPointer
   * @param  uint16_t handle Handle of the attribute
+  * @param  uint16_t Offset
+  * @param  uint8_t data_length
+  * @param  uint8_t *att_data
   * @retval None
   */
 __weak void Write_Request_BinaryContent(void *BleCharPointer, uint16_t handle, uint16_t Offset, uint8_t data_length,
@@ -165,7 +171,7 @@ __weak void Write_Request_BinaryContent(void *BleCharPointer, uint16_t handle, u
 
   if (CustomWriteRequestBinaryContent != NULL)
   {
-    CommandBufLen = BLE_Command_TP_Parse(&ble_command_buffer, att_data, data_length);
+    CommandBufLen = BLE_BinaryContent_Parse(&ble_command_buffer, att_data, data_length);
 
     if (CommandBufLen > 0U)
     {
@@ -178,5 +184,176 @@ __weak void Write_Request_BinaryContent(void *BleCharPointer, uint16_t handle, u
   else
   {
     BLE_MANAGER_PRINTF("\r\n\nWrite request BinaryContent function not defined\r\n\n");
+  }
+}
+
+/**
+  * @brief  This function is called to parse a Binary Content packet.
+  * @param  buffer_out: pointer to the output buffer.
+  * @param  buffer_in: pointer to the input data.
+  * @param  len: buffer in length
+  * @retval Buffer out length.
+  */
+__weak uint32_t BLE_BinaryContent_Parse(uint8_t **buffer_out, uint8_t *buffer_in, uint32_t len)
+{
+  TotalLenDecodePacket = 0;
+  uint32_t buff_out_len = 0;
+  StatusDecodingPacket = BLE_COMM_TP_WAIT_START;
+  BLE_COMM_TP_Packet_Typedef packet_type;
+
+  packet_type = (BLE_COMM_TP_Packet_Typedef) buffer_in[0];
+
+  switch (StatusDecodingPacket)
+  {
+    case BLE_COMM_TP_WAIT_START:
+      if (packet_type == BLE_COMM_TP_START_PACKET)
+      {
+        /*First part of an BLE Command packet*/
+        /*packet is enqueued*/
+        uint32_t message_length = buffer_in[1];
+        message_length = message_length << 8;
+        message_length |= buffer_in[2];
+
+        /*
+                To check
+                if (*buffer_out != NULL)
+                {
+                  BLE_FREE_FUNCTION(*buffer_out);
+                }
+        */
+
+        *buffer_out = (uint8_t *)BLE_MALLOC_FUNCTION((message_length) * sizeof(uint8_t));
+
+        if (*buffer_out == NULL)
+        {
+          BLE_MANAGER_PRINTF("Error: Mem alloc error [%d]: %d@%s\r\n", message_length, __LINE__, __FILE__);
+        }
+
+        memcpy(*buffer_out + TotalLenDecodePacket, (uint8_t *) &buffer_in[3], (len - 3U));
+
+
+        TotalLenDecodePacket += len - 3U;
+        StatusDecodingPacket = BLE_COMM_TP_WAIT_END;
+        buff_out_len = 0;
+      }
+      else if (packet_type == BLE_COMM_TP_START_LONG_PACKET)
+      {
+        /*First part of an BLE Command packet*/
+        /*packet is enqueued*/
+        uint32_t message_length = buffer_in[1];
+        message_length = message_length << 8;
+        message_length |= buffer_in[2];
+        message_length = message_length << 8;
+        message_length |= buffer_in[3];
+        message_length = message_length << 8;
+        message_length |= buffer_in[4];
+
+
+        /*
+                To check
+                if (*buffer_out != NULL)
+                {
+                  BLE_FREE_FUNCTION(*buffer_out);
+                }
+        */
+
+        *buffer_out = (uint8_t *)BLE_MALLOC_FUNCTION((message_length) * sizeof(uint8_t));
+
+        if (*buffer_out == NULL)
+        {
+          BLE_MANAGER_PRINTF("Error: Mem alloc error [%d]: %d@%s\r\n", message_length, __LINE__, __FILE__);
+        }
+
+        memcpy(*buffer_out + TotalLenDecodePacket, (uint8_t *) &buffer_in[5], (len - 5U));
+
+
+        TotalLenDecodePacket += len - 5U;
+        StatusDecodingPacket = BLE_COMM_TP_WAIT_END;
+        buff_out_len = 0;
+      }
+      else if (packet_type == BLE_COMM_TP_START_END_PACKET)
+      {
+        /*Final part of an BLE Command packet*/
+        /*packet is enqueued*/
+        uint32_t message_length = buffer_in[1];
+        message_length = message_length << 8;
+        message_length |= buffer_in[2];
+
+        *buffer_out = (uint8_t *)BLE_MALLOC_FUNCTION((message_length) * sizeof(uint8_t));
+        if (*buffer_out == NULL)
+        {
+          BLE_MANAGER_PRINTF("Error: Mem alloc error [%d]: %d@%s\r\n", message_length, __LINE__, __FILE__);
+        }
+
+        memcpy(*buffer_out + TotalLenDecodePacket, (uint8_t *) &buffer_in[3], (len - 3U));
+
+
+        TotalLenDecodePacket += len - 3U;
+        /*number of bytes of the output packet*/
+        buff_out_len = TotalLenDecodePacket;
+        /*total length set to zero*/
+        TotalLenDecodePacket = 0;
+        /*reset StatusDecodingPacket*/
+        StatusDecodingPacket = BLE_COMM_TP_WAIT_START;
+      }
+      else
+      {
+        /* Error */
+        buff_out_len = 0;
+      }
+      break;
+    case BLE_COMM_TP_WAIT_END:
+      if (packet_type == BLE_COMM_TP_MIDDLE_PACKET)
+      {
+        /*Central part of an BLE Command packet*/
+        /*packet is enqueued*/
+
+        memcpy(*buffer_out + TotalLenDecodePacket, (uint8_t *) &buffer_in[1], (len - 1U));
+
+        TotalLenDecodePacket += len - 1U;
+
+        buff_out_len = 0;
+      }
+      else if (packet_type == BLE_COMM_TP_END_PACKET)
+      {
+        /*Final part of an BLE Command packet*/
+        /*packet is enqueued*/
+        memcpy(*buffer_out + TotalLenDecodePacket, (uint8_t *) &buffer_in[1], (len - 1U));
+
+        TotalLenDecodePacket += len - 1U;
+        /*number of bytes of the output packet*/
+        buff_out_len = TotalLenDecodePacket;
+        /*total length set to zero*/
+        TotalLenDecodePacket = 0;
+        /*reset StatusDecodingPacket*/
+        StatusDecodingPacket = BLE_COMM_TP_WAIT_START;
+      }
+      else
+      {
+        /*reset StatusDecodingPacket*/
+        StatusDecodingPacket = BLE_COMM_TP_WAIT_START;
+        /*total length set to zero*/
+        TotalLenDecodePacket = 0;
+
+        buff_out_len = 0; /* error */
+      }
+      break;
+  }
+  return buff_out_len;
+}
+
+/**
+  * @brief  BinaryContent Reset Status
+  * @param  None
+  * @retval None
+  */
+void BLE_BinaryContentReset(void)
+{
+  TotalLenDecodePacket = 0;
+  StatusDecodingPacket = BLE_COMM_TP_WAIT_START;
+  
+  if(ble_command_buffer!=NULL) {
+    BLE_FREE_FUNCTION(ble_command_buffer);
+    ble_command_buffer = NULL;
   }
 }

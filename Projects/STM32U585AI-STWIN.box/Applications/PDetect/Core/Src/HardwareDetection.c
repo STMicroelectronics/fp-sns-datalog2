@@ -21,9 +21,11 @@
 
 #include "mx.h"
 #include "i2c.h"
+#include "gpio.h"
 #include "services/systypes.h"
 #include "HardwareDetection.h"
 #include "sths34pf80_reg.h"
+#include "lps22df_reg.h"
 
 #define HW_DETECTION_I2C_TIMEOUT  500U
 
@@ -61,6 +63,11 @@ boolean_t HardwareDetection_Check_Ext_PDETECT(uint8_t *device_address)
   ctx.write_reg = ext_sensor_i2c_write;
   ctx.handle = (void *)&addr;
 
+  MX_GPIO_PF10_Init();
+  MX_GPIO_PF8_Init();
+  MX_GPIO_PB1_Init();
+  HAL_GPIO_WritePin(GPIO3_EX_GPIO_Port, GPIO3_EX_Pin, GPIO_PIN_SET);
+
   MX_I2C3_Init();
 
   HAL_Delay(100);
@@ -72,7 +79,103 @@ boolean_t HardwareDetection_Check_Ext_PDETECT(uint8_t *device_address)
 
   HAL_I2C_DeInit(&hi2c3);
 
+  HAL_GPIO_WritePin(GPIO3_EX_GPIO_Port, GPIO3_EX_Pin, GPIO_PIN_RESET);
   *device_address = addr;
+  return found;
+}
+
+boolean_t HardwareDetection_Check_Ext_PDETECT2(uint8_t *device_address)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  uint8_t addr = STHS34PF80_I2C_ADD;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_i2c_read;
+  ctx.write_reg = ext_sensor_i2c_write;
+  ctx.handle = (void *)&addr;
+
+  MX_GPIO_PF10_Init();
+  MX_GPIO_PF8_Init();
+  MX_GPIO_PB1_Init();
+  HAL_GPIO_WritePin(GPIO2_EX_GPIO_Port, GPIO2_EX_Pin, GPIO_PIN_SET);
+
+  MX_I2C3_Init();
+
+  HAL_Delay(100);
+  sths34pf80_device_id_get(&ctx, (uint8_t *) &whoami_val);
+  if (whoami_val == STHS34PF80_ID)
+  {
+    found = TRUE;
+  }
+
+  HAL_I2C_DeInit(&hi2c3);
+
+  HAL_GPIO_WritePin(GPIO2_EX_GPIO_Port, GPIO2_EX_Pin, GPIO_PIN_RESET);
+  *device_address = addr;
+  return found;
+}
+
+boolean_t HardwareDetection_Check_Ext_PDETECT3(uint8_t *device_address)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  uint8_t addr = STHS34PF80_I2C_ADD;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_i2c_read;
+  ctx.write_reg = ext_sensor_i2c_write;
+  ctx.handle = (void *)&addr;
+
+  MX_GPIO_PF10_Init();
+  MX_GPIO_PF8_Init();
+  MX_GPIO_PB1_Init();
+  HAL_GPIO_WritePin(GPIO1_EX_GPIO_Port, GPIO1_EX_Pin, GPIO_PIN_SET);
+
+  MX_I2C3_Init();
+
+  HAL_Delay(100);
+  sths34pf80_device_id_get(&ctx, (uint8_t *) &whoami_val);
+  if (whoami_val == STHS34PF80_ID)
+  {
+    found = TRUE;
+  }
+
+  HAL_I2C_DeInit(&hi2c3);
+
+  HAL_GPIO_WritePin(GPIO1_EX_GPIO_Port, GPIO1_EX_Pin, GPIO_PIN_RESET);
+  *device_address = addr;
+  return found;
+}
+
+/**
+  * Detect an external SENSIRION board
+  *
+  * @param device_address: return the address of the LPS22DF sensor
+  *        mounted on SENSIRION board, if found. [output]
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_SENSIRION(void)
+{
+  lps22df_id_t whoami_val;
+  boolean_t found = FALSE;
+  uint8_t addr;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_i2c_read;
+  ctx.write_reg = ext_sensor_i2c_write;
+  ctx.handle = (void *)&addr;
+
+  MX_I2C3_Init();
+
+  addr = LPS22DF_I2C_ADD_H;
+  lps22df_id_get(&ctx, &whoami_val);
+
+  if (whoami_val.whoami == LPS22DF_ID)
+  {
+    found = TRUE;
+  }
+  HAL_I2C_DeInit(&hi2c3);
   return found;
 }
 

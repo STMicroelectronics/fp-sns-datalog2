@@ -6,6 +6,7 @@ include st_pnpl/DTDL/dtmi/appconfig/steval_mkboxpro/fpSnsDatalog2*
 include st_pnpl/DTDL/dtmi/appconfig/steval_mkboxpro/FP_SNS_DATALOG2*
 include st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/fpSnsDatalog2*
 include st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2*
+include st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/fpIndDatalogMC*
 include st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_IND_DATALOGMC*
 include st_pnpl/DTDL/dtmi/appconfig/steval_stwinkt1b/fpSnsDatalog2*
 include st_pnpl/DTDL/dtmi/appconfig/steval_stwinkt1b/FP_SNS_DATALOG2*

@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_TiltSensing.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add Tilt Sensing service using vendor specific profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -99,7 +99,7 @@ tBleStatus BLE_TiltSensingUpdate(BLE_ANGLES_output_t TiltSensingMeasure)
   float TempFloat;
   uint32_t *TempBuff = (uint32_t *) & TempFloat;
 
-  STORE_LE_16(buff, (HAL_GetTick() >> 3));
+  STORE_LE_16(buff, (HAL_GetTick() / 10));
   BuffPos = 2;
 
   TempFloat = TiltSensingMeasure.AnglesArray[2];
@@ -218,7 +218,7 @@ static void Read_Request_TiltSensing(void *BleCharPointer,
 
     CustomReadRequestTiltSensing(&TiltSensingMeasure);
 
-    STORE_LE_16(buff, (HAL_GetTick() >> 3));
+    STORE_LE_16(buff, (HAL_GetTick() / 10));
     BuffPos = 2;
 
     TempFloat = TiltSensingMeasure.AnglesArray[2];

@@ -46,13 +46,13 @@
  * @brief STWIN BSP Driver version number v1.0.0
  */
 #define STWIN_BOX_BSP_VERSION_MAIN   (0x01U) /*!< [31:24] main version */
-#define STWIN_BOX_BSP_VERSION_SUB1   (0x00U) /*!< [23:16] sub1 version */
-#define STWIN_BOX_BSP_VERSION_SUB2   (0x02U) /*!< [15:8]  sub2 version */
+#define STWIN_BOX_BSP_VERSION_SUB1   (0x01U) /*!< [23:16] sub1 version */
+#define STWIN_BOX_BSP_VERSION_SUB2   (0x00U) /*!< [15:8]  sub2 version */
 #define STWIN_BOX_BSP_VERSION_RC     (0x00U) /*!< [7:0]  release candidate */
 #define STWIN_BOX_BSP_VERSION         ((STWIN_BOX_BSP_VERSION_MAIN << 24)\
-                                    |(STWIN_BOX_BSP_VERSION_SUB1 << 16)\
+                                      |(STWIN_BOX_BSP_VERSION_SUB1 << 16)\
                                       |(STWIN_BOX_BSP_VERSION_SUB2 << 8 )\
-                                        |(STWIN_BOX_BSP_VERSION_RC))
+                                      |(STWIN_BOX_BSP_VERSION_RC))
 
 /** @defgroup STWIN_BOX_LOW_LEVEL_Exported_Types STWIN_BOX_LOW_LEVEL Exported Types
  * @{
@@ -138,106 +138,21 @@ typedef enum
   
 /* IIS2DLPC */
 #define BSP_IIS2DLPC_CS_GPIO_CLK_ENABLE()       __GPIOH_CLK_ENABLE()  
-#define BSP_IIS2DLPC_CS_PORT                    GPIOH
-#define BSP_IIS2DLPC_CS_PIN                     GPIO_PIN_6
-  
-#define BSP_IIS2DLPC_INT1_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOF_CLK_ENABLE()
-#define BSP_IIS2DLPC_INT1_PORT                  GPIOF
-#define BSP_IIS2DLPC_INT1_PIN                   GPIO_PIN_1
-#define BSP_IIS2DLPC_INT1_EXTI_IRQn             EXTI1_IRQn
-#ifndef BSP_IIS2DLPC_INT1_EXTI_IRQ_PP
-#define BSP_IIS2DLPC_INT1_EXTI_IRQ_PP           7
-#endif
-#ifndef BSP_IIS2DLPC_INT1_EXTI_IRQ_SP
-#define BSP_IIS2DLPC_INT1_EXTI_IRQ_SP           0
-#endif
 #define BSP_IIS2DLPC_INT1_EXTI_IRQHandler       EXTI1_IRQHandler
-
-#define BSP_IIS2DLPC_INT2_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOF_CLK_ENABLE()
-#define BSP_IIS2DLPC_INT2_PORT                  GPIOF
-#define BSP_IIS2DLPC_INT2_PIN                   GPIO_PIN_2
-#define BSP_IIS2DLPC_INT2_EXTI_IRQn             EXTI2_IRQn
-#ifndef BSP_IIS2DLPC_INT2_EXTI_IRQ_PP
-#define BSP_IIS2DLPC_INT2_EXTI_IRQ_PP           7
-#endif
-#ifndef BSP_IIS2DLPC_INT2_EXTI_IRQ_SP
-#define BSP_IIS2DLPC_INT2_EXTI_IRQ_SP           0
-#endif
 #define BSP_IIS2DLPC_INT2_EXTI_IRQHandler       EXTI2_IRQHandler
 
 /* IIS3DWB */
 #define BSP_IIS3DWB_CS_GPIO_CLK_ENABLE()        __GPIOF_CLK_ENABLE()
-#define BSP_IIS3DWB_CS_PORT                     GPIOF
-#define BSP_IIS3DWB_CS_PIN                      GPIO_PIN_12
-
-#define BSP_IIS3DWB_INT1_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOF_CLK_ENABLE()
-#define BSP_IIS3DWB_INT1_PORT                   GPIOF
-#define BSP_IIS3DWB_INT1_PIN                    GPIO_PIN_15
-#define BSP_IIS3DWB_INT1_EXTI_IRQn              EXTI15_IRQn
-#ifndef BSP_IIS3DWB_INT1_EXTI_IRQ_PP
-#define BSP_IIS3DWB_INT1_EXTI_IRQ_PP            7
-#endif
-#ifndef BSP_IIS3DWB_INT1_EXTI_IRQ_SP
-#define BSP_IIS3DWB_INT1_EXTI_IRQ_SP            0
-#endif
 #define BSP_IIS3DWB_INT1_EXTI_IRQHandler        EXTI15_IRQHandler
   
 /* ISM330DHCX */
 #define BSP_ISM330DHCX_CS_GPIO_CLK_ENABLE() 	__GPIOH_CLK_ENABLE()
-#define BSP_ISM330DHCX_CS_PORT                  GPIOH
-#define BSP_ISM330DHCX_CS_PIN                   GPIO_PIN_15
-
-#define BSP_ISM330DHCX_INT1_GPIO_CLK_ENABLE()   __GPIOB_CLK_ENABLE()
-#define BSP_ISM330DHCX_INT1_PORT                GPIOB
-#define BSP_ISM330DHCX_INT1_PIN                 GPIO_PIN_8  
-#define BSP_ISM330DHCX_INT1_EXTI_IRQn           EXTI8_IRQn
-#ifndef BSP_ISM330DHCX_INT1_EXTI_IRQ_PP
-#define BSP_ISM330DHCX_INT1_EXTI_IRQ_PP         7
-#endif
-#ifndef BSP_ISM330DHCX_INT1_EXTI_IRQ_SP
-#define BSP_ISM330DHCX_INT1_EXTI_IRQ_SP         0
-#endif
 #define BSP_ISM330DHCX_INT1_EXTI_IRQHandler     EXTI8_IRQHandler
- 
-#define BSP_ISM330DHCX_INT2_GPIO_CLK_ENABLE()   __GPIOF_CLK_ENABLE()
-#define BSP_ISM330DHCX_INT2_PORT                GPIOF
-#define BSP_ISM330DHCX_INT2_PIN                 GPIO_PIN_4  
-#define BSP_ISM330DHCX_INT2_EXTI_IRQn           EXTI4_IRQn
-#ifndef BSP_ISM330DHCX_INT2_EXTI_IRQ_PP
-#define BSP_ISM330DHCX_INT2_EXTI_IRQ_PP         7
-#endif
-#ifndef BSP_ISM330DHCX_INT2_EXTI_IRQ_SP
-#define BSP_ISM330DHCX_INT2_EXTI_IRQ_SP         0
-#endif
 #define BSP_ISM330DHCX_INT2_EXTI_IRQHandler     EXTI4_IRQHandler
   
 /* IIS2ICLX */
 #define BSP_IIS2ICLX_CS_GPIO_CLK_ENABLE()       __GPIOI_CLK_ENABLE()
-#define BSP_IIS2ICLX_CS_PORT                    GPIOI
-#define BSP_IIS2ICLX_CS_PIN                     GPIO_PIN_7
-
-#define BSP_IIS2ICLX_INT1_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOF_CLK_ENABLE()
-#define BSP_IIS2ICLX_INT1_PORT                  GPIOF
-#define BSP_IIS2ICLX_INT1_PIN                   GPIO_PIN_3
-#define BSP_IIS2ICLX_INT1_EXTI_IRQn             EXTI3_IRQn
-#ifndef BSP_IIS2ICLX_INT1_EXTI_IRQ_PP
-#define BSP_IIS2ICLX_INT1_EXTI_IRQ_PP           7
-#endif
-#ifndef BSP_IIS2ICLX_INT1_EXTI_IRQ_SP
-#define BSP_IIS2ICLX_INT1_EXTI_IRQ_SP           0
-#endif
 #define BSP_IIS2ICLX_INT1_EXTI_IRQHandler       EXTI3_IRQHandler
-
-#define BSP_IIS2ICLX_INT2_GPIO_CLK_ENABLE()     __HAL_RCC_GPIOF_CLK_ENABLE()
-#define BSP_IIS2ICLX_INT2_PORT                  GPIOF
-#define BSP_IIS2ICLX_INT2_PIN                   GPIO_PIN_11
-#define BSP_IIS2ICLX_INT2_EXTI_IRQn             EXTI11_IRQn
-#ifndef BSP_IIS2ICLX_INT2_EXTI_IRQ_PP
-#define BSP_IIS2ICLX_INT2_EXTI_IRQ_PP           7
-#endif
-#ifndef BSP_IIS2ICLX_INT2_EXTI_IRQ_SP
-#define BSP_IIS2ICLX_INT2_EXTI_IRQ_SP           0
-#endif
 #define BSP_IIS2ICLX_INT2_EXTI_IRQHandler       EXTI11_IRQHandler
 
 /* ILPS22QS */  
@@ -254,22 +169,7 @@ typedef enum
 #define BSP_ILPS22QS_INT_EXTI_IRQHandler        EXTI12_IRQHandler
 
 /* STTS22H */  
-#define BSP_STTS22H_INT_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOF_CLK_ENABLE()
-#define BSP_STTS22H_INT_PORT                    GPIOF
-#define BSP_STTS22H_INT_PIN                     GPIO_PIN_5
-#define BSP_STTS22H_INT_EXTI_IRQn               EXTI5_IRQn
-#ifndef BSP_STTS22H_INT_EXTI_IRQ_PP
-#define BSP_STTS22H_INT_EXTI_IRQ_PP             7
-#endif
-#ifndef BSP_STTS22H_INT_EXTI_IRQ_SP
-#define BSP_STTS22H_INT_EXTI_IRQ_SP             0
-#endif
 #define BSP_STTS22H_INT_EXTI_IRQHandler         EXTI5_IRQHandler
-
-/* EXT_SPI */
-#define BSP_EXT_SPI_CS_GPIO_CLK_ENABLE()       __GPIOA_CLK_ENABLE()
-#define BSP_EXT_SPI_CS_PORT                    GPIOA
-#define BSP_EXT_SPI_CS_PIN                     GPIO_PIN_15
                                                                       
 /**
  * @}

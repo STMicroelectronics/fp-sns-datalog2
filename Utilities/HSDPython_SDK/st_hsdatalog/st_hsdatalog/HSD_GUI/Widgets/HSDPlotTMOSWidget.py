@@ -35,8 +35,10 @@ class HSDPlotTMOSWidget(PlotWidget):
         for p in plot_params.plots_params_dict:
             p_enabled = plot_params.plots_params_dict[p].enabled
             self.graph_widgets[p].graph_widget.setVisible(p_enabled)
-
-        self.app_qt.processEvents()
+            self.graph_widgets[p].redraw_plot(plot_params.plots_params_dict[p])
+        
+        if self.app_qt is not None:
+            self.app_qt.processEvents()
         
     # @Slot(bool)
     def s_is_logging(self, status: bool, interface: int):
@@ -55,6 +57,7 @@ class HSDPlotTMOSWidget(PlotWidget):
     def add_data(self, data):
         amb = [data[0]] # Tambient (raw)
         self.graph_widgets["Ambient"].add_data(amb)
+        
         obj = [data[1], data[2], data[7], data[8]] # Tobject (raw) | Tobject (emb_comp) | Tobject (sw_comp) | Tobject_change (sw_comp)
         self.graph_widgets["Object"].add_data(obj)
         pres = [data[3], data[4], data[10]] # Tpresence | Presence flag | Presence flag (sw_comp)

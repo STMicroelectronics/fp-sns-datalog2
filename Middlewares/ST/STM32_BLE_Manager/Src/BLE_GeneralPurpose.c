@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_GeneralPurpose.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Add General Purpose info services using vendor specific profiles.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -27,13 +27,15 @@
 #define COPY_GP_CHAR_UUID(uuid_struct) COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,\
                                                      0x00,0x03,0x11,0xe1,0xac,0x36,0x00,0x02,0xa5,0xd5,0xc5,0x1b)
 
-
 /* Exported variables --------------------------------------------------------*/
 CustomNotifyEventGeneralPurpose_t CustomNotifyEventGeneralPurpose = NULL;
 
 /* Private variables ---------------------------------------------------------*/
 /* Data structure pointer for General Purpose info service */
 static BleCharTypeDef BleCharGeneralPurpose[BLE_GENERAL_PURPOSE_MAX_CHARS_NUM];
+
+/* Mapping bertween the GP number allocation and GP number used with the UUID */
+static uint8_t BleCharGeneralPurposeMapping[BLE_GENERAL_PURPOSE_MAX_CHARS_NUM];
 
 static int32_t NumberAllocatedGP = 0;
 
@@ -42,40 +44,43 @@ static void AttrMod_Request_GeneralPurpose(void *BleCharPointer, uint16_t attr_h
                                            uint8_t data_length, uint8_t *att_data);
 
 /**
-  * @brief  Init General Purpose info service
-  * @param  uint8_t Size size of General Purpose char to allocate
+  * @brief  Init General Purpose Service
+  * @brief  uint8_t BLE_CharUuid Number of General Purpose Char (UUID[14] byte)
+  * @param  uint8_t Size Dimensions of the BLE chars without couting the 2 bytes used for TimeStamp
   * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for General Purpose info service
   */
-BleCharTypeDef *BLE_InitGeneralPurposeService(uint8_t Size)
+extern BleCharTypeDef *BLE_InitGeneralPurposeService(uint8_t BLE_CharUuid,uint8_t Size)
 {
   /* Data structure pointer for BLE service */
   BleCharTypeDef *BleCharPointer;
-  uint8_t GP_CharNum = (uint8_t)NumberAllocatedGP;
 
   /* Some Controls */
   if ((uint8_t)NumberAllocatedGP >= BLE_GENERAL_PURPOSE_MAX_CHARS_NUM)
   {
-    BLE_MANAGER_PRINTF("Error GP_CharNum must be < %d\r\n", BLE_GENERAL_PURPOSE_MAX_CHARS_NUM);
+    BLE_MANAGER_PRINTF("Error already Allocated %d GP BLE Chars\r\n", BLE_GENERAL_PURPOSE_MAX_CHARS_NUM);
     return NULL;
   }
-  /* Increment the Number of Allocated General Purpose Features */
-  NumberAllocatedGP++;
+  
+  BleCharGeneralPurposeMapping[NumberAllocatedGP] = BLE_CharUuid;
 
   /* Init data structure pointer for General Purpose info service */
-  BleCharPointer = &BleCharGeneralPurpose[GP_CharNum];
+  BleCharPointer = &BleCharGeneralPurpose[NumberAllocatedGP];
   memset(BleCharPointer, 0, sizeof(BleCharTypeDef));
   BleCharPointer->AttrMod_Request_CB = AttrMod_Request_GeneralPurpose;
   COPY_GP_CHAR_UUID((BleCharPointer->uuid));
-  BleCharPointer->uuid[14] = GP_CharNum;
-  BleCharPointer->Char_UUID_Type = UUID_TYPE_128;
-  BleCharPointer->Char_Value_Length = Size;
+  BleCharPointer->uuid[14] = BLE_CharUuid;
+  BleCharPointer->Char_UUID_Type = UUID_TYPE_128; 
+  BleCharPointer->Char_Value_Length = ((uint16_t)Size) + 2U;
   BleCharPointer->Char_Properties = (uint8_t)CHAR_PROP_NOTIFY;
   BleCharPointer->Security_Permissions = ATTR_PERMISSION_NONE;
   BleCharPointer->GATT_Evt_Mask = GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP;
   BleCharPointer->Enc_Key_Size = 16;
   BleCharPointer->Is_Variable = 0;
 
-  BLE_MANAGER_PRINTF("BLE General Purpose feature [%d] ok\r\n", GP_CharNum);
+  BLE_MANAGER_PRINTF("BLE General Purpose feature [%ld] ok\r\n", NumberAllocatedGP);
+  
+  /* Increment the Number of Allocated General Purpose Features */
+  NumberAllocatedGP++;
 
   return BleCharPointer;
 }
@@ -83,34 +88,52 @@ BleCharTypeDef *BLE_InitGeneralPurposeService(uint8_t Size)
 
 /**
   * @brief  Update General Purpose characteristic value
-  * @param  uint8_t GP_CharNum General Purpose char number to update
+  * @param  uint8_t BLE_CharUuid Number of General Purpose Char (UUID[14] byte)
   * @param  uint8_t *Data data to Update
   * @retval tBleStatus   Status
   */
-tBleStatus BLE_GeneralPurposeStatusUpdate(uint8_t GP_CharNum, uint8_t *Data)
+tBleStatus BLE_GeneralPurposeStatusUpdate(uint8_t BLE_CharUuid, uint8_t *Data)
 {
-  tBleStatus ret;
-  uint8_t buff[BLE_GENERAL_PURPOSE_MAX_CHARS_DIM];
-
-  STORE_LE_16(buff, (HAL_GetTick() >> 3));
-  memcpy(buff + 2, Data, (uint32_t)BleCharGeneralPurpose[GP_CharNum].Char_Value_Length - 2U);
-
-  ret = ACI_GATT_UPDATE_CHAR_VALUE(&BleCharGeneralPurpose[GP_CharNum],
-                                   0,
-                                   (uint8_t)BleCharGeneralPurpose[GP_CharNum].Char_Value_Length,
-                                   buff);
-
-  if (ret != (tBleStatus)BLE_STATUS_SUCCESS)
+  tBleStatus ret = BLE_ERROR_UNSPECIFIED;
+  
+  uint8_t GP_CharNum = BLE_GENERAL_PURPOSE_MAX_CHARS_NUM;
+  /* Search the rigth BLE_GP char */
+  uint32_t search;
+  for (search = 0;
+       ((search < (uint32_t)NumberAllocatedGP) && (GP_CharNum == BLE_GENERAL_PURPOSE_MAX_CHARS_NUM));
+       search++)
   {
-    if (BLE_StdErr_Service == BLE_SERV_ENABLE)
+    if (BLE_CharUuid == BleCharGeneralPurposeMapping[search])
     {
-      BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "Error Updating GP[%d] Char\n", GP_CharNum);
-      Stderr_Update(BufferToWrite, BytesToWrite);
+      GP_CharNum = (uint8_t)search;
     }
-    else
+  }
+  
+  if(GP_CharNum!=BLE_GENERAL_PURPOSE_MAX_CHARS_NUM) {
+    uint8_t buff[BLE_GENERAL_PURPOSE_MAX_CHARS_DIM];
+
+    STORE_LE_16(buff, (HAL_GetTick() / 10));
+    memcpy(buff + 2, Data, (uint32_t)BleCharGeneralPurpose[GP_CharNum].Char_Value_Length - 2U);
+
+    ret = ACI_GATT_UPDATE_CHAR_VALUE(&BleCharGeneralPurpose[GP_CharNum],
+                                     0,
+                                     (uint8_t)BleCharGeneralPurpose[GP_CharNum].Char_Value_Length,
+                                     buff);
+
+    if (ret != (tBleStatus)BLE_STATUS_SUCCESS)
     {
-      BLE_MANAGER_PRINTF("Error Updating GP[%d] Char\r\n", GP_CharNum);
+      if (BLE_StdErr_Service == BLE_SERV_ENABLE)
+      {
+        BytesToWrite = (uint8_t)sprintf((char *)BufferToWrite, "Error Updating GP[%d] Char\n", GP_CharNum);
+        Stderr_Update(BufferToWrite, BytesToWrite);
+      }
+      else
+      {
+        BLE_MANAGER_PRINTF("Error Updating GP[%d] Char\r\n", GP_CharNum);
+      }
     }
+  } else {
+    BLE_MANAGER_PRINTF(" Error: GP Not Found for UUID[14] =%d\r\n",BLE_CharUuid);
   }
   return ret;
 }
@@ -133,6 +156,7 @@ static void AttrMod_Request_GeneralPurpose(void *VoidCharPointer, uint16_t attr_
                                            uint8_t data_length, uint8_t *att_data)
 {
   uint8_t GP_CharNum = BLE_GENERAL_PURPOSE_MAX_CHARS_NUM;
+  uint8_t BLE_CharUuid;
 
   if (CustomNotifyEventGeneralPurpose != NULL)
   {
@@ -151,14 +175,16 @@ static void AttrMod_Request_GeneralPurpose(void *VoidCharPointer, uint16_t attr_
 
     if (GP_CharNum != BLE_GENERAL_PURPOSE_MAX_CHARS_NUM)
     {
+      /* Retrive the GPE Char Number */
+      BLE_CharUuid = BleCharGeneralPurposeMapping[GP_CharNum];
       /* if we had found the corresponding General Purpose Feature */
       if (att_data[0] == 01U)
       {
-        CustomNotifyEventGeneralPurpose(GP_CharNum, BLE_NOTIFY_SUB);
+        CustomNotifyEventGeneralPurpose(BLE_CharUuid, BLE_NOTIFY_SUB);
       }
       else if (att_data[0] == 0U)
       {
-        CustomNotifyEventGeneralPurpose(GP_CharNum, BLE_NOTIFY_UNSUB);
+        CustomNotifyEventGeneralPurpose(BLE_CharUuid, BLE_NOTIFY_UNSUB);
       }
     }
   }
@@ -170,13 +196,13 @@ static void AttrMod_Request_GeneralPurpose(void *VoidCharPointer, uint16_t attr_
     {
       BytesToWrite = (uint8_t) sprintf((char *)BufferToWrite,
                                        "--->GP[%d]=%s\n",
-                                       GP_CharNum,
+                                       BLE_CharUuid,
                                        (att_data[0] == 01U) ? " ON" : " OFF");
       Term_Update(BufferToWrite, BytesToWrite);
     }
     else
     {
-      BLE_MANAGER_PRINTF("--->GP[%d]=%s", GP_CharNum, (att_data[0] == 01U) ? " ON\r\n" : " OFF\r\n");
+      BLE_MANAGER_PRINTF("--->GP[%d]=%s", BLE_CharUuid, (att_data[0] == 01U) ? " ON\r\n" : " OFF\r\n");
     }
   }
   else

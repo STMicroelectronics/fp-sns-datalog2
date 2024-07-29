@@ -2,13 +2,13 @@
   ******************************************************************************
   * @file    BLE_ActivityRecognition.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.9.1
-  * @date    10-October-2023
+  * @version 1.11.0
+  * @date    15-February-2024
   * @brief   Activity Recognition info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -39,7 +39,8 @@ typedef enum
   BLE_AR_BIKING              = 0x05,
   BLE_AR_DRIVING             = 0x06,
   BLE_AR_STAIRS              = 0x07,
-  BLE_AR_ERROR               = 0x08
+  BLE_AR_ADULTINCAR          = 0x08,
+  BLE_AR_ERROR               = 0x09
 } BLE_AR_output_t;
 
 typedef enum

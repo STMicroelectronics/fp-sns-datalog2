@@ -28,7 +28,7 @@
 extern "C" {
 #endif
 
-#define SYS_DBG_LEVEL                      SYS_DBG_LEVEL_VERBOSE /*!< set the level of the system log: all log messages with minor level are discharged. */
+#define SYS_DBG_LEVEL                      SYS_DBG_LEVEL_LLA /*!< set the level of the system log: all log messages with minor level are discharged. */
 
 /* Example */
 /*#define SYS_DBG_MODULE1     SYS_DBG_ON|GTS_DBG_HALT  ///< Module 1 debug control byte */
@@ -41,6 +41,7 @@ extern "C" {
 #define SYS_DBG_APMH                       SYS_DBG_ON                 ///< Application Power Mode Helper debug control byte
 #define SYS_DBG_SPIBUS                     SYS_DBG_ON                 ///< SPIBus task debug control byte
 #define SYS_DBG_I2CBUS                     SYS_DBG_ON                 ///< I2CBus task debug control byte
+#define SYS_DBG_LSM6DSV16BX                SYS_DBG_ON                 ///< LSM6DSV16BX sensor task debug control byte
 #define SYS_DBG_LSM6DSV16X                 SYS_DBG_ON                 ///< LSM6DSV16X sensor task debug control byte
 #define SYS_DBG_ISM330IS                   SYS_DBG_ON                 ///< ISM330IS sensor task debug control byte
 #define SYS_DBG_MP23DB01HP                 SYS_DBG_ON                 ///< MP23DB01HP task debug control byte

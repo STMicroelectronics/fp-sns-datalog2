@@ -80,27 +80,16 @@ const MX_GPIOParams_t MX_GPIO_INT_EXInitParams =
   INT_EX_GPIO_Port
 };
 
-/**
-  * (INT2_EX) Initialization parameters.
-  */
-const MX_GPIOParams_t MX_GPIO_INT2_EXInitParams =
-{
-  MX_GPIO_PB1_Init,
-  EXTI1_IRQn,
-  GPIO_PIN_1,
-  GPIOB
-};
-
-/**
-  * (INT_STT) Initialization parameters.
-  */
-const MX_GPIOParams_t MX_GPIO_INT_STTInitParams =
-{
-  MX_GPIO_PF5_Init,
-  INT_STT_EXTI_IRQn,
-  INT_STT_Pin,
-  INT_STT_GPIO_Port
-};
+///**
+//  * (INT2_EX) Initialization parameters.
+//  */
+//const MX_GPIOParams_t MX_GPIO_INT2_EXInitParams =
+//{
+//  MX_GPIO_PB1_Init,
+//  EXTI1_IRQn,
+//  GPIO_PIN_1,
+//  GPIOB
+//};
 
 /**
   * (INT_MAG) Initialization parameters.
@@ -111,17 +100,6 @@ const MX_GPIOParams_t MX_GPIO_INT_MAGInitParams =
   INT_MAG_EXTI_IRQn,
   INT_MAG_Pin,
   INT_MAG_GPIO_Port
-};
-
-/**
-  * (INT1_ICLX) Initialization parameters.
-  */
-const MX_GPIOParams_t MX_GPIO_INT1_ICLXInitParams =
-{
-  MX_GPIO_PF3_Init,
-  INT1_ICLX_EXTI_IRQn,
-  INT1_ICLX_Pin,
-  INT1_ICLX_GPIO_Port
 };
 
 /**
@@ -309,6 +287,61 @@ const MX_GPIOParams_t MX_GPIO_MXCHIP_RESETInitParams =
   UsageFault_IRQn, /*!< NOT USED */
   GPIO_PIN_12,
   GPIOE
+};
+
+/**
+  * PB1 Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO1_EXInitParams =
+{
+  MX_GPIO_PB1_Init,
+  UsageFault_IRQn, /*!< NOT USED */
+  GPIO1_EX_Pin,
+  GPIO1_EX_GPIO_Port
+};
+
+/**
+  * PF8 Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO2_EXInitParams =
+{
+  MX_GPIO_PF8_Init,
+  UsageFault_IRQn, /*!< NOT USED */
+  GPIO2_EX_Pin,
+  GPIO2_EX_GPIO_Port
+};
+
+/**
+  * PF10 Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO3_EXInitParams =
+{
+  MX_GPIO_PF10_Init,
+  UsageFault_IRQn, /*!< NOT USED */
+  GPIO3_EX_Pin,
+  GPIO3_EX_GPIO_Port
+};
+
+/**
+  * (INT_EX) Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO_INT_TOFInitParams =
+{
+  MX_GPIO_PC3_Init,
+  INT_TOF_EXTI_IRQn,
+  INT_TOF_Pin,
+  INT_TOF_GPIO_Port
+};
+
+/**
+  * (INT_EX) Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO_INT_TMOSInitParams =
+{
+  MX_GPIO_PG5_Init,
+  INT_TMOS_EXTI_IRQn,
+  INT_TMOS_Pin,
+  INT_TMOS_GPIO_Port
 };
 
 const MX_PCDParams_t MX_PCDInitParams =

@@ -75,6 +75,8 @@ SensorDescriptor_t LSM6DSV16XTask_vtblAccGetDescription(ISensor_t *_this);
 SensorDescriptor_t LSM6DSV16XTask_vtblGyroGetDescription(ISensor_t *_this);
 SensorStatus_t LSM6DSV16XTask_vtblAccGetStatus(ISensor_t *_this);
 SensorStatus_t LSM6DSV16XTask_vtblGyroGetStatus(ISensor_t *_this);
+SensorStatus_t *LSM6DSV16XTask_vtblAccGetStatusPointer(ISensor_t *_this);
+SensorStatus_t *LSM6DSV16XTask_vtblGyroGetStatusPointer(ISensor_t *_this);
 
 sys_error_code_t LSM6DSV16XTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len);
 sys_error_code_t LSM6DSV16XTask_vtblSensorWriteReg(ISensorLL_t *_this, uint16_t reg, const uint8_t *data, uint16_t len);
@@ -88,6 +90,7 @@ float LSM6DSV16XTask_vtblMlcGetSensitivity(ISensorMems_t *_this);
 EMData_t LSM6DSV16XTask_vtblMlcGetDataInfo(ISourceObservable *_this);
 SensorDescriptor_t LSM6DSV16XTask_vtblMlcGetDescription(ISensor_t *_this);
 SensorStatus_t LSM6DSV16XTask_vtblMlcGetStatus(ISensor_t *_this);
+SensorStatus_t *LSM6DSV16XTask_vtblMlcGetStatusPointer(ISensor_t *_this);
 
 #ifdef __cplusplus
 }

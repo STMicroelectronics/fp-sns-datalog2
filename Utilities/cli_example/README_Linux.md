@@ -2,7 +2,7 @@
 
 To use it, follow the above procedure: 
 
-- on a RaspberryPi do **cd raspberryPi_setup**, else do **cd linux_setup**
+- do **cd linux_setup**
 
 - **dos2unix 30-hsdatalog.rules setup.sh udev_removal.sh**
 
@@ -14,4 +14,4 @@ To use it, follow the above procedure:
 
 - Reopen a terminal from cli_example folder
 
-- Run **./USB_Datalog_Run** or **./bin_linux/cli_example**
+- Run **./bin_linux/cli_example**

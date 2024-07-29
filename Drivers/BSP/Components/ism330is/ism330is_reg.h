@@ -1028,7 +1028,7 @@ typedef struct
 #endif /* DRV_BYTE_ORDER */
 } ism330is_slv0_subadd_t;
 
-#define ISM330IS_SLAVE0_CONFIG                   0x17U
+#define ISM330IS_SLV0_CONFIG                   0x17U
 typedef struct
 {
 #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
@@ -1064,7 +1064,7 @@ typedef struct
 #endif /* DRV_BYTE_ORDER */
 } ism330is_slv1_subadd_t;
 
-#define ISM330IS_SLAVE1_CONFIG                   0x1AU
+#define ISM330IS_SLV1_CONFIG                   0x1AU
 typedef struct
 {
 #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
@@ -1098,7 +1098,7 @@ typedef struct
 #endif /* DRV_BYTE_ORDER */
 } ism330is_slv2_subadd_t;
 
-#define ISM330IS_SLAVE2_CONFIG                   0x1DU
+#define ISM330IS_SLV2_CONFIG                   0x1DU
 typedef struct
 {
 #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
@@ -1132,7 +1132,7 @@ typedef struct
 #endif /* DRV_BYTE_ORDER */
 } ism330is_slv3_subadd_t;
 
-#define ISM330IS_SLAVE3_CONFIG                   0x20U
+#define ISM330IS_SLV3_CONFIG                   0x20U
 typedef struct
 {
 #if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
@@ -2301,6 +2301,19 @@ typedef union
   *
   */
 
+#ifndef __weak
+#define __weak __attribute__((weak))
+#endif /* __weak */
+
+/*
+ * These are the basic platform dependent I/O routines to read
+ * and write device registers connected on a standard bus.
+ * The driver keeps offering a default implementation based on function
+ * pointers to read/write routines for backward compatibility.
+ * The __weak directive allows the final application to overwrite
+ * them with a custom implementation.
+ */
+
 int32_t ism330is_read_reg(stmdev_ctx_t *ctx, uint8_t reg,
                           uint8_t *data,
                           uint16_t len);
@@ -2343,8 +2356,7 @@ int32_t ism330is_data_ready_mode_get(stmdev_ctx_t *ctx,
 int32_t ism330is_device_id_set(stmdev_ctx_t *ctx, uint8_t val);
 int32_t ism330is_device_id_get(stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t ism330is_reset_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t ism330is_reset_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t ism330is_software_reset(stmdev_ctx_t *ctx);
 
 int32_t ism330is_boot_set(stmdev_ctx_t *ctx, uint8_t val);
 int32_t ism330is_boot_get(stmdev_ctx_t *ctx, uint8_t *val);
@@ -2589,29 +2601,7 @@ int32_t ism330is_acceleration_raw_get(stmdev_ctx_t *ctx, int16_t *val);
 int32_t ism330is_odr_cal_reg_set(stmdev_ctx_t *ctx, uint8_t val);
 int32_t ism330is_odr_cal_reg_get(stmdev_ctx_t *ctx, uint8_t *val);
 
-typedef struct
-{
-  ism330is_sensor_hub_1_t   sh_byte_1;
-  ism330is_sensor_hub_2_t   sh_byte_2;
-  ism330is_sensor_hub_3_t   sh_byte_3;
-  ism330is_sensor_hub_4_t   sh_byte_4;
-  ism330is_sensor_hub_5_t   sh_byte_5;
-  ism330is_sensor_hub_6_t   sh_byte_6;
-  ism330is_sensor_hub_7_t   sh_byte_7;
-  ism330is_sensor_hub_8_t   sh_byte_8;
-  ism330is_sensor_hub_9_t   sh_byte_9;
-  ism330is_sensor_hub_10_t  sh_byte_10;
-  ism330is_sensor_hub_11_t  sh_byte_11;
-  ism330is_sensor_hub_12_t  sh_byte_12;
-  ism330is_sensor_hub_13_t  sh_byte_13;
-  ism330is_sensor_hub_14_t  sh_byte_14;
-  ism330is_sensor_hub_15_t  sh_byte_15;
-  ism330is_sensor_hub_16_t  sh_byte_16;
-  ism330is_sensor_hub_17_t  sh_byte_17;
-  ism330is_sensor_hub_18_t  sh_byte_18;
-} ism330is_emb_sh_read_t;
-int32_t ism330is_sh_read_data_raw_get(stmdev_ctx_t *ctx,
-                                      ism330is_emb_sh_read_t *val,
+int32_t ism330is_sh_read_data_raw_get(stmdev_ctx_t *ctx, uint8_t *val,
                                       uint8_t len);
 
 typedef enum
@@ -2686,14 +2676,11 @@ typedef struct
   uint8_t   slv_subadd;
   uint8_t   slv_len;
 } ism330is_sh_cfg_read_t;
-int32_t ism330is_sh_slv0_cfg_read(stmdev_ctx_t *ctx,
-                                  ism330is_sh_cfg_read_t *val);
-int32_t ism330is_sh_slv1_cfg_read(stmdev_ctx_t *ctx,
-                                  ism330is_sh_cfg_read_t *val);
-int32_t ism330is_sh_slv2_cfg_read(stmdev_ctx_t *ctx,
-                                  ism330is_sh_cfg_read_t *val);
-int32_t ism330is_sh_slv3_cfg_read(stmdev_ctx_t *ctx,
-                                  ism330is_sh_cfg_read_t *val);
+int32_t ism330is_sh_slv_cfg_read(stmdev_ctx_t *ctx, uint8_t idx,
+                                 ism330is_sh_cfg_read_t *val);
+
+int32_t ism330is_sh_status_get(stmdev_ctx_t *ctx,
+                               ism330is_status_master_t *val);
 
 int32_t ism330is_ispu_reset_set(stmdev_ctx_t *ctx, uint8_t val);
 int32_t ism330is_ispu_reset_get(stmdev_ctx_t *ctx, uint8_t *val);
@@ -2741,8 +2728,8 @@ int32_t ism330is_ia_ispu_get(stmdev_ctx_t *ctx, uint32_t *val);
 
 int32_t ism330is_ispu_write_dummy_cfg(stmdev_ctx_t *ctx, uint8_t offset,
                                       uint8_t *val, uint8_t len);
-int32_t ism330is_ispu_ready_dummy_cfg(stmdev_ctx_t *ctx, uint8_t offset,
-                                      uint8_t *val, uint8_t len);
+int32_t ism330is_ispu_read_dummy_cfg(stmdev_ctx_t *ctx, uint8_t offset,
+                                     uint8_t *val, uint8_t len);
 
 typedef enum
 {

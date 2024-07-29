@@ -23,6 +23,7 @@ from st_hsdatalog.HSD_utils.exceptions import CommunicationEngineOpenError, Comm
     SETCommandError, PnPLSETDeviceStatusCommandError, WrongDeviceConfigFile
 
 from st_hsdatalog.HSD_link.communication.PnPL_HSD.hsd_dll import HSD_Dll
+from st_pnpl.PnPLCmd import PnPLCMDManager
 
 log = logger.get_logger(__name__)
 
@@ -145,8 +146,12 @@ class PnPLHSD_CommandManager:
     def get_device_status(self, d_id: int):
         res = self.hsd_dll.hs_datalog_get_device_status(d_id)
         if res[0]:
-            device_dict = json.loads(res[1])
-            return device_dict
+            try:
+                device_dict = json.loads(res[1])
+                return device_dict
+            except json.decoder.JSONDecodeError:
+                log.error("Device Status[d_id:{}] parsing error.".format(d_id))
+                raise EmptyCommandResponse("get_device_status")
         log.error("No Device Status[d_id:{}] returned.".format(d_id))
         raise EmptyCommandResponse("get_device_status")
 
@@ -208,7 +213,7 @@ class PnPLHSD_CommandManager:
         return sensors_c
     
     def get_algorithm_components_status(self, d_id: int, only_active: bool):
-        algo_c = self.__get_components_status(d_id,0)
+        algo_c = self.__get_components_status(d_id,1)
         if only_active == True:
             disabled_algo_names = []
             for ac in algo_c:
@@ -283,7 +288,7 @@ class PnPLHSD_CommandManager:
         log.error("Empty response from get_algorithm_components_names.".format(d_id))
         raise EmptyCommandResponse("get_algorithm_components_names")
 
-    def get_boolean_property(self, d_id: int, comp_name: str, prop_name: str, sub_prop_name: str = None):
+    def get_boolean_property(self, d_id: int, comp_name: str, prop_name: str, sub_prop_name = None):
         res = self.hsd_dll.hs_datalog_get_boolean_property(d_id, comp_name, prop_name, sub_prop_name)
         if res[0]:
             return res[1]
@@ -293,7 +298,7 @@ class PnPLHSD_CommandManager:
             log.error("Empty response from get_boolean_property(d_id={}, comp_name={}, prop_name={}, sub_prop_name={})".format(d_id, comp_name, prop_name, sub_prop_name))
         raise EmptyCommandResponse("get_boolean_property")
        
-    def get_integer_property(self, d_id: int, comp_name: str, prop_name: str, sub_prop_name: str = None):
+    def get_integer_property(self, d_id: int, comp_name: str, prop_name: str, sub_prop_name = None):
         res = self.hsd_dll.hs_datalog_get_integer_property(d_id, comp_name, prop_name, sub_prop_name)
         if res[0]:
             return res[1]
@@ -303,7 +308,7 @@ class PnPLHSD_CommandManager:
             log.error("Empty response from get_integer_property(d_id={}, comp_name={}, prop_name={}, sub_prop_name={})".format(d_id, comp_name, prop_name, sub_prop_name))
         raise EmptyCommandResponse("get_integer_property")
 
-    def get_float_property(self, d_id: int, comp_name: str, prop_name: str, sub_prop_name: str = None):
+    def get_float_property(self, d_id: int, comp_name: str, prop_name: str, sub_prop_name = None):
         res = self.hsd_dll.hs_datalog_get_float_property(d_id, comp_name, prop_name, sub_prop_name)
         if res[0]:
             return res[1]
@@ -313,7 +318,7 @@ class PnPLHSD_CommandManager:
             log.error("Empty response from get_float_property(d_id={}, comp_name={}, prop_name={}, sub_prop_name={})".format(d_id, comp_name, prop_name, sub_prop_name))
         raise EmptyCommandResponse("get_float_property")
 
-    def get_string_property(self, d_id: int, comp_name: str, prop_name: str, sub_prop_name: str = None):
+    def get_string_property(self, d_id: int, comp_name: str, prop_name: str, sub_prop_name = None):
         # if sub_prop_name is None:
         #     res = self.hsd_dll.hs_datalog_get_string_property(d_id, comp_name, prop_name)
         # else:
@@ -327,23 +332,26 @@ class PnPLHSD_CommandManager:
             log.error("Empty response from get_string_property(d_id={}, comp_name={}, prop_name={}, sub_prop_name={})".format(d_id, comp_name, prop_name, sub_prop_name))
         raise EmptyCommandResponse("get_string_property")
 
-    def set_property(self, d_id: int, value, comp_name: str, prop_name: str, sub_prop_name: str = None):
+    def set_property(self, d_id: int, value, comp_name: str, prop_name: str, sub_prop_name = None, sub_sub_prop_name = None):
         if value == []:
             return False
-        if type(value) == bool:
-            res = self.hsd_dll.hs_datalog_set_boolean_property(d_id, value, comp_name, prop_name, sub_prop_name)
-        elif type(value) == int:
-            res = self.hsd_dll.hs_datalog_set_integer_property(d_id, value, comp_name, prop_name, sub_prop_name)
-        elif type(value) == float:
-            res = self.hsd_dll.hs_datalog_set_float_property(d_id, value, comp_name, prop_name, sub_prop_name)
-        elif type(value) == str:
-            res = self.hsd_dll.hs_datalog_set_string_property(d_id, value, comp_name, prop_name, sub_prop_name)
+        
+        if sub_prop_name is None and sub_sub_prop_name is None:
+            message = PnPLCMDManager.create_set_property_cmd(comp_name, prop_name, value)
+        elif sub_prop_name is not None and sub_sub_prop_name is None:
+            message = PnPLCMDManager.create_set_property_cmd(comp_name, prop_name, {sub_prop_name: value})
+        else:
+            message = PnPLCMDManager.create_set_property_cmd(comp_name, prop_name, {sub_prop_name: {sub_sub_prop_name : value}})
+        res = self.hsd_dll.hs_datalog_send_message(d_id, message, len(message))
+        
         if res:
             return res
-        if sub_prop_name is None:
+        if sub_prop_name is None and sub_sub_prop_name is None:
             log.error("Empty response from set_property(d_id={}, comp_name={}, prop_name={})".format(d_id, comp_name, prop_name))
-        else:
+        elif sub_prop_name is not None and sub_sub_prop_name is None:
             log.error("Empty response from set_property(d_id={}, comp_name={}, prop_name={}, sub_prop_name={})".format(d_id, comp_name, prop_name, sub_prop_name))
+        else:
+            log.error("Empty response from set_property(d_id={}, comp_name={}, prop_name={}, sub_prop_name={}, sub_sub_prop_name={})".format(d_id, comp_name, prop_name, sub_prop_name, sub_sub_prop_name))
         raise EmptyCommandResponse("set_property")
 
     def set_data_ready_callback(self):
@@ -371,7 +379,14 @@ class PnPLHSD_CommandManager:
                             self.set_property(d_id, comp[comp_name][content.name], comp_name, content.name)
                         elif content.schema.type == DTM.SchemaType.OBJECT:
                             for field in content.schema.fields:
-                                self.set_property(d_id, comp[comp_name][content.name][field.name], comp_name, content.name, field.name)
+                                if isinstance(field.schema, DTM.ContentSchema):
+                                    if field.schema.type == DTM.SchemaType.OBJECT:
+                                        for sub_field in field.schema.fields:
+                                            self.set_property(d_id, comp[comp_name][content.name][field.name][sub_field.name], comp_name, content.name, field.name, sub_field.name)
+                                    elif content.schema.type == DTM.SchemaType.ENUM:
+                                        self.set_property(d_id, comp[comp_name][content.name], comp_name, content.name) 
+                                else:
+                                    self.set_property(d_id, comp[comp_name][content.name][field.name], comp_name, content.name, field.name)
                 else:
                     print("[WARNING] - wrong property name in your Device Status --> Component: {}".format(comp_name))
     

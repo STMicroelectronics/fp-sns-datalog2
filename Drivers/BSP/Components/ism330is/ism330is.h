@@ -48,6 +48,7 @@ extern "C"
 typedef int32_t (*ISM330IS_Init_Func)(void);
 typedef int32_t (*ISM330IS_DeInit_Func)(void);
 typedef int32_t (*ISM330IS_GetTick_Func)(void);
+typedef void    (*ISM330IS_Delay_Func)(uint32_t);
 typedef int32_t (*ISM330IS_WriteReg_Func)(uint16_t, uint16_t, uint8_t *, uint16_t);
 typedef int32_t (*ISM330IS_ReadReg_Func)(uint16_t, uint16_t, uint8_t *, uint16_t);
 
@@ -66,6 +67,7 @@ typedef struct
   ISM330IS_WriteReg_Func     WriteReg;
   ISM330IS_ReadReg_Func      ReadReg;
   ISM330IS_GetTick_Func      GetTick;
+  ISM330IS_Delay_Func        Delay;
 } ISM330IS_IO_t;
 
 
@@ -289,6 +291,8 @@ int32_t ISM330IS_FIFO_ACC_Set_Decimation(ISM330IS_Object_t *pObj, uint8_t Decima
 int32_t ISM330IS_FIFO_ACC_Get_Axis(ISM330IS_Object_t *pObj, int32_t *Acceleration);
 int32_t ISM330IS_FIFO_GYRO_Set_Decimation(ISM330IS_Object_t *pObj, uint8_t Decimation);
 int32_t ISM330IS_FIFO_GYRO_Get_Axis(ISM330IS_Object_t *pObj, int32_t *AngularVelocity);
+
+int32_t ISM330IS_Set_Mem_Bank(ISM330IS_Object_t *pObj, uint8_t Val);
 
 /**
   * @}

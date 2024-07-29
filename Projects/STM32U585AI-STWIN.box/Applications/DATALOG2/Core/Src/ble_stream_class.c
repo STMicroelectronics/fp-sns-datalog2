@@ -34,6 +34,11 @@
 #define MIN(a,b)            ((a) < (b) )? (a) : (b)
 #endif
 
+
+/* Data buffers sent via BLE */
+CircularBufferDL2 *ble_cbdl2[BLE_DATA_BUFFER_COUNT];
+uint8_t *ble_write_buffer[BLE_DATA_BUFFER_COUNT];
+
 /* Private define ------------------------------------------------------------*/
 
 static ble_stream_class_t sObj;
@@ -248,7 +253,17 @@ sys_error_code_t ble_stream_vtblStream_deinit(IStream_t *_this)
 sys_error_code_t ble_stream_vtblStream_start(IStream_t *_this, void *param)
 {
   assert_param(_this != NULL);
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  sys_error_code_t res;
+  ble_stream_class_t *obj = (ble_stream_class_t *) _this;
+
+  if (obj->connected)
+  {
+    res = SYS_NO_ERROR_CODE;
+  }
+  else
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
 
   return res;
 }
@@ -273,6 +288,8 @@ sys_error_code_t ble_stream_vtblStream_post_data(IStream_t *_this, uint8_t id_st
     obj->adv_buf[0] = buf[0];
     obj->adv_buf[1] = buf[1];
     obj->adv_buf[2] = buf[2];
+
+    return SYS_NO_ERROR_CODE;
   }
   else
   {
@@ -298,6 +315,29 @@ sys_error_code_t ble_stream_vtblStream_alloc_resource(IStream_t *_this, uint8_t 
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  /* Allocate a DL2 Circular Buffer with SD_BUFFER_ITEMS elements*/
+  CircularBufferDL2 *cbdl2 = CBDL2_Alloc(BLE_DATA_BUFFER_ITEMS);
+  if (cbdl2 == NULL)
+  {
+    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    return res;
+  }
+  /* Allocate the buffer to be used assigned to the CBDL2 object */
+  /* Size +4 byte to consider also the header not needed for the BLE */
+  ble_write_buffer[id_stream] = (uint8_t *) SysAlloc((size + 4) * BLE_DATA_BUFFER_ITEMS);
+  if (ble_write_buffer[id_stream] == NULL)
+  {
+    CBDL2_Free(cbdl2);
+    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    return res;
+  }
+  /* Initialize the Circular Buffer with the specified parameters */
+  /* Size +4 byte to consider also the header not needed for the BLE */
+  CBDL2_Init(cbdl2, ble_write_buffer[id_stream], size + 4, false);
+  ble_cbdl2[id_stream] = cbdl2;
 
   return res;
 }
@@ -325,6 +365,18 @@ sys_error_code_t ble_stream_vtblStream_dealloc(IStream_t *_this, uint8_t id_stre
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  if (ble_cbdl2[id_stream] != NULL)
+  {
+    CBDL2_Free(ble_cbdl2[id_stream]);
+    ble_cbdl2[id_stream] = NULL;
+  }
+
+  if (ble_write_buffer[id_stream] != NULL)
+  {
+    SysFree(ble_write_buffer[id_stream]);
+    ble_write_buffer[id_stream] = NULL;
+  }
 
   return res;
 }
