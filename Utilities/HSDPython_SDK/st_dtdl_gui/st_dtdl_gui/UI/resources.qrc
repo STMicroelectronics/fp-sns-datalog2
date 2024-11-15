@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="icons">
+    <file>icons/outline_expand_white_18.png</file>
+    <file>icons/outline_warning_white_18.png</file>
+    <file>icons/outline_sync_alt_white_18.png</file>
     <file>resources.qrc</file>
     <file>icons/outline_arrow_back_ios_white_18dp.png</file>
     <file>icons/outline_window_white_18dp.png</file>
@@ -40,6 +43,9 @@
     <file>icons/outline_cloud_upload_white_18dp.png</file>
     <file>icons/science_18dp_E8EAED.svg</file>
     <file>icons/power_18dp_E8EAED.svg</file>
+    <file>icons/pop-in_18dp_E8EAED.svg</file>
+    <file>icons/pop-out_18dp_E8EAED.svg</file>
+    <file>icons/monitoring_18dp_E8EAED.svg</file>
     <file>icons/ST16418_ST-Logo-Ico_3.ico</file>
   </qresource>
 </RCC>

@@ -135,6 +135,8 @@ uint8_t Sht40_Hum_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializedJ
   json_object_dotset_string(JSON_Status, "sht40_hum.sensor_annotation", temp_s);
   sht40_hum_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "sht40_hum.sensor_category", temp_i);
+  sht40_hum_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "sht40_hum.mounted", temp_b);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "sht40_hum.c_type", COMP_TYPE_SENSOR);

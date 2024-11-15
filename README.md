@@ -2,7 +2,7 @@
 
 ![latest tag](https://img.shields.io/github/v/tag/STMicroelectronics/fp-sns-datalog2.svg?color=brightgreen)
 
-The ST High Speed Datalog (**FP-SNS-DATALOG2**) is a comprehensive multisensor
+The **ST High Speed Datalog** (**FP-SNS-DATALOG2**) is a comprehensive multisensor
 data capture and visualization toolkit, engineered to facilitate the development of
 embedded data science applications.
 The tool has been designed as an open and modular instrument, tailored for data
@@ -18,8 +18,8 @@ The included firmware is compatible with the **STBLESensor** app, which also let
 manage the board and sensor configurations, start/stop data acquisition on SD card,
 and control data labeling. Sensor data can also be streamed using a C++-based
 companion host software or can be stored onto a microSD™ card.
-Via the host PC and Bluetooth® Low Energy app, it is possible to configure the
-**ISM330DHCX** and the **LSM6DSV16X** machine learning core unit (MLC) and the
+Via the host PC and Bluetooth® Low Energy app, it is possible to configure
+**ISM330BX**, **ISM330DHCX**, **LSM6DSV16BX** and **LSM6DSV16X** machine learning core unit (MLC) and the
 **ISM330IS** intelligent sensor processing unit (ISPU) to read the output of the selected
 algorithm.
 
@@ -51,6 +51,12 @@ Here is the list of references to user documents:
 ## Known Limitations
 
 - To run properly DATALOG2 example on STWIN.box, before using those applications, WIFI module firwmare must be upgraded. The binary is available in Utilities/WiFi_module_upgrade folder.
+- The application has been tested with the following SD cards, formatted FAT32 with 32 KB allocation table:
+  - SanDisk 32 GB Ultra HC C10 U1 A1 (p/n SDSQUA4-032G-GN6MA)
+  - Verbatim 16 GB Class 10 U1 (p/n 44082)
+  - Transcend Premium 16 GB U1 C10 (TS16GUSDCU1)
+  - Kingston 8 GB HC C4 (SDC4/8 GB)
+  For further details, please refer to [UM3106](https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf)
 
 ## Development Toolchains and Compilers
 

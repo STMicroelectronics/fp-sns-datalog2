@@ -29,7 +29,7 @@ from st_hsdatalog.HSD.utils.file_manager import FileManager
 from st_hsdatalog.HSD_utils.converters import NanoedgeCSVWriter, HSDatalogConverter
 from st_hsdatalog.HSD_utils.exceptions import *
 import st_hsdatalog.HSD_utils.logger as logger
-from st_pnpl.DTDL.dtdl_utils import ComponentTypeEnum
+from st_pnpl.DTDL.dtdl_utils import AlgorithmTypeEnum, ComponentTypeEnum
 
 log = logger.get_logger(__name__)
 
@@ -105,6 +105,20 @@ class HSDatalog:
                 if acquisition_json_file_path is not None:
                     return HSDatalog.HSDVersion.V2
         return HSDatalog.HSDVersion.INVALID
+
+    @staticmethod
+    def get_file_dimension(hsd, component_name):
+        """
+        Get the dimension of the file associated with the component.
+
+        :param hsd: An instance of the HSDatalog class.
+        :param component_name: The name of the component.
+        :return: The dimension of the file associated with the component.
+        """
+        # Check if the 'hsd' instance is of the HSDatalog_v2 class.
+        if isinstance(hsd, HSDatalog_v2):
+            # Retrieve the file dimension using the 'get_file_dimension' method from the 'hsd' instance.
+            return hsd.get_file_dimension(component_name)
 
     @staticmethod
     def present_sensor_list(hsd, sensor_list = None):
@@ -811,7 +825,7 @@ class HSDatalog:
             # Retrieve the dataframe for the current chunk.
             data_time = hsd.get_data_and_timestamps_batch(comp_name, comp_status, next_start_time, next_end_time, raw_data)
             
-            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM.value: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
                 is_last_chunk = True
                 log.info("--> Conversion completed")
             
@@ -840,7 +854,40 @@ class HSDatalog:
         return d_and_t
 
     @staticmethod
-    def get_dataframe(hsd, component, start_time = 0, end_time = -1, labeled = False, raw_data = False, which_tags:list = [], chunk_size=DEFAULT_SAMPLES_CHUNK_SIZE) -> list: 
+    def get_dataframe_gen(hsd, component, start_time = 0, end_time = -1, labeled = False, raw_data = False, which_tags:list = [], chunk_size=DEFAULT_SAMPLES_CHUNK_SIZE):
+        """
+        Retrieves data as a generator of dataframes for a given component within a specified time range.
+        
+        :param hsd: An instance of HSDatalog.
+        :param component: A dictionary where the key is the component name and the value is its status.
+        :param start_time: The start time for the data retrieval (the closest greater timestamp will be selected).
+        :param end_time: The end time for the data retrieval (the closest greater timestamp will be selected).
+        :param labeled: Boolean to choose whether the output should contain information about labels (Input data must be labelled).
+        :param raw_data: Boolean indicating whether to output raw data (not multiplied by sensitivity).
+        :param which_tags: [Optional] List of tags to filter the data.
+        :param chunk_size: [Optional] The size of the data chunk (in samples) to be processed at a time. Default value = HSDatalog.DEFAULT_SAMPLES_CHUNK_SIZE = 10M Samples
+        :return: A generator that yields dataframes for each chunk of data.
+        :raises MemoryError: If a memory error occurs during the retrieval of data and timestamps.
+        """
+        try:
+            # Extract the component name and status from the 'component' dictionary.
+            # The 'component' dictionary is expected to have only one key-value pair.
+            c_name = list(component.keys())[0]
+            c_status = component[c_name]
+
+            # Call the private method '__get_dataframe_batch_gen' to retrieve data in batches as a generator.
+            # This method is expected to return a generator that yields dataframes for each chunk of data.
+            return HSDatalog.__get_dataframe_batch_gen(hsd, c_name, c_status, start_time, end_time, labeled, raw_data, which_tags, chunk_size)
+            
+        except MemoryError as e:
+            # Handle the MemoryError by logging it, raising an error, or taking other appropriate action.
+            print(f"MemoryError encountered while retrieving dataframes for component {c_name}.\
+                    Try to extract dataframes in batches by calling this function on smaller subsequent time intervals,\
+                    varying the start_time and end_time parameters.: {e}")
+            raise
+
+    @staticmethod
+    def get_dataframe(hsd, component, start_time = 0, end_time = -1, labeled = False, raw_data = False, which_tags:list = [], chunk_size=DEFAULT_SAMPLES_CHUNK_SIZE):
         """
         Retrieves data as a list of dataframes for a given component within a specified time range.
 
@@ -876,7 +923,7 @@ class HSDatalog:
             raise
 
     @staticmethod
-    def __get_dataframe_batch(hsd, comp_name, comp_status, start_time = 0, end_time = -1, labeled = False, raw_data = False, which_tags:list = [], chunk_size=DEFAULT_SAMPLES_CHUNK_SIZE) -> list:   
+    def __get_dataframe_batch(hsd, comp_name, comp_status, start_time = 0, end_time = -1, labeled = False, raw_data = False, which_tags:list = [], chunk_size=DEFAULT_SAMPLES_CHUNK_SIZE):   
         """
         Retrieves data in batches as dataframes for a given component within a specified time range.
 
@@ -890,7 +937,7 @@ class HSDatalog:
         :param chunk_size: [Optional] The size of the data chunk (in samples) to be processed at a time. Default value = {HSDatalog.DEFAULT_SAMPLES_CHUNK_SIZE}
         :return: A list containing the dataframes of the retrieved data.
         """
-        
+
         # Calculate the time duration of each chunk based on the chunk size and the output data rate (odr).
         chunk_time_size = HSDatalog.__compute_chunk_time_size(chunk_size, comp_status)
 
@@ -903,7 +950,6 @@ class HSDatalog:
         
         # Initialize an empty list to store dataframes.
         dataframes = []
-        # data = None
         
         ioffset = comp_status.get('ioffset', 0)
         next_start_time = time_offset
@@ -932,7 +978,7 @@ class HSDatalog:
             if comp_status["is_first_chunk"]:
                 comp_status["is_first_chunk"] = False
 
-            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM.value: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
                 is_last_chunk = True
                 log.info("--> Conversion completed")
             
@@ -949,19 +995,115 @@ class HSDatalog:
                     log.info(f"--> {comp_name} Chunk Conversion completed")
                     dataframes.append(dataframe)
                     # Increment the time offset for the next chunk.
-                    # time_offset += chunk_time_size
                     next_start_time = dataframe.iloc[-1,0]
                     next_end_time = next_start_time + chunk_time_size
             else:
                 # If no dataframe is returned, mark the last chunk.
                 is_last_chunk = True
                 log.info(f"--> {comp_name} Conversion completed")
-        
+
         # Reset the status conversion side information for the component status.
         HSDatalog.reset_status_conversion_side_info(comp_status, ioffset)
+        
+        # Drop the 'Time' column for FFT algorithms.
+        if comp_status["c_type"] == ComponentTypeEnum.ALGORITHM.value:
+            algorithm_type = comp_status.get("algorithm_type")
+            if algorithm_type == AlgorithmTypeEnum.IALGORITHM_TYPE_FFT.value:
+                dataframes[0] = dataframes[0].drop(columns=["Time"])
+        
         # Return the list of dataframes.
         return dataframes
     
+    @staticmethod
+    def __get_dataframe_batch_gen(hsd, comp_name, comp_status, start_time = 0, end_time = -1, labeled = False, raw_data = False, which_tags:list = [], chunk_size=DEFAULT_SAMPLES_CHUNK_SIZE):
+        """
+        Retrieves data in batches as dataframes for a given component within a specified time range.
+
+        :param hsd: An instance of HSDatalog_v2.
+        :param comp_name: The name of the component.
+        :param comp_status: A dictionary containing the status of the component.
+        :param start_time: The start time for the data retrieval (the closest greater timestamp will be selected).
+        :param end_time: The end time for the data retrieval (the closest greater timestamp will be selected).
+        :param labeled: Boolean to choose whether the output should contain information about labels (Input data must be labelled).
+        :param raw_data: Boolean to get raw data output (not multiplied by sensitivity).
+        :param chunk_size: [Optional] The size of the data chunk (in samples) to be processed at a time. Default value = {HSDatalog.DEFAULT_SAMPLES_CHUNK_SIZE}
+        :return: A generator that yields dataframes for each chunk of data.
+        """
+
+        # Calculate the time duration of each chunk based on the chunk size and the output data rate (odr).
+        chunk_time_size = HSDatalog.__compute_chunk_time_size(chunk_size, comp_status)
+
+        # Initialize the flag to determine if the current chunk is the last one
+        is_last_chunk = False
+        # Set the initial time offset to the start time or 0 if not provided.
+        time_offset = start_time or 0
+        
+        log.info(f"--> {comp_name} Conversion started...")
+        
+        # Initialize an empty list to store dataframes.
+        dataframes = []
+        
+        ioffset = comp_status.get('ioffset', 0)
+        next_start_time = time_offset
+        next_end_time = time_offset+chunk_time_size
+        comp_status["is_first_chunk"] = True
+        while not is_last_chunk:
+            # Adjust the chunk size if the end time is specified and the current chunk exceeds it.
+            if end_time != -1 and next_end_time > end_time:
+                #read exactly the missing samples up to end_time
+                next_end_time = end_time
+                is_last_chunk = True
+            
+            # Retrieve the dataframe for the current chunk.
+            dataframe = hsd.get_dataframe_batch(comp_name, comp_status, next_start_time, next_end_time, labeled, raw_data, which_tags)
+            
+            if start_time == next_start_time:
+                # Trim the DataFrame if specific start_time is selected
+                dataframe = dataframe[(dataframe['Time'] >= next_start_time)]
+
+            if end_time == next_end_time:
+                if dataframe is not None:
+                    # Trim the DataFrame if specific end_time is selected
+                    dataframe = dataframe[(dataframe['Time'] <= next_end_time)]
+
+            # After the first chunk, update the status to no longer be the first chunk.
+            if comp_status["is_first_chunk"]:
+                comp_status["is_first_chunk"] = False
+
+            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM.value: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+                is_last_chunk = True
+                log.info("--> Conversion completed")
+            
+            if dataframe is not None:
+                # Print the dataframe for debugging purposes (optional).
+                # print(f"{dataframe}\n")
+                if len(dataframe) == 0:
+                    # If the dataframe is empty, mark the last chunk and log completion.
+                    is_last_chunk = True
+                    log.info(f"--> {comp_name} Conversion completed")
+                    print()
+                else:
+                    # Log the completion of the current chunk and append the dataframe to the list.
+                    log.info(f"--> {comp_name} Chunk Conversion completed")
+                    # Yield dataframe for generator
+                    yield dataframe
+                    # Increment the time offset for the next chunk.
+                    next_start_time = dataframe.iloc[-1,0]
+                    next_end_time = next_start_time + chunk_time_size
+            else:
+                # If no dataframe is returned, mark the last chunk.
+                is_last_chunk = True
+                log.info(f"--> {comp_name} Conversion completed")
+
+        # Reset the status conversion side information for the component status.
+        HSDatalog.reset_status_conversion_side_info(comp_status, ioffset)
+        
+        # Drop the 'Time' column for FFT algorithms.
+        if comp_status["c_type"] == ComponentTypeEnum.ALGORITHM.value:
+            algorithm_type = comp_status.get("algorithm_type")
+            if algorithm_type == AlgorithmTypeEnum.IALGORITHM_TYPE_FFT.value:
+                dataframe = dataframe.drop(columns=["Time"]) # Drop the 'Time' column
+
     @staticmethod
     def __check_data_batch(hsd, comp_name, comp_status, start_time, end_time, chunk_size = DEFAULT_SAMPLES_CHUNK_SIZE):
         """
@@ -1079,7 +1221,7 @@ class HSDatalog:
     @staticmethod
     def __convert_to_xsv_batch(hsd, comp_name, comp_status, start_time, end_time, labeled, raw_data, output_folder, file_format, which_tags:list = [], no_timestamps = False, chunk_size = DEFAULT_SAMPLES_CHUNK_SIZE):
         """
-        Converts sensor data to a specified file format (CSV, TSV, PARQUET) in batches.
+        Converts sensor data to a specified file format (TXT, CSV, TSV, PARQUET) in batches.
 
         :param hsd: An instance of HSDatalog
         :param comp_name: The name of the component.
@@ -1089,7 +1231,7 @@ class HSDatalog:
         :param labeled: Boolean to choose whether the output should contain information about labels (Input data must be labelled).
         :param raw_data: Boolean to get raw data output (not multiplied by sensitivity).
         :param output_folder: The folder where the output files will be saved.
-        :param file_format: The desired output file format ('CSV', 'TSV', 'PARQUET').
+        :param file_format: The desired output file format ('TXT', 'CSV', 'TSV', 'PARQUET').
         :param which_tags: [Optional] List of tags labels to be included into exported file.
         :param no_timestamps: [Optional] Boolean to decide whether to exclude timestamps from the output (if true, then no Time columns in exported file).
         :param chunk_size: [Optional] The size of the data chunk (in samples) to be processed at a time. Default value = HSDatalog.DEFAULT_SAMPLES_CHUNK_SIZE = 10M Samples
@@ -1126,7 +1268,9 @@ class HSDatalog:
                 comp_status["is_first_chunk"] = False
             
             log.debug("df extracted")
-            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM.value: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+                if comp_status.get("algorithm_type") == AlgorithmTypeEnum.IALGORITHM_TYPE_FFT.value:
+                    no_timestamps = True
                 is_last_chunk = True
                 log.info("--> Conversion completed")
 
@@ -1142,7 +1286,9 @@ class HSDatalog:
                 file_mode = 'w' if next_start_time == (start_time or 0) else 'a'
                 log.debug(f"df to {file_format} STARTED...")
                 # Convert the data frame to the specified file format and save it to the file path.
-                if file_format == 'CSV':
+                if file_format == 'TXT':
+                    HSDatalogConverter.to_txt(df, sensor_file_path, mode=file_mode)
+                elif file_format == 'CSV':
                     HSDatalogConverter.to_csv(df, sensor_file_path, mode=file_mode)
                 elif file_format == 'TSV':
                     HSDatalogConverter.to_tsv(df, sensor_file_path, mode=file_mode)
@@ -1175,7 +1321,7 @@ class HSDatalog:
     @staticmethod
     def convert_dat_to_xsv(hsd, component, start_time, end_time, labeled, raw_data, output_folder, file_format, which_tags:list = [], no_timestamps = False, chunk_size = DEFAULT_SAMPLES_CHUNK_SIZE):
         """
-        Converts data from .dat format to a specified file format (CSV, TSV, Apache PARQUET) for a given component.
+        Converts data from .dat format to a specified file format (TXT, CSV, TSV, Apache PARQUET) for a given component.
 
         :param hsd: An instance of HSDatalog.
         :param component: A dictionary where the key is the component name and the value is its status.
@@ -1184,7 +1330,7 @@ class HSDatalog:
         :param labeled: Boolean to choose whether the output should contain information about labels (Input data must be labelled).
         :param raw_data: Boolean indicating whether to output raw data (not multiplied by sensitivity).
         :param output_folder: The directory where the converted files will be saved.
-        :param file_format: The desired output file format ('CSV', 'TSV', 'PARQUET').
+        :param file_format: The desired output file format ('TXT', 'CSV', 'TSV', 'PARQUET').
         :param which_tags: [Optional] List of tags labels to be included into exported file.
         :param no_timestamps: [Optional] Boolean to decide whether to exclude timestamps from the output (if true, then no Time columns in exported file).
         :param chunk_size: [Optional] The size of the data chunk (in samples) to be processed at a time. Default value = HSDatalog.DEFAULT_SAMPLES_CHUNK_SIZE = 10M Samples
@@ -1287,7 +1433,9 @@ class HSDatalog:
             if comp_status["is_first_chunk"]:
                 comp_status["is_first_chunk"] = False
 
-            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM.value: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+                if comp_status.get("algorithm_type") == AlgorithmTypeEnum.IALGORITHM_TYPE_FFT.value:
+                    with_times = False
                 is_last_chunk = True
                 log.info("--> Conversion completed")
 
@@ -1372,7 +1520,7 @@ class HSDatalog:
         # filtered by the specified tags and including untagged data if specified.
         HSDatalog.__convert_to_txt_by_tags_batch(hsd, c_name, c_status, start_time, end_time, output_folder, out_format, which_tags, with_untagged, no_timestamps, raw_data, chunk_size)
     
-    def __convert_to_nanoedge_format_batch(hsd, comp_name, comp_status, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, chunk_size = DEFAULT_SAMPLES_CHUNK_SIZE):
+    def __convert_to_nanoedge_format_batch(hsd, comp_name, comp_status, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, target_value = None, chunk_size = DEFAULT_SAMPLES_CHUNK_SIZE):
         """
         Converts data to NanoEdge CSV format in batches for a given component within a specified time range.
 
@@ -1385,6 +1533,7 @@ class HSDatalog:
         :param end_time: The end time for the conversion (the closest greater timestamp will be selected).
         :param raw_data: Boolean indicating whether to output raw data (not multiplied by sensitivity).
         :param output_folder: The folder where the output files will be saved.
+        :param target_value: The target value (Mandatory for NEAI extrapolation datasets).
         :param chunk_size: [Optional] The size of the data chunk (in samples) to be processed at a time. Default value = HSDatalog.DEFAULT_SAMPLES_CHUNK_SIZE = 10M Samples.
         """
         
@@ -1421,7 +1570,7 @@ class HSDatalog:
                 #read exactly the missing samples up to end_time
                 next_end_time = end_time
 
-             # If chunk_size is 0, mark the last chunk and log completion.
+            # If chunk_size is 0, mark the last chunk and log completion.
             if chunk_size == 0:
                 is_last_chunk = 1
                 log.info(f"--> {comp_name} Nanoedge conversion completed successfully")
@@ -1430,7 +1579,7 @@ class HSDatalog:
             # Retrieve the data frame for the current chunk.
             df = hsd.get_dataframe_batch(comp_name, comp_status, next_start_time, next_end_time, False, raw_data)
 
-            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM.value: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
                 is_last_chunk = True
                 log.info("--> Conversion completed")
 
@@ -1440,10 +1589,10 @@ class HSDatalog:
                         # Write the data frame to NanoEdge format using the CSV writer.
                         # Use 'w' for write (first chunk) or 'a' for append (subsequent chunks).
                         if comp_status["is_first_chunk"]:
-                            csv_writer.to_nanoedge_format_batch(df,"w")
+                            csv_writer.to_nanoedge_format_batch(df,"w",target_value)
                             comp_status["is_first_chunk"] = False
                         else:
-                            csv_writer.to_nanoedge_format_batch(df,"a")
+                            csv_writer.to_nanoedge_format_batch(df,"a",target_value)
                 except NanoEdgeConversionError:
                     # If an error occurs during conversion, set the error flag.
                     errors_in_conversion = True
@@ -1479,7 +1628,7 @@ class HSDatalog:
         HSDatalog.reset_status_conversion_side_info(comp_status, io)
     
     @staticmethod
-    def convert_dat_to_nanoedge(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, chunk_size = DEFAULT_SAMPLES_CHUNK_SIZE):
+    def convert_dat_to_nanoedge(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, target_value = None, chunk_size = DEFAULT_SAMPLES_CHUNK_SIZE):
         """
         Converts data from .dat format to NanoEdge format.
 
@@ -1491,6 +1640,7 @@ class HSDatalog:
         :param end_time: The end time for the conversion (the closest greater timestamp will be selected).
         :param raw_data: Boolean indicating whether to output raw data (not multiplied by sensitivity).
         :param output_folder: The directory where the converted files will be saved.
+        :param target_value: The target value (Mandatory for NEAI extrapolation datasets).
         :param chunk_size: [Optional] The number of samples per data chunk during conversion. Default is HSDatalog.DEFAULT_SAMPLES_CHUNK_SIZE = 10M Samples.
         """
 
@@ -1502,7 +1652,7 @@ class HSDatalog:
         # Call the private method __convert_to_nanoedge_format_batch of the HSDatalog class.
         # This method will perform the actual conversion of data to NanoEdge format in batches,
         # using the provided parameters such as signal length, signal increment, and chunk size.
-        HSDatalog.__convert_to_nanoedge_format_batch(hsd, c_name, c_status, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, chunk_size)
+        HSDatalog.__convert_to_nanoedge_format_batch(hsd, c_name, c_status, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, target_value, chunk_size)
     
     @staticmethod
     def __convert_to_unico_format_batch(hsd, components, start_time, end_time, use_datalog_tags, output_folder, out_format, columns_labels = "default", with_times = False, raw_data = False, chunk_size = DEFAULT_SAMPLES_CHUNK_SIZE):
@@ -1530,6 +1680,14 @@ class HSDatalog:
         is_last_chunk = False
         is_first_chunk = True
 
+        # extract component names, status
+        c = components[0]
+        comp_name = list(c.keys())[0]
+        comp_status = c[comp_name]
+        
+        if comp_status["c_type"] == ComponentTypeEnum.ALGORITHM.value and comp_status.get("algorithm_type") == AlgorithmTypeEnum.IALGORITHM_TYPE_FFT.value:
+            with_times = False
+
         # Start the conversion log.
         if len(components) == 1:
             comp_name = list(components[0].keys())[0]
@@ -1537,10 +1695,6 @@ class HSDatalog:
         else:
             return HSDatalog.__convert_to_unico_agg_format_batch(hsd, components, start_time, end_time, use_datalog_tags, output_folder, out_format, "same_sensor", columns_labels, with_times, False, raw_data, chunk_size)
         
-        # extract component names, status
-        c = components[0]
-        comp_name = list(c.keys())[0]
-        comp_status = c[comp_name]
         # Calculate the time duration of each chunk based on the chunk size and the output data rate (odr).
         chunk_time_size = HSDatalog.__compute_chunk_time_size(chunk_size, comp_status)
         # Set the initial time offset to the start time or 0 if not provided.
@@ -1560,7 +1714,7 @@ class HSDatalog:
             # Retrieve the dataframe for the current chunk.
             df = hsd.get_dataframe_batch(comp_name, comp_status, next_start_time, next_end_time, use_datalog_tags, raw_data)
             
-            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+            if comp_status["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status["c_type"] == ComponentTypeEnum.ALGORITHM.value: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
                 is_last_chunk = True
                 log.info("--> Conversion completed")
             
@@ -1741,7 +1895,9 @@ class HSDatalog:
                 if i == 0:
                     df = hsd.get_dataframe_batch(comp_names[i], comp_status[i], next_start_time, next_end_time, use_datalog_tags, raw_data)
 
-                    if comp_status[i]["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status[i]["c_type"] == ComponentTypeEnum.ALGORITHM: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+                    if comp_status[i]["c_type"] == ComponentTypeEnum.ACTUATOR.value or comp_status[i]["c_type"] == ComponentTypeEnum.ALGORITHM.value: #NO BATCHES FOR ACTUATORS AND ALGORITHMS
+                        if comp_status[i].get("algorithm_type") == AlgorithmTypeEnum.IALGORITHM_TYPE_FFT.value:
+                            with_times = False
                         is_last_chunk = True
                         log.info("--> Conversion completed")
 
@@ -1784,11 +1940,12 @@ class HSDatalog:
                     # Merge multiple data frames into one.
                     df = HSDatalogConverter.merge_dataframes(comp_dataframes, comp_dataframes_names, columns_labels, list(tags_columns))
                     df = df[original_labels]
-                    if columns_labels == "mlc_tool":
-                        df = df.rename(columns={'Time': 'Time[s]'})
                 else:
-                    # If there's only one data frame, use it as is.
-                    df = comp_dataframes[0]
+                    # Rename the columns of the single data frame.
+                    df = HSDatalogConverter.rename_dataframe_columns(comp_name, comp_dataframes[0], columns_labels, list(tags_columns))
+                
+                if columns_labels == "mlc_tool":
+                    df = df.rename(columns={'Time': 'Time[s]'})
                 
                 if df is not None:
                     # If the merged data frame is not empty, proceed to save it.
@@ -1802,12 +1959,10 @@ class HSDatalog:
                         
                         acquisition_folder_name = os.path.basename(acquisition_path)
                         # Construct the file path for the aggregated data.
-                        #If aggregation is "same_sensor"
-                        if aggregation == "same_sensor":
+                        if aggregation == "same_sensor": # If aggregation is "same_sensor"
                             s_name, _ = FileManager.decode_file_name(list(components[0].keys())[0])
                             file_path = os.path.join(output_folder, s_name)    
-                        elif aggregation == "single_file":
-                            #If aggregation is "single_file", save the merged dataframe as a single file
+                        elif aggregation == "single_file": # If aggregation is "single_file", save the merged dataframe as a single file
                             file_path = os.path.join(output_folder, f"Aggregated_{acquisition_folder_name}")
                         # Convert the data frame to the specified file format and save it.
                         HSDatalogConverter.to_unico(file_path, df, out_format, file_mode, with_times, columns_labels)

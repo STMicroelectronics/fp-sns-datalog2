@@ -558,7 +558,22 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
 
     if (p_obj->sensorContext[sId].old_time_stamp == -1.0f)
     {
-      p_obj->datalog_model->s_models[sId]->stream_params.ioffset = p_evt->timestamp;
+      float ODR;
+      SensorStatus_t sensor_status = SMSensorGetStatus(sId);
+      if (sensor_status.isensor_class == ISENSOR_CLASS_MEMS)
+      {
+        ODR = sensor_status.type.mems.odr;
+      }
+      else if (sensor_status.isensor_class == ISENSOR_CLASS_AUDIO)
+      {
+        ODR = sensor_status.type.audio.frequency;
+      }
+      else
+      {
+        SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+        return res;
+      }
+      p_obj->datalog_model->s_models[sId]->stream_params.ioffset = p_evt->timestamp - ((1.0 / (double) ODR) * (samplesToSend - 1));
       p_obj->sensorContext[sId].old_time_stamp = p_evt->timestamp;
       p_obj->sensorContext[sId].n_samples_to_timestamp = p_obj->datalog_model->s_models[sId]->stream_params.spts;
     }
@@ -940,11 +955,26 @@ uint8_t DatalogAppTask_save_config_vtbl(void)
   char *responseJSON;
   uint32_t size;
 
+  if (IStream_is_enabled((IStream_t *) p_obj->filex_device) == FALSE)
+  {
+    if (IStream_enable((IStream_t *) p_obj->filex_device) != SYS_NO_ERROR_CODE)
+    {
+      char *message = "Error: SD Failure";
+      PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
+      DatalogApp_Task_command_response_cb(responseJSON, size);
+      /* TODO: send msg to util task or error led;*/
+      return 1;
+    }
+  }
   ULONG msg = FILEX_DCTRL_CMD_SET_DEFAULT_STATUS;
   filex_dctrl_msg(p_obj->filex_device, &msg);
 
   PnPLSerializeCommandResponse(&responseJSON, &size, 0, "", true);
   DatalogApp_Task_command_response_cb(responseJSON, size);
+
+  /* Unmount SD card when device_config.json has been saved */
+  msg = FILEX_DCTRL_CMD_CLOSE;
+  filex_dctrl_msg(p_obj->filex_device, &msg);
 
   return 0;
 }

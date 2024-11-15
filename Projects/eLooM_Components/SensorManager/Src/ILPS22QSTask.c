@@ -1235,10 +1235,6 @@ static sys_error_code_t ILPS22QSTaskSensorInit(ILPS22QSTask *_this)
     {
       ilps22qs_wtm_level = ILPS22QS_MAX_WTM_LEVEL;
     }
-    else if (ilps22qs_wtm_level < ILPS22QS_MIN_WTM_LEVEL)
-    {
-      ilps22qs_wtm_level = ILPS22QS_MIN_WTM_LEVEL;
-    }
 
     _this->samples_per_it = ilps22qs_wtm_level;
   }

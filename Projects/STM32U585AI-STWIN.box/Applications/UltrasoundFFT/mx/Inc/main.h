@@ -150,8 +150,8 @@ void Error_Handler(void);
 #define USART3_RX_GPIO_Port GPIOA
 #define CS_DWB_Pin GPIO_PIN_12
 #define CS_DWB_GPIO_Port GPIOF
-#define USART3_RTS_Pin GPIO_PIN_12
-#define USART3_RTS_GPIO_Port GPIOD
+#define HW_TAG_1_Pin GPIO_PIN_12
+#define HW_TAG_1_GPIO_Port GPIOD
 #define BUTTON_PWR_Pin GPIO_PIN_10
 #define BUTTON_PWR_GPIO_Port GPIOD
 #define BUTTON_PWR_EXTI_IRQn EXTI10_IRQn
@@ -174,8 +174,8 @@ void Error_Handler(void);
 #define LDO_EN_GPIO_Port GPIOE
 #define USART3_CTS_Pin GPIO_PIN_11
 #define USART3_CTS_GPIO_Port GPIOD
-#define GPIO1_EX_Pin GPIO_PIN_1
-#define GPIO1_EX_GPIO_Port GPIOB
+#define HW_TAG_0_Pin GPIO_PIN_1
+#define HW_TAG_0_GPIO_Port GPIOB
 #define INT1_DWB_Pin GPIO_PIN_15
 #define INT1_DWB_GPIO_Port GPIOF
 #define INT1_DWB_EXTI_IRQn EXTI15_IRQn

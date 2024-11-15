@@ -39,7 +39,6 @@ extern "C" {
 #define IIS3DWB_MAX_WTM_LEVEL             (256) /* samples */
 #endif
 
-#define IIS3DWB_MIN_WTM_LEVEL             (16)
 #define IIS3DWB_MAX_SAMPLES_PER_IT        (IIS3DWB_MAX_WTM_LEVEL)
 
 

@@ -65,6 +65,8 @@ void MX_GPIO_PD0_Init(void);
 void MX_GPIO_PE7_Init(void);
 void MX_GPIO_PE12_Init(void);
 void MX_GPIO_PH7_Init(void);
+void MX_GPIO_HWTAG0_Init(void);
+void MX_GPIO_HWTAG1_Init(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

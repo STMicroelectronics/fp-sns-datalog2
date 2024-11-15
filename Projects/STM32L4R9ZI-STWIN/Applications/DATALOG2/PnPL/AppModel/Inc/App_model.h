@@ -105,7 +105,7 @@ extern "C" {
 #define FORMAT_LEN 10U
 
 #define FW_VERSION_MAJOR    "2"
-#define FW_VERSION_MINOR    "2"
+#define FW_VERSION_MINOR    "3"
 #define FW_VERSION_PATCH    "0"
 
 /* Max BLE bandwidth for each sensor (in Byte) */

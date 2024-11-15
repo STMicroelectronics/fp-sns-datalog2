@@ -58,6 +58,10 @@
 
 #define SYS_DEBUGF(level, message)                SYS_DEBUGF3(SYS_DBG_IIS2DLPC, level, message)
 
+#ifndef IIS2DLPC_TASK_CFG_I2C_ADDRESS
+#define IIS2DLPC_TASK_CFG_I2C_ADDRESS             IIS2DLPC_I2C_ADD_H
+#endif
+
 #ifndef HSD_USE_DUMMY_DATA
 #define HSD_USE_DUMMY_DATA 0
 #endif
@@ -416,7 +420,7 @@ sys_error_code_t IIS2DLPCTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
   }
   else
   {
-    p_obj->p_sensor_bus_if = I2CBusIFAlloc(IIS2DLPC_ID, IIS2DLPC_I2C_ADD_H, 0);
+    p_obj->p_sensor_bus_if = I2CBusIFAlloc(IIS2DLPC_ID, IIS2DLPC_TASK_CFG_I2C_ADDRESS, 0);
     if (p_obj->p_sensor_bus_if == NULL)
     {
       res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;

@@ -342,9 +342,9 @@ typedef struct SensorStatusLight_t
   float gain[ ALS_NUM_CHANNELS ];
 
   /**
-    * Specifies the effective data rate [ms].
+    * Specifies the effective data rate [s].
     */
-  uint32_t measured_intermeasurement_time;
+  float measured_intermeasurement_time;
 } SensorStatusLight;
 
 typedef struct SensorStatusPowerMeter_t

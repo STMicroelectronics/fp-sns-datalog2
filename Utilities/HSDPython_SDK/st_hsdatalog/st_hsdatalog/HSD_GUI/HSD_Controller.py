@@ -14,7 +14,6 @@
 # *
 # ******************************************************************************
 #
-from collections import deque
 import shutil
 import struct
 import time
@@ -22,16 +21,16 @@ import os
 import json
 import copy
 
-from datetime import datetime
-from threading import Condition, Thread, Event
+from threading import Thread, Event
 
+import sys
 from enum import Enum
-import numpy as np
 
 from PySide6.QtCore import Signal, QThread, QObject
 from PySide6.QtWidgets import QFileDialog
 
-from st_hsdatalog.HSD_GUI.HSD_DataToolkit_Pipeline import HSD_DataToolkit_Pipeline
+from st_hsdatalog.HSD_datatoolkit.HSD_DataToolkit import HSD_DataToolkit
+from st_pnpl.DTDL.device_template_model import SchemaEnum
 from st_pnpl.DTDL.dtdl_utils import UnitMap
 import st_pnpl.DTDL.dtdl_utils as DTDLUtils
 
@@ -40,13 +39,14 @@ from st_hsdatalog.HSD_link.HSDLink import HSDLink
 from st_hsdatalog.HSD_link.HSDLink_v1 import HSDLink_v1
 
 from st_hsdatalog.HSD_GUI.Widgets.HSDPlotLinesWidget import HSDPlotLinesWidget
-from st_dtdl_gui.Utils.DataClass import AnomalyDetectorModelPlotParams, PlotPAmbientParams, PlotPMotionParams, PlotPObjectParams, PlotPPresenceParams, SensorAudioPlotParams, SensorLightPlotParams, SensorMemsPlotParams, FFTAlgPlotParams, ClassificationModelPlotParams, DataClass, SensorPlotParams, SensorPowerPlotParams, SensorPresenscePlotParams, SensorRangingPlotParams
+from st_dtdl_gui.Utils.DataClass import *
 from st_dtdl_gui.Utils.DataReader import DataReader
 from st_dtdl_gui.STDTDL_Controller import ComponentType, STDTDL_Controller
 
 from st_hsdatalog.HSD.utils.type_conversion import TypeConversion
 
 import st_hsdatalog.HSD_utils.logger as logger
+from st_pnpl.PnPLCmd import PnPLCMDManager
 log = logger.get_logger(__name__)
 
 log_file_name = None
@@ -59,76 +59,31 @@ class AutomodeStatus(Enum):
     AUTOMODE_IDLE = 1
     AUTOMODE_LOGGING = 2
 
+class FastTelemetryStateEnum(Enum):
+    MCP_FT_DISABLE = 0
+    MCP_FT_ENABLE = 1
+
 class HSD_Controller(STDTDL_Controller):
-
-    class DataConsumerThread(Thread):
-        def __init__(self, controller, data_pipeline):
-            Thread.__init__(self)
-            self.controller = controller
-            self.data_pipeline = data_pipeline
-
-            self.missing_bytes = {}
-            self.incoming_data = {}
-            self.stop_thread = False
-
-        def extract_data(self, data):
-            if data.comp_name in self.incoming_data:
-                self.incoming_data[data.comp_name] += data.data
-            else:
-                self.incoming_data[data.comp_name] = data.data
-            
-            comp_status = self.controller.components_status[data.comp_name]
-            dim = comp_status.get("dim")
-            data_type = comp_status.get("data_type")
-            data_sample_bytes_len = dim * TypeConversion.check_type_length(data_type)
-            spts = comp_status.get("samples_per_ts")
-            sensitivity = comp_status.get("sensitivity")
-            timestamp_bytes_len = 8 if spts != 0 else 0
-            data_packet_len = (spts * data_sample_bytes_len) if spts != 0 else data_sample_bytes_len
-
-            nof_cmplt_packets = len(self.incoming_data[data.comp_name]) // (data_packet_len + timestamp_bytes_len)
-            
-            for i in range(nof_cmplt_packets):
-                if spts != 0:
-                    d = self.incoming_data[data.comp_name][:data_packet_len]
-                    timestamp = struct.unpack('<d', self.incoming_data[data.comp_name][data_packet_len:data_packet_len + timestamp_bytes_len])
-                    self.incoming_data[data.comp_name] = self.incoming_data[data.comp_name][data_packet_len + timestamp_bytes_len:]
-                    data_buffer = np.frombuffer(d, dtype=TypeConversion.get_np_dtype(data_type)) * sensitivity
-                    self.data_pipeline.process_data({data.comp_name:{"data":data_buffer, "timestamp":timestamp}})
-                else:
-                    #TODO: Implement the case when spts = 0 (no timestamps)
-                    # missing_bytes_num = len(data.data)%(data_packet_len)
-                    
-                    # d = data.data[:-missing_bytes_num]
-                    # data_buffer = np.frombuffer(d, dtype=TypeConversion.get_np_dtype(data_type))
-                    
-                    # missing_d = data.data[len(d):]
-                    # self.missing_bytes[data.comp_name] = missing_d
-                    pass
-
-        def run(self):
-            while not self.stop_thread:
-                with self.controller.queue_evt:
-                    self.controller.queue_evt.wait()
-                data = self.controller.get_data_from_queue()
-                self.extract_data(data)
-
-        def stop(self):
-            self.stop_thread = True
-
     MAX_HSD_BANDWIDTH = 6000000
     # Signals
     sig_is_waiting_auto_start = Signal(bool)
     sig_is_waiting_idle = Signal(bool)
     sig_is_auto_started = Signal(bool)
+    sig_is_auto_started_inner = Signal(bool)
     sig_tag_done = Signal(bool, str) #(on|off),tag_label
     sig_hsd_bandwidth_exceeded = Signal(bool)
     sig_lock_start_button = Signal(bool, str)
     sig_streaming_error = Signal(bool, str)
+    #MCP Signals
+    sig_is_motor_started = Signal(bool, int)
+    sig_motor_fault_raised = Signal()
+    sig_motor_fault_acked = Signal()
     # TODO: Next version --> Hotplug events notification support
     # sig_usb_hotplug = Signal(bool)
     # TODO: Next version --> Hotplug events notification support
-
+    #dataToolKit
+    sig_new_spt_data_ready = Signal(DataClass)
+    
     class DataReader(DataReader):
         def __init__(self, controller, comp_name, samples_per_ts, dimensions, sample_size, data_format, sensitivity=1, interleaved_data=True, flat_raw_data=False):
             super().__init__(controller, comp_name, samples_per_ts, dimensions, sample_size, data_format, sensitivity, interleaved_data, flat_raw_data)
@@ -136,7 +91,7 @@ class HSD_Controller(STDTDL_Controller):
         def feed_data(self, data):
             if self.controller.dt_plugins_folder_path is not None:
                 a_data = copy.copy(data)
-                self.controller.add_data_to_queue(a_data)
+                self.controller.sig_new_spt_data_ready.emit(a_data)
             super().feed_data(data)
 
     class SensorAcquisitionThread(Thread):
@@ -225,7 +180,7 @@ class HSD_Controller(STDTDL_Controller):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        
+        # HSD
         self.hsd_link = None
         self.is_hsd_link_up = False
         self.is_logging = False
@@ -236,11 +191,20 @@ class HSD_Controller(STDTDL_Controller):
         self.config_error_dict = {}
         self.enabled_stream_comp_set = set()
         self.save_files_flag = True
+        self.auto_started = False
+        #Motor Control 
+        self.mcp_is_connected = False
+        self.is_motor_started = False # @is_motor_started saves motor state
+        self.mcp_fast_telemetries_state = FastTelemetryStateEnum.MCP_FT_DISABLE
+        self.mc_comp_name = "motor_controller"
+        self.mc_start_cmd_name = "start_motor"
+        self.mc_stop_cmd_name = "stop_motor"
+        self.mc_ack_fault_cmd_name = "ack_fault"
+        self.mc_motor_speed_prop_name = "motor_speed"
+        self.mc_speed_req_name = "speed"
         #DataToolkit
         self.dt_plugins_folder_path = None
-        self.data_queue = deque(maxlen=200000)
-        self.queue_evt = Condition()
-        
+
         # TODO: Next version --> Hotplug events notification support
         # self.plugged_flag = False
         # self.unplugged_flag = False
@@ -297,13 +261,6 @@ class HSD_Controller(STDTDL_Controller):
         elif isinstance(self.hsd_link, HSDLink_v1):
             return "{} - [{}] {} v{}".format(device.device_info.alias, device.device_info.part_number, device.device_info.fw_name, device.device_info.fw_version)
     
-    #HSD TODO duplicated API
-    def set_rtc_time(self):
-        now = datetime.now()
-        time = now.strftime("%Y%m%d_%H_%M_%S")
-        message = {"log_controller*set_time":{"datetime":time}}
-        return self.send_command(json.dumps(message))
-    
     def enable_start_log_button(self):
         self.sig_lock_start_button.emit(False, "")
 
@@ -356,6 +313,15 @@ class HSD_Controller(STDTDL_Controller):
     def get_device_info(self, d_id = 0):
         return self.hsd_link.get_device_info(d_id)
     
+    def get_firmware_info(self, d_id = 0):
+        return self.hsd_link.get_firmware_info(d_id)
+    
+    def get_acquisition_info(self, d_id = 0):
+        return self.hsd_link.get_acquisition_info(d_id)
+    
+    def get_device_status(self):
+        return self.hsd_link.get_device_status(self.device_id)
+
     def load_device_template(self, board_id, fw_id):
         self.sig_dtm_loading_started.emit()
         dev_template_json = self.query_dtdl_model(board_id, fw_id)
@@ -387,13 +353,25 @@ class HSD_Controller(STDTDL_Controller):
     def get_component_status(self, comp_name):
         return self.hsd_link.get_component_status(self.device_id, comp_name)
 
+    def __get_property_enum_value(self, prop_name, comp_status, comp_interface):
+        if prop_name in comp_status:
+            prop_index = comp_status[prop_name]
+            prop_schema = [c for c in comp_interface.contents if c.name == prop_name][0].schema
+            prop_enum_dname = prop_schema.enum_values[prop_index].display_name
+            prop_enum_value_schema = prop_schema.value_schema            
+            prop_value = prop_enum_dname if isinstance(prop_enum_dname, str) else prop_enum_dname.en
+            prop_value = prop_value.replace(',','.')
+            if prop_enum_value_schema == SchemaEnum.INTEGER:
+                return float(prop_value)
+            else:
+                return prop_value
+        else:
+            return None
+
     def __get_mems_sensor_odr(self, comp_status, comp_interface):
-        if "odr" in comp_status:
-            odr_index = comp_status["odr"]
-            odr_enum_dname = [c for c in comp_interface.contents if c.name == "odr"][0].schema.enum_values[odr_index].display_name
-            odr_value = odr_enum_dname if isinstance(odr_enum_dname,str) else odr_enum_dname.en
-            odr_value = odr_value.replace(',','.')
-            return float(odr_value)
+        ret = self.__get_property_enum_value("odr", comp_status, comp_interface)
+        if ret is not None:
+            return ret
         return 1
     
     def __get_ranging_sensor_odr(self, comp_status):
@@ -402,26 +380,51 @@ class HSD_Controller(STDTDL_Controller):
             return float(odr_value)
         return None
     
+    def __get_presence_sensor_odr(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("odr", comp_status, comp_interface)
+
     def __get_light_sensor_odr(self, comp_status):
         if "intermeasurement_time" in comp_status:
+            extime_value = comp_status["exposure_time"]/1000
             itime_value = comp_status["intermeasurement_time"]
-            return float(1/itime_value)
+            if itime_value > extime_value + 6:
+                return float(1/(itime_value))
+            else:
+                return float(1/(extime_value + 6))
         return None
+
+    def __get_light_sensor_channel1_gain(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("channel1_gain", comp_status, comp_interface)
+    
+    def __get_light_sensor_channel2_gain(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("channel2_gain", comp_status, comp_interface)
+    
+    def __get_light_sensor_channel3_gain(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("channel3_gain", comp_status, comp_interface)
+    
+    def __get_light_sensor_channel4_gain(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("channel4_gain", comp_status, comp_interface)
+    
+    def __get_light_sensor_channel5_gain(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("channel5_gain", comp_status, comp_interface)
+    
+    def __get_light_sensor_channel6_gain(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("channel6_gain", comp_status, comp_interface)
     
     def __get_powermeter_sensor_odr(self, comp_status, comp_interface):
-        if "adc_conversion_time" in comp_status:
-            odr_index = comp_status["adc_conversion_time"]
-            odr_enum_dname = [c for c in comp_interface.contents if c.name == "adc_conversion_time"][0].schema.enum_values[odr_index].display_name
-            odr_value = odr_enum_dname if isinstance(odr_enum_dname,str) else odr_enum_dname.en
-            odr_value = odr_value.replace(',','.')
-            return float(1000000/float(odr_value))
+        ret = self.__get_property_enum_value("adc_conversion_time", comp_status, comp_interface)
+        if ret is not None:
+            return float(1000000/float(ret))
         return None
 
     def __get_audio_sensor_odr(self, comp_status, comp_interface):
         return self.__get_mems_sensor_odr(comp_status, comp_interface)
     
     def __get_mems_sensor_fs(self, comp_status, comp_interface):
-        pass
+        return self.__get_property_enum_value("fs", comp_status, comp_interface)
+    
+    def __get_audio_sensor_aop(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("aop", comp_status, comp_interface)
 
     def __get_sensor_unit(self, prop_w_unit_name, comp_status, comp_interface):
         if prop_w_unit_name in comp_status:
@@ -448,11 +451,35 @@ class HSD_Controller(STDTDL_Controller):
     def __get_ranging_sensor_unit(self, comp_status, comp_interface):
         return ""
     
+    def __get_ranging_sensor_resolution(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("resolution", comp_status, comp_interface)
+    
+    def __get_ranging_sensor_ranging_mode(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("ranging_mode", comp_status, comp_interface)
+    
+    def __get_presence_sensor_avg_tobject_num(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("avg_tobject_num", comp_status, comp_interface)
+    
+    def __get_presence_sensor_avg_tambient_num(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("avg_tambient_num", comp_status, comp_interface)
+    
+    def __get_presence_sensor_lpf_p_m_bandwidth(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("lpf_p_m_bandwidth", comp_status, comp_interface)
+    
+    def __get_presence_sensor_lpf_p_bandwidth(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("lpf_p_bandwidth", comp_status, comp_interface)
+    
+    def __get_presence_sensor_lpf_m_bandwidth(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("lpf_m_bandwidth", comp_status, comp_interface)
+    
+    def __get_presence_sensor_compensation_type(self, comp_status, comp_interface):
+        return self.__get_property_enum_value("compensation_type", comp_status, comp_interface)
+    
     def __get_mc_telemetry_unit(self, telemetry_status, comp_interface):
         print(telemetry_status)
         pass
 
-    def get_description_string(content):
+    def get_description_string(self, content):
         if content.description is not None:
             return content.description if isinstance(content.description, str) else content.description.en
         return None
@@ -520,16 +547,51 @@ class HSD_Controller(STDTDL_Controller):
                                             fft_sample_freq= comp_status_value["fft_sample_freq"], 
                                             y_label = "db")
                 elif alg_type == DTDLUtils.AlgorithmTypeEnum.IALGORITHM_TYPE_ANOMALY_DETECTOR.value:
-                        return AnomalyDetectorModelPlotParams( comp_name,
-                                                              enabled)
+                        return AnomalyDetectorModelPlotParams( comp_name, enabled)
                 elif alg_type == DTDLUtils.AlgorithmTypeEnum.IALGORITHM_TYPE_CLASSIFIER.value:
-                        return ClassificationModelPlotParams( comp_name,
-                                                              enabled,
-                                                              num_of_class= comp_status_value["dim"])
+                        return ClassificationModelPlotParams( comp_name, enabled, num_of_class= comp_status_value["dim"])
             
             elif comp_type.name == ComponentType.ACTUATOR.name:
-                pass
-            
+                plot_params_dict = {}
+                comp_enabled = comp_status[comp_name].get("enable")
+                if comp_name == DTDLUtils.MC_SLOW_TELEMETRY_COMP_NAME:
+                    st_ble_stream_components = comp_status[DTDLUtils.MC_SLOW_TELEMETRY_COMP_NAME].get(DTDLUtils.ST_BLE_STREAM)
+                    if st_ble_stream_components is not None:
+                        for c in st_ble_stream_components.keys():
+                            if c == "temperature":
+                                t_enabled = st_ble_stream_components[c].get("enable")
+                                t_unit  = st_ble_stream_components[c].get("unit")
+                                plot_params_dict["temperature"] = PlotLabelParams("temperature", t_enabled, 0, 0, t_unit) # label
+                            elif c == "ref_speed":
+                                t_enabled = st_ble_stream_components[c].get("enable")
+                                t_unit  = st_ble_stream_components[c].get("unit")
+                                plot_params_dict["ref_speed"] = PlotLabelParams("ref_speed", t_enabled, 0, 0, t_unit) # label
+                            elif c == "bus_voltage":
+                                t_enabled = st_ble_stream_components[c].get("enable")
+                                t_unit  = st_ble_stream_components[c].get("unit")
+                                plot_params_dict["bus_voltage"] = PlotLabelParams("bus_voltage", t_enabled, 0, 0, t_unit) # label
+                            elif c == "speed":
+                                t_enabled = st_ble_stream_components[c].get("enable")
+                                t_unit  = st_ble_stream_components[c].get("unit")
+                                plot_params_dict["speed"] = PlotGaugeParams("speed", t_enabled, -4000, 4000, t_unit)
+                            elif c == "fault":
+                                t_enabled = st_ble_stream_components[c].get("enable")
+                                plot_params_dict["fault"] = PlotCheckBoxParams("fault", t_enabled, ['No Error', 'FOC Duration', 'Over Voltage', 'Under Voltage', 'Over Heat', 'Start Up failure', 'Speed Feedback', 'Over Current', 'Software Error' ]) # label #TODO ENUM in DTDL
+                elif comp_name == DTDLUtils.MC_FAST_TELEMETRY_COMP_NAME:
+                    contents = comp_interface.contents
+                    description = None
+                    for c in contents:
+                        if c.description is not None:
+                            description = c.description if isinstance(c.description, str) else c.description.en
+                            display_name = c.display_name if isinstance(c.display_name, str) else c.display_name.en
+                            t_root_key = list(comp_status.keys())[0]
+                            if description == DTDLUtils.MC_FAST_TELEMETRY_STRING:
+                                if c.name in comp_status[t_root_key]:
+                                    tele_status = comp_status[t_root_key][c.name]
+                                    t_enabled = tele_status[DTDLUtils.ENABLED_STRING]
+                                    t_unit = tele_status[DTDLUtils.UNIT_STRING]
+                                    plot_params_dict[display_name] = LinesPlotParams(c.name, t_enabled, 1, t_unit)
+                return MCTelemetriesPlotParams(comp_name, comp_enabled, plot_params_dict)            
         return None
     
     def fill_component_status(self, comp_name):
@@ -569,7 +631,45 @@ class HSD_Controller(STDTDL_Controller):
             self.sig_component_updated.emit(comp_name, comp_status[comp_name])
             
             if self.data_pipeline is not None:
-                self.data_pipeline.update_components_status(self.components_status)
+                components_status_exp = copy.deepcopy(self.components_status)
+                for cs in components_status_exp:
+                    comp_interface = self.components_dtdl[cs]
+                    comp_status_value = self.components_status[cs]
+                    s_category = comp_status_value.get("sensor_category")
+
+                    if s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_MEMS.value:
+                        components_status_exp[cs]["odr"] = self.__get_mems_sensor_odr(comp_status_value, comp_interface)
+                        components_status_exp[cs]["fs"] = self.__get_mems_sensor_fs(comp_status_value, comp_interface)
+                    elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_AUDIO.value:
+                        components_status_exp[cs]["odr"] = self.__get_audio_sensor_odr(comp_status_value, comp_interface)
+                        components_status_exp[cs]["aop"] = self.__get_audio_sensor_aop(comp_status_value, comp_interface)
+                    elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_RANGING.value:
+                        components_status_exp[cs]["resolution"] = self.__get_ranging_sensor_resolution(comp_status_value, comp_interface)
+                        components_status_exp[cs]["ranging_mode"] = self.__get_ranging_sensor_ranging_mode(comp_status_value, comp_interface)
+                    elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
+                        components_status_exp[cs]["channel1_gain"] = self.__get_light_sensor_channel1_gain(comp_status_value, comp_interface)
+                        components_status_exp[cs]["channel2_gain"] = self.__get_light_sensor_channel2_gain(comp_status_value, comp_interface)
+                        components_status_exp[cs]["channel3_gain"] = self.__get_light_sensor_channel3_gain(comp_status_value, comp_interface)
+                        components_status_exp[cs]["channel4_gain"] = self.__get_light_sensor_channel4_gain(comp_status_value, comp_interface)
+                        components_status_exp[cs]["channel5_gain"] = self.__get_light_sensor_channel5_gain(comp_status_value, comp_interface)
+                        components_status_exp[cs]["channel6_gain"] = self.__get_light_sensor_channel6_gain(comp_status_value, comp_interface)
+                    elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_PRESENCE.value:
+                        components_status_exp[cs]["odr"] = self.__get_presence_sensor_odr(comp_status_value, comp_interface)
+                        components_status_exp[cs]["avg_tobject_num"] = self.__get_presence_sensor_avg_tobject_num(comp_status_value, comp_interface)
+                        components_status_exp[cs]["avg_tambient_num"] = self.__get_presence_sensor_avg_tambient_num(comp_status_value, comp_interface)
+                        components_status_exp[cs]["lpf_p_m_bandwidth"] = self.__get_presence_sensor_lpf_p_m_bandwidth(comp_status_value, comp_interface)
+                        components_status_exp[cs]["lpf_p_bandwidth"] = self.__get_presence_sensor_lpf_p_bandwidth(comp_status_value, comp_interface)
+                        components_status_exp[cs]["lpf_m_bandwidth"] = self.__get_presence_sensor_lpf_m_bandwidth(comp_status_value, comp_interface)
+                        components_status_exp[cs]["compensation_type"] = self.__get_presence_sensor_compensation_type(comp_status_value, comp_interface)
+                    elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_CAMERA.value:
+                        pass
+                    elif s_category == DTDLUtils.SensorCategoryEnum.ISENSOR_CLASS_POWERMETER.value:
+                        components_status_exp[cs]["adc_conversion_time"] = self.__get_powermeter_sensor_odr(comp_status_value, comp_interface)
+                    else: #Maintain compatibility with OLD versions (< SensorManager v3 [NO SENSOR CATEGORIES])
+                        components_status_exp[cs]["odr"] = self.__get_mems_sensor_odr(comp_status_value, comp_interface)
+                        components_status_exp[cs]["fs"] = self.__get_mems_sensor_fs(comp_status_value, comp_interface)
+
+                self.data_pipeline.update_components_status(components_status_exp)
         else:
             log.warning("The component [{}] defined in DeviceTemplate has not a Twin in Device Status from the FW".format(comp_name))
             self.sig_component_updated.emit(comp_name, None)
@@ -613,10 +713,13 @@ class HSD_Controller(STDTDL_Controller):
 
     def stop_idle_auto_log(self):
         self.sig_is_waiting_idle.emit(False)
-    
-    def start_auto_log(self, interface=1, acq_folder = None, sub_folder=True):
-        self.start_log(interface, acq_folder, sub_folder)
+
+    def start_auto_log(self):
         self.sig_is_auto_started.emit(True)
+    
+    def start_auto_log_inner(self, interface=1, acq_folder = None, sub_folder=True):
+        self.start_log(interface, acq_folder, sub_folder)
+        self.sig_is_auto_started_inner.emit(True)
             
     def start_detect(self):
         if type(self.hsd_link) == HSDLink_v1:
@@ -635,10 +738,10 @@ class HSD_Controller(STDTDL_Controller):
 
     def start_plots(self):
         if self.dt_plugins_folder_path is not None:
-            # Create and start the consumer thread
-            self.consumer_thread = self.DataConsumerThread(self, self.data_pipeline)
+            # Initialize DataToolkit
+            self.dataToolKit = HSD_DataToolkit(self.components_status, self.data_pipeline, self.sig_new_spt_data_ready)
             # self.consumer_thread.daemon = True
-            self.consumer_thread.start()
+            self.dataToolKit.start()
 
         for s in self.plot_widgets:
             s_plot = self.plot_widgets[s]
@@ -697,15 +800,53 @@ class HSD_Controller(STDTDL_Controller):
                     elif c_type == ComponentType.ALGORITHM.value:
                         spts = 0 #spts override (no timestamps in algorithms @ the moment)
                         algorithm_type = c_status_value.get("algorithm_type")
-                        if algorithm_type == DTDLUtils.AlgorithmTypeEnum.IALGORITHM_TYPE_FFT.value \
-                            or algorithm_type == DTDLUtils.AlgorithmTypeEnum.IALGORITHM_TYPE_ANOMALY_DETECTOR.value \
-                            or algorithm_type == DTDLUtils.AlgorithmTypeEnum.IALGORITHM_TYPE_CLASSIFIER.value:
-                            interleaved_data = False
-                            if algorithm_type == DTDLUtils.AlgorithmTypeEnum.IALGORITHM_TYPE_FFT.value:
-                                dimensions = c_status_value.get("fft_length")
+                        if algorithm_type == DTDLUtils.AlgorithmTypeEnum.IALGORITHM_TYPE_ANOMALY_DETECTOR.value:
+                            dimensions = c_status_value["dim"]                                
+                        if algorithm_type == DTDLUtils.AlgorithmTypeEnum.IALGORITHM_TYPE_FFT.value:
+                            dimensions = c_status_value.get("fft_length")                                    
+                        if algorithm_type == DTDLUtils.AlgorithmTypeEnum.IALGORITHM_TYPE_CLASSIFIER.value:
+                            # Get ai classifier content
+                            ai_classifier_contents = c_status[DTDLUtils.AI_CLASSIFIER_COMP_NAME]
+                            # Get  ai classifier sub properties
+                            ai_classifier_sub_properties = ai_classifier_contents[DTDLUtils.ST_BLE_STREAM]
+                            dimensions = 0
+                            for t in ai_classifier_sub_properties:
+                                if t != 'id':
+                                # Check enable condition
+                                    t_enabled = ai_classifier_sub_properties[t].get("enable")
+                                    if t_enabled:
+                                        #get format 
+                                        t_format = ai_classifier_sub_properties[t].get("format")
+                                        dimensions += TypeConversion.check_type_length(t_format)
+                        interleaved_data = False                 
                     
-                    elif c_type == ComponentType.ACTUATOR.value:
-                        dimensions = c_status_value["n_params"]
+                    elif c_status_value["c_type"] == ComponentType.ACTUATOR.value:
+                        spts = 1
+                        dimensions = 0
+
+                        if s_plot.comp_name == DTDLUtils.MC_SLOW_TELEMETRY_COMP_NAME:
+                            # Get slow telemetries content:
+                            slow_telemetries_contents = c_status[DTDLUtils.MC_SLOW_TELEMETRY_COMP_NAME]
+                            # Get slow telemetries sub properties
+                            slow_telemetries_sub_properties = slow_telemetries_contents[DTDLUtils.ST_BLE_STREAM]
+                            for t in slow_telemetries_sub_properties:
+                                if t != 'id':
+                                # Check enable condition
+                                    t_enabled = slow_telemetries_sub_properties[t].get("enable")
+                                    if t_enabled:
+                                        self.plot_widgets[s_plot.comp_name].plots_params.plots_params_dict[t].enabled = t_enabled
+                                        if t_enabled:
+                                            dimensions += 1
+                        
+                        elif s_plot.comp_name == DTDLUtils.MC_FAST_TELEMETRY_COMP_NAME:
+                            fast_telemetries_contents = [ftc for ftc in self.components_dtdl[s_plot.comp_name].contents if self.get_description_string(ftc) == DTDLUtils.MC_FAST_TELEMETRY_STRING]
+                            for t in fast_telemetries_contents:
+                                t_display_name = t.display_name if isinstance(t.display_name, str) else t.display_name.en
+                                t_enabled = c_status_value[t.name].get("enabled")
+                                self.plot_widgets[s_plot.comp_name].plots_params.plots_params_dict[t_display_name].enabled = t_enabled
+
+                            dimensions = c_status_value["dim"]
+                            interleaved_data = False
 
                     if "_ispu" in s_plot.comp_name:
                         data_format = "b"
@@ -747,12 +888,16 @@ class HSD_Controller(STDTDL_Controller):
                         ucf_filename = os.path.basename(self.ispu_ucf_file_path)
                         shutil.copyfile(self.ispu_ucf_file_path, os.path.join(self.hsd_link.get_acquisition_folder(),ucf_filename))
                         log.info("{} File correctly saved".format(ucf_filename))
+                self.update_component_status("acquisition_info", ComponentType.OTHER)
                 self.sig_logging.emit(False, interface)
                 if self.data_pipeline is not None:
                     self.data_pipeline.stop()
                 self.is_logging = False
     
-    def stop_auto_log(self, interface=1):
+    def stop_auto_log(self):
+        self.sig_is_auto_started.emit(False)
+
+    def stop_auto_log_inner(self, interface=1):
         if self.is_logging == True:
             self.sig_autologging_is_stopping.emit(True)
             self.hsd_link.stop_log(self.device_id)
@@ -773,12 +918,13 @@ class HSD_Controller(STDTDL_Controller):
                         ucf_filename = os.path.basename(self.ispu_ucf_file_path)
                         shutil.copyfile(self.ispu_ucf_file_path, os.path.join(self.hsd_link.get_acquisition_folder(),ucf_filename))
                         log.info("{} File correctly saved".format(ucf_filename))
+                self.update_component_status("acquisition_info", ComponentType.OTHER)
                 self.sig_logging.emit(False, interface)
                 if self.data_pipeline is not None:
                     self.data_pipeline.stop()
                 self.is_logging = False
                 self.sig_autologging_is_stopping.emit(False)
-        self.sig_is_auto_started.emit(False)
+        self.sig_is_auto_started_inner.emit(False)
         self.is_logging = False
 
     def stop_detect(self):
@@ -799,13 +945,15 @@ class HSD_Controller(STDTDL_Controller):
                         ucf_filename = os.path.basename(self.ispu_ucf_file_path)
                         shutil.copyfile(self.ispu_ucf_file_path, os.path.join(self.hsd_link.get_acquisition_folder(),ucf_filename))
                         log.info("{} File correctly saved".format(ucf_filename))
+                    self.update_component_status("acquisition_info", ComponentType.OTHER)
             self.sig_detecting.emit(False)
             self.is_detecting = False
     
     def stop_plots(self):
         if self.dt_plugins_folder_path is not None:
-            # stop the consumer thread
-            self.consumer_thread.stop()
+            # stop dataToolKit thread
+            self.dataToolKit.stop()
+
         for sf in self.threads_stop_flags:
             sf.set()
         if self.save_files_flag:
@@ -821,8 +969,15 @@ class HSD_Controller(STDTDL_Controller):
         else:
             return None
     
-    def add_plot_widget(self, plot_widget):
+    def add_plot_widget(self, plot_widget, enabled=None):
         self.plot_widgets[plot_widget.comp_name] = (plot_widget)
+        if enabled is not None:
+            if enabled:
+                self.cconfig_widgets[plot_widget.comp_name].enable_plot_control()
+                self.cconfig_widgets[plot_widget.comp_name].show_plot_widget()
+            else:
+                self.cconfig_widgets[plot_widget.comp_name].disable_plot_control()
+                self.cconfig_widgets[plot_widget.comp_name].hide_plot_widget()
 
     def __calculate_hsd_bandwidth(self):
         self.curr_bandwidth = 0
@@ -858,7 +1013,12 @@ class HSD_Controller(STDTDL_Controller):
     def update_plot_widget(self, comp_name, plot_params, visible):
         if comp_name in self.plot_widgets:
             self.plot_widgets[comp_name].update_plot_characteristics(plot_params)
-            self.plot_widgets[comp_name].setVisible(visible)
+            if visible:
+                self.cconfig_widgets[comp_name].enable_plot_control()
+                self.cconfig_widgets[comp_name].show_plot_widget()
+            else:
+                self.cconfig_widgets[comp_name].disable_plot_control()
+                self.cconfig_widgets[comp_name].hide_plot_widget()
         else:
             log.warning(f"{comp_name} is not in plot widget list yet")
 
@@ -892,9 +1052,6 @@ class HSD_Controller(STDTDL_Controller):
         log.info("PnPL Message: {}".format(json_command))
         response = self.hsd_link.send_command(self.device_id, json_command)
         return response
-    
-    def get_device_status(self):
-        return self.hsd_link.get_device_status(self.device_id)
     
     def save_config(self, on_pc:bool, on_sd:bool):
         if on_pc:
@@ -1019,7 +1176,7 @@ class HSD_Controller(STDTDL_Controller):
                 HSDatalog.reset_status_conversion_side_info(s[s_key], ioffset)
             for a in active_algorithm_list:
                 a_key = list(a.keys())[0]
-                hsd.get_algorithm_plot(a_key, None, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
+                hsd.get_algorithm_plot(a_key, a[a_key], start_time, end_time, tag_label if tag_label != "None" else None, [], sub_plots_flag, raw_data_flag)
             if active_actuator_list is not None:
                 for act in active_actuator_list:
                     act_key = list(act.keys())[0]
@@ -1042,6 +1199,7 @@ class HSD_Controller(STDTDL_Controller):
                 HSDatalog.reset_status_conversion_side_info(sensor_comp, ioffset)
             elif len(algo_comp) > 0: # == 1
                 a_key = list(algo_comp[0].keys())[0]
+
                 hsd.get_algorithm_plot(a_key, algo_comp, start_time, end_time, tag_label if tag_label != "None" else None, sub_plots_flag, raw_data_flag)
             elif len(act_comp) > 0: # == 1
                 act_comp = act_comp[0][cb_sensor_value]
@@ -1106,14 +1264,36 @@ class HSD_Controller(STDTDL_Controller):
     #Data Toolkit functions
     def set_dt_plugins_folder(self, path:str):
         self.dt_plugins_folder_path = path
+        # Add the provided path to sys.path
+        sys.path.insert(0, self.dt_plugins_folder_path)
 
     def get_dt_plugin_folder_path(self):
         return self.dt_plugins_folder_path
+    
+    def remove_dt_plugins_folder(self):
+        if self.dt_plugins_folder_path in sys.path:
+            sys.path.remove(self.dt_plugins_folder_path)
 
-    def add_data_to_queue(self, data:DataClass):
-        with self.queue_evt:
-            self.data_queue.append(data)
-            self.queue_evt.notify()
-
-    def get_data_from_queue(self):
-        return self.data_queue.popleft()
+    #Motor Control functions
+    def start_motor(self, motor_id = 0):
+        # Send Start motor cmd
+        self.send_command(PnPLCMDManager.create_command_cmd(self.mc_comp_name, self.mc_start_cmd_name))
+        #Emit signal
+        self.sig_is_motor_started.emit(True, motor_id)
+    
+    def stop_motor(self, motor_id = 0):
+        #Send stop motor message
+        res = self.send_command(PnPLCMDManager.create_command_cmd(self.mc_comp_name, self.mc_stop_cmd_name))
+        #Emit signal
+        self.sig_is_motor_started.emit(False, motor_id)
+        return res
+    
+    def ack_fault(self, motor_id = 0):
+        res = self.send_command(PnPLCMDManager.create_command_cmd(self.mc_comp_name, self.mc_ack_fault_cmd_name))
+        time.sleep(0.7)
+        stop_res = self.stop_motor()
+        if res is not None and stop_res is not None:
+            self.sig_motor_fault_acked.emit()
+        
+    def set_motor_speed(self, value, motor_id = 0):
+        self.send_command(PnPLCMDManager.create_set_property_cmd(self.mc_comp_name, self.mc_motor_speed_prop_name, value))

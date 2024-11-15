@@ -32,6 +32,7 @@
 
 /* USER includes -------------------------------------------------------------*/
 #include "app_netxduo.h"
+#include "DatalogAppTask.h"
 
 /* USER private function prototypes ------------------------------------------*/
 
@@ -127,6 +128,7 @@ uint8_t wifi_config_wifi_connect(const char *password)
 
   if (password && (strlen(password) < PASSW_MAX_LENGTH))
   {
+    DatalogAppTask_sd_stream_enable();
     IWifi_Config_wifi_connect(AppNetXDuo_GetIWifi_ConfigIF(), password);
   }
   /* Wait for connection command execution */
@@ -142,6 +144,7 @@ uint8_t wifi_config_wifi_disconnect(void)
 {
   uint8_t ret = TX_SUCCESS;
   IWifi_Config_wifi_disconnect(AppNetXDuo_GetIWifi_ConfigIF());
+  DatalogAppTask_sd_stream_disable();
 
   /* Wait for connection command execution */
   if (TX_SUCCESS != netx_app_wait_command_execution())

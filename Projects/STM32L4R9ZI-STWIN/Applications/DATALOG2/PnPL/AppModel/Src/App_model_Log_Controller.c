@@ -35,6 +35,7 @@
 #include "fx_stm32_sd_driver.h"
 #include "TagManager.h"
 #include "DatalogAppTask.h"
+#include "automode.h"
 
 /* USER private function prototypes ------------------------------------------*/
 
@@ -136,7 +137,18 @@ uint8_t log_controller_start_log(int32_t interface)
   app_model.acquisition_info_model.start_time[23] = 'Z';
   app_model.acquisition_info_model.start_time[24] = '\0';
 
-  DatalogAppTask_start_vtbl(interface);
+  bool auto_enabled, auto_started;
+  automode_get_enabled(&auto_enabled);
+  automode_get_started(&auto_started);
+  if ((auto_enabled == true) && (auto_started == false) && (interface != LOG_CTRL_MODE_USB))
+  {
+    automode_setup_host();
+    automode_start();
+  }
+  else
+  {
+    DatalogAppTask_start_vtbl(interface);
+  }
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -166,7 +178,6 @@ uint8_t log_controller_set_dfu_mode(void)
 
 uint8_t log_controller_enable_all(bool status)
 {
-  /* USER Code */
   return DatalogAppTask_enable_all(status);
 }
 

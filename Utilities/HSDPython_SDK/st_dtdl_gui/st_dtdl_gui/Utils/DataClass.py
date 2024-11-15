@@ -76,10 +76,14 @@ class SensorAudioPlotParams(SensorPlotParams):
         super().__init__(comp_name, enabled, dimension, unit, time_window)
         self.odr = odr
 
-class SensorRangingPlotParams(SensorPlotParams):
-    def __init__(self, comp_name, enabled, dimension, resolution, output_format = None, unit="", time_window=30) -> None:
+class PlotHeatMapParams(SensorPlotParams):
+    def __init__(self, comp_name, enabled, dimension, resolution, unit="", time_window=30) -> None:
         super().__init__(comp_name, enabled, dimension, unit, time_window)
         self.resolution = resolution
+
+class SensorRangingPlotParams(PlotHeatMapParams):
+    def __init__(self, comp_name, enabled, dimension, resolution, output_format = None, unit="", time_window=30) -> None:
+        super().__init__(comp_name, enabled, dimension, resolution, unit, time_window)
         self.output_format = output_format
 
 class SensorLightPlotParams(SensorPlotParams):

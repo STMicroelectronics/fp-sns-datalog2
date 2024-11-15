@@ -36,6 +36,9 @@
 uint8_t __tags_info_set_sw_tagN__label(const char *value, char **response_message, int n);
 uint8_t __tags_info_set_sw_tagN__enabled(bool value, char **response_message, int n);
 uint8_t __tags_info_set_sw_tagN__status(bool value, char **response_message, int n);
+uint8_t __tags_info_set_hw_tagN__label(const char *value, char **response_message, int n);
+uint8_t __tags_info_set_hw_tagN__enabled(bool value, char **response_message, int n);
+uint8_t __tags_info_set_hw_tagN__status(bool value, char **response_message, int n);
 
 /* USER defines --------------------------------------------------------------*/
 
@@ -80,6 +83,13 @@ uint8_t tags_info_comp_init(void)
   tags_info_set_sw_tag13__status(false, NULL);
   tags_info_set_sw_tag14__status(false, NULL);
   tags_info_set_sw_tag15__status(false, NULL);
+
+  /* By default, HW TAGS are disabled */
+  tags_info_set_hw_tag0__enabled(false, NULL);
+  tags_info_set_hw_tag1__enabled(false, NULL);
+  tags_info_set_hw_tag0__status(false, NULL);
+  tags_info_set_hw_tag1__status(false, NULL);
+
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -511,6 +521,71 @@ uint8_t __tags_info_set_sw_tagN__status(bool value, char **response_message, int
   return ret;
 }
 
+/* USER CODE */
+uint8_t __tags_info_set_hw_tagN__label(const char *value, char **response_message, int n)
+{
+  if (response_message != NULL)
+  {
+    *response_message = "";
+  }
+  uint8_t ret = SYS_NO_ERROR_CODE;
+  ret = TMSetHWTagLabel(value, n);
+  if (ret != SYS_NO_ERROR_CODE)
+  {
+    if (response_message != NULL)
+    {
+      *response_message = "Error: Tag class label assignment failure";
+    }
+  }
+  return ret;
+}
+
+uint8_t __tags_info_set_hw_tagN__enabled(bool value, char **response_message, int n)
+{
+  if (response_message != NULL)
+  {
+    *response_message = "";
+  }
+  uint8_t ret = SYS_NO_ERROR_CODE;
+  ret = TMEnableHWTag(value, n);
+  if (ret != SYS_NO_ERROR_CODE)
+  {
+    if (response_message != NULL)
+    {
+      *response_message = "Error: Tag class enabling failure";
+    }
+  }
+  return ret;
+}
+
+uint8_t __tags_info_set_hw_tagN__status(bool value, char **response_message, int n)
+{
+  if (response_message != NULL)
+  {
+    *response_message = "";
+  }
+  bool status;
+  log_controller_get_log_status(&status);
+
+  uint8_t ret = SYS_NO_ERROR_CODE;
+  if (status)
+  {
+    TMSetHWTag(value, n);
+  }
+  else
+  {
+    TMInitHWTagStatus(false, n);
+  }
+  if (ret != SYS_NO_ERROR_CODE)
+  {
+    if (response_message != NULL)
+    {
+      *response_message = "Error: Acquisition tagging Unsuccessful";
+    }
+  }
+  return ret;
+}
+
 
 /* USER CODE */
 
@@ -754,3 +829,77 @@ uint8_t tags_info_set_sw_tag15__status(bool value, char **response_message)
   return __tags_info_set_sw_tagN__status(value, response_message, 15);
 }
 
+
+uint8_t tags_info_get_hw_tag0__label(char **value)
+{
+  *value = TMGetHWTagLabel(0);
+  return PNPL_NO_ERROR_CODE;
+}
+
+uint8_t tags_info_get_hw_tag0__enabled(bool *value)
+{
+  HSD_HW_Tag_Class_t *hw_tag_class;
+  hw_tag_class = TMGetHWTag(0);
+  *value = hw_tag_class->enabled;
+  return PNPL_NO_ERROR_CODE;
+}
+
+uint8_t tags_info_get_hw_tag0__status(bool *value)
+{
+  HSD_HW_Tag_Class_t *hw_tag_class;
+  hw_tag_class = TMGetHWTag(0);
+  *value = hw_tag_class->status;
+  return PNPL_NO_ERROR_CODE;
+}
+
+uint8_t tags_info_get_hw_tag1__label(char **value)
+{
+  *value = TMGetHWTagLabel(1);
+  return PNPL_NO_ERROR_CODE;
+}
+
+uint8_t tags_info_get_hw_tag1__enabled(bool *value)
+{
+  HSD_HW_Tag_Class_t *hw_tag_class;
+  hw_tag_class = TMGetHWTag(1);
+  *value = hw_tag_class->enabled;
+  return PNPL_NO_ERROR_CODE;
+}
+
+uint8_t tags_info_get_hw_tag1__status(bool *value)
+{
+  HSD_HW_Tag_Class_t *hw_tag_class;
+  hw_tag_class = TMGetHWTag(1);
+  *value = hw_tag_class->status;
+  return PNPL_NO_ERROR_CODE;
+}
+
+uint8_t tags_info_set_hw_tag0__label(const char *value, char **response_message)
+{
+  return __tags_info_set_hw_tagN__label(value, response_message, 0);
+}
+
+uint8_t tags_info_set_hw_tag0__enabled(bool value, char **response_message)
+{
+  return __tags_info_set_hw_tagN__enabled(value, response_message, 0);
+}
+
+uint8_t tags_info_set_hw_tag0__status(bool value, char **response_message)
+{
+  return __tags_info_set_hw_tagN__status(value, response_message, 0);
+}
+
+uint8_t tags_info_set_hw_tag1__label(const char *value, char **response_message)
+{
+  return __tags_info_set_hw_tagN__label(value, response_message, 1);
+}
+
+uint8_t tags_info_set_hw_tag1__enabled(bool value, char **response_message)
+{
+  return __tags_info_set_hw_tagN__enabled(value, response_message, 1);
+}
+
+uint8_t tags_info_set_hw_tag1__status(bool value, char **response_message)
+{
+  return __tags_info_set_hw_tagN__status(value, response_message, 1);
+}

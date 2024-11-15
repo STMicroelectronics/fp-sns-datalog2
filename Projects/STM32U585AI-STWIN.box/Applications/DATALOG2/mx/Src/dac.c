@@ -90,7 +90,7 @@ void HAL_DAC_MspInit(DAC_HandleTypeDef *dacHandle)
     /* USER CODE END DAC1_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_DAC1;
     PeriphClkInit.Dac1ClockSelection = RCC_DAC1CLKSOURCE_LSI;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)

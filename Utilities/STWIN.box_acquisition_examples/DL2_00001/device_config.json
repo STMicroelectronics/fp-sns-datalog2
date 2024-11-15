@@ -1,347 +1,20 @@
 {
     "schema_version": "2.2.0",
-    "uuid": "30aec81f-3207-4b77-a701-726b1452d3f5",
+    "uuid": "2d558d25-06fa-4544-8226-447426c2464a",
     "devices": [
         {
             "board_id": 14,
-            "fw_id": 6,
+            "fw_id": 14,
             "protocol_id": 2,
             "sn": "002700405752501820353339",
             "pnpl_responses": true,
             "pnpl_ble_responses": true,
             "components": [
                 {
-                    "iis2dlpc_acc": {
-                        "odr": 7,
-                        "fs": 3,
-                        "enable": true,
-                        "samples_per_ts": 1000,
-                        "dim": 3,
-                        "ioffset": 0.024916263297200203,
-                        "measodr": 1601.723876953125,
-                        "usb_dps": 480,
-                        "sd_dps": 3584,
-                        "sensitivity": 0.00048799999058246622,
-                        "data_type": "int16",
-                        "sensor_annotation": "",
-                        "sensor_category": 0,
-                        "st_ble_stream": {
-                            "id": 10,
-                            "acc": {
-                                "enable": false,
-                                "unit": "g",
-                                "format": "int16_t",
-                                "elements": 36,
-                                "channels": 3,
-                                "multiply_factor": 0.00048799999058246622,
-                                "odr": 666
-                            }
-                        },
-                        "c_type": 0,
-                        "stream_id": 5,
-                        "ep_id": 4
-                    }
-                },
-                {
-                    "iis2iclx_acc": {
-                        "odr": 6,
-                        "fs": 3,
-                        "enable": true,
-                        "samples_per_ts": 800,
-                        "dim": 2,
-                        "ioffset": 0.30813038349151611,
-                        "measodr": 838.1563720703125,
-                        "usb_dps": 166,
-                        "sd_dps": 1536,
-                        "sensitivity": 9.1499998234212399e-05,
-                        "data_type": "int16",
-                        "sensor_annotation": "",
-                        "sensor_category": 0,
-                        "st_ble_stream": {
-                            "id": 9,
-                            "acc": {
-                                "enable": false,
-                                "unit": "g",
-                                "format": "int16_t",
-                                "elements": 54,
-                                "channels": 2,
-                                "multiply_factor": 9.1499998234212399e-05,
-                                "odr": 833
-                            }
-                        },
-                        "c_type": 0,
-                        "stream_id": 6,
-                        "ep_id": 4
-                    }
-                },
-                {
-                    "iis2mdc_mag": {
-                        "odr": 3,
-                        "fs": 0,
-                        "enable": true,
-                        "samples_per_ts": 100,
-                        "dim": 3,
-                        "ioffset": 0.027769362553954124,
-                        "measodr": 101.447021484375,
-                        "usb_dps": 30,
-                        "sd_dps": 512,
-                        "sensitivity": 0.001500000013038516,
-                        "data_type": "int16",
-                        "sensor_annotation": "",
-                        "sensor_category": 0,
-                        "st_ble_stream": {
-                            "id": 8,
-                            "mag": {
-                                "enable": false,
-                                "unit": "gauss",
-                                "format": "int16_t",
-                                "elements": 36,
-                                "channels": 3,
-                                "multiply_factor": 0.001500000013038516,
-                                "odr": 100
-                            }
-                        },
-                        "c_type": 0,
-                        "stream_id": 9,
-                        "ep_id": 4
-                    }
-                },
-                {
-                    "ilps22qs_press": {
-                        "odr": 7,
-                        "fs": 1,
-                        "enable": true,
-                        "samples_per_ts": 200,
-                        "dim": 1,
-                        "ioffset": 0.3279951810836792,
-                        "measodr": 199.99992370605469,
-                        "usb_dps": 40,
-                        "sd_dps": 512,
-                        "sensitivity": 1,
-                        "data_type": "float",
-                        "sensor_annotation": "",
-                        "sensor_category": 0,
-                        "st_ble_stream": {
-                            "id": 6,
-                            "press": {
-                                "enable": false,
-                                "unit": "hPa",
-                                "format": "float",
-                                "elements": 54,
-                                "channels": 1,
-                                "multiply_factor": 1,
-                                "odr": 200
-                            }
-                        },
-                        "c_type": 0,
-                        "stream_id": 7,
-                        "ep_id": 4
-                    }
-                },
-                {
-                    "imp23absu_mic": {
-                        "odr": 4,
-                        "aop": 0,
-                        "enable": true,
-                        "volume": 100,
-                        "resolution": 0,
-                        "samples_per_ts": 1000,
-                        "dim": 1,
-                        "ioffset": 0.30000683665275574,
-                        "usb_dps": 7000,
-                        "sd_dps": 126976,
-                        "sensitivity": 3.0517578125e-05,
-                        "data_type": "int16",
-                        "sensor_annotation": "",
-                        "sensor_category": 1,
-                        "c_type": 0,
-                        "stream_id": 0,
-                        "ep_id": 0
-                    }
-                },
-                {
-                    "imp34dt05_mic": {
-                        "odr": 2,
-                        "aop": 0,
-                        "enable": true,
-                        "volume": 100,
-                        "resolution": 0,
-                        "samples_per_ts": 1000,
-                        "dim": 1,
-                        "ioffset": 0.30030304193496704,
-                        "usb_dps": 4800,
-                        "sd_dps": 31744,
-                        "sensitivity": 3.0517578125e-05,
-                        "data_type": "int16",
-                        "sensor_annotation": "",
-                        "sensor_category": 1,
-                        "c_type": 0,
-                        "stream_id": 2,
-                        "ep_id": 2
-                    }
-                },
-                {
-                    "stts22h_temp": {
-                        "odr": 4,
-                        "fs": 0,
-                        "enable": true,
-                        "samples_per_ts": 200,
-                        "dim": 1,
-                        "ioffset": 0.012994787655770781,
-                        "measodr": 199.96076965332031,
-                        "usb_dps": 40,
-                        "sd_dps": 512,
-                        "sensitivity": 1,
-                        "data_type": "float",
-                        "sensor_annotation": "",
-                        "sensor_category": 0,
-                        "st_ble_stream": {
-                            "id": 3,
-                            "temp": {
-                                "enable": false,
-                                "unit": "Celsius",
-                                "format": "float",
-                                "elements": 54,
-                                "channels": 1,
-                                "multiply_factor": 1,
-                                "odr": 200
-                            }
-                        },
-                        "c_type": 0,
-                        "stream_id": 8,
-                        "ep_id": 4
-                    }
-                },
-                {
-                    "iis3dwb_acc": {
-                        "odr": 0,
-                        "fs": 3,
-                        "enable": true,
-                        "samples_per_ts": 1000,
-                        "dim": 3,
-                        "ioffset": 0.029113955795764923,
-                        "measodr": 26736.2578125,
-                        "usb_dps": 7000,
-                        "sd_dps": 53248,
-                        "sensitivity": 0.00048799999058246622,
-                        "data_type": "int16",
-                        "sensor_annotation": "",
-                        "sensor_category": 0,
-                        "st_ble_stream": {
-                            "id": 7,
-                            "acc": {
-                                "enable": false,
-                                "unit": "g",
-                                "format": "int16_t",
-                                "elements": 36,
-                                "channels": 3,
-                                "multiply_factor": 0.00048799999058246622,
-                                "odr": 666
-                            }
-                        },
-                        "c_type": 0,
-                        "stream_id": 1,
-                        "ep_id": 1
-                    }
-                },
-                {
-                    "ism330dhcx_acc": {
-                        "odr": 9,
-                        "fs": 3,
-                        "enable": true,
-                        "samples_per_ts": 1000,
-                        "dim": 3,
-                        "ioffset": 0.055530592799186707,
-                        "measodr": 7135.04296875,
-                        "usb_dps": 2000,
-                        "sd_dps": 13312,
-                        "sensitivity": 0.00048799999058246622,
-                        "data_type": "int16",
-                        "sensor_annotation": "",
-                        "sensor_category": 0,
-                        "st_ble_stream": {
-                            "id": 0,
-                            "acc": {
-                                "enable": false,
-                                "unit": "g",
-                                "format": "int16_t",
-                                "elements": 36,
-                                "channels": 3,
-                                "multiply_factor": 0.00048799999058246622,
-                                "odr": 666
-                            }
-                        },
-                        "c_type": 0,
-                        "stream_id": 4,
-                        "ep_id": 4
-                    }
-                },
-                {
-                    "ism330dhcx_gyro": {
-                        "odr": 9,
-                        "fs": 5,
-                        "enable": true,
-                        "samples_per_ts": 1000,
-                        "dim": 3,
-                        "ioffset": 0.055530592799186707,
-                        "measodr": 7135.04296875,
-                        "usb_dps": 2000,
-                        "sd_dps": 13312,
-                        "sensitivity": 0.14000000059604645,
-                        "data_type": "int16",
-                        "sensor_annotation": "",
-                        "sensor_category": 0,
-                        "st_ble_stream": {
-                            "id": 1,
-                            "gyro": {
-                                "enable": false,
-                                "unit": "dps",
-                                "format": "int16_t",
-                                "elements": 36,
-                                "channels": 3,
-                                "multiply_factor": 0.14000000059604645,
-                                "odr": 666
-                            }
-                        },
-                        "c_type": 0,
-                        "stream_id": 3,
-                        "ep_id": 3
-                    }
-                },
-                {
-                    "ism330dhcx_mlc": {
-                        "enable": false,
-                        "samples_per_ts": 1,
-                        "ucf_status": false,
-                        "dim": 9,
-                        "ioffset": 0,
-                        "data_type": "int8",
-                        "usb_dps": 0,
-                        "sd_dps": 0,
-                        "sensor_annotation": "",
-                        "sensor_category": 0,
-                        "st_ble_stream": {
-                            "id": 2,
-                            "mlc": {
-                                "enable": false,
-                                "unit": "",
-                                "format": "int8_t",
-                                "elements": 3,
-                                "channels": 9,
-                                "multiply_factor": 1,
-                                "odr": 1
-                            }
-                        },
-                        "c_type": 0,
-                        "stream_id": -1,
-                        "ep_id": -1
-                    }
-                },
-                {
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-STWINBX1",
-                        "swVersion": "2.2.0",
+                        "swVersion": "2.3.0",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M33",
                         "processorManufacturer": "STMicroelectronics",
@@ -353,7 +26,7 @@
                     "firmware_info": {
                         "alias": "STWIN_BOX_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "2.2.0",
+                        "fw_version": "2.3.0",
                         "part_number": "FP-SNS-DATALOG2",
                         "device_url": "https:\/\/www.st.com\/stwinbox",
                         "fw_url": "https:\/\/github.com\/STMicroelectronics\/fp-sns-datalog2",
@@ -444,6 +117,16 @@
                             "enabled": true,
                             "status": false
                         },
+                        "hw_tag0": {
+                            "label": "HW_TAG_0",
+                            "enabled": false,
+                            "status": false
+                        },
+                        "hw_tag1": {
+                            "label": "HW_TAG_1",
+                            "enabled": false,
+                            "status": false
+                        },
                         "c_type": 2
                     }
                 },
@@ -473,8 +156,335 @@
                         "ftp_username": "anonymous",
                         "c_type": 2
                     }
+                },
+                {
+                    "iis2dlpc_acc": {
+                        "odr": 7,
+                        "fs": 3,
+                        "enable": true,
+                        "samples_per_ts": 1000,
+                        "dim": 3,
+                        "ioffset": 0.015395024791359899,
+                        "measodr": 1601.3121337890625,
+                        "usb_dps": 480,
+                        "sd_dps": 3584,
+                        "sensitivity": 0.00048799999058246622,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 10,
+                            "acc": {
+                                "enable": false,
+                                "unit": "g",
+                                "format": "int16_t",
+                                "elements": 36,
+                                "channels": 3,
+                                "multiply_factor": 0.00048799999058246622,
+                                "odr": 666
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": 5,
+                        "ep_id": 4
+                    }
+                },
+                {
+                    "iis2iclx_acc": {
+                        "odr": 6,
+                        "fs": 3,
+                        "enable": true,
+                        "samples_per_ts": 800,
+                        "dim": 2,
+                        "ioffset": 0.15546403825283053,
+                        "measodr": 838.05987548828125,
+                        "usb_dps": 166,
+                        "sd_dps": 1536,
+                        "sensitivity": 0.00012179999612271786,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 9,
+                            "acc": {
+                                "enable": false,
+                                "unit": "g",
+                                "format": "int16_t",
+                                "elements": 54,
+                                "channels": 2,
+                                "multiply_factor": 0.00012179999612271786,
+                                "odr": 833
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": 6,
+                        "ep_id": 4
+                    }
+                },
+                {
+                    "iis2mdc_mag": {
+                        "odr": 3,
+                        "fs": 0,
+                        "enable": true,
+                        "samples_per_ts": 100,
+                        "dim": 3,
+                        "ioffset": 0.027471775189042091,
+                        "measodr": 101.32238006591795,
+                        "usb_dps": 30,
+                        "sd_dps": 512,
+                        "sensitivity": 0.001500000013038516,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 8,
+                            "mag": {
+                                "enable": false,
+                                "unit": "gauss",
+                                "format": "int16_t",
+                                "elements": 36,
+                                "channels": 3,
+                                "multiply_factor": 0.001500000013038516,
+                                "odr": 100
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": 9,
+                        "ep_id": 4
+                    }
+                },
+                {
+                    "ilps22qs_press": {
+                        "odr": 7,
+                        "fs": 1,
+                        "enable": true,
+                        "samples_per_ts": 200,
+                        "dim": 1,
+                        "ioffset": 0.011994674801826475,
+                        "measodr": 199.97276306152344,
+                        "usb_dps": 40,
+                        "sd_dps": 512,
+                        "sensitivity": 1,
+                        "data_type": "float",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 6,
+                            "press": {
+                                "enable": false,
+                                "unit": "hPa",
+                                "format": "float",
+                                "elements": 54,
+                                "channels": 1,
+                                "multiply_factor": 1,
+                                "odr": 200
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": 7,
+                        "ep_id": 4
+                    }
+                },
+                {
+                    "imp23absu_mic": {
+                        "odr": 4,
+                        "aop": 0,
+                        "enable": true,
+                        "volume": 100,
+                        "resolution": 0,
+                        "samples_per_ts": 1000,
+                        "dim": 1,
+                        "ioffset": 0.29993709921836853,
+                        "usb_dps": 7000,
+                        "sd_dps": 126976,
+                        "sensitivity": 3.0517578125e-05,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 1,
+                        "c_type": 0,
+                        "stream_id": 0,
+                        "ep_id": 0
+                    }
+                },
+                {
+                    "imp34dt05_mic": {
+                        "odr": 2,
+                        "aop": 0,
+                        "enable": true,
+                        "volume": 100,
+                        "resolution": 0,
+                        "samples_per_ts": 1000,
+                        "dim": 1,
+                        "ioffset": 0.29924923181533813,
+                        "usb_dps": 4800,
+                        "sd_dps": 31744,
+                        "sensitivity": 3.0517578125e-05,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 1,
+                        "c_type": 0,
+                        "stream_id": 2,
+                        "ep_id": 2
+                    }
+                },
+                {
+                    "stts22h_temp": {
+                        "odr": 4,
+                        "fs": 0,
+                        "enable": true,
+                        "samples_per_ts": 200,
+                        "dim": 1,
+                        "ioffset": 0.012995025143027306,
+                        "measodr": 199.99624633789066,
+                        "usb_dps": 40,
+                        "sd_dps": 512,
+                        "sensitivity": 1,
+                        "data_type": "float",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 3,
+                            "temp": {
+                                "enable": false,
+                                "unit": "Celsius",
+                                "format": "float",
+                                "elements": 54,
+                                "channels": 1,
+                                "multiply_factor": 1,
+                                "odr": 200
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": 8,
+                        "ep_id": 4
+                    }
+                },
+                {
+                    "iis3dwb_acc": {
+                        "odr": 0,
+                        "fs": 3,
+                        "enable": true,
+                        "samples_per_ts": 1000,
+                        "dim": 3,
+                        "ioffset": 0.019541563466191292,
+                        "measodr": 26741.09375,
+                        "usb_dps": 7000,
+                        "sd_dps": 53248,
+                        "sensitivity": 0.00048799999058246622,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 7,
+                            "acc": {
+                                "enable": false,
+                                "unit": "g",
+                                "format": "int16_t",
+                                "elements": 36,
+                                "channels": 3,
+                                "multiply_factor": 0.00048799999058246622,
+                                "odr": 666
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": 1,
+                        "ep_id": 1
+                    }
+                },
+                {
+                    "ism330dhcx_acc": {
+                        "odr": 9,
+                        "fs": 3,
+                        "enable": true,
+                        "samples_per_ts": 1000,
+                        "dim": 3,
+                        "ioffset": 0.036433510482311249,
+                        "measodr": 7134.81396484375,
+                        "usb_dps": 2000,
+                        "sd_dps": 13312,
+                        "sensitivity": 0.00048799999058246622,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 0,
+                            "acc": {
+                                "enable": false,
+                                "unit": "g",
+                                "format": "int16_t",
+                                "elements": 36,
+                                "channels": 3,
+                                "multiply_factor": 0.00048799999058246622,
+                                "odr": 666
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": 4,
+                        "ep_id": 4
+                    }
+                },
+                {
+                    "ism330dhcx_gyro": {
+                        "odr": 9,
+                        "fs": 5,
+                        "enable": true,
+                        "samples_per_ts": 1000,
+                        "dim": 3,
+                        "ioffset": 0.036433510482311249,
+                        "measodr": 7134.81396484375,
+                        "usb_dps": 2000,
+                        "sd_dps": 13312,
+                        "sensitivity": 0.14000000059604645,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 1,
+                            "gyro": {
+                                "enable": false,
+                                "unit": "dps",
+                                "format": "int16_t",
+                                "elements": 36,
+                                "channels": 3,
+                                "multiply_factor": 0.14000000059604645,
+                                "odr": 666
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": 3,
+                        "ep_id": 3
+                    }
+                },
+                {
+                    "ism330dhcx_mlc": {
+                        "enable": false,
+                        "samples_per_ts": 1,
+                        "ucf_status": false,
+                        "dim": 9,
+                        "ioffset": 0,
+                        "data_type": "int8",
+                        "usb_dps": 0,
+                        "sd_dps": 0,
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 2,
+                            "mlc": {
+                                "enable": false,
+                                "unit": "",
+                                "format": "int8_t",
+                                "elements": 3,
+                                "channels": 9,
+                                "multiply_factor": 1,
+                                "odr": 1
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
                 }
             ]
         }
     ]
-} 
+}

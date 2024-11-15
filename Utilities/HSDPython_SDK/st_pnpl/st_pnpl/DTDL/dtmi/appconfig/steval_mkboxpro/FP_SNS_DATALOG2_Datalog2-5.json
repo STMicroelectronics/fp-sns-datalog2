@@ -688,7 +688,10 @@
           "valueSchema": "integer"
         },
         "unit": "gForce",
-        "writable": true
+        "writable": true,
+        "displayUnit": {
+          "en": "g"
+        }
       },
       {
         "@id": "dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lis2du12_acc:enable;1",
@@ -1114,7 +1117,10 @@
           "valueSchema": "integer"
         },
         "unit": "gForce",
-        "writable": true
+        "writable": true,
+        "displayUnit": {
+          "en": "g"
+        }
       },
       {
         "@id": "dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_acc:enable;1",
@@ -1562,6 +1568,9 @@
         },
         "unit": "degreePerSecond",
         "writable": true,
+        "displayUnit": {
+          "en": "dps"
+        },
         "initialValue": 5
       },
       {
@@ -2276,6 +2285,9 @@
         },
         "unit": "gForce",
         "writable": true,
+        "displayUnit": {
+          "en": "g"
+        },
         "initialValue": 0
       },
       {
@@ -2722,6 +2734,9 @@
         },
         "unit": "degreePerSecond",
         "writable": true,
+        "displayUnit": {
+          "en": "dps"
+        },
         "initialValue": 0
       },
       {
@@ -3592,7 +3607,10 @@
           "valueSchema": "integer"
         },
         "unit": "degreeCelsius",
-        "writable": false
+        "writable": false,
+        "displayUnit": {
+          "en": "C"
+        }
       },
       {
         "@id": "dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:stts22h_temp:enable;1",
@@ -4406,6 +4424,9 @@
         },
         "unit": "gForce",
         "writable": true,
+        "displayUnit": {
+          "en": "g"
+        },
         "initialValue": 3
       },
       {
@@ -4870,6 +4891,9 @@
         },
         "unit": "degreePerSecond",
         "writable": true,
+        "displayUnit": {
+          "en": "dps"
+        },
         "initialValue": 5
       },
       {

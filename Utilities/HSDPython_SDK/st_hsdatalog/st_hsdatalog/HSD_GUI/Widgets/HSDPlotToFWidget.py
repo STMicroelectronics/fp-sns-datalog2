@@ -37,6 +37,10 @@ class HSDPlotToFWidget(PlotWidget):
         heatmaps_shape = (4,4) if plot_params.resolution == self.RESOLUTION_4x4 else (8,8) #0 = 4x4, 1 = 8x8
 
         self.t1_out = PlotHeatmapWidget(controller, comp_name, comp_display_name, heatmaps_shape, plot_label= "Target 1", p_id = p_id, parent=self)
+        self.t1_out.set_default_rotation(3)
+        self.t1_out.set_default_x_flip(True)
+        self.t1_out.set_default_y_flip(False)
+        self.t1_out.title_frame.setVisible(False)
         # self.t2_out = PlotHeatmapWidget(controller, comp_name, comp_display_name, heatmaps_shape, plot_label= "Target 2", p_id = p_id, parent=self)
         self.heatmaps["target1"] = self.t1_out
         # self.heatmaps["target2"] = self.t2_out

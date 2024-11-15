@@ -193,6 +193,13 @@ uint8_t vl53l8cx_2_tof_get_sensor_category(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
+uint8_t vl53l8cx_2_tof_get_mounted(bool *value)
+{
+  *value = true;
+  /* USER Code */
+  return PNPL_NO_ERROR_CODE;
+}
+
 uint8_t vl53l8cx_2_tof_get_dim(int32_t *value)
 {
   uint8_t profile = vl53l8cx_2_tof_model.sensor_status->type.ranging.profile_config.ranging_profile;

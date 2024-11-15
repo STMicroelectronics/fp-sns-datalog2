@@ -551,6 +551,13 @@ uint8_t vd6283tx_3_als_get_sensor_category(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
+uint8_t vd6283tx_3_als_get_mounted(bool *value)
+{
+  *value = true;
+  /* USER Code */
+  return PNPL_NO_ERROR_CODE;
+}
+
 uint8_t vd6283tx_3_als_get_dim(int32_t *value)
 {
   *value = 6;
@@ -609,7 +616,20 @@ uint8_t vd6283tx_3_als_set_exposure_time(int32_t value, char **response_message)
     ret = SMSensorSetExposureTime(vd6283tx_3_als_model.id, value);
     if (ret == SYS_NO_ERROR_CODE)
     {
-      /* USER Code */
+#if (HSD_USE_DUMMY_DATA != 1)
+      float spts;
+      if (vd6283tx_3_als_model.sensor_status->type.light.intermeasurement_time >
+          vd6283tx_3_als_model.sensor_status->type.light.exposure_time / 1000 + 6)
+      {
+        spts = (1000.0f / (float)(vd6283tx_3_als_model.sensor_status->type.light.intermeasurement_time));
+      }
+      else
+      {
+        spts = (1000.0f / (float)(vd6283tx_3_als_model.sensor_status->type.light.exposure_time / 1000 + 6));
+      }
+      vd6283tx_3_als_set_samples_per_ts((uint32_t)spts, NULL);
+#endif
+      __stream_control(true);
     }
   }
   else
@@ -634,7 +654,17 @@ uint8_t vd6283tx_3_als_set_intermeasurement_time(int32_t value, char **response_
     if (ret == SYS_NO_ERROR_CODE)
     {
 #if (HSD_USE_DUMMY_DATA != 1)
-      vd6283tx_3_als_set_samples_per_ts((int32_t)(1000 / value), NULL);
+      float spts;
+      if (vd6283tx_3_als_model.sensor_status->type.light.intermeasurement_time >
+          vd6283tx_3_als_model.sensor_status->type.light.exposure_time / 1000 + 6)
+      {
+        spts = (1000.0f / (float)(vd6283tx_3_als_model.sensor_status->type.light.intermeasurement_time));
+      }
+      else
+      {
+        spts = (1000.0f / (float)(vd6283tx_3_als_model.sensor_status->type.light.exposure_time / 1000 + 6));
+      }
+      vd6283tx_3_als_set_samples_per_ts((uint32_t)spts, NULL);
 #endif
       __stream_control(true);
     }

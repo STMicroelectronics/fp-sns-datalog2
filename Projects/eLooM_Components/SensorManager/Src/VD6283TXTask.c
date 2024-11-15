@@ -750,7 +750,7 @@ sys_error_code_t VD6283TXTask_vtblLightGetIntermeasurementTime(ISensorLight_t *_
   }
   else
   {
-    *p_measured = p_if_owner->sensor_status.type.light.measured_intermeasurement_time;
+    *p_measured = (uint32_t)p_if_owner->sensor_status.type.light.measured_intermeasurement_time;
     *p_nominal = p_if_owner->sensor_status.type.light.intermeasurement_time;
   }
 
@@ -808,13 +808,6 @@ sys_error_code_t VD6283TXTask_vtblSensorSetIntermeasurementTime(ISensorLight_t *
     p_if_owner->sensor_status.type.light.intermeasurement_time = intermeasurement_time;
     p_if_owner->sensor_status.type.light.measured_intermeasurement_time = 0.0f;
 
-    /* From datasheet: After each EXTIME duration, a fixed period of time of ~6 ms takes
-     * place to allow counts to be converted into digital information. */
-    if ((p_if_owner->sensor_status.type.light.exposure_time / 1000) > intermeasurement_time - 6)
-    {
-      p_if_owner->sensor_status.type.light.exposure_time = (intermeasurement_time - 6) * 1000;
-    }
-
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -846,17 +839,7 @@ sys_error_code_t VD6283TXTask_vtblSensorSetExposureTime(ISensorLight_t *_this, u
   }
   else
   {
-    /* From datasheet: After each EXTIME duration, a fixed period of time of ~6 ms takes
-     * place to allow counts to be converted into digital information. */
-    if ((p_if_owner->sensor_status.type.light.exposure_time / 1000) <
-        p_if_owner->sensor_status.type.light.intermeasurement_time - 6)
-    {
-      p_if_owner->sensor_status.type.light.exposure_time = exposure_time;
-    }
-    else
-    {
-      return SYS_INVALID_PARAMETER_ERROR_CODE;
-    }
+    p_if_owner->sensor_status.type.light.exposure_time = exposure_time;
 
     /* Set a new command message in the queue */
     SMMessage report =
@@ -1158,7 +1141,7 @@ static sys_error_code_t VD6283TXTaskExecuteStepDatalog(AManagedTask *_this)
           p_obj->prev_timestamp = timestamp;
 
           /* update measured data frequency: one sample in delta_timestamp time */
-          p_obj->sensor_status.type.light.measured_intermeasurement_time = (uint32_t)(delta_timestamp / 1000.0f);
+          p_obj->sensor_status.type.light.measured_intermeasurement_time = (float)(delta_timestamp);
           EMD_Init(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[0], E_EM_UINT32, E_EM_MODE_INTERLEAVED, 2, 1, 6);
 
           DataEvent_t evt;
@@ -1415,7 +1398,19 @@ static sys_error_code_t VD6283TXTaskSensorInit(VD6283TXTask *_this)
 
   if (_this->sensor_status.is_active)
   {
-    _this->vd6283tx_task_cfg_timer_period_ms = _this->sensor_status.type.light.intermeasurement_time;
+    /* From datasheet: After each EXTIME duration, a fixed period of time of ~6 ms takes
+     * place to allow counts to be converted into digital information.
+     * The user can set an intermeasurement period (intermeasurement_time). This can be
+     * useful to reduce sensing frame rate and power consumption */
+
+    if (_this->sensor_status.type.light.intermeasurement_time > _this->sensor_status.type.light.exposure_time / 1000 + 6)
+    {
+      _this->vd6283tx_task_cfg_timer_period_ms =  _this->sensor_status.type.light.intermeasurement_time;
+    }
+    else
+    {
+      _this->vd6283tx_task_cfg_timer_period_ms = _this->sensor_status.type.light.exposure_time / 1000 + 6;
+    }
   }
 
   if (status != VD6283TX_OK)
@@ -1494,18 +1489,6 @@ static sys_error_code_t VD6283TXTaskSensorSetIntermeasurementTime(VD6283TXTask *
 
   if (id == _this->id)
   {
-    if (intermeasurement_time == 0)
-    {
-      res = VD6283TX_Stop(p_platform_drv);
-
-      if (res == VD6283TX_OK)
-      {
-        VD6283TX_DeInit(p_platform_drv);
-      }
-      /* Do not update the model in case of ODR = 0 */
-      intermeasurement_time = _this->sensor_status.type.light.intermeasurement_time;
-    }
-
     if (!SYS_IS_ERROR_CODE(res))
     {
       _this->sensor_status.type.light.intermeasurement_time = intermeasurement_time;
@@ -1532,12 +1515,7 @@ static sys_error_code_t VD6283TXTaskSensorSetExposureTime(VD6283TXTask *_this, S
 
   if (id == _this->id)
   {
-    /*PID requires time values in microseconds*/
-    if (VD6283TX_SetExposureTime(p_platform_drv, (uint32_t)(exposure_time)) != 0)
-    {
-      res = SYS_INVALID_PARAMETER_ERROR_CODE;
-    }
-    else
+    if (!SYS_IS_ERROR_CODE(res))
     {
       _this->sensor_status.type.light.exposure_time = exposure_time;
     }
@@ -1561,83 +1539,7 @@ static sys_error_code_t VD6283TXTaskSensorSetLightGain(VD6283TXTask *_this, SMMe
 
   if (id == _this->id)
   {
-//    for (uint8_t channel = 0; (channel < VD6283TX_MAX_CHANNELS) && (res == VD6283TX_OK); channel++)
-//    {
-//      /* Multiply the float value by 256 to shift the decimal point 8 bits to the left */
-//      uint32_t LightGain_fp = (uint32_t)(report.sensorMessage.nParam * 256.0f);
-//      res = VD6283TX_SetGain(p_platform_drv, channel, LightGain_fp);
-//
-//      if (res == SYS_NO_ERROR_CODE)
-//      {
-//        _this->sensor_status.type.light.gain[channel] = LightGain_fp;
-//      }
-//    }
-    uint16_t ch_gain_fp;
-    float ch_gain = report.sensorMessage.fParam;
-
-    if (ch_gain < 0.77)
-    {
-      ch_gain_fp = GainRange[14];
-    }
-    else if (ch_gain < 0.92)
-    {
-      ch_gain_fp = GainRange[13];
-    }
-    else if (ch_gain < 1.13)
-    {
-      ch_gain_fp = GainRange[12];
-    }
-    else if (ch_gain < 1.46)
-    {
-      ch_gain_fp = GainRange[11];
-    }
-    else if (ch_gain < 2.09)
-    {
-      ch_gain_fp = GainRange[10];
-    }
-    else if (ch_gain < 2.92)
-    {
-      ch_gain_fp = GainRange[9];
-    }
-    else if (ch_gain < 4.17)
-    {
-      ch_gain_fp = GainRange[8];
-    }
-    else if (ch_gain < 6.07)
-    {
-      ch_gain_fp = GainRange[7];
-    }
-    else if (ch_gain < 8.57)
-    {
-      ch_gain_fp = GainRange[6];
-    }
-    else if (ch_gain < 13.34)
-    {
-      ch_gain_fp = GainRange[5];
-    }
-    else if (ch_gain < 20.82)
-    {
-      ch_gain_fp = GainRange[4];
-    }
-    else if (ch_gain < 29.17)
-    {
-      ch_gain_fp = GainRange[3];
-    }
-    else if (ch_gain < 41.67)
-    {
-      ch_gain_fp = GainRange[2];
-    }
-    else if (ch_gain < 58.34)
-    {
-      ch_gain_fp = GainRange[1];
-    }
-    else
-    {
-      ch_gain_fp = GainRange[0];
-    }
-    /* ch_gain float value has been converted to 8.8 fixed point format */
-    res = VD6283TX_SetGain(p_platform_drv, report.sensorMessage.nCmdID - 6, ch_gain_fp);
-    if (res == SYS_NO_ERROR_CODE)
+    if (!SYS_IS_ERROR_CODE(res))
     {
       _this->sensor_status.type.light.gain[report.sensorMessage.nCmdID - 6] = report.sensorMessage.fParam;
     }

@@ -206,7 +206,14 @@ float SMSensorGetSamplesPerSecond(uint8_t id)
   }
   else if (sensor_class == ISENSOR_CLASS_LIGHT)
   {
-    samples_per_second = (1000.0f / (float)sensor_status.type.light.intermeasurement_time);
+    if (sensor_status.type.light.intermeasurement_time > sensor_status.type.light.exposure_time / 1000 + 6)
+    {
+      samples_per_second = (1000.0f / ((float)sensor_status.type.light.intermeasurement_time));
+    }
+    else
+    {
+      samples_per_second = (1000.0f / ((float)sensor_status.type.light.exposure_time / 1000.0f + 6.0f));
+    }
   }
   else if (sensor_class == ISENSOR_CLASS_PRESENCE)
   {
@@ -236,7 +243,14 @@ float SMSensorGetBandwidth(uint8_t id)
   }
   else if (sensor_class == ISENSOR_CLASS_LIGHT)
   {
-    bandwidth = bytes_per_sample * (1000.0f / (float)sensor_status.type.light.intermeasurement_time);
+    if (sensor_status.type.light.intermeasurement_time > sensor_status.type.light.exposure_time / 1000 + 6)
+    {
+      bandwidth = bytes_per_sample * (1000.0f / ((float)sensor_status.type.light.intermeasurement_time));
+    }
+    else
+    {
+      bandwidth = bytes_per_sample * (1000.0f / ((float)sensor_status.type.light.exposure_time / 1000.0f + 6.0f));
+    }
   }
   else if (sensor_class == ISENSOR_CLASS_PRESENCE)
   {

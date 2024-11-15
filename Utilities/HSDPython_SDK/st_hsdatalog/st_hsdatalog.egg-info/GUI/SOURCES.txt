@@ -25,7 +25,6 @@ st_hsdatalog/HSD/utils/plot_utils.py
 st_hsdatalog/HSD/utils/sensors_utils.py
 st_hsdatalog/HSD/utils/type_conversion.py
 st_hsdatalog/HSD_GUI/HSD_Controller.py
-st_hsdatalog/HSD_GUI/HSD_DataToolkit_Pipeline.py
 st_hsdatalog/HSD_GUI/HSD_DeviceConfigPage.py
 st_hsdatalog/HSD_GUI/HSD_MainWindow.py
 st_hsdatalog/HSD_GUI/LICENSE.md
@@ -55,6 +54,11 @@ st_hsdatalog/HSD_GUI/Widgets/HSDPlotToFWidget.py
 st_hsdatalog/HSD_GUI/Widgets/TagToggleButton.py
 st_hsdatalog/HSD_GUI/Widgets/TagsInfoWidget.py
 st_hsdatalog/HSD_GUI/Widgets/__init__.py
+st_hsdatalog/HSD_datatoolkit/HSD_DataToolkit.py
+st_hsdatalog/HSD_datatoolkit/HSD_DataToolkit_Pipeline.py
+st_hsdatalog/HSD_datatoolkit/LICENSE.md
+st_hsdatalog/HSD_datatoolkit/LICENSE.txt
+st_hsdatalog/HSD_datatoolkit/__init__.py
 st_hsdatalog/HSD_link/HSDLink.py
 st_hsdatalog/HSD_link/HSDLink_v1.py
 st_hsdatalog/HSD_link/HSDLink_v2.py

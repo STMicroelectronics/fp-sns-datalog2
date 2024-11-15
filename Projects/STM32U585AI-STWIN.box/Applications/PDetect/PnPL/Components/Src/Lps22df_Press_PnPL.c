@@ -135,6 +135,8 @@ uint8_t Lps22df_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   json_object_dotset_string(JSON_Status, "lps22df_press.sensor_annotation", temp_s);
   lps22df_press_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "lps22df_press.sensor_category", temp_i);
+  lps22df_press_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "lps22df_press.mounted", temp_b);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "lps22df_press.c_type", COMP_TYPE_SENSOR);

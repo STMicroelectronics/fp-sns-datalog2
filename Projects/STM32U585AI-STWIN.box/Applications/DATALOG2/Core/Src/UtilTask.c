@@ -47,6 +47,10 @@
 #define UTIL_TASK_CFG_UL_TIMER_PERIOD_MS       250
 #endif
 
+#ifndef UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS
+#define UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS       250
+#endif
+
 #define UTIL_UPDATE_BATTERY_CHAR_PERIOD_MS    2000U
 #define RCG_BAT_MIN_VOLTAGE                   3000 //! Rechargeable battery minimum voltage in mV
 #define RCG_BAT_MAX_VOLTAGE                   4200 //! Rechargeable battery maximum voltage in mV
@@ -103,6 +107,8 @@ static sys_error_code_t UtilTaskExecuteStepSensorsActive(AManagedTask *_this);
   * @param xTimer [IN] specifies the handle of the expired timer.
   */
 static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer);
+static VOID UtilTaskSwTimerCallbackHwTags(ULONG timer);
+
 
 /**
   * Initialize the BatteryCharger
@@ -156,7 +162,8 @@ static const UtilTaskClass_t sTheClass =
 AManagedTaskEx *UtilTaskAlloc(const void *p_mx_bc_tim_drv_cfg, const void *p_mx_bc_gpio_sw_drv_cfg,
                               const void *p_mx_bc_gpio_chg_drv_cfg,
                               const void *p_mx_bc_gpio_cen_drv_cfg, const void *p_mx_bc_tim_chg_drv_cfg, const void *p_mx_bc_adc_drv_cfg,
-                              const void *p_mx_ub_drv_cfg, const void *p_mx_led1_drv_cfg, const void *p_mx_led2_drv_cfg)
+                              const void *p_mx_ub_drv_cfg, const void *p_mx_led1_drv_cfg, const void *p_mx_led2_drv_cfg,
+                              const void *p_mx_hwtag0_drv_cfg, const void *p_mx_hwtag1_drv_cfg)
 {
   /* In this application there is only one Keyboard task,
    * so this allocator implement the singleton design pattern.
@@ -175,6 +182,8 @@ AManagedTaskEx *UtilTaskAlloc(const void *p_mx_bc_tim_drv_cfg, const void *p_mx_
   sTaskObj.p_mx_ub_drv_cfg = p_mx_ub_drv_cfg;
   sTaskObj.p_mx_led1_drv_cfg = p_mx_led1_drv_cfg;
   sTaskObj.p_mx_led2_drv_cfg = p_mx_led2_drv_cfg;
+  sTaskObj.p_mx_hwtag0_drv_cfg = p_mx_hwtag0_drv_cfg;
+  sTaskObj.p_mx_hwtag1_drv_cfg = p_mx_hwtag1_drv_cfg;
 
   return (AManagedTaskEx *) &sTaskObj;
 }
@@ -330,6 +339,17 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
       HAL_GPIO_WritePin(p_ld2_params->port, p_ld2_params->pin, GPIO_PIN_RESET);
     }
 
+    /* configure HW TAG 1*/
+    if (p_obj->p_mx_hwtag0_drv_cfg != NULL)
+    {
+      ((MX_GPIOParams_t *)p_obj->p_mx_hwtag0_drv_cfg)->p_mx_init_f();
+    }
+    /* configure HW TAG 2*/
+    if (p_obj->p_mx_hwtag1_drv_cfg != NULL)
+    {
+      ((MX_GPIOParams_t *)p_obj->p_mx_hwtag1_drv_cfg)->p_mx_init_f();
+    }
+
   }
 
   // configure the BatteryCharger
@@ -376,6 +396,20 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
     res = SYS_APP_TASK_INIT_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
     return res;
+  }
+
+  /* Create and enable HW_TAGS_T only if at least 1 HW TAG exists */
+  if ((p_obj->p_mx_hwtag0_drv_cfg != NULL) || (p_obj->p_mx_hwtag1_drv_cfg != NULL))
+  {
+    if (TX_SUCCESS
+        != tx_timer_create(&p_obj->hw_tags_timer, "HW_TAGS_T", UtilTaskSwTimerCallbackHwTags, (ULONG) TX_NULL,
+                           AMT_MS_TO_TICKS(UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS),
+                           TX_AUTO_ACTIVATE))
+    {
+      res = SYS_APP_TASK_INIT_ERROR_CODE;
+      SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+      return res;
+    }
   }
 
   /* initialize the protocol object */
@@ -669,6 +703,39 @@ static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer)
   }
 }
 
+static VOID UtilTaskSwTimerCallbackHwTags(ULONG timer)
+{
+  UtilTask_t *p_obj = (UtilTask_t *) &sTaskObj;
+
+  /* Read HW tags status in polling */
+  bool tag_enabled;
+  bool tag_status;
+  uint8_t new_status;
+
+  tags_info_get_hw_tag0__enabled(&tag_enabled);
+  tags_info_get_hw_tag0__status(&tag_status);
+  if (tag_enabled)
+  {
+    MX_GPIOParams_t *p_hw_tag0_params = (MX_GPIOParams_t *)p_obj->p_mx_hwtag0_drv_cfg;
+    new_status = (uint8_t) HAL_GPIO_ReadPin(p_hw_tag0_params->port, p_hw_tag0_params->pin);
+    if (new_status != tag_status)
+    {
+      tags_info_set_hw_tag0__status(new_status, NULL);
+    }
+  }
+
+  tags_info_get_hw_tag1__enabled(&tag_enabled);
+  tags_info_get_hw_tag1__status(&tag_status);
+  if (tag_enabled)
+  {
+    MX_GPIOParams_t *p_hw_tag1_params = (MX_GPIOParams_t *)p_obj->p_mx_hwtag1_drv_cfg;
+    new_status = (uint8_t) HAL_GPIO_ReadPin(p_hw_tag1_params->port, p_hw_tag1_params->pin);
+    if (new_status != tag_status)
+    {
+      tags_info_set_hw_tag1__status(new_status, NULL);
+    }
+  }
+}
 /**
   * @brief  Initialize the Power button PWR.
   * @param  None

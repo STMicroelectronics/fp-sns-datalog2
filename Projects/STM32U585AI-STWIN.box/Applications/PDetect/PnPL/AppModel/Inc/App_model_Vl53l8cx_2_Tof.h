@@ -79,6 +79,7 @@ uint8_t vl53l8cx_2_tof_get_sd_dps(int32_t *value);
 uint8_t vl53l8cx_2_tof_get_data_type(char **value);
 uint8_t vl53l8cx_2_tof_get_sensor_annotation(char **value);
 uint8_t vl53l8cx_2_tof_get_sensor_category(int32_t *value);
+uint8_t vl53l8cx_2_tof_get_mounted(bool *value);
 uint8_t vl53l8cx_2_tof_get_dim(int32_t *value);
 uint8_t vl53l8cx_2_tof_get_output_format__target_status__start_id(int32_t *value);
 uint8_t vl53l8cx_2_tof_get_output_format__target_distance__start_id(int32_t *value);

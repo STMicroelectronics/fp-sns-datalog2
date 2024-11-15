@@ -40,14 +40,14 @@ class NanoedgeCSVWriter:
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
 
-        filename = comp_name + "_NanoEdge.csv"
+        filename = comp_name + "_" + os.path.basename(os.path.normpath(output_folder)) +"_NanoEdge.csv"
         self.file_path = os.path.join(output_folder, filename)
 
         self.buffer = []
         self.samples_chest = np.array([])
         self.start_idx = 0
 
-    def to_nanoedge_format_batch(self, dataframe, mode = "w"):
+    def to_nanoedge_format_batch(self, dataframe, mode = "w", target_value = None):
         """
         Writes the contents of a NumPy array to a CSV file with a fixed number of columns (M).
         The array's values are written consecutively without padding, filling up rows as needed.
@@ -79,6 +79,8 @@ class NanoedgeCSVWriter:
         with open(self.file_path , mode, newline="") as f:
             writer = csv.writer(f)
             for _ in range(0, n_signals): #rows of final dataset
+                if target_value is not None:
+                    self.buffer.append(target_value)
                 for cc in range(idx, idx + self.signal_length): #cc = columns in input dataset
                     if cc >= dataset.shape[0]:
                         continue
@@ -117,6 +119,17 @@ class NanoedgeCSVWriter:
             self.buffer = []
 
 class HSDatalogConverter:
+
+    @staticmethod
+    def to_txt(df, filename, mode = 'w'):
+        """
+        Converts a DataFrame to a TXT (tab-separated) file.
+        
+        :param df: The DataFrame to convert.
+        :param filename: The base name of the file to write to.
+        :param mode: The file writing mode ('w' for write, 'a' for append).
+        """
+        HSDatalogConverter.to_xsv(df, filename, '.txt', '\t', mode)
 
     @staticmethod
     def to_csv(df, filename, mode = 'w'):
@@ -325,6 +338,35 @@ class HSDatalogConverter:
                 df = df.drop('Time', axis=1)
         HSDatalogConverter.__write_unico_file(df, file_path, out_format, mode)
         return True
+
+    @staticmethod
+    def rename_dataframe_columns(comp_name, dataframe, columns_labels, tags_columns_names = []):
+        # Define a list of columns to exclude
+        cols_to_exclude = ["Time","Time[s]"]
+        if len(tags_columns_names) > 0:
+            cols_to_exclude.extend(tags_columns_names)
+        # Apply a specific labeling scheme to the columns based on the provided columns_labels argument.
+        if columns_labels == "mlc_tool":
+            # Define a prefix to add to column names based on the component name.
+            prefix = f"{comp_name}"
+            new_names = {}
+            for col in dataframe.columns:
+                if col not in cols_to_exclude:
+                    sensor_type_str = col.split(' ')[0]
+                    # Create a dictionary of column name mappings with the new prefix.
+                    if "_" in sensor_type_str:
+                        new_col_name = prefix + "_" + sensor_type_str.split('_')[-1] + " " + dataframe.columns[1].split(' ')[-1]
+                    else:
+                        new_col_name = prefix + " " + dataframe.columns[1].split(' ')[-1]
+                    new_names[col] = new_col_name
+        else:
+            # Define a suffix to add to column names based on the component name.
+            suffix = f"_{comp_name}"
+            # Create a dictionary of column name mappings with the new suffix.
+            new_names = {col: col + suffix for col in dataframe.columns if col not in cols_to_exclude}
+        # Rename columns in the dataframe according to the new names mapping.
+        dataframe = dataframe.rename(columns=new_names)
+        return dataframe
 
     @staticmethod
     def merge_dataframes(dataframes, comp_names, columns_labels = None, tags_columns_names = []):

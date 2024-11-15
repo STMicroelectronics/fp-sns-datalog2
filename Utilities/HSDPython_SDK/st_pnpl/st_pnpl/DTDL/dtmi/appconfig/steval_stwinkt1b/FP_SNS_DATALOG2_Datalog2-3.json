@@ -255,6 +255,9 @@
         },
         "unit": "gForce",
         "writable": true,
+        "displayUnit": {
+          "en": "g"
+        },
         "initialValue": 3
       },
       {
@@ -1318,6 +1321,9 @@
         },
         "unit": "gForce",
         "writable": true,
+        "displayUnit": {
+          "en": "g"
+        },
         "initialValue": 3
       },
       {
@@ -1757,6 +1763,9 @@
         },
         "unit": "degreePerSecond",
         "writable": true,
+        "displayUnit": {
+          "en": "dps"
+        },
         "initialValue": 5
       },
       {
@@ -2732,6 +2741,9 @@
         },
         "unit": "gForce",
         "writable": true,
+        "displayUnit": {
+          "en": "g"
+        },
         "initialValue": 3
       },
       {
@@ -3079,7 +3091,10 @@
           "valueSchema": "integer"
         },
         "unit": "degreeCelsius",
-        "writable": false
+        "writable": false,
+        "displayUnit": {
+          "en": "C"
+        }
       },
       {
         "@id": "dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:stts751_temp:enable;1",
@@ -3822,9 +3837,10 @@
           ],
           "valueSchema": "integer"
         },
+        "unit": "degreeCelsius",
         "writable": false,
         "displayUnit": {
-          "en": "hPa"
+          "en": "C"
         }
       },
       {

@@ -135,6 +135,8 @@ uint8_t Sgp40_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialized
   json_object_dotset_string(JSON_Status, "sgp40_temp.sensor_annotation", temp_s);
   sgp40_temp_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "sgp40_temp.sensor_category", temp_i);
+  sgp40_temp_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "sgp40_temp.mounted", temp_b);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "sgp40_temp.c_type", COMP_TYPE_SENSOR);

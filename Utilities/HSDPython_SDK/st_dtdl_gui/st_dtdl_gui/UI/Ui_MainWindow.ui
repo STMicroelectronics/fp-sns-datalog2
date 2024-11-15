@@ -276,6 +276,8 @@ QRadioButton::indicator {
 	width: 15px;
 	height: 15px;
 	border-radius: 10px;
+	margin-top: 5px;
+    margin-bottom: 5px;
     background: rgb(44, 49, 60);
 }
 QRadioButton::indicator:hover {
@@ -284,6 +286,16 @@ QRadioButton::indicator:hover {
 QRadioButton::indicator:checked {
     background: 3px solid rgb(94, 106, 130);
 	border: 3px solid rgb(52, 59, 72);	
+}
+QRadioButton::indicator:checked:hover {
+    border: 3px solid rgb(68, 76, 91);
+}
+QRadioButton::indicator:unchecked {
+    border: 3px solid rgb(27, 29, 35);
+    background: rgb(44, 49, 60);
+}
+QRadioButton::indicator:unchecked:hover {
+    border: 3px solid rgb(58, 66, 81);
 }
 
 /* COMBOBOX */
@@ -869,7 +881,7 @@ QPushButton:pressed {
                    <string notr="true">background: transparent;</string>
                   </property>
                   <property name="currentIndex">
-                   <number>2</number>
+                   <number>3</number>
                   </property>
                   <widget class="QWidget" name="page_connection">
                    <layout class="QVBoxLayout" name="page_connection_vlayout">
@@ -1107,8 +1119,8 @@ QPushButton:pressed {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>482</width>
-                             <height>45</height>
+                             <width>496</width>
+                             <height>789</height>
                             </rect>
                            </property>
                            <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1252,8 +1264,8 @@ QPushButton:pressed {
                             <rect>
                              <x>0</x>
                              <y>0</y>
-                             <width>20</width>
-                             <height>16</height>
+                             <width>450</width>
+                             <height>789</height>
                             </rect>
                            </property>
                            <property name="sizePolicy">
@@ -1355,7 +1367,7 @@ QPushButton:pressed {
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>463</width>
+                          <width>524</width>
                           <height>595</height>
                          </rect>
                         </property>
@@ -1779,7 +1791,7 @@ QRadioButton::indicator:checked {
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>483</width>
+                          <width>422</width>
                           <height>595</height>
                          </rect>
                         </property>
@@ -1805,42 +1817,6 @@ QRadioButton::indicator:checked {
                          <property name="bottomMargin">
                           <number>3</number>
                          </property>
-                         <item>
-                          <widget class="QLabel" name="acq_upload_title_2">
-                           <property name="minimumSize">
-                            <size>
-                             <width>0</width>
-                             <height>0</height>
-                            </size>
-                           </property>
-                           <property name="styleSheet">
-                            <string notr="true">font: 700 12pt &quot;Segoe UI&quot;;
-background-color: rgb(39, 44, 54);</string>
-                           </property>
-                           <property name="text">
-                            <string>Coming soon...</string>
-                           </property>
-                           <property name="margin">
-                            <number>9</number>
-                           </property>
-                           <property name="indent">
-                            <number>3</number>
-                           </property>
-                          </widget>
-                         </item>
-                         <item>
-                          <spacer name="verticalSpacer_3">
-                           <property name="orientation">
-                            <enum>Qt::Vertical</enum>
-                           </property>
-                           <property name="sizeHint" stdset="0">
-                            <size>
-                             <width>20</width>
-                             <height>40</height>
-                            </size>
-                           </property>
-                          </spacer>
-                         </item>
                          <item>
                           <widget class="QFrame" name="acq_upload_frame">
                            <property name="frameShape">

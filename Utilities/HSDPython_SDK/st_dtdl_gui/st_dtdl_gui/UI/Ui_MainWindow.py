@@ -192,6 +192,8 @@ class Ui_MainWindow(object):
 "	width: 15px;\n"
 "	height: 15px;\n"
 "	border-radius: 10px;\n"
+"	margin-top: 5px;\n"
+"    margin-bottom: 5px;\n"
 "    background: rgb(44, 49, 60);\n"
 "}\n"
 "QRadioButton::indicator:hover {\n"
@@ -201,6 +203,16 @@ class Ui_MainWindow(object):
 "    background: 3px solid rgb(94, 106, 130);\n"
 "	border: 3px solid rgb(52, 59, 72);	\n"
 "}\n"
+"QRadioButton::indicator:checked:hover {\n"
+"    border: 3px solid rgb(68, 76, 91);\n"
+"}\n"
+"QRadioButton::indicator:unchecked {\n"
+"    border: 3px solid rgb(27, 29, 35);\n"
+"    background: rgb(44, 49, 60);\n"
+"}\n"
+"QRadioButton::indicator:unchecked:hover {\n"
+"    border: 3px solid rgb(58, 66, 81);\n"
+"}\n"
 "\n"
 "/* COMBOBOX */\n"
 "QComboBox{\n"
@@ -208,7 +220,8 @@ class Ui_MainWindow(object):
 "	border-radius: 5px;\n"
 "	border: 2px solid rgb(27, 29, 35);\n"
 "	padding: 5px;\n"
-"	padding-left: 10px;\n"
+"	"
+                        "padding-left: 10px;\n"
 "}\n"
 "QComboBox:hover{\n"
 "	border: 2px solid rgb(64, 71, 88);\n"
@@ -221,8 +234,7 @@ class Ui_MainWindow(object):
 "	border-left-color: rgba(39, 44, 54, 150);\n"
 "	border-left-style: solid;\n"
 "	border-top-right-radius: 3px;\n"
-"	border-b"
-                        "ottom-right-radius: 3px;	\n"
+"	border-bottom-right-radius: 3px;	\n"
 "	background-image: url(:/icons/icons/outline_arrow_bottom_white_18dp.png);\n"
 "	background-position: center;\n"
 "	background-repeat: no-reperat;\n"
@@ -245,7 +257,8 @@ class Ui_MainWindow(object):
 "	background-color: rgb(55, 62, 76);\n"
 "}\n"
 "QSlider::handle:horizontal {\n"
-"    background-color: rgb(32, 178, 170);\n"
+"    b"
+                        "ackground-color: rgb(32, 178, 170);\n"
 "    border: none;\n"
 "    height: 18px;\n"
 "    width: 18px;\n"
@@ -259,8 +272,7 @@ class Ui_MainWindow(object):
 "    background-color: rgb(65, 130, 195);\n"
 "}\n"
 "\n"
-"QSlider::groove:ver"
-                        "tical {\n"
+"QSlider::groove:vertical {\n"
 "    border-radius: 9px;\n"
 "    width: 18px;\n"
 "    margin: 0px;\n"
@@ -286,7 +298,8 @@ class Ui_MainWindow(object):
 "\n"
 "QScrollArea{\n"
 "	border-radius: 5px;\n"
-"	border: 2px solid rgb(39, 44, 54);\n"
+"	border: 2px solid rgb(39, 44, 54)"
+                        ";\n"
 "}\n"
 "\n"
 "/* PROGRESS BAR */\n"
@@ -301,8 +314,7 @@ class Ui_MainWindow(object):
 "    margin: 4px;\n"
 "    border-bottom-right-radius: 6px;\n"
 "    border-bottom-left-radius: 6px;\n"
-"    border-top-right-"
-                        "radius: 6px;\n"
+"    border-top-right-radius: 6px;\n"
 "    border-top-left-radius: 6px;\n"
 "}")
         self.frame_main.setFrameShape(QFrame.NoFrame)
@@ -641,7 +653,7 @@ class Ui_MainWindow(object):
         self.scrollArea_device_config.setWidgetResizable(True)
         self.widget_device_config_main = QWidget()
         self.widget_device_config_main.setObjectName(u"widget_device_config_main")
-        self.widget_device_config_main.setGeometry(QRect(0, 0, 482, 45))
+        self.widget_device_config_main.setGeometry(QRect(0, 0, 496, 789))
         self.verticalLayout_3 = QVBoxLayout(self.widget_device_config_main)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -704,7 +716,7 @@ class Ui_MainWindow(object):
         self.scrollArea_plots.setWidgetResizable(True)
         self.widget_plots = QWidget()
         self.widget_plots.setObjectName(u"widget_plots")
-        self.widget_plots.setGeometry(QRect(0, 0, 20, 16))
+        self.widget_plots.setGeometry(QRect(0, 0, 450, 789))
         sizePolicy5 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         sizePolicy5.setHorizontalStretch(0)
         sizePolicy5.setVerticalStretch(0)
@@ -757,7 +769,7 @@ class Ui_MainWindow(object):
         self.scrollArea_dt_settings.setWidgetResizable(True)
         self.widget_data_toolkit = QWidget()
         self.widget_data_toolkit.setObjectName(u"widget_data_toolkit")
-        self.widget_data_toolkit.setGeometry(QRect(0, 0, 463, 595))
+        self.widget_data_toolkit.setGeometry(QRect(0, 0, 524, 595))
         self.verticalLayout_16 = QVBoxLayout(self.widget_data_toolkit)
         self.verticalLayout_16.setSpacing(0)
         self.verticalLayout_16.setObjectName(u"verticalLayout_16")
@@ -967,27 +979,13 @@ class Ui_MainWindow(object):
         self.scrollArea_acq_upload.setWidgetResizable(True)
         self.widget_acq_upload = QWidget()
         self.widget_acq_upload.setObjectName(u"widget_acq_upload")
-        self.widget_acq_upload.setGeometry(QRect(0, 0, 483, 595))
+        self.widget_acq_upload.setGeometry(QRect(0, 0, 422, 595))
         sizePolicy1.setHeightForWidth(self.widget_acq_upload.sizePolicy().hasHeightForWidth())
         self.widget_acq_upload.setSizePolicy(sizePolicy1)
         self.verticalLayout_24 = QVBoxLayout(self.widget_acq_upload)
         self.verticalLayout_24.setSpacing(0)
         self.verticalLayout_24.setObjectName(u"verticalLayout_24")
         self.verticalLayout_24.setContentsMargins(3, 3, 3, 3)
-        self.acq_upload_title_2 = QLabel(self.widget_acq_upload)
-        self.acq_upload_title_2.setObjectName(u"acq_upload_title_2")
-        self.acq_upload_title_2.setMinimumSize(QSize(0, 0))
-        self.acq_upload_title_2.setStyleSheet(u"font: 700 12pt \"Segoe UI\";\n"
-"background-color: rgb(39, 44, 54);")
-        self.acq_upload_title_2.setMargin(9)
-        self.acq_upload_title_2.setIndent(3)
-
-        self.verticalLayout_24.addWidget(self.acq_upload_title_2)
-
-        self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.verticalLayout_24.addItem(self.verticalSpacer_3)
-
         self.acq_upload_frame = QFrame(self.widget_acq_upload)
         self.acq_upload_frame.setObjectName(u"acq_upload_frame")
         self.acq_upload_frame.setFrameShape(QFrame.StyledPanel)
@@ -1473,7 +1471,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stacked_widget.setCurrentIndex(2)
+        self.stacked_widget.setCurrentIndex(3)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -1500,7 +1498,6 @@ class Ui_MainWindow(object):
         self.dt_plugins_folder_button.setText(QCoreApplication.translate("MainWindow", u"Browse", None))
         self.groupBox_dt_plugin_list.setTitle(QCoreApplication.translate("MainWindow", u"Selected Plugins List", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"<html><head/><body><p><span style=\" font-size:12pt; font-weight:700;\">*</span>By enabling this feature, the data streams acquired from the sensors of a connected board pass through a data pipeline composed of a series of plugins. Along with the PythonSDK, in the examples folder, we provide a folder named <span style=\" font-weight:700; text-decoration: underline;\">data_toolkit_plugins</span> that contains three example plugins. Each plugin must implement a function named <span style=\" font-weight:700;\">process</span>, which processes the data received from the previous plugin and passes it to the next plugin. Additionally, each plugin can implement a function named <span style=\" font-weight:700;\">create_plot_widget</span>, which should return a QWidget that is automatically inserted into a dedicated section of this GUI (on the acquisition management page).</p></body></html>", None))
-        self.acq_upload_title_2.setText(QCoreApplication.translate("MainWindow", u"Coming soon...", None))
         self.acq_upload_title.setText(QCoreApplication.translate("MainWindow", u"ST AIoT Craft Acquisitions upload", None))
         self.groupBox_inner_login.setTitle(QCoreApplication.translate("MainWindow", u"ST AIoT Craft - User Login", None))
         self.login_button.setText(QCoreApplication.translate("MainWindow", u"Login", None))

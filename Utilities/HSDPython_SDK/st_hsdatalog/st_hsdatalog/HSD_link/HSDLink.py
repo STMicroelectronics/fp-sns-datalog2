@@ -1300,7 +1300,6 @@ class HSDLink:
                 thread = SensorAcquisitionThread(stopFlag, hsd_link, sensor_data_file, device_id, sensor.id, sd.id, print_data_cnt = print_data_cnt)
                 thread.start()
         else:
-            hsd_link.set_rtc_time(device_id)
             sensor_data_file_path = os.path.join(output_acquisition_path,(str(sensor) + ".dat"))
             sensor_data_file = open(sensor_data_file_path, "wb+")
             sensor_data_files.append(sensor_data_file)

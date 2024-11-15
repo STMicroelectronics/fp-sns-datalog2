@@ -93,13 +93,9 @@ uint8_t imp23absu_mic_get_odr(pnpl_imp23absu_mic_odr_t *enum_id)
   {
     *enum_id = pnpl_imp23absu_mic_odr_hz96000;
   }
-  else if (odr <= 192000)
-  {
-    *enum_id = pnpl_imp23absu_mic_odr_hz192000;
-  }
   else
   {
-    return 1;
+    *enum_id = pnpl_imp23absu_mic_odr_hz192000;
   }
   return PNPL_NO_ERROR_CODE;
 }
@@ -235,6 +231,7 @@ uint8_t imp23absu_mic_set_odr(pnpl_imp23absu_mic_odr_t enum_id, char **response_
       break;
     case pnpl_imp23absu_mic_odr_hz192000:
       value = 192000;
+      break;
     default:
       return 1;
   }

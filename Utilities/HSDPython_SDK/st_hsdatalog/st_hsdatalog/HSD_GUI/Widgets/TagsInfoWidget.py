@@ -101,6 +101,7 @@ class TagsInfoWidget(ComponentWidget):
                 r_id += 1
         
         frame_sw_tags_contents.layout().addLayout(sw_tags_grid_layout)
+        frame_hw_tags_contents.layout().addLayout(hw_tags_grid_layout)
         self.contents_widget.layout().addWidget(frame_contents)
     
     def tag_button_toggled(self, tag_name, a=None):

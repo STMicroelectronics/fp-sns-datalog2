@@ -200,8 +200,6 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   }
 
   /************ Allocate task objects ************/
-  sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams, &MX_GPIO_PA8InitParams, &MX_GPIO_PA0InitParams, &MX_GPIO_PD0InitParams, &MX_TIM5InitParams, &MX_ADC4InitParams,
-                           &MX_GPIO_UBInitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams);
   sDatalogAppObj = DatalogAppTaskAlloc();
   sI2C2BusObj = I2CBusTaskAlloc(&MX_I2C2InitParams);
   sSPI2BusObj = SPIBusTaskAlloc(&MX_SPI2InitParams);
@@ -248,6 +246,16 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   {
     sTSC1641Obj = TSC1641TaskAlloc(&MX_GPIO_INT_POW_InitParams, NULL);
     sI2C3BusObj = I2CBusTaskAlloc(&MX_I2C3InitParams);
+    /* Enable HW TAG pins available on STEVAL-C34KPM1 board only */
+    sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams, &MX_GPIO_PA8InitParams, &MX_GPIO_PA0InitParams, &MX_GPIO_PD0InitParams, &MX_TIM5InitParams, &MX_ADC4InitParams,
+                             &MX_GPIO_UBInitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams, &MX_GPIO_HWTAG0InitParams,
+                             &MX_GPIO_HWTAG1InitParams);
+  }
+  else
+  {
+    /* Avoid initializing HW TAG pins */
+    sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams, &MX_GPIO_PA8InitParams, &MX_GPIO_PA0InitParams, &MX_GPIO_PD0InitParams, &MX_TIM5InitParams, &MX_ADC4InitParams,
+                             &MX_GPIO_UBInitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams, NULL, NULL);
   }
 
   /************ Add the task object to the context ************/
@@ -423,6 +431,18 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   }
   DatalogAppTask_SetIspuIF((AManagedTask *) sISM330ISObj);
 
+  /************ Other PnPL Components ************/
+  Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
+  Firmware_Info_PnPLInit(pFirmwareInfoPnPLObj);
+  Acquisition_Info_PnPLInit(pAcquisitionInfoPnPLObj);
+  Tags_Info_PnPLInit(pTagsInfoPnPLObj);
+  Log_Controller_PnPLInit(pLogControllerPnPLObj);
+  Automode_PnPLInit(pAutomodePnPLObj);
+
+#if (DATALOG2_USE_WIFI == 1)
+  Wifi_Config_PnPLInit(pWifiConfigPnPLObj);
+#endif
+
   /************ Sensor PnPL Components ************/
   Iis2dlpc_Acc_PnPLInit(pIIS2DLPC_ACC_PnPLObj);
   Iis2iclx_Acc_PnPLInit(pIIS2ICLX_ACC_PnPLObj);
@@ -464,19 +484,14 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   if (sTSC1641Obj)
   {
     Tsc1641_Pow_PnPLInit(pTSC1641_POW_PnPLObj);
+    /* Enable HW tags with STEVAL-CP34KPM1 only */
+    tags_info_set_hw_tag0__label("DIN1", NULL);
+    tags_info_set_hw_tag1__label("DIN2", NULL);
+    tags_info_set_hw_tag0__enabled(true, NULL);
+    tags_info_set_hw_tag1__enabled(true, NULL);
+    tags_info_set_hw_tag0__status(false, NULL);
+    tags_info_set_hw_tag1__status(false, NULL);
   }
-
-  /************ Other PnPL Components ************/
-  Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
-  Firmware_Info_PnPLInit(pFirmwareInfoPnPLObj);
-  Acquisition_Info_PnPLInit(pAcquisitionInfoPnPLObj);
-  Tags_Info_PnPLInit(pTagsInfoPnPLObj);
-  Log_Controller_PnPLInit(pLogControllerPnPLObj);
-  Automode_PnPLInit(pAutomodePnPLObj);
-
-#if (DATALOG2_USE_WIFI == 1)
-  Wifi_Config_PnPLInit(pWifiConfigPnPLObj);
-#endif
 
   return SYS_NO_ERROR_CODE;
 }

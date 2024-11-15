@@ -28,6 +28,7 @@
 #include "services/sysdebug.h"
 #include "services/sysmem.h"
 #include "STWIN.box.h"
+#include "DatalogAppTask.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -311,9 +312,11 @@ static VOID NetX_Thread_Entry(ULONG thread_input)
   bool ftp_srv_is_on = false;
   bool ftp_srv_initialized = false;
   NetxAppQueueMsgType RxMsg, TxMsg;
+  char *message;
 
   for (;;)
   {
+    message = "";
     /* receive cmds from PnPl thread */
     if (!wifi_is_connected)
     {
@@ -378,6 +381,9 @@ static VOID NetX_Thread_Entry(ULONG thread_input)
       case WIFI_DISCONNECT:
       case WIFI_DISCONNECT_SYNC:
       {
+        char *responseJSON;
+        uint32_t size;
+
         if (!wifi_is_connected)
         {
           /* reject cmd? what PnPL answ ? now simply ignore it! */
@@ -403,28 +409,43 @@ static VOID NetX_Thread_Entry(ULONG thread_input)
           {
             connect_callback(false);
           }
+          PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, true);
         }
+        else
+        {
+          PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
+        }
+        DatalogApp_Task_command_response_cb(responseJSON, size);
         break;
       }
 
       case FTP_SERVER_INIT:
       {
+        char *responseJSON;
+        uint32_t size;
+
         if (!wifi_is_connected || ftp_srv_is_on)
         {
+          PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
+          DatalogApp_Task_command_response_cb(responseJSON, size);
           break;
         }
         if (FTP_Srv_Init() != 0)
         {
+          message = "ERROR FTP_Srv_Init\n\r";
           printf("ERROR FTP_Srv_Init\n\r");
-
+          PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
+          DatalogApp_Task_command_response_cb(responseJSON, size);
           break;
         }
         ftp_srv_initialized = true;
 
         if (FTP_Srv_Start() != 0)
         {
+          message = "ERROR FTP_Srv_Start\n\r";
           printf("ERROR FTP_Srv_Start\n\r");
-
+          PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
+          DatalogApp_Task_command_response_cb(responseJSON, size);
           break;
         }
         ftp_srv_is_on = true;
@@ -437,10 +458,16 @@ static VOID NetX_Thread_Entry(ULONG thread_input)
                                  &actual_status, NX_IP_PERIODIC_RATE * 10);  // give 10 Sec to wifi drv connection init
         if (ret != NX_SUCCESS)
         {
+          message = "nx_ip_status_check failed status";
           printf("nx_ip_status_check failed status: 0x%x, ret: 0x%x\n\r", (unsigned int) actual_status, ret);
-          /* FIXME roll back resources */
-//            return NX_NOT_ENABLED;
+          PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
         }
+        else
+        {
+          PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, true);
+        }
+        DatalogApp_Task_command_response_cb(responseJSON, size);
+
 #ifdef TX_ENABLE_EVENT_TRACE
         /* to start tracing at FTP srv start */
 //          tx_trace_enable(&my_trace_buffer, TRACE_BUFFER_SIZE, TRACE_EVENT_NUM);
@@ -485,6 +512,7 @@ static VOID NetX_Thread_Entry(ULONG thread_input)
 
         if (FTP_Srv_DeInit() != 0)
         {
+          message = "ERROR FTP_Srv_Stop\n\r";
           printf("ERROR FTP_Srv_Stop\n\r");
           break;
         }

@@ -14,12 +14,12 @@
 #
 
 import os
-from PySide6.QtWidgets import QLabel
+from PySide6.QtWidgets import QLabel, QFrame
 import st_dtdl_gui
 from PySide6.QtCore import Slot
 from st_dtdl_gui.Utils.DataClass import PlotLevelParams
 
-from st_dtdl_gui.Widgets.Plots.PlotWidget import PlotWidget
+from st_dtdl_gui.Widgets.Plots.PlotWidget import PlotLabel, PlotWidget, QSizePolicy
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 
@@ -28,8 +28,8 @@ class LabelPlotWidget(PlotWidget):
         super().__init__(controller, comp_name, comp_display_name, p_id, parent)
 
         # Clear PlotWidget inherited graphic elements (mantaining all attributes, functions and signals)
-        for i in reversed(range(self.layout().count())): 
-            self.layout().itemAt(i).widget().setParent(None)
+        for i in reversed(range(self.contents_frame.layout().count())): 
+            self.contents_frame.layout().itemAt(i).widget().setParent(None)
 
         QPyDesignerCustomWidgetCollection.registerCustomWidget(PlotWidget, module="PlotWidget")
         loader = QUiLoader()
@@ -40,17 +40,19 @@ class LabelPlotWidget(PlotWidget):
         self.max_val = plot_params.max_val
         self.value = None
 
-        self.label_widget = self.plot_widget.label
+        self.frame_plot = self.plot_widget.findChild(QFrame,"frame_plot")
+
+        self.label_widget = self.frame_plot.findChild(QLabel, "label")
         self.label_widget.setText(comp_display_name)
-        self.value_widget = self.plot_widget.frame_value.findChild(QLabel,"value")
+        self.value_widget = self.frame_plot.findChild(QLabel, "value")
         self.value_widget.setText("")
         self.value_widget.setFixedWidth(100)
-        self.unit_widget = self.plot_widget.frame_value.findChild(QLabel,"unit")
+        self.unit_widget = self.frame_plot.findChild(QLabel, "unit")
         self.unit_widget.setText("[{}]".format(self.plot_params.unit))
 
         self.timer_interval_ms = self.timer_interval*700
 
-        self.layout().addWidget(self.plot_widget)
+        self.contents_frame.layout().addWidget(self.plot_widget)
 
     @Slot(bool)
     def s_is_logging(self, status: bool, interface: int):

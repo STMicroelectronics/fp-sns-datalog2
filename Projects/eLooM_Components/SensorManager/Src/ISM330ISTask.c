@@ -64,6 +64,10 @@
 
 #define SYS_DEBUGF(level, message)                 SYS_DEBUGF3(SYS_DBG_ISM330IS, level, message)
 
+#ifndef ISM330IS_TASK_CFG_I2C_ADDRESS
+#define ISM330IS_TASK_CFG_I2C_ADDRESS              ISM330IS_I2C_ADD_H
+#endif
+
 #ifndef HSD_USE_DUMMY_DATA
 #define HSD_USE_DUMMY_DATA 0
 #endif
@@ -612,7 +616,7 @@ sys_error_code_t ISM330ISTask_vtblOnCreateTask(
   }
   else
   {
-    p_obj->p_sensor_bus_if = I2CBusIFAlloc(ISM330IS_ID, ISM330IS_I2C_ADD_H, 0);
+    p_obj->p_sensor_bus_if = I2CBusIFAlloc(ISM330IS_ID, ISM330IS_TASK_CFG_I2C_ADDRESS, 0);
     if (p_obj->p_sensor_bus_if == NULL)
     {
       res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
@@ -692,7 +696,8 @@ sys_error_code_t ISM330ISTask_vtblOnCreateTask(
   p_obj->acc_id = 0;
   p_obj->gyro_id = 1;
   p_obj->ispu_enable = FALSE;
-  p_obj->prev_timestamp = 0.0f;
+  p_obj->acc_prev_timestamp = 0.0f;
+  p_obj->gyro_prev_timestamp = 0.0f;
   p_obj->acc_samples_count = 0;
   p_obj->gyro_samples_count = 0;
   p_obj->samples_per_it = 0;
@@ -752,7 +757,8 @@ sys_error_code_t ISM330ISTask_vtblDoEnterPowerMode(AManagedTask *_this, const EP
       }
 
       // reset the variables for the actual odr computation.
-      p_obj->prev_timestamp = 0.0f;
+      p_obj->acc_prev_timestamp = 0.0f;
+      p_obj->gyro_prev_timestamp = 0.0f;
     }
 
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("ISM330IS: -> SENSORS_ACTIVE\r\n"));
@@ -771,22 +777,6 @@ sys_error_code_t ISM330ISTask_vtblDoEnterPowerMode(AManagedTask *_this, const EP
       p_obj->first_data_ready = 0;
       /* Empty the task queue and disable INT or timer */
       tx_queue_flush(&p_obj->in_queue);
-      if (p_obj->p_irq_config == NULL)
-      {
-        tx_timer_deactivate(&p_obj->read_timer);
-      }
-      else
-      {
-        ISM330ISTaskConfigureIrqPin(p_obj, TRUE);
-      }
-      if (p_obj->p_ispu_config == NULL)
-      {
-        tx_timer_deactivate(&p_obj->ispu_timer);
-      }
-      else
-      {
-        ISM330ISTaskConfigureISPUPin(p_obj, TRUE);
-      }
     }
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("ISM330IS: -> STATE1\r\n"));
   }
@@ -898,9 +888,30 @@ sys_error_code_t ISM330ISTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const 
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  //  ISM330ISTask *p_obj = (ISM330ISTask*)_this;
+  ISM330ISTask *p_obj = (ISM330ISTask *) _this;
 
-
+  if (NewPowerMode == E_POWER_MODE_STATE1)
+  {
+    if (ActivePowerMode == E_POWER_MODE_SENSORS_ACTIVE)
+    {
+      if (p_obj->p_irq_config == NULL)
+      {
+        tx_timer_deactivate(&p_obj->read_timer);
+      }
+      else
+      {
+        ISM330ISTaskConfigureIrqPin(p_obj, TRUE);
+      }
+      if (p_obj->p_ispu_config == NULL)
+      {
+        tx_timer_deactivate(&p_obj->ispu_timer);
+      }
+      else
+      {
+        ISM330ISTaskConfigureISPUPin(p_obj, TRUE);
+      }
+    }
+  }
   return res;
 }
 
@@ -1554,19 +1565,19 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
         res = ISM330ISTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
-          if (p_obj->first_data_ready == 1)
+          if (p_obj->first_data_ready == 7)
           {
             // notify the listeners...
             double timestamp = report.sensorDataReadyMessage.fTimestamp;
-            double delta_timestamp = timestamp - p_obj->prev_timestamp;
-            p_obj->prev_timestamp = timestamp;
 
             /* Create a bidimensional data interleaved [m x 3], m is the number of samples (1 in this case)
              * [X0, Y0, Z0]
              */
-            if (p_obj->acc_sensor_status.is_active)
+            if ((p_obj->acc_sensor_status.is_active) && (p_obj->acc_samples_count != 0))
             {
               DataEvent_t evt_acc;
+              double delta_timestamp = timestamp - p_obj->acc_prev_timestamp;
+              p_obj->acc_prev_timestamp = timestamp;
 
               /* update measuredODR */
               p_obj->acc_sensor_status.type.mems.measured_odr = (float)p_obj->acc_samples_count / (float)delta_timestamp;
@@ -1576,9 +1587,11 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
 
               IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent *) &evt_acc, NULL);
             }
-            if (p_obj->gyro_sensor_status.is_active)
+            if ((p_obj->gyro_sensor_status.is_active) && (p_obj->gyro_samples_count != 0))
             {
               DataEvent_t evt_gyro;
+              double delta_timestamp = timestamp - p_obj->gyro_prev_timestamp;
+              p_obj->gyro_prev_timestamp = timestamp;
 
               /* update measuredODR */
               p_obj->gyro_sensor_status.type.mems.measured_odr = (float)p_obj->gyro_samples_count / (float)delta_timestamp;
@@ -1593,7 +1606,7 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
           }
           else
           {
-            p_obj->first_data_ready = 1;
+            p_obj->first_data_ready++;
           }
         }
         break;
@@ -1629,7 +1642,6 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
         switch (report.sensorMessage.nCmdID)
         {
           case SENSOR_CMD_ID_INIT:
-            ISM330ISTaskConfigureIrqPin(p_obj, FALSE);
             res = ISM330ISTaskSensorInit(p_obj);
             if (!SYS_IS_ERROR_CODE(res))
             {
@@ -1650,6 +1662,7 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
                 }
                 else
                 {
+                  ISM330ISTaskConfigureIrqPin(p_obj, FALSE);
                 }
               }
             }
@@ -1962,7 +1975,7 @@ static sys_error_code_t ISM330ISTaskSensorInit(ISM330ISTask *_this)
   if ((_this->acc_sensor_status.is_active) && (_this->gyro_sensor_status.is_active))
   {
     _this->ism330is_task_cfg_timer_period_ms = (uint16_t)(
-                                                 _this->acc_sensor_status.type.mems.odr < _this->gyro_sensor_status.type.mems.odr ?
+                                                 _this->acc_sensor_status.type.mems.odr > _this->gyro_sensor_status.type.mems.odr ?
                                                  _this->acc_sensor_status.type.mems.odr :
                                                  _this->gyro_sensor_status.type.mems.odr);
   }
@@ -1989,6 +2002,9 @@ static sys_error_code_t ISM330ISTaskSensorReadData(ISM330ISTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
+
+  _this->acc_samples_count = 0;
+  _this->gyro_samples_count = 0;
 
   if ((_this->acc_sensor_status.is_active) && (_this->gyro_sensor_status.is_active))
   {

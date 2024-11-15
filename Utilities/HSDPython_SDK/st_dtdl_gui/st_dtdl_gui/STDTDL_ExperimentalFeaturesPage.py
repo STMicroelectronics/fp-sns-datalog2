@@ -23,6 +23,7 @@ import st_dtdl_gui.UI.images #NOTE don't delete this! it is used from resource_f
 from pkg_resources import resource_filename
 
 from st_dtdl_gui.Widgets.PluginListItemWidget import PluginListItemWidget
+from st_hsdatalog.HSD_datatoolkit.HSD_DataToolkit_Pipeline import HSD_DataToolkit_Pipeline
 hsd2_folder_icon_path = resource_filename('st_dtdl_gui.UI.icons', 'baseline_folder_open_white_18dp.png')
 
 from st_dtdl_gui.Widgets.AcqListItemWidget import AcqListItemWidget
@@ -77,6 +78,7 @@ class STDTDL_ExperimentalFeaturesPage():
         self.groupBox_upload_settings.setEnabled(False)
 
     def select_dt_plugins_folder(self):
+        self.controller.remove_dt_plugins_folder()
         # Open a dialog to select a directory
         folder_path = QFileDialog.getExistingDirectory(None, 'Select Folder')
         if folder_path:
@@ -87,10 +89,12 @@ class STDTDL_ExperimentalFeaturesPage():
             files = os.listdir(folder_path)
             py_files = [f for f in files if os.path.isfile(os.path.join(folder_path, f)) and f.endswith('.py') and f != "__init__.py"]
             # Remove the .py extension
-            plugin_modules = [os.path.splitext(f)[0] for f in py_files]
-            for pm in plugin_modules:
+            plugin_name = [os.path.splitext(f)[0] for f in py_files]
+            for pn in plugin_name:
+                if HSD_DataToolkit_Pipeline.validate_plugin(pn) is None:
+                    continue
                 item = QListWidgetItem(self.dt_plugin_listWidget)
-                custom_widget = PluginListItemWidget(pm, item, self.dt_plugin_listWidget)                    
+                custom_widget = PluginListItemWidget(pn, item, self.dt_plugin_listWidget)                    
                 self.dt_plugin_listWidget.addItem(item)
                 self.dt_plugin_listWidget.setItemWidget(item, custom_widget)
                 item.setSizeHint(custom_widget.sizeHint())

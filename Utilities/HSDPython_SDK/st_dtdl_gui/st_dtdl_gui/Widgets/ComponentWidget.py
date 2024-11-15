@@ -18,13 +18,14 @@ import os
 from functools import partial
 
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QScreen
+from PySide6.QtGui import QScreen, QPixmap, QIcon
 from PySide6.QtWidgets import QApplication, QFileDialog, QLabel, QSpinBox, QRadioButton, QPushButton, QVBoxLayout, QWidget, QFrame, QGridLayout
 from PySide6.QtGui import QDoubleValidator, QIntValidator
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 
 import st_dtdl_gui
+from st_dtdl_gui.UI.styles import STDTDL_PushButton
 from st_dtdl_gui.Utils import UIUtils
 from st_dtdl_gui.Widgets.ToggleButton import ToggleButton
 from st_pnpl.DTDL.device_template_model import ContentSchema, ContentType, RequestSchema, ResponseSchema
@@ -34,6 +35,11 @@ from st_dtdl_gui.Widgets.CommandWidget import CommandField, CommandWidget
 from st_dtdl_gui.Widgets.TelemetryWidget import TelemetryWidget
 from st_dtdl_gui.Utils.DataClass import TypeEnum
 from st_dtdl_gui.STDTDL_Controller import ComponentType
+
+import st_dtdl_gui.UI.icons 
+from pkg_resources import resource_filename
+icon_pop_in_img_path = resource_filename('st_dtdl_gui.UI.icons', 'pop-in_18dp_E8EAED.svg')
+icon_pop_out_img_path = resource_filename('st_dtdl_gui.UI.icons', 'pop-out_18dp_E8EAED.svg')
 
 import st_hsdatalog.HSD_utils.logger as logger
 log = logger.get_logger(__name__)
@@ -45,10 +51,12 @@ class ComponentWidget(QWidget):
         self.controller = controller
         self.controller.sig_component_updated.connect(self.s_component_updated)
         self.controller.sig_logging.connect(self.s_is_logging)
+        self.controller.sig_is_auto_started.connect(self.s_auto_started)
         self.controller.sig_detecting.connect(self.s_is_detecting)
         
         self.is_docked = True
         self.is_packed = True
+        self.is_plot_displayed = None
 
         self.original_idx = 0 
         self.c_id = c_id
@@ -69,11 +77,22 @@ class ComponentWidget(QWidget):
         self.title_label.setText(self.comp_display_name)
         self.title_label.clicked.connect(self.clicked_show_button)
         self.title_label.setCursor(Qt.PointingHandCursor)
+        
         self.annotation_label = self.title_frame.findChild(QLabel,"label_annotation")
         self.annotation_label.setVisible(False)
+        
         self.pushButton_show = self.title_frame.findChild(QPushButton, "pushButton_show")
         self.pushButton_show.clicked.connect(self.clicked_show_button)
-        self.pushButton_pop_out = self.title_frame.findChild(QPushButton, "pushButton_pop_out")
+        
+        self.pushButton_show_plot = self.title_frame.findChild(QPushButton, "pushButton_show_plot")
+        self.pushButton_show_plot.clicked.connect(self.clicked_show_plot_button)
+        self.pushButton_show_plot.setVisible(False)
+
+        icon_pop_in_pixmap = QPixmap(icon_pop_in_img_path)
+        self.icon_pop_in = QIcon(icon_pop_in_pixmap)
+        icon_pop_out_pixmap = QPixmap(icon_pop_out_img_path)
+        self.icon_pop_out = QIcon(icon_pop_out_pixmap)
+        self.pushButton_pop_out:QPushButton = self.title_frame.findChild(QPushButton, "pushButton_pop_out")
         self.pushButton_pop_out.clicked.connect(self.clicked_pop_out_button)
         self.radioButton_enable = self.title_frame.findChild(QRadioButton, "radioButton_enable")
         self.radioButton_enable.setVisible(False)
@@ -104,7 +123,7 @@ class ComponentWidget(QWidget):
             
             if cont_type == 'PROPERTY':
                 
-                if p.name != "st_ble_stream":
+                if p.name != "st_ble_stream" or comp_sem_type == ComponentType.ACTUATOR:
                     widget = PropertyWidget(comp_name, comp_sem_type, p)
                     
                     enum_values = None
@@ -301,6 +320,31 @@ class ComponentWidget(QWidget):
         else:
             self.pack_contents_widget()
             self.is_packed = True
+
+    @Slot()
+    def clicked_show_plot_button(self):
+        if self.is_plot_displayed:
+            self.hide_plot_widget()
+        else:
+            self.show_plot_widget()
+
+    def hide_plot_widget(self):
+        self.controller.hide_plot_widget(self.comp_name)
+        self.pushButton_show_plot.setVisible(True)
+        self.pushButton_show_plot.setStyleSheet(STDTDL_PushButton.valid)
+        self.is_plot_displayed = False
+
+    def show_plot_widget(self):
+        self.controller.show_plot_widget(self.comp_name)
+        self.pushButton_show_plot.setVisible(True)
+        self.pushButton_show_plot.setStyleSheet(STDTDL_PushButton.green)
+        self.is_plot_displayed = True
+
+    def enable_plot_control(self):
+        self.pushButton_show_plot.setEnabled(True)
+
+    def disable_plot_control(self):
+        self.pushButton_show_plot.setEnabled(False)
     
     @Slot()
     def clicked_pop_out_button(self):
@@ -365,6 +409,11 @@ class ComponentWidget(QWidget):
     @Slot(bool, int)
     @abstractmethod
     def s_is_logging(self, status:bool, interface:int):
+        if self.controller.auto_started == False:
+            '''to override in inherithed components which need to react to a logging state change event'''
+            self.radioButton_enable.setEnabled(not status)
+        
+    def s_auto_started(self, status:bool):
         '''to override in inherithed components which need to react to a logging state change event'''
         self.radioButton_enable.setEnabled(not status)
     
@@ -543,6 +592,7 @@ class ComponentWidget(QWidget):
         self.is_docked = True
 
     def pop_out_widget(self):
+        self.pushButton_pop_out.setIcon(self.icon_pop_in)
         self.original_idx = self.parent.layout().indexOf(self)
         self.setWindowFlags(Qt.Dialog | Qt.WindowMaximizeButtonHint | Qt.WindowMinimizeButtonHint)
         center = QScreen.availableGeometry(QApplication.primaryScreen()).center()
@@ -554,6 +604,7 @@ class ComponentWidget(QWidget):
         self.is_packed = False
 
     def pop_in_widget(self):
+        self.pushButton_pop_out.setIcon(self.icon_pop_out)
         self.setWindowFlags(Qt.Widget)
         self.parent.layout().insertWidget(self.original_idx, self)
 

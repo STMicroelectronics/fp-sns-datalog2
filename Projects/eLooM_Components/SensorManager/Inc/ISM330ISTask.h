@@ -38,14 +38,6 @@ extern "C" {
 
 #define ISM330IS_MAX_DRDY_PERIOD           (1.0)    /* seconds */
 
-#ifndef ISM330IS_MAX_WTM_LEVEL
-#define ISM330IS_MAX_WTM_LEVEL             (256)    /* samples */
-#endif
-
-#define ISM330IS_MIN_WTM_LEVEL             (16)     /* samples */
-#define ISM330IS_MAX_SAMPLES_PER_IT        (ISM330IS_MAX_WTM_LEVEL)
-
-
 #define ISM330IS_CFG_MAX_LISTENERS         2
 
 /**
@@ -238,7 +230,12 @@ struct _ISM330ISTask
   /**
     * Used to update the instantaneous odr.
     */
-  double prev_timestamp;
+  double acc_prev_timestamp;
+
+  /**
+    * Used to update the instantaneous odr.
+    */
+  double gyro_prev_timestamp;
 
   /**
     * Internal model (FW) is in sync with the component (HW registers)

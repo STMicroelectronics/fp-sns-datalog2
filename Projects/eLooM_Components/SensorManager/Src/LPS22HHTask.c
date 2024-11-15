@@ -1467,10 +1467,6 @@ static sys_error_code_t LPS22HHTaskSensorInit(LPS22HHTask *_this)
     {
       lps22hh_wtm_level = LPS22HH_MAX_WTM_LEVEL;
     }
-    else if (lps22hh_wtm_level < LPS22HH_MIN_WTM_LEVEL)
-    {
-      lps22hh_wtm_level = LPS22HH_MIN_WTM_LEVEL;
-    }
     _this->samples_per_it = lps22hh_wtm_level;
   }
 
@@ -1582,9 +1578,9 @@ static sys_error_code_t LPS22HHTaskSensorReadData(LPS22HHTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  uint16_t samples_per_it = _this->samples_per_it;
 
 #if LPS22HH_FIFO_ENABLED
+  uint16_t samples_per_it = _this->samples_per_it;
   lps22hh_fifo_data_level_get(p_sensor_drv, (uint8_t *)&_this->fifo_level);
 
   if (_this->fifo_level >= samples_per_it)

@@ -32,7 +32,7 @@ class HSDAutoModeWidget(ComponentWidget):
 
         self.controller.sig_is_waiting_auto_start.connect(self.is_waiting_auto_start)
         self.controller.sig_is_waiting_idle.connect(self.is_idle_auto_start)
-        self.controller.sig_is_auto_started.connect(self.is_auto_started)
+        self.controller.sig_is_auto_started_inner.connect(self.is_auto_started_inner)
 
         self.app = self.controller.qt_app
         self.is_packed = False
@@ -183,7 +183,7 @@ class HSDAutoModeWidget(ComponentWidget):
         if status:
             self.digital_clock_timer.start(1000)
 
-    def is_auto_started(self, status):
+    def is_auto_started_inner(self, status):
         self.elapsed_time = self.log_period_value.value() #0
         self.is_logging = status
         self.digital_clock_timer.start(1000)

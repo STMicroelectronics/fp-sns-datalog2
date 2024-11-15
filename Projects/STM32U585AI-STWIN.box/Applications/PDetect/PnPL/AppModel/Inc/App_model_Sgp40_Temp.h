@@ -80,6 +80,7 @@ uint8_t sgp40_temp_get_sensitivity(float *value);
 uint8_t sgp40_temp_get_data_type(char **value);
 uint8_t sgp40_temp_get_sensor_annotation(char **value);
 uint8_t sgp40_temp_get_sensor_category(int32_t *value);
+uint8_t sgp40_temp_get_mounted(bool *value);
 uint8_t sgp40_temp_get_stream_id(int8_t *value);
 uint8_t sgp40_temp_get_ep_id(int8_t *value);
 uint8_t sgp40_temp_set_enable(bool value, char **response_message);

@@ -318,6 +318,14 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
 
   DatalogAppTask_SetIspuIF((AManagedTask *) sISM330ISObj);
 
+  //Other PnPL Components
+  Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
+  Firmware_Info_PnPLInit(pFirmwareInfoPnPLObj);
+  Acquisition_Info_PnPLInit(pAcquisitionInfoPnPLObj);
+  Tags_Info_PnPLInit(pTagsInfoPnPLObj);
+  Log_Controller_PnPLInit(pLogControllerPnPLObj);
+  Automode_PnPLInit(pAutomodePnPLObj);
+
   //Sensor PnPL Components
   Lis2du12_Acc_PnPLInit(pLIS2DU12_ACC_PnPLObj);
   Lis2mdl_Mag_PnPLInit(pLIS2MDL_MAG_PnPLObj);
@@ -344,14 +352,6 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     Lsm6dsv16x_Gyro_PnPLInit(pLSM6DSV16X_GYRO_PnPLObj);
     Lsm6dsv16x_Mlc_PnPLInit(pLSM6DSV16X_MLC_PnPLObj);
   }
-
-  //Other PnPL Components
-  Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
-  Firmware_Info_PnPLInit(pFirmwareInfoPnPLObj);
-  Acquisition_Info_PnPLInit(pAcquisitionInfoPnPLObj);
-  Tags_Info_PnPLInit(pTagsInfoPnPLObj);
-  Log_Controller_PnPLInit(pLogControllerPnPLObj);
-  Automode_PnPLInit(pAutomodePnPLObj);
 
   return SYS_NO_ERROR_CODE;
 }

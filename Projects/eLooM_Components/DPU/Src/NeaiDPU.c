@@ -19,6 +19,7 @@
 #include "NeaiDPU.h"
 #include "NeaiDPU_vtbl.h"
 #include "knowledge_ncc.h"
+#include "knowledge_e.h"
 #include "services/sysmem.h"
 #include "services/sysdebug.h"
 
@@ -98,6 +99,13 @@ sys_error_code_t NeaiDPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t 
     p_out[0] = (float)status;
     p_out[1] = (float)id_class;
   }
+  else if (p_obj->proc_mode ==  E_NEAI_EXTRAPOLATION && p_obj->proc.extrapolation)
+  {
+    float extrapolated_value;
+    status = p_obj->proc.extrapolation(p_signal, &extrapolated_value);
+    p_out[0] = (float)status;
+    p_out[1] = (float)extrapolated_value;
+  }
   else
   {
     SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("NEAI: mode (%d) not initialized\r\n", p_obj->proc_mode));
@@ -109,9 +117,13 @@ sys_error_code_t NeaiDPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t 
   {
     SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("NEAI: mode (%d), status (%f)\r\n", p_obj->proc_mode, p_out[0]));
 
-    if (!(status == NEAI_NOT_ENOUGH_CALL_TO_LEARNING) && !(status == NEAI_OK))
+    if ((status != NEAI_OK) && (status != NEAI_MINIMAL_RECOMMENDED_LEARNING_DONE))
     {
-      if (status == NEAI_INIT_FCT_NOT_CALLED)
+      if (status == NEAI_BOARD_ERROR)
+      {
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("NEAI: Board error encountered\r\n"));
+      }
+      else if (status == NEAI_INIT_FCT_NOT_CALLED)
       {
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("NEAI: Init function not called\r\n"));
       }
@@ -120,7 +132,7 @@ sys_error_code_t NeaiDPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t 
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("NEAI: need more learning signals \r\n"));
       }
       else
-        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("NEAI: (mode %d) status: %d \r\n", p_obj->proc_mode, status));
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("NEAI: unknown error -> %d \r\n", status));
     }
   }
 #endif
@@ -146,6 +158,8 @@ IDPU2_t *NeaiDPU_Alloc()
     p_obj->proc.anomalyDetect           = neai_anomalydetection_detect;
     p_obj->proc_init.classificationInit = neai_classification_init_ncc;
     p_obj->proc.classification          = neai_classification_ncc;
+    p_obj->proc_init.extrapolationInit  = neai_extrapolation_init_e;
+    p_obj->proc.extrapolation           = neai_extrapolation_e;
   }
 
   return (IDPU2_t *)p_obj;
@@ -165,6 +179,8 @@ IDPU2_t *NeaiDPU_StaticAlloc(void *p_mem_block)
     p_obj->proc.anomalyDetect           = neai_anomalydetection_detect;
     p_obj->proc_init.classificationInit = neai_classification_init_ncc;
     p_obj->proc.classification          = neai_classification_ncc;
+    p_obj->proc_init.extrapolationInit  = neai_extrapolation_init_e;
+    p_obj->proc.extrapolation           = neai_extrapolation_e;
   }
 
   return (IDPU2_t *)p_obj;
@@ -177,7 +193,8 @@ sys_error_code_t NeaiDPU_SetProcessingMode(NeaiDPU_t *_this, ENeaiMode_t mode)
   uint8_t in_axes;
   uint16_t in_signal_size, out_signal_size;
 
-  if ((mode == E_NEAI_ANOMALY_DETECT) || (mode == E_NEAI_ANOMALY_LEARN) || (mode == E_NEAI_CLASSIFICATION))
+  if ((mode == E_NEAI_ANOMALY_DETECT) || (mode == E_NEAI_ANOMALY_LEARN) || (mode == E_NEAI_CLASSIFICATION)
+      || (mode == E_NEAI_EXTRAPOLATION))
   {
     _this->proc_mode = mode;
   }
@@ -195,6 +212,12 @@ sys_error_code_t NeaiDPU_SetProcessingMode(NeaiDPU_t *_this, ENeaiMode_t mode)
       in_axes = AXIS_NUMBER_NCC;
       in_signal_size = DATA_INPUT_USER_NCC;
       out_signal_size = 2 + CLASS_NUMBER_NCC;
+      break;
+
+    case E_NEAI_EXTRAPOLATION:
+      in_axes = AXIS_NUMBER_E;
+      in_signal_size = DATA_INPUT_USER_E;
+      out_signal_size = 2;
       break;
 
     default:
@@ -250,6 +273,9 @@ sys_error_code_t NeaiDPU_KnowledgeInit(NeaiDPU_t *_this)
     case E_NEAI_CLASSIFICATION:
       _this->proc_init.classificationInit(knowledge_ncc);
       break;
+    case E_NEAI_EXTRAPOLATION:
+      _this->proc_init.extrapolationInit(knowledge_e);
+      break;
     default:
       res = SYS_NOT_IMPLEMENTED_ERROR_CODE;
       SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_NOT_IMPLEMENTED_ERROR_CODE);
@@ -270,6 +296,7 @@ sys_error_code_t NeaiDPU_Init(NeaiDPU_t *_this, ENeaiMode_t mode)
   {
     case E_NEAI_ANOMALY_LEARN:
     case E_NEAI_ANOMALY_DETECT:
+    case E_NEAI_EXTRAPOLATION:
       in_axes = AXIS_NUMBER;
       in_signal_size = DATA_INPUT_USER;
       out_signal_size = 2;
@@ -337,18 +364,6 @@ sys_error_code_t NeaiDPU_PrepareToProcessData(NeaiDPU_t *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   ADPU2_Reset((ADPU2_t *)_this);
-
-  return res;
-}
-
-sys_error_code_t NeaiDPU_ADSetSensitivity(NeaiDPU_t *_this, float sensitivity)
-{
-  assert_param(_this != NULL);
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
-
-  _this->sensitivity = sensitivity;
-
-  neai_anomalydetection_set_sensitivity(_this->sensitivity);
 
   return res;
 }

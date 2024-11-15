@@ -39,7 +39,6 @@ extern "C" {
 #define ILPS22QS_MAX_WTM_LEVEL             (128)  /* samples */
 #endif
 
-#define ILPS22QS_MIN_WTM_LEVEL             (16)
 #define ILPS22QS_MAX_SAMPLES_PER_IT        (ILPS22QS_MAX_WTM_LEVEL)
 
 

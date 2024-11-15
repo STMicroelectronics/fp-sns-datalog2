@@ -4,12 +4,141 @@
     "devices": [
         {
             "board_id": 13,
-            "fw_id": 8,
+            "fw_id": 12,
             "protocol_id": 2,
             "sn": "003A00274841500520363230",
             "pnpl_responses": true,
             "pnpl_ble_responses": true,
             "components": [
+                {
+                    "DeviceInformation": {
+                        "manufacturer": "STMicroelectronics",
+                        "model": "STEVAL-MKBOXPRO",
+                        "swVersion": "2.3.0",
+                        "osName": "AzureRTOS",
+                        "processorArchitecture": "ARM Cortex-M33",
+                        "processorManufacturer": "STMicroelectronics",
+                        "totalStorage": 4,
+                        "totalMemory": 784
+                    }
+                },
+                {
+                    "firmware_info": {
+                        "alias": "STBOX_PRO_001",
+                        "fw_name": "FP-SNS-DATALOG2_Datalog2",
+                        "fw_version": "2.3.0",
+                        "part_number": "FP-SNS-DATALOG2",
+                        "device_url": "https://www.st.com/sensortileboxpro",
+                        "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
+                        "mac_address": "df:fd:8b:87:ae:e7",
+                        "c_type": 2
+                    }
+                },
+                {
+                    "tags_info": {
+                        "max_tags_num": 100,
+                        "sw_tag0": {
+                            "label": "SW_TAG_0",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag1": {
+                            "label": "SW_TAG_1",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag2": {
+                            "label": "SW_TAG_2",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag3": {
+                            "label": "SW_TAG_3",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag4": {
+                            "label": "SW_TAG_4",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag5": {
+                            "label": "SW_TAG_5",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag6": {
+                            "label": "SW_TAG_6",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag7": {
+                            "label": "SW_TAG_7",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag8": {
+                            "label": "SW_TAG_8",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag9": {
+                            "label": "SW_TAG_9",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag10": {
+                            "label": "SW_TAG_10",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag11": {
+                            "label": "SW_TAG_11",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag12": {
+                            "label": "SW_TAG_12",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag13": {
+                            "label": "SW_TAG_13",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag14": {
+                            "label": "SW_TAG_14",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag15": {
+                            "label": "SW_TAG_15",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "c_type": 2
+                    }
+                },
+                {
+                    "log_controller": {
+                        "log_status": false,
+                        "sd_mounted": true,
+                        "sd_failed": false,
+                        "controller_type": 0,
+                        "c_type": 2
+                    }
+                },
+                {
+                    "automode": {
+                        "enabled": false,
+                        "nof_acquisitions": 0,
+                        "start_delay_s": 0,
+                        "logging_period_s": 1,
+                        "idle_period_s": 1,
+                        "c_type": 2
+                    }
+                },
                 {
                     "lis2du12_acc": {
                         "odr": 4,
@@ -250,135 +379,6 @@
                         "c_type": 0,
                         "stream_id": -1,
                         "ep_id": -1
-                    }
-                },
-                {
-                    "DeviceInformation": {
-                        "manufacturer": "STMicroelectronics",
-                        "model": "STEVAL-MKBOXPRO",
-                        "swVersion": "2.2.0",
-                        "osName": "AzureRTOS",
-                        "processorArchitecture": "ARM Cortex-M33",
-                        "processorManufacturer": "STMicroelectronics",
-                        "totalStorage": 0,
-                        "totalMemory": 784
-                    }
-                },
-                {
-                    "firmware_info": {
-                        "alias": "STBOX_PRO_001",
-                        "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "2.2.0",
-                        "part_number": "FP-SNS-DATALOG2",
-                        "device_url": "https://www.st.com/sensortileboxpro",
-                        "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
-                        "mac_address": "df:fd:8b:87:ae:e7",
-                        "c_type": 2
-                    }
-                },
-                {
-                    "tags_info": {
-                        "max_tags_num": 100,
-                        "sw_tag0": {
-                            "label": "SW_TAG_0",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag1": {
-                            "label": "SW_TAG_1",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag2": {
-                            "label": "SW_TAG_2",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag3": {
-                            "label": "SW_TAG_3",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag4": {
-                            "label": "SW_TAG_4",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag5": {
-                            "label": "SW_TAG_5",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag6": {
-                            "label": "SW_TAG_6",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag7": {
-                            "label": "SW_TAG_7",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag8": {
-                            "label": "SW_TAG_8",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag9": {
-                            "label": "SW_TAG_9",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag10": {
-                            "label": "SW_TAG_10",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag11": {
-                            "label": "SW_TAG_11",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag12": {
-                            "label": "SW_TAG_12",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag13": {
-                            "label": "SW_TAG_13",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag14": {
-                            "label": "SW_TAG_14",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag15": {
-                            "label": "SW_TAG_15",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "c_type": 2
-                    }
-                },
-                {
-                    "log_controller": {
-                        "log_status": false,
-                        "sd_mounted": false,
-                        "sd_failed": false,
-                        "controller_type": 0,
-                        "c_type": 2
-                    }
-                },
-                {
-                    "automode": {
-                        "enabled": false,
-                        "nof_acquisitions": 0,
-                        "start_delay_s": 0,
-                        "logging_period_s": 1,
-                        "idle_period_s": 1,
-                        "c_type": 2
                     }
                 }
             ]

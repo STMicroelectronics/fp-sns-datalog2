@@ -435,6 +435,13 @@ uint8_t sths34pf80_3_tmos_get_sensor_category(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
+uint8_t sths34pf80_3_tmos_get_mounted(bool *value)
+{
+  *value = true;
+  /* USER Code */
+  return PNPL_NO_ERROR_CODE;
+}
+
 uint8_t sths34pf80_3_tmos_get_dim(int32_t *value)
 {
   *value = 11;

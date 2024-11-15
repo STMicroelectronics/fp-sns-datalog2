@@ -116,13 +116,9 @@ uint8_t iis3dwb_acc_get_fs(pnpl_iis3dwb_acc_fs_t *enum_id)
   {
     *enum_id = pnpl_iis3dwb_acc_fs_g8;
   }
-  else if (fs < 15.0f)
-  {
-    *enum_id = pnpl_iis3dwb_acc_fs_g16;
-  }
   else
   {
-    return 1;
+    *enum_id = pnpl_iis3dwb_acc_fs_g16;
   }
   return PNPL_NO_ERROR_CODE;
 }

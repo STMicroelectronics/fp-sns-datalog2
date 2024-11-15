@@ -70,6 +70,27 @@ const MX_GPIOParams_t MX_GPIO_LED2InitParams =
 };
 
 /**
+  * (HW TAG0) Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO_HWTAG0InitParams =
+{
+  MX_GPIO_HWTAG0_Init,
+  UsageFault_IRQn, /*!< NOT USED */
+  HW_TAG_0_Pin,
+  HW_TAG_0_GPIO_Port
+};
+
+/**
+  * (HW TAG2) Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO_HWTAG1InitParams =
+{
+  MX_GPIO_HWTAG1_Init,
+  UsageFault_IRQn, /*!< NOT USED */
+  HW_TAG_1_Pin,
+  HW_TAG_1_GPIO_Port
+};
+/**
   * (INT2_EX) Initialization parameters.
   */
 const MX_GPIOParams_t MX_GPIO_INT2_EXInitParams =

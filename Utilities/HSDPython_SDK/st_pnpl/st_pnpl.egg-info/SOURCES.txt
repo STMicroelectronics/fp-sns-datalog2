@@ -33,12 +33,14 @@ st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2-3.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2-4.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2-5.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2-6.json
+st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2-7.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2PDETECT-1.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2_ISPU-1.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2_ISPU-2.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_Datalog2_ISPU-3.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_PDetect-1.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_PDetect-2.json
+st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_PDetect-3.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_UltrasoundFft-1.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/FP_SNS_DATALOG2_UltrasoundFft-2.json
 st_pnpl/DTDL/dtmi/appconfig/steval_stwinbx1/fpSnsDatalog2_datalog2WiFi-1.json

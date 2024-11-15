@@ -38,7 +38,6 @@ extern "C" {
 #define LPS22DF_MAX_WTM_LEVEL             (128) /* samples */
 #endif
 
-#define LPS22DF_MIN_WTM_LEVEL             (16)
 #define LPS22DF_MAX_SAMPLES_PER_IT        (LPS22DF_MAX_WTM_LEVEL)
 
 

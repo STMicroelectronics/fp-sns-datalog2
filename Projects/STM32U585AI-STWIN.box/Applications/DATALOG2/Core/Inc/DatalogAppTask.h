@@ -93,6 +93,9 @@ sys_error_code_t DatalogAppTask_msg(ULONG msg);
 
 uint8_t DatalogAppTask_load_ucf(const char *ucf_data, uint32_t ucf_size, const char *output_data, int32_t output_size);
 
+uint8_t DatalogAppTask_sd_stream_enable(void);
+uint8_t DatalogAppTask_sd_stream_disable(void);
+
 // Inline functions definition
 // ***************************
 

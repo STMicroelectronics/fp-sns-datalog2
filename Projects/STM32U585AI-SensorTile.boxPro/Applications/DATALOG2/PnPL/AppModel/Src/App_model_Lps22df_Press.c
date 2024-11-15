@@ -311,7 +311,7 @@ uint8_t lps22df_press_set_odr(pnpl_lps22df_press_odr_t enum_id, char **response_
       value = 50.0f;
       break;
     case pnpl_lps22df_press_odr_hz75:
-      value = 750.0f;
+      value = 75.0f;
       break;
     case pnpl_lps22df_press_odr_hz100:
       value = 100.0f;

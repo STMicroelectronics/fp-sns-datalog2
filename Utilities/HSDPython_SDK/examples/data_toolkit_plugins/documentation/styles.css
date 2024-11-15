@@ -1,0 +1,365 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+}
+
+.header {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+.logo img {
+    height: 50px;
+    margin-right: 10px;
+}
+
+.title {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 22px;
+    color: #003366;
+}
+
+.version {
+    font-size: 12px;
+    font-weight: bold;
+    color: #003366;;
+    text-align: right;
+}
+
+.header img {
+    height: 40px;
+}
+
+.header nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #333;
+}
+
+.nav-button {
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.nav-button:hover {
+    background-color: #F7F7F7;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.main-content {
+    text-align: center;
+    padding: 50px 20px;
+    margin-bottom: 20px;
+    background-color: rgba(102, 131, 157, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.main-content .content-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.text-content {
+    flex: 1;
+    min-width: 150px;
+    padding-right: 20px;
+}
+
+.text-content h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.text-content p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.text-content .btn {
+    background-color: #03234B;
+    color: #ffffff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.rounded-logo-small {
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.rounded-logo-big {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-left: 20px;
+}
+
+.code-inline {
+    font-family: Consolas, "Courier New", monospace;
+    color: #333;
+    font-weight: bold;
+    background-color: #fff;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 10px;
+    border: 1px solid #e6e6e6;
+}
+
+.code-sample {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.code-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #e6e6e6;
+    position: relative;
+}
+
+.code-container pre {
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 0;
+    font-family: Consolas, "Courier New", monospace;
+    color: #333;
+}
+
+.example-card {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    border-radius: 10px;
+    border: 2px solid #e6e6e6;
+    position: relative;
+}
+
+.button-blue {
+    background-color: #03234B;
+    color: #ffffff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.button-blue:hover {
+    background-color: #66839D;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.link-in-text {
+    font-weight: bold;
+}
+
+.copy-btn {
+    background: none;
+    border: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+}
+
+.download-btn {
+    background: none;
+    border: none;
+    position: absolute;
+    top: 20px;
+    right: 50px;
+    cursor: pointer;
+}
+
+.copy-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.download-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.footer {
+    background-color: #e0e0e0;
+    padding: 10px 20px;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 50px 20px;
+    background-color: #f7f7f7;
+}
+
+.header-section h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin: 0;
+}
+
+.header-section img {
+    width: 150px;
+    height: auto;
+}
+
+.intro, .download, .presentation{
+    display: block; /* Initially visible */
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.intro h2, .download h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #000;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.download ol {
+    padding-left: 20px;
+}
+
+.download li {
+    margin-bottom: 20px;
+}
+
+.download li h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.tutorial-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.video-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.video-container video {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 8px;
+}
+
+.platforms-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.platform-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex: 1 1 calc(33.333% - 20px);
+    box-sizing: border-box;
+}
+
+.platform-card h3 {
+    margin-top: 0;
+}
+
+.platform-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.tutorials-section {
+    margin-top: 50px;
+    text-align: left;
+}
+
+.foldable{
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tutorials-section .header {
+    display: flex;
+    align-items: center;
+    border-radius: 10px 10px 0px 0px;
+    justify-content: space-between;
+    background-color: #03234B;
+    color: #ffffff;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.arrow {
+    margin-right: 10px;
+    transform: rotate(90deg);
+    transition: transform 0.3s ease;
+}
+
+.foldable.open .arrow {
+    transform: rotate(270deg);
+}
+
+.section {
+    margin-bottom: 20px;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.tutorials-section .tutorials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.tutorials-section .tutorial-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex: 1 1 calc(33.333% - 20px);
+    box-sizing: border-box;
+    max-width: 300px;
+}

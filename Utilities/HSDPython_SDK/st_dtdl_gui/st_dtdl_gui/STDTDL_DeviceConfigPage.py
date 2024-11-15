@@ -208,15 +208,19 @@ class STDTDL_DeviceConfigPage():
     def endisable_component_config(self, status, c_to_avoid):
         for w in self.device_config_widget.findChildren(ComponentWidget):
             if w.comp_name not in c_to_avoid:
-                w.contents_widget.setEnabled(not status)
-                if status:
-                    style_split = w.frame_component_config.styleSheet().split(';')
-                    style_split[-1] = "\ncolor: rgb(100, 100, 100)"
-                    w.frame_component_config.setStyleSheet(';'.join(style_split))
-                else:
-                    style_split = w.frame_component_config.styleSheet().split(';')
-                    style_split[-1] = "\ncolor: rgb(210, 210, 210)"
-                    w.frame_component_config.setStyleSheet(';'.join(style_split))
+                self.endisable_component(status, w.comp_name)
+
+    def endisable_component(self, status, c_name):
+        w = self.controller.cconfig_widgets[c_name]
+        w.contents_widget.setEnabled(not status)
+        if status:
+            style_split = w.frame_component_config.styleSheet().split(';')
+            style_split[-1] = "\ncolor: rgb(100, 100, 100)"
+            w.frame_component_config.setStyleSheet(';'.join(style_split))
+        else:
+            style_split = w.frame_component_config.styleSheet().split(';')
+            style_split[-1] = "\ncolor: rgb(210, 210, 210)"
+            w.frame_component_config.setStyleSheet(';'.join(style_split))
     
     @abstractmethod
     def add_header_widget(self, widget):
@@ -225,7 +229,9 @@ class STDTDL_DeviceConfigPage():
     @Slot(bool)
     def s_is_logging(self, status:bool, interface:int):
         self.endisable_logging_message(status)
+        self.select_all_button.setEnabled(not status)
         
     @Slot(bool)
     def s_is_detecting(self, status:bool):
         self.endisable_detecting_message(status)
+        self.select_all_button.setEnabled(not status)

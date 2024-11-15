@@ -17,7 +17,7 @@ from abc import abstractmethod
 import os
 
 from PySide6.QtCore import Qt, Slot, QTimer
-from PySide6.QtGui import QPainter, QFont, QScreen
+from PySide6.QtGui import QPainter, QFont, QScreen, QPixmap, QIcon
 from PySide6.QtWidgets import QWidget, QFrame, QVBoxLayout, QPushButton, QSizePolicy
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QApplication
@@ -26,6 +26,11 @@ from PySide6.QtDesigner import QPyDesignerCustomWidgetCollection
 import pyqtgraph as pg
 
 import st_dtdl_gui
+
+import st_dtdl_gui.UI.icons 
+from pkg_resources import resource_filename
+icon_pop_in_img_path = resource_filename('st_dtdl_gui.UI.icons', 'pop-in_18dp_E8EAED.svg')
+icon_pop_out_img_path = resource_filename('st_dtdl_gui.UI.icons', 'pop-out_18dp_E8EAED.svg')
 
 class PlotLabel(QWidget):
     def __init__(self, p_label, parent =None):
@@ -83,9 +88,16 @@ class PlotWidget(QWidget):
         QPyDesignerCustomWidgetCollection.registerCustomWidget(PlotWidget, module="PlotWidget")
         loader = QUiLoader()
         self.plot_widget = loader.load(os.path.join(os.path.dirname(st_dtdl_gui.__file__),"UI","plot_widget.ui"), parent)
+        self.frame_plot = self.plot_widget.findChild(QFrame, "frame_plot")
         self.title_frame = self.plot_widget.frame_plot.findChild(QFrame,"frame_title")
         self.contents_frame = self.plot_widget.frame_plot.findChild(QFrame,"frame_contents")
-        self.pushButton_pop_out = self.title_frame.findChild(QPushButton, "pushButton_pop_out")
+
+        icon_pop_in_pixmap = QPixmap(icon_pop_in_img_path)
+        self.icon_pop_in = QIcon(icon_pop_in_pixmap)
+        icon_pop_out_pixmap = QPixmap(icon_pop_out_img_path)
+        self.icon_pop_out = QIcon(icon_pop_out_pixmap)
+
+        self.pushButton_pop_out:QPushButton = self.title_frame.findChild(QPushButton, "pushButton_pop_out")
         self.pushButton_pop_out.clicked.connect(self.clicked_pop_out_button)
         self.pushButton_plot_settings = self.title_frame.findChild(QPushButton, "pushButton_plot_settings")
         
@@ -219,6 +231,8 @@ class PlotWidget(QWidget):
         self.is_docked = True
 
     def pop_out_widget(self):
+        self.pushButton_pop_out.setIcon(self.icon_pop_in)
+        self.original_idx = self.parent.layout().indexOf(self)
         self.setWindowFlags(Qt.Dialog | Qt.WindowMaximizeButtonHint | Qt.WindowMinimizeButtonHint)
         center = QScreen.availableGeometry(QApplication.primaryScreen()).center()
         geo = self.frameGeometry()
@@ -227,14 +241,6 @@ class PlotWidget(QWidget):
         self.show()
 
     def pop_in_widget(self):
+        self.pushButton_pop_out.setIcon(self.icon_pop_out)
         self.setWindowFlags(Qt.Widget)
-        self.parent.layout().insertWidget(self.p_id, self)
-
-# class PlotWidget_test_v1(PlotWidget): #NOTE Old. To be refactorized in order to support HSDv1 plots
-#     def __init__(self, controller, comp_name, s_id, ss_id, odr, time_window, spts, sample_size, data_format, n_curves=1, parent=None, p_id = 0):
-#         super().__init__(controller, comp_name, odr, time_window, n_curves, parent, p_id)
-#         self.s_id = s_id
-#         self.ss_id = ss_id
-#         self.sample_size = sample_size
-#         self.spts = spts
-#         self.data_format = data_format
+        self.parent.layout().insertWidget(self.original_idx, self)

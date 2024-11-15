@@ -114,7 +114,9 @@ QPushButton:pressed {
 QPushButton:disabled {
      background-color: rgb(29,33,41);
      border: 2px solid rgb(29,33,41);
-}</string>
+}
+
+	border-color: rgb(0, 255, 0);</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
@@ -135,7 +137,7 @@ QPushButton:disabled {
          <property name="bottomMargin">
           <number>9</number>
          </property>
-         <item alignment="Qt::AlignTop">
+         <item>
           <widget class="QPushButton" name="pushButton_pop_out">
            <property name="minimumSize">
             <size>
@@ -160,7 +162,7 @@ QPushButton:disabled {
            </property>
            <property name="icon">
             <iconset resource="resources.qrc">
-             <normaloff>:/icons/icons/outline_open_in_full_white_18dp.png</normaloff>:/icons/icons/outline_open_in_full_white_18dp.png</iconset>
+             <normaloff>:/icons/icons/pop-out_18dp_E8EAED.svg</normaloff>:/icons/icons/pop-out_18dp_E8EAED.svg</iconset>
            </property>
           </widget>
          </item>
@@ -1314,6 +1316,53 @@ QPushButton:pressed {
         </property>
         <property name="cursor">
          <cursorShape>ArrowCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+	border: 2px solid rgb(52, 59, 72);
+	border-radius: 5px;	
+	background-color: rgb(52, 59, 72);
+}
+QPushButton:hover {
+	background-color: rgb(57, 65, 80);
+	border: 2px solid rgb(61, 70, 86);
+}
+QPushButton:pressed {	
+	background-color: rgb(35, 40, 49);
+	border: 2px solid rgb(43, 50, 61);
+}
+QPushButton:disabled {
+     background-color: rgb(29,33,41);
+     border: 2px solid rgb(29,33,41);
+}
+
+/* RADIO BUTTON */
+QRadioButton::indicator {
+    border: 3px rgb(27, 29, 35);
+	width: 15px;
+	height: 15px;
+	border-radius: 10px;
+	margin-top: 5px;
+    margin-bottom: 5px;
+    background: rgb(44, 49, 60);
+}
+QRadioButton::indicator:hover {
+    border: 3px solid rgb(58, 66, 81);
+}
+QRadioButton::indicator:checked {
+    background: 3px solid rgb(94, 106, 130);
+	border: 3px solid rgb(52, 59, 72);	
+}
+QRadioButton::indicator:checked:hover {
+    border: 3px solid rgb(68, 76, 91);
+}
+QRadioButton::indicator:unchecked {
+    border: 3px solid rgb(27, 29, 35);
+    background: rgb(44, 49, 60);
+}
+QRadioButton::indicator:unchecked:hover {
+    border: 3px solid rgb(58, 66, 81);
+}</string>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>

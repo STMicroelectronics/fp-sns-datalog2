@@ -1,0 +1,44 @@
+{
+    "tags": [
+        {
+            "l": "SW_TAG_0",
+            "e": true,
+            "ta": "2024-09-16T15:27:31.119Z"
+        },
+        {
+            "l": "SW_TAG_0",
+            "e": false,
+            "ta": "2024-09-16T15:27:33.552Z"
+        },
+        {
+            "l": "SW_TAG_1",
+            "e": true,
+            "ta": "2024-09-16T15:27:34.280Z"
+        },
+        {
+            "l": "SW_TAG_1",
+            "e": false,
+            "ta": "2024-09-16T15:27:38.936Z"
+        },
+        {
+            "l": "SW_TAG_0",
+            "e": true,
+            "ta": "2024-09-16T15:27:42.423Z"
+        },
+        {
+            "l": "SW_TAG_0",
+            "e": false,
+            "ta": "2024-09-16T15:27:46.760Z"
+        }
+    ],
+    "name": "SensorTile.Box_PRO_acquisition",
+    "description": "",
+    "uuid": "253d6978-3ace-48f7-a924-2df82dff37d2",
+    "start_time": "2024-09-16T15:27:30.000Z",
+    "end_time": "2024-09-16T15:27:46.761Z",
+    "data_ext": ".dat",
+    "data_fmt": "HSD_2.0.0",
+    "interface": 1,
+    "schema_version": "2.0.0",
+    "c_type": 2
+}

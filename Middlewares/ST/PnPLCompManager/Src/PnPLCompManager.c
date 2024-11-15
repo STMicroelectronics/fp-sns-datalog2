@@ -127,11 +127,14 @@ void pnpl_free(void *ptr){
  */
 void PnPLSetAllocationFunctions(PnPL_Malloc_Function malloc_fun, PnPL_Free_Function free_fun)
 {
-  /* Parson allocation functions */
-  json_set_allocation_functions(malloc_fun, free_fun);
+  if(NULL != malloc_fun && NULL != free_fun)
+  {
+    /* Parson allocation functions */
+    json_set_allocation_functions(malloc_fun, free_fun);
 
-  prv_pnpl_malloc = malloc_fun;
-  prv_pnpl_free = free_fun;
+    prv_pnpl_malloc = malloc_fun;
+    prv_pnpl_free = free_fun;
+  }
 }
 
 
@@ -188,7 +191,7 @@ uint8_t PnPL_SetLockUnlockCallbacks(PnPLockCallback lock_callback, PnPLUnlockCal
 {
   uint8_t pnpn_RetVal = PNPL_NULL_PTR_ARG_CODE;
 
-  if(NULL != lock_callback || NULL != unlock_callback)
+  if(NULL != lock_callback && NULL != unlock_callback)
   {
     pnpl_lock_fp   = lock_callback;
     pnpl_unlock_fp = unlock_callback;
@@ -809,16 +812,24 @@ uint8_t PnPLParseCommand(char *commandString, PnPLCommand_t *command)
 #if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
               char *cmd_response = 0;
               uint32_t size = 0;
-              (void)IPnPLCommandExecuteFunction(p_obj, commandString, &cmd_response, &size, 0);
-//              /* CMD Response */
-              command->comm_type = PNPL_CMD_COMMAND;
-//              command->response = (char*)pnpl_malloc(size);
-//              if (command->response != NULL)
-//              {
-//                strcpy(command->response, cmd_response);
-//                pnpl_free(cmd_response);
-//              }
-//              /* CMD Response*/
+              ret = IPnPLCommandExecuteFunction(p_obj, commandString, &cmd_response, &size, 0);
+              /* CMD Response */
+              if(ret == PNPL_NO_ERROR_CODE)
+              {
+                command->comm_type = PNPL_CMD_COMMAND;
+              }
+              else
+              {
+                command->comm_type = PNPL_CMD_ERROR;
+                cmd_response = "Invalid cmd";
+                command->response = (char*)pnpl_malloc(strlen(cmd_response)+1);
+                if (command->response != NULL)
+                {
+                  strcpy(command->response, cmd_response);
+                  pnpl_free(cmd_response);
+                }
+                ret = PNPL_BASE_ERROR_CODE;
+              }
 #else
               (void)IPnPLCommandExecuteFunction(p_obj, commandString);
 #endif
@@ -922,7 +933,9 @@ uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uin
     }
     if (comp_found == 0u)
     {
-      PnPLCreateLogMessage(SerializedJSON, size, "", PNPL_LOG_ERROR);
+      char local_error[100];
+      (void) sprintf(local_error, "get_status %s property doesn't exist", command->comp_name);
+      PnPLCreateLogMessage(SerializedJSON, size, local_error, PNPL_LOG_ERROR);
       ret = PNPL_BASE_ERROR_CODE;
     }
   }
@@ -944,7 +957,15 @@ uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uin
 #endif
   else if (command->comm_type == PNPL_CMD_ERROR)
   {
-    PnPLCreateLogMessage(SerializedJSON, size, command->comp_name, PNPL_LOG_ERROR);
+    if (command->response != NULL)
+    {
+      PnPLCreateLogMessage(SerializedJSON, size, command->response, PNPL_LOG_ERROR);
+      pnpl_free(command->response);
+    }
+    else
+    {
+      PnPLCreateLogMessage(SerializedJSON, size, command->comp_name, PNPL_LOG_ERROR);
+    }
   }
   else
   {
@@ -1542,15 +1563,23 @@ static uint8_t _PnPLParseCommand(char *commandString, PnPLCommand_t *command)
               char *cmd_response = 0;
               uint32_t size = 0;
               (void)IPnPLCommandExecuteFunction(p_obj, commandString, &cmd_response, &size, 0);
-//              /* CMD Response */
-              command->comm_type = PNPL_CMD_COMMAND;
-//              command->response = (char*)pnpl_malloc(size);
-//              if (command->response != NULL)
-//              {
-//                strcpy(command->response, cmd_response);
-//                pnpl_free(cmd_response);
-//              }
-//              /* CMD Response*/
+              /* CMD Response */
+              if(ret == PNPL_NO_ERROR_CODE)
+              {
+                command->comm_type = PNPL_CMD_COMMAND;
+              }
+              else
+              {
+                command->comm_type = PNPL_CMD_ERROR;
+                cmd_response = "Invalid cmd";
+                command->response = (char*)pnpl_malloc(strlen(cmd_response)+1);
+                if (command->response != NULL)
+                {
+                  strcpy(command->response, cmd_response);
+                  pnpl_free(cmd_response);
+                }
+                ret = PNPL_BASE_ERROR_CODE;
+              }
 #else
               (void)IPnPLCommandExecuteFunction(p_obj, commandString);
 #endif

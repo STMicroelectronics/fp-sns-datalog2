@@ -447,6 +447,10 @@ uint8_t tags_info_get_sw_tag15__status(bool *value)
 
 uint8_t tags_info_set_sw_tag0__label(const char *value, char **response_message)
 {
+  if (response_message != NULL)
+  {
+    *response_message = "";
+  }
   return TMSetSWTagLabel(value, 0);
 }
 

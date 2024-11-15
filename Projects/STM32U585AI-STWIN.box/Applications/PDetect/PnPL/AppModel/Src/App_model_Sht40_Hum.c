@@ -158,6 +158,13 @@ uint8_t sht40_hum_get_sensor_category(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
+uint8_t sht40_hum_get_mounted(bool *value)
+{
+  *value = true;
+  /* USER Code */
+  return PNPL_NO_ERROR_CODE;
+}
+
 uint8_t sht40_hum_get_stream_id(int8_t *value)
 {
   *value = sht40_hum_model.stream_params.stream_id;

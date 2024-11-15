@@ -11,17 +11,17 @@ set proxy_string=%1
 ECHO ===========================================
 ECHO installing st_pnpl...
 ECHO ===========================================
-if "%proxy_string%"=="" (python -m pip install st_pnpl\dist\st_pnpl-2.3.0-py3-none-any.whl) else (python -m pip install st_pnpl\dist\st_pnpl-2.3.0-py3-none-any.whl --proxy %proxy_string%) 
+if "%proxy_string%"=="" (python -m pip install st_pnpl\dist\st_pnpl-2.4.0-py3-none-any.whl) else (python -m pip install st_pnpl\dist\st_pnpl-2.4.0-py3-none-any.whl --proxy %proxy_string%) 
 :: Section 2: st_dtdl_gui
 ECHO ===========================================
 ECHO installing st_dtdl_gui...
 ECHO ===========================================
-if "%proxy_string%"=="" (python -m pip install st_dtdl_gui\dist\st_dtdl_gui-2.3.0-py3-none-any.whl) else (python -m pip install st_dtdl_gui\dist\st_dtdl_gui-2.3.0-py3-none-any.whl --proxy %proxy_string%) 
+if "%proxy_string%"=="" (python -m pip install st_dtdl_gui\dist\st_dtdl_gui-2.4.0-py3-none-any.whl) else (python -m pip install st_dtdl_gui\dist\st_dtdl_gui-2.4.0-py3-none-any.whl --proxy %proxy_string%) 
 :: Section 3: st_hsdatalog (GUI version)
 ECHO ===========================================
 ECHO installing st_hsdatalog (GUI version)...
 ECHO ===========================================
-if "%proxy_string%"=="" (python -m pip install st_hsdatalog\dist\GUI\st_hsdatalog-3.3.0-py3-none-any.whl) else (python -m pip install st_hsdatalog\dist\GUI\st_hsdatalog-3.3.0-py3-none-any.whl --proxy %proxy_string%) 
+if "%proxy_string%"=="" (python -m pip install st_hsdatalog\dist\GUI\st_hsdatalog-3.4.0-py3-none-any.whl) else (python -m pip install st_hsdatalog\dist\GUI\st_hsdatalog-3.4.0-py3-none-any.whl --proxy %proxy_string%) 
 :: Section 4: asciimatics needed from hsdatalog_cli.py example script
 ECHO ===========================================
 ECHO installing asciimatics...

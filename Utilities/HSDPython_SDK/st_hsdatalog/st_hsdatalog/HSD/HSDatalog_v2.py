@@ -285,6 +285,13 @@ class HSDatalog_v2:
                                         comp_status[0][comp_name]["unit"] = ""
         log.debug(f"Device Model: {self.device_model}")
 
+    def get_file_dimension(self, component_name):
+        filepath = os.path.join(self.__acq_folder_path, f"{component_name}.dat")
+        if os.path.isfile(filepath):
+            return os.path.getsize(filepath)
+        else:
+            return None
+
     def get_data_protocol_size(self):
         return self.data_protocol_size
 
@@ -586,7 +593,8 @@ class HSDatalog_v2:
                 else:
                     check_timestamps = False
                 if s_category == SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
-                   frame_period = 0 if sensor_name_contains_mlc_ispu else samples_per_ts / (1/(ss_stat.get("intermeasurement_time")/1000))
+                   odr = 1/(ss_stat.get("intermeasurement_time")/1000) if ss_stat.get("intermeasurement_time") > ss_stat.get("exposure_time")/1000 + 6  else (1/((ss_stat.get("exposure_time")/1000 + 6)/1000))
+                   frame_period = 0 if sensor_name_contains_mlc_ispu else samples_per_ts / odr
                 elif s_category == SensorCategoryEnum.ISENSOR_CLASS_POWERMETER.value:
                    frame_period = 0 if sensor_name_contains_mlc_ispu else samples_per_ts / (1/(ss_stat.get("adc_conversion_time")/1000000))
                 else:
@@ -699,7 +707,10 @@ class HSDatalog_v2:
                 samples_time = np.zeros((frames * samples_per_ts, 1))
                 # sample times between timestamps are linearly interpolated
                 for ii in range(frames): # For each Frame:
-                    samples_time[ii * samples_per_ts:(ii + 1) * samples_per_ts, 0] = np.linspace(timestamps[ii], timestamps[ii + 1], samples_per_ts, endpoint=False)
+                    if ii == 0 and is_first_chunk:
+                        samples_time[ii * samples_per_ts:(ii + 1) * samples_per_ts, 0] = np.linspace(timestamps[ii], timestamps[ii + 1], samples_per_ts)
+                    else:
+                        samples_time[ii * samples_per_ts:(ii + 1) * samples_per_ts, 0] = np.linspace(timestamps[ii], timestamps[ii + 1], samples_per_ts + 1)[1:]
             else:
                 # if samples_per_ts is 1, the timestamps coincides with the sample timestamp
                 # initial offset and interpolation is not relevant anymore
@@ -968,7 +979,13 @@ class HSDatalog_v2:
                             log.debug(f"Extracted counter: {counter}")
                             log.debug(f"data_byte_counter: {data_byte_counter}")
                             if counter != data_byte_counter + data_packet_size:
-                                raise DataCorruptedException(file_path)
+                                if n == 0 and data_byte_counter == 0:
+                                    #drop the first complete packet (data_packet_size) and go ahead with the data extraction and validation
+                                    log.warning(f"Counter mismatch at the beginning of the file: {counter} != {data_byte_counter + data_packet_size}")
+                                    log.warning(f"Skipping the first packet and continuing with the data extraction")
+                                    continue
+                                else:
+                                    raise DataCorruptedException(file_path)
                             data_byte_counter = counter
 
                         # Directly copy data into preallocated array
@@ -1238,7 +1255,7 @@ class HSDatalog_v2:
             #TODO sample_start = N/s = 104 in 1 sec, 1040 in 10 sec, --> 104*10 in 1*10 sec --> ODR*start_time(in sec) = sample_start
             s_category = s_stat.get("sensor_category")
             if s_category is not None and s_category == SensorCategoryEnum.ISENSOR_CLASS_LIGHT.value:
-                odr = 1/(s_stat.get("intermeasurement_time")/1000)
+                odr = 1/(s_stat.get("intermeasurement_time")/1000) if s_stat.get("intermeasurement_time") > s_stat.get("exposure_time")/1000 + 6  else (1/((s_stat.get("exposure_time")/1000 + 6)/1000))
             elif s_category is not None and s_category == SensorCategoryEnum.ISENSOR_CLASS_POWERMETER.value:
                 odr = 1/(s_stat.get("adc_conversion_time")/1000000)
             else:
@@ -1449,17 +1466,23 @@ class HSDatalog_v2:
                         if resolution is not None:
                             res = int(resolution.split("x")[0])
                         c = []
-                        for i in range(res):
-                            for j in range(res):
-                                c += [f"Target Status T1_Z({i},{j})",f"Distance T1_Z({i},{j})"]
+                        # for i in range(res):
+                        #     for j in range(res):
+                        #         c += [f"Target Status T1_Z({i},{j})",f"Distance T1_Z({i},{j})"]
+                        for i in range(res*res):
+                            c += [f"Target Status Z{i}",f"Distance Z{i}"]
                     else: #NOTE: Code for old firmware versions
                         res = 4 if ss_stat['dim'] == 128 else 8
                         c = []
-                        for i in range(res):
-                            for j in range(res):
-                                c += [f"N Target Z({i},{j})",f"Ambient per SPAD Z({i},{j})",f"Signal per SPAD T1_Z({i},{j})",
-                                    f"Target Status T1_Z({i},{j})",f"Distance T1_Z({i},{j})",f"Signal per SPAD T2_Z({i},{j})",
-                                    f"Target Status T2_Z({i},{j})",f"Distance T2_Z({i},{j})"]
+                        # for i in range(res):
+                        #     for j in range(res):
+                        #         c += [f"N Target Z({i},{j})",f"Ambient per SPAD Z({i},{j})",f"Signal per SPAD T1_Z({i},{j})",
+                        #             f"Target Status T1_Z({i},{j})",f"Distance T1_Z({i},{j})",f"Signal per SPAD T2_Z({i},{j})",
+                        #             f"Target Status T2_Z({i},{j})",f"Distance T2_Z({i},{j})"]
+                        for i in range(res*res):
+                            c += [f"N Target Z{i}",f"Ambient per SPAD Z{i}",f"Signal per SPAD Z{i}",
+                                f"Target Status Z{i}",f"Distance Z{i}",f"Signal per SPAD Z{i}",
+                                f"Target Status Z{i}",f"Distance Z{i}"]
                         
                 elif s_category == SensorCategoryEnum.ISENSOR_CLASS_CAMERA:
                     raise UnsupportedSensorCategoryError(sensor_name)#TODO
@@ -1654,6 +1677,8 @@ class HSDatalog_v2:
             for r_id in range(nof_rows):
                 row_t1 = masked_df.iloc[r_id]
                 t1_mat = np.array(row_t1.values).reshape(new_shape).astype('float')
+                t1_mat = np.rot90(t1_mat, k=3)
+                t1_mat = np.flip(t1_mat, axis=0)
                 t1_mat = np.swapaxes(t1_mat, 0, 1)
                 dist_matrices[r_id] = t1_mat
         
@@ -1675,6 +1700,11 @@ class HSDatalog_v2:
                     )
             fig.colorbar(im_h, cax=axins, orientation="vertical")
 
+            # Add text annotations
+            for i in range(new_shape[0]):
+                for j in range(new_shape[1]):
+                    ax.text(j, i, f'Z{new_shape[0]*(new_shape[0]-1-i)+(new_shape[1]-1-j)}', ha='center', va='center', color='white')
+
             # setup a slider axis and the Slider
             ax_slider = plt.axes([0.23, 0.02, 0.56, 0.04])
             slider = Slider(ax_slider, 'Time Step', 0, nof_rows-1, valinit=times[0])
@@ -1694,45 +1724,48 @@ class HSDatalog_v2:
 
     def __plot_pixels_over_time(self, sensor_name, ss_data_frame, resolution, t1_dist_df):
         fig, ax = plt.subplots()
-
+        ax.set(xlabel = 'Time (s)', ylabel = 'Distance [mm]')
+        
         n_lines = resolution
         # extract the first column (Times column) of ss_data_frame
         times_col = ss_data_frame.iloc[:, 0]
         # extract Target 1 distance values columns from ss_data_frame
         times_df = pd.DataFrame({"Time": times_col})
         ss_t1_dist_df = pd.concat([times_df, t1_dist_df.fillna(0)], axis=1)
-                                   
+
         matrix_l = 8 if n_lines == 64 else 4
         
-        cnt = 0
-        lines = []
-        for i in range(matrix_l):
-            for j in range(matrix_l):
-                line = PlotUtils.draw_line(ax, ss_t1_dist_df, cnt, np.random.rand(3, ), f"({i},{j})", True)
-                lines.append(line)
-                if i+j == 0:
-                    line.set_visible(True)
-                else:
-                    line.set_visible(False)
-                cnt += 1
-        
-        ax.set(xlabel = 'Time (s)', ylabel = 'Distance [mm]')
+        lines = {}
+        for i in range(n_lines):
+            line_name = f'Z{i}'
+            line = PlotUtils.draw_line(ax, ss_t1_dist_df, i, np.random.rand(3, ), line_name, True)
+            lines[line_name] = {'line': line, 'visibility': False}
+            line.set_visible(False)
 
         # Create the checkbox widgets
+        labels = [f'Z{i}' for i in range(n_lines)]
+        rearranged_labels = []
+        # # Rearrange the elements
+        for start in range(matrix_l - 1, -1, -1):
+            for i in range(start, matrix_l * matrix_l, matrix_l):
+                rearranged_labels.append(labels[i])
+
         rax = []
         check = []
         for i in range(matrix_l):
             rax.append(plt.axes([0.1+i*0.1, 0.05, 0.1, 0.23]))
-            labels = [f"({i},{j%matrix_l})" for j in range(i*matrix_l, (i+1)*matrix_l)]
             actives = [False]*matrix_l
             if i == 0:
                 actives[0] = True
-            check.append(CheckButtons(rax[i], labels, actives))
+                lines[rearranged_labels[0]]["visibility"] = True
+                lines[rearranged_labels[0]]["line"].set_visible(True)
+
+            check.append(CheckButtons(rax[i], rearranged_labels[i*matrix_l:(i+1)*matrix_l], actives))
 
         # Define the function to update the plot based on the checkbox state
         def update(val):
-            for i, line in enumerate(lines):
-                line.set_visible(check[i//matrix_l].get_status()[i%matrix_l])
+            lines[val]["visibility"] = not lines[val]["visibility"]
+            lines[val]["line"].set_visible(lines[val]["visibility"])
             plt.draw()
 
         # Connect the checkbox widgets to the update function
@@ -1742,6 +1775,7 @@ class HSDatalog_v2:
         fig.suptitle(f"{sensor_name.upper()} - Distance over time per Zone")
         fig.subplots_adjust(top=0.93, bottom=0.37)
         plt.draw()
+        plt.show()
     
     def __plot_light_sensor(self, sensor_name, ss_data_frame, cols, dim, label):
         fig = plt.figure()

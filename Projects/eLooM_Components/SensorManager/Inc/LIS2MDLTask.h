@@ -100,11 +100,6 @@ struct _LIS2MDLTask
   uint8_t p_sensor_data_buff[6];
 
   /**
-    * Specifies the FIFO watermark level (it depends from odr)
-    */
-  uint16_t samples_per_it;
-
-  /**
     * ::IEventSrc interface implementation for this class.
     */
   IEventSrc *p_mag_event_src;

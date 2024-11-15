@@ -38,7 +38,6 @@ extern "C" {
 #define LIS2DU12_MAX_WTM_LEVEL             (92)    /* samples */
 #endif
 
-#define LIS2DU12_MIN_WTM_LEVEL             (16)
 #define LIS2DU12_MAX_SAMPLES_PER_IT        (LIS2DU12_MAX_WTM_LEVEL)
 
 

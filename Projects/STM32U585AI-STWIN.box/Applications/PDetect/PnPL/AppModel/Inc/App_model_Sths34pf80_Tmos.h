@@ -95,6 +95,7 @@ uint8_t sths34pf80_tmos_get_sd_dps(int32_t *value);
 uint8_t sths34pf80_tmos_get_data_type(char **value);
 uint8_t sths34pf80_tmos_get_sensor_annotation(char **value);
 uint8_t sths34pf80_tmos_get_sensor_category(int32_t *value);
+uint8_t sths34pf80_tmos_get_mounted(bool *value);
 uint8_t sths34pf80_tmos_get_dim(int32_t *value);
 uint8_t sths34pf80_tmos_get_stream_id(int8_t *value);
 uint8_t sths34pf80_tmos_get_ep_id(int8_t *value);

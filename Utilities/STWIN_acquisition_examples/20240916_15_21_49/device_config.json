@@ -1,0 +1,472 @@
+{
+    "schema_version": "2.2.0",
+    "uuid": "38e77176-3517-4ec1-9e79-dc4a36404827",
+    "devices": [
+        {
+            "board_id": 9,
+            "fw_id": 10,
+            "protocol_id": 2,
+            "sn": "0011002F5652500420303153",
+            "pnpl_responses": true,
+            "pnpl_ble_responses": true,
+            "components": [
+                {
+                    "automode": {
+                        "enabled": false,
+                        "nof_acquisitions": 0,
+                        "start_delay_s": 0,
+                        "logging_period_s": 1,
+                        "idle_period_s": 1,
+                        "c_type": 2
+                    }
+                },
+                {
+                    "log_controller": {
+                        "log_status": false,
+                        "sd_mounted": false,
+                        "sd_failed": false,
+                        "controller_type": 0,
+                        "c_type": 2
+                    }
+                },
+                {
+                    "tags_info": {
+                        "max_tags_num": 100,
+                        "sw_tag0": {
+                            "label": "SW_TAG_0",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag1": {
+                            "label": "SW_TAG_1",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag2": {
+                            "label": "SW_TAG_2",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag3": {
+                            "label": "SW_TAG_3",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag4": {
+                            "label": "SW_TAG_4",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag5": {
+                            "label": "SW_TAG_5",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag6": {
+                            "label": "SW_TAG_6",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag7": {
+                            "label": "SW_TAG_7",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag8": {
+                            "label": "SW_TAG_8",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag9": {
+                            "label": "SW_TAG_9",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag10": {
+                            "label": "SW_TAG_10",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag11": {
+                            "label": "SW_TAG_11",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag12": {
+                            "label": "SW_TAG_12",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag13": {
+                            "label": "SW_TAG_13",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag14": {
+                            "label": "SW_TAG_14",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag15": {
+                            "label": "SW_TAG_15",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "c_type": 2
+                    }
+                },
+                {
+                    "firmware_info": {
+                        "alias": "STWIN_001",
+                        "fw_name": "FP-SNS-DATALOG2_Datalog2",
+                        "fw_version": "2.3.0",
+                        "part_number": "FP-SNS-DATALOG2",
+                        "device_url": "https://www.st.com/stwin",
+                        "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
+                        "mac_address": "c2:6d:57:af:68:15",
+                        "c_type": 2
+                    }
+                },
+                {
+                    "DeviceInformation": {
+                        "manufacturer": "STMicroelectronics",
+                        "model": "STEVAL-STWINKT1B",
+                        "swVersion": "2.3.0",
+                        "osName": "AzureRTOS",
+                        "processorArchitecture": "ARM Cortex-M4",
+                        "processorManufacturer": "STMicroelectronics",
+                        "totalStorage": 0,
+                        "totalMemory": 0
+                    }
+                },
+                {
+                    "iis3dwb_acc": {
+                        "odr": 0,
+                        "fs": 3,
+                        "enable": false,
+                        "samples_per_ts": 1000,
+                        "dim": 3,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 7000,
+                        "sd_dps": 48128,
+                        "sensitivity": 0.00048799999058246623,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 10,
+                            "acc": {
+                                "enable": false,
+                                "unit": "g",
+                                "format": "int16_t",
+                                "elements": 36,
+                                "channels": 3,
+                                "multiply_factor": 0.00048799999058246623,
+                                "odr": 666
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "iis2mdc_mag": {
+                        "odr": 3,
+                        "fs": 0,
+                        "enable": false,
+                        "samples_per_ts": 100,
+                        "dim": 3,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 30,
+                        "sd_dps": 512,
+                        "sensitivity": 0.001500000013038516,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 9,
+                            "mag": {
+                                "enable": false,
+                                "unit": "gauss",
+                                "format": "int16_t",
+                                "elements": 36,
+                                "channels": 3,
+                                "multiply_factor": 0.001500000013038516,
+                                "odr": 100
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "imp23absu_mic": {
+                        "odr": 4,
+                        "aop": 0,
+                        "enable": false,
+                        "volume": 100,
+                        "resolution": 0,
+                        "samples_per_ts": 1000,
+                        "dim": 1,
+                        "ioffset": 0,
+                        "usb_dps": 7000,
+                        "sd_dps": 115712,
+                        "sensitivity": 3.0517578125e-05,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 1,
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "ism330dhcx_acc": {
+                        "odr": 3,
+                        "fs": 3,
+                        "enable": true,
+                        "samples_per_ts": 104,
+                        "dim": 3,
+                        "ioffset": 0.047369007021188736,
+                        "measodr": 107.7813720703125,
+                        "usb_dps": 31,
+                        "sd_dps": 512,
+                        "sensitivity": 0.00048799999058246623,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 4,
+                            "acc": {
+                                "enable": false,
+                                "unit": "g",
+                                "format": "int16_t",
+                                "elements": 36,
+                                "channels": 3,
+                                "multiply_factor": 0.00048799999058246623,
+                                "odr": 104
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": 1,
+                        "ep_id": 1
+                    }
+                },
+                {
+                    "ism330dhcx_gyro": {
+                        "odr": 3,
+                        "fs": 5,
+                        "enable": true,
+                        "samples_per_ts": 104,
+                        "dim": 3,
+                        "ioffset": 0.047369007021188736,
+                        "measodr": 107.7813720703125,
+                        "usb_dps": 31,
+                        "sd_dps": 512,
+                        "sensitivity": 0.14000000059604645,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 5,
+                            "gyro": {
+                                "enable": false,
+                                "unit": "dps",
+                                "format": "int16_t",
+                                "elements": 36,
+                                "channels": 3,
+                                "multiply_factor": 0.14000000059604645,
+                                "odr": 104
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": 0,
+                        "ep_id": 0
+                    }
+                },
+                {
+                    "ism330dhcx_mlc": {
+                        "enable": false,
+                        "samples_per_ts": 1,
+                        "ucf_status": false,
+                        "dim": 9,
+                        "ioffset": 0,
+                        "data_type": "int8",
+                        "usb_dps": 0,
+                        "sd_dps": 0,
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 6,
+                            "mlc": {
+                                "enable": false,
+                                "unit": "",
+                                "format": "int8_t",
+                                "elements": 3,
+                                "channels": 9,
+                                "multiply_factor": 1,
+                                "odr": 1
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "imp34dt05_mic": {
+                        "odr": 2,
+                        "aop": 0,
+                        "enable": false,
+                        "volume": 100,
+                        "resolution": 0,
+                        "samples_per_ts": 1000,
+                        "dim": 1,
+                        "ioffset": 0,
+                        "usb_dps": 4800,
+                        "sd_dps": 29184,
+                        "sensitivity": 3.0517578125e-05,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 1,
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "iis2dh_acc": {
+                        "odr": 7,
+                        "fs": 3,
+                        "enable": false,
+                        "samples_per_ts": 1000,
+                        "dim": 3,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 403,
+                        "sd_dps": 2560,
+                        "sensitivity": 0.0007309999782592057,
+                        "data_type": "int16",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 3,
+                            "acc": {
+                                "enable": false,
+                                "unit": "g",
+                                "format": "int16_t",
+                                "elements": 36,
+                                "channels": 3,
+                                "multiply_factor": 0.0007309999782592057,
+                                "odr": 666
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "stts751_temp": {
+                        "odr": 3,
+                        "fs": 0,
+                        "enable": false,
+                        "samples_per_ts": 8,
+                        "dim": 1,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 12,
+                        "sd_dps": 44,
+                        "sensitivity": 1,
+                        "data_type": "float",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 2,
+                            "temp": {
+                                "enable": false,
+                                "unit": "Celsius",
+                                "format": "float",
+                                "elements": 5,
+                                "channels": 1,
+                                "multiply_factor": 1,
+                                "odr": 8
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "lps22hh_press": {
+                        "odr": 6,
+                        "fs": 0,
+                        "enable": false,
+                        "samples_per_ts": 200,
+                        "dim": 1,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 40,
+                        "sd_dps": 512,
+                        "sensitivity": 1,
+                        "data_type": "float",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 7,
+                            "press": {
+                                "enable": false,
+                                "unit": "hPa",
+                                "format": "float",
+                                "elements": 54,
+                                "channels": 1,
+                                "multiply_factor": 1,
+                                "odr": 200
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
+                    "lps22hh_temp": {
+                        "odr": 6,
+                        "fs": 0,
+                        "enable": false,
+                        "samples_per_ts": 200,
+                        "dim": 1,
+                        "ioffset": 0,
+                        "measodr": 0,
+                        "usb_dps": 40,
+                        "sd_dps": 512,
+                        "sensitivity": 1,
+                        "data_type": "float",
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "st_ble_stream": {
+                            "id": 8,
+                            "temp": {
+                                "enable": false,
+                                "unit": "Celsius",
+                                "format": "float",
+                                "elements": 54,
+                                "channels": 1,
+                                "multiply_factor": 1,
+                                "odr": 200
+                            }
+                        },
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                }
+            ]
+        }
+    ]
+}

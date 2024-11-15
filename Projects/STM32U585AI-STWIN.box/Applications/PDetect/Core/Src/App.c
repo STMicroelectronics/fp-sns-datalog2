@@ -427,6 +427,14 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     IEventSrcAddEventListener(LPS22DFTaskGetPressEventSrcIF((LPS22DFTask *)spLPS22DFObj), DatalogAppListener);
   }
 
+  /************ Other PnPL Components ************/
+  Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
+  Firmware_Info_PnPLInit(pFirmwareInfoPnPLObj);
+  Acquisition_Info_PnPLInit(pAcquisitionInfoPnPLObj);
+  Tags_Info_PnPLInit(pTagsInfoPnPLObj);
+  Log_Controller_PnPLInit(pLogControllerPnPLObj);
+  Automode_PnPLInit(pAutomodePnPLObj);
+
   /************ Sensor PnPL Components ************/
   Iis2iclx_Acc_PnPLInit(pIIS2ICLX_ACC_PnPLObj);
   Iis2mdc_Mag_PnPLInit(pIIS2MDC_MAG_PnPLObj);
@@ -460,14 +468,6 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     Sht40_Temp_PnPLInit(pSht40_Temp_PnPLObj);
     Lps22df_Press_PnPLInit(pLps22df_Press_PnPLObj);
   }
-
-  /************ Other PnPL Components ************/
-  Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
-  Firmware_Info_PnPLInit(pFirmwareInfoPnPLObj);
-  Acquisition_Info_PnPLInit(pAcquisitionInfoPnPLObj);
-  Tags_Info_PnPLInit(pTagsInfoPnPLObj);
-  Log_Controller_PnPLInit(pLogControllerPnPLObj);
-  Automode_PnPLInit(pAutomodePnPLObj);
 
 #if (DATALOG2_USE_WIFI == 1)
   Wifi_Config_PnPLInit(pWifiConfigPnPLObj, AppNetXDuo_GetIWifi_ConfigIF());

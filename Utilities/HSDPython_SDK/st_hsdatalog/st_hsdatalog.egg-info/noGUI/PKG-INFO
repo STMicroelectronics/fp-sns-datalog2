@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: st_hsdatalog
-Version: 3.3.0
+Version: 3.4.0
 Summary: STMicroelectronics High Speed Datalog python package (NO GUI)
 Home-page: 
 Author: SRA-ASP
@@ -10,8 +10,6 @@ Classifier: License :: BSD License (BSD-3-Clause)
 Classifier: Operating System :: Microsoft :: Windows
 Classifier: Operating System :: Linux
 Classifier: Programming Language :: Python :: 3
-Classifier: Programming Language :: Python :: 3.7
-Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11

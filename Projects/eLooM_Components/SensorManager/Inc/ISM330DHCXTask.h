@@ -41,7 +41,6 @@ extern "C" {
 #define ISM330DHCX_MAX_WTM_LEVEL             (256)    /* samples */
 #endif
 
-#define ISM330DHCX_MIN_WTM_LEVEL             (16)     /* samples */
 #define ISM330DHCX_MAX_SAMPLES_PER_IT        (ISM330DHCX_MAX_WTM_LEVEL)
 
 

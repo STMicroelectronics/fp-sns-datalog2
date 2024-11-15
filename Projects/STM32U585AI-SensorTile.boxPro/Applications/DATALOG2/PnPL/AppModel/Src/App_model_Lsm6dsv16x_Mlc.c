@@ -366,6 +366,16 @@ uint8_t lsm6dsv16x_mlc_load_file(const char *data, int32_t size)
   app_model.mlc_ucf_valid = true;
   __stream_control(true);
   __sc_set_ble_stream_params(lsm6dsv16x_mlc_model.id);
+  /* UCF modifies also acc and gyro parameters.
+   * Get status from SM and update ble_stream_params also */
+  SQuery_t query;
+  uint16_t id;
+  SQInit(&query, SMGetSensorManager());
+  id = SQNextByNameAndType(&query, "lsm6dsv16x", COM_TYPE_ACC);
+  __sc_set_ble_stream_params(id);
+  SQInit(&query, SMGetSensorManager());
+  id = SQNextByNameAndType(&query, "lsm6dsv16x", COM_TYPE_GYRO);
+  __sc_set_ble_stream_params(id);
   return PNPL_NO_ERROR_CODE;
 }
 

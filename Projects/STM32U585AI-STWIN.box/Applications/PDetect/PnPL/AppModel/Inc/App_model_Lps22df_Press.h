@@ -80,6 +80,7 @@ uint8_t lps22df_press_get_sensitivity(float *value);
 uint8_t lps22df_press_get_data_type(char **value);
 uint8_t lps22df_press_get_sensor_annotation(char **value);
 uint8_t lps22df_press_get_sensor_category(int32_t *value);
+uint8_t lps22df_press_get_mounted(bool *value);
 uint8_t lps22df_press_get_stream_id(int8_t *value);
 uint8_t lps22df_press_get_ep_id(int8_t *value);
 uint8_t lps22df_press_set_odr(pnpl_lps22df_press_odr_t enum_id, char **response_message);

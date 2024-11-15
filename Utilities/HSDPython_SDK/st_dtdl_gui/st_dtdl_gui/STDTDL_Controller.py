@@ -18,7 +18,7 @@ from enum import Enum
 
 from PySide6.QtCore import QObject, Signal
 
-from st_hsdatalog.HSD_GUI.HSD_DataToolkit_Pipeline import HSD_DataToolkit_Pipeline
+from st_hsdatalog.HSD_datatoolkit.HSD_DataToolkit_Pipeline import HSD_DataToolkit_Pipeline
 from st_pnpl.DTDL.device_template_manager import DeviceTemplateManager
 from st_pnpl.DTDL.device_template_model import InterfaceElement
 from st_dtdl_gui.Utils.DataClass import SensorPlotParams, AlgorithmPlotParams, ActuatorPlotParams
@@ -81,7 +81,8 @@ class STDTDL_Controller(QObject):
         self.components_status = dict() #From FW
         self.cconfig_widgets = dict() #{comp_name:CConfigWidget}
         self.plot_widgets = dict()
-        self.plugin_plot_widgets = dict()
+        # self.plugin_plot_widgets = dict()
+        self.plugin_plot_widgets = []
         self.__dt_manager = None
         self.log_msg = ""
         self.detect_msg = ""
@@ -112,6 +113,8 @@ class STDTDL_Controller(QObject):
                 self.sig_actuator_component_found.emit(comp_name, self.components_dtdl[comp_name])
             else:
                 self.sig_component_found.emit(comp_name, self.components_dtdl[comp_name])
+        if self.data_pipeline is not None:
+            self.data_pipeline.update_components_status(self.components_status)
                 
     def get_component_config_widget(self, comp_name):
         if comp_name in self.cconfig_widgets:
@@ -128,18 +131,24 @@ class STDTDL_Controller(QObject):
         self.cconfig_widgets[comp_name].deleteLater()
         self.cconfig_widgets.pop(comp_name)
 
+    def hide_plot_widget(self, comp_name):
+        self.plot_widgets[comp_name].setVisible(False)
+
+    def show_plot_widget(self, comp_name):
+        self.plot_widgets[comp_name].setVisible(True)
+
     def add_plugin_plot_widget(self, plot_widget):
         self.plots_layout.addWidget(plot_widget)
-        self.plugin_plot_widgets[plot_widget.comp_name] = plot_widget
+        self.plugin_plot_widgets.append(plot_widget)
 
     def remove_plugin_plot_widget(self, plot_widget):
         plot_widget.setVisible(False)
         plot_widget.deleteLater()
-        self.pugin_plot_widgets.pop(plot_widget.comp_name)
+        self.plugin_plot_widgets.remove(plot_widget)
         self.plots_layout.removeWidget(plot_widget)
 
     def clear_all_plugin_plot_widgets(self):
-        for plot_widget in self.plugin_plot_widgets.values():
+        for plot_widget in self.plugin_plot_widgets:
             plot_widget.setVisible(False)
             plot_widget.deleteLater()
             self.plots_layout.removeWidget(plot_widget)
@@ -156,7 +165,6 @@ class STDTDL_Controller(QObject):
 
     def create_data_pipeline(self):
         self.data_pipeline = HSD_DataToolkit_Pipeline(self)
-        # self.data_pipeline.update_components_status(self.components_status)
     
     def destroy_data_pipeline(self):
         self.data_pipeline = None

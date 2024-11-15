@@ -171,6 +171,8 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seria
   json_object_dotset_string(JSON_Status, "sths34pf80_tmos.sensor_annotation", temp_s);
   sths34pf80_tmos_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "sths34pf80_tmos.sensor_category", temp_i);
+  sths34pf80_tmos_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "sths34pf80_tmos.mounted", temp_b);
   sths34pf80_tmos_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "sths34pf80_tmos.dim", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema

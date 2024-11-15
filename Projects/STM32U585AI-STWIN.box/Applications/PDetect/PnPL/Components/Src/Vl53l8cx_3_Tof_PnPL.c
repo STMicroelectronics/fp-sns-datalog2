@@ -134,6 +134,8 @@ uint8_t Vl53l8cx_3_Tof_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_string(JSON_Status, "vl53l8cx_3_tof.sensor_annotation", temp_s);
   vl53l8cx_3_tof_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "vl53l8cx_3_tof.sensor_category", temp_i);
+  vl53l8cx_3_tof_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "vl53l8cx_3_tof.mounted", temp_b);
   vl53l8cx_3_tof_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "vl53l8cx_3_tof.dim", temp_i);
   vl53l8cx_3_tof_get_output_format__target_status__start_id(&temp_i);

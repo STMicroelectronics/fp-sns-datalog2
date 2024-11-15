@@ -186,9 +186,11 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_property = false;
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.odr"))
   {
+    valid_property = true;
     int32_t odr = (int32_t)json_object_dotget_number(tempJSONObject, "iis2iclx_acc.odr");
     ret = iis2iclx_acc_set_odr((pnpl_iis2iclx_acc_odr_t)odr, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -207,6 +209,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   }
   if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.fs"))
   {
+    valid_property = true;
     int32_t fs = (int32_t)json_object_dotget_number(tempJSONObject, "iis2iclx_acc.fs");
     ret = iis2iclx_acc_set_fs((pnpl_iis2iclx_acc_fs_t)fs, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -225,6 +228,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   }
   if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.enable"))
   {
+    valid_property = true;
     bool enable = json_object_dotget_boolean(tempJSONObject, "iis2iclx_acc.enable");
     ret = iis2iclx_acc_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -243,6 +247,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   }
   if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.samples_per_ts"))
   {
+    valid_property = true;
     int32_t samples_per_ts = (int32_t)json_object_dotget_number(tempJSONObject, "iis2iclx_acc.samples_per_ts");
     ret = iis2iclx_acc_set_samples_per_ts(samples_per_ts, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -261,6 +266,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   }
   if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.sensor_annotation"))
   {
+    valid_property = true;
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "iis2iclx_acc.sensor_annotation");
     ret = iis2iclx_acc_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -281,6 +287,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.st_ble_stream.id"))
     {
+      valid_property = true;
       int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject, "iis2iclx_acc.st_ble_stream.id");
       ret = iis2iclx_acc_set_st_ble_stream__id(st_ble_stream__id, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -302,6 +309,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.st_ble_stream.acc.enable"))
     {
+      valid_property = true;
       bool st_ble_stream__acc__enable = json_object_dotget_boolean(tempJSONObject, "iis2iclx_acc.st_ble_stream.acc.enable");
       ret = iis2iclx_acc_set_st_ble_stream__acc__enable(st_ble_stream__acc__enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -323,6 +331,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.st_ble_stream.acc.unit"))
     {
+      valid_property = true;
       const char *st_ble_stream__acc__unit = json_object_dotget_string(tempJSONObject, "iis2iclx_acc.st_ble_stream.acc.unit");
       ret = iis2iclx_acc_set_st_ble_stream__acc__unit(st_ble_stream__acc__unit, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -344,6 +353,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.st_ble_stream.acc.format"))
     {
+      valid_property = true;
       const char *st_ble_stream__acc__format = json_object_dotget_string(tempJSONObject,
                                                                          "iis2iclx_acc.st_ble_stream.acc.format");
       ret = iis2iclx_acc_set_st_ble_stream__acc__format(st_ble_stream__acc__format, &resp_msg);
@@ -366,6 +376,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.st_ble_stream.acc.elements"))
     {
+      valid_property = true;
       int32_t st_ble_stream__acc__elements = (int32_t)json_object_dotget_number(tempJSONObject,
                                                                                 "iis2iclx_acc.st_ble_stream.acc.elements");
       ret = iis2iclx_acc_set_st_ble_stream__acc__elements(st_ble_stream__acc__elements, &resp_msg);
@@ -388,6 +399,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.st_ble_stream.acc.channels"))
     {
+      valid_property = true;
       int32_t st_ble_stream__acc__channels = (int32_t)json_object_dotget_number(tempJSONObject,
                                                                                 "iis2iclx_acc.st_ble_stream.acc.channels");
       ret = iis2iclx_acc_set_st_ble_stream__acc__channels(st_ble_stream__acc__channels, &resp_msg);
@@ -410,6 +422,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.st_ble_stream.acc.multiply_factor"))
     {
+      valid_property = true;
       float st_ble_stream__acc__multiply_factor = (float)json_object_dotget_number(tempJSONObject,
                                                                                    "iis2iclx_acc.st_ble_stream.acc.multiply_factor");
       ret = iis2iclx_acc_set_st_ble_stream__acc__multiply_factor(st_ble_stream__acc__multiply_factor, &resp_msg);
@@ -432,6 +445,7 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "iis2iclx_acc.st_ble_stream.acc.odr"))
     {
+      valid_property = true;
       int32_t st_ble_stream__acc__odr = (int32_t)json_object_dotget_number(tempJSONObject,
                                                                            "iis2iclx_acc.st_ble_stream.acc.odr");
       ret = iis2iclx_acc_set_st_ble_stream__acc__odr(st_ble_stream__acc__odr, &resp_msg);
@@ -451,15 +465,25 @@ uint8_t Iis2iclx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
     }
   }
   json_value_free(tempJSON);
-  if (pretty == 1)
+  /* Check if received a request to modify an existing property */
+  if (valid_property)
   {
-    *response = json_serialize_to_string_pretty(respJSON);
-    *size = json_serialization_size_pretty(respJSON);
+    if (pretty == 1)
+    {
+      *response = json_serialize_to_string_pretty(respJSON);
+      *size = json_serialization_size_pretty(respJSON);
+    }
+    else
+    {
+      *response = json_serialize_to_string(respJSON);
+      *size = json_serialization_size(respJSON);
+    }
   }
   else
   {
-    *response = json_serialize_to_string(respJSON);
-    *size = json_serialization_size(respJSON);
+    /* Set property is not containing a valid property/parameter: PnPL_Error */
+    char *log_message = "Invalid property for Iis2iclx_Acc";
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
   }
   json_value_free(respJSON);
   return ret;

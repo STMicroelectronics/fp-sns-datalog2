@@ -46,7 +46,7 @@ from st_hsdatalog.HSD.HSDatalog import HSDatalog
 log = logger.setup_applevel_logger(is_debug = False, file_name= "app_debug.log")
 
 # Define the script version
-script_version = "2.1.0"
+script_version = "2.2.0"
 
 # Define a callback function to show help information
 def show_help(ctx, param, value):
@@ -78,13 +78,14 @@ def validate_signal_increment(ctx, param, value):
 @click.option('-st','--start_time', help="Start Time - Data conversion will start from this time (seconds)", type=int, default=0)
 @click.option('-et','--end_time', help="End Time - Data conversion will end up in this time (seconds)", type=int, default=-1)
 @click.option('-r', '--raw_data', is_flag=True, help="Uses Raw data (not multiplied by sensitivity)", default=False)
+@click.option('-t', '--target_value', help="Adds target value (mandatory for NEAI extrapolation datasets)", type=float, default=None)
 @click.option('-cdm','--custom_device_model', help="Upload a custom Device Template Model (DTDL)", type=(int, int, str))
 @click.version_option(script_version, '-v', '--version', prog_name="hsdatalog_to_nanoedge", is_flag=True, help="hsdatalog_to_nanoedge Converter tool version number")
 @click.option('-d', '--debug', is_flag=True, help="[DEBUG] Check for corrupted data and timestamps", default=False)
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
 # Define the main function that will be executed when the script is run
-def hsd_dataframe(acq_folder, output_folder, sensor_name, signal_length, signal_increment, start_time, end_time, raw_data, custom_device_model, debug):
+def hsd_dataframe(acq_folder, output_folder, sensor_name, signal_length, signal_increment, start_time, end_time, raw_data, target_value, custom_device_model, debug):
     
     # If a custom device model is provided, upload it
     if custom_device_model is not None:
@@ -118,7 +119,7 @@ def hsd_dataframe(acq_folder, output_folder, sensor_name, signal_length, signal_
             component = HSDatalog.ask_for_component(hsd, only_active=True)
             if component is not None:
                 # Convert data for the selected component
-                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder)
+                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder, target_value)
             else:
                 # Exit the loop if no component is selected
                 break
@@ -128,7 +129,7 @@ def hsd_dataframe(acq_folder, output_folder, sensor_name, signal_length, signal_
             component_list = HSDatalog.get_all_components(hsd, only_active=True)
             # Iterate over each component and convert data
             for component in component_list:
-                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder)
+                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder, target_value)
             # Set flag to False to exit the loop after processing all components
             df_flag = False
         # If a specific sensor name is provided, process only that component
@@ -136,7 +137,7 @@ def hsd_dataframe(acq_folder, output_folder, sensor_name, signal_length, signal_
             component = HSDatalog.get_component(hsd, sensor_name)
             if component is not None:
                 # Convert data for the specified component
-                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder)
+                convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder, target_value)
             else:
                 # Log an error if the specified component is not found
                 log.exception("No \"{}\" Component found in your Device Configuration file.".format(sensor_name))
@@ -144,10 +145,10 @@ def hsd_dataframe(acq_folder, output_folder, sensor_name, signal_length, signal_
             df_flag = False
 
 # Define a helper function to convert data for a given component
-def convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder):
+def convert_data(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, acq_folder, target_value = None):
     try:
         # Attempt to convert data to NanoEdge format
-        HSDatalog.convert_dat_to_nanoedge(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, 100)
+        HSDatalog.convert_dat_to_nanoedge(hsd, component, signal_length, signal_increment, start_time, end_time, raw_data, output_folder, target_value)
     except MissingISPUOutputDescriptorException as ispu_err:
         # Handle missing ISPU output descriptor exception
         log.error(ispu_err)

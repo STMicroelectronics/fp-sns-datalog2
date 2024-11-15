@@ -80,6 +80,7 @@ uint8_t sht40_hum_get_sensitivity(float *value);
 uint8_t sht40_hum_get_data_type(char **value);
 uint8_t sht40_hum_get_sensor_annotation(char **value);
 uint8_t sht40_hum_get_sensor_category(int32_t *value);
+uint8_t sht40_hum_get_mounted(bool *value);
 uint8_t sht40_hum_get_stream_id(int8_t *value);
 uint8_t sht40_hum_get_ep_id(int8_t *value);
 uint8_t sht40_hum_set_enable(bool value, char **response_message);

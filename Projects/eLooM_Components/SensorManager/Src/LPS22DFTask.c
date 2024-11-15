@@ -1251,10 +1251,6 @@ static sys_error_code_t LPS22DFTaskSensorInit(LPS22DFTask *_this)
     {
       lps22df_wtm_level = LPS22DF_MAX_WTM_LEVEL;
     }
-    else if (lps22df_wtm_level < LPS22DF_MIN_WTM_LEVEL)
-    {
-      lps22df_wtm_level = LPS22DF_MIN_WTM_LEVEL;
-    }
 
     _this->samples_per_it = lps22df_wtm_level;
   }

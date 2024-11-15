@@ -185,9 +185,11 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_property = false;
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.enable"))
   {
+    valid_property = true;
     bool enable = json_object_dotget_boolean(tempJSONObject, "ism330dhcx_mlc.enable");
     ret = ism330dhcx_mlc_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -206,6 +208,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   }
   if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.sensor_annotation"))
   {
+    valid_property = true;
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ism330dhcx_mlc.sensor_annotation");
     ret = ism330dhcx_mlc_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -226,6 +229,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.st_ble_stream.id"))
     {
+      valid_property = true;
       int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject, "ism330dhcx_mlc.st_ble_stream.id");
       ret = ism330dhcx_mlc_set_st_ble_stream__id(st_ble_stream__id, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -247,6 +251,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.st_ble_stream.mlc.enable"))
     {
+      valid_property = true;
       bool st_ble_stream__mlc__enable = json_object_dotget_boolean(tempJSONObject, "ism330dhcx_mlc.st_ble_stream.mlc.enable");
       ret = ism330dhcx_mlc_set_st_ble_stream__mlc__enable(st_ble_stream__mlc__enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -268,6 +273,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.st_ble_stream.mlc.unit"))
     {
+      valid_property = true;
       const char *st_ble_stream__mlc__unit = json_object_dotget_string(tempJSONObject,
                                                                        "ism330dhcx_mlc.st_ble_stream.mlc.unit");
       ret = ism330dhcx_mlc_set_st_ble_stream__mlc__unit(st_ble_stream__mlc__unit, &resp_msg);
@@ -290,6 +296,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.st_ble_stream.mlc.format"))
     {
+      valid_property = true;
       const char *st_ble_stream__mlc__format = json_object_dotget_string(tempJSONObject,
                                                                          "ism330dhcx_mlc.st_ble_stream.mlc.format");
       ret = ism330dhcx_mlc_set_st_ble_stream__mlc__format(st_ble_stream__mlc__format, &resp_msg);
@@ -312,6 +319,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.st_ble_stream.mlc.elements"))
     {
+      valid_property = true;
       int32_t st_ble_stream__mlc__elements = (int32_t)json_object_dotget_number(tempJSONObject,
                                                                                 "ism330dhcx_mlc.st_ble_stream.mlc.elements");
       ret = ism330dhcx_mlc_set_st_ble_stream__mlc__elements(st_ble_stream__mlc__elements, &resp_msg);
@@ -334,6 +342,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.st_ble_stream.mlc.channels"))
     {
+      valid_property = true;
       int32_t st_ble_stream__mlc__channels = (int32_t)json_object_dotget_number(tempJSONObject,
                                                                                 "ism330dhcx_mlc.st_ble_stream.mlc.channels");
       ret = ism330dhcx_mlc_set_st_ble_stream__mlc__channels(st_ble_stream__mlc__channels, &resp_msg);
@@ -356,6 +365,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.st_ble_stream.mlc.multiply_factor"))
     {
+      valid_property = true;
       float st_ble_stream__mlc__multiply_factor = (float)json_object_dotget_number(tempJSONObject,
                                                                                    "ism330dhcx_mlc.st_ble_stream.mlc.multiply_factor");
       ret = ism330dhcx_mlc_set_st_ble_stream__mlc__multiply_factor(st_ble_stream__mlc__multiply_factor, &resp_msg);
@@ -378,6 +388,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ism330dhcx_mlc.st_ble_stream.mlc.odr"))
     {
+      valid_property = true;
       int32_t st_ble_stream__mlc__odr = (int32_t)json_object_dotget_number(tempJSONObject,
                                                                            "ism330dhcx_mlc.st_ble_stream.mlc.odr");
       ret = ism330dhcx_mlc_set_st_ble_stream__mlc__odr(st_ble_stream__mlc__odr, &resp_msg);
@@ -397,15 +408,25 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
     }
   }
   json_value_free(tempJSON);
-  if (pretty == 1)
+  /* Check if received a request to modify an existing property */
+  if (valid_property)
   {
-    *response = json_serialize_to_string_pretty(respJSON);
-    *size = json_serialization_size_pretty(respJSON);
+    if (pretty == 1)
+    {
+      *response = json_serialize_to_string_pretty(respJSON);
+      *size = json_serialization_size_pretty(respJSON);
+    }
+    else
+    {
+      *response = json_serialize_to_string(respJSON);
+      *size = json_serialization_size(respJSON);
+    }
   }
   else
   {
-    *response = json_serialize_to_string(respJSON);
-    *size = json_serialization_size(respJSON);
+    /* Set property is not containing a valid property/parameter: PnPL_Error */
+    char *log_message = "Invalid property for Ism330dhcx_Mlc";
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
   }
   json_value_free(respJSON);
   return ret;

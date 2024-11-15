@@ -30,8 +30,7 @@ def main():
     """
 
     # change the "path/to/your/acquisition_folder" with the path of the acquisition folder you want to analyze
-    # acquisition_folder = "path/to/your/acquisition_folder"
-    acquisition_folder = "20240712_15_18_51"
+    acquisition_folder = "path/to/your/acquisition_folder"
 
     # Create an instance of HSDatalog
     hsd = HSDatalog()
@@ -187,6 +186,12 @@ def main():
     for i in range(total):
         df = hsd.get_dataframe(hsd_instance, component, start_time=i, end_time=i+1)[0]
         print(df)
+
+    # Extract dataframes with a generator
+    df_generator = hsd.get_dataframe_gen(hsd_instance, component, start_time=0, end_time=total, chunk_size=sensor_spts)
+    if df_generator is not None:
+        for df in df_generator:
+            print(f"\nDataFrame: {df}")
 
     # [UNCOMMENT This to check an acquisition folder containing Dummy data] - Check dummy data
     # hsd.check_dummy_data(hsd_instance, component, start_time=0, end_time=-1)

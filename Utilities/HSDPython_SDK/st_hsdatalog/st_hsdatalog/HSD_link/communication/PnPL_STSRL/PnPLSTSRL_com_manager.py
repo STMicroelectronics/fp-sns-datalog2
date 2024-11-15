@@ -15,6 +15,7 @@
 
 import json
 import serial
+import serial.tools.list_ports as list_ports
 from threading import Semaphore
 from st_hsdatalog.HSD_link.communication.PnPL_STSRL.SSTL import SSTL
 
@@ -92,7 +93,7 @@ class PnPLSTSRL_CommandManager:
     #TODO filter only compatible devices
     def get_nof_devices(self):
         # Get a list of available serial ports
-        ports = list(serial.tools.list_ports.comports())
+        ports = list_ports.comports()
         #TODO filter here
         # Return the number of connected devices
         return len(ports)

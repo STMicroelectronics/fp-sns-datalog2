@@ -91,7 +91,7 @@ color: rgb(210, 210, 210);
         <property name="styleSheet">
          <string notr="true">QFrame {
 	border: transparent;
-	background-color: rgb(39, 44, 54);
+	background-color: rgb(45, 87, 87);
 }
 QFrame:disabled {
 	background-color: rgb(60, 60, 60);
@@ -141,7 +141,8 @@ QFrame:disabled {
            </property>
            <property name="styleSheet">
             <string notr="true">QPushButton{
-	text-align: left
+	text-align: left;
+	background-color: transparent;
 }
 QPushButton:hover {
 	color: rgb(32, 178, 170);

@@ -173,9 +173,11 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_property = false;
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.odr"))
   {
+    valid_property = true;
     int32_t odr = (int32_t)json_object_dotget_number(tempJSONObject, "imp34dt05_mic.odr");
     ret = imp34dt05_mic_set_odr((pnpl_imp34dt05_mic_odr_t)odr, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -194,6 +196,7 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.enable"))
   {
+    valid_property = true;
     bool enable = json_object_dotget_boolean(tempJSONObject, "imp34dt05_mic.enable");
     ret = imp34dt05_mic_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -212,6 +215,7 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.volume"))
   {
+    valid_property = true;
     int32_t volume = (int32_t)json_object_dotget_number(tempJSONObject, "imp34dt05_mic.volume");
     ret = imp34dt05_mic_set_volume(volume, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -230,6 +234,7 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.samples_per_ts"))
   {
+    valid_property = true;
     int32_t samples_per_ts = (int32_t)json_object_dotget_number(tempJSONObject, "imp34dt05_mic.samples_per_ts");
     ret = imp34dt05_mic_set_samples_per_ts(samples_per_ts, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -248,6 +253,7 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.sensor_annotation"))
   {
+    valid_property = true;
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "imp34dt05_mic.sensor_annotation");
     ret = imp34dt05_mic_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -265,15 +271,25 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
     }
   }
   json_value_free(tempJSON);
-  if (pretty == 1)
+  /* Check if received a request to modify an existing property */
+  if (valid_property)
   {
-    *response = json_serialize_to_string_pretty(respJSON);
-    *size = json_serialization_size_pretty(respJSON);
+    if (pretty == 1)
+    {
+      *response = json_serialize_to_string_pretty(respJSON);
+      *size = json_serialization_size_pretty(respJSON);
+    }
+    else
+    {
+      *response = json_serialize_to_string(respJSON);
+      *size = json_serialization_size(respJSON);
+    }
   }
   else
   {
-    *response = json_serialize_to_string(respJSON);
-    *size = json_serialization_size(respJSON);
+    /* Set property is not containing a valid property/parameter: PnPL_Error */
+    char *log_message = "Invalid property for Imp34dt05_Mic";
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
   }
   json_value_free(respJSON);
   return ret;

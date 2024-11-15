@@ -38,16 +38,18 @@ flip_flipped = resource_filename('st_dtdl_gui.UI.icons', 'outline_autorenew_whit
 roi_colors_rgba = [ [182, 206, 95, 128],
                     [98, 195, 235, 128],
                     [235, 50, 151, 128],
-                    [106, 193, 164, 128]]
+                    [106, 193, 164, 128],
+                    [255, 117, 20, 128]]
 
 roi_qcolors = [QColor('#B6CE5F'),
                QColor('#62C3EB'),
                QColor('#EB3297'),
-               QColor('#6AC1A4')]
+               QColor('#6AC1A4'),
+               QColor('#FF7514')]
 
 MIN_DIST = 0
 MAX_DIST = 4000
-ROI_NUMBER = 4
+ROI_NUMBER = 5
 VALIDITY_MASK_VALID_VALUE_1 = 5
 VALIDITY_MASK_VALID_VALUE_2 = 9
 VALIDITY_MASK_INVALID_VALUE = 255
@@ -117,7 +119,8 @@ class ROISettingsWidget(QFrame):
 
     sig_selected_roi = Signal(int)
     sig_data_rotation = Signal(int)
-    sig_data_flip = Signal()
+    sig_data_x_flip = Signal()
+    sig_data_y_flip = Signal()
     sig_roi_threshold_set = Signal(int,int)#roi_id,th_value
     sig_presence_threshold_set = Signal(int)#th_value
 
@@ -137,7 +140,8 @@ class ROISettingsWidget(QFrame):
         self.setLayout(layout)
 
         self.rotation_id = 0
-        self.flipped_status = False
+        self.flipped_x_status = False
+        self.flipped_y_status = False
         self.rois_chips = {}
         self.rois_threshold_lineedits = {}
         self.setStyleSheet("QFrame { border: transparent; background:#272c36}")
@@ -147,10 +151,10 @@ class ROISettingsWidget(QFrame):
         self.rot_right_button = QPushButton()
         self.rot_left_button.setStyleSheet(STDTDL_PushButton.valid)
         self.rot_right_button.setStyleSheet(STDTDL_PushButton.valid)
-        self.rot_left_button.setIcon(QIcon(rot_down))
-        self.rot_right_button.setIcon(QIcon(rot_up))
-        self.rot_left_button.clicked.connect(lambda:self.data_rotation(-1))
-        self.rot_right_button.clicked.connect(lambda:self.data_rotation(+1))
+        self.rot_left_button.setIcon(QIcon(rot_up))
+        self.rot_right_button.setIcon(QIcon(rot_down))
+        self.rot_left_button.clicked.connect(lambda:self.data_rotation(+1))
+        self.rot_right_button.clicked.connect(lambda:self.data_rotation(-1))
 
         # Create a label widget to display the value
         self.rot_label = QLabel("0°")
@@ -158,29 +162,41 @@ class ROISettingsWidget(QFrame):
         self.rot_label.setAlignment(Qt.AlignCenter)
 
         rot_label_title = QLabel("Data Rotation:")
-        flip_label_title = QLabel("Data Flip:")
+        flip_x_label_title = QLabel("Data x-Flip:")
+        flip_y_label_title = QLabel("Data y-Flip:")
         roi_label_title = QLabel("ROI settings:")
 
         rotation_layout = QHBoxLayout()
         rotation_layout.addWidget(self.rot_left_button)
         rotation_layout.addWidget(self.rot_label)
         rotation_layout.addWidget(self.rot_right_button)
+        
+        self.flip_x_label = QLabel("Normal")
+        self.flip_x_label.setStyleSheet("font:700")
+        flip_x_layout = QHBoxLayout()
+        self.flip_x_button = QPushButton()
+        self.flip_x_button.setStyleSheet(STDTDL_PushButton.valid)
+        self.flip_x_button.setIcon(QIcon(flip))
+        self.flip_x_button.clicked.connect(self.data_x_flip)
+        flip_x_layout.addWidget(self.flip_x_button)
+        flip_x_layout.addWidget(self.flip_x_label)
 
-        self.flip_label = QLabel("Normal")
-        self.flip_label.setStyleSheet("font:700")
-
-        flip_layout = QHBoxLayout()
-        self.flip_button = QPushButton()
-        self.flip_button.setStyleSheet(STDTDL_PushButton.valid)
-        self.flip_button.setIcon(QIcon(flip))
-        self.flip_button.clicked.connect(self.data_flip)
-        flip_layout.addWidget(self.flip_button)
-        flip_layout.addWidget(self.flip_label)
+        self.flip_y_label = QLabel("Normal")
+        self.flip_y_label.setStyleSheet("font:700")
+        flip_y_layout = QHBoxLayout()
+        self.flip_y_button = QPushButton()
+        self.flip_y_button.setStyleSheet(STDTDL_PushButton.valid)
+        self.flip_y_button.setIcon(QIcon(flip))
+        self.flip_y_button.clicked.connect(self.data_y_flip)
+        flip_y_layout.addWidget(self.flip_y_button)
+        flip_y_layout.addWidget(self.flip_y_label)
 
         self.layout().addWidget(rot_label_title)
         self.layout().insertLayout(1, rotation_layout)
-        self.layout().addWidget(flip_label_title)
-        self.layout().insertLayout(3, flip_layout)
+        self.layout().addWidget(flip_x_label_title)
+        self.layout().insertLayout(3, flip_x_layout)
+        self.layout().addWidget(flip_y_label_title)
+        self.layout().insertLayout(5, flip_y_layout)
         
 
         global_thresh_layout = QVBoxLayout()
@@ -198,7 +214,7 @@ class ROISettingsWidget(QFrame):
         self.global_thresh_value.textChanged.connect(partial(UIUtils.validate_value, self.controller,  self.global_thresh_value))
         self.global_thresh_value.editingFinished.connect(lambda: self.presence_threshold_set(self.global_thresh_value))
         global_thresh_layout.addWidget(self.global_thresh_value)
-        self.layout().insertLayout(4, global_thresh_layout)
+        self.layout().insertLayout(6, global_thresh_layout)
         
         self.layout().addWidget(roi_label_title)
         rois_layout = QGridLayout()
@@ -214,7 +230,7 @@ class ROISettingsWidget(QFrame):
         for i in range(0,ROI_NUMBER):
             self.add_roi_chip(rois_layout,i,6)
 
-        self.layout().insertLayout(6, rois_layout)
+        self.layout().insertLayout(8, rois_layout)
 
     def data_rotation(self, inc_dec):
         self.rotation_id += inc_dec
@@ -227,23 +243,28 @@ class ROISettingsWidget(QFrame):
             self.rot_label.setText("180°")
         elif r_id == 3:
             self.rot_label.setText("270°")
-        self.sig_data_rotation.emit(r_id)
-    
-    def data_flip(self):
-        self.flipped_status = not self.flipped_status
-        self.flip_label.setText("Flipped") if self.flipped_status else self.flip_label.setText("Normal")
-        self.flip_button.setIcon(QIcon(flip_flipped) if self.flipped_status else QIcon(flip))
-        self.sig_data_flip.emit()
+        if self.flipped_x_status != self.flipped_y_status:
+            self.sig_data_rotation.emit(-inc_dec)
+        else:
+            self.sig_data_rotation.emit(inc_dec)
+
+    def data_x_flip(self):
+        self.flipped_x_status = not self.flipped_x_status
+        self.flip_x_label.setText("x-Flipped") if self.flipped_x_status else self.flip_x_label.setText("Normal")
+        self.flip_x_button.setIcon(QIcon(flip_flipped) if self.flipped_x_status else QIcon(flip))
+        self.sig_data_x_flip.emit()
+
+    def data_y_flip(self):
+        self.flipped_y_status = not self.flipped_y_status
+        self.flip_y_label.setText("y-Flipped") if self.flipped_y_status else self.flip_y_label.setText("Normal")
+        self.flip_y_button.setIcon(QIcon(flip_flipped) if self.flipped_y_status else QIcon(flip))
+        self.sig_data_y_flip.emit()
 
     def add_roi_chip(self, rois_layout:QGridLayout, roi_id, start_offset = 0):
-        # Create a new horizontal layout for the radio button and "X" button
-        # chip_layout = QHBoxLayout()
-
         # Create a new radio button and add it to the layout
         roi_chip = Chip("ROI {}".format(roi_id), roi_qcolors[roi_id])
         roi_chip.setFixedSize(50,30)
         roi_chip.toggled.connect(lambda: self.roi_radio_clicked(roi_id))
-        # chip_layout.addWidget(roi_chip)
         
         roi_threshold_lineedit = QLineEdit()
         roi_threshold_lineedit.setText(str(MIN_DIST))
@@ -256,7 +277,6 @@ class ROISettingsWidget(QFrame):
         roi_threshold_lineedit.setValidator(int_validator)
         roi_threshold_lineedit.textChanged.connect(partial(UIUtils.validate_value, self.controller, roi_threshold_lineedit))
         roi_threshold_lineedit.editingFinished.connect(lambda: self.roi_threshold_set(roi_id, roi_threshold_lineedit))
-        # chip_layout.addWidget(roi_threshold_lineedit)
 
         # Add the radio button to the button group
         self.button_group.addButton(roi_chip)
@@ -265,8 +285,6 @@ class ROISettingsWidget(QFrame):
         if len(self.rois_chips) == 1:
             roi_chip.toggle()
         self.rois_threshold_lineedits[roi_id] = roi_threshold_lineedit
-        # self.layout().setSpacing(12)
-        # self.layout().insertLayout(roi_id+start_offset, chip_layout)
         rois_layout.addWidget(roi_chip, roi_id+1, 0)
         rois_layout.addWidget(roi_threshold_lineedit, roi_id+1, 1)
     
@@ -298,11 +316,8 @@ class PlotHeatmapWidget(PlotWidget):
 
         self.plot_label = plot_label
         # Clear PlotWidget inherited graphic elements (mantaining all attributes, functions and signals)
-        while self.layout().count():
-            item = self.layout().takeAt(0)
-            widget = item.widget()
-            if widget:
-                widget.deleteLater()
+        for i in reversed(range(self.contents_frame.layout().count())): 
+            self.contents_frame.layout().itemAt(i).widget().setParent(None)
 
         main_layout = QHBoxLayout()
         main_frame = QFrame()
@@ -313,7 +328,8 @@ class PlotHeatmapWidget(PlotWidget):
         
         self.heatmap_shape = heatmap_shape
         self.heatmap_rotation = 0
-        self.heatmap_is_flipped = False
+        self.heatmap_is_x_flipped = False
+        self.heatmap_is_y_flipped = False
         self.roi_thresolds = {i:MIN_DIST for i in range(ROI_NUMBER)}
         self.presence_threshold = MIN_DIST
         self.global_presence_status = False
@@ -341,7 +357,6 @@ class PlotHeatmapWidget(PlotWidget):
         self.graph_widget.getPlotItem().layout.setContentsMargins(10, 3, 3, 10)
         self.graph_widget.getPlotItem().setMenuEnabled(False) #Disable right click menu in plots
         self.graph_widget.getPlotItem().showGrid(True,True)
-        # self.graph_widget.setFixedSize(QSize(250, 270))
         
         styles = {'color':'#d2d2d2', 'font-size':'12px'}
         self.graph_widget.setLabel('bottom', self.left_label, **styles)
@@ -356,11 +371,11 @@ class PlotHeatmapWidget(PlotWidget):
         self.rois_frame = ROISettingsWidget(controller)
         self.rois_frame.sig_data_rotation.connect(self.data_rotation_callback)
         self.rois_frame.sig_selected_roi.connect(self.set_selected_roi_id)
-        self.rois_frame.sig_data_flip.connect(self.data_flip_callback)
+        self.rois_frame.sig_data_x_flip.connect(self.data_flip_x_callback)
+        self.rois_frame.sig_data_y_flip.connect(self.data_flip_y_callback)
         self.rois_frame.sig_roi_threshold_set.connect(self.roi_threshold_set_callback)
         self.rois_frame.sig_presence_threshold_set.connect(self.presence_threshold_set_callback)
         self.roi_chips = self.rois_frame.rois_chips
-        # self.roi_animations = {}
 
         self.plot_layout = QHBoxLayout()
         self.plot_frame = QFrame()
@@ -371,7 +386,7 @@ class PlotHeatmapWidget(PlotWidget):
 
         main_layout.addWidget(self.rois_frame)
         main_layout.addWidget(self.plot_frame)
-        self.layout().addWidget(main_frame)
+        self.contents_frame.layout().addWidget(main_frame)
 
         # Add text items for each pixel
         self.text_items = []
@@ -427,85 +442,97 @@ class PlotHeatmapWidget(PlotWidget):
             print("Component {} is logging on SD Card: {}".format(self.comp_name,status))
 
     def update_plot(self):
-        # Extract all data from the queue (pop)    
+        # Extract all data from the queue (pop)
         if len(self._data) > 0 :
             l_data = self._data.popleft()
-            self.heatmap_img.setImage(l_data, levels=[MIN_DIST, MAX_DIST]) 
-                
-            for i in range(self.heatmap_shape[0]):
-                for j in range(self.heatmap_shape[1]):
-                    curr_data = l_data[i][j]
-                    curr_valid_mask = self.validity_mask[i][j]
-                    if curr_data > MAX_DIST:
-                        self.text_items[j][i].setText("X")
-                        curr_valid_mask = VALIDITY_MASK_INVALID_VALUE
-                        self.global_underthresh[i][j] = 0
-                    else:                    
-                        self.text_items[j][i].setText(str(curr_data))
-                    
-                    if curr_valid_mask == VALIDITY_MASK_INVALID_VALUE:
-                        self.text_items[j][i].setColor(self.red_color) #red, invalid
-                        self.global_underthresh[i][j] = 0
-                    else:
-                        self.text_items[j][i].setColor(self.green_color) #green, valid
-                        if curr_data != 0 and curr_data < self.presence_threshold:
-                            self.global_underthresh[i][j] = 1
-                        else:
+            if l_data.shape == self.heatmap_shape:
+                self.heatmap_img.setImage(l_data, levels=[MIN_DIST, MAX_DIST])
+                for i in range(self.heatmap_shape[0]):
+                    for j in range(self.heatmap_shape[1]):
+                        curr_data = l_data[i][j]
+                        curr_valid_mask = self.validity_mask[i][j]
+                        if curr_data > MAX_DIST:
+                            self.text_items[j][i].setText("X")
+                            curr_valid_mask = VALIDITY_MASK_INVALID_VALUE
                             self.global_underthresh[i][j] = 0
-                    for k in range(ROI_NUMBER):
-                        if len(self.rois[k].keys()) == 0:
-                            self.underthresh[k] = []
-                        elif (i,j) in self.rois[k].keys():
-
-                            if curr_valid_mask == VALIDITY_MASK_INVALID_VALUE:
-                                if (i,j) in self.underthresh[k]:
-                                    self.underthresh[k].remove((i,j))
+                        else:                    
+                            self.text_items[j][i].setText(str(curr_data))
+                        
+                        if curr_valid_mask == VALIDITY_MASK_INVALID_VALUE:
+                            self.text_items[j][i].setColor(self.red_color) #red, invalid
+                            self.global_underthresh[i][j] = 0
+                        else:
+                            self.text_items[j][i].setColor(self.green_color) #green, valid
+                            if curr_data != 0 and curr_data < self.presence_threshold:
+                                self.global_underthresh[i][j] = 1
                             else:
-                                if curr_data < self.roi_thresolds[k]:
-                                    if (i,j) not in self.underthresh[k]:
-                                        self.underthresh[k].append((i,j))
-                                else:
+                                self.global_underthresh[i][j] = 0
+                        for k in range(ROI_NUMBER):
+                            if len(self.rois[k].keys()) == 0:
+                                self.underthresh[k] = []
+                            elif (i,j) in self.rois[k].keys():
+
+                                if curr_valid_mask == VALIDITY_MASK_INVALID_VALUE:
                                     if (i,j) in self.underthresh[k]:
                                         self.underthresh[k].remove((i,j))
-            
-            if bool(np.any(self.global_underthresh)) == True and not np.all(0) and self.global_presence_status == False:
-                self.global_presence_status = True
-                self.controller.sig_tof_presence_detected.emit(self.global_presence_status, "tof_presence")
-            elif bool(np.any(self.global_underthresh)) == False and not np.all(0) and self.global_presence_status == True:
-                self.global_presence_status = False
-                self.controller.sig_tof_presence_detected.emit(self.global_presence_status, "tof_presence")
-            
-            for x in range(ROI_NUMBER):
-                if x in self.underthresh and self.underthresh[x] != []:
-                    if not self.is_roi_flashing[x]: 
-                        roi_chip = self.rois_frame.rois_chips[x]
-                        self.is_roi_flashing[x] = True
-                        roi_chip.start_flash()
-                        self.controller.sig_tof_presence_detected_in_roi.emit(True,x+1,"Target {}".format(x+1))
-                        # self.controller.setPresenceInRoiFlag()
-                else:
-                    if self.is_roi_flashing[x]: 
-                        roi_chip = self.rois_frame.rois_chips[x]
-                        self.is_roi_flashing[x] = False
-                        roi_chip.stop_flash()
-                        self.controller.sig_tof_presence_detected_in_roi.emit(False,x+1,"Target {}".format(x+1))
-                        # self.controller.setPresenceInRoiFlag()
+                                else:
+                                    if curr_data < self.roi_thresolds[k]:
+                                        if (i,j) not in self.underthresh[k]:
+                                            self.underthresh[k].append((i,j))
+                                    else:
+                                        if (i,j) in self.underthresh[k]:
+                                            self.underthresh[k].remove((i,j))
+                
+                if bool(np.any(self.global_underthresh)) == True and not np.all(0) and self.global_presence_status == False:
+                    self.global_presence_status = True
+                    self.controller.sig_tof_presence_detected.emit(self.global_presence_status, "tof_presence")
+                elif bool(np.any(self.global_underthresh)) == False and not np.all(0) and self.global_presence_status == True:
+                    self.global_presence_status = False
+                    self.controller.sig_tof_presence_detected.emit(self.global_presence_status, "tof_presence")
+                
+                for x in range(ROI_NUMBER):
+                    if x in self.underthresh and self.underthresh[x] != []:
+                        if not self.is_roi_flashing[x]: 
+                            roi_chip = self.rois_frame.rois_chips[x]
+                            self.is_roi_flashing[x] = True
+                            roi_chip.start_flash()
+                            self.controller.sig_tof_presence_detected_in_roi.emit(True,x+1,"Target {}".format(x+1))
+                    else:
+                        if self.is_roi_flashing[x]: 
+                            roi_chip = self.rois_frame.rois_chips[x]
+                            self.is_roi_flashing[x] = False
+                            roi_chip.stop_flash()
+                            self.controller.sig_tof_presence_detected_in_roi.emit(False,x+1,"Target {}".format(x+1))
+            else:
+                self.heatmap_img.setImage(l_data)
         self._data.clear()
         
     def add_data(self, data):
         data_shape = self.heatmap_shape[0]*self.heatmap_shape[1]
-        if len(data[0]) % (data_shape) == 0 and len(data[0]) != 0:
-            l_data = data[0][-data_shape:].reshape(self.heatmap_shape)
-            l_data = np.rot90(l_data, k=self.heatmap_rotation % 4)
-            if self.heatmap_is_flipped:
-                l_data = np.flip(l_data) 
+        if len(data) == 2:
+            if len(data[0]) % (data_shape) == 0 and len(data[0]) != 0:
+                l_data = data[0][-data_shape:].reshape(self.heatmap_shape)
+                l_data = np.rot90(l_data, k=self.heatmap_rotation % 4)
+                if self.heatmap_is_x_flipped:
+                    l_data = np.flip(l_data, axis=0) 
+                if self.heatmap_is_y_flipped:
+                    l_data = np.flip(l_data, axis=1)
+                self._data.append(l_data)
+            
+            if len(data[1]) % (data_shape) == 0 and len(data[1]) != 0:
+                self.validity_mask = data[1][-data_shape:].reshape(self.heatmap_shape)
+                self.validity_mask = np.rot90(self.validity_mask, k=self.heatmap_rotation % 4)
+                if self.heatmap_is_x_flipped:
+                    self.validity_mask = np.flip(self.validity_mask, axis=0)
+                if self.heatmap_is_y_flipped:
+                    self.validity_mask = np.flip(self.validity_mask, axis=1)
+        if len(data) == self.heatmap_shape[0]:
+            l_data = np.rot90(data, k=self.heatmap_rotation % 4)
+            if self.heatmap_is_x_flipped:
+                l_data = np.flip(l_data, axis=0)
+            if self.heatmap_is_y_flipped:
+                l_data = np.flip(l_data, axis=1)
             self._data.append(l_data)
-        
-        if len(data[1]) % (data_shape) == 0 and len(data[1]) != 0:
-            self.validity_mask = data[1][-data_shape:].reshape(self.heatmap_shape)
-            self.validity_mask = np.rot90(self.validity_mask, k=self.heatmap_rotation % 4)
-            if self.heatmap_is_flipped:
-                self.validity_mask = np.flip(self.validity_mask)       
 
     @staticmethod
     def create_matrix(size):
@@ -524,11 +551,23 @@ class PlotHeatmapWidget(PlotWidget):
     def set_selected_roi_id(self, roi_id):
         self.selected_roi_id = roi_id
     
-    def data_rotation_callback(self, rot_id):
-        self.heatmap_rotation = rot_id
+    def set_default_rotation(self, rotation):
+        self.heatmap_rotation = rotation
+    
+    def set_default_x_flip(self, x_flip):
+        self.heatmap_is_x_flipped = x_flip
 
-    def data_flip_callback(self):
-        self.heatmap_is_flipped = not self.heatmap_is_flipped
+    def set_default_y_flip(self, y_flip):
+        self.heatmap_is_y_flipped = y_flip
+
+    def data_rotation_callback(self, rot_id):
+        self.heatmap_rotation += rot_id
+
+    def data_flip_x_callback(self):
+        self.heatmap_is_x_flipped = not self.heatmap_is_x_flipped
+
+    def data_flip_y_callback(self):
+        self.heatmap_is_y_flipped = not self.heatmap_is_y_flipped
 
     def roi_threshold_set_callback(self, roi_id, roi_threshold):
         # print("roi_id: {}, roi_threshold: {}".format(roi_id, roi_threshold))
@@ -544,7 +583,6 @@ class PlotHeatmapWidget(PlotWidget):
 
         # Get the pixel value at the clicked position
         # pixel_value = self.data[y, x]
-
         # print(f"Clicked on pixel ({x}, {y}) with value {pixel_value}")
 
         if self.zones[(x,y)] == False:
@@ -559,4 +597,3 @@ class PlotHeatmapWidget(PlotWidget):
             self.graph_widget.removeItem(self.rois[self.selected_roi_id][(x,y)])
             del self.rois[self.selected_roi_id][(x,y)]
             self.zones[(x,y)] = False
-            # self.app.processEvents()

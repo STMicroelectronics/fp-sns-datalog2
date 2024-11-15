@@ -466,7 +466,6 @@ sys_error_code_t LIS2MDLTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
   memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
   p_obj->mag_id = 0;
   p_obj->prev_timestamp = 0.0f;
-  p_obj->samples_per_it = 0;
   p_obj->task_delay = 0;
   p_obj->first_data_ready = 0;
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
@@ -1000,15 +999,15 @@ static sys_error_code_t LIS2MDLTaskExecuteStepDatalog(AManagedTask *_this)
             p_obj->prev_timestamp = timestamp;
 
             /* update measuredODR */
-            p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
+            p_obj->sensor_status.type.mems.measured_odr = 1.0f / (float) delta_timestamp;
 
-            /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
+            /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (1):
              * [X0, Y0, Z0]
              * [X1, Y1, Z1]
              * ...
              * [Xm-1, Ym-1, Zm-1]
              */
-            EMD_Init(&p_obj->data, p_obj->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->samples_per_it, 3);
+            EMD_Init(&p_obj->data, p_obj->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 3);
 
             DataEvent_t evt;
 
@@ -1179,8 +1178,6 @@ static sys_error_code_t LIS2MDLTaskSensorInit(LIS2MDLTask *_this)
     lis2mdl_drdy_on_pin_set(p_sensor_drv, 0);
   }
 
-  _this->samples_per_it = 1;
-
   /*Read first data to start it generation */
   int16_t buff[] =
   {
@@ -1211,17 +1208,13 @@ static sys_error_code_t LIS2MDLTaskSensorInit(LIS2MDLTask *_this)
   if (_this->sensor_status.is_active)
   {
     lis2mdl_data_rate_set(p_sensor_drv, lis2mdl_odr);
+    _this->task_delay = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
   }
   else
   {
     lis2mdl_power_mode_set(p_sensor_drv, LIS2MDL_HIGH_RESOLUTION);
     lis2mdl_operating_mode_set(p_sensor_drv, LIS2MDL_POWER_DOWN);
     _this->sensor_status.is_active = false;
-  }
-
-  if (_this->sensor_status.is_active)
-  {
-    _this->task_delay = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
   }
 
   return res;
@@ -1235,16 +1228,10 @@ static sys_error_code_t LIS2MDLTaskSensorReadData(LIS2MDLTask *_this)
   lis2mdl_magnetic_raw_get(p_sensor_drv, (int16_t *) &_this->p_sensor_data_buff);
 
 #if (HSD_USE_DUMMY_DATA == 1)
-  uint16_t samples_per_it = _this->samples_per_it;
-  uint16_t i;
   int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
-
-  for (i = 0; i < samples_per_it; i++)
-  {
-    *p16++ = dummyDataCounter++;
-    *p16++ = dummyDataCounter++;
-    *p16++ = dummyDataCounter++;
-  }
+  *p16++ = dummyDataCounter++;
+  *p16++ = dummyDataCounter++;
+  *p16++ = dummyDataCounter++;
 #endif
   //TODO: Other things to add?? --> Add a callback for the ready data?
   // LIS2MDL_Data_Ready(0, (uint8_t *)lis2mdl_mem, 6, TimeStamp_lis2mdl);

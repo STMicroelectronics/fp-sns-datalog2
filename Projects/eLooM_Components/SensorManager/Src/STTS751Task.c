@@ -750,7 +750,7 @@ sys_error_code_t STTS751Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   }
   else
   {
-    if (odr > 1.0f)
+    if (odr > 0.0f)
     {
       p_if_owner->sensor_status.type.mems.odr = odr;
       p_if_owner->sensor_status.type.mems.measured_odr = 0.0f;

@@ -63,7 +63,11 @@
 #define ISM330BX_TASK_CFG_MAX_INSTANCES_COUNT      1
 #endif
 
-#define SYS_DEBUGF(level, message)                   SYS_DEBUGF3(SYS_DBG_ISM330BX, level, message)
+#define SYS_DEBUGF(level, message)                 SYS_DEBUGF3(SYS_DBG_ISM330BX, level, message)
+
+#ifndef ISM330BX_TASK_CFG_I2C_ADDRESS
+#define ISM330BX_TASK_CFG_I2C_ADDRESS              ISM330BX_I2C_ADD_H
+#endif
 
 #ifndef HSD_USE_DUMMY_DATA
 #define HSD_USE_DUMMY_DATA 0
@@ -612,7 +616,7 @@ sys_error_code_t ISM330BXTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
   }
   else
   {
-    p_obj->p_sensor_bus_if = I2CBusIFAlloc(ISM330BX_ID, ISM330BX_I2C_ADD_H, 0);
+    p_obj->p_sensor_bus_if = I2CBusIFAlloc(ISM330BX_ID, ISM330BX_TASK_CFG_I2C_ADDRESS, 0);
     if (p_obj->p_sensor_bus_if == NULL)
     {
       res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
@@ -1609,47 +1613,59 @@ static sys_error_code_t ISM330BXTaskExecuteStepDatalog(AManagedTask *_this)
 #if ISM330BX_FIFO_ENABLED
               if ((p_obj->acc_sensor_status.is_active) && (p_obj->gyro_sensor_status.is_active)) /* Read both ACC and GYRO */
               {
-                /* update measuredODR */
-                p_obj->acc_sensor_status.type.mems.measured_odr = (float) p_obj->acc_samples_count / (float) delta_timestamp;
-                p_obj->gyro_sensor_status.type.mems.measured_odr = (float) p_obj->gyro_samples_count / (float) delta_timestamp;
-
                 if (p_obj->acc_sensor_status.type.mems.odr > p_obj->gyro_sensor_status.type.mems.odr) /* Acc is faster than Gyro */
                 {
+                  /* update measuredODR */
+                  p_obj->acc_sensor_status.type.mems.measured_odr = (float) p_obj->acc_samples_count / (float) delta_timestamp;
+                  p_obj->gyro_sensor_status.type.mems.measured_odr = (p_obj->gyro_sensor_status.type.mems.odr / p_obj->acc_sensor_status.type.mems.odr) * p_obj->acc_sensor_status.type.mems.measured_odr;
+
                   /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue:
                    * [X0, Y0, Z0]
                    * [X1, Y1, Z1]
                    * ...
                    * [Xm-1, Ym-1, Zm-1]
                    */
-                  EMD_Init(&p_obj->data_acc, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2,
-                           p_obj->acc_samples_count, 3);
-                  DataEventInit((IEvent *) &evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp, p_obj->acc_id);
-
-                  EMD_Init(&p_obj->data_gyro, p_obj->p_slow_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2,
-                           p_obj->gyro_samples_count, 3);
-                  DataEventInit((IEvent *) &evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp, p_obj->gyro_id);
-
-                  IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent *) &evt_acc, NULL);
-                  IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent *) &evt_gyro, NULL);
+                  if (p_obj->acc_samples_count != 0)
+                  {
+                    EMD_Init(&p_obj->data_acc, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2,
+                             p_obj->acc_samples_count, 3);
+                    DataEventInit((IEvent *) &evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp, p_obj->acc_id);
+                    IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent *) &evt_acc, NULL);
+                  }
+                  if (p_obj->gyro_samples_count != 0)
+                  {
+                    EMD_Init(&p_obj->data_gyro, p_obj->p_slow_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2,
+                             p_obj->gyro_samples_count, 3);
+                    DataEventInit((IEvent *) &evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp, p_obj->gyro_id);
+                    IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent *) &evt_gyro, NULL);
+                  }
                 }
                 else
                 {
+                  /* update measuredODR */
+                  p_obj->gyro_sensor_status.type.mems.measured_odr = (float) p_obj->gyro_samples_count / (float) delta_timestamp;
+                  p_obj->acc_sensor_status.type.mems.measured_odr = (p_obj->acc_sensor_status.type.mems.odr / p_obj->gyro_sensor_status.type.mems.odr) * p_obj->gyro_sensor_status.type.mems.measured_odr;
+
                   /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue:
                    * [X0, Y0, Z0]
                    * [X1, Y1, Z1]
                    * ...
                    * [Xm-1, Ym-1, Zm-1]
                    */
-                  EMD_Init(&p_obj->data_acc, p_obj->p_slow_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2,
-                           p_obj->acc_samples_count, 3);
-                  DataEventInit((IEvent *) &evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp, p_obj->acc_id);
-
-                  EMD_Init(&p_obj->data_gyro, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2,
-                           p_obj->gyro_samples_count, 3);
-                  DataEventInit((IEvent *) &evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp, p_obj->gyro_id);
-
-                  IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent *) &evt_acc, NULL);
-                  IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent *) &evt_gyro, NULL);
+                  if (p_obj->acc_samples_count != 0)
+                  {
+                    EMD_Init(&p_obj->data_acc, p_obj->p_slow_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2,
+                             p_obj->acc_samples_count, 3);
+                    DataEventInit((IEvent *) &evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp, p_obj->acc_id);
+                    IEventSrcSendEvent(p_obj->p_acc_event_src, (IEvent *) &evt_acc, NULL);
+                  }
+                  if (p_obj->gyro_samples_count != 0)
+                  {
+                    EMD_Init(&p_obj->data_gyro, p_obj->p_fast_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2,
+                             p_obj->gyro_samples_count, 3);
+                    DataEventInit((IEvent *) &evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp, p_obj->gyro_id);
+                    IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent *) &evt_gyro, NULL);
+                  }
                 }
 
               }
@@ -2024,10 +2040,6 @@ static sys_error_code_t ISM330BXTaskSensorInit(ISM330BXTask *_this)
     {
       ism330bx_wtm_level = ISM330BX_MAX_WTM_LEVEL;
     }
-    else if (ism330bx_wtm_level < ISM330BX_MIN_WTM_LEVEL)
-    {
-      ism330bx_wtm_level = ISM330BX_MIN_WTM_LEVEL;
-    }
     _this->samples_per_it = ism330bx_wtm_level;
   }
 
@@ -2256,7 +2268,7 @@ static sys_error_code_t ISM330BXTaskSensorInit(ISM330BXTask *_this)
   if ((_this->acc_sensor_status.is_active) && (_this->gyro_sensor_status.is_active))
   {
     _this->ism330bx_task_cfg_timer_period_ms = (uint16_t)(
-                                                 _this->acc_sensor_status.type.mems.odr < _this->gyro_sensor_status.type.mems.odr ?
+                                                 _this->acc_sensor_status.type.mems.odr > _this->gyro_sensor_status.type.mems.odr ?
                                                  _this->acc_sensor_status.type.mems.odr :
                                                  _this->gyro_sensor_status.type.mems.odr);
   }

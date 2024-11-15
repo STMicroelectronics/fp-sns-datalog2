@@ -58,6 +58,10 @@
 
 #define SYS_DEBUGF(level, message)                SYS_DEBUGF3(SYS_DBG_IIS2ICLX, level, message)
 
+#ifndef IIS2ICLX_TASK_CFG_I2C_ADDRESS
+#define IIS2ICLX_TASK_CFG_I2C_ADDRESS             IIS2ICLX_I2C_ADD_H
+#endif
+
 #ifndef HSD_USE_DUMMY_DATA
 #define HSD_USE_DUMMY_DATA 0
 #endif
@@ -420,7 +424,7 @@ sys_error_code_t IIS2ICLXTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
   }
   else
   {
-    p_obj->p_sensor_bus_if = I2CBusIFAlloc(IIS2ICLX_ID, IIS2ICLX_I2C_ADD_H, 0);
+    p_obj->p_sensor_bus_if = I2CBusIFAlloc(IIS2ICLX_ID, IIS2ICLX_TASK_CFG_I2C_ADDRESS, 0);
     if (p_obj->p_sensor_bus_if == NULL)
     {
       res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
@@ -1314,11 +1318,6 @@ static sys_error_code_t IIS2ICLXTaskSensorInit(IIS2ICLXTask *_this)
     {
       iis2iclx_wtm_level = IIS2ICLX_MAX_WTM_LEVEL;
     }
-    else if (iis2iclx_wtm_level < IIS2ICLX_MIN_WTM_LEVEL)
-    {
-      iis2iclx_wtm_level = IIS2ICLX_MIN_WTM_LEVEL;
-    }
-
     _this->samples_per_it = iis2iclx_wtm_level;
   }
 

@@ -47,7 +47,7 @@ from st_hsdatalog.HSD.HSDatalog import HSDatalog
 log = logger.setup_applevel_logger(is_debug = False, file_name= "app_debug.log")
 
 # Define the script version for reference
-script_version = "2.1.0"
+script_version = "2.2.0"
 
 # Define a callback function to show help information
 def show_help(ctx, param, value):
@@ -88,10 +88,14 @@ def show_help(ctx, param, value):
 @click.option('-cs', '--chunk_size', help="Specify the size (number of samples) of each data chunk to be processed", default=HSDatalog.DEFAULT_SAMPLES_CHUNK_SIZE)
 @click.version_option(script_version, '-v', '--version', prog_name="hsdatalog_dataframes", is_flag=True, help="hsdatalog_dataframes tool version number")
 @click.option('-d', '--debug', is_flag=True, help="[DEBUG] Check for corrupted data and timestamps", default=False)
+@click.option('-dlg', '--disable_lazy_generator', is_flag=True, help="Disable lazy generator for dataframes extraction", default=False)
 @click.option("-h", "--help", is_flag=True, is_eager=True, expose_value=False, callback=show_help, help="Show this message and exit.",)
 
 # Define the main function that will be executed when the script is run
-def hsd_dataframe(acq_folder, sensor_name, start_time, end_time, raw_data, labeled, tag_labels, custom_device_model, chunk_size, debug):
+def hsd_dataframe(acq_folder, sensor_name, start_time, end_time, raw_data, labeled, tag_labels, custom_device_model, chunk_size, debug, disable_lazy_generator):
+
+    # Check if the lazy generator is disabled or not
+    use_generator = not disable_lazy_generator
 
     # If a custom device model is provided, upload it
     if custom_device_model is not None:
@@ -125,38 +129,45 @@ def hsd_dataframe(acq_folder, sensor_name, start_time, end_time, raw_data, label
             component = HSDatalog.ask_for_component(hsd, only_active=True)
             # If a component is selected, extract a dataframe from its data
             if component is not None:
-                df = extract_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder)
-                if df is not None:
-                    [log.info("\nDataFrame - Start time: {}, End time: {}\n{}".format(start_time, x.values[-1][0] , x)) for x in df if not x.empty]
+                extract_component_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder, use_generator)
             else:
                 break
         # If 'all' is specified for sensor name, process all active components
         elif sensor_name == 'all':
             component_list = HSDatalog.get_all_components(hsd, only_active=True)
             for component in component_list:
-                df = extract_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder)
-                if not (df is None or len(df) == 0):
-                    for d in df:
-                        log.info("\nDataFrame - Start time: {}, End time: {}\n{}".format(start_time, d.values[-1][0] ,d))
+                extract_component_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder, use_generator)
             df_flag = False
         # If a specific sensor name is provided, process only that component
         else:
             component = HSDatalog.get_component(hsd, sensor_name)
             if component is not None:
-                df = extract_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder)
-                if df is not None:
-                    [log.info("\nDataFrame - Start time: {}, End time: {}\n{}".format(start_time, x.values[-1][0] , x)) for x in df if not x.empty]
+                extract_component_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder, use_generator)
             else:
                 # Log an error if the specified component is not found
                 log.error("No \"{}\" Component found in your Device Configuration file.".format(sensor_name))
             df_flag = False
 
+def extract_component_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder, use_generator=True):
+    if use_generator:
+        df_generator = extract_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder, True)
+        if df_generator is not None:
+            for df in df_generator:
+                log.info(f"\nDataFrame: {df}")
+    else:
+        df_list = extract_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder, False)
+        if df_list is not None:
+            [log.info(f"\nDataFrame: {df}") for df in df_list if not df.empty]
+
 # Define a helper function to extract dataframes
-def extract_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder):
+def extract_dataframe(hsd, component, start_time, end_time, labeled, which_tags, raw_data, chunk_size, acq_folder, use_generator=True):
     try:
-        # Attempt to convert data to text by tags
-        df = HSDatalog.get_dataframe(hsd, component, start_time, end_time, labeled, raw_data, which_tags, chunk_size)
-        return df
+        # Extract dataframes based on the provided parameters
+        if use_generator:
+            return HSDatalog.get_dataframe_gen(hsd, component, start_time, end_time, labeled, raw_data, which_tags, chunk_size)
+        else:
+            return HSDatalog.get_dataframe(hsd, component, start_time, end_time, labeled, raw_data, which_tags, chunk_size)
+
     except MissingTagsException as tags_err:
         # Handle missing tags exception
         log.error(tags_err)

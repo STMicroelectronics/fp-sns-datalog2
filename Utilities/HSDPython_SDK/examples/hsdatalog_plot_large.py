@@ -48,8 +48,12 @@ Key Features:
 """
 
 import sys
+import subprocess
 
-print("Checking additional required packages...")
+import st_hsdatalog.HSD_utils.logger as logger
+log = logger.setup_applevel_logger(is_debug = False, file_name= "app_debug.log")
+
+log.info("Checking additional required packages...")
 
 # List of required packages
 required_packages = [
@@ -59,23 +63,38 @@ required_packages = [
 ]
 
 # Check for missing packages
-missing_packages = []
+missing_packages = {}
 for package in required_packages:
     try:
         __import__(package)
     except ImportError:
-        missing_packages.append(package)
+        if package == "dask":
+            missing_packages[package] = "dask[dataframe]"
+        elif package == "plotly":
+            missing_packages[package] = "plotly"
+        elif package == "plotly_resampler":
+            missing_packages[package] = "plotly_resampler"
 
 # Notify user of missing packages
 if missing_packages:
-    print("The following required packages are missing:")
+    log.warning("The following required packages are missing:")
     for package in missing_packages:
-        if package == "dask":
-            print(" - dask[dataframe]")
-        else:
-            print(f" - {package}")
-    print("Please install the missing packages and try again.")
-    sys.exit(1)
+        log.warning(f" - ({package}) {missing_packages[package]}")
+    
+    user_input = input("Do you want to install the missing packages? (yes/no): ").strip().lower()
+    if user_input in ["yes", "y"]:
+        for package in missing_packages:
+            version = input(f"Enter the version for {missing_packages[package]} (or press Enter to install the latest version): ").strip()
+            if version:
+                subprocess.check_call([sys.executable, "-m", "pip", "install", f"{missing_packages[package]}=={version}"])
+            else:
+                subprocess.check_call([sys.executable, "-m", "pip", "install", missing_packages[package]])
+        log.info("All required packages are installed.")
+    else:
+        log.error("Please install the missing packages and try again.")
+        sys.exit(1)
+else:
+    log.info("All required packages are installed.")
 
 import os
 import webbrowser
@@ -86,10 +105,8 @@ from plotly_resampler import FigureResampler
 import click
 from st_hsdatalog.HSD_utils.dtm import HSDatalogDTM
 from st_hsdatalog.HSD_utils.exceptions import MissingDeviceModelError, MissingISPUOutputDescriptorException
-import st_hsdatalog.HSD_utils.logger as logger
 from st_hsdatalog.HSD.HSDatalog import HSDatalog
 
-log = logger.setup_applevel_logger(is_debug = False, file_name= "app_debug.log")
 script_version = "1.0.0"
 
 def show_help(ctx, param, value):

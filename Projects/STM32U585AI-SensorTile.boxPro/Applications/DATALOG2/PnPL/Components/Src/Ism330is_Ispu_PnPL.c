@@ -254,6 +254,11 @@ uint8_t Ism330is_Ispu_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *se
       }
     }
   }
+  /* USER CODE: to be automatically added in the next generator version */
+  else
+  {
+    ret = PNPL_BASE_ERROR_CODE;
+  }
   json_value_free(tempJSON);
   return ret;
 }

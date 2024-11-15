@@ -140,6 +140,7 @@ class SubPlotFrame(QWidget):
             sub_plot.setMinimumSize(200,200)
         elif isinstance(plot_params, PlotLabelParams):
             sub_plot = LabelPlotWidget(self.parent_wdgt.controller, comp_name, pw, plot_params, sp_id, self.parent_wdgt)
+            sub_plot.title_frame.setVisible(False)
             sub_plot_name.setVisible(False)
         elif isinstance(plot_params, PlotLevelParams):
             sub_plot = LevelPlotWidget(self.parent_wdgt.controller, comp_name, comp_display_name, plot_params.min_val, plot_params.max_val, 1, plot_params.unit, sp_id, self.parent_wdgt)

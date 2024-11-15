@@ -32,7 +32,7 @@ from st_hsdatalog.HSD_GUI.Widgets.HSDAutoModeWidget import HSDAutoModeWidget
 from st_hsdatalog.HSD_GUI.Widgets.HSDLogControlWidget import HSDLogControlWidget
 from st_hsdatalog.HSD_GUI.Widgets.HSDAdvLogControlWidget import HSDAdvLogControlWidget
 
-from st_hsdatalog.HSD_GUI.Widgets.HSDComponentWidget import HSDComponentWidget
+from st_hsdatalog.HSD_GUI.Widgets.HSDComponentWidget import HSDALSComponentWidget, HSDComponentWidget
 from st_hsdatalog.HSD_GUI.Widgets.TagsInfoWidget import TagsInfoWidget
 from st_hsdatalog.HSD_GUI.Widgets.HSDPlotLinesWidget import HSDPlotLinesWidget
 
@@ -53,6 +53,8 @@ class HSD_DeviceConfigPage(STDTDL_DeviceConfigPage):
         
         self.controller.sig_hsd_bandwidth_exceeded.connect(self.s_bandwidth_exceeded)
         self.controller.sig_streaming_error.connect(self.s_streaming_error)
+        self.controller.sig_is_waiting_auto_start.connect(self.s_is_waiting_autostart)
+        self.controller.sig_is_auto_started.connect(self.s_auto_started)
 
         self.anomaly_classes = {}
         self.output_classes = {}
@@ -121,6 +123,8 @@ class HSD_DeviceConfigPage(STDTDL_DeviceConfigPage):
         comp_display_name = comp_interface.display_name if isinstance(comp_interface.display_name, str) else comp_interface.display_name.en
         if "_mlc" in comp_name:
             sensor_config_widget = HSDMCLConfigurationWidget(self.controller, comp_name, comp_display_name, ComponentType.SENSOR, comp_interface.contents, self.comp_id, self.device_config_widget)
+        elif "_als" in comp_name:
+            sensor_config_widget = HSDALSComponentWidget(self.controller, comp_name, comp_display_name, ComponentType.SENSOR, comp_interface.contents, self.comp_id, self.device_config_widget)
         else:
             sensor_config_widget = HSDComponentWidget(self.controller, comp_name, comp_display_name, ComponentType.SENSOR, comp_interface.contents, self.comp_id, self.device_config_widget)
         
@@ -155,7 +159,7 @@ class HSD_DeviceConfigPage(STDTDL_DeviceConfigPage):
                 else:
                     sensor_plot_widget = HSDPlotLinesWidget(self.controller, comp_name, comp_display_name, sensor_plot_params, self.graph_id, self.plots_widget)
                 self.graph_id +=1
-                self.controller.add_plot_widget(sensor_plot_widget)
+                self.controller.add_plot_widget(sensor_plot_widget, enabled)
                 self.plots_widget.layout().addWidget(sensor_plot_widget)
                 log.debug("comp_name: {} - status: {}".format(comp_name,enabled))
                 sensor_plot_widget.setVisible(enabled)
@@ -278,9 +282,16 @@ class HSD_DeviceConfigPage(STDTDL_DeviceConfigPage):
     
     @Slot(bool)
     def s_is_logging(self, status:bool, interface:int):
-        self.__endisable_log_controller_components(status)
         self.endisable_logging_message(status)
-        self.endisable_component_config(status, ["tags_info","device_info"])
+        if self.controller.auto_started == False:
+            self.select_all_button.setEnabled(not status)
+            self.__endisable_log_controller_components(status)
+            self.endisable_component_config(status, ["tags_info","device_info"])
+        else:
+            self.endisable_component(not status, "tags_info")
+
+    def s_is_waiting_autostart(self, status:bool):
+        self.endisable_component(status, "tags_info")
 
     @Slot(bool)
     def s_bandwidth_exceeded(self, status:bool):
@@ -294,3 +305,9 @@ class HSD_DeviceConfigPage(STDTDL_DeviceConfigPage):
     @Slot(bool, str)
     def s_streaming_error(self, status, message:str):
         self.set_error_message(status, message)
+
+    def s_auto_started(self, status):
+        self.controller.auto_started = not self.controller.auto_started
+        self.select_all_button.setEnabled(not status)
+        self.endisable_component_config(status, ["tags_info","device_info"])
+        self.__endisable_log_controller_components(status)

@@ -146,6 +146,8 @@ uint8_t Vd6283tx_3_Als_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_string(JSON_Status, "vd6283tx_3_als.sensor_annotation", temp_s);
   vd6283tx_3_als_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "vd6283tx_3_als.sensor_category", temp_i);
+  vd6283tx_3_als_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "vd6283tx_3_als.mounted", temp_b);
   vd6283tx_3_als_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "vd6283tx_3_als.dim", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema

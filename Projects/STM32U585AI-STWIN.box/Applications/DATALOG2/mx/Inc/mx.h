@@ -150,6 +150,8 @@ extern const MX_GPIOParams_t MX_GPIO_INT2_EXInitParams;
 extern const MX_GPIOParams_t MX_GPIO_MXCHIP_NOTIFYInitParams;
 extern const MX_GPIOParams_t MX_GPIO_MXCHIP_NSSInitParams;
 extern const MX_GPIOParams_t MX_GPIO_MXCHIP_RESETInitParams;
+extern const MX_GPIOParams_t MX_GPIO_HWTAG0InitParams;
+extern const MX_GPIOParams_t MX_GPIO_HWTAG1InitParams;
 
 /**
   * SPI2 configuration parameters.

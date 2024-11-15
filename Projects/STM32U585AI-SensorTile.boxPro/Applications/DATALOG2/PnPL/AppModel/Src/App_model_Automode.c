@@ -55,6 +55,12 @@ char *automode_get_key(void)
 }
 
 
+uint8_t automode_get_started(bool *value)
+{
+  *value = app_model.automode_model.started;
+  return PNPL_NO_ERROR_CODE;
+}
+
 uint8_t automode_get_enabled(bool *value)
 {
   *value = app_model.automode_model.enabled;
@@ -85,6 +91,17 @@ uint8_t automode_get_idle_period_s(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
+
+uint8_t automode_set_started(bool value, char **response_message)
+{
+  if (response_message != NULL)
+  {
+    *response_message = "";
+  }
+  /* USER Code */
+  app_model.automode_model.started = value;
+  return PNPL_NO_ERROR_CODE;
+}
 
 uint8_t automode_set_enabled(bool value, char **response_message)
 {
@@ -145,6 +162,10 @@ uint8_t automode_set_logging_period_s(int32_t value, char **response_message)
   }
   else
   {
+    if (response_message != NULL)
+    {
+      *response_message = "Error: Value setting below minimum threshold (1)";
+    }
     app_model.automode_model.logging_period_s = min_v;
   }
   return PNPL_NO_ERROR_CODE;
@@ -163,6 +184,10 @@ uint8_t automode_set_idle_period_s(int32_t value, char **response_message)
   }
   else
   {
+    if (response_message != NULL)
+    {
+      *response_message = "Error: Value setting below minimum threshold (1)";
+    }
     app_model.automode_model.idle_period_s = min_v;
   }
   return PNPL_NO_ERROR_CODE;

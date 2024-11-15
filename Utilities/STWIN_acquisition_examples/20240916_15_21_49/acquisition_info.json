@@ -1,0 +1,44 @@
+{
+    "tags": [
+        {
+            "l": "SW_TAG_0",
+            "e": true,
+            "ta": "2024-09-16T15:21:49.750Z"
+        },
+        {
+            "l": "SW_TAG_0",
+            "e": false,
+            "ta": "2024-09-16T15:21:52.054Z"
+        },
+        {
+            "l": "SW_TAG_1",
+            "e": true,
+            "ta": "2024-09-16T15:21:52.887Z"
+        },
+        {
+            "l": "SW_TAG_1",
+            "e": false,
+            "ta": "2024-09-16T15:21:55.239Z"
+        },
+        {
+            "l": "SW_TAG_0",
+            "e": true,
+            "ta": "2024-09-16T15:21:56.160Z"
+        },
+        {
+            "l": "SW_TAG_0",
+            "e": false,
+            "ta": "2024-09-16T15:21:59.863Z"
+        }
+    ],
+    "name": "STWIN_acquisition",
+    "description": "",
+    "uuid": "38e77176-3517-4ec1-9e79-dc4a36404827",
+    "start_time": "2024-09-16T15:21:49.000Z",
+    "end_time": "2024-09-16T15:22:02.370Z",
+    "data_ext": ".dat",
+    "data_fmt": "HSD_2.0.0",
+    "interface": 1,
+    "schema_version": "2.0.0",
+    "c_type": 2
+}

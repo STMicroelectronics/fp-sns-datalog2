@@ -418,7 +418,7 @@ uint8_t iis2dh_acc_set_samples_per_ts(int32_t value, char **response_message)
   int32_t max_v = 1000;
   if (value >= min_v && value <= max_v)
   {
-    /* USER Code */
+    iis2dh_acc_model.stream_params.spts = value;
   }
   else if (value > max_v)
   {

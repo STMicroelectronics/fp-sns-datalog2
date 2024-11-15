@@ -58,6 +58,10 @@
 
 #define SYS_DEBUGF(level, message)                 SYS_DEBUGF3(SYS_DBG_LIS2DU12, level, message)
 
+#ifndef LIS2DU12_TASK_CFG_I2C_ADDRESS
+#define LIS2DU12_TASK_CFG_I2C_ADDRESS              LIS2DU12_I2C_ADD_H
+#endif
+
 #ifndef HSD_USE_DUMMY_DATA
 #define HSD_USE_DUMMY_DATA 0
 #endif
@@ -418,7 +422,7 @@ sys_error_code_t LIS2DU12Task_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
   }
   else
   {
-    p_obj->p_sensor_bus_if = I2CBusIFAlloc(LIS2DU12_ID, LIS2DU12_I2C_ADD_H, 0);
+    p_obj->p_sensor_bus_if = I2CBusIFAlloc(LIS2DU12_ID, LIS2DU12_TASK_CFG_I2C_ADDRESS, 0);
     if (p_obj->p_sensor_bus_if == NULL)
     {
       res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
@@ -1223,10 +1227,6 @@ static sys_error_code_t LIS2DU12TaskSensorInit(LIS2DU12Task *_this)
     {
       lis2du12_wtm_level = LIS2DU12_MAX_WTM_LEVEL;
     }
-    else if (lis2du12_wtm_level < LIS2DU12_MIN_WTM_LEVEL)
-    {
-      lis2du12_wtm_level = LIS2DU12_MIN_WTM_LEVEL;
-    }
 
     _this->samples_per_it = lis2du12_wtm_level;
   }
@@ -1556,7 +1556,6 @@ static sys_error_code_t LIS2DU12TaskSensorSetFifoWM(LIS2DU12Task *_this, SMMessa
     {
       lis2du12_wtm_level = LIS2DU12_MAX_WTM_LEVEL;
     }
-
     _this->samples_per_it = lis2du12_wtm_level;
 
     lis2du12_fifo_md_t fifo_md = { LIS2DU12_BYPASS, LIS2DU12_8_BIT };

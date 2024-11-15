@@ -240,7 +240,7 @@ class HSDLogControlWidget(ComponentWidget):
     @Slot()
     def clicked_save_config_button(self):
         if self.sd_mounted:
-           self.sd_checkbox.setVisible(True)
+            self.sd_checkbox.setVisible(True)
         else:
             self.sd_checkbox.setVisible(False)
         self.save_config_dialog.exec_()
@@ -390,7 +390,7 @@ class HSDLogControlWidget(ComponentWidget):
             else:
                 if self.controller.is_automode_enabled():
                     self.stop_automode_timer()
-                    self.controller.stop_auto_log(1)
+                    self.controller.stop_auto_log_inner(1)
                     self.controller.stop_waiting_auto_log()
                     self.save_files_checkbox.setEnabled(True)
                     self.log_start_button.setText("Start Log")
@@ -474,13 +474,13 @@ class HSDLogControlWidget(ComponentWidget):
         self.controller.plot_window_changed(self.time_spinbox.value())
 
     def saveSettings(self, settings):
-         settings.setValue("logcontrolwidget/timewindow", self.time_spinbox.value())
+        settings.setValue("logcontrolwidget/timewindow", self.time_spinbox.value())
 
     def restoreSettings(self, settings):
-         try:
-             self.time_spinbox.setValue(int(settings.value("logcontrolwidget/timewindow")))
-         except:
-             pass
+        try:
+            self.time_spinbox.setValue(int(settings.value("logcontrolwidget/timewindow")))
+        except:
+            pass
     
     # import threading
     def run_timer(self, n, m, x, y):
@@ -488,6 +488,7 @@ class HSDLogControlWidget(ComponentWidget):
         def timer_thread():
             nonlocal stop_flag
             self.is_waiting_to_start = True
+            self.controller.start_auto_log()
             self.controller.start_waiting_auto_log()
             # tim.wait(m)
             time.sleep(m)  # Wait M seconds before the first start
@@ -498,13 +499,13 @@ class HSDLogControlWidget(ComponentWidget):
                     if stop_flag:
                         break
                     self.controller.set_automode_status(AutomodeStatus.AUTOMODE_LOGGING)
-                    self.controller.start_auto_log(1, self.acq_folder, True)
+                    self.controller.start_auto_log_inner(1, self.acq_folder, True)
                     time.sleep(x)  # Wait X seconds
                     if stop_flag:
                         break
                     if i < n-1:
                         self.controller.set_automode_status(AutomodeStatus.AUTOMODE_IDLE)
-                        self.controller.stop_auto_log(1)
+                        self.controller.stop_auto_log_inner(1)
                         self.log_start_button.setText("Stop Log")
                         self.log_start_button.setStyleSheet(STDTDL_PushButton.red)
                         self.controller.update_component_status("acquisition_info")
@@ -521,18 +522,20 @@ class HSDLogControlWidget(ComponentWidget):
                     if stop_flag:
                         break
                     self.controller.set_automode_status(AutomodeStatus.AUTOMODE_LOGGING)
-                    self.controller.start_auto_log(1, self.acq_folder, True)
+                    self.controller.start_auto_log_inner(1, self.acq_folder, True)
                     time.sleep(x)  # Wait X seconds
                     if stop_flag:
                         break
                     self.controller.set_automode_status(AutomodeStatus.AUTOMODE_IDLE)
-                    self.controller.stop_auto_log(1)
+                    self.controller.stop_auto_log_inner(1)
                     self.log_start_button.setText("Stop Log")
                     self.log_start_button.setStyleSheet(STDTDL_PushButton.red)
                     self.controller.update_component_status("acquisition_info")
                     self.controller.start_idle_auto_log()
                     time.sleep(y)  # Wait Y seconds before the next execution
                     self.controller.stop_idle_auto_log()
+
+            self.controller.stop_auto_log()
                     
         stop_flag = False
         

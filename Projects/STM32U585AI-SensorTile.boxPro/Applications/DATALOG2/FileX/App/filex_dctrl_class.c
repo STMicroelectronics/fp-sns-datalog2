@@ -885,6 +885,7 @@ void filex_data_flush(filex_dctrl_class_t *_this, uint8_t stream_id)
 static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
+  filex_dctrl_class_t *obj = (filex_dctrl_class_t *) _this;
   char entry_name[50];
   const char *p_file_ext = NULL;
   char *p_json = NULL;
@@ -999,6 +1000,11 @@ static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
 #ifdef AUTOMODE_SUPPORT
   automode_setup();
 #endif
+
+  /* Unmount SD card when the reading from SD root procedure is terminated */
+  unsigned long msg = FILEX_DCTRL_CMD_CLOSE;
+  filex_dctrl_msg(obj, &msg);
+
   return res;
 }
 

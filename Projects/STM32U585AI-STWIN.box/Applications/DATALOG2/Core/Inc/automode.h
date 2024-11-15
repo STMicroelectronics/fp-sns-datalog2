@@ -27,6 +27,8 @@ extern "C" {
 #include "stdint.h"
 
 uint8_t automode_setup(void);
+uint8_t automode_setup_host(void);
+uint8_t automode_start(void);
 uint8_t automode_forced_stop(void);
 
 #ifdef __cplusplus

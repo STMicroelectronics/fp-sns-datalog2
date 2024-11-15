@@ -39,7 +39,6 @@ extern "C" {
 #define IIS2ICLX_MAX_WTM_LEVEL             (128)  /* samples */
 #endif
 
-#define IIS2ICLX_MIN_WTM_LEVEL             (16)
 #define IIS2ICLX_MAX_SAMPLES_PER_IT        (IIS2ICLX_MAX_WTM_LEVEL)
 
 

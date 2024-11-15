@@ -131,6 +131,17 @@ struct _UtilTask_t
   const void *p_mx_led2_drv_cfg;
 
   /**
+    * HW TAG0 configuration parameters.
+    */
+  const void *p_mx_hwtag0_drv_cfg;
+
+  /**
+    * HW TAG1 configuration parameters.
+    */
+  const void *p_mx_hwtag1_drv_cfg;
+
+
+  /**
     * Battery Charger Protocol object.
     */
   BCProtocol_t bc_protocol;
@@ -162,6 +173,11 @@ struct _UtilTask_t
     * Software timer used make user led blinking
     */
   TX_TIMER user_led_timer;
+
+  /**
+    * Software timer used to manage HW TAGS
+    */
+  TX_TIMER hw_tags_timer;
 };
 
 /* Public API declaration */
@@ -181,7 +197,8 @@ struct _UtilTask_t
 AManagedTaskEx *UtilTaskAlloc(const void *p_mx_bc_tim_drv_cfg, const void *p_mx_bc_gpio_sw_drv_cfg,
                               const void *p_mx_bc_gpio_chg_drv_cfg,
                               const void *p_mx_bc_gpio_cen_drv_cfg, const void *p_mx_bc_tim_chg_drv_cfg, const void *p_mx_bc_adc_drv_cfg,
-                              const void *p_mx_ub_drv_cfg, const void *p_mx_led1_drv_cfg, const void *p_mx_led2_drv_cfg);
+                              const void *p_mx_ub_drv_cfg, const void *p_mx_led1_drv_cfg, const void *p_mx_led2_drv_cfg,
+                              const void *p_mx_hwtag0_drv_cfg, const void *p_mx_hwtag1_drv_cfg);
 
 /**
   * Get the battery level value in percentage

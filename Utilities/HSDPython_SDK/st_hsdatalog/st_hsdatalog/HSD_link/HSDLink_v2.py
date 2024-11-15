@@ -355,6 +355,7 @@ class HSDLink_v2:
         return self.send_command(d_id, message)
     
     def start_log(self, d_id:int, interface:int = 1, acq_folder = None, sub_folder = True, save_files = True):
+        self.set_rtc_time(d_id)
         log.info("Log Started")
         self.save_files = save_files
         if acq_folder is not None:

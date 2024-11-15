@@ -257,6 +257,12 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   DatalogAppTask_SetMLCIF((AManagedTask *) sISM330DHCXObj);
 
   /* Init&Add PnPL Components */
+  Automode_PnPLInit(pAutomode_PnPLObj);
+  Log_Controller_PnPLInit(pLog_Controller_PnPLObj);
+  Tags_Info_PnPLInit(pTags_Info_PnPLObj);
+  Acquisition_Info_PnPLInit(pAcquisition_Info_PnPLObj);
+  Firmware_Info_PnPLInit(pFirmware_Info_PnPLObj);
+  Deviceinformation_PnPLInit(pDeviceinformation_PnPLObj);
   Iis3dwb_Acc_PnPLInit(pIis3dwb_Acc_PnPLObj);
   Iis2mdc_Mag_PnPLInit(pIis2mdc_Mag_PnPLObj);
   Imp23absu_Mic_PnPLInit(pImp23absu_Mic_PnPLObj);
@@ -268,12 +274,6 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   Stts751_Temp_PnPLInit(pStts751_Temp_PnPLObj);
   Lps22hh_Press_PnPLInit(pLps22hh_Press_PnPLObj);
   Lps22hh_Temp_PnPLInit(pLps22hh_Temp_PnPLObj);
-  Automode_PnPLInit(pAutomode_PnPLObj);
-  Log_Controller_PnPLInit(pLog_Controller_PnPLObj);
-  Tags_Info_PnPLInit(pTags_Info_PnPLObj);
-  Acquisition_Info_PnPLInit(pAcquisition_Info_PnPLObj);
-  Firmware_Info_PnPLInit(pFirmware_Info_PnPLObj);
-  Deviceinformation_PnPLInit(pDeviceinformation_PnPLObj);
 
   return SYS_NO_ERROR_CODE;
 }

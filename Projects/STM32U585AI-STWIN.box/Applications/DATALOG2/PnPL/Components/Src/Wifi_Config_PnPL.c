@@ -150,9 +150,11 @@ uint8_t Wifi_Config_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_property = false;
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "wifi_config.ssid"))
   {
+    valid_property = true;
     const char *ssid = json_object_dotget_string(tempJSONObject, "wifi_config.ssid");
     ret = wifi_config_set_ssid(ssid, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -171,6 +173,7 @@ uint8_t Wifi_Config_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   }
   if (json_object_dothas_value(tempJSONObject, "wifi_config.ftp_username"))
   {
+    valid_property = true;
     const char *ftp_username = json_object_dotget_string(tempJSONObject, "wifi_config.ftp_username");
     ret = wifi_config_set_ftp_username(ftp_username, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -188,15 +191,25 @@ uint8_t Wifi_Config_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
     }
   }
   json_value_free(tempJSON);
-  if (pretty == 1)
+  /* Check if received a request to modify an existing property */
+  if (valid_property)
   {
-    *response = json_serialize_to_string_pretty(respJSON);
-    *size = json_serialization_size_pretty(respJSON);
+    if (pretty == 1)
+    {
+      *response = json_serialize_to_string_pretty(respJSON);
+      *size = json_serialization_size_pretty(respJSON);
+    }
+    else
+    {
+      *response = json_serialize_to_string(respJSON);
+      *size = json_serialization_size(respJSON);
+    }
   }
   else
   {
-    *response = json_serialize_to_string(respJSON);
-    *size = json_serialization_size(respJSON);
+    /* Set property is not containing a valid property/parameter: PnPL_Error */
+    char *log_message = "Invalid property for Wifi_Config";
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
   }
   json_value_free(respJSON);
   return ret;

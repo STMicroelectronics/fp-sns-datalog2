@@ -4,16 +4,145 @@
     "devices": [
         {
             "board_id": 9,
-            "fw_id": 9,
+            "fw_id": 10,
             "protocol_id": 2,
             "sn": "0011002F5652500420303153",
             "pnpl_responses": true,
             "pnpl_ble_responses": true,
             "components": [
                 {
+                    "automode": {
+                        "enabled": false,
+                        "nof_acquisitions": 0,
+                        "start_delay_s": 0,
+                        "logging_period_s": 1,
+                        "idle_period_s": 1,
+                        "c_type": 2
+                    }
+                },
+                {
+                    "log_controller": {
+                        "log_status": false,
+                        "sd_mounted": true,
+                        "sd_failed": false,
+                        "controller_type": 0,
+                        "c_type": 2
+                    }
+                },
+                {
+                    "tags_info": {
+                        "max_tags_num": 100,
+                        "sw_tag0": {
+                            "label": "SW_TAG_0",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag1": {
+                            "label": "SW_TAG_1",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag2": {
+                            "label": "SW_TAG_2",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag3": {
+                            "label": "SW_TAG_3",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag4": {
+                            "label": "SW_TAG_4",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag5": {
+                            "label": "SW_TAG_5",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag6": {
+                            "label": "SW_TAG_6",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag7": {
+                            "label": "SW_TAG_7",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag8": {
+                            "label": "SW_TAG_8",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag9": {
+                            "label": "SW_TAG_9",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag10": {
+                            "label": "SW_TAG_10",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag11": {
+                            "label": "SW_TAG_11",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag12": {
+                            "label": "SW_TAG_12",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag13": {
+                            "label": "SW_TAG_13",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag14": {
+                            "label": "SW_TAG_14",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "sw_tag15": {
+                            "label": "SW_TAG_15",
+                            "enabled": true,
+                            "status": false
+                        },
+                        "c_type": 2
+                    }
+                },
+                {
+                    "firmware_info": {
+                        "alias": "STWIN_001",
+                        "fw_name": "FP-SNS-DATALOG2_Datalog2",
+                        "fw_version": "2.3.0",
+                        "part_number": "FP-SNS-DATALOG2",
+                        "device_url": "https://www.st.com/stwin",
+                        "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
+                        "mac_address": "c2:6d:57:af:68:15",
+                        "c_type": 2
+                    }
+                },
+                {
+                    "DeviceInformation": {
+                        "manufacturer": "STMicroelectronics",
+                        "model": "STEVAL-STWINKT1B",
+                        "swVersion": "2.3.0",
+                        "osName": "AzureRTOS",
+                        "processorArchitecture": "ARM Cortex-M4",
+                        "processorManufacturer": "STMicroelectronics",
+                        "totalStorage": 0,
+                        "totalMemory": 0
+                    }
+                },
+                {
                     "iis3dwb_acc": {
                         "odr": 0,
-                        "fs": 0,
+                        "fs": 3,
                         "enable": true,
                         "samples_per_ts": 1000,
                         "dim": 3,
@@ -174,7 +303,7 @@
                         "st_ble_stream": {
                             "id": 6,
                             "mlc": {
-                                "enable": true,
+                                "enable": false,
                                 "unit": "",
                                 "format": "int8_t",
                                 "elements": 3,
@@ -214,7 +343,7 @@
                         "odr": 7,
                         "fs": 3,
                         "enable": true,
-                        "samples_per_ts": 0,
+                        "samples_per_ts": 1000,
                         "dim": 3,
                         "ioffset": 0,
                         "measodr": 0,
@@ -275,7 +404,7 @@
                 },
                 {
                     "lps22hh_press": {
-                        "odr": 0,
+                        "odr": 6,
                         "fs": 0,
                         "enable": false,
                         "samples_per_ts": 200,
@@ -307,7 +436,7 @@
                 },
                 {
                     "lps22hh_temp": {
-                        "odr": 0,
+                        "odr": 6,
                         "fs": 0,
                         "enable": false,
                         "samples_per_ts": 200,
@@ -335,135 +464,6 @@
                         "c_type": 0,
                         "stream_id": -1,
                         "ep_id": -1
-                    }
-                },
-                {
-                    "automode": {
-                        "enabled": false,
-                        "nof_acquisitions": 0,
-                        "start_delay_s": 0,
-                        "logging_period_s": 1,
-                        "idle_period_s": 1,
-                        "c_type": 2
-                    }
-                },
-                {
-                    "log_controller": {
-                        "log_status": false,
-                        "sd_mounted": false,
-                        "sd_failed": false,
-                        "controller_type": 0,
-                        "c_type": 2
-                    }
-                },
-                {
-                    "tags_info": {
-                        "max_tags_num": 100,
-                        "sw_tag0": {
-                            "label": "SW_TAG_0",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag1": {
-                            "label": "SW_TAG_1",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag2": {
-                            "label": "SW_TAG_2",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag3": {
-                            "label": "SW_TAG_3",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag4": {
-                            "label": "SW_TAG_4",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag5": {
-                            "label": "SW_TAG_5",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag6": {
-                            "label": "SW_TAG_6",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag7": {
-                            "label": "SW_TAG_7",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag8": {
-                            "label": "SW_TAG_8",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag9": {
-                            "label": "SW_TAG_9",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag10": {
-                            "label": "SW_TAG_10",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag11": {
-                            "label": "SW_TAG_11",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag12": {
-                            "label": "SW_TAG_12",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag13": {
-                            "label": "SW_TAG_13",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag14": {
-                            "label": "SW_TAG_14",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "sw_tag15": {
-                            "label": "SW_TAG_15",
-                            "enabled": true,
-                            "status": false
-                        },
-                        "c_type": 2
-                    }
-                },
-                {
-                    "firmware_info": {
-                        "alias": "STWIN_001",
-                        "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "2.2.0",
-                        "part_number": "FP-SNS-DATALOG2",
-                        "device_url": "https://www.st.com/stwin",
-                        "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
-                        "mac_address": "c2:6d:57:af:68:15",
-                        "c_type": 2
-                    }
-                },
-                {
-                    "DeviceInformation": {
-                        "manufacturer": "STMicroelectronics",
-                        "model": "STEVAL-STWINKT1B",
-                        "swVersion": "2.2.0",
-                        "osName": "AzureRTOS",
-                        "processorArchitecture": "ARM Cortex-M4",
-                        "processorManufacturer": "STMicroelectronics",
-                        "totalStorage": 0,
-                        "totalMemory": 0
                     }
                 }
             ]

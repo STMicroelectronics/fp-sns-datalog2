@@ -71,16 +71,19 @@ typedef struct _AutomodeModel_t
   int32_t start_delay_s;
   int32_t logging_period_s;
   int32_t idle_period_s;
+  bool started;
 } AutomodeModel_t;
 
 /* AutoMode PnPL Component ---------------------------------------------------- */
 uint8_t automode_comp_init(void);
 char *automode_get_key(void);
+uint8_t automode_get_started(bool *value);
 uint8_t automode_get_enabled(bool *value);
 uint8_t automode_get_nof_acquisitions(int32_t *value);
 uint8_t automode_get_start_delay_s(int32_t *value);
 uint8_t automode_get_logging_period_s(int32_t *value);
 uint8_t automode_get_idle_period_s(int32_t *value);
+uint8_t automode_set_started(bool value, char **response_message);
 uint8_t automode_set_enabled(bool value, char **response_message);
 uint8_t automode_set_nof_acquisitions(int32_t value, char **response_message);
 uint8_t automode_set_start_delay_s(int32_t value, char **response_message);

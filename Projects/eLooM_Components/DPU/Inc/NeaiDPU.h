@@ -30,6 +30,7 @@ extern "C" {
 #include "ADPU2_vtbl.h"
 #include "NanoEdgeAI.h"
 #include "NanoEdgeAI_ncc.h"
+#include "NanoEdgeAI_e.h"
 
 
 /**
@@ -178,19 +179,6 @@ sys_error_code_t NeaiDPU_SetProcessingMode(NeaiDPU_t *_this, ENeaiMode_t mode);
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
   */
 sys_error_code_t NeaiDPU_KnowledgeInit(NeaiDPU_t *_this);
-
-/**
-  * This function method specific for a NanoEdge AI library for anomaly detection (AD).
-  * It sets the sensitivity of the model in detection mode.
-  * It can be tuned at any time without having to go through a new learning phase.
-  *
-  * @param _this [IN] specifies a pointer to the object.
-  * @param sensitivity [IN] specifies the sensitivity of the model.
-  * The default sensitivity value is 1. A sensitivity value between 0 and 1 (excluded)
-  * decreases the sensitivity of the model, while a value in between 1 and 100 increases it.
-  * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
-  */
-sys_error_code_t NeaiDPU_ADSetSensitivity(NeaiDPU_t *_this, float sensitivity);
 
 /**
   * Get the actual processing mode for the DPU.
