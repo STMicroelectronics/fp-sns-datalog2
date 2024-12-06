@@ -57,6 +57,9 @@ Here is the list of references to user documents:
   - Transcend Premium 16 GB U1 C10 (TS16GUSDCU1)
   - Kingston 8 GB HC C4 (SDC4/8 GB)
   For further details, please refer to [UM3106](https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf)
+- HSDPython_SDK is compatible with Python 3.10, 3.11, and 3.12. By using Python 3.12, HSDPython_SDK_install installation batch scripts may fail due to an internal package dependency. To solve the issue:
+  - Install manually fastparquet version 2024.5.0 by running **python -m pip install fastparquet==2024.5.0**
+  - Relaunch HSDPython_SDK_install preferred batch scripts
 
 ## Development Toolchains and Compilers
 

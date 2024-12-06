@@ -20,7 +20,7 @@
 <div class="row">
 <div class="col-sm-12 col-lg-8">
 <h2 id="how-to-install-hsdpython_sdk-in-linux-environment"><strong>How to install HSDPython_SDK in Linux environment</strong></h2>
-<p>The HSDPython_SDK provides installer scripts that can be used to properly install the SDK and all the required dependencies. The SDK has been developed using Python 3.10. To properly use it, Python 3.10 or above must be already installed on the machine before proceeding with the following procedure:</p>
+<p>The HSDPython_SDK provides installer scripts that can be used to properly install the SDK and all the required dependencies. The SDK has been developed using Python 3.12. To properly use it, Python 3.10, 3.11, or 3.12 must be already installed on the machine before proceeding with the following procedure:</p>
 <ul>
 <li><p>Open a terminal from HSDPython_SDK folder</p></li>
 <li><p>The SDK has been built in a Windows environment. To avoid any possible issues while executing the script in Linux environment, we suggest you to use dos2unix to reformat properly the files. To do so, execute the following commands:</p>
@@ -42,6 +42,11 @@
 <li><p>Reopen a terminal from HSDPython_SDK folder</p></li>
 <li><p><strong>cd examples</strong></p></li>
 <li><p>Launch the preferred script: i.e.: to launch the GUI type <strong>python3 hsdatalog_GUI.py</strong></p></li>
+<li><p>By using Python 3.12, HSDPython_SDK_install installation batch scripts may fail due to an internal package dependency. To solve the issue:</p>
+<ul>
+<li>Install manually fastparquet version 2024.5.0 by running <strong>python -m pip install fastparquet==2024.5.0</strong></li>
+<li>Relaunch HSDPython_SDK_install preferred batch scripts</li>
+</ul></li>
 </ul>
 </div>
 </div>

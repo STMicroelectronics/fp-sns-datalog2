@@ -1,8 +1,9 @@
 ## __How to install HSDPython_SDK in Linux environment__
 
 The HSDPython_SDK provides installer scripts that can be used to properly install the SDK and all the required dependencies.
-The SDK has been developed using Python 3.10.
-To properly use it, Python 3.10 or above must be already installed on the machine before proceeding with the following procedure: 
+
+The SDK has been developed using Python 3.12.
+To properly use it, Python 3.10, 3.11, or 3.12 must be already installed on the machine before proceeding with the following procedure: 
 
 - Open a terminal from HSDPython_SDK folder
 
@@ -32,4 +33,11 @@ To properly use it, Python 3.10 or above must be already installed on the machin
 - **cd examples**
 
 - Launch the preferred script: i.e.: to launch the GUI type **python3 hsdatalog_GUI.py**
+
+
+- By using Python 3.12, HSDPython_SDK_install installation batch scripts may fail due to an internal package dependency. To solve the issue:
+
+  - Install manually fastparquet version 2024.5.0 by running **python -m pip install fastparquet==2024.5.0**
+  
+  - Relaunch HSDPython_SDK_install preferred batch scripts
 
