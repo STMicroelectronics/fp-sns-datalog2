@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:tsc1641_pow;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:tsc1641_pow;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -185,7 +185,6 @@ uint8_t tsc1641_pow_get_sensor_category(int32_t *value)
 uint8_t tsc1641_pow_get_mounted(bool *value)
 {
   *value = true;
-  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -285,4 +284,6 @@ uint8_t tsc1641_pow_set_sensor_annotation(const char *value, char **response_mes
   strcpy(tsc1641_pow_model.annotation, value);
   return ret;
 }
+
+
 

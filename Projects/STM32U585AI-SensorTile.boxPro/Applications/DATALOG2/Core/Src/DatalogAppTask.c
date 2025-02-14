@@ -234,8 +234,17 @@ uint8_t DatalogAppTask_SetMLCIF(AManagedTask *task_obj)
   }
   else
   {
-    /* Store SensorLL interface for LSM6DSV16BX Sensor */
-    p_obj->mlc_sensor_ll = LSM6DSV16BXTaskGetSensorLLIF((LSM6DSV16BXTask *) task_obj);
+    id = SQNextByNameAndType(&q1, "lsm6dsv32x", COM_TYPE_MLC);
+    if (id != 0xFFFF)
+    {
+      /* Store SensorLL interface for LSM6DSV32X Sensor */
+      p_obj->mlc_sensor_ll = LSM6DSV32XTaskGetSensorLLIF((LSM6DSV32XTask *) task_obj);
+    }
+    else
+    {
+      /* Store SensorLL interface for LSM6DSV16BX Sensor */
+      p_obj->mlc_sensor_ll = LSM6DSV16BXTaskGetSensorLLIF((LSM6DSV16BXTask *) task_obj);
+    }
   }
   return 0;
 }
@@ -795,11 +804,12 @@ uint8_t DatalogAppTask_start_vtbl(int32_t interface)
     if (p_obj->datalog_model->log_controller_model.sd_failed == true)
     {
       /* Notify BLE App */
+      char *p_serialized = NULL;
+      uint32_t size = 0;
       PnPLCommand_t pnpl_cmd;
-      char *p_serialized;
-      uint32_t size;
       sprintf(pnpl_cmd.comp_name, "%s", "SD card failed in previous log");
       pnpl_cmd.comm_type = PNPL_CMD_ERROR;
+      pnpl_cmd.response = NULL;
       PnPLSerializeResponse(&pnpl_cmd, &p_serialized, &size, 0);
       IStream_send_async((IStream_t *) p_obj->ble_device, (uint8_t *)p_serialized, size);
     }
@@ -1226,6 +1236,61 @@ uint8_t DatalogAppTask_load_lsm6dsv16x_ucf_vtbl(const char *ucf_data, int32_t uc
 }
 
 // IMLCController_t virtual functions
+uint8_t DatalogAppTask_load_lsm6dsv32x_ucf_vtbl(const char *ucf_data, int32_t ucf_size)
+{
+  DatalogAppTask *p_obj = getDatalogAppTask();
+  SQuery_t q1, q2, q3, q4;
+  uint16_t id;
+  SensorStatus_t sensor_status;
+  char *responseJSON;
+  uint32_t size;
+  char *message = "";
+  bool status = true;
+  uint8_t res = SYS_NO_ERROR_CODE;
+
+  /* Create and initialize a new instance of UCF Protocol service */
+  SUcfProtocol_t ucf_protocol;
+  UCFP_Init(&ucf_protocol, p_obj->mlc_sensor_ll);
+
+  /* Load the compressed UCF using the specified ISensorLL interface */
+  res = UCFP_LoadCompressedUcf(&ucf_protocol, ucf_data, ucf_size);
+  if (res != SYS_NO_ERROR_CODE)
+  {
+    message = "Error: MLC programming failed";
+    status = false;
+  }
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, status);
+  DatalogApp_Task_command_response_cb(responseJSON, size);
+
+  /* Enable MLC */
+  SQInit(&q1, SMGetSensorManager());
+  id = SQNextByNameAndType(&q1, "lsm6dsv32x", COM_TYPE_MLC);
+  SMSensorEnable((uint8_t)id);
+
+  if (IStream_is_enabled((IStream_t *)p_obj->filex_device)) /* Save UCF into SDCard, if available */
+  {
+    filex_dctrl_write_ucf(p_obj->filex_device, ucf_size, ucf_data);
+  }
+
+  /* Get ISM330DHCX status from SM and update app_model */
+  SQInit(&q2, SMGetSensorManager());
+  id = SQNextByNameAndType(&q2, "lsm6dsv32x", COM_TYPE_ACC);
+  sensor_status = SMSensorGetStatus(id);
+  lsm6dsv32x_acc_set_samples_per_ts((int32_t)sensor_status.type.mems.odr, NULL);
+
+  SQInit(&q3, SMGetSensorManager());
+  id = SQNextByNameAndType(&q3, "lsm6dsv32x", COM_TYPE_GYRO);
+  sensor_status = SMSensorGetStatus(id);
+  lsm6dsv32x_gyro_set_samples_per_ts((int32_t)sensor_status.type.mems.odr, NULL);
+
+  SQInit(&q4, SMGetSensorManager());
+  id = SQNextByNameAndType(&q4, "lsm6dsv32x", COM_TYPE_MLC);
+  sensor_status = SMSensorGetStatus(id);
+
+  return 0;
+}
+
+// IMLCController_t virtual functions
 uint8_t DatalogAppTask_load_ism330is_ucf_vtbl(const char *ucf_data, int32_t ucf_size,
                                               const char *output_data, int32_t output_size)
 {
@@ -1376,7 +1441,15 @@ uint8_t DatalogAppTask_load_ucf(const char *p_ucf_data, uint32_t ucf_size, const
     }
     else
     {
-      lsm6dsv16bx_mlc_load_file(p_ucf_data, ucf_size);
+      id = SQNextByNameAndType(&q1, "lsm6dsv32x", COM_TYPE_MLC);
+      if (id != 0xFFFF)
+      {
+        lsm6dsv32x_mlc_load_file(p_ucf_data, ucf_size);
+      }
+      else
+      {
+        lsm6dsv16bx_mlc_load_file(p_ucf_data, ucf_size);
+      }
     }
   }
   return 0;
@@ -1589,11 +1662,12 @@ static void DatalogAppTask_filex_queue_full_cb(void)
   log_controller_stop_log();
 
   /* Notify BLE App */
+  char *p_serialized = NULL;
+  uint32_t size = 0;
   PnPLCommand_t pnpl_cmd;
-  char *p_serialized;
-  uint32_t size;
   sprintf(pnpl_cmd.comp_name, "%s", "SD card failed. Consider to change the SD");
   pnpl_cmd.comm_type = PNPL_CMD_ERROR;
+  pnpl_cmd.response = NULL;
   PnPLSerializeResponse(&pnpl_cmd, &p_serialized, &size, 0);
   IStream_send_async((IStream_t *) sTaskObj.ble_device, (uint8_t *)p_serialized, size);
 

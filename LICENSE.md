@@ -4,12 +4,15 @@
 | BSP STWIN					  	| STMicroelectronics				| BSD-3-Clause			|
 | BSP STWIN.box				  	| STMicroelectronics				| BSD-3-Clause			|
 | Components/Common			  	| STMicroelectronics				| BSD-3-Clause	        |
+| Components/h3lis331dl			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/iis2dh				| STMicroelectronics				| BSD-3-Clause	        |
 | Components/iis2dlpc			| STMicroelectronics				| BSD-3-Clause	        |
+| Components/iis2dulpx			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/iis2iclx			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/iis2mdc			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/iis3dwb       		| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ilps22qs			| STMicroelectronics				| BSD-3-Clause	        |
+| Components/ilps28qsw			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ism330bx      		| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ism330dhcx    		| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ism330is      		| STMicroelectronics				| BSD-3-Clause	        |
@@ -19,6 +22,7 @@
 | Components/lps22hh	    	| STMicroelectronics				| BSD-3-Clause	        |
 | Components/lsm6dsv16bx   		| STMicroelectronics				| BSD-3-Clause	        |
 | Components/lsm6dsv16x    		| STMicroelectronics				| BSD-3-Clause        	|
+| Components/lsm6dsv32x    		| STMicroelectronics				| BSD-3-Clause        	|
 | Components/mx_wifi			| STMicroelectronics				| SLA0044	        	|
 | Components/sgp40				| STMicroelectronics				| BSD-3-Clause	        |
 | Components/sht40ad1b			| STMicroelectronics				| BSD-3-Clause	        |
@@ -63,5 +67,4 @@
 | HSD2 Utilities				| STMicroelectronics				| BSD-3-Clause	        |
 | cli_example               	| STMicroelectronics				| BSD-3-Clause	        |
 | nlohmann/json library			| Lohmann, N. 						| MIT	                |
-| Python_SDK					| STMicroelectronics				| BSD-3-Clause	        |
 | WiFi_module_upgrade			| STMicroelectronics				| SLA0044				|

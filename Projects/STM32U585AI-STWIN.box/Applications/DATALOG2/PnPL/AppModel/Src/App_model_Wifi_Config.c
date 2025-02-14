@@ -161,3 +161,4 @@ uint8_t wifi_config_set_ftp_credentials(const char *password)
   return PNPL_NO_ERROR_CODE;
 }
 
+

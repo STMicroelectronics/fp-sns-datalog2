@@ -125,7 +125,6 @@ extern EXTI_HandleTypeDef hexti8;
 #define H_EXTI_8         hexti8
 #define H_EXTI_INT1_ISM330DHCX                      hexti8
 #define ISM330DHCX_INT1_EXTI_LINE                   EXTI_LINE_8
-#define BSP_ISM330DHCX_INT1_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOB_CLK_ENABLE()
 #define BSP_ISM330DHCX_INT1_PORT                    GPIOB
 #define BSP_ISM330DHCX_INT1_PIN                     GPIO_PIN_8
 #define BSP_ISM330DHCX_INT1_EXTI_IRQn               EXTI8_IRQn
@@ -139,7 +138,6 @@ extern EXTI_HandleTypeDef hexti4;
 #define H_EXTI_4         hexti4
 #define H_EXTI_INT2_ISM330DHCX                      hexti4
 #define ISM330DHCX_INT2_EXTI_LINE                   EXTI_LINE_4
-#define BSP_ISM330DHCX_INT2_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOF_CLK_ENABLE()
 #define BSP_ISM330DHCX_INT2_PORT                    GPIOF
 #define BSP_ISM330DHCX_INT2_PIN                     GPIO_PIN_4
 #define BSP_ISM330DHCX_INT2_EXTI_IRQn               EXTI4_IRQn

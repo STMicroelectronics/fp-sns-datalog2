@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16bx_gyro;1
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16bx_gyro;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -55,13 +55,13 @@ uint8_t lsm6dsv16bx_gyro_comp_init(void)
   lsm6dsv16bx_gyro_model.stream_params.stream_id = -1;
   lsm6dsv16bx_gyro_model.stream_params.usb_ep = -1;
 
-  lsm6dsv16bx_gyro_set_st_ble_stream__gyro__unit("dps", NULL);
-  lsm6dsv16bx_gyro_set_st_ble_stream__gyro__format("int16_t", NULL);
+  lsm6dsv16bx_gyro_set_st_ble_stream__gyro_unit("dps", NULL);
+  lsm6dsv16bx_gyro_set_st_ble_stream__gyro_format("int16_t", NULL);
 
   addSensorToAppModel(id, &lsm6dsv16bx_gyro_model);
 
   lsm6dsv16bx_gyro_set_sensor_annotation("[EXTERN]\0", NULL);
-  lsm6dsv16bx_gyro_set_odr(pnpl_lsm6dsv16bx_gyro_odr_hz3840, NULL);
+  lsm6dsv16bx_gyro_set_odr(pnpl_lsm6dsv16bx_gyro_odr_hz7680, NULL);
   lsm6dsv16bx_gyro_set_fs(pnpl_lsm6dsv16bx_gyro_fs_dps4000, NULL);
   lsm6dsv16bx_gyro_set_enable(false, NULL);
 #if (HSD_USE_DUMMY_DATA == 1)
@@ -72,10 +72,10 @@ uint8_t lsm6dsv16bx_gyro_comp_init(void)
 
   int32_t value = 0;
   lsm6dsv16bx_gyro_get_dim(&value);
-  lsm6dsv16bx_gyro_set_st_ble_stream__gyro__channels(value, NULL);
+  lsm6dsv16bx_gyro_set_st_ble_stream__gyro_channels(value, NULL);
   float sensitivity = 0.0f;
   lsm6dsv16bx_gyro_get_sensitivity(&sensitivity);
-  lsm6dsv16bx_gyro_set_st_ble_stream__gyro__multiply_factor(sensitivity, NULL);
+  lsm6dsv16bx_gyro_set_st_ble_stream__gyro_multiply_factor(sensitivity, NULL);
 
   __stream_control(true);
   __sc_set_ble_stream_params(lsm6dsv16bx_gyro_model.id);
@@ -206,12 +206,14 @@ uint8_t lsm6dsv16bx_gyro_get_measodr(float *value)
 uint8_t lsm6dsv16bx_gyro_get_usb_dps(int32_t *value)
 {
   *value = lsm6dsv16bx_gyro_model.stream_params.usb_dps;
+  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
 uint8_t lsm6dsv16bx_gyro_get_sd_dps(int32_t *value)
 {
   *value = lsm6dsv16bx_gyro_model.stream_params.sd_dps;
+  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -244,62 +246,53 @@ uint8_t lsm6dsv16bx_gyro_get_sensor_category(int32_t *value)
 uint8_t lsm6dsv16bx_gyro_get_mounted(bool *value)
 {
   *value = true;
-  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
 uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__id(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_gyro_model.st_ble_stream.st_ble_stream_id;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro__enable(bool *value)
+uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro_enable(bool *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_gyro_model.st_ble_stream.st_ble_stream_objects.status;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro__unit(char **value)
+uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro_unit(char **value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_gyro_model.st_ble_stream.st_ble_stream_objects.unit;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro__format(char **value)
+uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro_format(char **value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_gyro_model.st_ble_stream.st_ble_stream_objects.format;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro__elements(int32_t *value)
+uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro_elements(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_gyro_model.st_ble_stream.st_ble_stream_objects.elements;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro__channels(int32_t *value)
+uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro_channels(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_gyro_model.st_ble_stream.st_ble_stream_objects.channel;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro__multiply_factor(float *value)
+uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro_multiply_factor(float *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_gyro_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro__odr(int32_t *value)
+uint8_t lsm6dsv16bx_gyro_get_st_ble_stream__gyro_odr(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_gyro_model.st_ble_stream.st_ble_stream_objects.odr;
   return PNPL_NO_ERROR_CODE;
 }
@@ -423,7 +416,7 @@ uint8_t lsm6dsv16bx_gyro_set_fs(pnpl_lsm6dsv16bx_gyro_fs_t enum_id, char **respo
 
   float sensitivity = 0.0f;
   lsm6dsv16bx_gyro_get_sensitivity(&sensitivity);
-  lsm6dsv16bx_gyro_set_st_ble_stream__gyro__multiply_factor(sensitivity, NULL);
+  lsm6dsv16bx_gyro_set_st_ble_stream__gyro_multiply_factor(sensitivity, NULL);
 
   return ret;
 }
@@ -501,7 +494,7 @@ uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__id(int32_t value, char **response_me
   return ret;
 }
 
-uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__enable(bool value, char **response_message)
+uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro_enable(bool value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -512,7 +505,7 @@ uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__enable(bool value, char **resp
   return ret;
 }
 
-uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__unit(const char *value, char **response_message)
+uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro_unit(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -523,7 +516,7 @@ uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__unit(const char *value, char *
   return ret;
 }
 
-uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__format(const char *value, char **response_message)
+uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro_format(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -534,7 +527,7 @@ uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__format(const char *value, char
   return ret;
 }
 
-uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__elements(int32_t value, char **response_message)
+uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro_elements(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -545,7 +538,7 @@ uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__elements(int32_t value, char *
   return ret;
 }
 
-uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__channels(int32_t value, char **response_message)
+uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro_channels(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -556,7 +549,7 @@ uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__channels(int32_t value, char *
   return ret;
 }
 
-uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__multiply_factor(float value, char **response_message)
+uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro_multiply_factor(float value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -567,7 +560,7 @@ uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__multiply_factor(float value, c
   return ret;
 }
 
-uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__odr(int32_t value, char **response_message)
+uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro_odr(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -577,4 +570,6 @@ uint8_t lsm6dsv16bx_gyro_set_st_ble_stream__gyro__odr(int32_t value, char **resp
   lsm6dsv16bx_gyro_model.st_ble_stream.st_ble_stream_objects.odr = value;
   return ret;
 }
+
+
 

@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lps22df_press;5
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lps22df_press;6
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -55,8 +55,8 @@ uint8_t lps22df_press_comp_init(void)
   lps22df_press_model.stream_params.stream_id = -1;
   lps22df_press_model.stream_params.usb_ep = -1;
 
-  lps22df_press_set_st_ble_stream__press__unit("hPa", NULL);
-  lps22df_press_set_st_ble_stream__press__format("float", NULL);
+  lps22df_press_set_st_ble_stream__press_unit("hPa", NULL);
+  lps22df_press_set_st_ble_stream__press_format("float", NULL);
 
   addSensorToAppModel(id, &lps22df_press_model);
 
@@ -71,10 +71,10 @@ uint8_t lps22df_press_comp_init(void)
 
   int32_t value = 0;
   lps22df_press_get_dim(&value);
-  lps22df_press_set_st_ble_stream__press__channels(value, NULL);
+  lps22df_press_set_st_ble_stream__press_channels(value, NULL);
   float sensitivity = 0.0f;
   lps22df_press_get_sensitivity(&sensitivity);
-  lps22df_press_set_st_ble_stream__press__multiply_factor(sensitivity, NULL);
+  lps22df_press_set_st_ble_stream__press_multiply_factor(sensitivity, NULL);
 
   __stream_control(true);
   __sc_set_ble_stream_params(lps22df_press_model.id);
@@ -216,56 +216,48 @@ uint8_t lps22df_press_get_sensor_category(int32_t *value)
 
 uint8_t lps22df_press_get_st_ble_stream__id(int32_t *value)
 {
-  /* USER Code */
   *value = lps22df_press_model.st_ble_stream.st_ble_stream_id;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lps22df_press_get_st_ble_stream__press__enable(bool *value)
+uint8_t lps22df_press_get_st_ble_stream__press_enable(bool *value)
 {
-  /* USER Code */
   *value = lps22df_press_model.st_ble_stream.st_ble_stream_objects.status;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lps22df_press_get_st_ble_stream__press__unit(char **value)
+uint8_t lps22df_press_get_st_ble_stream__press_unit(char **value)
 {
-  /* USER Code */
   *value = lps22df_press_model.st_ble_stream.st_ble_stream_objects.unit;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lps22df_press_get_st_ble_stream__press__format(char **value)
+uint8_t lps22df_press_get_st_ble_stream__press_format(char **value)
 {
-  /* USER Code */
   *value = lps22df_press_model.st_ble_stream.st_ble_stream_objects.format;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lps22df_press_get_st_ble_stream__press__elements(int32_t *value)
+uint8_t lps22df_press_get_st_ble_stream__press_elements(int32_t *value)
 {
-  /* USER Code */
   *value = lps22df_press_model.st_ble_stream.st_ble_stream_objects.elements;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lps22df_press_get_st_ble_stream__press__channels(int32_t *value)
+uint8_t lps22df_press_get_st_ble_stream__press_channels(int32_t *value)
 {
-  /* USER Code */
   *value = lps22df_press_model.st_ble_stream.st_ble_stream_objects.channel;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lps22df_press_get_st_ble_stream__press__multiply_factor(float *value)
+uint8_t lps22df_press_get_st_ble_stream__press_multiply_factor(float *value)
 {
-  /* USER Code */
   *value = lps22df_press_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lps22df_press_get_st_ble_stream__press__odr(int32_t *value)
+uint8_t lps22df_press_get_st_ble_stream__press_odr(int32_t *value)
 {
-  /* USER Code */
   *value = lps22df_press_model.st_ble_stream.st_ble_stream_objects.odr;
   return PNPL_NO_ERROR_CODE;
 }
@@ -404,7 +396,7 @@ uint8_t lps22df_press_set_st_ble_stream__id(int32_t value, char **response_messa
   return ret;
 }
 
-uint8_t lps22df_press_set_st_ble_stream__press__enable(bool value, char **response_message)
+uint8_t lps22df_press_set_st_ble_stream__press_enable(bool value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -415,7 +407,7 @@ uint8_t lps22df_press_set_st_ble_stream__press__enable(bool value, char **respon
   return ret;
 }
 
-uint8_t lps22df_press_set_st_ble_stream__press__unit(const char *value, char **response_message)
+uint8_t lps22df_press_set_st_ble_stream__press_unit(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -426,7 +418,7 @@ uint8_t lps22df_press_set_st_ble_stream__press__unit(const char *value, char **r
   return ret;
 }
 
-uint8_t lps22df_press_set_st_ble_stream__press__format(const char *value, char **response_message)
+uint8_t lps22df_press_set_st_ble_stream__press_format(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -437,7 +429,7 @@ uint8_t lps22df_press_set_st_ble_stream__press__format(const char *value, char *
   return ret;
 }
 
-uint8_t lps22df_press_set_st_ble_stream__press__elements(int32_t value, char **response_message)
+uint8_t lps22df_press_set_st_ble_stream__press_elements(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -448,7 +440,7 @@ uint8_t lps22df_press_set_st_ble_stream__press__elements(int32_t value, char **r
   return ret;
 }
 
-uint8_t lps22df_press_set_st_ble_stream__press__channels(int32_t value, char **response_message)
+uint8_t lps22df_press_set_st_ble_stream__press_channels(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -459,7 +451,7 @@ uint8_t lps22df_press_set_st_ble_stream__press__channels(int32_t value, char **r
   return ret;
 }
 
-uint8_t lps22df_press_set_st_ble_stream__press__multiply_factor(float value, char **response_message)
+uint8_t lps22df_press_set_st_ble_stream__press_multiply_factor(float value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -470,7 +462,7 @@ uint8_t lps22df_press_set_st_ble_stream__press__multiply_factor(float value, cha
   return ret;
 }
 
-uint8_t lps22df_press_set_st_ble_stream__press__odr(int32_t value, char **response_message)
+uint8_t lps22df_press_set_st_ble_stream__press_odr(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -480,4 +472,6 @@ uint8_t lps22df_press_set_st_ble_stream__press__odr(int32_t value, char **respon
   lps22df_press_model.st_ble_stream.st_ble_stream_objects.odr = value;
   return ret;
 }
+
+
 

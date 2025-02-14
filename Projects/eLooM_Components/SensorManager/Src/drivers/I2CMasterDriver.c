@@ -281,7 +281,18 @@ sys_error_code_t I2CMasterDriver_vtblWrite(IIODriver *_this, uint8_t *p_data_buf
     {
       if (HAL_I2C_GetError(p_i2c) != (uint32_t) HAL_BUSY)
       {
-        SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I2C_M_WRITE_ERROR_CODE);
+        res = SYS_I2C_M_WRITE_ERROR_CODE;
+        SYS_SET_LOW_LEVEL_ERROR_CODE(res);
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Write failed.\r\n"));
+      }
+    }
+    else
+    {
+      /* Suspend the calling task until the operation is completed.*/
+      if (tx_semaphore_get(&p_obj->sync_obj, (500)) != TX_SUCCESS)
+      {
+        res = SYS_I2C_M_WRITE_ERROR_CODE;
+        SYS_SET_LOW_LEVEL_ERROR_CODE(res);
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Write failed.\r\n"));
       }
     }
@@ -293,13 +304,22 @@ sys_error_code_t I2CMasterDriver_vtblWrite(IIODriver *_this, uint8_t *p_data_buf
     {
       if (HAL_I2C_GetError(p_i2c) != (uint32_t) HAL_BUSY)
       {
-        SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I2C_M_WRITE_ERROR_CODE);
+        res = SYS_I2C_M_WRITE_ERROR_CODE;
+        SYS_SET_LOW_LEVEL_ERROR_CODE(res);
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Write failed.\r\n"));
+      }
+    }
+    else
+    {
+      /* Suspend the calling task until the operation is completed.*/
+      if (tx_semaphore_get(&p_obj->sync_obj, (500)) != TX_SUCCESS)
+      {
+        res = SYS_I2C_M_WRITE_ERROR_CODE;
+        SYS_SET_LOW_LEVEL_ERROR_CODE(res);
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Write failed.\r\n"));
       }
     }
   }
-  /* Suspend the calling task until the operation is completed.*/
-  tx_semaphore_get(&p_obj->sync_obj, TX_WAIT_FOREVER);
 
   return res;
 }
@@ -318,7 +338,18 @@ sys_error_code_t I2CMasterDriver_vtblRead(IIODriver *_this, uint8_t *p_data_buff
     {
       if (HAL_I2C_GetError(p_i2c) != (uint32_t) HAL_BUSY)
       {
-        SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I2C_M_WRITE_ERROR_CODE);
+        res = SYS_I2C_M_READ_ERROR_CODE;
+        SYS_SET_LOW_LEVEL_ERROR_CODE(res);
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Read failed.\r\n"));
+      }
+    }
+    else
+    {
+      /* Suspend the calling task until the operation is completed.*/
+      if (tx_semaphore_get(&p_obj->sync_obj, (500)) != TX_SUCCESS)
+      {
+        res = SYS_I2C_M_READ_ERROR_CODE;
+        SYS_SET_LOW_LEVEL_ERROR_CODE(res);
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Read failed.\r\n"));
       }
     }
@@ -330,13 +361,22 @@ sys_error_code_t I2CMasterDriver_vtblRead(IIODriver *_this, uint8_t *p_data_buff
     {
       if (HAL_I2C_GetError(p_i2c) != (uint32_t) HAL_BUSY)
       {
-        SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I2C_M_READ_ERROR_CODE);
+        res = SYS_I2C_M_READ_ERROR_CODE;
+        SYS_SET_LOW_LEVEL_ERROR_CODE(res);
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Read failed.\r\n"));
+      }
+    }
+    else
+    {
+      /* Suspend the calling task until the operation is completed.*/
+      if (tx_semaphore_get(&p_obj->sync_obj, (500)) != TX_SUCCESS)
+      {
+        res = SYS_I2C_M_READ_ERROR_CODE;
+        SYS_SET_LOW_LEVEL_ERROR_CODE(res);
         SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I2CMasterDriver - Read failed.\r\n"));
       }
     }
   }
-  /* Suspend the calling task until the operation is completed.*/
-  tx_semaphore_get(&p_obj->sync_obj, TX_WAIT_FOREVER);
 
   return res;
 }

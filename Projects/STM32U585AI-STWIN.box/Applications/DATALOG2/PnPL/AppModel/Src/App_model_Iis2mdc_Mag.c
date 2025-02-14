@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:iis2mdc_mag;5
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:iis2mdc_mag;6
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -55,8 +55,8 @@ uint8_t iis2mdc_mag_comp_init(void)
   iis2mdc_mag_model.stream_params.stream_id = -1;
   iis2mdc_mag_model.stream_params.usb_ep = -1;
 
-  iis2mdc_mag_set_st_ble_stream__mag__unit("gauss", NULL);
-  iis2mdc_mag_set_st_ble_stream__mag__format("int16_t", NULL);
+  iis2mdc_mag_set_st_ble_stream__mag_unit("G", NULL);
+  iis2mdc_mag_set_st_ble_stream__mag_format("int16_t", NULL);
 
   addSensorToAppModel(id, &iis2mdc_mag_model);
 
@@ -71,10 +71,10 @@ uint8_t iis2mdc_mag_comp_init(void)
 
   int32_t value = 0;
   iis2mdc_mag_get_dim(&value);
-  iis2mdc_mag_set_st_ble_stream__mag__channels(value, NULL);
+  iis2mdc_mag_set_st_ble_stream__mag_channels(value, NULL);
   float sensitivity = 0.0f;
   iis2mdc_mag_get_sensitivity(&sensitivity);
-  iis2mdc_mag_set_st_ble_stream__mag__multiply_factor(sensitivity, NULL);
+  iis2mdc_mag_set_st_ble_stream__mag_multiply_factor(sensitivity, NULL);
 
   __stream_control(true);
   __sc_set_ble_stream_params(iis2mdc_mag_model.id);
@@ -144,7 +144,6 @@ uint8_t iis2mdc_mag_get_samples_per_ts(int32_t *value)
 
 uint8_t iis2mdc_mag_get_dim(int32_t *value)
 {
-  /* USER Code */
   *value = 3;
   return PNPL_NO_ERROR_CODE;
 }
@@ -186,14 +185,12 @@ uint8_t iis2mdc_mag_get_sensitivity(float *value)
 
 uint8_t iis2mdc_mag_get_data_type(char **value)
 {
-  /* USER Code */
   *value = "int16";
   return PNPL_NO_ERROR_CODE;
 }
 
 uint8_t iis2mdc_mag_get_sensor_annotation(char **value)
 {
-  /* USER Code */
   *value = iis2mdc_mag_model.annotation;
   return PNPL_NO_ERROR_CODE;
 }
@@ -207,60 +204,51 @@ uint8_t iis2mdc_mag_get_sensor_category(int32_t *value)
 
 uint8_t iis2mdc_mag_get_st_ble_stream__id(int32_t *value)
 {
-  /* USER Code */
   *value = iis2mdc_mag_model.st_ble_stream.st_ble_stream_id;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_get_st_ble_stream__mag__enable(bool *value)
+uint8_t iis2mdc_mag_get_st_ble_stream__mag_enable(bool *value)
 {
-  /* USER Code */
   *value = iis2mdc_mag_model.st_ble_stream.st_ble_stream_objects.status;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_get_st_ble_stream__mag__unit(char **value)
+uint8_t iis2mdc_mag_get_st_ble_stream__mag_unit(char **value)
 {
-  /* USER Code */
   *value = iis2mdc_mag_model.st_ble_stream.st_ble_stream_objects.unit;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_get_st_ble_stream__mag__format(char **value)
+uint8_t iis2mdc_mag_get_st_ble_stream__mag_format(char **value)
 {
-  /* USER Code */
   *value = iis2mdc_mag_model.st_ble_stream.st_ble_stream_objects.format;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_get_st_ble_stream__mag__elements(int32_t *value)
+uint8_t iis2mdc_mag_get_st_ble_stream__mag_elements(int32_t *value)
 {
-  /* USER Code */
   *value = iis2mdc_mag_model.st_ble_stream.st_ble_stream_objects.elements;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_get_st_ble_stream__mag__channels(int32_t *value)
+uint8_t iis2mdc_mag_get_st_ble_stream__mag_channels(int32_t *value)
 {
-  /* USER Code */
   *value = iis2mdc_mag_model.st_ble_stream.st_ble_stream_objects.channel;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_get_st_ble_stream__mag__multiply_factor(float *value)
+uint8_t iis2mdc_mag_get_st_ble_stream__mag_multiply_factor(float *value)
 {
-  /* USER Code */
   *value = iis2mdc_mag_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_get_st_ble_stream__mag__odr(int32_t *value)
+uint8_t iis2mdc_mag_get_st_ble_stream__mag_odr(int32_t *value)
 {
-  /* USER Code */
   *value = iis2mdc_mag_model.st_ble_stream.st_ble_stream_objects.odr;
   return PNPL_NO_ERROR_CODE;
 }
-
 
 uint8_t iis2mdc_mag_get_stream_id(int8_t *value)
 {
@@ -402,7 +390,7 @@ uint8_t iis2mdc_mag_set_st_ble_stream__id(int32_t value, char **response_message
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_set_st_ble_stream__mag__enable(bool value, char **response_message)
+uint8_t iis2mdc_mag_set_st_ble_stream__mag_enable(bool value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -413,7 +401,7 @@ uint8_t iis2mdc_mag_set_st_ble_stream__mag__enable(bool value, char **response_m
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_set_st_ble_stream__mag__unit(const char *value, char **response_message)
+uint8_t iis2mdc_mag_set_st_ble_stream__mag_unit(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -424,7 +412,7 @@ uint8_t iis2mdc_mag_set_st_ble_stream__mag__unit(const char *value, char **respo
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_set_st_ble_stream__mag__format(const char *value, char **response_message)
+uint8_t iis2mdc_mag_set_st_ble_stream__mag_format(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -435,7 +423,7 @@ uint8_t iis2mdc_mag_set_st_ble_stream__mag__format(const char *value, char **res
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_set_st_ble_stream__mag__elements(int32_t value, char **response_message)
+uint8_t iis2mdc_mag_set_st_ble_stream__mag_elements(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -445,7 +433,7 @@ uint8_t iis2mdc_mag_set_st_ble_stream__mag__elements(int32_t value, char **respo
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_set_st_ble_stream__mag__channels(int32_t value, char **response_message)
+uint8_t iis2mdc_mag_set_st_ble_stream__mag_channels(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -456,7 +444,7 @@ uint8_t iis2mdc_mag_set_st_ble_stream__mag__channels(int32_t value, char **respo
   return ret;
 }
 
-uint8_t iis2mdc_mag_set_st_ble_stream__mag__multiply_factor(float value, char **response_message)
+uint8_t iis2mdc_mag_set_st_ble_stream__mag_multiply_factor(float value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -467,7 +455,7 @@ uint8_t iis2mdc_mag_set_st_ble_stream__mag__multiply_factor(float value, char **
   return ret;
 }
 
-uint8_t iis2mdc_mag_set_st_ble_stream__mag__odr(int32_t value, char **response_message)
+uint8_t iis2mdc_mag_set_st_ble_stream__mag_odr(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -477,4 +465,6 @@ uint8_t iis2mdc_mag_set_st_ble_stream__mag__odr(int32_t value, char **response_m
   iis2mdc_mag_model.st_ble_stream.st_ble_stream_objects.odr = value;
   return ret;
 }
+
+
 

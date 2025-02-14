@@ -41,6 +41,7 @@ extern "C" {
 
 #include "LSM6DSV16BXTask.h"
 #include "LSM6DSV16XTask.h"
+#include "LSM6DSV32XTask.h"
 #include "ISM330ISTask.h"
 #include "services/SQuery.h"
 #include "services/SUcfProtocol.h"
@@ -140,6 +141,7 @@ void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
 uint8_t DatalogAppTask_SetMLCIF(AManagedTask *task_obj);
 uint8_t DatalogAppTask_load_lsm6dsv16x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 uint8_t DatalogAppTask_load_lsm6dsv16bx_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
+uint8_t DatalogAppTask_load_lsm6dsv32x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 
 uint8_t DatalogAppTask_SetIspuIF(AManagedTask *task_obj);
 uint8_t DatalogAppTask_load_ism330is_ucf_vtbl(const char *ucf_data, int32_t ucf_size,

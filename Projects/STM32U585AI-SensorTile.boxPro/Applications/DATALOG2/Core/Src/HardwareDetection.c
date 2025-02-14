@@ -24,8 +24,11 @@
 #include "i2c.h"
 #include "services/systypes.h"
 #include "HardwareDetection.h"
+#include "h3lis331dl_reg.h"
+#include "ilps28qsw_reg.h"
 #include "ism330is_reg.h"
 #include "lsm6dsv16bx_reg.h"
+#include "lsm6dsv32x_reg.h"
 
 #define HW_DETECTION_I2C_TIMEOUT  500U
 
@@ -39,6 +42,7 @@
 
 extern SPI_HandleTypeDef hspi3;
 extern I2C_HandleTypeDef hi2c2;
+extern I2C_HandleTypeDef hi2c3;
 
 static int32_t ext_sensor_spi_read(void *handle, uint8_t reg, uint8_t *p_data, uint16_t size);
 static int32_t ext_sensor_spi_write(void *handle, uint8_t reg, uint8_t *p_data, uint16_t size);
@@ -47,6 +51,83 @@ static int32_t ext_sensor_spi_write(void *handle, uint8_t reg, uint8_t *p_data, 
 /* Public functions declaration */
 /*********************************/
 
+/**
+  * Detect an external H3LIS331DL sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_H3LIS331DL(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+
+  MX_SPI3_Init();
+
+  h3lis331dl_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi3);
+
+  if (whoami_val == H3LIS331DL_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
+
+/**
+  * Detect an external ILPS28QSW sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_ILPS28QSW(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+
+  MX_I2C3_Init();
+
+  HAL_I2C_Mem_Read(&hi2c3, ILPS28QSW_I2C_ADD, ILPS28QSW_WHO_AM_I, I2C_MEMADD_SIZE_8BIT, &whoami_val, 1,
+                   HW_DETECTION_I2C_TIMEOUT);
+
+  HAL_I2C_DeInit(&hi2c3);
+
+  if (whoami_val == ILPS28QSW_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
+
+/**
+  * Detect an external ISM330IS(N) sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_ISM330IS(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+
+  MX_SPI3_Init();
+
+  ism330is_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi3);
+
+  if (whoami_val == ISM330IS_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
 
 /**
   * Detect an external LSM6DSV16BX sensor
@@ -76,11 +157,11 @@ boolean_t HardwareDetection_Check_Ext_LSM6DSV16BX(void)
 }
 
 /**
-  * Detect an external ISM330IS(N) sensor
+  * Detect an external LSM6DSV32X sensor
   *
   * @return TRUE if the sensor was found, FALSE otherwise
   */
-boolean_t HardwareDetection_Check_Ext_ISM330IS(void)
+boolean_t HardwareDetection_Check_Ext_LSM6DSV32X(void)
 {
   uint8_t whoami_val = 0U;
   boolean_t found = FALSE;
@@ -91,11 +172,11 @@ boolean_t HardwareDetection_Check_Ext_ISM330IS(void)
 
   MX_SPI3_Init();
 
-  ism330is_device_id_get(&ctx, (uint8_t *) &whoami_val);
+  lsm6dsv32x_device_id_get(&ctx, (uint8_t *) &whoami_val);
 
   HAL_SPI_DeInit(&hspi3);
 
-  if (whoami_val == ISM330IS_ID)
+  if (whoami_val == LSM6DSV32X_ID)
   {
     found = TRUE;
   }

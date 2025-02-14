@@ -1219,29 +1219,32 @@ static sys_error_code_t TSC1641TaskSensorReadData(TSC1641Task *_this)
   uint16_t vshunt_lsb;
   uint16_t power_lsb;
 
-  TSC1641_read_reg(p_sensor_drv, TSC1641_RegAdd_ShuntV, Buffer, 6);
+  res = TSC1641_read_reg(p_sensor_drv, TSC1641_RegAdd_ShuntV, Buffer, 6);
 
-  /* Current read */
-  vshunt_lsb = (Buffer[0] << 8) + Buffer[1];
-  /* Voltage read */
-  vload_lsb = (Buffer[2] << 8) + Buffer[3];
-  /* Power read */
-  power_lsb = (Buffer[4] << 8) + Buffer[5];
+  if (!SYS_IS_ERROR_CODE(res))
+  {
+    /* Current read */
+    vshunt_lsb = (Buffer[0] << 8) + Buffer[1];
+    /* Voltage read */
+    vload_lsb = (Buffer[2] << 8) + Buffer[3];
+    /* Power read */
+    power_lsb = (Buffer[4] << 8) + Buffer[5];
 
-  _this->p_sensor_data_buff[0] = (float)vload_lsb * VLOAD_LSB_TO_MV; /* Voltage */
-  _this->p_sensor_data_buff[1] = (float)vshunt_lsb * VSHUNT_LSB_TO_MV; /* Voltage(VShunt) */
-  _this->p_sensor_data_buff[2] = _this->p_sensor_data_buff[1] / _this->sensor_status.type.power_meter.r_shunt * 1000.0f; /* Current */
-  _this->p_sensor_data_buff[3] = (float)power_lsb * DCPOWER_LSB_TO_MW; /* Power */
+    _this->p_sensor_data_buff[0] = (float)vload_lsb * VLOAD_LSB_TO_MV; /* Voltage */
+    _this->p_sensor_data_buff[1] = (float)vshunt_lsb * VSHUNT_LSB_TO_MV; /* Voltage(VShunt) */
+    _this->p_sensor_data_buff[2] = _this->p_sensor_data_buff[1] / _this->sensor_status.type.power_meter.r_shunt * 1000.0f; /* Current */
+    _this->p_sensor_data_buff[3] = (float)power_lsb * DCPOWER_LSB_TO_MW; /* Power */
 
 #if (HSD_USE_DUMMY_DATA == 1)
-  uint16_t i = 0;
-  float *pfloat = (float *)_this->p_sensor_data_buff;
+    uint16_t i = 0;
+    float *pfloat = (float *)_this->p_sensor_data_buff;
 
-  for (i = 0; i < 4 ; i++)
-  {
-    *pfloat++ = dummyDataCounter++;
-  }
+    for (i = 0; i < 4 ; i++)
+    {
+      *pfloat++ = dummyDataCounter++;
+    }
 #endif
+  }
 
   return res;
 }

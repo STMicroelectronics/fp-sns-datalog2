@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:iis3dwb_acc;1
+  * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:iis3dwb_acc;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -81,13 +81,13 @@ uint8_t iis3dwb_acc_get_data_type(char **value);
 uint8_t iis3dwb_acc_get_sensor_annotation(char **value);
 uint8_t iis3dwb_acc_get_sensor_category(int32_t *value);
 uint8_t iis3dwb_acc_get_st_ble_stream__id(int32_t *value);
-uint8_t iis3dwb_acc_get_st_ble_stream__acc__enable(bool *value);
-uint8_t iis3dwb_acc_get_st_ble_stream__acc__unit(char **value);
-uint8_t iis3dwb_acc_get_st_ble_stream__acc__format(char **value);
-uint8_t iis3dwb_acc_get_st_ble_stream__acc__elements(int32_t *value);
-uint8_t iis3dwb_acc_get_st_ble_stream__acc__channels(int32_t *value);
-uint8_t iis3dwb_acc_get_st_ble_stream__acc__multiply_factor(float *value);
-uint8_t iis3dwb_acc_get_st_ble_stream__acc__odr(int32_t *value);
+uint8_t iis3dwb_acc_get_st_ble_stream__acc_enable(bool *value);
+uint8_t iis3dwb_acc_get_st_ble_stream__acc_unit(char **value);
+uint8_t iis3dwb_acc_get_st_ble_stream__acc_format(char **value);
+uint8_t iis3dwb_acc_get_st_ble_stream__acc_elements(int32_t *value);
+uint8_t iis3dwb_acc_get_st_ble_stream__acc_channels(int32_t *value);
+uint8_t iis3dwb_acc_get_st_ble_stream__acc_multiply_factor(float *value);
+uint8_t iis3dwb_acc_get_st_ble_stream__acc_odr(int32_t *value);
 uint8_t iis3dwb_acc_get_stream_id(int8_t *value);
 uint8_t iis3dwb_acc_get_ep_id(int8_t *value);
 uint8_t iis3dwb_acc_set_fs(pnpl_iis3dwb_acc_fs_t enum_id, char **response_message);
@@ -95,13 +95,13 @@ uint8_t iis3dwb_acc_set_enable(bool value, char **response_message);
 uint8_t iis3dwb_acc_set_samples_per_ts(int32_t value, char **response_message);
 uint8_t iis3dwb_acc_set_sensor_annotation(const char *value, char **response_message);
 uint8_t iis3dwb_acc_set_st_ble_stream__id(int32_t value, char **response_message);
-uint8_t iis3dwb_acc_set_st_ble_stream__acc__enable(bool value, char **response_message);
-uint8_t iis3dwb_acc_set_st_ble_stream__acc__unit(const char *value, char **response_message);
-uint8_t iis3dwb_acc_set_st_ble_stream__acc__format(const char *value, char **response_message);
-uint8_t iis3dwb_acc_set_st_ble_stream__acc__elements(int32_t value, char **response_message);
-uint8_t iis3dwb_acc_set_st_ble_stream__acc__channels(int32_t value, char **response_message);
-uint8_t iis3dwb_acc_set_st_ble_stream__acc__multiply_factor(float value, char **response_message);
-uint8_t iis3dwb_acc_set_st_ble_stream__acc__odr(int32_t value, char **response_message);
+uint8_t iis3dwb_acc_set_st_ble_stream__acc_enable(bool value, char **response_message);
+uint8_t iis3dwb_acc_set_st_ble_stream__acc_unit(const char *value, char **response_message);
+uint8_t iis3dwb_acc_set_st_ble_stream__acc_format(const char *value, char **response_message);
+uint8_t iis3dwb_acc_set_st_ble_stream__acc_elements(int32_t value, char **response_message);
+uint8_t iis3dwb_acc_set_st_ble_stream__acc_channels(int32_t value, char **response_message);
+uint8_t iis3dwb_acc_set_st_ble_stream__acc_multiply_factor(float value, char **response_message);
+uint8_t iis3dwb_acc_set_st_ble_stream__acc_odr(int32_t value, char **response_message);
 
 
 #ifdef __cplusplus

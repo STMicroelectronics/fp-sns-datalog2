@@ -10,13 +10,13 @@
       <TargetName>Datalog2_Debug</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6180000::V6.18::ARMCLANG</pCCUsed>
+      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32U585AIIx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32U5xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32U5xx_DFP.2.2.1</PackID>
           <PackURL>https://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000-0x81FFFFF) IRAM(0x20000000-0x200BFFFF) CLOCK(8000000) FPU3(SFPU) CPUTYPE("Cortex-M33") ELITTLE TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -340,7 +340,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>DEBUG, SYS_DEBUG, SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, NX_INCLUDE_USER_DEFINE_FILE, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;..\..\..\..\..\Drivers\BSP\Components\ism330bx;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\threadx\utility\execution_profile_kit;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;..\..\..\..\..\Drivers\BSP\Components\iis2dulpx;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;..\..\..\..\..\Drivers\BSP\Components\ism330bx;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -794,6 +794,21 @@
               <FileType>1</FileType>
               <FilePath>..\PnPL\AppModel\Src\App_model_Wifi_Config.c</FilePath>
             </File>
+            <File>
+              <FileName>App_model_Iis2dulpx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2dulpx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2dulpx_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2dulpx_Mlc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2iclx_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2iclx_Mlc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -933,6 +948,21 @@
               <FileName>Wifi_Config_PnPL.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\Components\Src\Wifi_Config_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis2dulpx_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis2dulpx_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis2dulpx_Mlc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis2dulpx_Mlc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis2iclx_Mlc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis2iclx_Mlc_PnPL.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1099,6 +1129,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\TSC1641Task.c</FilePath>
             </File>
+            <File>
+              <FileName>IIS2DULPXTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\IIS2DULPXTask.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1208,6 +1243,11 @@
               <FileName>mx_wifi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\mx_wifi\mx_wifi.c</FilePath>
+            </File>
+            <File>
+              <FileName>iis2dulpx_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\iis2dulpx\iis2dulpx_reg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3988,6 +4028,16 @@
               <FileName>ux_utility_virtual_address.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_virtual_address.c</FilePath>
+            </File>
+            <File>
+              <FileName>ux_utility_memory_byte_pool_create.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_byte_pool_create.c</FilePath>
+            </File>
+            <File>
+              <FileName>ux_utility_memory_byte_pool_search.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_byte_pool_search.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6129,7 +6179,7 @@
         <TargetCommonOption>
           <Device>STM32U585AIIx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32U5xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32U5xx_DFP.2.2.1</PackID>
           <PackURL>https://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000-0x81FFFFF) IRAM(0x20000000-0x200BFFFF) CLOCK(8000000) FPU3(SFPU) CPUTYPE("Cortex-M33") ELITTLE TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -6453,7 +6503,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, NX_INCLUDE_USER_DEFINE_FILE, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;..\..\..\..\..\Drivers\BSP\Components\ism330bx;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;..\..\..\..\..\Drivers\BSP\Components\iis2dulpx;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;..\..\..\..\..\Drivers\BSP\Components\ism330bx;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -6907,6 +6957,21 @@
               <FileType>1</FileType>
               <FilePath>..\PnPL\AppModel\Src\App_model_Wifi_Config.c</FilePath>
             </File>
+            <File>
+              <FileName>App_model_Iis2dulpx_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2dulpx_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2dulpx_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2dulpx_Mlc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis2iclx_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis2iclx_Mlc.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -7046,6 +7111,21 @@
               <FileName>Wifi_Config_PnPL.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\Components\Src\Wifi_Config_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis2dulpx_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis2dulpx_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis2dulpx_Mlc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis2dulpx_Mlc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis2iclx_Mlc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis2iclx_Mlc_PnPL.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -7212,6 +7292,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\TSC1641Task.c</FilePath>
             </File>
+            <File>
+              <FileName>IIS2DULPXTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\IIS2DULPXTask.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -7321,6 +7406,11 @@
               <FileName>mx_wifi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\mx_wifi\mx_wifi.c</FilePath>
+            </File>
+            <File>
+              <FileName>iis2dulpx_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\iis2dulpx\iis2dulpx_reg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -10101,6 +10191,16 @@
               <FileName>ux_utility_virtual_address.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_virtual_address.c</FilePath>
+            </File>
+            <File>
+              <FileName>ux_utility_memory_byte_pool_create.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_byte_pool_create.c</FilePath>
+            </File>
+            <File>
+              <FileName>ux_utility_memory_byte_pool_search.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_byte_pool_search.c</FilePath>
             </File>
           </Files>
         </Group>

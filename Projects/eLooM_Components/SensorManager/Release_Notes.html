@@ -40,12 +40,15 @@
 </ul>
 <p>It contains specific implementations for the following sensor and peripheral tasks:</p>
 <ul>
+<li>H3LIS331DL</li>
 <li>IIS2DH</li>
 <li>IIS2DLPC</li>
+<li>IIS2DULPX</li>
 <li>IIS2ICLX</li>
 <li>IIS2MDC</li>
 <li>IIS3DWB</li>
 <li>ILPS22QS</li>
+<li>ILPS28QSW</li>
 <li>IMP23ABSU_DFSDM</li>
 <li>IMP23ABSU</li>
 <li>IMP34DT05_DFSDM</li>
@@ -59,6 +62,7 @@
 <li>LPS22HH</li>
 <li>LSM6DSV16BX</li>
 <li>LSM6DSV16X</li>
+<li>LSM6DSV32X</li>
 <li>MP23DB01HP</li>
 <li>SGP40</li>
 <li>SHT40</li>
@@ -73,15 +77,30 @@
 <li>MDF</li>
 <li>SPI</li>
 </ul>
-<p>It includes also a DUMMYDATA implementation that you can use for debugging purposes and as a template to build up new sensors tasks.</p>
+<p>It includes also a DUMMYSENSOR implementation that you can use for debugging purposes and as a template to build up new sensors tasks.</p>
 </div>
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section11" checked aria-hidden="true"> <label for="collapse-section11" aria-hidden="true"><strong>v3.3.0 / 31-Oct-24</strong></label>
+<input type="checkbox" id="collapse-section12" checked aria-hidden="true"> <label for="collapse-section12" aria-hidden="true"><strong>v3.4.0 / 17-Jan-25</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
 <h3 id="maintenance-release">Maintenance release</h3>
+<ul>
+<li>Added new sensors: H3LIS331DL, IIS2DULPX, ILPS28QSW, LSM6DSV32X</li>
+<li>Added XXX_DISABLED macro for combo sensors: disable subsensor at compile time by defining the proper XXX_DISABLED macro in SensorManager_conf.h</li>
+<li>Aligned ILPS22QSTask, LIS2DU12Task, LPS22DFTask, LPS22HHTask, LSM6DSV16BXTask, STHS34PF80Task and VL53L8CXTask with related drivers/platform to the last sensors drivers</li>
+<li>Manage stacked I2C: reshaped semaphore management in I2C read/write + added i2c_ack field in I2CBusIF and use return value in sensors tasks to manage read_reg failures</li>
+<li>Aligned DUMMYSENSOR implementation</li>
+<li>Code cleaning and compliation warnings solved</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true"><strong>v3.3.0 / 31-Oct-24</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<h3 id="maintenance-release-1">Maintenance release</h3>
 <ul>
 <li>Reshaped VD6283TXTask: fixed depencency between inter-measurement time, exposure time and odr</li>
 <li>Updated STHS34PF80 init procedure</li>
@@ -101,7 +120,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section10" aria-hidden="true"> <label for="collapse-section10" aria-hidden="true"><strong>v3.2.1 / 2-Sep-24</strong></label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
+<h2 id="main-changes-2">Main Changes</h2>
 <h3 id="minor-patch-release">Minor patch release</h3>
 <ul>
 <li>Fixed IIS2DLPC I2C address according to STEVAL-PROTEUS1 design and removed ISM330DHCX_MLP from the available sensors list.</li>
@@ -111,7 +130,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true"><strong>v3.2.0 / 19-Jul-24</strong></label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
+<h2 id="main-changes-3">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
 <ul>
 <li>Added new sensor tasks for ISM330BX, LSM6DSV16BX, SGP40, SHT40 and TSC1641 sensors</li>
@@ -131,7 +150,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>v3.1.1 / 12-Apr-24</strong></label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
+<h2 id="main-changes-4">Main Changes</h2>
 <h3 id="patch-release">Patch release</h3>
 <ul>
 <li>Moved VL53L8CX init procedure in DoEnterPowerMode, so to execute it before any other operation from any other concurrent task</li>
@@ -144,8 +163,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true"><strong>v3.1.0 / 16-Feb-24</strong></label>
 <div>
-<h2 id="main-changes-4">Main Changes</h2>
-<h3 id="maintenance-release-1">Maintenance release</h3>
+<h2 id="main-changes-5">Main Changes</h2>
+<h3 id="maintenance-release-2">Maintenance release</h3>
 <ul>
 <li><strong>Added SMSensorGetSamplesPerSecond and SMSensorGetBandwidth APIs to retrieve sample per second and bandwidth</strong></li>
 <li><strong>Updated STHS34PF80, VD6283TX and VL53L8CX using the latest SMessage definition</strong></li>
@@ -166,7 +185,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true"><strong>v3.0.1 / 27-Nov-2023</strong></label>
 <div>
-<h2 id="main-changes-5">Main Changes</h2>
+<h2 id="main-changes-6">Main Changes</h2>
 <h3 id="patch-release-1">Patch release</h3>
 <ul>
 <li>Fixed ADC multi management in DFSDM-based microphones</li>
@@ -180,7 +199,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true"><strong>v.3.0.0 / 29-Sep-23</strong></label>
 <div>
-<h2 id="main-changes-6">Main Changes</h2>
+<h2 id="main-changes-7">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
 <ul>
 <li>Complete redesign for SensorManager and ISensor interface:
@@ -209,7 +228,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>v.2.2.0 / 7-Jul-23</strong></label>
 <div>
-<h2 id="main-changes-7">Main Changes</h2>
+<h2 id="main-changes-8">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
 <ul>
 <li><strong>Added eloom_sysbase.h: aligned to the new definition of the basic system features defined by eLooM v3.3.0</strong></li>
@@ -231,7 +250,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>v.2.1.0 / 24-Mar-23</strong></label>
 <div>
-<h2 id="main-changes-8">Main Changes</h2>
+<h2 id="main-changes-9">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
 <ul>
 <li>Major updates for LIS2DU12, LSM6DSV16X and LPS22DF, needed to support Sensortile.box PRO board</li>
@@ -255,7 +274,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>v.2.0.1 / 14-Feb-23</strong></label>
 <div>
-<h2 id="main-changes-9">Main Changes</h2>
+<h2 id="main-changes-10">Main Changes</h2>
 <h3 id="patch-release-2">Patch release</h3>
 <ul>
 <li>Fixed auto-increment handling in SPIBusTask</li>
@@ -271,7 +290,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>v.2.0.0 / 2-Dec-22</strong></label>
 <div>
-<h2 id="main-changes-10">Main Changes</h2>
+<h2 id="main-changes-11">Main Changes</h2>
 <h3 id="first-official-release">First official release</h3>
 <ul>
 <li>Aligned threadx and FreeRTOS versions</li>

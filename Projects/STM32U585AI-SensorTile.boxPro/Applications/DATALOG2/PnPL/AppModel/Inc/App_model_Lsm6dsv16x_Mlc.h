@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_mlc;4
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16x_mlc;5
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -76,27 +76,28 @@ uint8_t lsm6dsv16x_mlc_get_sd_dps(int32_t *value);
 uint8_t lsm6dsv16x_mlc_get_sensor_annotation(char **value);
 uint8_t lsm6dsv16x_mlc_get_sensor_category(int32_t *value);
 uint8_t lsm6dsv16x_mlc_get_st_ble_stream__id(int32_t *value);
-uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc__enable(bool *value);
-uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc__unit(char **value);
-uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc__format(char **value);
-uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc__elements(int32_t *value);
-uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc__channels(int32_t *value);
-uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc__multiply_factor(float *value);
-uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc__odr(int32_t *value);
+uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_enable(bool *value);
+uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_unit(char **value);
+uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_format(char **value);
+uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_elements(int32_t *value);
+uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_channels(int32_t *value);
+uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_multiply_factor(float *value);
+uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_odr(int32_t *value);
 uint8_t lsm6dsv16x_mlc_get_stream_id(int8_t *value);
 uint8_t lsm6dsv16x_mlc_get_ep_id(int8_t *value);
 uint8_t lsm6dsv16x_mlc_set_enable(bool value, char **response_message);
 uint8_t lsm6dsv16x_mlc_set_samples_per_ts(int32_t value, char **response_message);
 uint8_t lsm6dsv16x_mlc_set_sensor_annotation(const char *value, char **response_message);
 uint8_t lsm6dsv16x_mlc_set_st_ble_stream__id(int32_t value, char **response_message);
-uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc__enable(bool value, char **response_message);
-uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc__unit(const char *value, char **response_message);
-uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc__format(const char *value, char **response_message);
-uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc__elements(int32_t value, char **response_message);
-uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc__channels(int32_t value, char **response_message);
-uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc__multiply_factor(float value, char **response_message);
-uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc__odr(int32_t value, char **response_message);
+uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_enable(bool value, char **response_message);
+uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_unit(const char *value, char **response_message);
+uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_format(const char *value, char **response_message);
+uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_elements(int32_t value, char **response_message);
+uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_channels(int32_t value, char **response_message);
+uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_multiply_factor(float value, char **response_message);
+uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_odr(int32_t value, char **response_message);
 uint8_t lsm6dsv16x_mlc_load_file(const char *data, int32_t size);
+
 
 #ifdef __cplusplus
 }

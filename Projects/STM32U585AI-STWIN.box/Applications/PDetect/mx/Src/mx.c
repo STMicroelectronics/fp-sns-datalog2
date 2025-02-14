@@ -147,28 +147,6 @@ const MX_GPIOParams_t MX_GPIO_INT1_DWBInitParams =
 };
 
 /**
-  * (INT1_EXTERNAL_DWB) Initialization parameters.
-  */
-const MX_GPIOParams_t MX_GPIO_INT1_EXTERNAL_DWBInitParams =
-{
-  MX_GPIO_PG6_Init,
-  INT_EX_EXTI_IRQn,
-  INT_EX_Pin,
-  INT_EX_GPIO_Port
-};
-
-/**
-  * (INT1_EXTERNAL_ISPU) Initialization parameters.
-  */
-const MX_GPIOParams_t MX_GPIO_INT1_EXTERNAL_ISPUInitParams =
-{
-  MX_GPIO_PG6_Init,
-  INT_EX_EXTI_IRQn,
-  INT_EX_Pin,
-  INT_EX_GPIO_Port
-};
-
-/**
   * PI7 Initialization parameters.
   */
 const MX_GPIOParams_t MX_GPIO_CS_ICLXInitParams =

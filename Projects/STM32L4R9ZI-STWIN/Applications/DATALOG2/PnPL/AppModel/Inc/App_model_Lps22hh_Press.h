@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:appconfig:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:lps22hh_press;1
+  * dtmi:appconfig:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:lps22hh_press;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -81,13 +81,13 @@ uint8_t lps22hh_press_get_data_type(char **value);
 uint8_t lps22hh_press_get_sensor_annotation(char **value);
 uint8_t lps22hh_press_get_sensor_category(int32_t *value);
 uint8_t lps22hh_press_get_st_ble_stream__id(int32_t *value);
-uint8_t lps22hh_press_get_st_ble_stream__press__enable(bool *value);
-uint8_t lps22hh_press_get_st_ble_stream__press__unit(char **value);
-uint8_t lps22hh_press_get_st_ble_stream__press__format(char **value);
-uint8_t lps22hh_press_get_st_ble_stream__press__elements(int32_t *value);
-uint8_t lps22hh_press_get_st_ble_stream__press__channels(int32_t *value);
-uint8_t lps22hh_press_get_st_ble_stream__press__multiply_factor(float *value);
-uint8_t lps22hh_press_get_st_ble_stream__press__odr(int32_t *value);
+uint8_t lps22hh_press_get_st_ble_stream__press_enable(bool *value);
+uint8_t lps22hh_press_get_st_ble_stream__press_unit(char **value);
+uint8_t lps22hh_press_get_st_ble_stream__press_format(char **value);
+uint8_t lps22hh_press_get_st_ble_stream__press_elements(int32_t *value);
+uint8_t lps22hh_press_get_st_ble_stream__press_channels(int32_t *value);
+uint8_t lps22hh_press_get_st_ble_stream__press_multiply_factor(float *value);
+uint8_t lps22hh_press_get_st_ble_stream__press_odr(int32_t *value);
 uint8_t lps22hh_press_get_stream_id(int8_t *value);
 uint8_t lps22hh_press_get_ep_id(int8_t *value);
 uint8_t lps22hh_press_set_odr(pnpl_lps22hh_press_odr_t enum_id, char **response_message);
@@ -95,13 +95,13 @@ uint8_t lps22hh_press_set_enable(bool value, char **response_message);
 uint8_t lps22hh_press_set_samples_per_ts(int32_t value, char **response_message);
 uint8_t lps22hh_press_set_sensor_annotation(const char *value, char **response_message);
 uint8_t lps22hh_press_set_st_ble_stream__id(int32_t value, char **response_message);
-uint8_t lps22hh_press_set_st_ble_stream__press__enable(bool value, char **response_message);
-uint8_t lps22hh_press_set_st_ble_stream__press__unit(const char *value, char **response_message);
-uint8_t lps22hh_press_set_st_ble_stream__press__format(const char *value, char **response_message);
-uint8_t lps22hh_press_set_st_ble_stream__press__elements(int32_t value, char **response_message);
-uint8_t lps22hh_press_set_st_ble_stream__press__channels(int32_t value, char **response_message);
-uint8_t lps22hh_press_set_st_ble_stream__press__multiply_factor(float value, char **response_message);
-uint8_t lps22hh_press_set_st_ble_stream__press__odr(int32_t value, char **response_message);
+uint8_t lps22hh_press_set_st_ble_stream__press_enable(bool value, char **response_message);
+uint8_t lps22hh_press_set_st_ble_stream__press_unit(const char *value, char **response_message);
+uint8_t lps22hh_press_set_st_ble_stream__press_format(const char *value, char **response_message);
+uint8_t lps22hh_press_set_st_ble_stream__press_elements(int32_t value, char **response_message);
+uint8_t lps22hh_press_set_st_ble_stream__press_channels(int32_t value, char **response_message);
+uint8_t lps22hh_press_set_st_ble_stream__press_multiply_factor(float value, char **response_message);
+uint8_t lps22hh_press_set_st_ble_stream__press_odr(int32_t value, char **response_message);
 
 
 #ifdef __cplusplus

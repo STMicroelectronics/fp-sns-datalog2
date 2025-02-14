@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:ism330bx_gyro;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:ism330bx_gyro;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -82,13 +82,13 @@ uint8_t ism330bx_gyro_get_sensor_annotation(char **value);
 uint8_t ism330bx_gyro_get_sensor_category(int32_t *value);
 uint8_t ism330bx_gyro_get_mounted(bool *value);
 uint8_t ism330bx_gyro_get_st_ble_stream__id(int32_t *value);
-uint8_t ism330bx_gyro_get_st_ble_stream__gyro__enable(bool *value);
-uint8_t ism330bx_gyro_get_st_ble_stream__gyro__unit(char **value);
-uint8_t ism330bx_gyro_get_st_ble_stream__gyro__format(char **value);
-uint8_t ism330bx_gyro_get_st_ble_stream__gyro__elements(int32_t *value);
-uint8_t ism330bx_gyro_get_st_ble_stream__gyro__channels(int32_t *value);
-uint8_t ism330bx_gyro_get_st_ble_stream__gyro__multiply_factor(float *value);
-uint8_t ism330bx_gyro_get_st_ble_stream__gyro__odr(int32_t *value);
+uint8_t ism330bx_gyro_get_st_ble_stream__gyro_enable(bool *value);
+uint8_t ism330bx_gyro_get_st_ble_stream__gyro_unit(char **value);
+uint8_t ism330bx_gyro_get_st_ble_stream__gyro_format(char **value);
+uint8_t ism330bx_gyro_get_st_ble_stream__gyro_elements(int32_t *value);
+uint8_t ism330bx_gyro_get_st_ble_stream__gyro_channels(int32_t *value);
+uint8_t ism330bx_gyro_get_st_ble_stream__gyro_multiply_factor(float *value);
+uint8_t ism330bx_gyro_get_st_ble_stream__gyro_odr(int32_t *value);
 uint8_t ism330bx_gyro_get_stream_id(int8_t *value);
 uint8_t ism330bx_gyro_get_ep_id(int8_t *value);
 uint8_t ism330bx_gyro_set_odr(pnpl_ism330bx_gyro_odr_t enum_id, char **response_message);
@@ -97,13 +97,13 @@ uint8_t ism330bx_gyro_set_enable(bool value, char **response_message);
 uint8_t ism330bx_gyro_set_samples_per_ts(int32_t value, char **response_message);
 uint8_t ism330bx_gyro_set_sensor_annotation(const char *value, char **response_message);
 uint8_t ism330bx_gyro_set_st_ble_stream__id(int32_t value, char **response_message);
-uint8_t ism330bx_gyro_set_st_ble_stream__gyro__enable(bool value, char **response_message);
-uint8_t ism330bx_gyro_set_st_ble_stream__gyro__unit(const char *value, char **response_message);
-uint8_t ism330bx_gyro_set_st_ble_stream__gyro__format(const char *value, char **response_message);
-uint8_t ism330bx_gyro_set_st_ble_stream__gyro__elements(int32_t value, char **response_message);
-uint8_t ism330bx_gyro_set_st_ble_stream__gyro__channels(int32_t value, char **response_message);
-uint8_t ism330bx_gyro_set_st_ble_stream__gyro__multiply_factor(float value, char **response_message);
-uint8_t ism330bx_gyro_set_st_ble_stream__gyro__odr(int32_t value, char **response_message);
+uint8_t ism330bx_gyro_set_st_ble_stream__gyro_enable(bool value, char **response_message);
+uint8_t ism330bx_gyro_set_st_ble_stream__gyro_unit(const char *value, char **response_message);
+uint8_t ism330bx_gyro_set_st_ble_stream__gyro_format(const char *value, char **response_message);
+uint8_t ism330bx_gyro_set_st_ble_stream__gyro_elements(int32_t value, char **response_message);
+uint8_t ism330bx_gyro_set_st_ble_stream__gyro_channels(int32_t value, char **response_message);
+uint8_t ism330bx_gyro_set_st_ble_stream__gyro_multiply_factor(float value, char **response_message);
+uint8_t ism330bx_gyro_set_st_ble_stream__gyro_odr(int32_t value, char **response_message);
 
 
 #ifdef __cplusplus

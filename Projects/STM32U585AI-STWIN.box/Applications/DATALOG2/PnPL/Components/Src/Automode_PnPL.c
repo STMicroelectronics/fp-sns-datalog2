@@ -147,8 +147,8 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "automode.enabled"))
   {
-    valid_property = true;
     bool enabled = json_object_dotget_boolean(tempJSONObject, "automode.enabled");
+    valid_property = true;
     ret = automode_set_enabled(enabled, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -166,8 +166,8 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   }
   if (json_object_dothas_value(tempJSONObject, "automode.nof_acquisitions"))
   {
-    valid_property = true;
     int32_t nof_acquisitions = (int32_t)json_object_dotget_number(tempJSONObject, "automode.nof_acquisitions");
+    valid_property = true;
     ret = automode_set_nof_acquisitions(nof_acquisitions, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -185,8 +185,8 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   }
   if (json_object_dothas_value(tempJSONObject, "automode.start_delay_s"))
   {
-    valid_property = true;
     int32_t start_delay_s = (int32_t)json_object_dotget_number(tempJSONObject, "automode.start_delay_s");
+    valid_property = true;
     ret = automode_set_start_delay_s(start_delay_s, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -204,8 +204,8 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   }
   if (json_object_dothas_value(tempJSONObject, "automode.logging_period_s"))
   {
-    valid_property = true;
     int32_t logging_period_s = (int32_t)json_object_dotget_number(tempJSONObject, "automode.logging_period_s");
+    valid_property = true;
     ret = automode_set_logging_period_s(logging_period_s, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -223,8 +223,8 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   }
   if (json_object_dothas_value(tempJSONObject, "automode.idle_period_s"))
   {
-    valid_property = true;
     int32_t idle_period_s = (int32_t)json_object_dotget_number(tempJSONObject, "automode.idle_period_s");
+    valid_property = true;
     ret = automode_set_idle_period_s(idle_period_s, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -241,7 +241,7 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
     }
   }
   json_value_free(tempJSON);
-  /* Check if received a request to modify an existing property */
+  /* Check if received a valid request to modify an existing property */
   if (valid_property)
   {
     if (pretty == 1)
@@ -258,8 +258,9 @@ uint8_t Automode_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializedJ
   else
   {
     /* Set property is not containing a valid property/parameter: PnPL_Error */
-    char *log_message = "Invalid property for Automode";
+    char *log_message = "Invalid property for automode";
     PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

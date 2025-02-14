@@ -31,12 +31,12 @@
 // *********************
 
 #define BOARD_ID_PROA           0x0D
-#define BLE_FW_ID_DATALOG2_PROA 0x19
-#define USB_FW_ID_DATALOG2_PROA 0x0C
+#define BLE_FW_ID_DATALOG2_PROA 0x1A
+#define USB_FW_ID_DATALOG2_PROA 0x0D
 
 #define BOARD_ID_PROB           0x11
-#define BLE_FW_ID_DATALOG2_PROB 0x14
-#define USB_FW_ID_DATALOG2_PROB 0x06
+#define BLE_FW_ID_DATALOG2_PROB 0x15
+#define USB_FW_ID_DATALOG2_PROB 0x07
 
 // Other hardware configuration
 // ****************************

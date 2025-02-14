@@ -1479,24 +1479,24 @@ static sys_error_code_t LPS22HHTaskSensorInit(LPS22HHTask *_this)
 
   if (_this->pIRQConfig != NULL)
   {
-    lps22hh_ctrl_reg3_t int_route;
+    lps22hh_pin_int_route_t int_route;
 
     lps22hh_int_notification_set(p_sensor_drv, LPS22HH_INT_LATCHED);
 
     lps22hh_pin_int_route_get(p_sensor_drv, &int_route);
-    int_route.int_f_wtm = PROPERTY_ENABLE;
+    int_route.fifo_th = PROPERTY_ENABLE;
     lps22hh_pin_int_route_set(p_sensor_drv, &int_route);
   }
 
 #else
   if (_this->pIRQConfig != NULL)
   {
-    lps22hh_ctrl_reg3_t int_route;
+    lps22hh_pin_int_route_t int_route;
 
     lps22hh_int_notification_set(p_sensor_drv, LPS22HH_INT_LATCHED);
 
     lps22hh_pin_int_route_get(p_sensor_drv, &int_route);
-    int_route.drdy = PROPERTY_ENABLE;
+    int_route.drdy_pres = PROPERTY_ENABLE;
     lps22hh_pin_int_route_set(p_sensor_drv, &int_route);
   }
 
@@ -1585,36 +1585,39 @@ static sys_error_code_t LPS22HHTaskSensorReadData(LPS22HHTask *_this)
 
   if (_this->fifo_level >= samples_per_it)
   {
-    lps22hh_read_reg(p_sensor_drv, LPS22HH_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_sensor_data_buff,
+    res = lps22hh_read_reg(p_sensor_drv, LPS22HH_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_sensor_data_buff,
                      5 * _this->fifo_level);
 
-    uint16_t i = 0;
-
-    for (i = 0; i < samples_per_it; i++)
+    if (!SYS_IS_ERROR_CODE(res))
     {
-      uint32_t press = (((uint32_t) _this->p_sensor_data_buff[5 * i + 0])) | (((uint32_t) _this->p_sensor_data_buff[5 * i + 1]) << (8 * 1))
-                       | (((uint32_t) _this->p_sensor_data_buff[5 * i + 2]) << (8 * 2));
+      uint16_t i = 0;
 
-      /* convert the 2's complement 24 bit to 2's complement 32 bit */
-      if (press & 0x00800000)
+      for (i = 0; i < samples_per_it; i++)
       {
-        press |= 0xFF000000;
-      }
+        uint32_t press = (((uint32_t) _this->p_sensor_data_buff[5 * i + 0])) | (((uint32_t) _this->p_sensor_data_buff[5 * i + 1]) << (8 * 1))
+                           | (((uint32_t) _this->p_sensor_data_buff[5 * i + 2]) << (8 * 2));
 
-      uint16_t temp = *((uint16_t *)(&_this->p_sensor_data_buff[5 * i + 3]));
+        /* convert the 2's complement 24 bit to 2's complement 32 bit */
+        if (press & 0x00800000)
+        {
+          press |= 0xFF000000;
+        }
 
-      if (_this->press_sensor_status.is_active && !_this->temp_sensor_status.is_active) /* Only Pressure */
-      {
-        _this->p_press_data_buff[i] = (float) press / 4096.0f; /* Pressure */
-      }
-      else if (!_this->press_sensor_status.is_active && _this->temp_sensor_status.is_active) /* Only Temperature */
-      {
-        _this->p_temp_data_buff[i] = (float) temp / 100.0f; /* Temperature */
-      }
-      else if (_this->press_sensor_status.is_active && _this->temp_sensor_status.is_active) /* Both Sub Sensors */
-      {
-        _this->p_press_data_buff[i] = (float) press / 4096.0f; /* Pressure */
-        _this->p_temp_data_buff[i] = (float) temp / 100.0f; /* Temperature */
+        uint16_t temp = *((uint16_t *)(&_this->p_sensor_data_buff[5 * i + 3]));
+
+        if (_this->press_sensor_status.is_active && !_this->temp_sensor_status.is_active) /* Only Pressure */
+        {
+          _this->p_press_data_buff[i] = (float) press / 4096.0f; /* Pressure */
+        }
+        else if (!_this->press_sensor_status.is_active && _this->temp_sensor_status.is_active) /* Only Temperature */
+        {
+          _this->p_temp_data_buff[i] = (float) temp / 100.0f; /* Temperature */
+        }
+        else if (_this->press_sensor_status.is_active && _this->temp_sensor_status.is_active) /* Both Sub Sensors */
+        {
+          _this->p_press_data_buff[i] = (float) press / 4096.0f; /* Pressure */
+          _this->p_temp_data_buff[i] = (float) temp / 100.0f; /* Temperature */
+        }
       }
     }
   }
@@ -1646,15 +1649,17 @@ static sys_error_code_t LPS22HHTaskSensorReadData(LPS22HHTask *_this)
 
 #endif
 
-#if (HSD_USE_DUMMY_DATA == 1)
-  uint16_t i = 0;
-  for (i = 0; i < _this->samples_per_it ; i++)
+  if (!SYS_IS_ERROR_CODE(res))
   {
-    _this->p_press_data_buff[i]  = (float)(dummyDataCounter_press++);
-    _this->p_temp_data_buff[i]  = (float)(dummyDataCounter_temp++);
-  }
-
+#if (HSD_USE_DUMMY_DATA == 1)
+    uint16_t i = 0;
+    for (i = 0; i < _this->samples_per_it ; i++)
+    {
+      _this->p_press_data_buff[i]  = (float)(dummyDataCounter_press++);
+      _this->p_temp_data_buff[i]  = (float)(dummyDataCounter_temp++);
+    }
 #endif
+  }
 
   return res;
 }
@@ -1664,11 +1669,14 @@ static sys_error_code_t LPS22HHTaskSensorRegister(LPS22HHTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
+#if !LPS22HH_PRESS_DISABLED
   ISensor_t *press_if = (ISensor_t *) LPS22HHTaskGetPressSensorIF(_this);
-  ISensor_t *temp_if = (ISensor_t *) LPS22HHTaskGetTempSensorIF(_this);
-
   _this->press_id = SMAddSensor(press_if);
+#endif
+#if !LPS22HH_TEMP_DISABLED
+  ISensor_t *temp_if = (ISensor_t *) LPS22HHTaskGetTempSensorIF(_this);
   _this->temp_id = SMAddSensor(temp_if);
+#endif
 
   return res;
 }

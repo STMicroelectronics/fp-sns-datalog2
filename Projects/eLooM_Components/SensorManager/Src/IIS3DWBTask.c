@@ -1320,29 +1320,32 @@ static sys_error_code_t IIS3DWBTaskSensorReadData(IIS3DWBTask *_this)
 
   if (((reg[1]) & 0x80) && (fifo_level >= samples_per_it))
   {
-    iis3dwb_read_reg(p_sensor_drv, IIS3DWB_FIFO_DATA_OUT_TAG, (uint8_t *) _this->p_sensor_data_buff, samples_per_it * 7);
+    res = iis3dwb_read_reg(p_sensor_drv, IIS3DWB_FIFO_DATA_OUT_TAG, (uint8_t *) _this->p_sensor_data_buff, samples_per_it * 7);
 
+    if (!SYS_IS_ERROR_CODE(res))
+    {
 #if (HSD_USE_DUMMY_DATA == 1)
-    int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
+      int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
 
-    for (i = 0; i < samples_per_it; i++)
-    {
-      *p16++ = dummyDataCounter++;
-      *p16++ = dummyDataCounter++;
-      *p16++ = dummyDataCounter++;
-    }
+      for (i = 0; i < samples_per_it; i++)
+      {
+        *p16++ = dummyDataCounter++;
+        *p16++ = dummyDataCounter++;
+        *p16++ = dummyDataCounter++;
+      }
 #else
-    /* Arrange Data */
-    int16_t *p16_src = (int16_t *) _this->p_sensor_data_buff;
-    int16_t *p16_dest = (int16_t *) _this->p_sensor_data_buff;
-    for (i = 0; i < samples_per_it; i++)
-    {
-      p16_src = (int16_t *) & ((uint8_t *)(p16_src))[1];
-      *p16_dest++ = *p16_src++;
-      *p16_dest++ = *p16_src++;
-      *p16_dest++ = *p16_src++;
-    }
+      /* Arrange Data */
+      int16_t *p16_src = (int16_t *) _this->p_sensor_data_buff;
+      int16_t *p16_dest = (int16_t *) _this->p_sensor_data_buff;
+      for (i = 0; i < samples_per_it; i++)
+      {
+        p16_src = (int16_t *) & ((uint8_t *)(p16_src))[1];
+        *p16_dest++ = *p16_src++;
+        *p16_dest++ = *p16_src++;
+        *p16_dest++ = *p16_src++;
+      }
 #endif /* HSD_USE_DUMMY_DATA */
+    }
   }
   else
   {
@@ -1350,15 +1353,19 @@ static sys_error_code_t IIS3DWBTaskSensorReadData(IIS3DWBTask *_this)
   }
 #else
   iis3dwb_read_reg(p_sensor_drv, IIS3DWB_OUTX_L_A, (uint8_t *) _this->p_sensor_data_buff, samples_per_it * 6);
-#if (HSD_USE_DUMMY_DATA == 1)
-  int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
-  for (i = 0; i < samples_per_it ; i++)
+
+  if (!SYS_IS_ERROR_CODE(res))
   {
-    *p16++ = dummyDataCounter++;
-    *p16++ = dummyDataCounter++;
-    *p16++ = dummyDataCounter++;
-  }
+#if (HSD_USE_DUMMY_DATA == 1)
+    int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
+    for (i = 0; i < samples_per_it ; i++)
+    {
+      *p16++ = dummyDataCounter++;
+      *p16++ = dummyDataCounter++;
+      *p16++ = dummyDataCounter++;
+    }
 #endif /* HSD_USE_DUMMY_DATA */
+  }
 #endif /* IIS3DWB_FIFO_ENABLED */
 
   return res;

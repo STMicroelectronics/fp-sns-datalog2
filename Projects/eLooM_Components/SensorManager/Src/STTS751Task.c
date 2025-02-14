@@ -1222,12 +1222,16 @@ static sys_error_code_t STTS751TaskSensorReadData(STTS751Task *_this)
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   int16_t temperature_celsius;
 
-  stts751_temperature_raw_get(p_sensor_drv, (int16_t *) &temperature_celsius);
-  _this->temperature = (float) temperature_celsius / 256.0f;
+  res = stts751_temperature_raw_get(p_sensor_drv, (int16_t *) &temperature_celsius);
+
+  if (!SYS_IS_ERROR_CODE(res))
+  {
+    _this->temperature = (float) temperature_celsius / 256.0f;
 
 #if (HSD_USE_DUMMY_DATA == 1)
-  _this->temperature = (float) dummyDataCounter++;
+    _this->temperature = (float) dummyDataCounter++;
 #endif
+  }
 
   return res;
 }

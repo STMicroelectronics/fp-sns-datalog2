@@ -150,8 +150,8 @@ uint8_t Firmware_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "firmware_info.alias"))
   {
-    valid_property = true;
     const char *alias = json_object_dotget_string(tempJSONObject, "firmware_info.alias");
+    valid_property = true;
     ret = firmware_info_set_alias(alias, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -168,7 +168,7 @@ uint8_t Firmware_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
     }
   }
   json_value_free(tempJSON);
-  /* Check if received a request to modify an existing property */
+  /* Check if received a valid request to modify an existing property */
   if (valid_property)
   {
     if (pretty == 1)
@@ -185,8 +185,9 @@ uint8_t Firmware_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   else
   {
     /* Set property is not containing a valid property/parameter: PnPL_Error */
-    char *log_message = "Invalid property for Firmware_Info";
+    char *log_message = "Invalid property for firmware_info";
     PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

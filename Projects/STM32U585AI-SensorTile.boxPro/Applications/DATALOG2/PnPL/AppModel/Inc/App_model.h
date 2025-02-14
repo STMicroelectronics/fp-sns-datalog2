@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:vespucci:steval_mkboxpro:FP_SNS_DATALOG2_Datalog2;5
+  * dtmi:vespucci:steval_mkboxpro:FP_SNS_DATALOG2_Datalog2;6
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -65,26 +65,31 @@ extern "C" {
 #include "PnPLCompManager.h"
 #include "SensorManager.h"
 #include "parson.h"
-#include "App_model_Lis2mdl_Mag.h"
 #include "App_model_Lis2du12_Acc.h"
+#include "App_model_Lis2mdl_Mag.h"
+#include "App_model_Lps22df_Press.h"
 #include "App_model_Lsm6dsv16x_Acc.h"
 #include "App_model_Lsm6dsv16x_Gyro.h"
 #include "App_model_Lsm6dsv16x_Mlc.h"
+#include "App_model_Mp23db01hp_Mic.h"
+#include "App_model_Stts22h_Temp.h"
+#include "App_model_H3lis331dl_Acc.h"
+#include "App_model_Ilps28qsw_Press.h"
 #include "App_model_Ism330is_Acc.h"
 #include "App_model_Ism330is_Gyro.h"
 #include "App_model_Ism330is_Ispu.h"
-#include "App_model_Mp23db01hp_Mic.h"
-#include "App_model_Stts22h_Temp.h"
-#include "App_model_Lps22df_Press.h"
 #include "App_model_Lsm6dsv16bx_Acc.h"
 #include "App_model_Lsm6dsv16bx_Gyro.h"
 #include "App_model_Lsm6dsv16bx_Mlc.h"
+#include "App_model_Lsm6dsv32x_Acc.h"
+#include "App_model_Lsm6dsv32x_Gyro.h"
+#include "App_model_Lsm6dsv32x_Mlc.h"
+#include "App_model_Deviceinformation.h"
 #include "App_model_Automode.h"
 #include "App_model_Log_Controller.h"
 #include "App_model_Tags_Info.h"
 #include "App_model_Acquisition_Info.h"
 #include "App_model_Firmware_Info.h"
-#include "App_model_Deviceinformation.h"
 /* USER includes -------------------------------------------------------------*/
 
 #define COMP_TYPE_SENSOR          0x00
@@ -96,7 +101,7 @@ extern "C" {
 #define LOG_CTRL_MODE_USB         0x01
 #define LOG_CTRL_MODE_BLE         0x02
 
-#define SENSOR_NUMBER             14
+#define SENSOR_NUMBER             19
 #define ALGORITHM_NUMBER          0
 #define ACTUATOR_NUMBER           0
 #define OTHER_COMP_NUMBER         5
@@ -106,8 +111,8 @@ extern "C" {
 #define UNIT_LEN 20U
 #define FORMAT_LEN 10U
 
-#define FW_VERSION_MAJOR    "2"
-#define FW_VERSION_MINOR    "3"
+#define FW_VERSION_MAJOR    "3"
+#define FW_VERSION_MINOR    "0"
 #define FW_VERSION_PATCH    "0"
 
 /* Max BLE bandwidth for each sensor (in Byte) */

@@ -1255,12 +1255,16 @@ static sys_error_code_t STTS22HTaskSensorReadData(STTS22HTask *_this)
     stts22h_temp_trshld_src_get(p_sensor_drv, &status);
   }
 
-  stts22h_temperature_raw_get(p_sensor_drv, (int16_t *) &temperature_celsius);
-  _this->temperature = (float) temperature_celsius / 100.0f;
+  res = stts22h_temperature_raw_get(p_sensor_drv, (int16_t *) &temperature_celsius);
+
+  if (!SYS_IS_ERROR_CODE(res))
+  {
+    _this->temperature = (float) temperature_celsius / 100.0f;
 
 #if (HSD_USE_DUMMY_DATA == 1)
-  _this->temperature = (float) dummyDataCounter++;
+    _this->temperature = (float) dummyDataCounter++;
 #endif
+  }
 
   return res;
 }

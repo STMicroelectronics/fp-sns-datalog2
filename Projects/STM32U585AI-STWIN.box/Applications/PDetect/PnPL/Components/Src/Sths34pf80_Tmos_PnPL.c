@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_tmos;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -171,10 +171,10 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seria
   json_object_dotset_string(JSON_Status, "sths34pf80_tmos.sensor_annotation", temp_s);
   sths34pf80_tmos_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "sths34pf80_tmos.sensor_category", temp_i);
-  sths34pf80_tmos_get_mounted(&temp_b);
-  json_object_dotset_boolean(JSON_Status, "sths34pf80_tmos.mounted", temp_b);
   sths34pf80_tmos_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "sths34pf80_tmos.dim", temp_i);
+  sths34pf80_tmos_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "sths34pf80_tmos.mounted", temp_b);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "sths34pf80_tmos.c_type", COMP_TYPE_SENSOR);
@@ -210,10 +210,12 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_property = false;
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "sths34pf80_tmos.enable");
+    valid_property = true;
     ret = sths34pf80_tmos_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -232,6 +234,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.odr"))
   {
     int32_t odr = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.odr");
+    valid_property = true;
     ret = sths34pf80_tmos_set_odr((pnpl_sths34pf80_tmos_odr_t)odr, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -250,6 +253,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.transmittance"))
   {
     float transmittance = (float)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.transmittance");
+    valid_property = true;
     ret = sths34pf80_tmos_set_transmittance(transmittance, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -268,6 +272,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.avg_tobject_num"))
   {
     int32_t avg_tobject_num = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.avg_tobject_num");
+    valid_property = true;
     ret = sths34pf80_tmos_set_avg_tobject_num((pnpl_sths34pf80_tmos_avg_tobject_num_t)avg_tobject_num, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -286,6 +291,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.avg_tambient_num"))
   {
     int32_t avg_tambient_num = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.avg_tambient_num");
+    valid_property = true;
     ret = sths34pf80_tmos_set_avg_tambient_num((pnpl_sths34pf80_tmos_avg_tambient_num_t)avg_tambient_num, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -304,6 +310,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.lpf_p_m_bandwidth"))
   {
     int32_t lpf_p_m_bandwidth = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.lpf_p_m_bandwidth");
+    valid_property = true;
     ret = sths34pf80_tmos_set_lpf_p_m_bandwidth((pnpl_sths34pf80_tmos_lpf_p_m_bandwidth_t)lpf_p_m_bandwidth, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -322,6 +329,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.lpf_p_bandwidth"))
   {
     int32_t lpf_p_bandwidth = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.lpf_p_bandwidth");
+    valid_property = true;
     ret = sths34pf80_tmos_set_lpf_p_bandwidth((pnpl_sths34pf80_tmos_lpf_p_bandwidth_t)lpf_p_bandwidth, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -340,6 +348,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.lpf_m_bandwidth"))
   {
     int32_t lpf_m_bandwidth = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.lpf_m_bandwidth");
+    valid_property = true;
     ret = sths34pf80_tmos_set_lpf_m_bandwidth((pnpl_sths34pf80_tmos_lpf_m_bandwidth_t)lpf_m_bandwidth, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -358,6 +367,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.presence_threshold"))
   {
     int32_t presence_threshold = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.presence_threshold");
+    valid_property = true;
     ret = sths34pf80_tmos_set_presence_threshold(presence_threshold, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -376,6 +386,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.presence_hysteresis"))
   {
     int32_t presence_hysteresis = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.presence_hysteresis");
+    valid_property = true;
     ret = sths34pf80_tmos_set_presence_hysteresis(presence_hysteresis, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -394,6 +405,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.motion_threshold"))
   {
     int32_t motion_threshold = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.motion_threshold");
+    valid_property = true;
     ret = sths34pf80_tmos_set_motion_threshold(motion_threshold, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -412,6 +424,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.motion_hysteresis"))
   {
     int32_t motion_hysteresis = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.motion_hysteresis");
+    valid_property = true;
     ret = sths34pf80_tmos_set_motion_hysteresis(motion_hysteresis, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -431,6 +444,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     int32_t tambient_shock_threshold = (int32_t)json_object_dotget_number(tempJSONObject,
                                                                           "sths34pf80_tmos.tambient_shock_threshold");
+    valid_property = true;
     ret = sths34pf80_tmos_set_tambient_shock_threshold(tambient_shock_threshold, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -450,6 +464,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     int32_t tambient_shock_hysteresis = (int32_t)json_object_dotget_number(tempJSONObject,
                                                                            "sths34pf80_tmos.tambient_shock_hysteresis");
+    valid_property = true;
     ret = sths34pf80_tmos_set_tambient_shock_hysteresis(tambient_shock_hysteresis, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -468,6 +483,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.embedded_compensation"))
   {
     bool embedded_compensation = json_object_dotget_boolean(tempJSONObject, "sths34pf80_tmos.embedded_compensation");
+    valid_property = true;
     ret = sths34pf80_tmos_set_embedded_compensation(embedded_compensation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -486,6 +502,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.software_compensation"))
   {
     bool software_compensation = json_object_dotget_boolean(tempJSONObject, "sths34pf80_tmos.software_compensation");
+    valid_property = true;
     ret = sths34pf80_tmos_set_software_compensation(software_compensation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -504,6 +521,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.compensation_type"))
   {
     int32_t compensation_type = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.compensation_type");
+    valid_property = true;
     ret = sths34pf80_tmos_set_compensation_type((pnpl_sths34pf80_tmos_compensation_type_t)compensation_type, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -523,6 +541,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     int32_t sw_presence_threshold = (int32_t)json_object_dotget_number(tempJSONObject,
                                                                        "sths34pf80_tmos.sw_presence_threshold");
+    valid_property = true;
     ret = sths34pf80_tmos_set_sw_presence_threshold(sw_presence_threshold, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -541,6 +560,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.sw_motion_threshold"))
   {
     int32_t sw_motion_threshold = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.sw_motion_threshold");
+    valid_property = true;
     ret = sths34pf80_tmos_set_sw_motion_threshold(sw_motion_threshold, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -559,6 +579,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.compensation_filter_flag"))
   {
     bool compensation_filter_flag = json_object_dotget_boolean(tempJSONObject, "sths34pf80_tmos.compensation_filter_flag");
+    valid_property = true;
     ret = sths34pf80_tmos_set_compensation_filter_flag(compensation_filter_flag, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -577,6 +598,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.absence_static_flag"))
   {
     bool absence_static_flag = json_object_dotget_boolean(tempJSONObject, "sths34pf80_tmos.absence_static_flag");
+    valid_property = true;
     ret = sths34pf80_tmos_set_absence_static_flag(absence_static_flag, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -595,6 +617,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.samples_per_ts"))
   {
     int32_t samples_per_ts = (int32_t)json_object_dotget_number(tempJSONObject, "sths34pf80_tmos.samples_per_ts");
+    valid_property = true;
     ret = sths34pf80_tmos_set_samples_per_ts(samples_per_ts, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -613,6 +636,7 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_tmos.sensor_annotation"))
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "sths34pf80_tmos.sensor_annotation");
+    valid_property = true;
     ret = sths34pf80_tmos_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -629,15 +653,26 @@ uint8_t Sths34pf80_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
     }
   }
   json_value_free(tempJSON);
-  if (pretty == 1)
+  /* Check if received a valid request to modify an existing property */
+  if (valid_property)
   {
-    *response = json_serialize_to_string_pretty(respJSON);
-    *size = json_serialization_size_pretty(respJSON);
+    if (pretty == 1)
+    {
+      *response = json_serialize_to_string_pretty(respJSON);
+      *size = json_serialization_size_pretty(respJSON);
+    }
+    else
+    {
+      *response = json_serialize_to_string(respJSON);
+      *size = json_serialization_size(respJSON);
+    }
   }
   else
   {
-    *response = json_serialize_to_string(respJSON);
-    *size = json_serialization_size(respJSON);
+    /* Set property is not containing a valid property/parameter: PnPL_Error */
+    char *log_message = "Invalid property for sths34pf80_tmos";
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

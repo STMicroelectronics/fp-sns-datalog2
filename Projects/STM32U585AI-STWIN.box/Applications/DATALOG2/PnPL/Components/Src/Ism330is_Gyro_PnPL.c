@@ -139,19 +139,19 @@ uint8_t Ism330is_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   json_object_dotset_boolean(JSON_Status, "ism330is_gyro.mounted", temp_b);
   ism330is_gyro_get_st_ble_stream__id(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_gyro.st_ble_stream.id", temp_i);
-  ism330is_gyro_get_st_ble_stream__gyro__enable(&temp_b);
+  ism330is_gyro_get_st_ble_stream__gyro_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "ism330is_gyro.st_ble_stream.gyro.enable", temp_b);
-  ism330is_gyro_get_st_ble_stream__gyro__unit(&temp_s);
+  ism330is_gyro_get_st_ble_stream__gyro_unit(&temp_s);
   json_object_dotset_string(JSON_Status, "ism330is_gyro.st_ble_stream.gyro.unit", temp_s);
-  ism330is_gyro_get_st_ble_stream__gyro__format(&temp_s);
+  ism330is_gyro_get_st_ble_stream__gyro_format(&temp_s);
   json_object_dotset_string(JSON_Status, "ism330is_gyro.st_ble_stream.gyro.format", temp_s);
-  ism330is_gyro_get_st_ble_stream__gyro__elements(&temp_i);
+  ism330is_gyro_get_st_ble_stream__gyro_elements(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_gyro.st_ble_stream.gyro.elements", temp_i);
-  ism330is_gyro_get_st_ble_stream__gyro__channels(&temp_i);
+  ism330is_gyro_get_st_ble_stream__gyro_channels(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_gyro.st_ble_stream.gyro.channels", temp_i);
-  ism330is_gyro_get_st_ble_stream__gyro__multiply_factor(&temp_f);
+  ism330is_gyro_get_st_ble_stream__gyro_multiply_factor(&temp_f);
   json_object_dotset_number(JSON_Status, "ism330is_gyro.st_ble_stream.gyro.multiply_factor", temp_f);
-  ism330is_gyro_get_st_ble_stream__gyro__odr(&temp_i);
+  ism330is_gyro_get_st_ble_stream__gyro_odr(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_gyro.st_ble_stream.gyro.odr", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
@@ -192,8 +192,8 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.odr"))
   {
-    valid_property = true;
     int32_t odr = (int32_t)json_object_dotget_number(tempJSONObject, "ism330is_gyro.odr");
+    valid_property = true;
     ret = ism330is_gyro_set_odr((pnpl_ism330is_gyro_odr_t)odr, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -211,8 +211,8 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.fs"))
   {
-    valid_property = true;
     int32_t fs = (int32_t)json_object_dotget_number(tempJSONObject, "ism330is_gyro.fs");
+    valid_property = true;
     ret = ism330is_gyro_set_fs((pnpl_ism330is_gyro_fs_t)fs, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -230,8 +230,8 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.enable"))
   {
-    valid_property = true;
     bool enable = json_object_dotget_boolean(tempJSONObject, "ism330is_gyro.enable");
+    valid_property = true;
     ret = ism330is_gyro_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -249,8 +249,8 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.samples_per_ts"))
   {
-    valid_property = true;
     int32_t samples_per_ts = (int32_t)json_object_dotget_number(tempJSONObject, "ism330is_gyro.samples_per_ts");
+    valid_property = true;
     ret = ism330is_gyro_set_samples_per_ts(samples_per_ts, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -268,8 +268,8 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.sensor_annotation"))
   {
-    valid_property = true;
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ism330is_gyro.sensor_annotation");
+    valid_property = true;
     ret = ism330is_gyro_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -289,8 +289,8 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.st_ble_stream.id"))
     {
-      valid_property = true;
       int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject, "ism330is_gyro.st_ble_stream.id");
+      valid_property = true;
       ret = ism330is_gyro_set_st_ble_stream__id(st_ble_stream__id, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -311,20 +311,20 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.st_ble_stream.gyro.enable"))
     {
+      bool st_ble_stream__gyro_enable = json_object_dotget_boolean(tempJSONObject, "ism330is_gyro.st_ble_stream.gyro.enable");
       valid_property = true;
-      bool st_ble_stream__gyro__enable = json_object_dotget_boolean(tempJSONObject, "ism330is_gyro.st_ble_stream.gyro.enable");
-      ret = ism330is_gyro_set_st_ble_stream__gyro__enable(st_ble_stream__gyro__enable, &resp_msg);
+      ret = ism330is_gyro_set_st_ble_stream__gyro_enable(st_ble_stream__gyro_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro__enable);
+        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro_enable);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        bool old_st_ble_stream__gyro__enable;
-        ism330is_gyro_get_st_ble_stream__gyro__enable(&old_st_ble_stream__gyro__enable);
-        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro__enable);
+        bool old_st_ble_stream__gyro_enable;
+        ism330is_gyro_get_st_ble_stream__gyro_enable(&old_st_ble_stream__gyro_enable);
+        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro_enable);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -333,21 +333,21 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.st_ble_stream.gyro.unit"))
     {
+      const char *st_ble_stream__gyro_unit = json_object_dotget_string(tempJSONObject,
+                                                                       "ism330is_gyro.st_ble_stream.gyro.unit");
       valid_property = true;
-      const char *st_ble_stream__gyro__unit = json_object_dotget_string(tempJSONObject,
-                                                                        "ism330is_gyro.st_ble_stream.gyro.unit");
-      ret = ism330is_gyro_set_st_ble_stream__gyro__unit(st_ble_stream__gyro__unit, &resp_msg);
+      ret = ism330is_gyro_set_st_ble_stream__gyro_unit(st_ble_stream__gyro_unit, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro__unit);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro_unit);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        char *old_st_ble_stream__gyro__unit;
-        ism330is_gyro_get_st_ble_stream__gyro__unit(&old_st_ble_stream__gyro__unit);
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro__unit);
+        char *old_st_ble_stream__gyro_unit;
+        ism330is_gyro_get_st_ble_stream__gyro_unit(&old_st_ble_stream__gyro_unit);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro_unit);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -356,21 +356,21 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.st_ble_stream.gyro.format"))
     {
+      const char *st_ble_stream__gyro_format = json_object_dotget_string(tempJSONObject,
+                                                                         "ism330is_gyro.st_ble_stream.gyro.format");
       valid_property = true;
-      const char *st_ble_stream__gyro__format = json_object_dotget_string(tempJSONObject,
-                                                                          "ism330is_gyro.st_ble_stream.gyro.format");
-      ret = ism330is_gyro_set_st_ble_stream__gyro__format(st_ble_stream__gyro__format, &resp_msg);
+      ret = ism330is_gyro_set_st_ble_stream__gyro_format(st_ble_stream__gyro_format, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro__format);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro_format);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        char *old_st_ble_stream__gyro__format;
-        ism330is_gyro_get_st_ble_stream__gyro__format(&old_st_ble_stream__gyro__format);
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro__format);
+        char *old_st_ble_stream__gyro_format;
+        ism330is_gyro_get_st_ble_stream__gyro_format(&old_st_ble_stream__gyro_format);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro_format);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -379,21 +379,21 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.st_ble_stream.gyro.elements"))
     {
+      int32_t st_ble_stream__gyro_elements = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                                "ism330is_gyro.st_ble_stream.gyro.elements");
       valid_property = true;
-      int32_t st_ble_stream__gyro__elements = (int32_t)json_object_dotget_number(tempJSONObject,
-                                                                                 "ism330is_gyro.st_ble_stream.gyro.elements");
-      ret = ism330is_gyro_set_st_ble_stream__gyro__elements(st_ble_stream__gyro__elements, &resp_msg);
+      ret = ism330is_gyro_set_st_ble_stream__gyro_elements(st_ble_stream__gyro_elements, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro__elements);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro_elements);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        int32_t old_st_ble_stream__gyro__elements;
-        ism330is_gyro_get_st_ble_stream__gyro__elements(&old_st_ble_stream__gyro__elements);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro__elements);
+        int32_t old_st_ble_stream__gyro_elements;
+        ism330is_gyro_get_st_ble_stream__gyro_elements(&old_st_ble_stream__gyro_elements);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro_elements);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -402,21 +402,21 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.st_ble_stream.gyro.channels"))
     {
+      int32_t st_ble_stream__gyro_channels = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                                "ism330is_gyro.st_ble_stream.gyro.channels");
       valid_property = true;
-      int32_t st_ble_stream__gyro__channels = (int32_t)json_object_dotget_number(tempJSONObject,
-                                                                                 "ism330is_gyro.st_ble_stream.gyro.channels");
-      ret = ism330is_gyro_set_st_ble_stream__gyro__channels(st_ble_stream__gyro__channels, &resp_msg);
+      ret = ism330is_gyro_set_st_ble_stream__gyro_channels(st_ble_stream__gyro_channels, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro__channels);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro_channels);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        int32_t old_st_ble_stream__gyro__channels;
-        ism330is_gyro_get_st_ble_stream__gyro__channels(&old_st_ble_stream__gyro__channels);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro__channels);
+        int32_t old_st_ble_stream__gyro_channels;
+        ism330is_gyro_get_st_ble_stream__gyro_channels(&old_st_ble_stream__gyro_channels);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro_channels);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -425,21 +425,21 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.st_ble_stream.gyro.multiply_factor"))
     {
+      float st_ble_stream__gyro_multiply_factor = (float)json_object_dotget_number(tempJSONObject,
+                                                                                   "ism330is_gyro.st_ble_stream.gyro.multiply_factor");
       valid_property = true;
-      float st_ble_stream__gyro__multiply_factor = (float)json_object_dotget_number(tempJSONObject,
-                                                                                    "ism330is_gyro.st_ble_stream.gyro.multiply_factor");
-      ret = ism330is_gyro_set_st_ble_stream__gyro__multiply_factor(st_ble_stream__gyro__multiply_factor, &resp_msg);
+      ret = ism330is_gyro_set_st_ble_stream__gyro_multiply_factor(st_ble_stream__gyro_multiply_factor, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro__multiply_factor);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro_multiply_factor);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        float old_st_ble_stream__gyro__multiply_factor;
-        ism330is_gyro_get_st_ble_stream__gyro__multiply_factor(&old_st_ble_stream__gyro__multiply_factor);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro__multiply_factor);
+        float old_st_ble_stream__gyro_multiply_factor;
+        ism330is_gyro_get_st_ble_stream__gyro_multiply_factor(&old_st_ble_stream__gyro_multiply_factor);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro_multiply_factor);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -448,27 +448,27 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.st_ble_stream.gyro.odr"))
     {
+      int32_t st_ble_stream__gyro_odr = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                           "ism330is_gyro.st_ble_stream.gyro.odr");
       valid_property = true;
-      int32_t st_ble_stream__gyro__odr = (int32_t)json_object_dotget_number(tempJSONObject,
-                                                                            "ism330is_gyro.st_ble_stream.gyro.odr");
-      ret = ism330is_gyro_set_st_ble_stream__gyro__odr(st_ble_stream__gyro__odr, &resp_msg);
+      ret = ism330is_gyro_set_st_ble_stream__gyro_odr(st_ble_stream__gyro_odr, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro__odr);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__gyro_odr);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        int32_t old_st_ble_stream__gyro__odr;
-        ism330is_gyro_get_st_ble_stream__gyro__odr(&old_st_ble_stream__gyro__odr);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro__odr);
+        int32_t old_st_ble_stream__gyro_odr;
+        ism330is_gyro_get_st_ble_stream__gyro_odr(&old_st_ble_stream__gyro_odr);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro_odr);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
   }
   json_value_free(tempJSON);
-  /* Check if received a request to modify an existing property */
+  /* Check if received a valid request to modify an existing property */
   if (valid_property)
   {
     if (pretty == 1)
@@ -485,8 +485,9 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   else
   {
     /* Set property is not containing a valid property/parameter: PnPL_Error */
-    char *log_message = "Invalid property for Ism330is_Gyro";
+    char *log_message = "Invalid property for ism330is_gyro";
     PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

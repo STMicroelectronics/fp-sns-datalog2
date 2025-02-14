@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:other:tags_info;2
+  * dtmi:vespucci:other:tags_info;3
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -120,6 +120,12 @@ uint8_t tags_info_get_sw_tag14__status(bool *value);
 uint8_t tags_info_get_sw_tag15__label(char **value);
 uint8_t tags_info_get_sw_tag15__enabled(bool *value);
 uint8_t tags_info_get_sw_tag15__status(bool *value);
+uint8_t tags_info_get_hw_tag0__label(char **value);
+uint8_t tags_info_get_hw_tag0__enabled(bool *value);
+uint8_t tags_info_get_hw_tag0__status(bool *value);
+uint8_t tags_info_get_hw_tag1__label(char **value);
+uint8_t tags_info_get_hw_tag1__enabled(bool *value);
+uint8_t tags_info_get_hw_tag1__status(bool *value);
 uint8_t tags_info_set_sw_tag0__label(const char *value, char **response_message);
 uint8_t tags_info_set_sw_tag0__enabled(bool value, char **response_message);
 uint8_t tags_info_set_sw_tag0__status(bool value, char **response_message);
@@ -168,19 +174,13 @@ uint8_t tags_info_set_sw_tag14__status(bool value, char **response_message);
 uint8_t tags_info_set_sw_tag15__label(const char *value, char **response_message);
 uint8_t tags_info_set_sw_tag15__enabled(bool value, char **response_message);
 uint8_t tags_info_set_sw_tag15__status(bool value, char **response_message);
-
-uint8_t tags_info_get_hw_tag0__label(char **value);
-uint8_t tags_info_get_hw_tag0__enabled(bool *value);
-uint8_t tags_info_get_hw_tag0__status(bool *value);
-uint8_t tags_info_get_hw_tag1__label(char **value);
-uint8_t tags_info_get_hw_tag1__enabled(bool *value);
-uint8_t tags_info_get_hw_tag1__status(bool *value);
 uint8_t tags_info_set_hw_tag0__label(const char *value, char **response_message);
 uint8_t tags_info_set_hw_tag0__enabled(bool value, char **response_message);
 uint8_t tags_info_set_hw_tag0__status(bool value, char **response_message);
 uint8_t tags_info_set_hw_tag1__label(const char *value, char **response_message);
 uint8_t tags_info_set_hw_tag1__enabled(bool value, char **response_message);
 uint8_t tags_info_set_hw_tag1__status(bool value, char **response_message);
+
 
 #ifdef __cplusplus
 }

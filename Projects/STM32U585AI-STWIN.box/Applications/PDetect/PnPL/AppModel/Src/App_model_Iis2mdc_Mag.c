@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:iis2mdc_mag;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -296,4 +296,6 @@ uint8_t iis2mdc_mag_set_sensor_annotation(const char *value, char **response_mes
   strcpy(iis2mdc_mag_model.annotation, value);
   return ret;
 }
+
+
 

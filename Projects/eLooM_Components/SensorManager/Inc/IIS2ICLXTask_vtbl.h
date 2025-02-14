@@ -43,18 +43,32 @@ sys_error_code_t IIS2ICLXTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const 
 uint8_t IIS2ICLXTask_vtblAccGetId(ISourceObservable *_this);
 IEventSrc *IIS2ICLXTask_vtblGetEventSourceIF(ISourceObservable *_this);
 EMData_t IIS2ICLXTask_vtblAccGetDataInfo(ISourceObservable *_this);
+uint8_t IIS2ICLXTask_vtblMlcGetId(ISourceObservable *_this);
+IEventSrc *IIS2ICLXTask_vtblMlcGetEventSourceIF(ISourceObservable *_this);
+EMData_t IIS2ICLXTask_vtblMlcGetDataInfo(ISourceObservable *_this);
 sys_error_code_t IIS2ICLXTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t IIS2ICLXTask_vtblSensorDisable(ISensor_t *_this);
 boolean_t IIS2ICLXTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t IIS2ICLXTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t IIS2ICLXTask_vtblSensorGetStatus(ISensor_t *_this);
 SensorStatus_t *IIS2ICLXTask_vtblSensorGetStatusPointer(ISensor_t *_this);
+SensorDescriptor_t IIS2ICLXTask_vtblMlcGetDescription(ISensor_t *_this);
+SensorStatus_t IIS2ICLXTask_vtblMlcGetStatus(ISensor_t *_this);
+SensorStatus_t *IIS2ICLXTask_vtblMlcGetStatusPointer(ISensor_t *_this);
 sys_error_code_t IIS2ICLXTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
 float IIS2ICLXTask_vtblAccGetFS(ISensorMems_t *_this);
 float IIS2ICLXTask_vtblAccGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t IIS2ICLXTask_vtblMlcGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
+float IIS2ICLXTask_vtblMlcGetFS(ISensorMems_t *_this);
+float IIS2ICLXTask_vtblMlcGetSensitivity(ISensorMems_t *_this);
 sys_error_code_t IIS2ICLXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
 sys_error_code_t IIS2ICLXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
 sys_error_code_t IIS2ICLXTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
+
+sys_error_code_t IIS2ICLXTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len);
+sys_error_code_t IIS2ICLXTask_vtblSensorWriteReg(ISensorLL_t *_this, uint16_t reg, const uint8_t *data, uint16_t len);
+sys_error_code_t IIS2ICLXTask_vtblSensorSyncModel(ISensorLL_t *_this);
+
 
 #ifdef __cplusplus
 }

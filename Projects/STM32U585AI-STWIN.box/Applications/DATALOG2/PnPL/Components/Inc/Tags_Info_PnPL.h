@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:other:tags_info;2
+  * dtmi:vespucci:other:tags_info;3
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *

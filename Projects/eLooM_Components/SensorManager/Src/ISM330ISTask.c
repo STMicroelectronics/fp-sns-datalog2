@@ -2019,74 +2019,88 @@ static sys_error_code_t ISM330ISTaskSensorReadData(ISM330ISTask *_this)
 
       if (val.xlda == 1U)
       {
-        ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_A, _this->p_acc_sample, 6);
+        res = ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_A, _this->p_acc_sample, 6);
+        if (!SYS_IS_ERROR_CODE(res))
+        {
 #if (HSD_USE_DUMMY_DATA == 1)
-        int16_t *p16 = (int16_t *)(_this->p_acc_sample);
-        *p16++ = dummyDataCounter_acc++;
-        *p16++ = dummyDataCounter_acc++;
-        *p16++ = dummyDataCounter_acc++;
+          int16_t *p16 = (int16_t *)(_this->p_acc_sample);
+          *p16++ = dummyDataCounter_acc++;
+          *p16++ = dummyDataCounter_acc++;
+          *p16++ = dummyDataCounter_acc++;
 #endif
-        _this->acc_samples_count = 1U;
-
+          _this->acc_samples_count = 1U;
+        }
         /* Read newly INT status: while reading acc a new gyro data could be available */
         ism330is_status_reg_get(p_sensor_drv, &val);
       }
       if (val.gda == 1U)
       {
-        ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_G, _this->p_gyro_sample, 6);
+        res = ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_G, _this->p_gyro_sample, 6);
+        if (!SYS_IS_ERROR_CODE(res))
+        {
 #if (HSD_USE_DUMMY_DATA == 1)
-        int16_t *p16 = (int16_t *)(_this->p_gyro_sample);
-        *p16++ = dummyDataCounter_gyro++;
-        *p16++ = dummyDataCounter_gyro++;
-        *p16++ = dummyDataCounter_gyro++;
+          int16_t *p16 = (int16_t *)(_this->p_gyro_sample);
+          *p16++ = dummyDataCounter_gyro++;
+          *p16++ = dummyDataCounter_gyro++;
+          *p16++ = dummyDataCounter_gyro++;
 #endif
-        _this->gyro_samples_count = 1U;
+          _this->gyro_samples_count = 1U;
+        }
       }
     }
     else
     {
       uint8_t p_samples[12];
 
-      ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_G, p_samples, 12);
+      res = ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_G, p_samples, 12);
+      if (!SYS_IS_ERROR_CODE(res))
+      {
+#if (HSD_USE_DUMMY_DATA == 1)
+        int16_t *p16 = (int16_t *)(_this->p_acc_sample);
+        *p16++ = dummyDataCounter_acc++;
+        *p16++ = dummyDataCounter_acc++;
+        *p16++ = dummyDataCounter_acc++;
+
+        p16 = (int16_t *)(_this->p_gyro_sample);
+        *p16++ = dummyDataCounter_gyro++;
+        *p16++ = dummyDataCounter_gyro++;
+        *p16++ = dummyDataCounter_gyro++;
+#else
+        memcpy(_this->p_gyro_sample, p_samples, 6);
+        memcpy(_this->p_acc_sample, &p_samples[6], 6);
+#endif
+        _this->acc_samples_count = 1U;
+        _this->gyro_samples_count = 1U;
+      }
+    }
+  }
+  else if (_this->acc_sensor_status.is_active)
+  {
+    res = ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_A, _this->p_acc_sample, 6);
+    if (!SYS_IS_ERROR_CODE(res))
+    {
 #if (HSD_USE_DUMMY_DATA == 1)
       int16_t *p16 = (int16_t *)(_this->p_acc_sample);
       *p16++ = dummyDataCounter_acc++;
       *p16++ = dummyDataCounter_acc++;
       *p16++ = dummyDataCounter_acc++;
-
-      p16 = (int16_t *)(_this->p_gyro_sample);
-      *p16++ = dummyDataCounter_gyro++;
-      *p16++ = dummyDataCounter_gyro++;
-      *p16++ = dummyDataCounter_gyro++;
-#else
-      memcpy(_this->p_gyro_sample, p_samples, 6);
-      memcpy(_this->p_acc_sample, &p_samples[6], 6);
 #endif
       _this->acc_samples_count = 1U;
-      _this->gyro_samples_count = 1U;
     }
-  }
-  else if (_this->acc_sensor_status.is_active)
-  {
-    ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_A, _this->p_acc_sample, 6);
-#if (HSD_USE_DUMMY_DATA == 1)
-    int16_t *p16 = (int16_t *)(_this->p_acc_sample);
-    *p16++ = dummyDataCounter_acc++;
-    *p16++ = dummyDataCounter_acc++;
-    *p16++ = dummyDataCounter_acc++;
-#endif
-    _this->acc_samples_count = 1U;
   }
   else if (_this->gyro_sensor_status.is_active)
   {
-    ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_G, _this->p_gyro_sample, 6);
+    res = ism330is_read_reg(p_sensor_drv, ISM330IS_OUTX_L_G, _this->p_gyro_sample, 6);
+    if (!SYS_IS_ERROR_CODE(res))
+    {
 #if (HSD_USE_DUMMY_DATA == 1)
-    int16_t *p16 = (int16_t *)(_this->p_gyro_sample);
-    *p16++ = dummyDataCounter_gyro++;
-    *p16++ = dummyDataCounter_gyro++;
-    *p16++ = dummyDataCounter_gyro++;
+      int16_t *p16 = (int16_t *)(_this->p_gyro_sample);
+      *p16++ = dummyDataCounter_gyro++;
+      *p16++ = dummyDataCounter_gyro++;
+      *p16++ = dummyDataCounter_gyro++;
 #endif
-    _this->gyro_samples_count = 1U;
+      _this->gyro_samples_count = 1U;
+    }
   }
   else
   {
@@ -2116,13 +2130,18 @@ static sys_error_code_t ISM330ISTaskSensorRegister(ISM330ISTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
+#if !ISM330IS_ACC_DISABLED
   ISensor_t *acc_if = (ISensor_t *) ISM330ISTaskGetAccSensorIF(_this);
-  ISensor_t *gyro_if = (ISensor_t *) ISM330ISTaskGetGyroSensorIF(_this);
-  ISensor_t *ispu_if = (ISensor_t *) ISM330ISTaskGetIspuSensorIF(_this);
-
-  _this->ispu_id = SMAddSensor(ispu_if);
   _this->acc_id = SMAddSensor(acc_if);
+#endif
+#if !ISM330IS_GYRO_DISABLED
+  ISensor_t *gyro_if = (ISensor_t *) ISM330ISTaskGetGyroSensorIF(_this);
   _this->gyro_id = SMAddSensor(gyro_if);
+#endif
+#if !ISM330IS_ISPU_DISABLED
+  ISensor_t *ispu_if = (ISensor_t *) ISM330ISTaskGetIspuSensorIF(_this);
+  _this->ispu_id = SMAddSensor(ispu_if);
+#endif
 
   return res;
 }

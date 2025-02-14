@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2;6
+  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2;8
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -65,25 +65,28 @@ extern "C" {
 #include "PnPLCompManager.h"
 #include "SensorManager.h"
 #include "parson.h"
-#include "App_model_Iis3dwb_Acc.h"
-#include "App_model_Iis3dwb_Ext_Acc.h"
+#include "App_model_Iis2dlpc_Acc.h"
+#include "App_model_Iis2iclx_Acc.h"
+#include "App_model_Iis2iclx_Mlc.h"
 #include "App_model_Iis2mdc_Mag.h"
+#include "App_model_Iis3dwb_Acc.h"
+#include "App_model_Ilps22qs_Press.h"
 #include "App_model_Imp23absu_Mic.h"
+#include "App_model_Imp34dt05_Mic.h"
 #include "App_model_Ism330dhcx_Acc.h"
 #include "App_model_Ism330dhcx_Gyro.h"
 #include "App_model_Ism330dhcx_Mlc.h"
-#include "App_model_Ism330is_Acc.h"
-#include "App_model_Ism330is_Gyro.h"
-#include "App_model_Ism330is_Ispu.h"
-#include "App_model_Iis2dlpc_Acc.h"
 #include "App_model_Stts22h_Temp.h"
-#include "App_model_Stts22h_Ext_Temp.h"
-#include "App_model_Ilps22qs_Press.h"
-#include "App_model_Imp34dt05_Mic.h"
-#include "App_model_Iis2iclx_Acc.h"
+#include "App_model_Iis2dulpx_Acc.h"
+#include "App_model_Iis2dulpx_Mlc.h"
+#include "App_model_Iis3dwb_Ext_Acc.h"
 #include "App_model_Ism330bx_Acc.h"
 #include "App_model_Ism330bx_Gyro.h"
 #include "App_model_Ism330bx_Mlc.h"
+#include "App_model_Ism330is_Acc.h"
+#include "App_model_Ism330is_Gyro.h"
+#include "App_model_Ism330is_Ispu.h"
+#include "App_model_Stts22h_Ext_Temp.h"
 #include "App_model_Tsc1641_Pow.h"
 #include "App_model_Automode.h"
 #include "App_model_Log_Controller.h"
@@ -103,7 +106,7 @@ extern "C" {
 #define LOG_CTRL_MODE_USB         0x01
 #define LOG_CTRL_MODE_BLE         0x02
 
-#define SENSOR_NUMBER             20
+#define SENSOR_NUMBER             23
 #define ALGORITHM_NUMBER          0
 #define ACTUATOR_NUMBER           0
 #define OTHER_COMP_NUMBER         6
@@ -113,8 +116,8 @@ extern "C" {
 #define UNIT_LEN 20U
 #define FORMAT_LEN 10U
 
-#define FW_VERSION_MAJOR    "2"
-#define FW_VERSION_MINOR    "3"
+#define FW_VERSION_MAJOR    "3"
+#define FW_VERSION_MINOR    "0"
 #define FW_VERSION_PATCH    "0"
 
 /* Max BLE bandwidth for each sensor (in Byte) */
@@ -185,6 +188,7 @@ typedef struct _AppModel_t
   /* Insert here your custom App Model code */
   bool mlc_ucf_valid;
   bool ispu_ucf_valid;
+  uint32_t total_bandwidth;
 } AppModel_t;
 
 AppModel_t *getAppModel(void);

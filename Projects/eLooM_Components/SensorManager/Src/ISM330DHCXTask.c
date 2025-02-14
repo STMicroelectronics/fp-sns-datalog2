@@ -707,8 +707,9 @@ sys_error_code_t ISM330DHCXTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
   p_obj->gyro_drdy = 0;
 #endif
   memset(p_obj->p_mlc_sensor_data_buff, 0, sizeof(p_obj->p_mlc_sensor_data_buff));
-  p_obj->acc_id = 0;
-  p_obj->gyro_id = 1;
+  p_obj->acc_id = 0xff;
+  p_obj->gyro_id = 0xff;
+  p_obj->mlc_id = 0xff;
   p_obj->mlc_enable = FALSE;
   p_obj->prev_timestamp = 0.0f;
   p_obj->acc_samples_count = 0;
@@ -1228,7 +1229,7 @@ sys_error_code_t ISM330DHCXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (uint32_t) fs
+      .sensorMessage.fParam = (float) fs
     };
     res = ISM330DHCXTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -2299,96 +2300,98 @@ static sys_error_code_t ISM330DHCXTaskSensorReadData(ISM330DHCXTask *_this)
 
   if (((reg[1]) & 0x80) && (_this->fifo_level >= samples_per_it))
   {
-    ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_FIFO_DATA_OUT_TAG, _this->p_fast_sensor_data_buff, samples_per_it * 7);
+    res = ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_FIFO_DATA_OUT_TAG, _this->p_fast_sensor_data_buff, samples_per_it * 7);
 
+    if (!SYS_IS_ERROR_CODE(res))
+    {
 #if (HSD_USE_DUMMY_DATA == 1)
-    int16_t *p16 = (int16_t *)(_this->p_fast_sensor_data_buff);
-
-    for (i = 0; i < samples_per_it; i++)
-    {
-      p16 = (int16_t *)(&_this->p_fast_sensor_data_buff[i * 7] + 1);
-      if ((_this->p_fast_sensor_data_buff[i * 7] >> 3) == ISM330DHCX_TAG_ACC)
-      {
-        *p16++ = dummyDataCounter_acc++;
-        *p16++ = dummyDataCounter_acc++;
-        *p16++ = dummyDataCounter_acc++;
-      }
-      else
-      {
-        *p16++ = dummyDataCounter_gyro++;
-        *p16++ = dummyDataCounter_gyro++;
-        *p16++ = dummyDataCounter_gyro++;
-      }
-    }
-#endif
-    if ((_this->acc_sensor_status.is_active) && (_this->gyro_sensor_status.is_active))
-    {
-      /* Read both ACC and GYRO */
-
-      uint32_t odr_acc = (uint32_t) _this->acc_sensor_status.type.mems.odr;
-      uint32_t odr_gyro = (uint32_t) _this->gyro_sensor_status.type.mems.odr;
-
-      int16_t *p16_src = (int16_t *) _this->p_fast_sensor_data_buff;
-      int16_t *p_acc, *p_gyro;
-
-      _this->acc_samples_count = 0;
-      _this->gyro_samples_count = 0;
-
-      if (odr_acc > odr_gyro) /* Acc is faster than Gyro */
-      {
-        p_acc = (int16_t *) _this->p_fast_sensor_data_buff;
-        p_gyro = (int16_t *) _this->p_slow_sensor_data_buff;
-      }
-      else
-      {
-        p_acc = (int16_t *) _this->p_slow_sensor_data_buff;
-        p_gyro = (int16_t *) _this->p_fast_sensor_data_buff;
-      }
-
-      uint8_t *p_tag = (uint8_t *) p16_src;
+      int16_t *p16 = (int16_t *)(_this->p_fast_sensor_data_buff);
 
       for (i = 0; i < samples_per_it; i++)
       {
-        if (((*p_tag) >> 3) == ISM330DHCX_TAG_ACC)
+        p16 = (int16_t *)(&_this->p_fast_sensor_data_buff[i * 7] + 1);
+        if ((_this->p_fast_sensor_data_buff[i * 7] >> 3) == ISM330DHCX_TAG_ACC)
         {
-          p16_src = (int16_t *)(p_tag + 1);
-          *p_acc++ = *p16_src++;
-          *p_acc++ = *p16_src++;
-          *p_acc++ = *p16_src++;
-          _this->acc_samples_count++;
+          *p16++ = dummyDataCounter_acc++;
+          *p16++ = dummyDataCounter_acc++;
+          *p16++ = dummyDataCounter_acc++;
         }
         else
         {
-          p16_src = (int16_t *)(p_tag + 1);
-          *p_gyro++ = *p16_src++;
-          *p_gyro++ = *p16_src++;
-          *p_gyro++ = *p16_src++;
-          _this->gyro_samples_count++;
+          *p16++ = dummyDataCounter_gyro++;
+          *p16++ = dummyDataCounter_gyro++;
+          *p16++ = dummyDataCounter_gyro++;
         }
-        p_tag += 7;
       }
-    }
-    else /* 1 subsensor active only --> simply drop TAGS */
-    {
-      int16_t *p16_src = (int16_t *) _this->p_fast_sensor_data_buff;
-      int16_t *p16_dest = (int16_t *) _this->p_fast_sensor_data_buff;
-      for (i = 0; i < samples_per_it; i++)
+#endif
+      if ((_this->acc_sensor_status.is_active) && (_this->gyro_sensor_status.is_active))
       {
-        p16_src = (int16_t *) & ((uint8_t *)(p16_src))[1];
-        *p16_dest++ = *p16_src++;
-        *p16_dest++ = *p16_src++;
-        *p16_dest++ = *p16_src++;
-      }
-      if (_this->acc_sensor_status.is_active)
-      {
-        _this->acc_samples_count = samples_per_it;
-      }
-      else
-      {
-        _this->gyro_samples_count = samples_per_it;
-      }
-    }
+        /* Read both ACC and GYRO */
 
+        uint32_t odr_acc = (uint32_t) _this->acc_sensor_status.type.mems.odr;
+        uint32_t odr_gyro = (uint32_t) _this->gyro_sensor_status.type.mems.odr;
+
+        int16_t *p16_src = (int16_t *) _this->p_fast_sensor_data_buff;
+        int16_t *p_acc, *p_gyro;
+
+        _this->acc_samples_count = 0;
+        _this->gyro_samples_count = 0;
+
+        if (odr_acc > odr_gyro) /* Acc is faster than Gyro */
+        {
+          p_acc = (int16_t *) _this->p_fast_sensor_data_buff;
+          p_gyro = (int16_t *) _this->p_slow_sensor_data_buff;
+        }
+        else
+        {
+          p_acc = (int16_t *) _this->p_slow_sensor_data_buff;
+          p_gyro = (int16_t *) _this->p_fast_sensor_data_buff;
+        }
+
+        uint8_t *p_tag = (uint8_t *) p16_src;
+
+        for (i = 0; i < samples_per_it; i++)
+        {
+          if (((*p_tag) >> 3) == ISM330DHCX_TAG_ACC)
+          {
+            p16_src = (int16_t *)(p_tag + 1);
+            *p_acc++ = *p16_src++;
+            *p_acc++ = *p16_src++;
+            *p_acc++ = *p16_src++;
+            _this->acc_samples_count++;
+          }
+          else
+          {
+            p16_src = (int16_t *)(p_tag + 1);
+            *p_gyro++ = *p16_src++;
+            *p_gyro++ = *p16_src++;
+            *p_gyro++ = *p16_src++;
+            _this->gyro_samples_count++;
+          }
+          p_tag += 7;
+        }
+      }
+      else /* 1 subsensor active only --> simply drop TAGS */
+      {
+        int16_t *p16_src = (int16_t *) _this->p_fast_sensor_data_buff;
+        int16_t *p16_dest = (int16_t *) _this->p_fast_sensor_data_buff;
+        for (i = 0; i < samples_per_it; i++)
+        {
+          p16_src = (int16_t *) & ((uint8_t *)(p16_src))[1];
+          *p16_dest++ = *p16_src++;
+          *p16_dest++ = *p16_src++;
+          *p16_dest++ = *p16_src++;
+        }
+        if (_this->acc_sensor_status.is_active)
+        {
+          _this->acc_samples_count = samples_per_it;
+        }
+        else
+        {
+          _this->gyro_samples_count = samples_per_it;
+        }
+      }
+    }
   }
   else
   {
@@ -2416,60 +2419,72 @@ static sys_error_code_t ISM330DHCXTaskSensorReadData(ISM330DHCXTask *_this)
 
     if (val.xlda == 1U)
     {
-      ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_A, _this->p_acc_sample, 6);
+      res = ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_A, _this->p_acc_sample, 6);
+      if (!SYS_IS_ERROR_CODE(res))
+      {
 #if (HSD_USE_DUMMY_DATA == 1)
-      int16_t *p16 = (int16_t *)(_this->p_acc_sample);
-      *p16++ = dummyDataCounter_acc++;
-      *p16++ = dummyDataCounter_acc++;
-      *p16++ = dummyDataCounter_acc++;
+        int16_t *p16 = (int16_t *)(_this->p_acc_sample);
+        *p16++ = dummyDataCounter_acc++;
+        *p16++ = dummyDataCounter_acc++;
+        *p16++ = dummyDataCounter_acc++;
 #endif
-      _this->acc_samples_count = 1U;
-      _this->acc_drdy = 1;
+        _this->acc_samples_count = 1U;
+        _this->acc_drdy = 1;
+      }
     }
     if (val.gda == 1U)
     {
-      ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_G, _this->p_gyro_sample, 6);
+      res = ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_G, _this->p_gyro_sample, 6);
+      if (!SYS_IS_ERROR_CODE(res))
+      {
 #if (HSD_USE_DUMMY_DATA == 1)
-      int16_t *p16 = (int16_t *)(_this->p_gyro_sample);
-      *p16++ = dummyDataCounter_gyro++;
-      *p16++ = dummyDataCounter_gyro++;
-      *p16++ = dummyDataCounter_gyro++;
+        int16_t *p16 = (int16_t *)(_this->p_gyro_sample);
+        *p16++ = dummyDataCounter_gyro++;
+        *p16++ = dummyDataCounter_gyro++;
+        *p16++ = dummyDataCounter_gyro++;
 #endif
-      _this->gyro_samples_count = 1U;
-      _this->gyro_drdy = 1;
+        _this->gyro_samples_count = 1U;
+        _this->gyro_drdy = 1;
+      }
     }
   }
   else if (_this->acc_sensor_status.is_active)
   {
-    ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_A, _this->p_acc_sample, samples_per_it * 6);
-#if (HSD_USE_DUMMY_DATA == 1)
-    uint16_t i = 0;
-    int16_t *p16 = (int16_t *)(_this->p_acc_sample);
-    for (i = 0; i < samples_per_it; i++)
+    res = ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_A, _this->p_acc_sample, samples_per_it * 6);
+    if (!SYS_IS_ERROR_CODE(res))
     {
-      *p16++ = dummyDataCounter_acc++;
-      *p16++ = dummyDataCounter_acc++;
-      *p16++ = dummyDataCounter_acc++;
-    }
+#if (HSD_USE_DUMMY_DATA == 1)
+      uint16_t i = 0;
+      int16_t *p16 = (int16_t *)(_this->p_acc_sample);
+      for (i = 0; i < samples_per_it; i++)
+      {
+        *p16++ = dummyDataCounter_acc++;
+        *p16++ = dummyDataCounter_acc++;
+        *p16++ = dummyDataCounter_acc++;
+      }
 #endif
-    _this->acc_samples_count = 1U;
-    _this->acc_drdy = 1;
+      _this->acc_samples_count = 1U;
+      _this->acc_drdy = 1;
+    }
   }
   else if (_this->gyro_sensor_status.is_active)
   {
-    ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_G, _this->p_acc_sample, samples_per_it * 6);
-#if (HSD_USE_DUMMY_DATA == 1)
-    uint16_t i = 0;
-    int16_t *p16 = (int16_t *)(_this->p_gyro_sample);
-    for (i = 0; i < samples_per_it; i++)
+    res = ism330dhcx_read_reg(p_sensor_drv, ISM330DHCX_OUTX_L_G, _this->p_acc_sample, samples_per_it * 6);
+    if (!SYS_IS_ERROR_CODE(res))
     {
-      *p16++ = dummyDataCounter_gyro++;
-      *p16++ = dummyDataCounter_gyro++;
-      *p16++ = dummyDataCounter_gyro++;
-    }
+#if (HSD_USE_DUMMY_DATA == 1)
+      uint16_t i = 0;
+      int16_t *p16 = (int16_t *)(_this->p_gyro_sample);
+      for (i = 0; i < samples_per_it; i++)
+      {
+        *p16++ = dummyDataCounter_gyro++;
+        *p16++ = dummyDataCounter_gyro++;
+        *p16++ = dummyDataCounter_gyro++;
+      }
 #endif
-    _this->gyro_samples_count = 1U;
-    _this->gyro_drdy = 1;
+      _this->gyro_samples_count = 1U;
+      _this->gyro_drdy = 1;
+    }
   }
   else
   {
@@ -2502,13 +2517,18 @@ static sys_error_code_t ISM330DHCXTaskSensorRegister(ISM330DHCXTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
+#if !ISM330DHCX_ACC_DISABLED
   ISensor_t *acc_if = (ISensor_t *) ISM330DHCXTaskGetAccSensorIF(_this);
-  ISensor_t *gyro_if = (ISensor_t *) ISM330DHCXTaskGetGyroSensorIF(_this);
-  ISensor_t *mlc_if = (ISensor_t *) ISM330DHCXTaskGetMlcSensorIF(_this);
-
   _this->acc_id = SMAddSensor(acc_if);
+#endif
+#if !ISM330DHCX_GYRO_DISABLED
+  ISensor_t *gyro_if = (ISensor_t *) ISM330DHCXTaskGetGyroSensorIF(_this);
   _this->gyro_id = SMAddSensor(gyro_if);
+#endif
+#if !ISM330DHCX_MLC_DISABLED
+  ISensor_t *mlc_if = (ISensor_t *) ISM330DHCXTaskGetMlcSensorIF(_this);
   _this->mlc_id = SMAddSensor(mlc_if);
+#endif
 
   return res;
 }

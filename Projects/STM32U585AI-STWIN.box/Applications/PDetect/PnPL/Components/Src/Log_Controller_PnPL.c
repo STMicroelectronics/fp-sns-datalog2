@@ -169,31 +169,46 @@ uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *s
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_function = false;
   if (json_object_dothas_value(tempJSONObject, "log_controller*save_config"))
   {
     ret = log_controller_save_config();
+    valid_function = true;
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*start_log.interface"))
   {
+    valid_function = true;
     int32_t interface = (int32_t)json_object_dotget_number(tempJSONObject, "log_controller*start_log.interface");
     ret = log_controller_start_log(interface);
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*stop_log"))
   {
     ret = log_controller_stop_log();
+    valid_function = true;
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*set_time.datetime"))
   {
+    valid_function = true;
     const char *datetime = json_object_dotget_string(tempJSONObject, "log_controller*set_time.datetime");
     ret = log_controller_set_time(datetime);
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*switch_bank"))
   {
     ret = log_controller_switch_bank();
+    valid_function = true;
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*set_dfu_mode"))
   {
     ret = log_controller_set_dfu_mode();
+    valid_function = true;
+  }
+  /* Check if received a valid function to modify an existing property */
+  if (valid_function == false)
+  {
+    char log_message[100];
+    (void) sprintf(log_message, "%s Invalid command", serializedJSON);
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(tempJSON);
   return ret;

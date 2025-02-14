@@ -589,11 +589,11 @@ sys_error_code_t STHS34PF80Task_vtblDoEnterPowerMode(AManagedTask *_this, const 
       if (STHS34PF80TaskSensorIsActive(p_obj))
       {
         /* Deactivate the sensor */
-        sths34pf80_tmos_func_status_t tmos_func_status;
-        if (0 == sths34pf80_tmos_odr_set(p_sensor_drv, STHS34PF80_TMOS_ODR_OFF))
+        sths34pf80_func_status_t tmos_func_status;
+        if (0 == sths34pf80_odr_set(p_sensor_drv, STHS34PF80_ODR_OFF))
         {
           /* Clear DRDY */
-          sths34pf80_tmos_func_status_get(p_sensor_drv, &tmos_func_status);
+          sths34pf80_func_status_get(p_sensor_drv, &tmos_func_status);
         }
       }
       /* Empty the task queue and disable INT or timer */
@@ -1890,7 +1890,7 @@ static sys_error_code_t STHS34PF80TaskSensorInit(STHS34PF80Task *_this)
   uint8_t id;
   uint32_t status = 0;
 
-  sths34pf80_tmos_odr_t tmos_odr;
+  sths34pf80_odr_t tmos_odr;
   sths34pf80_avg_tobject_num_t avg_tobject_num;
   sths34pf80_avg_tambient_num_t avg_tambient_num;
   sths34pf80_lpf_bandwidth_t lpf_bandwidth;
@@ -2050,9 +2050,9 @@ static sys_error_code_t STHS34PF80TaskSensorInit(STHS34PF80Task *_this)
     if (_this->sensor_status.type.presence.embedded_compensation  != 0)
     {
       /* Change sensitivity */
-      sths34pf80_tmos_sensitivity_get(p_sensor_drv, &tmos_sensitivity_boot);    // Get default value
+      sths34pf80_tobject_sensitivity_get(p_sensor_drv, &tmos_sensitivity_boot);    // Get default value
       tmos_sensitivity = (uint16_t)_this->sensor_status.type.presence.Transmittance * tmos_sensitivity_boot; // Update default value
-      sths34pf80_tmos_sensitivity_set(p_sensor_drv, &tmos_sensitivity);     // Set new value
+      sths34pf80_tobject_sensitivity_set(p_sensor_drv, &tmos_sensitivity);     // Set new value
     }
 
     /* Set thresholds and hysteresis mode */
@@ -2101,48 +2101,48 @@ static sys_error_code_t STHS34PF80TaskSensorInit(STHS34PF80Task *_this)
     }
 
     /* See AN5867 chapter 7.4: once setup algorithms and/or filters, algorithms must be reset */
-    sths34pf80_reset_algo(p_sensor_drv);
+    sths34pf80_algo_reset(p_sensor_drv);
 
     /* Set BDU */
     sths34pf80_block_data_update_set(p_sensor_drv, 1);
 
     if (_this->pIRQConfig != NULL)
     {
-      sths34pf80_tmos_route_int_set(p_sensor_drv, STHS34PF80_TMOS_INT_DRDY);
+      sths34pf80_route_int_set(p_sensor_drv, STHS34PF80_INT_DRDY);
     }
 
     if (_this->sensor_status.type.presence.data_frequency < 2.0f)
     {
-      tmos_odr = STHS34PF80_TMOS_ODR_AT_1Hz;
+      tmos_odr = STHS34PF80_ODR_AT_1Hz;
     }
     else if (_this->sensor_status.type.presence.data_frequency < 3.0f)
     {
-      tmos_odr = STHS34PF80_TMOS_ODR_AT_2Hz;
+      tmos_odr = STHS34PF80_ODR_AT_2Hz;
     }
     else if (_this->sensor_status.type.presence.data_frequency < 5.0f)
     {
-      tmos_odr = STHS34PF80_TMOS_ODR_AT_4Hz;
+      tmos_odr = STHS34PF80_ODR_AT_4Hz;
     }
     else if (_this->sensor_status.type.presence.data_frequency < 9.0f)
     {
-      tmos_odr = STHS34PF80_TMOS_ODR_AT_8Hz;
+      tmos_odr = STHS34PF80_ODR_AT_8Hz;
     }
     else if (_this->sensor_status.type.presence.data_frequency < 16.0f)
     {
-      tmos_odr = STHS34PF80_TMOS_ODR_AT_15Hz;
+      tmos_odr = STHS34PF80_ODR_AT_15Hz;
     }
     else
     {
-      tmos_odr = STHS34PF80_TMOS_ODR_AT_30Hz;
+      tmos_odr = STHS34PF80_ODR_AT_30Hz;
     }
     if (_this->sensor_status.is_active)
     {
-      sths34pf80_tmos_odr_set(p_sensor_drv, tmos_odr);
+      sths34pf80_odr_set(p_sensor_drv, tmos_odr);
       _this->sths34pf80_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.presence.data_frequency);
     }
     else
     {
-      sths34pf80_tmos_odr_set(p_sensor_drv, STHS34PF80_TMOS_ODR_OFF);
+      sths34pf80_odr_set(p_sensor_drv, STHS34PF80_ODR_OFF);
       _this->sensor_status.is_active = false;
     }
   }
@@ -2160,7 +2160,7 @@ static sys_error_code_t STHS34PF80TaskSensorReadData(STHS34PF80Task *_this)
   {
     uint32_t timeout;
     uint32_t tick_start;
-    sths34pf80_tmos_drdy_status_t new_data_ready;
+    sths34pf80_drdy_status_t new_data_ready;
 
     if (_this->IsBlocking == 1U)
     {
@@ -2175,7 +2175,7 @@ static sys_error_code_t STHS34PF80TaskSensorReadData(STHS34PF80Task *_this)
 
     do
     {
-      (void) sths34pf80_tmos_drdy_status_get(p_sensor_drv, &new_data_ready);
+      (void) sths34pf80_drdy_status_get(p_sensor_drv, &new_data_ready);
 
       if (new_data_ready.drdy == 1U)
       {
@@ -2188,7 +2188,7 @@ static sys_error_code_t STHS34PF80TaskSensorReadData(STHS34PF80Task *_this)
   /* a new measure is available if no error is returned by the poll function */
   if (res == 0)
   {
-    sths34pf80_tmos_func_status_t tmos_func_status;
+    sths34pf80_func_status_t tmos_func_status;
     int16_t tobject = 0;
     int16_t tambient = 0;
     int16_t tobj_comp = 0;
@@ -2198,7 +2198,7 @@ static sys_error_code_t STHS34PF80TaskSensorReadData(STHS34PF80Task *_this)
     IPD_output_t swlib_out = {0};
 
     // Clear DRDY and read flags
-    if (sths34pf80_tmos_func_status_get(p_sensor_drv, &tmos_func_status) != 0)
+    if (sths34pf80_func_status_get(p_sensor_drv, &tmos_func_status) != 0)
     {
       res = -1;
     }
@@ -2235,7 +2235,7 @@ static sys_error_code_t STHS34PF80TaskSensorReadData(STHS34PF80Task *_this)
       res = -1;
     }
 
-    if(res == 0)
+    if (res == 0)
     {
       _this->p_sensor_data_buff[0] = tambient;
       _this->p_sensor_data_buff[1] = tobject;
@@ -2322,7 +2322,7 @@ static sys_error_code_t STHS34PF80TaskSensorSetDataFrequency(STHS34PF80Task *_th
   {
     if (data_frequency < 1.0f)
     {
-      sths34pf80_tmos_odr_set(p_sensor_drv, STHS34PF80_TMOS_ODR_OFF);
+      sths34pf80_odr_set(p_sensor_drv, STHS34PF80_ODR_OFF);
       /* Do not update the model in case of ODR = 0 */
       data_frequency = _this->sensor_status.type.presence.data_frequency;
     }
@@ -3102,7 +3102,7 @@ static sys_error_code_t STHS34PF80TaskSensorDisable(STHS34PF80Task *_this, SMMes
   if (id == _this->id)
   {
     _this->sensor_status.is_active = FALSE;
-    sths34pf80_tmos_odr_set(p_sensor_drv, STHS34PF80_TMOS_ODR_OFF);
+    sths34pf80_odr_set(p_sensor_drv, STHS34PF80_ODR_OFF);
   }
   else
   {
@@ -3124,7 +3124,7 @@ static sys_error_code_t STHS34PF80TaskEnterLowPowerMode(const STHS34PF80Task *_t
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  if (sths34pf80_tmos_odr_set(p_sensor_drv, STHS34PF80_TMOS_ODR_OFF))
+  if (sths34pf80_odr_set(p_sensor_drv, STHS34PF80_ODR_OFF))
   {
     res = SYS_SENSOR_TASK_OP_ERROR_CODE;
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_OP_ERROR_CODE);

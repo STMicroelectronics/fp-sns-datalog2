@@ -106,3 +106,6 @@ uint8_t DeviceInformation_get_totalMemory(float *value)
   return PNPL_NO_ERROR_CODE;
 }
 
+
+
+

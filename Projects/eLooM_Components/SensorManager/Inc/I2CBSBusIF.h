@@ -67,6 +67,8 @@ struct _I2CBSBusIF
 
   uint8_t transmit_receive;
 
+  uint8_t i2c_ack;
+
   /**
     * Board Select GPIO Port
     */

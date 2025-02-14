@@ -89,6 +89,9 @@ uint8_t DatalogAppTask_SetIspuIF(AManagedTask *task_obj);
 uint8_t DatalogAppTask_load_ism330is_ucf_vtbl(const char *ucf_data, int32_t ucf_size,
                                               const char *output_data, int32_t output_size);
 
+uint8_t DatalogAppTask_Set_ICLX_MLCIF(AManagedTask *task_obj);
+uint8_t DatalogAppTask_load_iis2iclx_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
+
 sys_error_code_t DatalogAppTask_msg(ULONG msg);
 
 uint8_t DatalogAppTask_load_ucf(const char *ucf_data, uint32_t ucf_size, const char *output_data, int32_t output_size);

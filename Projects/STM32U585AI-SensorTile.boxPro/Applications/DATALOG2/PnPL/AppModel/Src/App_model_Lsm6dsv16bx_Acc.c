@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16bx_acc;1
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lsm6dsv16bx_acc;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -55,13 +55,13 @@ uint8_t lsm6dsv16bx_acc_comp_init(void)
   lsm6dsv16bx_acc_model.stream_params.stream_id = -1;
   lsm6dsv16bx_acc_model.stream_params.usb_ep = -1;
 
-  lsm6dsv16bx_acc_set_st_ble_stream__acc__unit("g", NULL);
-  lsm6dsv16bx_acc_set_st_ble_stream__acc__format("int16_t", NULL);
+  lsm6dsv16bx_acc_set_st_ble_stream__acc_unit("g", NULL);
+  lsm6dsv16bx_acc_set_st_ble_stream__acc_format("int16_t", NULL);
 
   addSensorToAppModel(id, &lsm6dsv16bx_acc_model);
 
   lsm6dsv16bx_acc_set_sensor_annotation("[EXTERN]\0", NULL);
-  lsm6dsv16bx_acc_set_odr(pnpl_lsm6dsv16bx_acc_odr_hz3840, NULL);
+  lsm6dsv16bx_acc_set_odr(pnpl_lsm6dsv16bx_acc_odr_hz7680, NULL);
   lsm6dsv16bx_acc_set_fs(pnpl_lsm6dsv16bx_acc_fs_g16, NULL);
   lsm6dsv16bx_acc_set_enable(false, NULL);
 #if (HSD_USE_DUMMY_DATA == 1)
@@ -72,10 +72,10 @@ uint8_t lsm6dsv16bx_acc_comp_init(void)
 
   int32_t value = 0;
   lsm6dsv16bx_acc_get_dim(&value);
-  lsm6dsv16bx_acc_set_st_ble_stream__acc__channels(value, NULL);
+  lsm6dsv16bx_acc_set_st_ble_stream__acc_channels(value, NULL);
   float sensitivity = 0.0f;
   lsm6dsv16bx_acc_get_sensitivity(&sensitivity);
-  lsm6dsv16bx_acc_set_st_ble_stream__acc__multiply_factor(sensitivity, NULL);
+  lsm6dsv16bx_acc_set_st_ble_stream__acc_multiply_factor(sensitivity, NULL);
 
   __stream_control(true);
   __sc_set_ble_stream_params(lsm6dsv16bx_acc_model.id);
@@ -198,12 +198,14 @@ uint8_t lsm6dsv16bx_acc_get_measodr(float *value)
 uint8_t lsm6dsv16bx_acc_get_usb_dps(int32_t *value)
 {
   *value = lsm6dsv16bx_acc_model.stream_params.usb_dps;
+  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
 uint8_t lsm6dsv16bx_acc_get_sd_dps(int32_t *value)
 {
   *value = lsm6dsv16bx_acc_model.stream_params.sd_dps;
+  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -236,62 +238,53 @@ uint8_t lsm6dsv16bx_acc_get_sensor_category(int32_t *value)
 uint8_t lsm6dsv16bx_acc_get_mounted(bool *value)
 {
   *value = true;
-  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
 uint8_t lsm6dsv16bx_acc_get_st_ble_stream__id(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_acc_model.st_ble_stream.st_ble_stream_id;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc__enable(bool *value)
+uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc_enable(bool *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_acc_model.st_ble_stream.st_ble_stream_objects.status;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc__unit(char **value)
+uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc_unit(char **value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_acc_model.st_ble_stream.st_ble_stream_objects.unit;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc__format(char **value)
+uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc_format(char **value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_acc_model.st_ble_stream.st_ble_stream_objects.format;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc__elements(int32_t *value)
+uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc_elements(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_acc_model.st_ble_stream.st_ble_stream_objects.elements;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc__channels(int32_t *value)
+uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc_channels(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_acc_model.st_ble_stream.st_ble_stream_objects.channel;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc__multiply_factor(float *value)
+uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc_multiply_factor(float *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_acc_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc__odr(int32_t *value)
+uint8_t lsm6dsv16bx_acc_get_st_ble_stream__acc_odr(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_acc_model.st_ble_stream.st_ble_stream_objects.odr;
   return PNPL_NO_ERROR_CODE;
 }
@@ -409,7 +402,7 @@ uint8_t lsm6dsv16bx_acc_set_fs(pnpl_lsm6dsv16bx_acc_fs_t enum_id, char **respons
 
   float sensitivity = 0.0f;
   lsm6dsv16bx_acc_get_sensitivity(&sensitivity);
-  lsm6dsv16bx_acc_set_st_ble_stream__acc__multiply_factor(sensitivity, NULL);
+  lsm6dsv16bx_acc_set_st_ble_stream__acc_multiply_factor(sensitivity, NULL);
 
   return ret;
 }
@@ -487,7 +480,7 @@ uint8_t lsm6dsv16bx_acc_set_st_ble_stream__id(int32_t value, char **response_mes
   return ret;
 }
 
-uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__enable(bool value, char **response_message)
+uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc_enable(bool value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -498,7 +491,7 @@ uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__enable(bool value, char **respon
   return ret;
 }
 
-uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__unit(const char *value, char **response_message)
+uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc_unit(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -509,7 +502,7 @@ uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__unit(const char *value, char **r
   return ret;
 }
 
-uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__format(const char *value, char **response_message)
+uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc_format(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -520,7 +513,7 @@ uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__format(const char *value, char *
   return ret;
 }
 
-uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__elements(int32_t value, char **response_message)
+uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc_elements(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -528,11 +521,10 @@ uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__elements(int32_t value, char **r
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
   lsm6dsv16bx_acc_model.st_ble_stream.st_ble_stream_objects.elements = value;
-
   return ret;
 }
 
-uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__channels(int32_t value, char **response_message)
+uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc_channels(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -543,7 +535,7 @@ uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__channels(int32_t value, char **r
   return ret;
 }
 
-uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__multiply_factor(float value, char **response_message)
+uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc_multiply_factor(float value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -554,7 +546,7 @@ uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__multiply_factor(float value, cha
   return ret;
 }
 
-uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__odr(int32_t value, char **response_message)
+uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc_odr(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -564,4 +556,6 @@ uint8_t lsm6dsv16bx_acc_set_st_ble_stream__acc__odr(int32_t value, char **respon
   lsm6dsv16bx_acc_model.st_ble_stream.st_ble_stream_objects.odr = value;
   return ret;
 }
+
+
 

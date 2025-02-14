@@ -201,6 +201,20 @@ const MX_I2CParams_t MX_I2C1InitParams =
   .i2c_dma_rx_irq_n = GPDMA1_Channel2_IRQn,
   .i2c_dma_tx_irq_n = GPDMA1_Channel3_IRQn
 };
+
+/**
+  * I2C3 initialization parameters.
+  */
+const MX_I2CParams_t MX_I2C3InitParams =
+{
+  .p_mx_init_f = MX_I2C3_Init,
+  .p_i2c_handle = &hi2c3,
+  .p_mx_dma_init_f = MX_GPDMA1_InitCustom,
+  .i2c_er_irq_n = I2C3_ER_IRQn,
+  .i2c_ev_irq_n = I2C3_EV_IRQn,
+  .i2c_dma_rx_irq_n = GPDMA1_Channel8_IRQn,
+  .i2c_dma_tx_irq_n = GPDMA1_Channel4_IRQn
+};
 #if 0
 /**
   * MDF initialization parameters.

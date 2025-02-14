@@ -3022,7 +3022,7 @@
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lps22df_Press.h</name>
                         </file>
                         <file>
-                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Sgp40_Temp.h</name>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Sgp40_Voc.h</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Sht40_Hum.h</name>
@@ -3106,7 +3106,7 @@
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lps22df_Press.c</name>
                         </file>
                         <file>
-                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Sgp40_Temp.c</name>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Sgp40_Voc.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Sht40_Hum.c</name>
@@ -3190,7 +3190,7 @@
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lps22df_Press_PnPL.h</name>
                         </file>
                         <file>
-                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Sgp40_Temp_PnPL.h</name>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Sgp40_Voc_PnPL.h</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Sht40_Hum_PnPL.h</name>
@@ -3271,7 +3271,7 @@
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Lps22df_Press_PnPL.c</name>
                         </file>
                         <file>
-                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Sgp40_Temp_PnPL.c</name>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Sgp40_Voc_PnPL.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Sht40_Hum_PnPL.c</name>
@@ -5371,6 +5371,12 @@
                             </file>
                             <file>
                                 <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_allocate_mulv_safe.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_byte_pool_create.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_byte_pool_search.c</name>
                             </file>
                             <file>
                                 <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_compare.c</name>

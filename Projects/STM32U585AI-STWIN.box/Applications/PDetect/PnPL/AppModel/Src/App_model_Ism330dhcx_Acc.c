@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ism330dhcx_acc;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -380,4 +380,6 @@ uint8_t ism330dhcx_acc_set_sensor_annotation(const char *value, char **response_
   strcpy(ism330dhcx_acc_model.annotation, value);
   return ret;
 }
+
+
 

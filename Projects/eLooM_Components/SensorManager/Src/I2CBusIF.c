@@ -42,6 +42,7 @@ ABusIF *I2CBusIFAlloc(uint16_t who_am_i, uint8_t address, uint8_t auto_inc)
     _this->auto_inc = auto_inc;
     _this->address_size = I2C_MEMADD_SIZE_8BIT;
     _this->transmit_receive = 0;
+    _this->i2c_ack = 0;
 
     // initialize the software resources
     if (TX_SUCCESS != tx_semaphore_create(&_this->sync_obj, "I2C_IP_S", 0))
@@ -70,6 +71,7 @@ ABusIF *I2CBusIFAlloc16(uint16_t who_am_i, uint16_t address, uint8_t auto_inc)
     _this->auto_inc = auto_inc;
     _this->address_size = I2C_MEMADD_SIZE_16BIT;
     _this->transmit_receive = 0;
+    _this->i2c_ack = 0;
 
     // initialize the software resources
     if (TX_SUCCESS != tx_semaphore_create(&_this->sync_obj, "I2C_IP_S", 0))
@@ -98,6 +100,7 @@ ABusIF *I2CBusIFAllocTransmitReceive(uint16_t who_am_i, uint8_t address, uint8_t
     _this->auto_inc = auto_inc;
     _this->address_size = I2C_MEMADD_SIZE_8BIT;
     _this->transmit_receive = 1;
+    _this->i2c_ack = 0;
 
     // initialize the software resources
     if (TX_SUCCESS != tx_semaphore_create(&_this->sync_obj, "I2C_IP_S", 0))
@@ -118,13 +121,19 @@ sys_error_code_t I2CBusIFWaitIOComplete(I2CBusIF *_this)
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  // if (_this->m_xSyncObj != NULL){//TODO: STF.Port - how to check the sem is initialized ??
   if (TX_SUCCESS != tx_semaphore_get(&_this->sync_obj, TX_WAIT_FOREVER))
   {
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
     res = SYS_UNDEFINED_ERROR_CODE;
   }
-  // }
+  else
+  {
+    if (_this->i2c_ack != 1)
+    {
+      SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
+      res = SYS_UNDEFINED_ERROR_CODE;
+    }
+  }
 
   return res;
 }
@@ -134,13 +143,19 @@ sys_error_code_t I2CBusIFNotifyIOComplete(I2CBusIF *_this)
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  // if (_this->m_xSyncObj != NULL){//TODO: STF.Port - how to check the sem is initialized ??
   if (TX_SUCCESS != tx_semaphore_put(&_this->sync_obj))
   {
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
     res = SYS_UNDEFINED_ERROR_CODE;
   }
-//  }
+  else
+  {
+    if (_this->i2c_ack != 1)
+    {
+      SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
+      res = SYS_UNDEFINED_ERROR_CODE;
+    }
+  }
 
   return res;
 }

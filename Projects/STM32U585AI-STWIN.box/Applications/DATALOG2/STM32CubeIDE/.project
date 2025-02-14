@@ -1643,6 +1643,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/iis2dlpc/iis2dlpc_reg.h</locationURI>
 		</link>
 		<link>
+			<name>Drivers/BSP/Components/iis2dulpx/iis2dulpx_reg.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/iis2dulpx/iis2dulpx_reg.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/Components/iis2dulpx/iis2dulpx_reg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/iis2dulpx/iis2dulpx_reg.h</locationURI>
+		</link>
+		<link>
 			<name>Drivers/BSP/Components/iis2iclx/iis2iclx_reg.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/iis2iclx/iis2iclx_reg.c</locationURI>
@@ -2123,9 +2133,24 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Iis2dlpc_Acc.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Iis2dulpx_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Iis2dulpx_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Iis2dulpx_Mlc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Iis2dulpx_Mlc.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Inc/App_model_Iis2iclx_Acc.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Iis2iclx_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Iis2iclx_Mlc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Iis2iclx_Mlc.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/AppModel/Inc/App_model_Iis2mdc_Mag.h</name>
@@ -2263,9 +2288,24 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Iis2dlpc_Acc.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Iis2dulpx_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Iis2dulpx_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Iis2dulpx_Mlc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Iis2dulpx_Mlc.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Src/App_model_Iis2iclx_Acc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Iis2iclx_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Iis2iclx_Mlc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Iis2iclx_Mlc.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/AppModel/Src/App_model_Iis2mdc_Mag.c</name>
@@ -2398,9 +2438,24 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Iis2dlpc_Acc_PnPL.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Components/Inc/Iis2dulpx_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Iis2dulpx_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Iis2dulpx_Mlc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Iis2dulpx_Mlc_PnPL.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Components/Inc/Iis2iclx_Acc_PnPL.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Iis2iclx_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Iis2iclx_Mlc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Iis2iclx_Mlc_PnPL.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Components/Inc/Iis2mdc_Mag_PnPL.h</name>
@@ -2533,9 +2588,24 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Iis2dlpc_Acc_PnPL.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Components/Src/Iis2dulpx_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Iis2dulpx_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Iis2dulpx_Mlc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Iis2dulpx_Mlc_PnPL.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Components/Src/Iis2iclx_Acc_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Iis2iclx_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Iis2iclx_Mlc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Iis2iclx_Mlc_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Components/Src/Iis2mdc_Mag_PnPL.c</name>
@@ -2681,6 +2751,16 @@
 			<name>User/eLooM_Components/SensorManager/Inc/IIS2DLPCTask_vtbl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/IIS2DLPCTask_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/IIS2DULPXTask.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/IIS2DULPXTask.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/IIS2DULPXTask_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/IIS2DULPXTask_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Inc/IIS2ICLXTask.h</name>
@@ -2906,6 +2986,11 @@
 			<name>User/eLooM_Components/SensorManager/Src/IIS2DLPCTask.c</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/IIS2DLPCTask.c</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Src/IIS2DULPXTask.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/IIS2DULPXTask.c</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Src/IIS2ICLXTask.c</name>
@@ -7501,6 +7586,16 @@
 			<name>Middlewares/ST/usbx/common/core/src/ux_utility_memory_allocate_mulv_safe.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/core/src/ux_utility_memory_allocate_mulv_safe.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/usbx/common/core/src/ux_utility_memory_byte_pool_create.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/core/src/ux_utility_memory_byte_pool_create.c</locationURI>
+		</link>
+		<link>
+			<name>Middlewares/ST/usbx/common/core/src/ux_utility_memory_byte_pool_search.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/usbx/common/core/src/ux_utility_memory_byte_pool_search.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/usbx/common/core/src/ux_utility_memory_compare.c</name>

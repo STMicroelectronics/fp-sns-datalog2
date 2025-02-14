@@ -1431,15 +1431,18 @@ static sys_error_code_t VD6283TXTaskSensorReadData(VD6283TXTask *_this)
 
   res = VD6283TX_GetValues(p_platform_drv, _this->p_sensor_data_buff);
 
-#if (HSD_USE_DUMMY_DATA == 1)
-  uint16_t i = 0;
-  int32_t *p32 = (int32_t *)_this->p_sensor_data_buff;
-
-  for (i = 0; i < VD6283TX_MAX_CHANNELS; i++)
+  if (!SYS_IS_ERROR_CODE(res))
   {
-    *p32++ = dummyDataCounter++;
-  }
+#if (HSD_USE_DUMMY_DATA == 1)
+    uint16_t i = 0;
+    int32_t *p32 = (int32_t *)_this->p_sensor_data_buff;
+
+    for (i = 0; i < VD6283TX_MAX_CHANNELS; i++)
+    {
+      *p32++ = dummyDataCounter++;
+    }
 #endif
+  }
 
   return res;
 }

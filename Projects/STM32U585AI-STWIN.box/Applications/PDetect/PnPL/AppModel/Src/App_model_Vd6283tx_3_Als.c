@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_3_als;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_3_als;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -37,7 +37,7 @@
 
 /* USER defines --------------------------------------------------------------*/
 
-/* VD6283TX_2_ALS PnPL Component ---------------------------------------------*/
+/* VD6283TX_3_ALS PnPL Component ---------------------------------------------*/
 static SensorModel_t vd6283tx_3_als_model;
 extern AppModel_t app_model;
 
@@ -1106,4 +1106,6 @@ uint8_t vd6283tx_3_als_set_sensor_annotation(const char *value, char **response_
   strcpy(vd6283tx_3_als_model.annotation, value);
   return ret;
 }
+
+
 

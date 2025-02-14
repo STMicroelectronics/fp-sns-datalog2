@@ -367,11 +367,14 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/threadx/ports/cortex_m33/iar/inc</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/CMSIS/Include</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/h3lis331dl</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ilps28qsw</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lis2du12</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lis2mdl</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lps22df</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv16bx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv16x</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv32x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/stts22h</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/SensorTileBoxPro</state>
@@ -1476,11 +1479,14 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/threadx/ports/cortex_m33/iar/inc</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/CMSIS/Include</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/h3lis331dl</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ilps28qsw</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lis2du12</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lis2mdl</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lps22df</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv16bx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv16x</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv32x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/stts22h</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/SensorTileBoxPro</state>
@@ -2331,10 +2337,10 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\ABusIF.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\FAKESENSORTask.h</name>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\H3LIS331DLTask.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\FAKESENSORTask_vtbl.h</name>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\H3LIS331DLTask_vtbl.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\I2CBusIF.h</name>
@@ -2380,6 +2386,12 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\ILPS22QSTask_vtbl.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\ILPS28QSWTask.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\ILPS28QSWTask_vtbl.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\IMP23ABSUTask.h</name>
@@ -2460,6 +2472,12 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\LSM6DSV16XTask_vtbl.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\LSM6DSV32XTask.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\LSM6DSV32XTask_vtbl.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\MP23DB01HPTask.h</name>
                     </file>
                     <file>
@@ -2529,10 +2547,16 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\ABusIF.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\H3LIS331DLTask.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\I2CBusIF.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\I2CBusTask.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\ILPS28QSWTask.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\ISM330ISTask.c</name>
@@ -2551,6 +2575,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\LSM6DSV16XTask.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\LSM6DSV32XTask.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\MP23DB01HPTask.c</name>
@@ -2966,6 +2993,12 @@
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Firmware_Info.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_H3lis331dl_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ilps28qsw_Press.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism330is_Acc.h</name>
                         </file>
                         <file>
@@ -3005,6 +3038,15 @@
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lsm6dsv16x_Mlc.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lsm6dsv32x_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lsm6dsv32x_Gyro.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Lsm6dsv32x_Mlc.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Mp23db01hp_Mic.h</name>
                         </file>
                         <file>
@@ -3030,6 +3072,12 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Firmware_Info.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_H3lis331dl_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ilps28qsw_Press.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism330is_Acc.c</name>
@@ -3071,6 +3119,15 @@
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lsm6dsv16x_Mlc.c</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lsm6dsv32x_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lsm6dsv32x_Gyro.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Lsm6dsv32x_Mlc.c</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Mp23db01hp_Mic.c</name>
                         </file>
                         <file>
@@ -3096,6 +3153,12 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Firmware_Info_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\H3lis331dl_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ilps28qsw_Press_PnPL.h</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism330is_Acc_PnPL.h</name>
@@ -3137,6 +3200,15 @@
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lsm6dsv16x_Mlc_PnPL.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lsm6dsv32x_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lsm6dsv32x_Gyro_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Lsm6dsv32x_Mlc_PnPL.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Mp23db01hp_Mic_PnPL.h</name>
                         </file>
                         <file>
@@ -3159,6 +3231,12 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Firmware_Info_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\H3lis331dl_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ilps28qsw_Press_PnPL.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism330is_Acc_PnPL.c</name>
@@ -3198,6 +3276,15 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Lsm6dsv16x_Mlc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lsm6dsv32x_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lsm6dsv32x_Gyro_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Lsm6dsv32x_Mlc_PnPL.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Mp23db01hp_Mic_PnPL.c</name>
@@ -3271,6 +3358,12 @@
             <group>
                 <name>Components</name>
                 <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\h3lis331dl\h3lis331dl_reg.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ilps28qsw\ilps28qsw_reg.c</name>
+                </file>
+                <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ism330is\ism330is_reg.c</name>
                 </file>
                 <file>
@@ -3287,6 +3380,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x\lsm6dsv16x_reg.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\lsm6dsv32x\lsm6dsv32x_reg.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\stts22h\stts22h_reg.c</name>
@@ -5201,6 +5297,12 @@
                             </file>
                             <file>
                                 <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_allocate_mulv_safe.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_byte_pool_create.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_byte_pool_search.c</name>
                             </file>
                             <file>
                                 <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_compare.c</name>

@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:sensors:sht40_temp;1
+  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:sensors:sht40_temp;3
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -172,10 +172,12 @@ uint8_t Sht40_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialize
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_property = false;
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "sht40_temp.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "sht40_temp.enable");
+    valid_property = true;
     ret = sht40_temp_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -191,27 +193,10 @@ uint8_t Sht40_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialize
       json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
     }
   }
-  if (json_object_dothas_value(tempJSONObject, "sht40_temp.samples_per_ts"))
-  {
-    int32_t samples_per_ts = (int32_t)json_object_dotget_number(tempJSONObject, "sht40_temp.samples_per_ts");
-    ret = sht40_temp_set_samples_per_ts(samples_per_ts, &resp_msg);
-    json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
-    if (ret == PNPL_NO_ERROR_CODE)
-    {
-      json_object_dotset_number(respJSONObject, "PnPL_Response.value", samples_per_ts);
-      json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
-    }
-    else
-    {
-      int32_t old_samples_per_ts;
-      sht40_temp_get_samples_per_ts(&old_samples_per_ts);
-      json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_samples_per_ts);
-      json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
-    }
-  }
   if (json_object_dothas_value(tempJSONObject, "sht40_temp.sensor_annotation"))
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "sht40_temp.sensor_annotation");
+    valid_property = true;
     ret = sht40_temp_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -228,15 +213,26 @@ uint8_t Sht40_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialize
     }
   }
   json_value_free(tempJSON);
-  if (pretty == 1)
+  /* Check if received a valid request to modify an existing property */
+  if (valid_property)
   {
-    *response = json_serialize_to_string_pretty(respJSON);
-    *size = json_serialization_size_pretty(respJSON);
+    if (pretty == 1)
+    {
+      *response = json_serialize_to_string_pretty(respJSON);
+      *size = json_serialization_size_pretty(respJSON);
+    }
+    else
+    {
+      *response = json_serialize_to_string(respJSON);
+      *size = json_serialization_size(respJSON);
+    }
   }
   else
   {
-    *response = json_serialize_to_string(respJSON);
-    *size = json_serialization_size(respJSON);
+    /* Set property is not containing a valid property/parameter: PnPL_Error */
+    char *log_message = "Invalid property for sht40_temp";
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

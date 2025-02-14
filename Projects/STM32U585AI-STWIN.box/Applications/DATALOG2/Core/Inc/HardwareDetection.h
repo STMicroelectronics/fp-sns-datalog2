@@ -36,6 +36,7 @@ typedef enum
   ST25DV_ERROR,
 } hwd_st25dv_version;
 
+boolean_t HardwareDetection_Check_Ext_IIS2DULPX(void);
 boolean_t HardwareDetection_Check_Ext_IIS3DWB(void);
 boolean_t HardwareDetection_Check_Ext_ISM330BX(void);
 boolean_t HardwareDetection_Check_Ext_ISM330IS(void);

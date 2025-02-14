@@ -39,7 +39,9 @@
 
 /* 0x1388 corresponds to 5000 decimal. This will do a timeout of 5 seconds */
 #define V53L8CX_POLL_TIMEOUT  (0x1388U)
+#ifndef UNUSED
 #define UNUSED(x) (void)(x)
+#endif
 
 /**
   * @}
@@ -213,10 +215,10 @@ int32_t VL53L8CX_ReadID(VL53L8CX_Object_t *pObj, uint32_t *pId)
   }
   else
   {
-    status |= WrByte(&pObj->Dev.platform, 0x7fff, 0x00);
-    status |= RdByte(&pObj->Dev.platform, 0, &device_id);
-    status |= RdByte(&pObj->Dev.platform, 1, &revision_id);
-    status |= WrByte(&pObj->Dev.platform, 0x7fff, 0x02);
+    status |= VL53L8CX_WrByte(&pObj->Dev.platform, 0x7fff, 0x00);
+    status |= VL53L8CX_RdByte(&pObj->Dev.platform, 0, &device_id);
+    status |= VL53L8CX_RdByte(&pObj->Dev.platform, 1, &revision_id);
+    status |= VL53L8CX_WrByte(&pObj->Dev.platform, 0x7fff, 0x02);
 
     if (status == 0U)
     {

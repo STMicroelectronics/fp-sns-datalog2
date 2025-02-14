@@ -1241,15 +1241,18 @@ static sys_error_code_t SHT40TaskSensorReadData(SHT40Task *_this)
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   float data[2];
 
-  sht40ad1b_data_get(p_sensor_drv, data);
-  _this->humidity = data[0];
-  _this->temperature = data[1];
+  res = sht40ad1b_data_get(p_sensor_drv, data);
+
+  if (!SYS_IS_ERROR_CODE(res))
+  {
+    _this->humidity = data[0];
+    _this->temperature = data[1];
 
 #if (HSD_USE_DUMMY_DATA == 1)
-  _this->temperature = (float) dummyDataCounter++;
-  _this->humidity = (float) dummyDataCounter++;
+    _this->temperature = (float) dummyDataCounter++;
+    _this->humidity = (float) dummyDataCounter++;
 #endif
-
+  }
   return res;
 }
 

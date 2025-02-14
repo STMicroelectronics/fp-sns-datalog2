@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:other:tags_info;2
+  * dtmi:vespucci:other:tags_info;3
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -250,8 +250,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag0.label"))
     {
-      valid_property = true;
       const char *sw_tag0__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag0.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag0__label(sw_tag0__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -272,8 +272,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag0.enabled"))
     {
-      valid_property = true;
       bool sw_tag0__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag0.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag0__enabled(sw_tag0__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -294,8 +294,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag0.status"))
     {
-      valid_property = true;
       bool sw_tag0__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag0.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag0__status(sw_tag0__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -316,8 +316,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag1.label"))
     {
-      valid_property = true;
       const char *sw_tag1__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag1.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag1__label(sw_tag1__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -338,8 +338,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag1.enabled"))
     {
-      valid_property = true;
       bool sw_tag1__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag1.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag1__enabled(sw_tag1__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -360,8 +360,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag1.status"))
     {
-      valid_property = true;
       bool sw_tag1__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag1.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag1__status(sw_tag1__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -382,8 +382,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag2.label"))
     {
-      valid_property = true;
       const char *sw_tag2__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag2.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag2__label(sw_tag2__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -404,8 +404,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag2.enabled"))
     {
-      valid_property = true;
       bool sw_tag2__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag2.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag2__enabled(sw_tag2__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -426,8 +426,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag2.status"))
     {
-      valid_property = true;
       bool sw_tag2__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag2.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag2__status(sw_tag2__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -448,8 +448,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag3.label"))
     {
-      valid_property = true;
       const char *sw_tag3__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag3.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag3__label(sw_tag3__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -470,8 +470,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag3.enabled"))
     {
-      valid_property = true;
       bool sw_tag3__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag3.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag3__enabled(sw_tag3__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -492,8 +492,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag3.status"))
     {
-      valid_property = true;
       bool sw_tag3__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag3.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag3__status(sw_tag3__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -514,8 +514,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag4.label"))
     {
-      valid_property = true;
       const char *sw_tag4__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag4.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag4__label(sw_tag4__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -536,8 +536,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag4.enabled"))
     {
-      valid_property = true;
       bool sw_tag4__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag4.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag4__enabled(sw_tag4__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -558,8 +558,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag4.status"))
     {
-      valid_property = true;
       bool sw_tag4__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag4.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag4__status(sw_tag4__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -580,8 +580,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag5.label"))
     {
-      valid_property = true;
       const char *sw_tag5__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag5.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag5__label(sw_tag5__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -602,8 +602,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag5.enabled"))
     {
-      valid_property = true;
       bool sw_tag5__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag5.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag5__enabled(sw_tag5__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -624,8 +624,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag5.status"))
     {
-      valid_property = true;
       bool sw_tag5__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag5.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag5__status(sw_tag5__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -646,8 +646,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag6.label"))
     {
-      valid_property = true;
       const char *sw_tag6__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag6.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag6__label(sw_tag6__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -668,8 +668,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag6.enabled"))
     {
-      valid_property = true;
       bool sw_tag6__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag6.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag6__enabled(sw_tag6__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -690,8 +690,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag6.status"))
     {
-      valid_property = true;
       bool sw_tag6__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag6.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag6__status(sw_tag6__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -712,8 +712,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag7.label"))
     {
-      valid_property = true;
       const char *sw_tag7__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag7.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag7__label(sw_tag7__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -734,8 +734,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag7.enabled"))
     {
-      valid_property = true;
       bool sw_tag7__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag7.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag7__enabled(sw_tag7__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -756,8 +756,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag7.status"))
     {
-      valid_property = true;
       bool sw_tag7__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag7.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag7__status(sw_tag7__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -778,8 +778,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag8.label"))
     {
-      valid_property = true;
       const char *sw_tag8__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag8.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag8__label(sw_tag8__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -800,8 +800,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag8.enabled"))
     {
-      valid_property = true;
       bool sw_tag8__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag8.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag8__enabled(sw_tag8__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -822,8 +822,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag8.status"))
     {
-      valid_property = true;
       bool sw_tag8__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag8.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag8__status(sw_tag8__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -844,8 +844,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag9.label"))
     {
-      valid_property = true;
       const char *sw_tag9__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag9.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag9__label(sw_tag9__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -866,8 +866,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag9.enabled"))
     {
-      valid_property = true;
       bool sw_tag9__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag9.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag9__enabled(sw_tag9__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -888,8 +888,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag9.status"))
     {
-      valid_property = true;
       bool sw_tag9__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag9.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag9__status(sw_tag9__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -910,8 +910,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag10.label"))
     {
-      valid_property = true;
       const char *sw_tag10__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag10.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag10__label(sw_tag10__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -932,8 +932,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag10.enabled"))
     {
-      valid_property = true;
       bool sw_tag10__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag10.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag10__enabled(sw_tag10__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -954,8 +954,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag10.status"))
     {
-      valid_property = true;
       bool sw_tag10__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag10.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag10__status(sw_tag10__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -976,8 +976,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag11.label"))
     {
-      valid_property = true;
       const char *sw_tag11__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag11.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag11__label(sw_tag11__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -998,8 +998,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag11.enabled"))
     {
-      valid_property = true;
       bool sw_tag11__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag11.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag11__enabled(sw_tag11__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1020,8 +1020,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag11.status"))
     {
-      valid_property = true;
       bool sw_tag11__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag11.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag11__status(sw_tag11__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1042,8 +1042,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag12.label"))
     {
-      valid_property = true;
       const char *sw_tag12__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag12.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag12__label(sw_tag12__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1064,8 +1064,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag12.enabled"))
     {
-      valid_property = true;
       bool sw_tag12__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag12.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag12__enabled(sw_tag12__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1086,8 +1086,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag12.status"))
     {
-      valid_property = true;
       bool sw_tag12__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag12.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag12__status(sw_tag12__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1108,8 +1108,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag13.label"))
     {
-      valid_property = true;
       const char *sw_tag13__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag13.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag13__label(sw_tag13__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1130,8 +1130,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag13.enabled"))
     {
-      valid_property = true;
       bool sw_tag13__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag13.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag13__enabled(sw_tag13__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1152,8 +1152,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag13.status"))
     {
-      valid_property = true;
       bool sw_tag13__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag13.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag13__status(sw_tag13__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1174,8 +1174,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag14.label"))
     {
-      valid_property = true;
       const char *sw_tag14__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag14.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag14__label(sw_tag14__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1196,8 +1196,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag14.enabled"))
     {
-      valid_property = true;
       bool sw_tag14__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag14.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag14__enabled(sw_tag14__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1218,8 +1218,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag14.status"))
     {
-      valid_property = true;
       bool sw_tag14__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag14.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag14__status(sw_tag14__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1240,8 +1240,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag15.label"))
     {
-      valid_property = true;
       const char *sw_tag15__label = json_object_dotget_string(tempJSONObject, "tags_info.sw_tag15.label");
+      valid_property = true;
       ret = tags_info_set_sw_tag15__label(sw_tag15__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1262,8 +1262,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag15.enabled"))
     {
-      valid_property = true;
       bool sw_tag15__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag15.enabled");
+      valid_property = true;
       ret = tags_info_set_sw_tag15__enabled(sw_tag15__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1284,8 +1284,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.sw_tag15.status"))
     {
-      valid_property = true;
       bool sw_tag15__status = json_object_dotget_boolean(tempJSONObject, "tags_info.sw_tag15.status");
+      valid_property = true;
       ret = tags_info_set_sw_tag15__status(sw_tag15__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1306,8 +1306,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.hw_tag0.label"))
     {
-      valid_property = true;
       const char *hw_tag0__label = json_object_dotget_string(tempJSONObject, "tags_info.hw_tag0.label");
+      valid_property = true;
       ret = tags_info_set_hw_tag0__label(hw_tag0__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1328,8 +1328,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.hw_tag0.enabled"))
     {
-      valid_property = true;
       bool hw_tag0__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.hw_tag0.enabled");
+      valid_property = true;
       ret = tags_info_set_hw_tag0__enabled(hw_tag0__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1350,8 +1350,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.hw_tag0.status"))
     {
-      valid_property = true;
       bool hw_tag0__status = json_object_dotget_boolean(tempJSONObject, "tags_info.hw_tag0.status");
+      valid_property = true;
       ret = tags_info_set_hw_tag0__status(hw_tag0__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1372,8 +1372,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.hw_tag1.label"))
     {
-      valid_property = true;
       const char *hw_tag1__label = json_object_dotget_string(tempJSONObject, "tags_info.hw_tag1.label");
+      valid_property = true;
       ret = tags_info_set_hw_tag1__label(hw_tag1__label, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1394,8 +1394,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.hw_tag1.enabled"))
     {
-      valid_property = true;
       bool hw_tag1__enabled = json_object_dotget_boolean(tempJSONObject, "tags_info.hw_tag1.enabled");
+      valid_property = true;
       ret = tags_info_set_hw_tag1__enabled(hw_tag1__enabled, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1416,8 +1416,8 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   {
     if (json_object_dothas_value(tempJSONObject, "tags_info.hw_tag1.status"))
     {
-      valid_property = true;
       bool hw_tag1__status = json_object_dotget_boolean(tempJSONObject, "tags_info.hw_tag1.status");
+      valid_property = true;
       ret = tags_info_set_hw_tag1__status(hw_tag1__status, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -1435,7 +1435,7 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
     }
   }
   json_value_free(tempJSON);
-  /* Check if received a request to modify an existing property */
+  /* Check if received a valid request to modify an existing property */
   if (valid_property)
   {
     if (pretty == 1)
@@ -1452,8 +1452,9 @@ uint8_t Tags_Info_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialized
   else
   {
     /* Set property is not containing a valid property/parameter: PnPL_Error */
-    char *log_message = "Invalid property for Tags_Info";
+    char *log_message = "Invalid property for tags_info";
     PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

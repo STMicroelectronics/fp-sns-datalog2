@@ -4,11 +4,16 @@
   * \tableofcontents
   *
   * \section intro_sm Introduction
-  * SensorManager is an eLooM-based application-level module that interfaces sensors and offers their data to other application modules.
+  * The **SensorManager_threadx** is an eLooM-based application-level FW component.
+  *
+  * It retrieves sensor data and sets the sensors parameters.
   * It is implemented as an acquisition engine that:
-  * - orchestrates multiple task accesses to sensor bus
-  * - defines interfaces to avoid implementation dependencies
-  * - dispatches events to notify when a certain amount of data is available
+  *
+  * - Orchestrates multiple tasks accesses to sensor bus data as follows:
+  *   - One sensor for each task
+  *   - Read/write requests via queue to handle concurrency on common buses
+  * - Defines interfaces to avoid implementation dependencies
+  * - Dispatches events to notify when data ready
 
   * \section design_sm Design
   * As for any eLooM-based module, the SensorManager is packed into a folder. It is totally self-contained, so it is independent from other modules and
@@ -26,27 +31,44 @@
   * \section folder_sm Folder structure
   * The SensorManager folder contains the following kind of files:
   * - Communication: managed tasks and interfaces that implements the bus peripheral communication. The supported peripherals are:
+  *   + DFSDM
   *   + I2C
   *   + SPI
   *   + MDF
   * - Sensors: managed tasks and interfaces that implements the single sensor threads. The supported sensors are:
+  *   + H3LIS331DL
+  *   + IIS2DH
   *   + IIS2DLPC
+  *   + IIS2DULPX
   *   + IIS2ICLX
   *   + IIS2MDC
   *   + IIS3DWB
   *   + ILPS22QS
+  *   + ILPS28QSW
   *   + IMP23ABSU
   *   + IMP34DT05
+  *   + ISM330BX
   *   + ISM330DHCX
   *   + ISM330IS
   *   + LIS2DU12
   *   + LIS2MDL
   *   + LPS22DF
   *   + LPS22HH
+  *   + LSM6DSV16BX
   *   + LSM6DSV16X
+  *   + LSM6DSV32X
   *   + MP23DB01HP
+  *   + SGP40
+  *   + SHT40
+  *   + STHS34PF80
   *   + STTS22H
+  *   + STTS751
+  *   + TSC1641
+  *   + VD6283TX
+  *   + VL53L8CX
   * - Utilities: SensorManager and eLooM macros, services and utilities
+  *
+  * It includes also a DUMMYSENSOR implementation that you can use for debugging purposes and as a template to build up new sensors tasks.
   *
   * \anchor fig1 \image html SensorManager_folder.jpg "Fig.1 - SensorManager files" width=300px
 

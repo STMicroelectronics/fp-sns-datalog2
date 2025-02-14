@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:sensors:sht40_temp;1
+  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:sensors:sht40_temp;3
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -84,7 +84,6 @@ uint8_t sht40_temp_get_mounted(bool *value);
 uint8_t sht40_temp_get_stream_id(int8_t *value);
 uint8_t sht40_temp_get_ep_id(int8_t *value);
 uint8_t sht40_temp_set_enable(bool value, char **response_message);
-uint8_t sht40_temp_set_samples_per_ts(int32_t value, char **response_message);
 uint8_t sht40_temp_set_sensor_annotation(const char *value, char **response_message);
 
 

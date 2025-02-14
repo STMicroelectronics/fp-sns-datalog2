@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_3_tmos;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_3_tmos;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -95,8 +95,8 @@ uint8_t sths34pf80_3_tmos_get_sd_dps(int32_t *value);
 uint8_t sths34pf80_3_tmos_get_data_type(char **value);
 uint8_t sths34pf80_3_tmos_get_sensor_annotation(char **value);
 uint8_t sths34pf80_3_tmos_get_sensor_category(int32_t *value);
-uint8_t sths34pf80_3_tmos_get_mounted(bool *value);
 uint8_t sths34pf80_3_tmos_get_dim(int32_t *value);
+uint8_t sths34pf80_3_tmos_get_mounted(bool *value);
 uint8_t sths34pf80_3_tmos_get_stream_id(int8_t *value);
 uint8_t sths34pf80_3_tmos_get_ep_id(int8_t *value);
 uint8_t sths34pf80_3_tmos_set_enable(bool value, char **response_message);

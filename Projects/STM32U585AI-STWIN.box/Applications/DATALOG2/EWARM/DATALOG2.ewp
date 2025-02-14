@@ -369,6 +369,7 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/CMSIS/Include</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/hts221</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis2dlpc</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis2dulpx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis2iclx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis2mdc</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis3dwb</state>
@@ -1489,13 +1490,13 @@
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/usbx/ports/generic/inc</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/eLooM/Inc</state>
-                    <state>$PROJ_DIR$/../../../../../Middlewares/ST/CircularBufferDL2</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/Third_Party/parson</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/threadx/ports/cortex_m33/iar/inc</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/CMSIS/Include</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/hts221</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis2dlpc</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis2dulpx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis2iclx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis2mdc</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis3dwb</state>
@@ -1518,6 +1519,7 @@
                     <state>$PROJ_DIR$/../../../../eLooM_Components/TagManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/PnPLCompManager/Inc</state>
                     <state>$PROJ_DIR$/../../../../eLooM_Components/EMData/Inc</state>
+                    <state>$PROJ_DIR$/../../../../../Middlewares/ST/CircularBufferDL2</state>
                     <state>$PROJ_DIR$/../../../../../Middlewares/ST/threadx/utility/execution_profile_kit</state>
                     <state>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp</state>
                     <state>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\netxduo\addons\dns</state>
@@ -2389,6 +2391,12 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\IIS2DLPCTask_vtbl.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\IIS2DULPXTask.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\IIS2DULPXTask_vtbl.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\IIS2ICLXTask.h</name>
                     </file>
                     <file>
@@ -2531,6 +2539,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\IIS2DLPCTask.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\IIS2DULPXTask.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\IIS2ICLXTask.c</name>
@@ -3027,7 +3038,16 @@
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Iis2dlpc_Acc.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Iis2dulpx_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Iis2dulpx_Mlc.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Iis2iclx_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Iis2iclx_Mlc.h</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Iis2mdc_Mag.h</name>
@@ -3114,7 +3134,16 @@
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Iis2dlpc_Acc.c</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Iis2dulpx_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Iis2dulpx_Mlc.c</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Iis2iclx_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Iis2iclx_Mlc.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Iis2mdc_Mag.c</name>
@@ -3201,7 +3230,16 @@
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Iis2dlpc_Acc_PnPL.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Iis2dulpx_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Iis2dulpx_Mlc_PnPL.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Iis2iclx_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Iis2iclx_Mlc_PnPL.h</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Iis2mdc_Mag_PnPL.h</name>
@@ -3285,7 +3323,16 @@
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Iis2dlpc_Acc_PnPL.c</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Iis2dulpx_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Iis2dulpx_Mlc_PnPL.c</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Iis2iclx_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Iis2iclx_Mlc_PnPL.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Iis2mdc_Mag_PnPL.c</name>
@@ -3447,6 +3494,9 @@
                 </group>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\iis2dlpc\iis2dlpc_reg.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\iis2dulpx\iis2dulpx_reg.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\iis2iclx\iis2iclx_reg.c</name>
@@ -6628,6 +6678,12 @@
                             </file>
                             <file>
                                 <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_allocate_mulv_safe.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_byte_pool_create.c</name>
+                            </file>
+                            <file>
+                                <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_byte_pool_search.c</name>
                             </file>
                             <file>
                                 <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\usbx\common\core\src\ux_utility_memory_compare.c</name>

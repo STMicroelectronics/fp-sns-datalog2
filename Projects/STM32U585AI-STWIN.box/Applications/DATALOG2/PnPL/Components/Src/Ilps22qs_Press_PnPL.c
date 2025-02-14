@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:ilps22qs_press;4
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:ilps22qs_press;5
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -138,19 +138,19 @@ uint8_t Ilps22qs_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_number(JSON_Status, "ilps22qs_press.sensor_category", temp_i);
   ilps22qs_press_get_st_ble_stream__id(&temp_i);
   json_object_dotset_number(JSON_Status, "ilps22qs_press.st_ble_stream.id", temp_i);
-  ilps22qs_press_get_st_ble_stream__press__enable(&temp_b);
+  ilps22qs_press_get_st_ble_stream__press_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "ilps22qs_press.st_ble_stream.press.enable", temp_b);
-  ilps22qs_press_get_st_ble_stream__press__unit(&temp_s);
+  ilps22qs_press_get_st_ble_stream__press_unit(&temp_s);
   json_object_dotset_string(JSON_Status, "ilps22qs_press.st_ble_stream.press.unit", temp_s);
-  ilps22qs_press_get_st_ble_stream__press__format(&temp_s);
+  ilps22qs_press_get_st_ble_stream__press_format(&temp_s);
   json_object_dotset_string(JSON_Status, "ilps22qs_press.st_ble_stream.press.format", temp_s);
-  ilps22qs_press_get_st_ble_stream__press__elements(&temp_i);
+  ilps22qs_press_get_st_ble_stream__press_elements(&temp_i);
   json_object_dotset_number(JSON_Status, "ilps22qs_press.st_ble_stream.press.elements", temp_i);
-  ilps22qs_press_get_st_ble_stream__press__channels(&temp_i);
+  ilps22qs_press_get_st_ble_stream__press_channels(&temp_i);
   json_object_dotset_number(JSON_Status, "ilps22qs_press.st_ble_stream.press.channels", temp_i);
-  ilps22qs_press_get_st_ble_stream__press__multiply_factor(&temp_f);
+  ilps22qs_press_get_st_ble_stream__press_multiply_factor(&temp_f);
   json_object_dotset_number(JSON_Status, "ilps22qs_press.st_ble_stream.press.multiply_factor", temp_f);
-  ilps22qs_press_get_st_ble_stream__press__odr(&temp_i);
+  ilps22qs_press_get_st_ble_stream__press_odr(&temp_i);
   json_object_dotset_number(JSON_Status, "ilps22qs_press.st_ble_stream.press.odr", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
@@ -191,8 +191,8 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.odr"))
   {
-    valid_property = true;
     int32_t odr = (int32_t)json_object_dotget_number(tempJSONObject, "ilps22qs_press.odr");
+    valid_property = true;
     ret = ilps22qs_press_set_odr((pnpl_ilps22qs_press_odr_t)odr, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -210,8 +210,8 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   }
   if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.fs"))
   {
-    valid_property = true;
     int32_t fs = (int32_t)json_object_dotget_number(tempJSONObject, "ilps22qs_press.fs");
+    valid_property = true;
     ret = ilps22qs_press_set_fs((pnpl_ilps22qs_press_fs_t)fs, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -229,8 +229,8 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   }
   if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.enable"))
   {
-    valid_property = true;
     bool enable = json_object_dotget_boolean(tempJSONObject, "ilps22qs_press.enable");
+    valid_property = true;
     ret = ilps22qs_press_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -248,8 +248,8 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   }
   if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.samples_per_ts"))
   {
-    valid_property = true;
     int32_t samples_per_ts = (int32_t)json_object_dotget_number(tempJSONObject, "ilps22qs_press.samples_per_ts");
+    valid_property = true;
     ret = ilps22qs_press_set_samples_per_ts(samples_per_ts, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -267,8 +267,8 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   }
   if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.sensor_annotation"))
   {
-    valid_property = true;
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ilps22qs_press.sensor_annotation");
+    valid_property = true;
     ret = ilps22qs_press_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -288,8 +288,8 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.st_ble_stream.id"))
     {
-      valid_property = true;
       int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject, "ilps22qs_press.st_ble_stream.id");
+      valid_property = true;
       ret = ilps22qs_press_set_st_ble_stream__id(st_ble_stream__id, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -310,21 +310,21 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.st_ble_stream.press.enable"))
     {
+      bool st_ble_stream__press_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                    "ilps22qs_press.st_ble_stream.press.enable");
       valid_property = true;
-      bool st_ble_stream__press__enable = json_object_dotget_boolean(tempJSONObject,
-                                                                     "ilps22qs_press.st_ble_stream.press.enable");
-      ret = ilps22qs_press_set_st_ble_stream__press__enable(st_ble_stream__press__enable, &resp_msg);
+      ret = ilps22qs_press_set_st_ble_stream__press_enable(st_ble_stream__press_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", st_ble_stream__press__enable);
+        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", st_ble_stream__press_enable);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        bool old_st_ble_stream__press__enable;
-        ilps22qs_press_get_st_ble_stream__press__enable(&old_st_ble_stream__press__enable);
-        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press__enable);
+        bool old_st_ble_stream__press_enable;
+        ilps22qs_press_get_st_ble_stream__press_enable(&old_st_ble_stream__press_enable);
+        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press_enable);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -333,21 +333,21 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.st_ble_stream.press.unit"))
     {
+      const char *st_ble_stream__press_unit = json_object_dotget_string(tempJSONObject,
+                                                                        "ilps22qs_press.st_ble_stream.press.unit");
       valid_property = true;
-      const char *st_ble_stream__press__unit = json_object_dotget_string(tempJSONObject,
-                                                                         "ilps22qs_press.st_ble_stream.press.unit");
-      ret = ilps22qs_press_set_st_ble_stream__press__unit(st_ble_stream__press__unit, &resp_msg);
+      ret = ilps22qs_press_set_st_ble_stream__press_unit(st_ble_stream__press_unit, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__press__unit);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__press_unit);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        char *old_st_ble_stream__press__unit;
-        ilps22qs_press_get_st_ble_stream__press__unit(&old_st_ble_stream__press__unit);
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press__unit);
+        char *old_st_ble_stream__press_unit;
+        ilps22qs_press_get_st_ble_stream__press_unit(&old_st_ble_stream__press_unit);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press_unit);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -356,21 +356,21 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.st_ble_stream.press.format"))
     {
+      const char *st_ble_stream__press_format = json_object_dotget_string(tempJSONObject,
+                                                                          "ilps22qs_press.st_ble_stream.press.format");
       valid_property = true;
-      const char *st_ble_stream__press__format = json_object_dotget_string(tempJSONObject,
-                                                                           "ilps22qs_press.st_ble_stream.press.format");
-      ret = ilps22qs_press_set_st_ble_stream__press__format(st_ble_stream__press__format, &resp_msg);
+      ret = ilps22qs_press_set_st_ble_stream__press_format(st_ble_stream__press_format, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__press__format);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__press_format);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        char *old_st_ble_stream__press__format;
-        ilps22qs_press_get_st_ble_stream__press__format(&old_st_ble_stream__press__format);
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press__format);
+        char *old_st_ble_stream__press_format;
+        ilps22qs_press_get_st_ble_stream__press_format(&old_st_ble_stream__press_format);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press_format);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -379,21 +379,21 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.st_ble_stream.press.elements"))
     {
+      int32_t st_ble_stream__press_elements = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                                 "ilps22qs_press.st_ble_stream.press.elements");
       valid_property = true;
-      int32_t st_ble_stream__press__elements = (int32_t)json_object_dotget_number(tempJSONObject,
-                                                                                  "ilps22qs_press.st_ble_stream.press.elements");
-      ret = ilps22qs_press_set_st_ble_stream__press__elements(st_ble_stream__press__elements, &resp_msg);
+      ret = ilps22qs_press_set_st_ble_stream__press_elements(st_ble_stream__press_elements, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__press__elements);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__press_elements);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        int32_t old_st_ble_stream__press__elements;
-        ilps22qs_press_get_st_ble_stream__press__elements(&old_st_ble_stream__press__elements);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press__elements);
+        int32_t old_st_ble_stream__press_elements;
+        ilps22qs_press_get_st_ble_stream__press_elements(&old_st_ble_stream__press_elements);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press_elements);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -402,21 +402,21 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.st_ble_stream.press.channels"))
     {
+      int32_t st_ble_stream__press_channels = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                                 "ilps22qs_press.st_ble_stream.press.channels");
       valid_property = true;
-      int32_t st_ble_stream__press__channels = (int32_t)json_object_dotget_number(tempJSONObject,
-                                                                                  "ilps22qs_press.st_ble_stream.press.channels");
-      ret = ilps22qs_press_set_st_ble_stream__press__channels(st_ble_stream__press__channels, &resp_msg);
+      ret = ilps22qs_press_set_st_ble_stream__press_channels(st_ble_stream__press_channels, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__press__channels);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__press_channels);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        int32_t old_st_ble_stream__press__channels;
-        ilps22qs_press_get_st_ble_stream__press__channels(&old_st_ble_stream__press__channels);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press__channels);
+        int32_t old_st_ble_stream__press_channels;
+        ilps22qs_press_get_st_ble_stream__press_channels(&old_st_ble_stream__press_channels);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press_channels);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -425,21 +425,21 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.st_ble_stream.press.multiply_factor"))
     {
+      float st_ble_stream__press_multiply_factor = (float)json_object_dotget_number(tempJSONObject,
+                                                                                    "ilps22qs_press.st_ble_stream.press.multiply_factor");
       valid_property = true;
-      float st_ble_stream__press__multiply_factor = (float)json_object_dotget_number(tempJSONObject,
-                                                                                     "ilps22qs_press.st_ble_stream.press.multiply_factor");
-      ret = ilps22qs_press_set_st_ble_stream__press__multiply_factor(st_ble_stream__press__multiply_factor, &resp_msg);
+      ret = ilps22qs_press_set_st_ble_stream__press_multiply_factor(st_ble_stream__press_multiply_factor, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__press__multiply_factor);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__press_multiply_factor);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        float old_st_ble_stream__press__multiply_factor;
-        ilps22qs_press_get_st_ble_stream__press__multiply_factor(&old_st_ble_stream__press__multiply_factor);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press__multiply_factor);
+        float old_st_ble_stream__press_multiply_factor;
+        ilps22qs_press_get_st_ble_stream__press_multiply_factor(&old_st_ble_stream__press_multiply_factor);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press_multiply_factor);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -448,27 +448,27 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ilps22qs_press.st_ble_stream.press.odr"))
     {
+      int32_t st_ble_stream__press_odr = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                            "ilps22qs_press.st_ble_stream.press.odr");
       valid_property = true;
-      int32_t st_ble_stream__press__odr = (int32_t)json_object_dotget_number(tempJSONObject,
-                                                                             "ilps22qs_press.st_ble_stream.press.odr");
-      ret = ilps22qs_press_set_st_ble_stream__press__odr(st_ble_stream__press__odr, &resp_msg);
+      ret = ilps22qs_press_set_st_ble_stream__press_odr(st_ble_stream__press_odr, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__press__odr);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__press_odr);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        int32_t old_st_ble_stream__press__odr;
-        ilps22qs_press_get_st_ble_stream__press__odr(&old_st_ble_stream__press__odr);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press__odr);
+        int32_t old_st_ble_stream__press_odr;
+        ilps22qs_press_get_st_ble_stream__press_odr(&old_st_ble_stream__press_odr);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press_odr);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
   }
   json_value_free(tempJSON);
-  /* Check if received a request to modify an existing property */
+  /* Check if received a valid request to modify an existing property */
   if (valid_property)
   {
     if (pretty == 1)
@@ -485,8 +485,9 @@ uint8_t Ilps22qs_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   else
   {
     /* Set property is not containing a valid property/parameter: PnPL_Error */
-    char *log_message = "Invalid property for Ilps22qs_Press";
+    char *log_message = "Invalid property for ilps22qs_press";
     PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

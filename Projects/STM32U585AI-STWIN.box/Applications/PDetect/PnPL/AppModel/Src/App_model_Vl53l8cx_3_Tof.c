@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_3_tof;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_3_tof;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -37,7 +37,7 @@
 
 /* USER defines --------------------------------------------------------------*/
 
-/* VL53L8CX_2_TOF PnPL Component ---------------------------------------------*/
+/* VL53L8CX_3_TOF PnPL Component ---------------------------------------------*/
 static SensorModel_t vl53l8cx_3_tof_model;
 extern AppModel_t app_model;
 
@@ -234,13 +234,13 @@ uint8_t vl53l8cx_3_tof_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t vl53l8cx_3_tof_get_output_format__target_status__start_id(int32_t *value)
+uint8_t vl53l8cx_3_tof_get_output_format__target_status_start_id(int32_t *value)
 {
   *value = 0;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t vl53l8cx_3_tof_get_output_format__target_distance__start_id(int32_t *value)
+uint8_t vl53l8cx_3_tof_get_output_format__target_distance_start_id(int32_t *value)
 {
   *value = 1;
   return PNPL_NO_ERROR_CODE;
@@ -440,4 +440,6 @@ uint8_t vl53l8cx_3_tof_set_sensor_annotation(const char *value, char **response_
   strcpy(vl53l8cx_3_tof_model.annotation, value);
   return ret;
 }
+
+
 

@@ -77,7 +77,7 @@
 #include "Vd6283tx_3_Als_PnPL.h"
 #include "Sths34pf80_3_Tmos_PnPL.h"
 
-#include "Sgp40_Temp_PnPL.h"
+#include "Sgp40_Voc_PnPL.h"
 #include "Sht40_Hum_PnPL.h"
 #include "Sht40_Temp_PnPL.h"
 #include "Lps22df_Press_PnPL.h"
@@ -111,7 +111,7 @@ static IPnPLComponent_t *pVl53l8cx_3_Tof_PnPLObj = NULL;
 static IPnPLComponent_t *pVd6283tx_3_Als_PnPLObj = NULL;
 static IPnPLComponent_t *pSths34pf80_3_Tmos_PnPLObj = NULL;
 
-static IPnPLComponent_t *pSgp40_Temp_PnPLObj = NULL;
+static IPnPLComponent_t *pSgp40_Voc_PnPLObj = NULL;
 static IPnPLComponent_t *pSht40_Hum_PnPLObj = NULL;
 static IPnPLComponent_t *pSht40_Temp_PnPLObj = NULL;
 static IPnPLComponent_t *pLps22df_Press_PnPLObj = NULL;
@@ -217,7 +217,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   sDatalogAppObj = DatalogAppTaskAlloc();
   sI2C2BusObj = I2CBusTaskAlloc(&MX_I2C2InitParams);
   sSPI2BusObj = SPIBusTaskAlloc(&MX_SPI2InitParams);
-  sIIS2ICLXObj = IIS2ICLXTaskAlloc(NULL, &MX_GPIO_CS_ICLXInitParams);
+  sIIS2ICLXObj = IIS2ICLXTaskAlloc(NULL, NULL, &MX_GPIO_CS_ICLXInitParams);
   sIIS2MDCObj = IIS2MDCTaskAlloc(&MX_GPIO_INT_MAGInitParams, NULL);
   sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, NULL, &MX_GPIO_CS_DHCXInitParams);
   sSTTS22HObj = STTS22HTaskAlloc(NULL, NULL, STTS22H_I2C_ADD_L);
@@ -265,12 +265,6 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   res = ACAddTask(pAppContext, (AManagedTask *) sDatalogAppObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sI2C2BusObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sSPI2BusObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sIIS2ICLXObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sIIS2MDCObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sILPS22QSObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sIMP34DT05Obj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sSTTS22HObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sISM330DHCXObj);
   if (spSTHS34PF80Obj)
   {
     res = ACAddTask(pAppContext, (AManagedTask *) sI2C3BusObj);
@@ -296,6 +290,12 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
     res = ACAddTask(pAppContext, (AManagedTask *) spSGP40Obj);
     res = ACAddTask(pAppContext, (AManagedTask *) spLPS22DFObj);
   }
+  res = ACAddTask(pAppContext, (AManagedTask *) sIIS2ICLXObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sIIS2MDCObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sILPS22QSObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sIMP34DT05Obj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sSTTS22HObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sISM330DHCXObj);
 
   pIIS2ICLX_ACC_PnPLObj = Iis2iclx_Acc_PnPLAlloc();
   pIIS2MDC_MAG_PnPLObj = Iis2mdc_Mag_PnPLAlloc();
@@ -324,7 +324,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   }
   if (spLPS22DFObj)
   {
-    pSgp40_Temp_PnPLObj = Sgp40_Temp_PnPLAlloc();
+    pSgp40_Voc_PnPLObj = Sgp40_Voc_PnPLAlloc();
     pSht40_Hum_PnPLObj = Sht40_Hum_PnPLAlloc();
     pSht40_Temp_PnPLObj = Sht40_Temp_PnPLAlloc();
     pLps22df_Press_PnPLObj = Lps22df_Press_PnPLAlloc();
@@ -463,7 +463,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   }
   if (spLPS22DFObj)
   {
-    Sgp40_Temp_PnPLInit(pSgp40_Temp_PnPLObj);
+    Sgp40_Voc_PnPLInit(pSgp40_Voc_PnPLObj);
     Sht40_Hum_PnPLInit(pSht40_Hum_PnPLObj);
     Sht40_Temp_PnPLInit(pSht40_Temp_PnPLObj);
     Lps22df_Press_PnPLInit(pLps22df_Press_PnPLObj);

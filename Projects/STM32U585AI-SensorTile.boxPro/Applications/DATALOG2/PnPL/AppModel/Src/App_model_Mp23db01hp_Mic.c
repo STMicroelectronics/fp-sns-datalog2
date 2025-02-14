@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:mp23db01hp_mic;5
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:mp23db01hp_mic;6
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -309,4 +309,6 @@ uint8_t mp23db01hp_mic_set_sensor_annotation(const char *value, char **response_
   strcpy(mp23db01hp_mic_model.annotation, value);
   return ret;
 }
+
+
 

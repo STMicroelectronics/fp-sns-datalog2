@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:tsc1641_pow;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:tsc1641_pow;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -171,8 +171,8 @@ uint8_t Tsc1641_Pow_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "tsc1641_pow.adc_conversion_time"))
   {
-    valid_property = true;
     int32_t adc_conversion_time = (int32_t)json_object_dotget_number(tempJSONObject, "tsc1641_pow.adc_conversion_time");
+    valid_property = true;
     ret = tsc1641_pow_set_adc_conversion_time((pnpl_tsc1641_pow_adc_conversion_time_t)adc_conversion_time, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -190,8 +190,8 @@ uint8_t Tsc1641_Pow_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   }
   if (json_object_dothas_value(tempJSONObject, "tsc1641_pow.enable"))
   {
-    valid_property = true;
     bool enable = json_object_dotget_boolean(tempJSONObject, "tsc1641_pow.enable");
+    valid_property = true;
     ret = tsc1641_pow_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -209,8 +209,8 @@ uint8_t Tsc1641_Pow_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   }
   if (json_object_dothas_value(tempJSONObject, "tsc1641_pow.sensor_annotation"))
   {
-    valid_property = true;
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "tsc1641_pow.sensor_annotation");
+    valid_property = true;
     ret = tsc1641_pow_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -227,7 +227,7 @@ uint8_t Tsc1641_Pow_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
     }
   }
   json_value_free(tempJSON);
-  /* Check if received a request to modify an existing property */
+  /* Check if received a valid request to modify an existing property */
   if (valid_property)
   {
     if (pretty == 1)
@@ -244,8 +244,9 @@ uint8_t Tsc1641_Pow_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   else
   {
     /* Set property is not containing a valid property/parameter: PnPL_Error */
-    char *log_message = "Invalid property for Tsc1641_Pow";
+    char *log_message = "Invalid property for tsc1641_pow";
     PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

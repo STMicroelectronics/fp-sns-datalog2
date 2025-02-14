@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:vespucci:steval_stwinkt1b:FP_SNS_DATALOG2_Datalog2;3
+  * dtmi:vespucci:steval_stwinkt1b:FP_SNS_DATALOG2_Datalog2;4
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -104,8 +104,8 @@ extern "C" {
 #define UNIT_LEN 20U
 #define FORMAT_LEN 10U
 
-#define FW_VERSION_MAJOR    "2"
-#define FW_VERSION_MINOR    "3"
+#define FW_VERSION_MAJOR    "3"
+#define FW_VERSION_MINOR    "0"
 #define FW_VERSION_PATCH    "0"
 
 /* Max BLE bandwidth for each sensor (in Byte) */

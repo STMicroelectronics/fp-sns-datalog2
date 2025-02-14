@@ -143,7 +143,6 @@ uint8_t ism330is_ispu_get_sensor_category(int32_t *value)
 uint8_t ism330is_ispu_get_mounted(bool *value)
 {
   *value = true;
-  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -214,4 +213,5 @@ uint8_t ism330is_ispu_load_file(const char *ucf_data, int32_t ucf_size, const ch
   __stream_control(true);
   return PNPL_NO_ERROR_CODE;
 }
+
 

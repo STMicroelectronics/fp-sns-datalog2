@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:imp23absu_mic;5
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:imp23absu_mic;6
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -56,6 +56,7 @@ uint8_t imp23absu_mic_comp_init(void)
   addSensorToAppModel(id, &imp23absu_mic_model);
 
   imp23absu_mic_set_sensor_annotation("\0", NULL);
+  imp23absu_mic_set_odr(pnpl_imp23absu_mic_odr_hz192000, NULL);
   imp23absu_mic_set_volume(100, NULL);
 #if (HSD_USE_DUMMY_DATA == 1)
   imp23absu_mic_set_samples_per_ts(0, NULL);
@@ -339,4 +340,6 @@ uint8_t imp23absu_mic_set_sensor_annotation(const char *value, char **response_m
   strcpy(imp23absu_mic_model.annotation, value);
   return ret;
 }
+
+
 

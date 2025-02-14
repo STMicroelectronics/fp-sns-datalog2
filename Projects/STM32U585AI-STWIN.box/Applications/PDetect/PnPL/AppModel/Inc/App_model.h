@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect;2
+  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect;4
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -76,7 +76,7 @@ extern "C" {
 #include "App_model_Sths34pf80_3_Tmos.h"
 #include "App_model_Sht40_Temp.h"
 #include "App_model_Sht40_Hum.h"
-#include "App_model_Sgp40_Temp.h"
+#include "App_model_Sgp40_Voc.h"
 #include "App_model_Lps22df_Press.h"
 #include "App_model_Imp34dt05_Mic.h"
 #include "App_model_Ism330dhcx_Acc.h"
@@ -102,16 +102,16 @@ extern "C" {
 #define LOG_CTRL_MODE_USB         0x01
 #define LOG_CTRL_MODE_BLE         0x02
 
-#define SENSOR_NUMBER             21
+#define SENSOR_NUMBER             20
 #define ALGORITHM_NUMBER          0
 #define ACTUATOR_NUMBER           0
-#define OTHER_COMP_NUMBER         6
+#define OTHER_COMP_NUMBER         5
 
 
 #define N_MAX_EP            5
 
-#define FW_VERSION_MAJOR    "2"
-#define FW_VERSION_MINOR    "3"
+#define FW_VERSION_MAJOR    "3"
+#define FW_VERSION_MINOR    "0"
 #define FW_VERSION_PATCH    "0"
 
 

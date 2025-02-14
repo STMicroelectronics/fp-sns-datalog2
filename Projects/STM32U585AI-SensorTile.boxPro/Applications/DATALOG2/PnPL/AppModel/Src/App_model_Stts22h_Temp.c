@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:stts22h_temp;5
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:stts22h_temp;6
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -55,8 +55,8 @@ uint8_t stts22h_temp_comp_init(void)
   stts22h_temp_model.stream_params.stream_id = -1;
   stts22h_temp_model.stream_params.usb_ep = -1;
 
-  stts22h_temp_set_st_ble_stream__temp__unit("Celsius", NULL);
-  stts22h_temp_set_st_ble_stream__temp__format("float", NULL);
+  stts22h_temp_set_st_ble_stream__temp_unit("°C", NULL);
+  stts22h_temp_set_st_ble_stream__temp_format("float", NULL);
 
   addSensorToAppModel(id, &stts22h_temp_model);
 
@@ -71,10 +71,10 @@ uint8_t stts22h_temp_comp_init(void)
 
   int32_t value = 0;
   stts22h_temp_get_dim(&value);
-  stts22h_temp_set_st_ble_stream__temp__channels(value, NULL);
+  stts22h_temp_set_st_ble_stream__temp_channels(value, NULL);
   float sensitivity = 0.0f;
   stts22h_temp_get_sensitivity(&sensitivity);
-  stts22h_temp_set_st_ble_stream__temp__multiply_factor(sensitivity, NULL);
+  stts22h_temp_set_st_ble_stream__temp_multiply_factor(sensitivity, NULL);
 
   __stream_control(true);
   __sc_set_ble_stream_params(stts22h_temp_model.id);
@@ -169,12 +169,14 @@ uint8_t stts22h_temp_get_measodr(float *value)
 uint8_t stts22h_temp_get_usb_dps(int32_t *value)
 {
   *value = stts22h_temp_model.stream_params.usb_dps;
+  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
 uint8_t stts22h_temp_get_sd_dps(int32_t *value)
 {
   *value = stts22h_temp_model.stream_params.sd_dps;
+  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -206,56 +208,48 @@ uint8_t stts22h_temp_get_sensor_category(int32_t *value)
 
 uint8_t stts22h_temp_get_st_ble_stream__id(int32_t *value)
 {
-  /* USER Code */
   *value = stts22h_temp_model.st_ble_stream.st_ble_stream_id;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t stts22h_temp_get_st_ble_stream__temp__enable(bool *value)
+uint8_t stts22h_temp_get_st_ble_stream__temp_enable(bool *value)
 {
-  /* USER Code */
   *value = stts22h_temp_model.st_ble_stream.st_ble_stream_objects.status;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t stts22h_temp_get_st_ble_stream__temp__unit(char **value)
+uint8_t stts22h_temp_get_st_ble_stream__temp_unit(char **value)
 {
-  /* USER Code */
   *value = stts22h_temp_model.st_ble_stream.st_ble_stream_objects.unit;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t stts22h_temp_get_st_ble_stream__temp__format(char **value)
+uint8_t stts22h_temp_get_st_ble_stream__temp_format(char **value)
 {
-  /* USER Code */
   *value = stts22h_temp_model.st_ble_stream.st_ble_stream_objects.format;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t stts22h_temp_get_st_ble_stream__temp__elements(int32_t *value)
+uint8_t stts22h_temp_get_st_ble_stream__temp_elements(int32_t *value)
 {
-  /* USER Code */
   *value = stts22h_temp_model.st_ble_stream.st_ble_stream_objects.elements;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t stts22h_temp_get_st_ble_stream__temp__channels(int32_t *value)
+uint8_t stts22h_temp_get_st_ble_stream__temp_channels(int32_t *value)
 {
-  /* USER Code */
   *value = stts22h_temp_model.st_ble_stream.st_ble_stream_objects.channel;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t stts22h_temp_get_st_ble_stream__temp__multiply_factor(float *value)
+uint8_t stts22h_temp_get_st_ble_stream__temp_multiply_factor(float *value)
 {
-  /* USER Code */
   *value = stts22h_temp_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t stts22h_temp_get_st_ble_stream__temp__odr(int32_t *value)
+uint8_t stts22h_temp_get_st_ble_stream__temp_odr(int32_t *value)
 {
-  /* USER Code */
   *value = stts22h_temp_model.st_ble_stream.st_ble_stream_objects.odr;
   return PNPL_NO_ERROR_CODE;
 }
@@ -385,7 +379,7 @@ uint8_t stts22h_temp_set_st_ble_stream__id(int32_t value, char **response_messag
   return ret;
 }
 
-uint8_t stts22h_temp_set_st_ble_stream__temp__enable(bool value, char **response_message)
+uint8_t stts22h_temp_set_st_ble_stream__temp_enable(bool value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -396,7 +390,7 @@ uint8_t stts22h_temp_set_st_ble_stream__temp__enable(bool value, char **response
   return ret;
 }
 
-uint8_t stts22h_temp_set_st_ble_stream__temp__unit(const char *value, char **response_message)
+uint8_t stts22h_temp_set_st_ble_stream__temp_unit(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -407,7 +401,7 @@ uint8_t stts22h_temp_set_st_ble_stream__temp__unit(const char *value, char **res
   return ret;
 }
 
-uint8_t stts22h_temp_set_st_ble_stream__temp__format(const char *value, char **response_message)
+uint8_t stts22h_temp_set_st_ble_stream__temp_format(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -418,7 +412,7 @@ uint8_t stts22h_temp_set_st_ble_stream__temp__format(const char *value, char **r
   return ret;
 }
 
-uint8_t stts22h_temp_set_st_ble_stream__temp__elements(int32_t value, char **response_message)
+uint8_t stts22h_temp_set_st_ble_stream__temp_elements(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -429,7 +423,7 @@ uint8_t stts22h_temp_set_st_ble_stream__temp__elements(int32_t value, char **res
   return ret;
 }
 
-uint8_t stts22h_temp_set_st_ble_stream__temp__channels(int32_t value, char **response_message)
+uint8_t stts22h_temp_set_st_ble_stream__temp_channels(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -440,7 +434,7 @@ uint8_t stts22h_temp_set_st_ble_stream__temp__channels(int32_t value, char **res
   return ret;
 }
 
-uint8_t stts22h_temp_set_st_ble_stream__temp__multiply_factor(float value, char **response_message)
+uint8_t stts22h_temp_set_st_ble_stream__temp_multiply_factor(float value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -451,7 +445,7 @@ uint8_t stts22h_temp_set_st_ble_stream__temp__multiply_factor(float value, char 
   return ret;
 }
 
-uint8_t stts22h_temp_set_st_ble_stream__temp__odr(int32_t value, char **response_message)
+uint8_t stts22h_temp_set_st_ble_stream__temp_odr(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -461,4 +455,6 @@ uint8_t stts22h_temp_set_st_ble_stream__temp__odr(int32_t value, char **response
   stts22h_temp_model.st_ble_stream.st_ble_stream_objects.odr = value;
   return ret;
 }
+
+
 

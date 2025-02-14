@@ -97,12 +97,14 @@ uint8_t ism330is_ispu_get_ucf_status(bool *value)
 uint8_t ism330is_ispu_get_usb_dps(float *value)
 {
   *value = ism330is_ispu_model.stream_params.usb_dps;
+  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
 uint8_t ism330is_ispu_get_sd_dps(float *value)
 {
   *value = ism330is_ispu_model.stream_params.sd_dps;
+  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -141,7 +143,6 @@ uint8_t ism330is_ispu_get_sensor_category(int32_t *value)
 uint8_t ism330is_ispu_get_mounted(bool *value)
 {
   *value = true;
-  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 

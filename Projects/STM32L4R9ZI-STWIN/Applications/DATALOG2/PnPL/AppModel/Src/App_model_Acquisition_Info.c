@@ -175,3 +175,5 @@ uint8_t acquisition_info_set_description(const char *value, char **response_mess
   return PNPL_NO_ERROR_CODE;
 }
 
+
+

@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:other:acquisition_info;1
+  * dtmi:vespucci:other:acquisition_info;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -37,6 +37,8 @@ typedef enum
 //String Enum --> enum value is translated to be an integer following the definition order in the Device Model.
   pnpl_acquisition_info_interface_sd = 0,
   pnpl_acquisition_info_interface_usb = 1,
+  pnpl_acquisition_info_interface_ble = 2,
+  pnpl_acquisition_info_interface_serial = 3,
 } pnpl_acquisition_info_interface_t;
 
 

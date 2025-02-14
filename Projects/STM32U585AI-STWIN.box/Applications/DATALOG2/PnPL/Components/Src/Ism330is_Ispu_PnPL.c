@@ -174,8 +174,8 @@ uint8_t Ism330is_Ispu_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "ism330is_ispu.enable"))
   {
-    valid_property = true;
     bool enable = json_object_dotget_boolean(tempJSONObject, "ism330is_ispu.enable");
+    valid_property = true;
     ret = ism330is_ispu_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -193,8 +193,8 @@ uint8_t Ism330is_Ispu_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "ism330is_ispu.sensor_annotation"))
   {
-    valid_property = true;
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "ism330is_ispu.sensor_annotation");
+    valid_property = true;
     ret = ism330is_ispu_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -211,7 +211,7 @@ uint8_t Ism330is_Ispu_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
     }
   }
   json_value_free(tempJSON);
-  /* Check if received a request to modify an existing property */
+  /* Check if received a valid request to modify an existing property */
   if (valid_property)
   {
     if (pretty == 1)
@@ -228,8 +228,9 @@ uint8_t Ism330is_Ispu_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   else
   {
     /* Set property is not containing a valid property/parameter: PnPL_Error */
-    char *log_message = "Invalid property for Ism330is_Ispu";
+    char *log_message = "Invalid property for ism330is_ispu";
     PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;
@@ -243,8 +244,10 @@ uint8_t Ism330is_Ispu_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *se
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_function = false;
   if (json_object_dothas_value(tempJSONObject, "ism330is_ispu*load_file.files"))
   {
+    valid_function = true;
     const char *ucf_data;
     int32_t ucf_size;
     const char *output_data;
@@ -267,9 +270,12 @@ uint8_t Ism330is_Ispu_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *se
       }
     }
   }
-  /* USER CODE: to be automatically added in the next generator version */
-  else
+  /* Check if received a valid function to modify an existing property */
+  if (valid_function == false)
   {
+    char log_message[100];
+    (void) sprintf(log_message, "%s Invalid command", serializedJSON);
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
     ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(tempJSON);

@@ -4,7 +4,7 @@
     "devices": [
         {
             "board_id": 14,
-            "fw_id": 14,
+            "fw_id": 25,
             "protocol_id": 2,
             "sn": "002700405752501820353339",
             "pnpl_responses": true,
@@ -14,7 +14,7 @@
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-STWINBX1",
-                        "swVersion": "2.3.0",
+                        "swVersion": "3.0.0",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M33",
                         "processorManufacturer": "STMicroelectronics",
@@ -26,7 +26,7 @@
                     "firmware_info": {
                         "alias": "STWIN_BOX_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "2.3.0",
+                        "fw_version": "3.0.0",
                         "part_number": "FP-SNS-DATALOG2",
                         "device_url": "https://www.st.com/stwinbox",
                         "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",

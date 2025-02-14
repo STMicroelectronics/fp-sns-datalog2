@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lis2mdl_mag;5
+  * dtmi:vespucci:steval_mkboxpro:fpSnsDatalog2_datalog2:sensors:lis2mdl_mag;6
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -81,13 +81,13 @@ uint8_t lis2mdl_mag_get_data_type(char **value);
 uint8_t lis2mdl_mag_get_sensor_annotation(char **value);
 uint8_t lis2mdl_mag_get_sensor_category(int32_t *value);
 uint8_t lis2mdl_mag_get_st_ble_stream__id(int32_t *value);
-uint8_t lis2mdl_mag_get_st_ble_stream__mag__enable(bool *value);
-uint8_t lis2mdl_mag_get_st_ble_stream__mag__unit(char **value);
-uint8_t lis2mdl_mag_get_st_ble_stream__mag__format(char **value);
-uint8_t lis2mdl_mag_get_st_ble_stream__mag__elements(int32_t *value);
-uint8_t lis2mdl_mag_get_st_ble_stream__mag__channels(int32_t *value);
-uint8_t lis2mdl_mag_get_st_ble_stream__mag__multiply_factor(float *value);
-uint8_t lis2mdl_mag_get_st_ble_stream__mag__odr(int32_t *value);
+uint8_t lis2mdl_mag_get_st_ble_stream__mag_enable(bool *value);
+uint8_t lis2mdl_mag_get_st_ble_stream__mag_unit(char **value);
+uint8_t lis2mdl_mag_get_st_ble_stream__mag_format(char **value);
+uint8_t lis2mdl_mag_get_st_ble_stream__mag_elements(int32_t *value);
+uint8_t lis2mdl_mag_get_st_ble_stream__mag_channels(int32_t *value);
+uint8_t lis2mdl_mag_get_st_ble_stream__mag_multiply_factor(float *value);
+uint8_t lis2mdl_mag_get_st_ble_stream__mag_odr(int32_t *value);
 uint8_t lis2mdl_mag_get_stream_id(int8_t *value);
 uint8_t lis2mdl_mag_get_ep_id(int8_t *value);
 uint8_t lis2mdl_mag_set_odr(pnpl_lis2mdl_mag_odr_t enum_id, char **response_message);
@@ -95,13 +95,13 @@ uint8_t lis2mdl_mag_set_enable(bool value, char **response_message);
 uint8_t lis2mdl_mag_set_samples_per_ts(int32_t value, char **response_message);
 uint8_t lis2mdl_mag_set_sensor_annotation(const char *value, char **response_message);
 uint8_t lis2mdl_mag_set_st_ble_stream__id(int32_t value, char **response_message);
-uint8_t lis2mdl_mag_set_st_ble_stream__mag__enable(bool value, char **response_message);
-uint8_t lis2mdl_mag_set_st_ble_stream__mag__unit(const char *value, char **response_message);
-uint8_t lis2mdl_mag_set_st_ble_stream__mag__format(const char *value, char **response_message);
-uint8_t lis2mdl_mag_set_st_ble_stream__mag__elements(int32_t value, char **response_message);
-uint8_t lis2mdl_mag_set_st_ble_stream__mag__channels(int32_t value, char **response_message);
-uint8_t lis2mdl_mag_set_st_ble_stream__mag__multiply_factor(float value, char **response_message);
-uint8_t lis2mdl_mag_set_st_ble_stream__mag__odr(int32_t value, char **response_message);
+uint8_t lis2mdl_mag_set_st_ble_stream__mag_enable(bool value, char **response_message);
+uint8_t lis2mdl_mag_set_st_ble_stream__mag_unit(const char *value, char **response_message);
+uint8_t lis2mdl_mag_set_st_ble_stream__mag_format(const char *value, char **response_message);
+uint8_t lis2mdl_mag_set_st_ble_stream__mag_elements(int32_t value, char **response_message);
+uint8_t lis2mdl_mag_set_st_ble_stream__mag_channels(int32_t value, char **response_message);
+uint8_t lis2mdl_mag_set_st_ble_stream__mag_multiply_factor(float value, char **response_message);
+uint8_t lis2mdl_mag_set_st_ble_stream__mag_odr(int32_t value, char **response_message);
 
 
 #ifdef __cplusplus

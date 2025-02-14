@@ -56,8 +56,8 @@ uint8_t ism330dhcx_mlc_comp_init(void)
   ism330dhcx_mlc_model.stream_params.stream_id = -1;
   ism330dhcx_mlc_model.stream_params.usb_ep = -1;
 
-  ism330dhcx_mlc_set_st_ble_stream__mlc__unit("", NULL);
-  ism330dhcx_mlc_set_st_ble_stream__mlc__format("int8_t", NULL);
+  ism330dhcx_mlc_set_st_ble_stream__mlc_unit("", NULL);
+  ism330dhcx_mlc_set_st_ble_stream__mlc_format("int8_t", NULL);
 
   addSensorToAppModel(id, &ism330dhcx_mlc_model);
 
@@ -70,9 +70,9 @@ uint8_t ism330dhcx_mlc_comp_init(void)
 
   int32_t value = 0;
   ism330dhcx_mlc_get_dim(&value);
-  ism330dhcx_mlc_set_st_ble_stream__mlc__channels(value, NULL);
+  ism330dhcx_mlc_set_st_ble_stream__mlc_channels(value, NULL);
   float sensitivity = 1.0f;
-  ism330dhcx_mlc_set_st_ble_stream__mlc__multiply_factor(sensitivity, NULL);
+  ism330dhcx_mlc_set_st_ble_stream__mlc_multiply_factor(sensitivity, NULL);
 
   __stream_control(true);
   app_model.mlc_ucf_valid = false;
@@ -155,56 +155,48 @@ uint8_t ism330dhcx_mlc_get_sensor_category(int32_t *value)
 
 uint8_t ism330dhcx_mlc_get_st_ble_stream__id(int32_t *value)
 {
-  /* USER Code */
   *value = ism330dhcx_mlc_model.st_ble_stream.st_ble_stream_id;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc__enable(bool *value)
+uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc_enable(bool *value)
 {
-  /* USER Code */
   *value = ism330dhcx_mlc_model.st_ble_stream.st_ble_stream_objects.status;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc__unit(char **value)
+uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc_unit(char **value)
 {
-  /* USER Code */
   *value = ism330dhcx_mlc_model.st_ble_stream.st_ble_stream_objects.unit;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc__format(char **value)
+uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc_format(char **value)
 {
-  /* USER Code */
   *value = ism330dhcx_mlc_model.st_ble_stream.st_ble_stream_objects.format;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc__elements(int32_t *value)
+uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc_elements(int32_t *value)
 {
-  /* USER Code */
   *value = ism330dhcx_mlc_model.st_ble_stream.st_ble_stream_objects.elements;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc__channels(int32_t *value)
+uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc_channels(int32_t *value)
 {
-  /* USER Code */
   *value = ism330dhcx_mlc_model.st_ble_stream.st_ble_stream_objects.channel;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc__multiply_factor(float *value)
+uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc_multiply_factor(float *value)
 {
-  /* USER Code */
   *value = ism330dhcx_mlc_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc__odr(int32_t *value)
+uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc_odr(int32_t *value)
 {
-  /* USER Code */
   *value = ism330dhcx_mlc_model.st_ble_stream.st_ble_stream_objects.odr;
   return PNPL_NO_ERROR_CODE;
 }
@@ -280,7 +272,7 @@ uint8_t ism330dhcx_mlc_set_st_ble_stream__id(int32_t value, char **response_mess
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__enable(bool value, char **response_message)
+uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_enable(bool value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -291,7 +283,7 @@ uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__enable(bool value, char **respons
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__unit(const char *value, char **response_message)
+uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_unit(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -302,7 +294,7 @@ uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__unit(const char *value, char **re
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__format(const char *value, char **response_message)
+uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_format(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -313,7 +305,7 @@ uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__format(const char *value, char **
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__elements(int32_t value, char **response_message)
+uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_elements(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -324,7 +316,7 @@ uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__elements(int32_t value, char **re
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__channels(int32_t value, char **response_message)
+uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_channels(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -335,7 +327,7 @@ uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__channels(int32_t value, char **re
   return ret;
 }
 
-uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__multiply_factor(float value, char **response_message)
+uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_multiply_factor(float value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -346,7 +338,7 @@ uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__multiply_factor(float value, char
   return ret;
 }
 
-uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__odr(int32_t value, char **response_message)
+uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_odr(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -356,6 +348,7 @@ uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc__odr(int32_t value, char **respons
   ism330dhcx_mlc_model.st_ble_stream.st_ble_stream_objects.odr = value;
   return ret;
 }
+
 
 uint8_t ism330dhcx_mlc_load_file(const char *data, int32_t size)
 {
@@ -375,4 +368,5 @@ uint8_t ism330dhcx_mlc_load_file(const char *data, int32_t size)
   __sc_set_ble_stream_params(id);
   return PNPL_NO_ERROR_CODE;
 }
+
 

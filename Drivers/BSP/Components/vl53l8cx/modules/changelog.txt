@@ -77,3 +77,21 @@ Date : 01/24/2024
 
 
 ---------------------------------------------------------------------------------------------------------------
+
+
+Version : 1.2.2
+Date : 04/29/2024
+- Update initialization routine to accomodate low SPI speeds 
+
+
+---------------------------------------------------------------------------------------------------------------
+
+
+Version : 2.0.0
+Date : 05/21/2024
+- Update to FW MM1.8
+- Update platform function names to being with VL53L8CX to avoid clashes when using multiple devices using platform functions with the same name.
+- New VL53L8CX_buffers.h file to update spread spectrum values in default config.
+- Improve FW checksum
+
+---------------------------------------------------------------------------------------------------------------

@@ -771,11 +771,12 @@ uint8_t DatalogAppTask_start_vtbl(int32_t interface)
     if (p_obj->datalog_model->log_controller_model.sd_failed == true)
     {
       /* Notify BLE App */
+      char *p_serialized = NULL;
+      uint32_t size = 0;
       PnPLCommand_t pnpl_cmd;
-      char *p_serialized;
-      uint32_t size;
       sprintf(pnpl_cmd.comp_name, "%s", "SD card failed in previous log");
       pnpl_cmd.comm_type = PNPL_CMD_ERROR;
+      pnpl_cmd.response = NULL;
       PnPLSerializeResponse(&pnpl_cmd, &p_serialized, &size, 0);
       IStream_send_async((IStream_t *) p_obj->ble_device, (uint8_t *)p_serialized, size);
     }
@@ -1410,11 +1411,12 @@ static void DatalogAppTask_filex_queue_full_cb(void)
   log_controller_stop_log();
 
   /* Notify BLE App */
+  char *p_serialized = NULL;
+  uint32_t size = 0;
   PnPLCommand_t pnpl_cmd;
-  char *p_serialized;
-  uint32_t size;
   sprintf(pnpl_cmd.comp_name, "%s", "SD card failed. Consider to change the SD");
   pnpl_cmd.comm_type = PNPL_CMD_ERROR;
+  pnpl_cmd.response = NULL;
   PnPLSerializeResponse(&pnpl_cmd, &p_serialized, &size, 0);
   IStream_send_async((IStream_t *) sTaskObj.ble_device, (uint8_t *)p_serialized, size);
 

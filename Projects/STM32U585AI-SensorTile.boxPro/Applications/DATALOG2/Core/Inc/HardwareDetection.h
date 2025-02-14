@@ -35,8 +35,11 @@ typedef enum
   ST25DV_ERROR,
 } hwd_st25dv_version;
 
-boolean_t HardwareDetection_Check_Ext_LSM6DSV16BX(void);
+boolean_t HardwareDetection_Check_Ext_H3LIS331DL(void);
+boolean_t HardwareDetection_Check_Ext_ILPS28QSW(void);
 boolean_t HardwareDetection_Check_Ext_ISM330IS(void);
+boolean_t HardwareDetection_Check_Ext_LSM6DSV16BX(void);
+boolean_t HardwareDetection_Check_Ext_LSM6DSV32X(void);
 hwd_st25dv_version HardwareDetection_Check_ST25DV(void);
 
 #ifdef __cplusplus

@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect;2
+  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect;4
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *

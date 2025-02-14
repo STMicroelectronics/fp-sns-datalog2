@@ -103,6 +103,7 @@ uint8_t automode_set_started(bool value, char **response_message)
   return PNPL_NO_ERROR_CODE;
 }
 
+
 uint8_t automode_set_enabled(bool value, char **response_message)
 {
   if (response_message != NULL)
@@ -192,4 +193,6 @@ uint8_t automode_set_idle_period_s(int32_t value, char **response_message)
   }
   return PNPL_NO_ERROR_CODE;
 }
+
+
 

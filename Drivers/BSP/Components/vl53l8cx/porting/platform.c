@@ -12,7 +12,7 @@
 
 #include "platform.h"
 
-uint8_t RdByte(
+uint8_t VL53L8CX_RdByte(
 		VL53L8CX_Platform *p_platform,
 		uint16_t RegisterAdress,
 		uint8_t *p_value)
@@ -20,7 +20,7 @@ uint8_t RdByte(
   return p_platform->Read(p_platform->address, RegisterAdress, p_value, 1U);
 }
 
-uint8_t WrByte(
+uint8_t VL53L8CX_WrByte(
 		VL53L8CX_Platform *p_platform,
 		uint16_t RegisterAdress,
 		uint8_t value)
@@ -28,7 +28,7 @@ uint8_t WrByte(
   return p_platform->Write(p_platform->address, RegisterAdress, &value, 1U);
 }
 
-uint8_t WrMulti(
+uint8_t VL53L8CX_WrMulti(
 		VL53L8CX_Platform *p_platform,
 		uint16_t RegisterAdress,
 		uint8_t *p_values,
@@ -37,7 +37,7 @@ uint8_t WrMulti(
   return p_platform->Write(p_platform->address, RegisterAdress, p_values, size);
 }
 
-uint8_t RdMulti(
+uint8_t VL53L8CX_RdMulti(
 		VL53L8CX_Platform *p_platform,
 		uint16_t RegisterAdress,
 		uint8_t *p_values,
@@ -46,26 +46,26 @@ uint8_t RdMulti(
   return p_platform->Read(p_platform->address, RegisterAdress, p_values, size);
 }
 
-void SwapBuffer(
-    uint8_t     *buffer,
-    uint16_t     size)
+void VL53L8CX_SwapBuffer(
+		uint8_t 		*buffer,
+		uint16_t 	 	 size)
 {
-  uint32_t i, tmp;
+	uint32_t i, tmp;
+	
+	/* Example of possible implementation using <string.h> */
+	for(i = 0; i < size; i = i + 4) 
+	{
+		tmp = (
+		  buffer[i]<<24)
+		|(buffer[i+1]<<16)
+		|(buffer[i+2]<<8)
+		|(buffer[i+3]);
+		
+		memcpy(&(buffer[i]), &tmp, 4);
+	}
+}	
 
-  /* Example of possible implementation using <string.h> */
-  for(i = 0; i < size; i = i + 4)
-  {
-    tmp = (
-      buffer[i]<<24)
-    |(buffer[i+1]<<16)
-    |(buffer[i+2]<<8)
-    |(buffer[i+3]);
-
-    memcpy(&(buffer[i]), &tmp, 4);
-  }
-}
-
-uint8_t WaitMs(
+uint8_t VL53L8CX_WaitMs(
 		VL53L8CX_Platform *p_platform,
 		uint32_t TimeMs)
 {

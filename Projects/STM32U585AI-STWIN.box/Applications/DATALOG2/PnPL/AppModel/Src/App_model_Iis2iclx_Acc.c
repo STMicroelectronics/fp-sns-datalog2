@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:iis2iclx_acc;4
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:iis2iclx_acc;5
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -55,8 +55,8 @@ uint8_t iis2iclx_acc_comp_init(void)
   iis2iclx_acc_model.stream_params.stream_id = -1;
   iis2iclx_acc_model.stream_params.usb_ep = -1;
 
-  iis2iclx_acc_set_st_ble_stream__acc__unit("g", NULL);
-  iis2iclx_acc_set_st_ble_stream__acc__format("int16_t", NULL);
+  iis2iclx_acc_set_st_ble_stream__acc_unit("g", NULL);
+  iis2iclx_acc_set_st_ble_stream__acc_format("int16_t", NULL);
 
   addSensorToAppModel(id, &iis2iclx_acc_model);
 
@@ -72,10 +72,10 @@ uint8_t iis2iclx_acc_comp_init(void)
 
   int32_t value = 0;
   iis2iclx_acc_get_dim(&value);
-  iis2iclx_acc_set_st_ble_stream__acc__channels(value, NULL);
+  iis2iclx_acc_set_st_ble_stream__acc_channels(value, NULL);
   float sensitivity = 0.0f;
   iis2iclx_acc_get_sensitivity(&sensitivity);
-  iis2iclx_acc_set_st_ble_stream__acc__multiply_factor(sensitivity, NULL);
+  iis2iclx_acc_set_st_ble_stream__acc_multiply_factor(sensitivity, NULL);
 
   __stream_control(true);
   __sc_set_ble_stream_params(iis2iclx_acc_model.id);
@@ -170,7 +170,6 @@ uint8_t iis2iclx_acc_get_samples_per_ts(int32_t *value)
 
 uint8_t iis2iclx_acc_get_dim(int32_t *value)
 {
-  /* USER Code */
   *value = 2;
   return PNPL_NO_ERROR_CODE;
 }
@@ -231,56 +230,48 @@ uint8_t iis2iclx_acc_get_sensor_category(int32_t *value)
 
 uint8_t iis2iclx_acc_get_st_ble_stream__id(int32_t *value)
 {
-  /* USER Code */
   *value = iis2iclx_acc_model.st_ble_stream.st_ble_stream_id;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_get_st_ble_stream__acc__enable(bool *value)
+uint8_t iis2iclx_acc_get_st_ble_stream__acc_enable(bool *value)
 {
-  /* USER Code */
   *value = iis2iclx_acc_model.st_ble_stream.st_ble_stream_objects.status;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_get_st_ble_stream__acc__unit(char **value)
+uint8_t iis2iclx_acc_get_st_ble_stream__acc_unit(char **value)
 {
-  /* USER Code */
   *value = iis2iclx_acc_model.st_ble_stream.st_ble_stream_objects.unit;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_get_st_ble_stream__acc__format(char **value)
+uint8_t iis2iclx_acc_get_st_ble_stream__acc_format(char **value)
 {
-  /* USER Code */
   *value = iis2iclx_acc_model.st_ble_stream.st_ble_stream_objects.format;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_get_st_ble_stream__acc__elements(int32_t *value)
+uint8_t iis2iclx_acc_get_st_ble_stream__acc_elements(int32_t *value)
 {
-  /* USER Code */
   *value = iis2iclx_acc_model.st_ble_stream.st_ble_stream_objects.elements;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_get_st_ble_stream__acc__channels(int32_t *value)
+uint8_t iis2iclx_acc_get_st_ble_stream__acc_channels(int32_t *value)
 {
-  /* USER Code */
   *value = iis2iclx_acc_model.st_ble_stream.st_ble_stream_objects.channel;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_get_st_ble_stream__acc__multiply_factor(float *value)
+uint8_t iis2iclx_acc_get_st_ble_stream__acc_multiply_factor(float *value)
 {
-  /* USER Code */
   *value = iis2iclx_acc_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_get_st_ble_stream__acc__odr(int32_t *value)
+uint8_t iis2iclx_acc_get_st_ble_stream__acc_odr(int32_t *value)
 {
-  /* USER Code */
   *value = iis2iclx_acc_model.st_ble_stream.st_ble_stream_objects.odr;
   return PNPL_NO_ERROR_CODE;
 }
@@ -383,7 +374,7 @@ uint8_t iis2iclx_acc_set_fs(pnpl_iis2iclx_acc_fs_t enum_id, char **response_mess
 
   float sensitivity = 0.0f;
   iis2iclx_acc_get_sensitivity(&sensitivity);
-  iis2iclx_acc_set_st_ble_stream__acc__multiply_factor(sensitivity, NULL);
+  iis2iclx_acc_set_st_ble_stream__acc_multiply_factor(sensitivity, NULL);
 
   return ret;
 }
@@ -472,7 +463,7 @@ uint8_t iis2iclx_acc_set_st_ble_stream__id(int32_t value, char **response_messag
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_set_st_ble_stream__acc__enable(bool value, char **response_message)
+uint8_t iis2iclx_acc_set_st_ble_stream__acc_enable(bool value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -483,7 +474,7 @@ uint8_t iis2iclx_acc_set_st_ble_stream__acc__enable(bool value, char **response_
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_set_st_ble_stream__acc__unit(const char *value, char **response_message)
+uint8_t iis2iclx_acc_set_st_ble_stream__acc_unit(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -494,7 +485,7 @@ uint8_t iis2iclx_acc_set_st_ble_stream__acc__unit(const char *value, char **resp
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_set_st_ble_stream__acc__format(const char *value, char **response_message)
+uint8_t iis2iclx_acc_set_st_ble_stream__acc_format(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -505,7 +496,7 @@ uint8_t iis2iclx_acc_set_st_ble_stream__acc__format(const char *value, char **re
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_set_st_ble_stream__acc__elements(int32_t value, char **response_message)
+uint8_t iis2iclx_acc_set_st_ble_stream__acc_elements(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -515,7 +506,7 @@ uint8_t iis2iclx_acc_set_st_ble_stream__acc__elements(int32_t value, char **resp
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_set_st_ble_stream__acc__channels(int32_t value, char **response_message)
+uint8_t iis2iclx_acc_set_st_ble_stream__acc_channels(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -526,7 +517,7 @@ uint8_t iis2iclx_acc_set_st_ble_stream__acc__channels(int32_t value, char **resp
   return ret;
 }
 
-uint8_t iis2iclx_acc_set_st_ble_stream__acc__multiply_factor(float value, char **response_message)
+uint8_t iis2iclx_acc_set_st_ble_stream__acc_multiply_factor(float value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -537,7 +528,7 @@ uint8_t iis2iclx_acc_set_st_ble_stream__acc__multiply_factor(float value, char *
   return ret;
 }
 
-uint8_t iis2iclx_acc_set_st_ble_stream__acc__odr(int32_t value, char **response_message)
+uint8_t iis2iclx_acc_set_st_ble_stream__acc_odr(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -547,4 +538,6 @@ uint8_t iis2iclx_acc_set_st_ble_stream__acc__odr(int32_t value, char **response_
   iis2iclx_acc_model.st_ble_stream.st_ble_stream_objects.odr = value;
   return ret;
 }
+
+
 

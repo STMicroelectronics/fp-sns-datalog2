@@ -154,8 +154,8 @@ uint8_t Wifi_Config_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "wifi_config.ssid"))
   {
-    valid_property = true;
     const char *ssid = json_object_dotget_string(tempJSONObject, "wifi_config.ssid");
+    valid_property = true;
     ret = wifi_config_set_ssid(ssid, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -173,8 +173,8 @@ uint8_t Wifi_Config_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   }
   if (json_object_dothas_value(tempJSONObject, "wifi_config.ftp_username"))
   {
-    valid_property = true;
     const char *ftp_username = json_object_dotget_string(tempJSONObject, "wifi_config.ftp_username");
+    valid_property = true;
     ret = wifi_config_set_ftp_username(ftp_username, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -191,7 +191,7 @@ uint8_t Wifi_Config_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
     }
   }
   json_value_free(tempJSON);
-  /* Check if received a request to modify an existing property */
+  /* Check if received a valid request to modify an existing property */
   if (valid_property)
   {
     if (pretty == 1)
@@ -208,8 +208,9 @@ uint8_t Wifi_Config_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   else
   {
     /* Set property is not containing a valid property/parameter: PnPL_Error */
-    char *log_message = "Invalid property for Wifi_Config";
+    char *log_message = "Invalid property for wifi_config";
     PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;
@@ -223,19 +224,30 @@ uint8_t Wifi_Config_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *seri
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_function = false;
   if (json_object_dothas_value(tempJSONObject, "wifi_config*wifi_connect.password"))
   {
+    valid_function = true;
     const char *password = json_object_dotget_string(tempJSONObject, "wifi_config*wifi_connect.password");
     ret = wifi_config_wifi_connect(password);
   }
   if (json_object_dothas_value(tempJSONObject, "wifi_config*wifi_disconnect"))
   {
-    ret = wifi_config_wifi_disconnect();
+    valid_function = true;
   }
   if (json_object_dothas_value(tempJSONObject, "wifi_config*set_ftp_credentials.password"))
   {
+    valid_function = true;
     const char *password = json_object_dotget_string(tempJSONObject, "wifi_config*set_ftp_credentials.password");
     ret = wifi_config_set_ftp_credentials(password);
+  }
+  /* Check if received a valid function to modify an existing property */
+  if (valid_function == false)
+  {
+    char log_message[100];
+    (void) sprintf(log_message, "%s Invalid command", serializedJSON);
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(tempJSON);
   return ret;

@@ -52,6 +52,10 @@
 #define IIS2ICLX_TASK_CFG_TIMER_PERIOD_MS          1000
 #endif
 
+#ifndef IIS2ICLX_TASK_CFG_MLC_TIMER_PERIOD_MS
+#define IIS2ICLX_TASK_CFG_MLC_TIMER_PERIOD_MS      500
+#endif
+
 #ifndef IIS2ICLX_TASK_CFG_MAX_INSTANCES_COUNT
 #define IIS2ICLX_TASK_CFG_MAX_INSTANCES_COUNT      1
 #endif
@@ -87,9 +91,24 @@ typedef struct _IIS2ICLXTaskClass
   const ISensorMems_vtbl sensor_if_vtbl;
 
   /**
+    * mlc IF virtual table.
+    */
+  const ISensorMems_vtbl mlc_sensor_if_vtbl;
+
+  /**
+    * SensorLL IF virtual table.
+    */
+  const ISensorLL_vtbl sensor_ll_if_vtbl;
+
+  /**
     * Specifies accelerometer sensor capabilities.
     */
   const SensorDescriptor_t class_descriptor;
+
+  /**
+    * Specifies mlc sensor capabilities.
+    */
+  const SensorDescriptor_t mlc_class_descriptor;
 
   /**
     * IIS2ICLXTask (PM_STATE, ExecuteStepFunc) map.
@@ -142,6 +161,14 @@ static sys_error_code_t IIS2ICLXTaskSensorInit(IIS2ICLXTask *_this);
 static sys_error_code_t IIS2ICLXTaskSensorReadData(IIS2ICLXTask *_this);
 
 /**
+  * Read the data from the mlc.
+  *
+  * @param _this [IN] specifies a pointer to a task object.
+  * @return SYS_NO_EROR_CODE if success, a task specific error code otherwise.
+  */
+static sys_error_code_t IIS2ICLXTaskSensorReadMLC(IIS2ICLXTask *_this);
+
+/**
   * Register the sensor with the global DB and initialize the default parameters.
   *
   * @param _this [IN] specifies a pointer to a task object.
@@ -176,6 +203,15 @@ static boolean_t IIS2ICLXTaskSensorIsActive(const IIS2ICLXTask *_this);
 static sys_error_code_t IIS2ICLXTaskEnterLowPowerMode(const IIS2ICLXTask *_this);
 
 static sys_error_code_t IIS2ICLXTaskConfigureIrqPin(const IIS2ICLXTask *_this, boolean_t LowPower);
+static sys_error_code_t IIS2ICLXTaskConfigureMLCPin(const IIS2ICLXTask *_this, boolean_t LowPower);
+
+/**
+  * Given a interface pointer it return the instance of the object that implement the interface.
+  *
+  * @param p_if [IN] specifies a sensor interface implemented by the task object.
+  * @return the instance of the task object that implements the given interface.
+  */
+static inline IIS2ICLXTask *IIS2ICLXTaskGetOwnerFromISensorIF(ISensor_t *p_if);
 
 /**
   * Callback function called when the software timer expires.
@@ -183,6 +219,23 @@ static sys_error_code_t IIS2ICLXTaskConfigureIrqPin(const IIS2ICLXTask *_this, b
   * @param param [IN] specifies an application defined parameter.
   */
 static void IIS2ICLXTaskTimerCallbackFunction(ULONG param);
+
+/**
+  * Callback function called when the mlc software timer expires.
+  *
+  * @param param [IN] specifies an application defined parameter.
+  */
+static void IIS2ICLXTaskMLCTimerCallbackFunction(ULONG param);
+
+/**
+  * Read the odr value from the sensor and update the internal model
+  */
+static sys_error_code_t IIS2ICLX_ODR_Sync(IIS2ICLXTask *_this);
+
+/**
+  * Read the odr value from the sensor and update the internal model
+  */
+static sys_error_code_t IIS2ICLX_FS_Sync(IIS2ICLXTask *_this);
 
 
 /* Inline function forward declaration */
@@ -256,10 +309,46 @@ static IIS2ICLXTaskClass_t sTheClass =
     IIS2ICLXTask_vtblSensorSetFifoWM
   },
 
+  /* class::mlc_sensor_if_vtbl virtual table */
+  {
+    {
+      {
+        IIS2ICLXTask_vtblMlcGetId,
+        IIS2ICLXTask_vtblMlcGetEventSourceIF,
+        IIS2ICLXTask_vtblMlcGetDataInfo
+      },
+      IIS2ICLXTask_vtblSensorEnable,
+      IIS2ICLXTask_vtblSensorDisable,
+      IIS2ICLXTask_vtblSensorIsEnabled,
+      IIS2ICLXTask_vtblMlcGetDescription,
+      IIS2ICLXTask_vtblMlcGetStatus,
+      IIS2ICLXTask_vtblMlcGetStatusPointer
+    },
+    IIS2ICLXTask_vtblMlcGetODR,
+    IIS2ICLXTask_vtblMlcGetFS,
+    IIS2ICLXTask_vtblMlcGetSensitivity,
+    IIS2ICLXTask_vtblSensorSetODR,
+    IIS2ICLXTask_vtblSensorSetFS,
+    IIS2ICLXTask_vtblSensorSetFifoWM
+  },
+
+  /* class::sensor_ll_if_vtbl virtual table */
+  {
+    IIS2ICLXTask_vtblSensorReadReg,
+    IIS2ICLXTask_vtblSensorWriteReg,
+    IIS2ICLXTask_vtblSensorSyncModel
+  },
+
   /* ACCELEROMETER DESCRIPTOR */
   {
     "iis2iclx",
     COM_TYPE_ACC
+  },
+
+  /* MLC DESCRIPTOR */
+  {
+    "iis2iclx",
+    COM_TYPE_MLC
   },
 
   /* class (PM_STATE, ExecuteStepFunc) map */
@@ -280,7 +369,18 @@ ISourceObservable *IIS2ICLXTaskGetAccSensorIF(IIS2ICLXTask *_this)
   return (ISourceObservable *) & (_this->sensor_if);
 }
 
-AManagedTaskEx *IIS2ICLXTaskAlloc(const void *pIRQConfig, const void *pCSConfig)
+ISourceObservable *IIS2ICLXTaskGetMlcSensorIF(IIS2ICLXTask *_this)
+{
+  return (ISourceObservable *) & (_this->mlc_sensor_if);
+}
+
+ISensorLL_t *IIS2ICLXTaskGetSensorLLIF(IIS2ICLXTask *_this)
+{
+  return (ISensorLL_t *) & (_this->sensor_ll_if);
+}
+
+
+AManagedTaskEx *IIS2ICLXTaskAlloc(const void *pIRQConfig, const void *pMLCConfig, const void *pCSConfig)
 {
   IIS2ICLXTask *p_new_obj = SysAlloc(sizeof(IIS2ICLXTask));
 
@@ -291,28 +391,36 @@ AManagedTaskEx *IIS2ICLXTaskAlloc(const void *pIRQConfig, const void *pCSConfig)
 
     p_new_obj->super.vptr = &sTheClass.vtbl;
     p_new_obj->sensor_if.vptr = &sTheClass.sensor_if_vtbl;
+    p_new_obj->mlc_sensor_if.vptr = &sTheClass.mlc_sensor_if_vtbl;
+    p_new_obj->sensor_ll_if.vptr = &sTheClass.sensor_ll_if_vtbl;
     p_new_obj->sensor_descriptor = &sTheClass.class_descriptor;
+    p_new_obj->mlc_sensor_descriptor = &sTheClass.mlc_class_descriptor;
 
     p_new_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
+    p_new_obj->pMLCConfig = (MX_GPIOParams_t *) pMLCConfig;
     p_new_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
 
     strcpy(p_new_obj->sensor_status.p_name, sTheClass.class_descriptor.p_name);
+    strcpy(p_new_obj->mlc_sensor_status.p_name, sTheClass.mlc_class_descriptor.p_name);
   }
 
   return (AManagedTaskEx *) p_new_obj;
 }
 
-AManagedTaskEx *IIS2ICLXTaskAllocSetName(const void *pIRQConfig, const void *pCSConfig, const char *p_name)
+AManagedTaskEx *IIS2ICLXTaskAllocSetName(const void *pIRQConfig, const void *pMLCConfig, const void *pCSConfig,
+                                         const char *p_name)
 {
-  IIS2ICLXTask *p_new_obj = (IIS2ICLXTask *)IIS2ICLXTaskAlloc(pIRQConfig, pCSConfig);
+  IIS2ICLXTask *p_new_obj = (IIS2ICLXTask *)IIS2ICLXTaskAlloc(pIRQConfig, pMLCConfig, pCSConfig);
 
   /* Overwrite default name with the one selected by the application */
   strcpy(p_new_obj->sensor_status.p_name, p_name);
+  strcpy(p_new_obj->mlc_sensor_status.p_name, p_name);
 
   return (AManagedTaskEx *) p_new_obj;
 }
 
-AManagedTaskEx *IIS2ICLXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig)
+AManagedTaskEx *IIS2ICLXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfig, const void *pMLCConfig,
+                                        const void *pCSConfig)
 {
   IIS2ICLXTask *p_obj = (IIS2ICLXTask *)p_mem_block;
 
@@ -324,22 +432,28 @@ AManagedTaskEx *IIS2ICLXTaskStaticAlloc(void *p_mem_block, const void *pIRQConfi
 
     p_obj->super.vptr = &sTheClass.vtbl;
     p_obj->sensor_if.vptr = &sTheClass.sensor_if_vtbl;
+    p_obj->mlc_sensor_if.vptr = &sTheClass.mlc_sensor_if_vtbl;
+    p_obj->sensor_ll_if.vptr = &sTheClass.sensor_ll_if_vtbl;
     p_obj->sensor_descriptor = &sTheClass.class_descriptor;
+    p_obj->mlc_sensor_descriptor = &sTheClass.mlc_class_descriptor;
 
     p_obj->pIRQConfig = (MX_GPIOParams_t *) pIRQConfig;
+    p_obj->pMLCConfig = (MX_GPIOParams_t *) pMLCConfig;
     p_obj->pCSConfig = (MX_GPIOParams_t *) pCSConfig;
   }
 
   return (AManagedTaskEx *)p_obj;
 }
 
-AManagedTaskEx *IIS2ICLXTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pCSConfig,
+AManagedTaskEx *IIS2ICLXTaskStaticAllocSetName(void *p_mem_block, const void *pIRQConfig, const void *pMLCConfig,
+                                               const void *pCSConfig,
                                                const char *p_name)
 {
-  IIS2ICLXTask *p_obj = (IIS2ICLXTask *)IIS2ICLXTaskStaticAlloc(p_mem_block, pIRQConfig, pCSConfig);
+  IIS2ICLXTask *p_obj = (IIS2ICLXTask *)IIS2ICLXTaskStaticAlloc(p_mem_block, pIRQConfig, pMLCConfig, pCSConfig);
 
   /* Overwrite default name with the one selected by the application */
   strcpy(p_obj->sensor_status.p_name, p_name);
+  strcpy(p_obj->mlc_sensor_status.p_name, p_name);
 
   return (AManagedTaskEx *) p_obj;
 }
@@ -356,6 +470,13 @@ IEventSrc *IIS2ICLXTaskGetEventSrcIF(IIS2ICLXTask *_this)
   assert_param(_this != NULL);
 
   return (IEventSrc *) _this->p_event_src;
+}
+
+IEventSrc *IIS2ICLXTaskGetMlcEventSrcIF(IIS2ICLXTask *_this)
+{
+  assert_param(_this != NULL);
+
+  return (IEventSrc *) _this->p_mlc_event_src;
 }
 
 // AManagedTask virtual functions definition
@@ -411,7 +532,15 @@ sys_error_code_t IIS2ICLXTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
     return res;
   }
-
+  /* create the mlc software timer*/
+  if (TX_SUCCESS
+      != tx_timer_create(&p_obj->mlc_timer, "IIS2ICLX_MLC_T", IIS2ICLXTaskMLCTimerCallbackFunction, (ULONG)_this,
+                         AMT_MS_TO_TICKS(IIS2ICLX_TASK_CFG_MLC_TIMER_PERIOD_MS), 0, TX_NO_ACTIVATE))
+  {
+    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    return res;
+  }
   /* Alloc the bus interface (SPI if the task is given the CS Pin configuration param, I2C otherwise) */
   if (p_obj->pCSConfig != NULL)
   {
@@ -446,6 +575,15 @@ sys_error_code_t IIS2ICLXTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
   }
   IEventSrcInit(p_obj->p_event_src);
 
+  p_obj->p_mlc_event_src = DataEventSrcAlloc();
+  if (p_obj->p_mlc_event_src == NULL)
+  {
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+    res = SYS_OUT_OF_MEMORY_ERROR_CODE;
+    return res;
+  }
+  IEventSrcInit(p_obj->p_mlc_event_src);
+
   if (!MTMap_IsInitialized(&sTheClass.task_map))
   {
     (void) MTMap_Init(&sTheClass.task_map, sTheClass.task_map_elements, IIS2ICLX_TASK_CFG_MAX_INSTANCES_COUNT);
@@ -466,8 +604,25 @@ sys_error_code_t IIS2ICLXTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fun
     }
   }
 
+  /* Add the managed task to the map.*/
+  if (p_obj->pMLCConfig != NULL)
+  {
+    /* Use the PIN as unique key for the map. */
+    MTMapElement_t *p_element = NULL;
+    uint32_t key = (uint32_t) p_obj->pMLCConfig->pin;
+    p_element = MTMap_AddElement(&sTheClass.task_map, key, _this);
+    if (p_element == NULL)
+    {
+      SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+      res = SYS_INVALID_PARAMETER_ERROR_CODE;
+      return res;
+    }
+  }
+
   memset(p_obj->p_sensor_data_buff, 0, sizeof(p_obj->p_sensor_data_buff));
+  memset(p_obj->p_mlc_sensor_data_buff, 0, sizeof(p_obj->p_mlc_sensor_data_buff));
   p_obj->acc_id = 0;
+  p_obj->mlc_enable = FALSE;
   p_obj->prev_timestamp = 0.0f;
   p_obj->fifo_level = 0;
   p_obj->samples_per_it = 0;
@@ -554,6 +709,15 @@ sys_error_code_t IIS2ICLXTask_vtblDoEnterPowerMode(AManagedTask *_this, const EP
       {
         IIS2ICLXTaskConfigureIrqPin(p_obj, TRUE);
       }
+      if (p_obj->pMLCConfig == NULL)
+      {
+        tx_timer_deactivate(&p_obj->mlc_timer);
+      }
+      else
+      {
+        IIS2ICLXTaskConfigureMLCPin(p_obj, TRUE);
+      }
+      memset(p_obj->p_mlc_sensor_data_buff, 0, sizeof(p_obj->p_mlc_sensor_data_buff));
     }
 
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2ICLX: -> STATE1\r\n"));
@@ -571,6 +735,10 @@ sys_error_code_t IIS2ICLXTask_vtblDoEnterPowerMode(AManagedTask *_this, const EP
     {
       IIS2ICLXTaskConfigureIrqPin(p_obj, TRUE);
     }
+    if (p_obj->pMLCConfig != NULL)
+    {
+      IIS2ICLXTaskConfigureMLCPin(p_obj, TRUE);
+    }
     /* notify the bus */
     if (p_obj->p_sensor_bus_if->m_pfBusCtrl != NULL)
     {
@@ -579,6 +747,10 @@ sys_error_code_t IIS2ICLXTask_vtblDoEnterPowerMode(AManagedTask *_this, const EP
     if (p_obj->pIRQConfig == NULL)
     {
       tx_timer_deactivate(&p_obj->read_timer);
+    }
+    if (p_obj->pMLCConfig == NULL)
+    {
+      tx_timer_deactivate(&p_obj->mlc_timer);
     }
 
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS2ICLX: -> SLEEP_1\r\n"));
@@ -677,12 +849,28 @@ uint8_t IIS2ICLXTask_vtblAccGetId(ISourceObservable *_this)
   return res;
 }
 
+uint8_t IIS2ICLXTask_vtblMlcGetId(ISourceObservable *_this)
+{
+  assert_param(_this != NULL);
+  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, mlc_sensor_if));
+  uint8_t res = p_if_owner->mlc_id;
+
+  return res;
+}
+
 IEventSrc *IIS2ICLXTask_vtblGetEventSourceIF(ISourceObservable *_this)
 {
   assert_param(_this != NULL);
   IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_if));
 
   return p_if_owner->p_event_src;
+}
+
+IEventSrc *IIS2ICLXTask_vtblMlcGetEventSourceIF(ISourceObservable *_this)
+{
+  assert_param(_this != NULL);
+  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, mlc_sensor_if));
+  return p_if_owner->p_mlc_event_src;
 }
 
 sys_error_code_t IIS2ICLXTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
@@ -734,11 +922,66 @@ EMData_t IIS2ICLXTask_vtblAccGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
+sys_error_code_t IIS2ICLXTask_vtblMlcGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+{
+  assert_param(_this != NULL);
+  /*get the object implementing the ISourceObservable IF */
+  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, mlc_sensor_if));
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  /* parameter validation */
+  if ((p_measured == NULL) || (p_nominal == NULL))
+  {
+    res = SYS_INVALID_PARAMETER_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+  }
+  else
+  {
+    *p_measured = p_if_owner->mlc_sensor_status.type.mems.measured_odr;
+    *p_nominal = p_if_owner->mlc_sensor_status.type.mems.odr;
+  }
+
+  return res;
+}
+
+float IIS2ICLXTask_vtblMlcGetFS(ISensorMems_t *_this)
+{
+  assert_param(_this != NULL);
+
+  /* MLC does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_INVALID_CALL_ERROR_CODE);
+
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS2ICLX: warning - MLC GetFS() not supported.\r\n"));
+
+  return -1.0f;
+}
+
+float IIS2ICLXTask_vtblMlcGetSensitivity(ISensorMems_t *_this)
+{
+  assert_param(_this != NULL);
+
+  /* MLC does not support this virtual function.*/
+  SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_INVALID_CALL_ERROR_CODE);
+
+  SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS2ICLX: warning - MLC GetSensitivity() not supported.\r\n"));
+
+  return -1.0f;
+}
+
+EMData_t IIS2ICLXTask_vtblMlcGetDataInfo(ISourceObservable *_this)
+{
+  assert_param(_this != NULL);
+  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, mlc_sensor_if));
+  EMData_t res = p_if_owner->data_mlc;
+
+  return res;
+}
+
 sys_error_code_t IIS2ICLXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_if));
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
 
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
@@ -754,8 +997,20 @@ sys_error_code_t IIS2ICLXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       /* ODR = 0 sends only message to switch off the sensor.
        * Do not update the model in case of odr = 0 */
 
-      p_if_owner->sensor_status.type.mems.odr = odr;
-      p_if_owner->sensor_status.type.mems.measured_odr = 0.0f;
+      if (sensor_id == p_if_owner->acc_id)
+      {
+        p_if_owner->sensor_status.type.mems.odr = odr;
+        p_if_owner->sensor_status.type.mems.measured_odr = 0.0f;
+      }
+      else if (sensor_id == p_if_owner->mlc_id)
+      {
+        p_if_owner->mlc_sensor_status.type.mems.odr = odr;
+        p_if_owner->mlc_sensor_status.type.mems.measured_odr = 0.0f;
+      }
+      else
+      {
+        /**/
+      }
     }
     /* Set a new command message in the queue */
     SMMessage report =
@@ -775,7 +1030,7 @@ sys_error_code_t IIS2ICLXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_if));
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
 
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
@@ -786,14 +1041,25 @@ sys_error_code_t IIS2ICLXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
   }
   else
   {
-    p_if_owner->sensor_status.type.mems.fs = fs;
-    if (fs < 3.0f)
+    if (sensor_id == p_if_owner->acc_id)
     {
-      p_if_owner->sensor_status.type.mems.sensitivity = 0.0000305f * p_if_owner->sensor_status.type.mems.fs;
+      p_if_owner->sensor_status.type.mems.fs = fs;
+      if (fs < 3.0f)
+      {
+        p_if_owner->sensor_status.type.mems.sensitivity = 0.0000305f * p_if_owner->sensor_status.type.mems.fs;
+      }
+      else
+      {
+        p_if_owner->sensor_status.type.mems.sensitivity = 0.0000406f * p_if_owner->sensor_status.type.mems.fs;
+      }
+    }
+    else if (sensor_id == p_if_owner->mlc_id)
+    {
+      p_if_owner->mlc_sensor_status.type.mems.fs = fs;
     }
     else
     {
-      p_if_owner->sensor_status.type.mems.sensitivity = 0.0000406f * p_if_owner->sensor_status.type.mems.fs;
+      /**/
     }
     /* Set a new command message in the queue */
     SMMessage report =
@@ -815,7 +1081,7 @@ sys_error_code_t IIS2ICLXTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
 #if IIS2ICLX_FIFO_ENABLED
-  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_if));
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
@@ -844,7 +1110,7 @@ sys_error_code_t IIS2ICLXTask_vtblSensorEnable(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_if));
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF(_this);
 
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
@@ -855,7 +1121,18 @@ sys_error_code_t IIS2ICLXTask_vtblSensorEnable(ISensor_t *_this)
   }
   else
   {
-    p_if_owner->sensor_status.is_active = TRUE;
+    if (sensor_id == p_if_owner->acc_id)
+    {
+      p_if_owner->sensor_status.is_active = TRUE;
+    }
+    else if (sensor_id == p_if_owner->mlc_id)
+    {
+      p_if_owner->mlc_sensor_status.is_active = TRUE;
+    }
+    else
+    {
+      /**/
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -873,7 +1150,7 @@ sys_error_code_t IIS2ICLXTask_vtblSensorDisable(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_if));
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF(_this);
 
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
@@ -884,7 +1161,18 @@ sys_error_code_t IIS2ICLXTask_vtblSensorDisable(ISensor_t *_this)
   }
   else
   {
-    p_if_owner->sensor_status.is_active = FALSE;
+    if (sensor_id == p_if_owner->acc_id)
+    {
+      p_if_owner->sensor_status.is_active = FALSE;
+    }
+    else if (sensor_id == p_if_owner->mlc_id)
+    {
+      p_if_owner->mlc_sensor_status.is_active = FALSE;
+    }
+    else
+    {
+      /**/
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -902,11 +1190,15 @@ boolean_t IIS2ICLXTask_vtblSensorIsEnabled(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   boolean_t res = FALSE;
-  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_if));
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF(_this);
 
   if (ISourceGetId((ISourceObservable *) _this) == p_if_owner->acc_id)
   {
     res = p_if_owner->sensor_status.is_active;
+  }
+  else if (ISourceGetId((ISourceObservable *) _this) == p_if_owner->mlc_id)
+  {
+    res = p_if_owner->mlc_sensor_status.is_active;
   }
   else
   {
@@ -919,25 +1211,112 @@ boolean_t IIS2ICLXTask_vtblSensorIsEnabled(ISensor_t *_this)
 SensorDescriptor_t IIS2ICLXTask_vtblSensorGetDescription(ISensor_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_if));
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF(_this);
 
   return *p_if_owner->sensor_descriptor;
+}
+
+SensorDescriptor_t IIS2ICLXTask_vtblMlcGetDescription(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF(_this);
+  return *p_if_owner->mlc_sensor_descriptor;
 }
 
 SensorStatus_t IIS2ICLXTask_vtblSensorGetStatus(ISensor_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_if));
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF(_this);
 
   return p_if_owner->sensor_status;
+}
+
+SensorStatus_t IIS2ICLXTask_vtblMlcGetStatus(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF(_this);
+  return p_if_owner->mlc_sensor_status;
 }
 
 SensorStatus_t *IIS2ICLXTask_vtblSensorGetStatusPointer(ISensor_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_if));
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF(_this);
 
   return &p_if_owner->sensor_status;
+}
+
+SensorStatus_t *IIS2ICLXTask_vtblMlcGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  IIS2ICLXTask *p_if_owner = IIS2ICLXTaskGetOwnerFromISensorIF(_this);
+  return &p_if_owner->mlc_sensor_status;
+}
+
+sys_error_code_t IIS2ICLXTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len)
+{
+  assert_param(_this != NULL);
+  assert_param(reg <= 0xFFU);
+  assert_param(data != NULL);
+  assert_param(len != 0U);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_ll_if));
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &p_if_owner->p_sensor_bus_if->m_xConnector;
+  uint8_t reg8 = (uint8_t)(reg & 0x00FF);
+
+  if (iis2iclx_read_reg(p_sensor_drv, reg8, data, len) != 0)
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
+
+  return res;
+}
+
+sys_error_code_t IIS2ICLXTask_vtblSensorWriteReg(ISensorLL_t *_this, uint16_t reg, const uint8_t *data, uint16_t len)
+{
+  assert_param(_this != NULL);
+  assert_param(reg <= 0xFFU);
+  assert_param(data != NULL);
+  assert_param(len != 0U);
+
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_ll_if));
+  uint8_t reg8 = (uint8_t)(reg & 0x00FF);
+
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &p_if_owner->p_sensor_bus_if->m_xConnector;
+
+  /* This generic register write operation could mean that the model is out of sync with the HW */
+  p_if_owner->sync = false;
+
+  if (iis2iclx_write_reg(p_sensor_drv, reg8, (uint8_t *)data, len) != 0)
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
+
+  return res;
+}
+
+sys_error_code_t IIS2ICLXTask_vtblSensorSyncModel(ISensorLL_t *_this)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  IIS2ICLXTask *p_if_owner = (IIS2ICLXTask *)((uint32_t) _this - offsetof(IIS2ICLXTask, sensor_ll_if));
+
+  if (IIS2ICLX_ODR_Sync(p_if_owner) != SYS_NO_ERROR_CODE)
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
+  if (IIS2ICLX_FS_Sync(p_if_owner) != SYS_NO_ERROR_CODE)
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
+
+  if (!SYS_IS_ERROR_CODE(res))
+  {
+    p_if_owner->sync = true;
+  }
+
+  return res;
 }
 
 /* Private function definition */
@@ -1077,6 +1456,30 @@ static sys_error_code_t IIS2ICLXTaskExecuteStepDatalog(AManagedTask *_this)
         }
         break;
       }
+      case SM_MESSAGE_ID_DATA_READY_MLC:
+      {
+        res = IIS2ICLXTaskSensorReadMLC(p_obj);
+        if (!SYS_IS_ERROR_CODE(res))
+        {
+          // notify the listeners...
+          double timestamp = report.sensorDataReadyMessage.fTimestamp;
+
+          if (p_obj->mlc_enable)
+          {
+            EMD_Init(&p_obj->data_mlc, p_obj->p_mlc_sensor_data_buff, E_EM_UINT8, E_EM_MODE_INTERLEAVED, 2, 1, 9);
+
+            DataEvent_t evt;
+
+            DataEventInit((IEvent *) &evt, p_obj->p_mlc_event_src, &p_obj->data_mlc, timestamp, p_obj->mlc_id);
+            IEventSrcSendEvent(p_obj->p_mlc_event_src, (IEvent *) &evt, NULL);
+          }
+          else
+          {
+            res = SYS_INVALID_PARAMETER_ERROR_CODE;
+          }
+        }
+        break;
+      }
       case SM_MESSAGE_ID_SENSOR_CMD:
       {
         switch (report.sensorMessage.nCmdID)
@@ -1103,6 +1506,29 @@ static sys_error_code_t IIS2ICLXTaskExecuteStepDatalog(AManagedTask *_this)
                 else
                 {
                   IIS2ICLXTaskConfigureIrqPin(p_obj, FALSE);
+                }
+              }
+            }
+            if (!SYS_IS_ERROR_CODE(res))
+            {
+              if (p_obj->mlc_sensor_status.is_active == true)
+              {
+                if (p_obj->pMLCConfig == NULL)
+                {
+                  if (TX_SUCCESS
+                      != tx_timer_change(&p_obj->mlc_timer, AMT_MS_TO_TICKS(IIS2ICLX_TASK_CFG_MLC_TIMER_PERIOD_MS),
+                                         AMT_MS_TO_TICKS(IIS2ICLX_TASK_CFG_MLC_TIMER_PERIOD_MS)))
+                  {
+                    res = SYS_UNDEFINED_ERROR_CODE;
+                  }
+                  if (TX_SUCCESS != tx_timer_activate(&p_obj->mlc_timer))
+                  {
+                    res = SYS_UNDEFINED_ERROR_CODE;
+                  }
+                }
+                else
+                {
+                  IIS2ICLXTaskConfigureMLCPin(p_obj, FALSE);
                 }
               }
             }
@@ -1212,6 +1638,10 @@ static sys_error_code_t IIS2ICLXTaskSensorInit(IIS2ICLXTask *_this)
 
   // if this variable need to persist then I move it in the managed task class declaration.
   iis2iclx_pin_int1_route_t int1_route =
+  {
+    0
+  };
+  iis2iclx_pin_int2_route_t int2_route =
   {
     0
   };
@@ -1350,6 +1780,38 @@ static sys_error_code_t IIS2ICLXTaskSensorInit(IIS2ICLXTask *_this)
   iis2iclx_pin_int1_route_set(p_sensor_drv, &int1_route);
 #endif /* IIS2ICLX_FIFO_ENABLED */
 
+  /* Setup mlc */
+  if (_this->mlc_enable)
+  {
+    iis2iclx_pin_int1_route_get(p_sensor_drv, &int1_route);
+    iis2iclx_pin_int2_route_get(p_sensor_drv, &int2_route);
+
+    if (int1_route.mlc_int1.int1_mlc1 == 1 || int1_route.md1_cfg.int1_emb_func == 1)
+    {
+      int1_route.mlc_int1.int1_mlc1 = 0;
+      int1_route.md1_cfg.int1_emb_func = 0;
+      iis2iclx_pin_int1_route_set(p_sensor_drv, &int1_route);
+    }
+
+    if (int2_route.mlc_int2.int2_mlc1 == 0 || int2_route.md2_cfg.int2_emb_func == 0)
+    {
+      int2_route.mlc_int2.int2_mlc1 = 1;
+      int2_route.md2_cfg.int2_emb_func = 1;
+      iis2iclx_pin_int2_route_set(p_sensor_drv, &int2_route);
+    }
+
+    SMMessage report;
+    report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY_MLC;
+    report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
+
+    // if (sTaskObj.in_queue != NULL ) {//TODO: STF.Port - how to check if the queue has been initialized ??
+    if (TX_SUCCESS != tx_queue_send(&_this->in_queue, &report, TX_NO_WAIT))
+    {
+      /* unable to send the report. Signal the error */
+      sys_error_handler();
+    }
+  }
+
   if (_this->sensor_status.is_active)
   {
 #if IIS2ICLX_FIFO_ENABLED
@@ -1380,28 +1842,31 @@ static sys_error_code_t IIS2ICLXTaskSensorReadData(IIS2ICLXTask *_this)
 
   if ((reg[1]) & 0x80 && (_this->fifo_level >= samples_per_it))
   {
-    iis2iclx_read_reg(p_sensor_drv, IIS2ICLX_FIFO_DATA_OUT_TAG, (uint8_t *) _this->p_fifo_data_buff, samples_per_it * 7);
+    res = iis2iclx_read_reg(p_sensor_drv, IIS2ICLX_FIFO_DATA_OUT_TAG, (uint8_t *) _this->p_fifo_data_buff, samples_per_it * 7);
 
+    if (!SYS_IS_ERROR_CODE(res))
+    {
 #if (HSD_USE_DUMMY_DATA == 1)
-    int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
+      int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
 
-    for (i = 0; i < samples_per_it; i++)
-    {
-      *p16++ = dummyDataCounter++;
-      *p16++ = dummyDataCounter++;
-    }
+      for (i = 0; i < samples_per_it; i++)
+      {
+        *p16++ = dummyDataCounter++;
+        *p16++ = dummyDataCounter++;
+      }
 #else
-    /* Arrange Data */
-    int16_t *p16_src = (int16_t *) _this->p_fifo_data_buff;
-    int16_t *p16_dest = (int16_t *) _this->p_sensor_data_buff;
-    for (i = 0; i < samples_per_it; i++)
-    {
-      p16_src = (int16_t *) & ((uint8_t *)(p16_src))[1];
-      *p16_dest++ = *p16_src++;
-      *p16_dest++ = *p16_src++;
-      p16_src++;
-    }
+      /* Arrange Data */
+      int16_t *p16_src = (int16_t *) _this->p_fifo_data_buff;
+      int16_t *p16_dest = (int16_t *) _this->p_sensor_data_buff;
+      for (i = 0; i < samples_per_it; i++)
+      {
+        p16_src = (int16_t *) & ((uint8_t *)(p16_src))[1];
+        *p16_dest++ = *p16_src++;
+        *p16_dest++ = *p16_src++;
+        p16_src++;
+      }
 #endif /* HSD_USE_DUMMY_DATA */
+    }
   }
   else
   {
@@ -1410,18 +1875,39 @@ static sys_error_code_t IIS2ICLXTaskSensorReadData(IIS2ICLXTask *_this)
   }
 
 #else
-  iis2iclx_read_reg(p_sensor_drv, IIS2ICLX_OUTX_L_A, (uint8_t *) _this->p_sensor_data_buff, samples_per_it * 4);
+  res = iis2iclx_read_reg(p_sensor_drv, IIS2ICLX_OUTX_L_A, (uint8_t *) _this->p_sensor_data_buff, samples_per_it * 4);
   _this->fifo_level = 1;
-#if (HSD_USE_DUMMY_DATA == 1)
-  int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
 
-  for (i = 0; i < samples_per_it; i++)
+  if (!SYS_IS_ERROR_CODE(res))
   {
-    *p16++ = dummyDataCounter++;
-    *p16++ = dummyDataCounter++;
-  }
+#if (HSD_USE_DUMMY_DATA == 1)
+    int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
+
+    for (i = 0; i < samples_per_it; i++)
+    {
+      *p16++ = dummyDataCounter++;
+      *p16++ = dummyDataCounter++;
+    }
 #endif /* HSD_USE_DUMMY_DATA */
+  }
 #endif /* IIS2ICLX_FIFO_ENABLED */
+
+  return res;
+}
+
+static sys_error_code_t IIS2ICLXTaskSensorReadMLC(IIS2ICLXTask *_this)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
+
+  if (_this->mlc_enable)
+  {
+    iis2iclx_mlc_status_get(p_sensor_drv, (iis2iclx_mlc_status_mainpage_t *) &_this->p_mlc_sensor_data_buff[8]);
+    iis2iclx_mem_bank_set(p_sensor_drv, IIS2ICLX_EMBEDDED_FUNC_BANK);
+    iis2iclx_read_reg(p_sensor_drv, IIS2ICLX_MLC0_SRC, (uint8_t *)(&_this->p_mlc_sensor_data_buff[0]), 8);
+    iis2iclx_mem_bank_set(p_sensor_drv, IIS2ICLX_USER_BANK);
+  }
 
   return res;
 }
@@ -1431,8 +1917,15 @@ static sys_error_code_t IIS2ICLXTaskSensorRegister(IIS2ICLXTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
+#if !IIS2ICLX_ACC_DISABLED
   ISensor_t *acc_if = (ISensor_t *) IIS2ICLXTaskGetAccSensorIF(_this);
   _this->acc_id = SMAddSensor(acc_if);
+#endif
+
+#if !IIS2ICLX_MLC_DISABLED
+  ISensor_t *mlc_if = (ISensor_t *) IIS2ICLXTaskGetMlcSensorIF(_this);
+  _this->mlc_id = SMAddSensor(mlc_if);
+#endif
 
   return res;
 }
@@ -1450,6 +1943,15 @@ static sys_error_code_t IIS2ICLXTaskSensorInitTaskParams(IIS2ICLXTask *_this)
   _this->sensor_status.type.mems.odr = 833.0f;
   _this->sensor_status.type.mems.measured_odr = 0.0f;
   EMD_Init(&_this->data, _this->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 2);
+
+  /* MLC STATUS */
+  _this->mlc_sensor_status.isensor_class = ISENSOR_CLASS_MEMS;
+  _this->mlc_sensor_status.is_active = FALSE;
+  _this->mlc_sensor_status.type.mems.fs = 1.0f;
+  _this->mlc_sensor_status.type.mems.sensitivity = 1.0f;
+  _this->mlc_sensor_status.type.mems.odr = 1.0f;
+  _this->mlc_sensor_status.type.mems.measured_odr = 0.0f;
+  EMD_Init(&_this->data_mlc, _this->p_mlc_sensor_data_buff, E_EM_UINT8, E_EM_MODE_INTERLEAVED, 2, 1, 9);
 
   return res;
 }
@@ -1506,6 +2008,13 @@ static sys_error_code_t IIS2ICLXTaskSensorSetODR(IIS2ICLXTask *_this, SMMessage 
       _this->sensor_status.type.mems.measured_odr = 0.0f;
     }
   }
+  else if (id == _this->mlc_id)
+  {
+    res = SYS_TASK_INVALID_CALL_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_INVALID_CALL_ERROR_CODE);
+
+    SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS2ICLX: warning - MLC SetODR() not supported.\r\n"));
+  }
   else
   {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
@@ -1551,6 +2060,13 @@ static sys_error_code_t IIS2ICLXTaskSensorSetFS(IIS2ICLXTask *_this, SMMessage r
       _this->sensor_status.type.mems.sensitivity = 0.0000406f * _this->sensor_status.type.mems.fs;
     }
   }
+  else if (id == _this->mlc_id)
+  {
+    res = SYS_TASK_INVALID_CALL_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_INVALID_CALL_ERROR_CODE);
+
+    SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("IIS2ICLX: warning - MLC SetFS() not supported.\r\n"));
+  }
   else
   {
     res = SYS_INVALID_PARAMETER_ERROR_CODE;
@@ -1563,6 +2079,14 @@ static sys_error_code_t IIS2ICLXTaskSensorSetFifoWM(IIS2ICLXTask *_this, SMMessa
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  if (report.sensorMessage.nSensorId == _this->mlc_id)
+  {
+    res = SYS_TASK_INVALID_CALL_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_TASK_INVALID_CALL_ERROR_CODE);
+
+    SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2ICLX: warning - MLC SetFifoWM() not supported.\r\n"));
+  }
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   uint16_t iis2iclx_wtm_level = (uint16_t)report.sensorMessage.nParam;
@@ -1600,6 +2124,15 @@ static sys_error_code_t IIS2ICLXTaskSensorEnable(IIS2ICLXTask *_this, SMMessage 
   if (id == _this->acc_id)
   {
     _this->sensor_status.is_active = TRUE;
+
+    /* Changing sensor configuration must disable MLC sensor: MLC can work properly only when setup from UCF */
+    _this->mlc_enable = FALSE;
+    _this->mlc_sensor_status.is_active = FALSE;
+  }
+  else if (id == _this->mlc_id)
+  {
+    _this->mlc_sensor_status.is_active = TRUE;
+    _this->mlc_enable = TRUE;
   }
   else
   {
@@ -1621,6 +2154,15 @@ static sys_error_code_t IIS2ICLXTaskSensorDisable(IIS2ICLXTask *_this, SMMessage
   {
     _this->sensor_status.is_active = FALSE;
     iis2iclx_xl_data_rate_set(p_sensor_drv, IIS2ICLX_XL_ODR_OFF);
+
+    /* Changing sensor configuration must disable MLC sensor: MLC can work properly only when setup from UCF */
+    _this->mlc_enable = FALSE;
+    _this->mlc_sensor_status.is_active = FALSE;
+  }
+  else if (id == _this->mlc_id)
+  {
+    _this->mlc_sensor_status.is_active = FALSE;
+    _this->mlc_enable = FALSE;
   }
   else
   {
@@ -1681,6 +2223,52 @@ static sys_error_code_t IIS2ICLXTaskConfigureIrqPin(const IIS2ICLXTask *_this, b
   return res;
 }
 
+static sys_error_code_t IIS2ICLXTaskConfigureMLCPin(const IIS2ICLXTask *_this, boolean_t LowPower)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  if (!LowPower)
+  {
+    /* Configure MLC INT Pin */
+    _this->pMLCConfig->p_mx_init_f();
+  }
+  else
+  {
+    GPIO_InitTypeDef GPIO_InitStruct =
+    {
+      0
+    };
+
+    // first disable the IRQ to avoid spurious interrupt to wake the MCU up.
+    HAL_NVIC_DisableIRQ(_this->pMLCConfig->irq_n);
+    HAL_NVIC_ClearPendingIRQ(_this->pMLCConfig->irq_n);
+    // then reconfigure the PIN in analog high impedance to reduce the power consumption.
+    GPIO_InitStruct.Pin = _this->pMLCConfig->pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(_this->pMLCConfig->port, &GPIO_InitStruct);
+  }
+
+  return res;
+}
+
+static inline IIS2ICLXTask *IIS2ICLXTaskGetOwnerFromISensorIF(ISensor_t *p_if)
+{
+  assert_param(p_if != NULL);
+  IIS2ICLXTask *p_if_owner = NULL;
+
+  /* check if the virtual function has been called from the mlc sensor IF  */
+  p_if_owner = (IIS2ICLXTask *)((uint32_t) p_if - offsetof(IIS2ICLXTask, mlc_sensor_if));
+  if (!(p_if_owner->sensor_if.vptr == &sTheClass.sensor_if_vtbl) || !(p_if_owner->super.vptr == &sTheClass.vtbl))
+  {
+    /* then the virtual function has been called from the acc IF  */
+    p_if_owner = (IIS2ICLXTask *)((uint32_t) p_if - offsetof(IIS2ICLXTask, sensor_if));
+  }
+
+  return p_if_owner;
+}
+
 static void IIS2ICLXTaskTimerCallbackFunction(ULONG param)
 {
   IIS2ICLXTask *p_obj = (IIS2ICLXTask *) param;
@@ -1692,6 +2280,22 @@ static void IIS2ICLXTaskTimerCallbackFunction(ULONG param)
   if (TX_SUCCESS != tx_queue_send(&p_obj->in_queue, &report, TX_NO_WAIT))
   {
     // unable to send the message. Signal the error
+    sys_error_handler();
+  }
+  //}
+}
+
+static void IIS2ICLXTaskMLCTimerCallbackFunction(ULONG param)
+{
+  IIS2ICLXTask *p_obj = (IIS2ICLXTask *) param;
+  SMMessage report;
+  report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY_MLC;
+  report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
+
+  // if (sTaskObj.in_queue != NULL ) {//TODO: STF.Port - how to check if the queue has been initialized ??
+  if (TX_SUCCESS != tx_queue_send(&p_obj->in_queue, &report, TX_NO_WAIT))
+  {
+    /* unable to send the report. Signal the error */
     sys_error_handler();
   }
   //}
@@ -1717,4 +2321,124 @@ void IIS2ICLXTask_EXTI_Callback(uint16_t nPin)
       sys_error_handler();
     }
   }
+}
+
+void INT2_ICLX_EXTI_Callback(uint16_t nPin)
+{
+  MTMapValue_t *p_val;
+  TX_QUEUE *p_queue;
+  SMMessage report;
+  report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY_MLC;
+  report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
+
+  p_val = MTMap_FindByKey(&sTheClass.task_map, (uint32_t) nPin);
+  if (p_val != NULL)
+  {
+    p_queue = &((IIS2ICLXTask *)p_val->p_mtask_obj)->in_queue;
+    if (TX_SUCCESS != tx_queue_send(p_queue, &report, TX_NO_WAIT))
+    {
+      /* unable to send the report. Signal the error */
+      sys_error_handler();
+    }
+  }
+}
+
+static sys_error_code_t IIS2ICLX_ODR_Sync(IIS2ICLXTask *_this)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
+
+  float odr = 0.0f;
+  iis2iclx_odr_xl_t iis2iclx_odr_xl;
+  if (iis2iclx_xl_data_rate_get(p_sensor_drv, &iis2iclx_odr_xl) == 0)
+  {
+    _this->sensor_status.is_active = TRUE;
+
+    /* Update only the model */
+    switch (iis2iclx_odr_xl)
+    {
+      case IIS2ICLX_XL_ODR_OFF:
+        _this->sensor_status.is_active = FALSE;
+        /* Do not update the model in case of odr = 0 */
+        odr = _this->sensor_status.type.mems.odr;
+        break;
+      case IIS2ICLX_XL_ODR_12Hz5:
+        odr = 12.5f;
+        break;
+      case IIS2ICLX_XL_ODR_26Hz:
+        odr = 26.0f;
+        break;
+      case IIS2ICLX_XL_ODR_52Hz:
+        odr = 52.0f;
+        break;
+      case IIS2ICLX_XL_ODR_104Hz:
+        odr = 104.0f;
+        break;
+      case IIS2ICLX_XL_ODR_208Hz:
+        odr = 208.0f;
+        break;
+      case IIS2ICLX_XL_ODR_416Hz:
+        odr = 416.0f;
+        break;
+      case IIS2ICLX_XL_ODR_833Hz:
+        odr = 833.0f;
+        break;
+      default:
+        break;
+    }
+    _this->sensor_status.type.mems.odr = odr;
+    _this->sensor_status.type.mems.measured_odr = 0.0f;
+
+  }
+  else
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
+  _this->samples_per_it = 0;
+  return res;
+}
+
+static sys_error_code_t IIS2ICLX_FS_Sync(IIS2ICLXTask *_this)
+{
+  assert_param(_this != NULL);
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
+
+  float fs = 2.0;
+  iis2iclx_fs_xl_t fs_xl;
+  if (iis2iclx_xl_full_scale_get(p_sensor_drv, &fs_xl) == 0)
+  {
+    switch (fs_xl)
+    {
+      case IIS2ICLX_500mg:
+        fs = 0.5;
+        break;
+      case IIS2ICLX_1g:
+        fs = 1.0;
+        break;
+      case IIS2ICLX_2g:
+        fs = 2.0;
+        break;
+      case IIS2ICLX_3g:
+        fs = 3.0;
+        break;
+      default:
+        break;
+    }
+    _this->sensor_status.type.mems.fs = fs;
+    if (fs < 3.0f)
+    {
+      _this->sensor_status.type.mems.sensitivity = 0.0000305f * _this->sensor_status.type.mems.fs;
+    }
+    else
+    {
+      _this->sensor_status.type.mems.sensitivity = 0.0000406f * _this->sensor_status.type.mems.fs;
+    }
+  }
+  else
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
+  return res;
 }

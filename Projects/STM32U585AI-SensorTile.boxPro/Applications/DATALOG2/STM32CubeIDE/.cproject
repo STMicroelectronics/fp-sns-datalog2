@@ -81,11 +81,14 @@
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/h3lis331dl"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ilps28qsw"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lis2du12"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lis2mdl"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lps22df"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lsm6dsv16x"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lsm6dsv16bx"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lsm6dsv32x"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/stts22h"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism330is"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/SensorTileBoxPro"/>
@@ -219,11 +222,14 @@
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/h3lis331dl"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ilps28qsw"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lis2du12"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lis2mdl"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lps22df"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lsm6dsv16x"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lsm6dsv16bx"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lsm6dsv32x"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/stts22h"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism330is"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/SensorTileBoxPro"/>

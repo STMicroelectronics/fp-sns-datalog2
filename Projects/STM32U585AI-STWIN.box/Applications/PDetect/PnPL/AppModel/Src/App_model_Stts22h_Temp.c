@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:stts22h_temp;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -303,4 +303,6 @@ uint8_t stts22h_temp_set_sensor_annotation(const char *value, char **response_me
   strcpy(stts22h_temp_model.annotation, value);
   return ret;
 }
+
+
 

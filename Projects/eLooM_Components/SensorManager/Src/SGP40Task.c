@@ -1061,11 +1061,14 @@ static sys_error_code_t SGP40TaskSensorReadData(SGP40Task *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  sgp40_data_get(p_sensor_drv, &_this->sraw_voc, NULL);
+  res = sgp40_data_get(p_sensor_drv, &_this->sraw_voc, NULL);
 
+  if (!SYS_IS_ERROR_CODE(res))
+  {
 #if (HSD_USE_DUMMY_DATA == 1)
-  _this->sraw_voc = dummyDataCounter++;
+    _this->sraw_voc = dummyDataCounter++;
 #endif
+  }
 
   return res;
 }

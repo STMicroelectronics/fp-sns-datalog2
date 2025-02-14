@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_tof;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -133,16 +133,16 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   json_object_dotset_string(JSON_Status, "vl53l8cx_tof.sensor_annotation", temp_s);
   vl53l8cx_tof_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "vl53l8cx_tof.sensor_category", temp_i);
-  vl53l8cx_tof_get_mounted(&temp_b);
-  json_object_dotset_boolean(JSON_Status, "vl53l8cx_tof.mounted", temp_b);
   vl53l8cx_tof_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "vl53l8cx_tof.dim", temp_i);
-  vl53l8cx_tof_get_output_format__target_status__start_id(&temp_i);
+  vl53l8cx_tof_get_output_format__target_status_start_id(&temp_i);
   json_object_dotset_number(JSON_Status, "vl53l8cx_tof.output_format.target_status.start_id", temp_i);
-  vl53l8cx_tof_get_output_format__target_distance__start_id(&temp_i);
+  vl53l8cx_tof_get_output_format__target_distance_start_id(&temp_i);
   json_object_dotset_number(JSON_Status, "vl53l8cx_tof.output_format.target_distance.start_id", temp_i);
   vl53l8cx_tof_get_output_format__nof_outputs(&temp_i);
   json_object_dotset_number(JSON_Status, "vl53l8cx_tof.output_format.nof_outputs", temp_i);
+  vl53l8cx_tof_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "vl53l8cx_tof.mounted", temp_b);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "vl53l8cx_tof.c_type", COMP_TYPE_SENSOR);
@@ -178,10 +178,12 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_property = false;
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "vl53l8cx_tof.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "vl53l8cx_tof.enable");
+    valid_property = true;
     ret = vl53l8cx_tof_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -200,6 +202,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   if (json_object_dothas_value(tempJSONObject, "vl53l8cx_tof.resolution"))
   {
     int32_t resolution = (int32_t)json_object_dotget_number(tempJSONObject, "vl53l8cx_tof.resolution");
+    valid_property = true;
     ret = vl53l8cx_tof_set_resolution((pnpl_vl53l8cx_tof_resolution_t)resolution, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -218,6 +221,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   if (json_object_dothas_value(tempJSONObject, "vl53l8cx_tof.odr"))
   {
     int32_t odr = (int32_t)json_object_dotget_number(tempJSONObject, "vl53l8cx_tof.odr");
+    valid_property = true;
     ret = vl53l8cx_tof_set_odr(odr, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -236,6 +240,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   if (json_object_dothas_value(tempJSONObject, "vl53l8cx_tof.ranging_mode"))
   {
     int32_t ranging_mode = (int32_t)json_object_dotget_number(tempJSONObject, "vl53l8cx_tof.ranging_mode");
+    valid_property = true;
     ret = vl53l8cx_tof_set_ranging_mode((pnpl_vl53l8cx_tof_ranging_mode_t)ranging_mode, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -254,6 +259,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   if (json_object_dothas_value(tempJSONObject, "vl53l8cx_tof.integration_time"))
   {
     int32_t integration_time = (int32_t)json_object_dotget_number(tempJSONObject, "vl53l8cx_tof.integration_time");
+    valid_property = true;
     ret = vl53l8cx_tof_set_integration_time(integration_time, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -272,6 +278,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   if (json_object_dothas_value(tempJSONObject, "vl53l8cx_tof.samples_per_ts"))
   {
     int32_t samples_per_ts = (int32_t)json_object_dotget_number(tempJSONObject, "vl53l8cx_tof.samples_per_ts");
+    valid_property = true;
     ret = vl53l8cx_tof_set_samples_per_ts(samples_per_ts, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -290,6 +297,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   if (json_object_dothas_value(tempJSONObject, "vl53l8cx_tof.sensor_annotation"))
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "vl53l8cx_tof.sensor_annotation");
+    valid_property = true;
     ret = vl53l8cx_tof_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -306,15 +314,26 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
     }
   }
   json_value_free(tempJSON);
-  if (pretty == 1)
+  /* Check if received a valid request to modify an existing property */
+  if (valid_property)
   {
-    *response = json_serialize_to_string_pretty(respJSON);
-    *size = json_serialization_size_pretty(respJSON);
+    if (pretty == 1)
+    {
+      *response = json_serialize_to_string_pretty(respJSON);
+      *size = json_serialization_size_pretty(respJSON);
+    }
+    else
+    {
+      *response = json_serialize_to_string(respJSON);
+      *size = json_serialization_size(respJSON);
+    }
   }
   else
   {
-    *response = json_serialize_to_string(respJSON);
-    *size = json_serialization_size(respJSON);
+    /* Set property is not containing a valid property/parameter: PnPL_Error */
+    char *log_message = "Invalid property for vl53l8cx_tof";
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

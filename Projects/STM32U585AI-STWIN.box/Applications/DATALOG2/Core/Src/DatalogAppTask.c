@@ -33,6 +33,7 @@
 #include "ISM330BXTask.h"
 #include "ISM330DHCXTask.h"
 #include "ISM330ISTask.h"
+#include "IIS2ICLXTask.h"
 #include "services/SQuery.h"
 #include "services/SUcfProtocol.h"
 
@@ -118,6 +119,9 @@ struct _DatalogAppTask
 
   /** SensorLL interface for MLC **/
   ISensorLL_t *mlc_sensor_ll;
+
+  /** SensorLL interface for ICLX **/
+  ISensorLL_t *iclx_sensor_ll;
 
   /** SensorLL interface for ISPU **/
   ISensorLL_t *ispu_sensor_ll;
@@ -312,6 +316,14 @@ uint8_t DatalogAppTask_SetMLCIF(AManagedTask *task_obj)
     /* Store SensorLL interface for ISM330DHCX Sensor */
     p_obj->mlc_sensor_ll = ISM330DHCXTaskGetSensorLLIF((ISM330DHCXTask *) task_obj);
   }
+  return 0;
+}
+
+uint8_t DatalogAppTask_Set_ICLX_MLCIF(AManagedTask *task_obj)
+{
+  DatalogAppTask *p_obj = getDatalogAppTask();
+  /* Store SensorLL interface for ISM330DHCX Sensor */
+  p_obj->iclx_sensor_ll = IIS2ICLXTaskGetSensorLLIF((IIS2ICLXTask *) task_obj);
   return 0;
 }
 
@@ -909,11 +921,12 @@ uint8_t DatalogAppTask_start_vtbl(int32_t interface)
     if (p_obj->datalog_model->log_controller_model.sd_failed == true)
     {
       /* Notify BLE App */
+      char *p_serialized = NULL;
+      uint32_t size = 0;
       PnPLCommand_t pnpl_cmd;
-      char *p_serialized;
-      uint32_t size;
       sprintf(pnpl_cmd.comp_name, "%s", "SD card failed in previous log");
       pnpl_cmd.comm_type = PNPL_CMD_ERROR;
+      pnpl_cmd.response = NULL;
       PnPLSerializeResponse(&pnpl_cmd, &p_serialized, &size, 0);
       IStream_send_async((IStream_t *) p_obj->ble_device, (uint8_t *)p_serialized, size);
     }
@@ -1335,6 +1348,56 @@ uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(const char *ucf_data, int32_t uc
 
   SQInit(&q4, SMGetSensorManager());
   id = SQNextByNameAndType(&q4, "ism330dhcx", COM_TYPE_MLC);
+  sensor_status = SMSensorGetStatus(id);
+
+  return 0;
+}
+
+// IMLCController_t virtual functions
+uint8_t DatalogAppTask_load_iis2iclx_ucf_vtbl(const char *ucf_data, int32_t ucf_size)
+{
+  DatalogAppTask *p_obj = getDatalogAppTask();
+  SQuery_t q1, q2, q4;
+  uint16_t id;
+  SensorStatus_t sensor_status;
+  char *responseJSON;
+  uint32_t size;
+  char *message = "";
+  bool status = true;
+  uint8_t res = SYS_NO_ERROR_CODE;
+
+  /* Create and initialize a new instance of UCF Protocol service */
+  SUcfProtocol_t ucf_protocol;
+  UCFP_Init(&ucf_protocol, p_obj->iclx_sensor_ll);
+
+  /* Load the compressed UCF using the specified ISensorLL interface */
+  res = UCFP_LoadCompressedUcf(&ucf_protocol, ucf_data, ucf_size);
+  if (res != SYS_NO_ERROR_CODE)
+  {
+    message = "Error: MLC programming failed";
+    status = false;
+  }
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, status);
+  DatalogApp_Task_command_response_cb(responseJSON, size);
+
+  /* Enable MLC */
+  SQInit(&q1, SMGetSensorManager());
+  id = SQNextByNameAndType(&q1, "iis2iclx", COM_TYPE_MLC);
+  SMSensorEnable((uint8_t)id);
+
+  if (IStream_is_enabled((IStream_t *)p_obj->filex_device)) /* Save UCF into SDCard, if available */
+  {
+    filex_dctrl_write_ucf(p_obj->filex_device, ucf_size, ucf_data);
+  }
+
+  /* Get ISM330DHCX status from SM and update app_model */
+  SQInit(&q2, SMGetSensorManager());
+  id = SQNextByNameAndType(&q2, "iis2iclx", COM_TYPE_ACC);
+  sensor_status = SMSensorGetStatus(id);
+  iis2iclx_acc_set_samples_per_ts((int32_t)sensor_status.type.mems.odr, NULL);
+
+  SQInit(&q4, SMGetSensorManager());
+  id = SQNextByNameAndType(&q4, "iis2iclx", COM_TYPE_MLC);
   sensor_status = SMSensorGetStatus(id);
 
   return 0;
@@ -1773,15 +1836,13 @@ static void DatalogAppTask_NetX_Connect_Callback(bool connected)
 {
   if (connected == false)
   {
+    char *p_serialized = NULL;
+    uint32_t size = 0;
     PnPLCommand_t pnpl_cmd;
-    char *p_serialized;
-    uint32_t size;
-
     sprintf(pnpl_cmd.comp_name, "%s", "wifi_config");
     pnpl_cmd.comm_type = PNPL_CMD_GET;
-
+    pnpl_cmd.response = NULL;
     PnPLSerializeResponse(&pnpl_cmd, &p_serialized, &size, 0);
-
     IStream_send_async((IStream_t *) sTaskObj.ble_device, (uint8_t *)p_serialized, size);
   }
 }
@@ -1793,11 +1854,12 @@ static void DatalogAppTask_filex_queue_full_cb(void)
   log_controller_stop_log();
 
   /* Notify BLE App */
+  char *p_serialized = NULL;
+  uint32_t size = 0;
   PnPLCommand_t pnpl_cmd;
-  char *p_serialized;
-  uint32_t size;
   sprintf(pnpl_cmd.comp_name, "%s", "SD card failed. Consider to change the SD");
   pnpl_cmd.comm_type = PNPL_CMD_ERROR;
+  pnpl_cmd.response = NULL;
   PnPLSerializeResponse(&pnpl_cmd, &p_serialized, &size, 0);
   IStream_send_async((IStream_t *) sTaskObj.ble_device, (uint8_t *)p_serialized, size);
 

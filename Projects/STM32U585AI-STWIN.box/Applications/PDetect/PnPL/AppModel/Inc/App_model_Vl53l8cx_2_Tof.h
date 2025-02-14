@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_2_tof;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vl53l8cx_2_tof;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -79,11 +79,11 @@ uint8_t vl53l8cx_2_tof_get_sd_dps(int32_t *value);
 uint8_t vl53l8cx_2_tof_get_data_type(char **value);
 uint8_t vl53l8cx_2_tof_get_sensor_annotation(char **value);
 uint8_t vl53l8cx_2_tof_get_sensor_category(int32_t *value);
-uint8_t vl53l8cx_2_tof_get_mounted(bool *value);
 uint8_t vl53l8cx_2_tof_get_dim(int32_t *value);
-uint8_t vl53l8cx_2_tof_get_output_format__target_status__start_id(int32_t *value);
-uint8_t vl53l8cx_2_tof_get_output_format__target_distance__start_id(int32_t *value);
+uint8_t vl53l8cx_2_tof_get_output_format__target_status_start_id(int32_t *value);
+uint8_t vl53l8cx_2_tof_get_output_format__target_distance_start_id(int32_t *value);
 uint8_t vl53l8cx_2_tof_get_output_format__nof_outputs(int32_t *value);
+uint8_t vl53l8cx_2_tof_get_mounted(bool *value);
 uint8_t vl53l8cx_2_tof_get_stream_id(int8_t *value);
 uint8_t vl53l8cx_2_tof_get_ep_id(int8_t *value);
 uint8_t vl53l8cx_2_tof_set_enable(bool value, char **response_message);

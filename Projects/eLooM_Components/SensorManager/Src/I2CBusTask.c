@@ -456,8 +456,9 @@ static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this)
         res = IIODrvRead(p_obj->p_driver, msg.pnData, msg.nDataSize, msg.nRegAddr);
         if (!SYS_IS_ERROR_CODE(res))
         {
-          res = I2CBusIFNotifyIOComplete(msg.pxSensor);
+          msg.pxSensor->i2c_ack = 1;
         }
+        I2CBusIFNotifyIOComplete(msg.pxSensor);
         if (msg.pxSensor->super.m_pfBusCtrl != NULL)
         {
           I2CBSBusIF *px_sensor = (I2CBSBusIF *)msg.pxSensor;
@@ -477,8 +478,9 @@ static sys_error_code_t I2CBusTaskExecuteStep(AManagedTask *_this)
         res = IIODrvWrite(p_obj->p_driver, msg.pnData, msg.nDataSize, msg.nRegAddr);
         if (!SYS_IS_ERROR_CODE(res))
         {
-          res = I2CBusIFNotifyIOComplete(msg.pxSensor);
+          msg.pxSensor->i2c_ack = 1;
         }
+        I2CBusIFNotifyIOComplete(msg.pxSensor);
         if (msg.pxSensor->super.m_pfBusCtrl != NULL)
         {
           I2CBSBusIF *px_sensor = (I2CBSBusIF *)msg.pxSensor;
@@ -539,6 +541,7 @@ static int32_t I2CBusTaskWrite(void *p_sensor, uint16_t reg, uint8_t *data, uint
     res = I2CBusIFWaitIOComplete(p_i2c_sensor);
   }
 
+  p_i2c_sensor->i2c_ack = 0;
   return res;
 }
 
@@ -583,5 +586,6 @@ static int32_t I2CBusTaskRead(void *p_sensor, uint16_t reg, uint8_t *data, uint1
     res = I2CBusIFWaitIOComplete(p_i2c_sensor);
   }
 
+  p_i2c_sensor->i2c_ack = 0;
   return res;
 }

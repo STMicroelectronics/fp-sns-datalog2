@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2;6
+  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2;8
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -53,6 +53,8 @@
 #define SC_USB_SLOW_ODR_LIMIT_HZ      20.0f
 /* Maximum time between two consecutive stream packets */
 #define SC_USB_MAX_PACKETS_PERIOD     0.05f
+/* Maximum data bandwidth supported (byte) */
+#define SC_SAFE_BANDWIDTH             800000
 
 /* USER private function prototypes ------------------------------------------*/
 static sys_error_code_t __sc_set_sd_stream_params(uint32_t id);
@@ -84,6 +86,7 @@ uint8_t __stream_control(bool status)
   if (status) /* Set stream ids */
   {
     int8_t j, stream_id = 0;
+    app_model.total_bandwidth = 0;
     for (i = 0; i < SENSOR_NUMBER; i++)
     {
       if (app_model.s_models[i] != NULL)
@@ -147,6 +150,16 @@ uint8_t __stream_control(bool status)
         {
           app_model.s_models[i]->stream_params.bandwidth = 0;
           app_model.s_models[i]->stream_params.stream_id = -1;
+        }
+        app_model.total_bandwidth += app_model.s_models[i]->stream_params.bandwidth;
+        if (app_model.total_bandwidth > SC_SAFE_BANDWIDTH)
+        {
+          /* PnPL Warning "Safe bandwidth limit exceeded.
+           * Consider disabling sensors or lowering ODRs
+           * to avoid possible data corruption.uire data correctly" */
+          char *SerializedJSON;
+          uint32_t size;
+          PnPLCreateLogMessage(&SerializedJSON, &size, "Safe bandwidth limit exceeded", PNPL_LOG_WARNING);
         }
       }
     }

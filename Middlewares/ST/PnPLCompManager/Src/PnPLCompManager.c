@@ -776,6 +776,10 @@ uint8_t PnPLParseCommand(char *commandString, PnPLCommand_t *command)
   command->comm_type = commandType;
   (void)strcpy(command->comp_name, componentName);
 
+#if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
+  uint16_t comp_found = 0;
+#endif
+
   if (ret == PNPL_NO_ERROR_CODE)
   {
     if (commandType == PNPL_CMD_SET)
@@ -787,6 +791,7 @@ uint8_t PnPLParseCommand(char *commandString, PnPLCommand_t *command)
         if (strcmp(componentName, IPnPLComponentGetKey(p_obj)) == 0)
         {
 #if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
+          comp_found = 1;
           char *set_response = 0;
           uint32_t size = 0;
           (void)IPnPLComponentSetProperty(p_obj, commandString, &set_response, &size, 0);
@@ -810,6 +815,7 @@ uint8_t PnPLParseCommand(char *commandString, PnPLCommand_t *command)
             if (strcmp(IPnPLComponentGetCommandKey(p_obj, j), componentName) == 0)
             {
 #if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
+              comp_found = 1;
               char *cmd_response = 0;
               uint32_t size = 0;
               ret = IPnPLCommandExecuteFunction(p_obj, commandString, &cmd_response, &size, 0);
@@ -846,6 +852,7 @@ uint8_t PnPLParseCommand(char *commandString, PnPLCommand_t *command)
         if (strcmp(componentName, IPnPLComponentGetKey(p_obj)) == 0)
         {
 #if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
+          comp_found = 1;
           char *set_response = 0;
           uint32_t size = 0;
           (void)IPnPLComponentSetProperty(p_obj, commandString, &set_response, &size, 0);
@@ -866,11 +873,26 @@ uint8_t PnPLParseCommand(char *commandString, PnPLCommand_t *command)
     if (commandType == PNPL_CMD_UPDATE_DEVICE)
     {
       (void)PnPLUpdateDeviceStatusFromJSON(commandString);
+#if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
+      comp_found = 1;
+#endif
     }
   }
   else
   {
     command->comm_type = PNPL_CMD_ERROR;
+#if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
+    if (comp_found == 0)
+    {
+      char local_error[100];
+      command->response = (char*)pnpl_malloc(sizeof(local_error));
+      if (command->response != NULL)
+      {
+        snprintf(local_error, sizeof(local_error), "%s Component doesn't exist", command->comp_name);
+        strcpy(command->response, local_error);
+      }
+    }
+#endif
   }
 
   if(NULL != pnpl_unlock_fp)
@@ -934,7 +956,7 @@ uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uin
     if (comp_found == 0u)
     {
       char local_error[100];
-      (void) sprintf(local_error, "get_status %s property doesn't exist", command->comp_name);
+      (void) sprintf(local_error, "get_status %s. Component doesn't exist", command->comp_name);
       PnPLCreateLogMessage(SerializedJSON, size, local_error, PNPL_LOG_ERROR);
       ret = PNPL_BASE_ERROR_CODE;
     }

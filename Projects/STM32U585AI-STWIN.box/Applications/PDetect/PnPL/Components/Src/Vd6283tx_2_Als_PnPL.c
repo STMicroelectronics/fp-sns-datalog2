@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_2_als;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:vd6283tx_2_als;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -146,10 +146,10 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_string(JSON_Status, "vd6283tx_2_als.sensor_annotation", temp_s);
   vd6283tx_2_als_get_sensor_category(&temp_i);
   json_object_dotset_number(JSON_Status, "vd6283tx_2_als.sensor_category", temp_i);
-  vd6283tx_2_als_get_mounted(&temp_b);
-  json_object_dotset_boolean(JSON_Status, "vd6283tx_2_als.mounted", temp_b);
   vd6283tx_2_als_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "vd6283tx_2_als.dim", temp_i);
+  vd6283tx_2_als_get_mounted(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "vd6283tx_2_als.mounted", temp_b);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
   json_object_dotset_number(JSON_Status, "vd6283tx_2_als.c_type", COMP_TYPE_SENSOR);
@@ -185,10 +185,12 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_property = false;
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "vd6283tx_2_als.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "vd6283tx_2_als.enable");
+    valid_property = true;
     ret = vd6283tx_2_als_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -207,6 +209,7 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   if (json_object_dothas_value(tempJSONObject, "vd6283tx_2_als.exposure_time"))
   {
     int32_t exposure_time = (int32_t)json_object_dotget_number(tempJSONObject, "vd6283tx_2_als.exposure_time");
+    valid_property = true;
     ret = vd6283tx_2_als_set_exposure_time(exposure_time, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -226,6 +229,7 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     int32_t intermeasurement_time = (int32_t)json_object_dotget_number(tempJSONObject,
                                                                        "vd6283tx_2_als.intermeasurement_time");
+    valid_property = true;
     ret = vd6283tx_2_als_set_intermeasurement_time(intermeasurement_time, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -244,6 +248,7 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   if (json_object_dothas_value(tempJSONObject, "vd6283tx_2_als.channel1_gain"))
   {
     int32_t channel1_gain = (int32_t)json_object_dotget_number(tempJSONObject, "vd6283tx_2_als.channel1_gain");
+    valid_property = true;
     ret = vd6283tx_2_als_set_channel1_gain((pnpl_vd6283tx_2_als_channel1_gain_t)channel1_gain, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -262,6 +267,7 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   if (json_object_dothas_value(tempJSONObject, "vd6283tx_2_als.channel2_gain"))
   {
     int32_t channel2_gain = (int32_t)json_object_dotget_number(tempJSONObject, "vd6283tx_2_als.channel2_gain");
+    valid_property = true;
     ret = vd6283tx_2_als_set_channel2_gain((pnpl_vd6283tx_2_als_channel2_gain_t)channel2_gain, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -280,6 +286,7 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   if (json_object_dothas_value(tempJSONObject, "vd6283tx_2_als.channel3_gain"))
   {
     int32_t channel3_gain = (int32_t)json_object_dotget_number(tempJSONObject, "vd6283tx_2_als.channel3_gain");
+    valid_property = true;
     ret = vd6283tx_2_als_set_channel3_gain((pnpl_vd6283tx_2_als_channel3_gain_t)channel3_gain, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -298,6 +305,7 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   if (json_object_dothas_value(tempJSONObject, "vd6283tx_2_als.channel4_gain"))
   {
     int32_t channel4_gain = (int32_t)json_object_dotget_number(tempJSONObject, "vd6283tx_2_als.channel4_gain");
+    valid_property = true;
     ret = vd6283tx_2_als_set_channel4_gain((pnpl_vd6283tx_2_als_channel4_gain_t)channel4_gain, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -316,6 +324,7 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   if (json_object_dothas_value(tempJSONObject, "vd6283tx_2_als.channel5_gain"))
   {
     int32_t channel5_gain = (int32_t)json_object_dotget_number(tempJSONObject, "vd6283tx_2_als.channel5_gain");
+    valid_property = true;
     ret = vd6283tx_2_als_set_channel5_gain((pnpl_vd6283tx_2_als_channel5_gain_t)channel5_gain, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -334,6 +343,7 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   if (json_object_dothas_value(tempJSONObject, "vd6283tx_2_als.channel6_gain"))
   {
     int32_t channel6_gain = (int32_t)json_object_dotget_number(tempJSONObject, "vd6283tx_2_als.channel6_gain");
+    valid_property = true;
     ret = vd6283tx_2_als_set_channel6_gain((pnpl_vd6283tx_2_als_channel6_gain_t)channel6_gain, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -352,6 +362,7 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   if (json_object_dothas_value(tempJSONObject, "vd6283tx_2_als.samples_per_ts"))
   {
     int32_t samples_per_ts = (int32_t)json_object_dotget_number(tempJSONObject, "vd6283tx_2_als.samples_per_ts");
+    valid_property = true;
     ret = vd6283tx_2_als_set_samples_per_ts(samples_per_ts, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -370,6 +381,7 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   if (json_object_dothas_value(tempJSONObject, "vd6283tx_2_als.sensor_annotation"))
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "vd6283tx_2_als.sensor_annotation");
+    valid_property = true;
     ret = vd6283tx_2_als_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -386,15 +398,26 @@ uint8_t Vd6283tx_2_Als_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
     }
   }
   json_value_free(tempJSON);
-  if (pretty == 1)
+  /* Check if received a valid request to modify an existing property */
+  if (valid_property)
   {
-    *response = json_serialize_to_string_pretty(respJSON);
-    *size = json_serialization_size_pretty(respJSON);
+    if (pretty == 1)
+    {
+      *response = json_serialize_to_string_pretty(respJSON);
+      *size = json_serialization_size_pretty(respJSON);
+    }
+    else
+    {
+      *response = json_serialize_to_string(respJSON);
+      *size = json_serialization_size(respJSON);
+    }
   }
   else
   {
-    *response = json_serialize_to_string(respJSON);
-    *size = json_serialization_size(respJSON);
+    /* Set property is not containing a valid property/parameter: PnPL_Error */
+    char *log_message = "Invalid property for vd6283tx_2_als";
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

@@ -310,3 +310,5 @@ uint8_t imp34dt05_mic_set_sensor_annotation(const char *value, char **response_m
   return ret;
 }
 
+
+

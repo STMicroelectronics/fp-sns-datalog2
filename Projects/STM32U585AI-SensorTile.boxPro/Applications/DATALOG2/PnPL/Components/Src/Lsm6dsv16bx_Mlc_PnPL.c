@@ -138,19 +138,19 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seria
   json_object_dotset_boolean(JSON_Status, "lsm6dsv16bx_mlc.mounted", temp_b);
   lsm6dsv16bx_mlc_get_st_ble_stream__id(&temp_i);
   json_object_dotset_number(JSON_Status, "lsm6dsv16bx_mlc.st_ble_stream.id", temp_i);
-  lsm6dsv16bx_mlc_get_st_ble_stream__mlc__enable(&temp_b);
+  lsm6dsv16bx_mlc_get_st_ble_stream__mlc_enable(&temp_b);
   json_object_dotset_boolean(JSON_Status, "lsm6dsv16bx_mlc.st_ble_stream.mlc.enable", temp_b);
-  lsm6dsv16bx_mlc_get_st_ble_stream__mlc__unit(&temp_s);
+  lsm6dsv16bx_mlc_get_st_ble_stream__mlc_unit(&temp_s);
   json_object_dotset_string(JSON_Status, "lsm6dsv16bx_mlc.st_ble_stream.mlc.unit", temp_s);
-  lsm6dsv16bx_mlc_get_st_ble_stream__mlc__format(&temp_s);
+  lsm6dsv16bx_mlc_get_st_ble_stream__mlc_format(&temp_s);
   json_object_dotset_string(JSON_Status, "lsm6dsv16bx_mlc.st_ble_stream.mlc.format", temp_s);
-  lsm6dsv16bx_mlc_get_st_ble_stream__mlc__elements(&temp_i);
+  lsm6dsv16bx_mlc_get_st_ble_stream__mlc_elements(&temp_i);
   json_object_dotset_number(JSON_Status, "lsm6dsv16bx_mlc.st_ble_stream.mlc.elements", temp_i);
-  lsm6dsv16bx_mlc_get_st_ble_stream__mlc__channels(&temp_i);
+  lsm6dsv16bx_mlc_get_st_ble_stream__mlc_channels(&temp_i);
   json_object_dotset_number(JSON_Status, "lsm6dsv16bx_mlc.st_ble_stream.mlc.channels", temp_i);
-  lsm6dsv16bx_mlc_get_st_ble_stream__mlc__multiply_factor(&temp_f);
+  lsm6dsv16bx_mlc_get_st_ble_stream__mlc_multiply_factor(&temp_f);
   json_object_dotset_number(JSON_Status, "lsm6dsv16bx_mlc.st_ble_stream.mlc.multiply_factor", temp_f);
-  lsm6dsv16bx_mlc_get_st_ble_stream__mlc__odr(&temp_i);
+  lsm6dsv16bx_mlc_get_st_ble_stream__mlc_odr(&temp_i);
   json_object_dotset_number(JSON_Status, "lsm6dsv16bx_mlc.st_ble_stream.mlc.odr", temp_i);
   /* Next fields are not in DTDL model but added looking @ the component schema
   field (this is :sensors). ONLY for Sensors, Algorithms and Actuators*/
@@ -187,10 +187,12 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   JSON_Object *respJSONObject = json_value_get_object(respJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_property = false;
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.enable"))
   {
     bool enable = json_object_dotget_boolean(tempJSONObject, "lsm6dsv16bx_mlc.enable");
+    valid_property = true;
     ret = lsm6dsv16bx_mlc_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -209,6 +211,7 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.sensor_annotation"))
   {
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "lsm6dsv16bx_mlc.sensor_annotation");
+    valid_property = true;
     ret = lsm6dsv16bx_mlc_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -229,6 +232,7 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.id"))
     {
       int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.id");
+      valid_property = true;
       ret = lsm6dsv16bx_mlc_set_st_ble_stream__id(st_ble_stream__id, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
@@ -249,19 +253,20 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.enable"))
     {
-      bool st_ble_stream__mlc__enable = json_object_dotget_boolean(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.enable");
-      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc__enable(st_ble_stream__mlc__enable, &resp_msg);
+      bool st_ble_stream__mlc_enable = json_object_dotget_boolean(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.enable");
+      valid_property = true;
+      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc_enable(st_ble_stream__mlc_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc__enable);
+        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc_enable);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        bool old_st_ble_stream__mlc__enable;
-        lsm6dsv16bx_mlc_get_st_ble_stream__mlc__enable(&old_st_ble_stream__mlc__enable);
-        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc__enable);
+        bool old_st_ble_stream__mlc_enable;
+        lsm6dsv16bx_mlc_get_st_ble_stream__mlc_enable(&old_st_ble_stream__mlc_enable);
+        json_object_dotset_boolean(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc_enable);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -270,20 +275,21 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.unit"))
     {
-      const char *st_ble_stream__mlc__unit = json_object_dotget_string(tempJSONObject,
-                                                                       "lsm6dsv16bx_mlc.st_ble_stream.mlc.unit");
-      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc__unit(st_ble_stream__mlc__unit, &resp_msg);
+      const char *st_ble_stream__mlc_unit = json_object_dotget_string(tempJSONObject,
+                                                                      "lsm6dsv16bx_mlc.st_ble_stream.mlc.unit");
+      valid_property = true;
+      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc_unit(st_ble_stream__mlc_unit, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc__unit);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc_unit);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        char *old_st_ble_stream__mlc__unit;
-        lsm6dsv16bx_mlc_get_st_ble_stream__mlc__unit(&old_st_ble_stream__mlc__unit);
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc__unit);
+        char *old_st_ble_stream__mlc_unit;
+        lsm6dsv16bx_mlc_get_st_ble_stream__mlc_unit(&old_st_ble_stream__mlc_unit);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc_unit);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -292,20 +298,21 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.format"))
     {
-      const char *st_ble_stream__mlc__format = json_object_dotget_string(tempJSONObject,
-                                                                         "lsm6dsv16bx_mlc.st_ble_stream.mlc.format");
-      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc__format(st_ble_stream__mlc__format, &resp_msg);
+      const char *st_ble_stream__mlc_format = json_object_dotget_string(tempJSONObject,
+                                                                        "lsm6dsv16bx_mlc.st_ble_stream.mlc.format");
+      valid_property = true;
+      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc_format(st_ble_stream__mlc_format, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc__format);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc_format);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        char *old_st_ble_stream__mlc__format;
-        lsm6dsv16bx_mlc_get_st_ble_stream__mlc__format(&old_st_ble_stream__mlc__format);
-        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc__format);
+        char *old_st_ble_stream__mlc_format;
+        lsm6dsv16bx_mlc_get_st_ble_stream__mlc_format(&old_st_ble_stream__mlc_format);
+        json_object_dotset_string(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc_format);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -314,20 +321,21 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.elements"))
     {
-      int32_t st_ble_stream__mlc__elements = (int32_t)json_object_dotget_number(tempJSONObject,
-                                                                                "lsm6dsv16bx_mlc.st_ble_stream.mlc.elements");
-      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc__elements(st_ble_stream__mlc__elements, &resp_msg);
+      int32_t st_ble_stream__mlc_elements = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                               "lsm6dsv16bx_mlc.st_ble_stream.mlc.elements");
+      valid_property = true;
+      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc_elements(st_ble_stream__mlc_elements, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc__elements);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc_elements);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        int32_t old_st_ble_stream__mlc__elements;
-        lsm6dsv16bx_mlc_get_st_ble_stream__mlc__elements(&old_st_ble_stream__mlc__elements);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc__elements);
+        int32_t old_st_ble_stream__mlc_elements;
+        lsm6dsv16bx_mlc_get_st_ble_stream__mlc_elements(&old_st_ble_stream__mlc_elements);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc_elements);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -336,20 +344,21 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.channels"))
     {
-      int32_t st_ble_stream__mlc__channels = (int32_t)json_object_dotget_number(tempJSONObject,
-                                                                                "lsm6dsv16bx_mlc.st_ble_stream.mlc.channels");
-      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc__channels(st_ble_stream__mlc__channels, &resp_msg);
+      int32_t st_ble_stream__mlc_channels = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                               "lsm6dsv16bx_mlc.st_ble_stream.mlc.channels");
+      valid_property = true;
+      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc_channels(st_ble_stream__mlc_channels, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc__channels);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc_channels);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        int32_t old_st_ble_stream__mlc__channels;
-        lsm6dsv16bx_mlc_get_st_ble_stream__mlc__channels(&old_st_ble_stream__mlc__channels);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc__channels);
+        int32_t old_st_ble_stream__mlc_channels;
+        lsm6dsv16bx_mlc_get_st_ble_stream__mlc_channels(&old_st_ble_stream__mlc_channels);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc_channels);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -358,20 +367,21 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.multiply_factor"))
     {
-      float st_ble_stream__mlc__multiply_factor = (float)json_object_dotget_number(tempJSONObject,
-                                                                                   "lsm6dsv16bx_mlc.st_ble_stream.mlc.multiply_factor");
-      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc__multiply_factor(st_ble_stream__mlc__multiply_factor, &resp_msg);
+      float st_ble_stream__mlc_multiply_factor = (float)json_object_dotget_number(tempJSONObject,
+                                                                                  "lsm6dsv16bx_mlc.st_ble_stream.mlc.multiply_factor");
+      valid_property = true;
+      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc_multiply_factor(st_ble_stream__mlc_multiply_factor, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc__multiply_factor);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc_multiply_factor);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        float old_st_ble_stream__mlc__multiply_factor;
-        lsm6dsv16bx_mlc_get_st_ble_stream__mlc__multiply_factor(&old_st_ble_stream__mlc__multiply_factor);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc__multiply_factor);
+        float old_st_ble_stream__mlc_multiply_factor;
+        lsm6dsv16bx_mlc_get_st_ble_stream__mlc_multiply_factor(&old_st_ble_stream__mlc_multiply_factor);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc_multiply_factor);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
@@ -380,34 +390,46 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.odr"))
     {
-      int32_t st_ble_stream__mlc__odr = (int32_t)json_object_dotget_number(tempJSONObject,
-                                                                           "lsm6dsv16bx_mlc.st_ble_stream.mlc.odr");
-      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc__odr(st_ble_stream__mlc__odr, &resp_msg);
+      int32_t st_ble_stream__mlc_odr = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                          "lsm6dsv16bx_mlc.st_ble_stream.mlc.odr");
+      valid_property = true;
+      ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc_odr(st_ble_stream__mlc_odr, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
       if (ret == PNPL_NO_ERROR_CODE)
       {
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc__odr);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", st_ble_stream__mlc_odr);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", true);
       }
       else
       {
-        int32_t old_st_ble_stream__mlc__odr;
-        lsm6dsv16bx_mlc_get_st_ble_stream__mlc__odr(&old_st_ble_stream__mlc__odr);
-        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc__odr);
+        int32_t old_st_ble_stream__mlc_odr;
+        lsm6dsv16bx_mlc_get_st_ble_stream__mlc_odr(&old_st_ble_stream__mlc_odr);
+        json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__mlc_odr);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);
       }
     }
   }
   json_value_free(tempJSON);
-  if (pretty == 1)
+  /* Check if received a valid request to modify an existing property */
+  if (valid_property)
   {
-    *response = json_serialize_to_string_pretty(respJSON);
-    *size = json_serialization_size_pretty(respJSON);
+    if (pretty == 1)
+    {
+      *response = json_serialize_to_string_pretty(respJSON);
+      *size = json_serialization_size_pretty(respJSON);
+    }
+    else
+    {
+      *response = json_serialize_to_string(respJSON);
+      *size = json_serialization_size(respJSON);
+    }
   }
   else
   {
-    *response = json_serialize_to_string(respJSON);
-    *size = json_serialization_size(respJSON);
+    /* Set property is not containing a valid property/parameter: PnPL_Error */
+    char *log_message = "Invalid property for lsm6dsv16bx_mlc";
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;
@@ -421,8 +443,10 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *
   JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
 
   uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_function = false;
   if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc*load_file.ucf_data"))
   {
+    valid_function = true;
     const char *data;
     int32_t size;
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc*load_file.ucf_data.data"))
@@ -434,6 +458,14 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *
         ret = lsm6dsv16bx_mlc_load_file((char *) data, size);
       }
     }
+  }
+  /* Check if received a valid function to modify an existing property */
+  if (valid_function == false)
+  {
+    char log_message[100];
+    (void) sprintf(log_message, "%s Invalid command", serializedJSON);
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(tempJSON);
   return ret;

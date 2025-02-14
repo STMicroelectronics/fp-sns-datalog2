@@ -122,12 +122,8 @@ void Error_Handler(void);
 #define INT_EX_Pin GPIO_PIN_6
 #define INT_EX_GPIO_Port GPIOG
 #define INT_EX_EXTI_IRQn EXTI6_IRQn
-#define TIM3_PWM_Pin GPIO_PIN_6
-#define TIM3_PWM_GPIO_Port GPIOC
 #define uC_ADC_BATT_Pin GPIO_PIN_2
 #define uC_ADC_BATT_GPIO_Port GPIOC
-#define USART3_TX_Pin GPIO_PIN_7
-#define USART3_TX_GPIO_Port GPIOA
 #define INT_TMOS_Pin GPIO_PIN_5
 #define INT_TMOS_GPIO_Port GPIOG
 #define INT_TMOS_EXTI_IRQn EXTI5_IRQn
@@ -138,12 +134,8 @@ void Error_Handler(void);
 #define INT_TOF_EXTI_IRQn EXTI3_IRQn
 #define CHRG_Pin GPIO_PIN_0
 #define CHRG_GPIO_Port GPIOA
-#define USART3_RX_Pin GPIO_PIN_5
-#define USART3_RX_GPIO_Port GPIOA
 #define CS_DWB_Pin GPIO_PIN_12
 #define CS_DWB_GPIO_Port GPIOF
-#define USART3_RTS_Pin GPIO_PIN_12
-#define USART3_RTS_GPIO_Port GPIOD
 #define BUTTON_PWR_Pin GPIO_PIN_10
 #define BUTTON_PWR_GPIO_Port GPIOD
 #define BUTTON_PWR_EXTI_IRQn EXTI10_IRQn
@@ -155,8 +147,6 @@ void Error_Handler(void);
 #define WIFI_NOTIFY_Pin GPIO_PIN_7
 #define WIFI_NOTIFY_GPIO_Port GPIOE
 #define WIFI_NOTIFY_EXTI_IRQn EXTI7_IRQn
-#define SPI2_MOSI_p2_Pin GPIO_PIN_15
-#define SPI2_MOSI_p2_GPIO_Port GPIOB
 #define WIFI_BOOT_Pin GPIO_PIN_9
 #define WIFI_BOOT_GPIO_Port GPIOD
 #define INT2_ICLX_Pin GPIO_PIN_11
@@ -164,8 +154,6 @@ void Error_Handler(void);
 #define INT2_ICLX_EXTI_IRQn EXTI11_IRQn
 #define LDO_EN_Pin GPIO_PIN_15
 #define LDO_EN_GPIO_Port GPIOE
-#define USART3_CTS_Pin GPIO_PIN_11
-#define USART3_CTS_GPIO_Port GPIOD
 #define GPIO1_EX_Pin GPIO_PIN_1
 #define GPIO1_EX_GPIO_Port GPIOB
 #define INT1_DWB_Pin GPIO_PIN_15

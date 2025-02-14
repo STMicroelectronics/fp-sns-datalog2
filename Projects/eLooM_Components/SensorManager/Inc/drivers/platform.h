@@ -105,7 +105,7 @@ typedef struct
   * @return (uint8_t) status : 0 if OK
   */
 
-uint8_t RdByte(
+uint8_t VL53L8CX_RdByte(
   VL53L8CX_Platform *p_platform,
   uint16_t RegisterAdress,
   uint8_t *p_value);
@@ -119,7 +119,7 @@ uint8_t RdByte(
   * @return (uint8_t) status : 0 if OK
   */
 
-uint8_t WrByte(
+uint8_t VL53L8CX_WrByte(
   VL53L8CX_Platform *p_platform,
   uint16_t RegisterAdress,
   uint8_t value);
@@ -134,7 +134,7 @@ uint8_t WrByte(
   * @return (uint8_t) status : 0 if OK
   */
 
-uint8_t RdMulti(
+uint8_t VL53L8CX_RdMulti(
   VL53L8CX_Platform *p_platform,
   uint16_t RegisterAdress,
   uint8_t *p_values,
@@ -150,7 +150,7 @@ uint8_t RdMulti(
   * @return (uint8_t) status : 0 if OK
   */
 
-uint8_t WrMulti(
+uint8_t VL53L8CX_WrMulti(
   VL53L8CX_Platform *p_platform,
   uint16_t RegisterAdress,
   uint8_t *p_values,
@@ -163,10 +163,9 @@ uint8_t WrMulti(
   * @param (uint16_t) size : Buffer size to swap
   */
 
-void SwapBuffer(
+void VL53L8CX_SwapBuffer(
   uint8_t     *buffer,
   uint16_t     size);
-
 /**
   * @brief Mandatory function, used to wait during an amount of time. It must be
   * filled as it's used into the API.
@@ -176,8 +175,20 @@ void SwapBuffer(
   * @return (uint8_t) status : 0 if wait is finished.
   */
 
-uint8_t WaitMs(
+uint8_t VL53L8CX_WaitMs(
   VL53L8CX_Platform *p_platform,
   uint32_t TimeMs);
 
+
+uint8_t RdByte(
+  VL53L8CX_Platform *p_platform,
+  uint16_t RegisterAdress,
+  uint8_t *p_value);
+
+uint8_t WrByte(
+  VL53L8CX_Platform *p_platform,
+  uint16_t RegisterAdress,
+  uint8_t value);
+
 #endif  // _PLATFORM_H_
+

@@ -193,3 +193,5 @@ uint8_t automode_set_idle_period_s(int32_t value, char **response_message)
   return PNPL_NO_ERROR_CODE;
 }
 
+
+

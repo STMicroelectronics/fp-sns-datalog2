@@ -1368,7 +1368,7 @@ static sys_error_code_t IIS2DLPCTaskSensorReadData(IIS2DLPCTask *_this)
 
   if (_this->fifo_level >= samples_per_it)
   {
-    iis2dlpc_read_reg(p_sensor_drv, IIS2DLPC_OUT_X_L, (uint8_t *) _this->p_sensor_data_buff,
+    res = iis2dlpc_read_reg(p_sensor_drv, IIS2DLPC_OUT_X_L, (uint8_t *) _this->p_sensor_data_buff,
                       ((uint16_t) samples_per_it * 6u));
   }
   else
@@ -1377,22 +1377,25 @@ static sys_error_code_t IIS2DLPCTaskSensorReadData(IIS2DLPCTask *_this)
   }
 
 #else
-  iis2dlpc_read_reg(p_sensor_drv, IIS2DLPC_OUT_X_L, (uint8_t *) _this->p_sensor_data_buff, samples_per_it * 6);
+  res = iis2dlpc_read_reg(p_sensor_drv, IIS2DLPC_OUT_X_L, (uint8_t *) _this->p_sensor_data_buff, samples_per_it * 6);
   _this->fifo_level = 1;
 #endif /* IIS2DLPC_FIFO_ENABLED */
 
-#if (HSD_USE_DUMMY_DATA == 1)
-  uint16_t i = 0;
-  int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
-
-  if (_this->fifo_level >= samples_per_it)
+  if (!SYS_IS_ERROR_CODE(res))
   {
-    for (i = 0; i < samples_per_it * 3 ; i++)
+#if (HSD_USE_DUMMY_DATA == 1)
+    uint16_t i = 0;
+    int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
+
+    if (_this->fifo_level >= samples_per_it)
     {
-      *p16++ = dummyDataCounter++;
+      for (i = 0; i < samples_per_it * 3 ; i++)
+      {
+        *p16++ = dummyDataCounter++;
+      }
     }
-  }
 #endif
+  }
 
   return res;
 }

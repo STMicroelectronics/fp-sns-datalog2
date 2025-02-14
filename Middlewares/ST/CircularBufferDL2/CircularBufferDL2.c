@@ -170,8 +170,8 @@ static uint16_t GetNewItem(CircularBufferDL2 *_this, CircularBuffer *cb, uint32_
     }
 
     /* increment the byte counter by adding the payload size (item - header) */
-    _this->byte_counter += (cb_item_size - header_size);
     *p_byte_counter_dst = _this->byte_counter;
+    _this->byte_counter += (cb_item_size - header_size);
 
     /* move buffer index after header */
     _this->item_idx = header_size;

@@ -29,6 +29,8 @@
 #include "ism330is_reg.h"
 #include "stts22h_reg.h"
 #include "TSC1641.h"
+#include "iis2dulpx_reg.h"
+#include "tx_api.h"
 
 #define HW_DETECTION_I2C_TIMEOUT  500U
 
@@ -57,6 +59,37 @@ static int32_t ext_sensor_i2c_write(void *handle, uint8_t reg, uint8_t *p_data, 
 /* Public functions declaration */
 /*********************************/
 
+
+/**
+  * Detect an external IIS2DULPX sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_IIS2DULPX(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+  ctx.mdelay = (stmdev_mdelay_ptr)tx_thread_sleep;
+
+  HardwareDetection_SPI2_CS_Init();
+  MX_SPI2_Init();
+
+  iis2dulpx_exit_deep_power_down(&ctx);
+  iis2dulpx_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi2);
+  HardwareDetection_SPI2_CS_DeInit();
+
+  if (whoami_val == IIS2DULPX_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
 
 /**
   * Detect an external IIS3DWB sensor

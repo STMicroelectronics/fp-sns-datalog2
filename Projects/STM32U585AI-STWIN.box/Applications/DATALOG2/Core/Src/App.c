@@ -40,6 +40,7 @@
 #include "IIS2MDCTask.h"
 #include "IMP23ABSUTask.h"
 #include "IIS2DLPCTask.h"
+#include "IIS2DULPXTask.h"
 #include "ILPS22QSTask.h"
 #include "STTS22HTask.h"
 #include "IMP34DT05Task.h"
@@ -51,34 +52,37 @@
 #include "app_netxduo.h"
 
 #include "PnPLCompManager.h"
-#include "Deviceinformation_PnPL.h"
-#include "Firmware_Info_PnPL.h"
-#include "Acquisition_Info_PnPL.h"
-#include "Tags_Info_PnPL.h"
-#include "Log_Controller_PnPL.h"
+#include "Iis2dlpc_Acc_PnPL.h"
+#include "Iis2iclx_Acc_PnPL.h"
+#include "Iis2iclx_Mlc_PnPL.h"
+#include "Iis2mdc_Mag_PnPL.h"
 #include "Iis3dwb_Acc_PnPL.h"
+#include "Ilps22qs_Press_PnPL.h"
+#include "Imp23absu_Mic_PnPL.h"
+#include "Imp34dt05_Mic_PnPL.h"
+#include "Ism330dhcx_Acc_PnPL.h"
+#include "Ism330dhcx_Gyro_PnPL.h"
+#include "Ism330dhcx_Mlc_PnPL.h"
+#include "Stts22h_Temp_PnPL.h"
+#include "Iis2dulpx_Acc_PnPL.h"
+#include "Iis2dulpx_Mlc_PnPL.h"
 #include "Iis3dwb_Ext_Acc_PnPL.h"
 #include "Ism330bx_Acc_PnPL.h"
 #include "Ism330bx_Gyro_PnPL.h"
 #include "Ism330bx_Mlc_PnPL.h"
-#include "Ism330dhcx_Acc_PnPL.h"
-#include "Ism330dhcx_Gyro_PnPL.h"
-#include "Ism330dhcx_Mlc_PnPL.h"
 #include "Ism330is_Acc_PnPL.h"
 #include "Ism330is_Gyro_PnPL.h"
 #include "Ism330is_Ispu_PnPL.h"
-#include "Iis2mdc_Mag_PnPL.h"
-#include "Imp23absu_Mic_PnPL.h"
-#include "Iis2dlpc_Acc_PnPL.h"
-#include "Stts22h_Temp_PnPL.h"
 #include "Stts22h_Ext_Temp_PnPL.h"
-#include "Ilps22qs_Press_PnPL.h"
-#include "Imp34dt05_Mic_PnPL.h"
-#include "Iis2iclx_Acc_PnPL.h"
-#include "Automode_PnPL.h"
-#include "parson.h"
-#include "Wifi_Config_PnPL.h"
 #include "Tsc1641_Pow_PnPL.h"
+#include "Automode_PnPL.h"
+#include "Log_Controller_PnPL.h"
+#include "Wifi_Config_PnPL.h"
+#include "Tags_Info_PnPL.h"
+#include "Acquisition_Info_PnPL.h"
+#include "Firmware_Info_PnPL.h"
+#include "Deviceinformation_PnPL.h"
+#include "parson.h"
 
 static uint8_t BoardId = BOARD_ID_BOXA;
 static uint8_t FwId = USB_FW_ID_DATALOG2_BOXA;
@@ -102,11 +106,13 @@ static IPnPLComponent_t *pISM330IS_ISPU_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2MDC_MAG_PnPLObj = NULL;
 static IPnPLComponent_t *pIMP23ABSU_MIC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2DLPC_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pIIS2DULPX_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pSTTS22H_TEMP_PnPLObj = NULL;
 static IPnPLComponent_t *pSTTS22H_Ext_TEMP_PnPLObj = NULL;
 static IPnPLComponent_t *pILPS22QS_PRESS_PnPLObj = NULL;
 static IPnPLComponent_t *pIMP34DT05_MIC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2ICLX_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pIIS2ICLX_MLC_PnPLObj = NULL;
 static IPnPLComponent_t *pAutomodePnPLObj = NULL;
 static IPnPLComponent_t *pTSC1641_POW_PnPLObj = NULL;
 
@@ -136,6 +142,7 @@ static AManagedTaskEx *sISM330DHCXObj = NULL;
 static AManagedTaskEx *sIIS2MDCObj = NULL;
 static AManagedTaskEx *sIMP23ABSUObj = NULL;
 static AManagedTaskEx *sIIS2DLPCObj = NULL;
+static AManagedTaskEx *sIIS2DULPXObj = NULL;
 static AManagedTaskEx *sILPS22QSObj = NULL;
 static AManagedTaskEx *sSTTS22HObj = NULL;
 static AManagedTaskEx *sSTTS22HExtObj = NULL;
@@ -169,6 +176,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   assert_param(pAppContext);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   uint8_t stts22h_address;
+  boolean_t ext_iis2dulpx = FALSE;
   boolean_t ext_iis3dwb = FALSE;
   boolean_t ext_ism330bx = FALSE;
   boolean_t ext_iis330is = FALSE;
@@ -185,6 +193,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
   /* Check availability of external sensors */
+  ext_iis2dulpx = HardwareDetection_Check_Ext_IIS2DULPX();
   ext_iis3dwb = HardwareDetection_Check_Ext_IIS3DWB();
   ext_ism330bx = HardwareDetection_Check_Ext_ISM330BX();
   ext_iis330is = HardwareDetection_Check_Ext_ISM330IS();
@@ -204,7 +213,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   sI2C2BusObj = I2CBusTaskAlloc(&MX_I2C2InitParams);
   sSPI2BusObj = SPIBusTaskAlloc(&MX_SPI2InitParams);
   sIIS2DLPCObj = IIS2DLPCTaskAlloc(&MX_GPIO_INT2_DLPCInitParams, &MX_GPIO_CS_DLPCInitParams);
-  sIIS2ICLXObj = IIS2ICLXTaskAlloc(&MX_GPIO_INT1_ICLXInitParams, &MX_GPIO_CS_ICLXInitParams);
+  sIIS2ICLXObj = IIS2ICLXTaskAlloc(&MX_GPIO_INT1_ICLXInitParams, NULL, &MX_GPIO_CS_ICLXInitParams);
   sIIS2MDCObj = IIS2MDCTaskAlloc(&MX_GPIO_INT_MAGInitParams, NULL);
   sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_DWBInitParams, &MX_GPIO_CS_DWBInitParams);
 
@@ -227,6 +236,10 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   {
     /* Use the onboard IIS3DWB and ISM330DHCX */
     sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams, &MX_GPIO_CS_DHCXInitParams);
+  }
+  if (ext_iis2dulpx)
+  {
+    sIIS2DULPXObj = IIS2DULPXTaskAlloc(NULL, NULL, &MX_GPIO_CS_EXTERNALInitParams);
   }
 
   /* Use the onboard STTS22H (address low) */
@@ -265,6 +278,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   res = ACAddTask(pAppContext, (AManagedTask *) sI2C3BusObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sSPI2BusObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS2DLPCObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sIIS2DULPXObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS2ICLXObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS2MDCObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS3DWBObj);
@@ -281,6 +295,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 
   pIIS2DLPC_ACC_PnPLObj = Iis2dlpc_Acc_PnPLAlloc();
   pIIS2ICLX_ACC_PnPLObj = Iis2iclx_Acc_PnPLAlloc();
+  pIIS2ICLX_MLC_PnPLObj = Iis2iclx_Mlc_PnPLAlloc();
   pIIS2MDC_MAG_PnPLObj = Iis2mdc_Mag_PnPLAlloc();
   pILPS22QS_PRESS_PnPLObj = Ilps22qs_Press_PnPLAlloc();
   pIMP23ABSU_MIC_PnPLObj = Imp23absu_Mic_PnPLAlloc();
@@ -317,6 +332,10 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   if (sTSC1641Obj)
   {
     pTSC1641_POW_PnPLObj = Tsc1641_Pow_PnPLAlloc();
+  }
+  if (sIIS2DULPXObj)
+  {
+    pIIS2DULPX_ACC_PnPLObj = Iis2dulpx_Acc_PnPLAlloc();
   }
 
   pDeviceInfoPnPLObj = Deviceinformation_PnPLAlloc();
@@ -378,11 +397,18 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     I2CBusTaskConnectDevice((I2CBusTask *) sI2C3BusObj, (I2CBusIF *)TSC1641TaskGetSensorIF((TSC1641Task *) sTSC1641Obj));
   }
+  if (sIIS2DULPXObj)
+  {
+    SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj,
+                            (SPIBusIF *)IIS2DULPXTaskGetSensorIF((IIS2DULPXTask *) sIIS2DULPXObj));
+  }
+
 
   /************ Connect the Sensor events to the DatalogAppTask ************/
   IEventListener *DatalogAppListener = DatalogAppTask_GetEventListenerIF((DatalogAppTask *) sDatalogAppObj);
   IEventSrcAddEventListener(IIS2DLPCTaskGetEventSrcIF((IIS2DLPCTask *) sIIS2DLPCObj), DatalogAppListener);
   IEventSrcAddEventListener(IIS2ICLXTaskGetEventSrcIF((IIS2ICLXTask *) sIIS2ICLXObj), DatalogAppListener);
+  IEventSrcAddEventListener(IIS2ICLXTaskGetMlcEventSrcIF((IIS2ICLXTask *) sIIS2ICLXObj), DatalogAppListener);
   IEventSrcAddEventListener(IIS2MDCTaskGetMagEventSrcIF((IIS2MDCTask *) sIIS2MDCObj), DatalogAppListener);
   IEventSrcAddEventListener(ILPS22QSTaskGetPressEventSrcIF((ILPS22QSTask *) sILPS22QSObj), DatalogAppListener);
   IEventSrcAddEventListener(IMP23ABSUTaskGetEventSrcIF((IMP23ABSUTask *) sIMP23ABSUObj), DatalogAppListener);
@@ -419,6 +445,10 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     IEventSrcAddEventListener(TSC1641TaskGetEventSrcIF((TSC1641Task *) sTSC1641Obj), DatalogAppListener);
   }
+  if (sIIS2DULPXObj)
+  {
+    IEventSrcAddEventListener(IIS2DULPXTaskGetEventSrcIF((IIS2DULPXTask *)sIIS2DULPXObj), DatalogAppListener);
+  }
 
   /************ Connect Sensor LL to be used for ucf management to the DatalogAppTask ************/
   if (sISM330DHCXObj)
@@ -430,6 +460,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     DatalogAppTask_SetMLCIF((AManagedTask *) sISM330BXObj);
   }
   DatalogAppTask_SetIspuIF((AManagedTask *) sISM330ISObj);
+  DatalogAppTask_Set_ICLX_MLCIF((AManagedTask *) sIIS2ICLXObj);
 
   /************ Other PnPL Components ************/
   Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
@@ -446,6 +477,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   /************ Sensor PnPL Components ************/
   Iis2dlpc_Acc_PnPLInit(pIIS2DLPC_ACC_PnPLObj);
   Iis2iclx_Acc_PnPLInit(pIIS2ICLX_ACC_PnPLObj);
+  Iis2iclx_Mlc_PnPLInit(pIIS2ICLX_MLC_PnPLObj);
   Iis2mdc_Mag_PnPLInit(pIIS2MDC_MAG_PnPLObj);
   Ilps22qs_Press_PnPLInit(pILPS22QS_PRESS_PnPLObj);
   Imp23absu_Mic_PnPLInit(pIMP23ABSU_MIC_PnPLObj);
@@ -491,6 +523,10 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     tags_info_set_hw_tag1__enabled(true, NULL);
     tags_info_set_hw_tag0__status(false, NULL);
     tags_info_set_hw_tag1__status(false, NULL);
+  }
+  if (sIIS2DULPXObj)
+  {
+    Iis2dulpx_Acc_PnPLInit(pIIS2DULPX_ACC_PnPLObj);
   }
 
   return SYS_NO_ERROR_CODE;

@@ -1,6 +1,0 @@
-st_pnpl
-numpy==1.26.4
-pyqtgraph
-setuptools
-PySide6==6.6.1
-pyaudio

@@ -42,6 +42,7 @@ ABusIF *I2CBSBusIFAlloc(uint16_t who_am_i, uint8_t address, GPIO_TypeDef *p_port
     _this->auto_inc = auto_inc;
     _this->address_size = I2C_MEMADD_SIZE_8BIT;
     _this->transmit_receive = 0;
+    _this->i2c_ack = 0;
     _this->p_bs_gpio_port = p_port;
     _this->bs_gpio_pin = pin;
 
@@ -72,6 +73,7 @@ ABusIF *I2CBSBusIFAlloc16(uint16_t who_am_i, uint16_t address, GPIO_TypeDef *p_p
     _this->auto_inc = auto_inc;
     _this->address_size = I2C_MEMADD_SIZE_16BIT;
     _this->transmit_receive = 0;
+    _this->i2c_ack = 0;
     _this->p_bs_gpio_port = p_port;
     _this->bs_gpio_pin = pin;
 

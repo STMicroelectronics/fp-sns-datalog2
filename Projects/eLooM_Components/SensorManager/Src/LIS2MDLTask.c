@@ -1225,16 +1225,17 @@ static sys_error_code_t LIS2MDLTaskSensorReadData(LIS2MDLTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  lis2mdl_magnetic_raw_get(p_sensor_drv, (int16_t *) &_this->p_sensor_data_buff);
+  res = lis2mdl_magnetic_raw_get(p_sensor_drv, (int16_t *) &_this->p_sensor_data_buff);
 
+  if (!SYS_IS_ERROR_CODE(res))
+  {
 #if (HSD_USE_DUMMY_DATA == 1)
-  int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
-  *p16++ = dummyDataCounter++;
-  *p16++ = dummyDataCounter++;
-  *p16++ = dummyDataCounter++;
+    int16_t *p16 = (int16_t *)_this->p_sensor_data_buff;
+    *p16++ = dummyDataCounter++;
+    *p16++ = dummyDataCounter++;
+    *p16++ = dummyDataCounter++;
 #endif
-  //TODO: Other things to add?? --> Add a callback for the ready data?
-  // LIS2MDL_Data_Ready(0, (uint8_t *)lis2mdl_mem, 6, TimeStamp_lis2mdl);
+  }
 
   return res;
 }

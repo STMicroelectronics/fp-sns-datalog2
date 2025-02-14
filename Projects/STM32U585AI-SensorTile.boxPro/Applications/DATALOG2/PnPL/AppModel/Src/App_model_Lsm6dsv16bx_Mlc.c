@@ -56,8 +56,8 @@ uint8_t lsm6dsv16bx_mlc_comp_init(void)
   lsm6dsv16bx_mlc_model.stream_params.stream_id = -1;
   lsm6dsv16bx_mlc_model.stream_params.usb_ep = -1;
 
-  lsm6dsv16bx_mlc_set_st_ble_stream__mlc__unit("", NULL);
-  lsm6dsv16bx_mlc_set_st_ble_stream__mlc__format("int8_t", NULL);
+  lsm6dsv16bx_mlc_set_st_ble_stream__mlc_unit("", NULL);
+  lsm6dsv16bx_mlc_set_st_ble_stream__mlc_format("int8_t", NULL);
 
   addSensorToAppModel(id, &lsm6dsv16bx_mlc_model);
 
@@ -70,9 +70,9 @@ uint8_t lsm6dsv16bx_mlc_comp_init(void)
 
   int32_t value = 0;
   lsm6dsv16bx_mlc_get_dim(&value);
-  lsm6dsv16bx_mlc_set_st_ble_stream__mlc__channels(value, NULL);
+  lsm6dsv16bx_mlc_set_st_ble_stream__mlc_channels(value, NULL);
   float sensitivity = 1.0f;
-  lsm6dsv16bx_mlc_set_st_ble_stream__mlc__multiply_factor(sensitivity, NULL);
+  lsm6dsv16bx_mlc_set_st_ble_stream__mlc_multiply_factor(sensitivity, NULL);
 
   app_model.mlc_ucf_valid = false;
   __stream_control(true);
@@ -129,12 +129,14 @@ uint8_t lsm6dsv16bx_mlc_get_data_type(char **value)
 uint8_t lsm6dsv16bx_mlc_get_usb_dps(int32_t *value)
 {
   *value = lsm6dsv16bx_mlc_model.stream_params.usb_dps;
+  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
 uint8_t lsm6dsv16bx_mlc_get_sd_dps(int32_t *value)
 {
   *value = lsm6dsv16bx_mlc_model.stream_params.sd_dps;
+  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -154,62 +156,53 @@ uint8_t lsm6dsv16bx_mlc_get_sensor_category(int32_t *value)
 uint8_t lsm6dsv16bx_mlc_get_mounted(bool *value)
 {
   *value = true;
-  /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
 uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__id(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_mlc_model.st_ble_stream.st_ble_stream_id;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc__enable(bool *value)
+uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc_enable(bool *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_mlc_model.st_ble_stream.st_ble_stream_objects.status;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc__unit(char **value)
+uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc_unit(char **value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_mlc_model.st_ble_stream.st_ble_stream_objects.unit;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc__format(char **value)
+uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc_format(char **value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_mlc_model.st_ble_stream.st_ble_stream_objects.format;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc__elements(int32_t *value)
+uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc_elements(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_mlc_model.st_ble_stream.st_ble_stream_objects.elements;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc__channels(int32_t *value)
+uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc_channels(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_mlc_model.st_ble_stream.st_ble_stream_objects.channel;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc__multiply_factor(float *value)
+uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc_multiply_factor(float *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_mlc_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc__odr(int32_t *value)
+uint8_t lsm6dsv16bx_mlc_get_st_ble_stream__mlc_odr(int32_t *value)
 {
-  /* USER Code */
   *value = lsm6dsv16bx_mlc_model.st_ble_stream.st_ble_stream_objects.odr;
   return PNPL_NO_ERROR_CODE;
 }
@@ -277,7 +270,7 @@ uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__id(int32_t value, char **response_mes
   return ret;
 }
 
-uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__enable(bool value, char **response_message)
+uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc_enable(bool value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -288,7 +281,7 @@ uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__enable(bool value, char **respon
   return ret;
 }
 
-uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__unit(const char *value, char **response_message)
+uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc_unit(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -299,7 +292,7 @@ uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__unit(const char *value, char **r
   return ret;
 }
 
-uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__format(const char *value, char **response_message)
+uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc_format(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -310,7 +303,7 @@ uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__format(const char *value, char *
   return ret;
 }
 
-uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__elements(int32_t value, char **response_message)
+uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc_elements(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -321,7 +314,7 @@ uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__elements(int32_t value, char **r
   return ret;
 }
 
-uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__channels(int32_t value, char **response_message)
+uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc_channels(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -332,7 +325,7 @@ uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__channels(int32_t value, char **r
   return ret;
 }
 
-uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__multiply_factor(float value, char **response_message)
+uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc_multiply_factor(float value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -343,7 +336,7 @@ uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__multiply_factor(float value, cha
   return ret;
 }
 
-uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc__odr(int32_t value, char **response_message)
+uint8_t lsm6dsv16bx_mlc_set_st_ble_stream__mlc_odr(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {

@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_2_tmos;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect:sensors:sths34pf80_2_tmos;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -1111,4 +1111,6 @@ uint8_t sths34pf80_2_tmos_set_sensor_annotation(const char *value, char **respon
   strcpy(sths34pf80_2_tmos_model.annotation, value);
   return ret;
 }
+
+
 

@@ -406,7 +406,7 @@ sys_error_code_t LPS22DFTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
 
   /* create the software timer*/
   if (TX_SUCCESS
-      != tx_timer_create(&p_obj->read_fifo_timer, "ILPS22WS_T", LPS22DFTaskTimerCallbackFunction, (ULONG)_this,
+      != tx_timer_create(&p_obj->read_fifo_timer, "LPS22DF_T", LPS22DFTaskTimerCallbackFunction, (ULONG)_this,
                          AMT_MS_TO_TICKS(LPS22DF_TASK_CFG_TIMER_PERIOD_MS), 0, TX_NO_ACTIVATE))
   {
     res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
@@ -545,14 +545,12 @@ sys_error_code_t LPS22DFTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
         lps22df_md_t val;
         lps22df_mode_get(p_sensor_drv, &val);
         val.odr = LPS22DF_ONE_SHOT;
+        lps22df_mode_set(p_sensor_drv, &val);
 
         lps22df_fifo_md_t fifo_md;
         fifo_md.watermark = 1;
         fifo_md.operation = LPS22DF_BYPASS;
-
         lps22df_fifo_mode_set(p_sensor_drv, &fifo_md);
-
-        lps22df_mode_set(p_sensor_drv, &val);
       }
       /* Empty the task queue and disable INT or timer */
       tx_queue_flush(&p_obj->in_queue);
@@ -1201,22 +1199,13 @@ static sys_error_code_t LPS22DFTaskSensorInit(LPS22DFTask *_this)
 
   int32_t ret_val = 0;
 
-  lps22df_int_mode_t int_mode =
-  {
-    0
-  };
-  lps22df_pin_int_route_t int_route =
-  {
-    0
-  };
-
   /* Set bdu and if_inc recommended for driver usage */
   lps22df_init_set(p_sensor_drv, LPS22DF_DRV_RDY);
 
   /* Select bus interface */
   lps22df_bus_mode_t bus_mode;
   bus_mode.interface = LPS22DF_SEL_BY_HW;
-  bus_mode.filter = LPS22DF_AUTO;
+  bus_mode.filter = LPS22DF_FILTER_AUTO;
   lps22df_bus_mode_set(p_sensor_drv, &bus_mode);
 
   /* Set Output Data Rate in Power Down */
@@ -1258,37 +1247,19 @@ static sys_error_code_t LPS22DFTaskSensorInit(LPS22DFTask *_this)
   lps22df_fifo_md_t fifo_md;
   fifo_md.watermark = _this->samples_per_it;
   fifo_md.operation = LPS22DF_STREAM;
-  lps22df_fifo_mode_set(p_sensor_drv, &fifo_md);;
-  /* Configure Interrupt */
-  if (_this->pIRQConfig != NULL)
-  {
-    int_mode.drdy_latched = 0;
-    int_route.fifo_th = 1;
-  }
-  else
-  {
-    int_mode.drdy_latched = 1;
-    int_route.fifo_th = 0;
-  }
+  lps22df_fifo_mode_set(p_sensor_drv, &fifo_md);
 #else
   _this->samples_per_it = 1;
-  /* Configure Interrupt */
+#endif /* LPS22DF_FIFO_ENABLED */
+
+  /* Set odr and fs */
+  lps22df_mode_get(p_sensor_drv, &md);
+
+  /* Currently, the INT pin is not exposed */
   if (_this->pIRQConfig != NULL)
   {
-    int_mode.drdy_latched = 0;
-    int_route.drdy_pres = 1;
+    /* you should enable the INT here */
   }
-  else
-  {
-    int_mode.drdy_latched = 1;
-    int_route.drdy_pres = 0;
-  }
-#endif /* LPS22DF_FIFO_ENABLED */
-  lps22df_interrupt_mode_set(p_sensor_drv, &int_mode);
-  lps22df_pin_int_route_set(p_sensor_drv, &int_route);
-
-  /* Set odr */
-  lps22df_mode_get(p_sensor_drv, &md);
 
   float lps22df_odr;
   lps22df_odr = _this->sensor_status.type.mems.odr;
@@ -1324,24 +1295,33 @@ static sys_error_code_t LPS22DFTaskSensorInit(LPS22DFTask *_this)
   {
     md.odr = LPS22DF_200Hz;
   }
-  lps22df_mode_set(p_sensor_drv, &md);
 
-#if LPS22DF_FIFO_ENABLED
-  lps22df_fifo_level_get(p_sensor_drv, (uint8_t *) &_this->fifo_level);
+
+  if (_this->sensor_status.is_active)
+  {
+    lps22df_mode_set(p_sensor_drv, &md);
+  }
+  else
+  {
+    md.odr = LPS22DF_ONE_SHOT;
+    lps22df_mode_set(p_sensor_drv, &md);
+    _this->sensor_status.is_active = false;
+  }
+
+  lps22df_fifo_level_get(p_sensor_drv, &_this->fifo_level);
 
   if (_this->fifo_level >= _this->samples_per_it)
   {
     lps22df_read_reg(p_sensor_drv, LPS22DF_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_fifo_data_buff,
                      _this->samples_per_it * 3);
   }
-#endif
 
   if (_this->sensor_status.is_active)
   {
 #if LPS22DF_FIFO_ENABLED
-    _this->task_delay = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
+    _this->task_delay = (uint16_t)((1000.0f / lps22df_odr) * (((float)(_this->samples_per_it)) / 2.0f));
 #else
-    _this->task_delay = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
+    _this->task_delay = (uint16_t)(1000.0f / lps22df_odr);
 #endif
   }
 
@@ -1354,7 +1334,7 @@ static sys_error_code_t LPS22DFTaskSensorReadData(LPS22DFTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   uint16_t samples_per_it = _this->samples_per_it;
-  uint16_t i = 0;
+  uint8_t i = 0;
 
 #if LPS22DF_FIFO_ENABLED
   /* Check FIFO_WTM_IA and fifo level */
@@ -1362,48 +1342,47 @@ static sys_error_code_t LPS22DFTaskSensorReadData(LPS22DFTask *_this)
 
   if (_this->fifo_level >= samples_per_it)
   {
-    lps22df_read_reg(p_sensor_drv, LPS22DF_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_fifo_data_buff, samples_per_it * 3);
+    res = lps22df_read_reg(p_sensor_drv, LPS22DF_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_fifo_data_buff,
+                      samples_per_it * 3);
   }
   else
   {
     _this->fifo_level = 0;
   }
 #else
-  lps22df_read_reg(p_sensor_drv, LPS22DF_PRESS_OUT_XL, (uint8_t *) _this->p_fifo_data_buff, samples_per_it * 3);
+  res = lps22df_read_reg(p_sensor_drv, LPS22DF_PRESS_OUT_XL, (uint8_t *) _this->p_fifo_data_buff, samples_per_it * 3);
   _this->fifo_level = 1;
 #endif /* LPS22DF_FIFO_ENABLED */
 
+  if (!SYS_IS_ERROR_CODE(res))
+  {
+    if (_this->fifo_level >= samples_per_it)
+    {
 #if (HSD_USE_DUMMY_DATA == 1)
-  if (_this->fifo_level >= samples_per_it)
-  {
-    for (i = 0; i < samples_per_it ; i++)
-    {
-      _this->p_press_data_buff[i]  = (float)(dummyDataCounter_press++);
+      for (i = 0; i < samples_per_it ; i++)
+      {
+        _this->p_press_data_buff[i]  = (float)(dummyDataCounter_press++);
+      }
     }
-  }
 #else
-  /* Arrange Data */
-  int32_t data;
-  uint8_t *p8_src = _this->p_fifo_data_buff;
-  uint8_t *p8_dest = _this->p_fifo_data_buff;
+      /* Arrange Data */
+      int32_t data;
+      uint8_t *p8_src = _this->p_fifo_data_buff;
 
-  if (_this->fifo_level >= samples_per_it)
-  {
-    for (i = 0; i < samples_per_it; i++)
-    {
-      data = (int16_t)(p8_src[2]);
-      data = (data * 256) + p8_src[1];
-      data = (data * 256) + p8_src[0];
-      data = (data * 256);
-      *p8_dest++ = *p8_src++;
-      *p8_dest++ = *p8_src++;
-      *p8_dest++ = *p8_src++;
+      for (i = 0; i < samples_per_it; i++)
+      {
+        /* Pressure data conversion to Int32 */
+        data = (int32_t) p8_src[2];
+        data = (data * 256) + (int32_t) p8_src[1];
+        data = (data * 256) + (int32_t) p8_src[0];
+        data = (data * 256);
+        p8_src = p8_src + 3;
 
-      _this->p_press_data_buff[i] = lps22df_from_lsb_to_hPa(data);
+        _this->p_press_data_buff[i] = lps22df_from_lsb_to_hPa(data);
+      }
     }
+#endif /* HSD_USE_DUMMY_DATA */
   }
-#endif
-
   return res;
 }
 

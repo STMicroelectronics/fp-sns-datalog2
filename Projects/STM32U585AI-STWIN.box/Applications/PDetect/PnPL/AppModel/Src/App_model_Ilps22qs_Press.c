@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press;1
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_pdetect1:sensors:ilps22qs_press;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -352,4 +352,6 @@ uint8_t ilps22qs_press_set_sensor_annotation(const char *value, char **response_
   strcpy(ilps22qs_press_model.annotation, value);
   return ret;
 }
+
+
 

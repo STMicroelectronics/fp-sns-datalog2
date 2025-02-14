@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:imp34dt05_mic;5
+  * dtmi:vespucci:steval_stwinbx1:fpSnsDatalog2_datalog2:sensors:imp34dt05_mic;6
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -177,8 +177,8 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   char *resp_msg;
   if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.odr"))
   {
-    valid_property = true;
     int32_t odr = (int32_t)json_object_dotget_number(tempJSONObject, "imp34dt05_mic.odr");
+    valid_property = true;
     ret = imp34dt05_mic_set_odr((pnpl_imp34dt05_mic_odr_t)odr, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -196,8 +196,8 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.enable"))
   {
-    valid_property = true;
     bool enable = json_object_dotget_boolean(tempJSONObject, "imp34dt05_mic.enable");
+    valid_property = true;
     ret = imp34dt05_mic_set_enable(enable, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -215,8 +215,8 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.volume"))
   {
-    valid_property = true;
     int32_t volume = (int32_t)json_object_dotget_number(tempJSONObject, "imp34dt05_mic.volume");
+    valid_property = true;
     ret = imp34dt05_mic_set_volume(volume, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -234,8 +234,8 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.samples_per_ts"))
   {
-    valid_property = true;
     int32_t samples_per_ts = (int32_t)json_object_dotget_number(tempJSONObject, "imp34dt05_mic.samples_per_ts");
+    valid_property = true;
     ret = imp34dt05_mic_set_samples_per_ts(samples_per_ts, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -253,8 +253,8 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   }
   if (json_object_dothas_value(tempJSONObject, "imp34dt05_mic.sensor_annotation"))
   {
-    valid_property = true;
     const char *sensor_annotation = json_object_dotget_string(tempJSONObject, "imp34dt05_mic.sensor_annotation");
+    valid_property = true;
     ret = imp34dt05_mic_set_sensor_annotation(sensor_annotation, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
     if (ret == PNPL_NO_ERROR_CODE)
@@ -271,7 +271,7 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
     }
   }
   json_value_free(tempJSON);
-  /* Check if received a request to modify an existing property */
+  /* Check if received a valid request to modify an existing property */
   if (valid_property)
   {
     if (pretty == 1)
@@ -288,8 +288,9 @@ uint8_t Imp34dt05_Mic_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   else
   {
     /* Set property is not containing a valid property/parameter: PnPL_Error */
-    char *log_message = "Invalid property for Imp34dt05_Mic";
+    char *log_message = "Invalid property for imp34dt05_mic";
     PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
   }
   json_value_free(respJSON);
   return ret;

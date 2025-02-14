@@ -155,6 +155,11 @@ extern const MX_SPIParams_t MX_SPI3InitParams;
 extern const MX_I2CParams_t MX_I2C1InitParams;
 
 /**
+  * I2C3 configuration parameters.
+  */
+extern const MX_I2CParams_t MX_I2C3InitParams;
+
+/**
   * MDF CH0 F1 configuration parameters.
   */
 extern const MX_MDFParams_t MX_MDF1InitParams;

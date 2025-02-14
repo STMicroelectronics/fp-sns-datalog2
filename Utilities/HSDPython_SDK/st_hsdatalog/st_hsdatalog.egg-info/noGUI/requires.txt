@@ -1,9 +1,0 @@
-st_pnpl
-numpy==1.26.4
-pyserial
-pandas
-fastparquet
-colorama
-click
-matplotlib
-setuptools

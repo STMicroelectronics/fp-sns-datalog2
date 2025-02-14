@@ -55,7 +55,6 @@ void MX_GPIO_PF4_Init(void);
 void MX_GPIO_PH15_Init(void);
 void MX_GPIO_PF12_Init(void);
 void MX_GPIO_PF15_Init(void);
-void MX_GPIO_PD15_Init(void);
 void MX_GPIO_PI0_Init(void);
 void MX_GPIO_PA8_Init(void);
 void MX_GPIO_PA0_Init(void);

@@ -1199,7 +1199,7 @@ static sys_error_code_t ILPS22QSTaskSensorInit(ILPS22QSTask *_this)
   /* Select bus interface */
   ilps22qs_bus_mode_t bus_mode;
   bus_mode.interface = ILPS22QS_SEL_BY_HW;
-  bus_mode.filter = ILPS22QS_AUTO;
+  bus_mode.filter = ILPS22QS_FILTER_AUTO;
   ilps22qs_bus_mode_set(p_sensor_drv, &bus_mode);
 
   /* Set Output Data Rate in Power Down */
@@ -1347,50 +1347,53 @@ static sys_error_code_t ILPS22QSTaskSensorReadData(ILPS22QSTask *_this)
 
   if (_this->fifo_level >= samples_per_it)
   {
-    ilps22qs_read_reg(p_sensor_drv, ILPS22QS_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_fifo_data_buff,
-                      samples_per_it * 3);
+    res = ilps22qs_read_reg(p_sensor_drv, ILPS22QS_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_fifo_data_buff,
+                            samples_per_it * 3);
   }
   else
   {
     _this->fifo_level = 0;
   }
 #else
-  ilps22qs_read_reg(p_sensor_drv, ILPS22QS_PRESS_OUT_XL, (uint8_t *) _this->p_fifo_data_buff, samples_per_it * 3);
+  res = ilps22qs_read_reg(p_sensor_drv, ILPS22QS_PRESS_OUT_XL, (uint8_t *) _this->p_fifo_data_buff, samples_per_it * 3);
   _this->fifo_level = 1;
 #endif /* ILPS22QS_FIFO_ENABLED */
 
-  if (_this->fifo_level >= samples_per_it)
+  if (!SYS_IS_ERROR_CODE(res))
   {
+    if (_this->fifo_level >= samples_per_it)
+    {
 #if (HSD_USE_DUMMY_DATA == 1)
-    for (i = 0; i < samples_per_it ; i++)
-    {
-      _this->p_press_data_buff[i]  = (float)(dummyDataCounter_press++);
-    }
+      for (i = 0; i < samples_per_it ; i++)
+      {
+        _this->p_press_data_buff[i]  = (float)(dummyDataCounter_press++);
+      }
 #else
-    /* Arrange Data */
-    int32_t data;
-    uint8_t *p8_src = _this->p_fifo_data_buff;
-    float fs = _this->sensor_status.type.mems.fs;
+      /* Arrange Data */
+      int32_t data;
+      uint8_t *p8_src = _this->p_fifo_data_buff;
+      float fs = _this->sensor_status.type.mems.fs;
 
-    for (i = 0; i < samples_per_it; i++)
-    {
-      /* Pressure data conversion to Int32 */
-      data = (int32_t) p8_src[2];
-      data = (data * 256) + (int32_t) p8_src[1];
-      data = (data * 256) + (int32_t) p8_src[0];
-      data = (data * 256);
-      p8_src = p8_src + 3;
+      for (i = 0; i < samples_per_it; i++)
+      {
+        /* Pressure data conversion to Int32 */
+        data = (int32_t) p8_src[2];
+        data = (data * 256) + (int32_t) p8_src[1];
+        data = (data * 256) + (int32_t) p8_src[0];
+        data = (data * 256);
+        p8_src = p8_src + 3;
 
-      if (fs <= 1261.0f)
-      {
-        _this->p_press_data_buff[i] = ilps22qs_from_fs1260_to_hPa(data);
+        if (fs <= 1261.0f)
+        {
+          _this->p_press_data_buff[i] = ilps22qs_from_fs1260_to_hPa(data);
+        }
+        else
+        {
+          _this->p_press_data_buff[i] = ilps22qs_from_fs4000_to_hPa(data);
+        }
       }
-      else
-      {
-        _this->p_press_data_buff[i] = ilps22qs_from_fs4000_to_hPa(data);
-      }
-    }
 #endif
+    }
   }
 
   return res;

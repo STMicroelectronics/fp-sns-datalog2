@@ -62,6 +62,8 @@ struct _I2CBusIF
 
   uint8_t transmit_receive;
 
+  uint8_t i2c_ack;
+
 };
 
 

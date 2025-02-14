@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:sensors:sht40_hum;1
+  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_PDetect:sensors:sht40_hum;3
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -52,15 +52,11 @@ uint8_t sht40_hum_comp_init(void)
   sht40_hum_model.sensor_status = SMSensorGetStatusPointer(id);
   sht40_hum_model.stream_params.stream_id = -1;
   sht40_hum_model.stream_params.usb_ep = -1;
+  sht40_hum_model.stream_params.spts = 1;
 
   addSensorToAppModel(id, &sht40_hum_model);
 
   sht40_hum_set_sensor_annotation("[EXTERN]\0", NULL);
-#if (HSD_USE_DUMMY_DATA == 1)
-  sht40_hum_set_samples_per_ts(0, NULL);
-#else
-  sht40_hum_set_samples_per_ts(1, NULL);
-#endif
   __stream_control(true);
   /* USER Component initialization code */
   return PNPL_NO_ERROR_CODE;
@@ -199,30 +195,7 @@ uint8_t sht40_hum_set_enable(bool value, char **response_message)
   {
     /* USER Code */
     __stream_control(true);
-  }
-  return ret;
-}
-
-uint8_t sht40_hum_set_samples_per_ts(int32_t value, char **response_message)
-{
-  if (response_message != NULL)
-  {
-    *response_message = "";
-  }
-  uint8_t ret = PNPL_NO_ERROR_CODE;
-  int32_t min_v = 0;
-  int32_t max_v = 200;
-  if (value >= min_v && value <= max_v)
-  {
-    sht40_hum_model.stream_params.spts = value;
-  }
-  else if (value > max_v)
-  {
-    sht40_hum_model.stream_params.spts = max_v;
-  }
-  else
-  {
-    sht40_hum_model.stream_params.spts = min_v;
+    /* USER Code */
   }
   return ret;
 }

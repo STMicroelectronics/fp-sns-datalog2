@@ -40,7 +40,6 @@ extern "C" {
 #include "nx_driver_emw3080.h"
 #include "stm32u5xx_hal_rtc.h"
 #include "fx_api.h"
-#include "PnPLDef.h"
 #include "PnPLCompManager.h"
 #include "BLE_Manager_Conf.h"
 #include "IWifi_Config.h"

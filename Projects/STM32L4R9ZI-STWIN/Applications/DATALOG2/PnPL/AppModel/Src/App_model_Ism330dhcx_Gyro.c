@@ -20,7 +20,7 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following DTDL Component:
-  * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:ism330dhcx_gyro;1
+  * dtmi:vespucci:steval_stwinkt1b:fpSnsDatalog2_datalog2:sensors:ism330dhcx_gyro;2
   *
   * Created by: DTDL2PnPL_cGen version 2.1.0
   *
@@ -55,8 +55,8 @@ uint8_t ism330dhcx_gyro_comp_init(void)
   ism330dhcx_gyro_model.stream_params.stream_id = -1;
   ism330dhcx_gyro_model.stream_params.usb_ep = -1;
 
-  ism330dhcx_gyro_set_st_ble_stream__gyro__unit("dps", NULL);
-  ism330dhcx_gyro_set_st_ble_stream__gyro__format("int16_t", NULL);
+  ism330dhcx_gyro_set_st_ble_stream__gyro_unit("dps", NULL);
+  ism330dhcx_gyro_set_st_ble_stream__gyro_format("int16_t", NULL);
 
   addSensorToAppModel(id, &ism330dhcx_gyro_model);
 
@@ -71,10 +71,10 @@ uint8_t ism330dhcx_gyro_comp_init(void)
 
   int32_t value = 0;
   ism330dhcx_gyro_get_dim(&value);
-  ism330dhcx_gyro_set_st_ble_stream__gyro__channels(value, NULL);
+  ism330dhcx_gyro_set_st_ble_stream__gyro_channels(value, NULL);
   float sensitivity = 0.0f;
   ism330dhcx_gyro_get_sensitivity(&sensitivity);
-  ism330dhcx_gyro_set_st_ble_stream__gyro__multiply_factor(sensitivity, NULL);
+  ism330dhcx_gyro_set_st_ble_stream__gyro_multiply_factor(sensitivity, NULL);
 
   __stream_control(true);
   __sc_set_ble_stream_params(ism330dhcx_gyro_model.id);
@@ -253,49 +253,49 @@ uint8_t ism330dhcx_gyro_get_st_ble_stream__id(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro__enable(bool *value)
+uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro_enable(bool *value)
 {
   /* USER Code */
   *value = ism330dhcx_gyro_model.st_ble_stream.st_ble_stream_objects.status;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro__unit(char **value)
+uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro_unit(char **value)
 {
   /* USER Code */
   *value = ism330dhcx_gyro_model.st_ble_stream.st_ble_stream_objects.unit;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro__format(char **value)
+uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro_format(char **value)
 {
   /* USER Code */
   *value = ism330dhcx_gyro_model.st_ble_stream.st_ble_stream_objects.format;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro__elements(int32_t *value)
+uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro_elements(int32_t *value)
 {
   /* USER Code */
   *value = ism330dhcx_gyro_model.st_ble_stream.st_ble_stream_objects.elements;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro__channels(int32_t *value)
+uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro_channels(int32_t *value)
 {
   /* USER Code */
   *value = ism330dhcx_gyro_model.st_ble_stream.st_ble_stream_objects.channel;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro__multiply_factor(float *value)
+uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro_multiply_factor(float *value)
 {
   /* USER Code */
   *value = ism330dhcx_gyro_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro__odr(int32_t *value)
+uint8_t ism330dhcx_gyro_get_st_ble_stream__gyro_odr(int32_t *value)
 {
   /* USER Code */
   *value = ism330dhcx_gyro_model.st_ble_stream.st_ble_stream_objects.odr;
@@ -418,7 +418,7 @@ uint8_t ism330dhcx_gyro_set_fs(pnpl_ism330dhcx_gyro_fs_t enum_id, char **respons
 
   float sensitivity = 0.0f;
   ism330dhcx_gyro_get_sensitivity(&sensitivity);
-  ism330dhcx_gyro_set_st_ble_stream__gyro__multiply_factor(sensitivity, NULL);
+  ism330dhcx_gyro_set_st_ble_stream__gyro_multiply_factor(sensitivity, NULL);
 
   return ret;
 }
@@ -496,7 +496,7 @@ uint8_t ism330dhcx_gyro_set_st_ble_stream__id(int32_t value, char **response_mes
   return ret;
 }
 
-uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__enable(bool value, char **response_message)
+uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro_enable(bool value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -507,7 +507,7 @@ uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__enable(bool value, char **respo
   return ret;
 }
 
-uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__unit(const char *value, char **response_message)
+uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro_unit(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -518,7 +518,7 @@ uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__unit(const char *value, char **
   return ret;
 }
 
-uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__format(const char *value, char **response_message)
+uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro_format(const char *value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -529,7 +529,7 @@ uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__format(const char *value, char 
   return ret;
 }
 
-uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__elements(int32_t value, char **response_message)
+uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro_elements(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -540,7 +540,7 @@ uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__elements(int32_t value, char **
   return ret;
 }
 
-uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__channels(int32_t value, char **response_message)
+uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro_channels(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -551,7 +551,7 @@ uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__channels(int32_t value, char **
   return ret;
 }
 
-uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__multiply_factor(float value, char **response_message)
+uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro_multiply_factor(float value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -562,7 +562,7 @@ uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__multiply_factor(float value, ch
   return ret;
 }
 
-uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__odr(int32_t value, char **response_message)
+uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro_odr(int32_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -572,4 +572,6 @@ uint8_t ism330dhcx_gyro_set_st_ble_stream__gyro__odr(int32_t value, char **respo
   ism330dhcx_gyro_model.st_ble_stream.st_ble_stream_objects.odr = value;
   return ret;
 }
+
+
 

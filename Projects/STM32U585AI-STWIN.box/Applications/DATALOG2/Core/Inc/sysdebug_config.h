@@ -49,6 +49,7 @@ extern "C" {
 #define SYS_DBG_IMP34DT05                  SYS_DBG_ON                 ///< IMP34DT05 task debug control byte
 #define SYS_DBG_IIS2MDC                    SYS_DBG_ON                 ///< IIS2MDC task debug control byte
 #define SYS_DBG_IIS2DLPC                   SYS_DBG_ON                 ///< IIS2DLPC task debug control byte
+#define SYS_DBG_IIS2DULPX                  SYS_DBG_ON                 ///< IIS2DULPX task debug control byte
 #define SYS_DBG_ILPS22QS                   SYS_DBG_ON                 ///< ILPS22QS task debug control byte
 #define SYS_DBG_STTS22H                    SYS_DBG_ON                 ///< STTS22H task debug control byte
 #define SYS_DBG_IIS2ICLX                   SYS_DBG_ON                 ///< IIS2ICLX sensor task debug control byte
