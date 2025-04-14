@@ -17,6 +17,7 @@
   ******************************************************************************
   */
 
+#include "log.h"
 #include <stdint.h>
 #include <iostream>
 #include "HS_DataLog.h"
@@ -34,9 +35,13 @@
 #include <conio.h>
 #endif
 
-#ifdef __linux__
+#if defined(__linux__)
 #include <sys/stat.h>
-int _kbhit() ;
+int _kbhit();
+#elif __APPLE__
+#include <sys/stat.h>
+int _kbhit();
+void _closeFiles(char* sNames[], int nSensors, std::map<std::string, FILE*>& pFiles);
 #elif _WIN32
 #include "windows.h"
 #endif
@@ -76,7 +81,7 @@ class InputParser
 // Get Input
 bool getInput(char *c)
 {
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
     if (_kbhit())
     {
         *c = getc(stdin);

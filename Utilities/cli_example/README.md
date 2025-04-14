@@ -7,7 +7,7 @@ Sensor data can be either stored on a micro SD Card, SDHC (Secure Digital High C
 formatted with the FAT32 file system, or streamed to a PC via USB (WinUSB class).
 
 To save data via USB, a command line interface example as executable is available here.
-It is available for Windows 32 and 64 bit, Linux and RaspberryPi 3 platforms.
+It is available for Windows 32 and 64 bit, macOS, Linux and RaspberryPi 32 and 64 bit platforms.
 
 USB_DataLog_Run.bat and USB_DataLog_Run.sh scripts provide a ready to use example.
 They show how to launch and use the provided executables.

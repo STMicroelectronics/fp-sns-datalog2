@@ -21,7 +21,6 @@
 #include <unordered_map>
 #include <iomanip>
 #include <sstream>
-#include "json.hpp"
 
 using namespace std;
 
@@ -43,6 +42,8 @@ int main(int argc, char *argv[])
 {
     /* ---------------------------- Parse command line options ---------------------------- */
 
+    setLogLevel(LOG_LEVEL_INFO);
+
     InputParser input(argc, argv);
 
     if(input.cmdOptionExists("-h"))
@@ -53,7 +54,9 @@ int main(int argc, char *argv[])
         cout << " -h\t\t: Show this help" << endl;
         cout << " -f <filename>\t: Device Configuration file (JSON)" << endl;
         cout << " -u <filename>\t: UCF Configuration file for MLC" << endl;
+        cout << " -msn <mlc_sensor_name>\t: MLC Sensor Name" << endl;
         cout << " -t <seconds>\t: Duration of the current acquisition (seconds) " << endl;
+        cout << " -d <debug_level>\t: Set the debug level (0-DEBUG, 1-INFO, 2-WARNING, 3-ERROR). Default is 1 (INFO)" << endl;
         cout << " -g\t\t: Get current Device Configuration, save it to file <device_config.json> and return." << endl;
         cout << " -y\t\t: Directly start the acquisition without waiting for user confirmation" << endl;
         cout << "   \t\t  All other parameters are ignored! " << endl;
@@ -61,15 +64,62 @@ int main(int argc, char *argv[])
 
         exit(0);
     }
+
     // TODO: Next version --> Hotplug events notification support
     // hs_datalog_register_usb_hotplug_callback(plug_callback, unplug_callback);
     // TODO: Next version --> Hotplug events notification support
+
+    // TODO: Next version --> Hotplug events notification support
+    // hs_datalog_start_hotplug_monitor();
+    // TODO: Next version --> Hotplug events notification support
+
+    if(input.cmdOptionExists("-d"))
+    {
+        const std::string &debugLevelParam = input.getCmdOption("-d");
+        if (!debugLevelParam.empty())
+        {
+            try
+            {
+                int debugLevel = std::stoi(debugLevelParam);
+                switch (debugLevel)
+                {
+                    case 0:
+                        setLogLevel(LOG_LEVEL_DEBUG);
+                        break;
+                    case 1:
+                        setLogLevel(LOG_LEVEL_INFO);
+                        break;
+                    case 2:
+                        setLogLevel(LOG_LEVEL_WARNING);
+                        break;
+                    case 3:
+                        setLogLevel(LOG_LEVEL_ERROR);
+                        break;
+                    default:
+                        logMessage(LOG_LEVEL_ERROR, "Invalid debug level: " + debugLevelParam);
+                        logMessage(LOG_LEVEL_INFO, "Log level is set to default (INFO)");
+                }
+            }
+            catch (const std::invalid_argument& ia)
+            {
+                logMessage(LOG_LEVEL_ERROR, "The specified debug level argument is not a valid number: " + debugLevelParam);
+                logMessage(LOG_LEVEL_INFO, "Log level is set to default (INFO)");
+            }
+        }
+        else
+        {
+            logMessage(LOG_LEVEL_ERROR, "Missing debug level after -d command");
+            logMessage(LOG_LEVEL_INFO, "Log level is set to default (INFO)");
+        }
+    }
+
+    logMessage(LOG_LEVEL_INFO, "Welcome to HSDatalog Command Line Interface example");
 
     if(input.cmdOptionExists("-g"))
     {
         if(hs_datalog_open() != ST_HS_DATALOG_OK)
         {
-            cout << "Error occurred while initializing datalog\n";
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while initializing datalog");
             cout << "Press any key to exit \n";
             getchar();
             return -1;
@@ -78,7 +128,7 @@ int main(int argc, char *argv[])
         int nDevices = 0;
         if(hs_datalog_get_device_number(&nDevices) != ST_HS_DATALOG_OK)
         {
-            cout << "Error occurred while retrieving device number\n";
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while retrieving device number");
             cout << "Press any key to exit \n";
             getchar();
             return -1;
@@ -87,7 +137,7 @@ int main(int argc, char *argv[])
 
         if(nDevices == 0)
         {
-            cout << "No devices, exiting\n";
+            logMessage(LOG_LEVEL_ERROR, "No devices, exiting");
             cout << "Press any key to exit \n";
             getchar();
             return -1;
@@ -96,7 +146,7 @@ int main(int argc, char *argv[])
         char *tmp1;
         if(hs_datalog_get_device_status(0, &tmp1) != ST_HS_DATALOG_OK)
         {
-            cout << "Error occurred while retrieving device configuration\n";
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while retrieving device configuration");
             cout << "Press any key to exit \n";
             getchar();
             return -1;
@@ -109,7 +159,7 @@ int main(int argc, char *argv[])
         currentConfigFile << json.dump(1);
         currentConfigFile.close();
 
-        cout << "Current Device Status has been saved as device_config.json.\n";
+        logMessage(LOG_LEVEL_INFO, "Current Device Status has been saved as device_config.json.");
         hs_datalog_free(tmp1);
         exit(0);
     }
@@ -132,25 +182,36 @@ int main(int argc, char *argv[])
             }
             if (!configFile.is_open())
             {
-                cout << "Device configuration file not found" << endl << endl;
+                logMessage(LOG_LEVEL_ERROR, "Device configuration file not found");
                 exit(1);
             }
         }
         else
         {
-            cout << "Please specify a file name after -f command" << endl << endl;
+            logMessage(LOG_LEVEL_ERROR, "Please specify a file name after -f command");
             exit(1);
         }
     }
 
     const std::string &fileUCFParam = input.getCmdOption("-u");
     ifstream ucfFile;
+    char* mlc_comp_str = nullptr;
     if(input.cmdOptionExists("-u"))
     {
+        if(input.cmdOptionExists("-msn"))
+        {
+            mlc_comp_str = new char[input.getCmdOption("-msn").length() + 1];
+            strcpy(mlc_comp_str, input.getCmdOption("-msn").c_str());
+        }
+        else
+        {
+            logMessage(LOG_LEVEL_ERROR, "-msn <mlc_sensor_name> is required when -u <filename> is specified.");
+            exit(1);
+        }
         if (!fileUCFParam.empty())
         {
             string ucfFileName = fileUCFParam;
-
+            
             ucfFile.open(ucfFileName, ios::in|ios::binary);
 
             if (!ucfFile.is_open()) // Needed in linux in case of local file???
@@ -160,13 +221,13 @@ int main(int argc, char *argv[])
             }
             if (!ucfFile.is_open())
             {
-                cout << "UCF configuration file not found" << endl << endl;
+                logMessage(LOG_LEVEL_ERROR, "UCF configuration file not found");
                 exit(1);
             }
         }
         else
         {
-            cout << "Please specify a file name after -u command" << endl << endl;
+            logMessage(LOG_LEVEL_ERROR, "Please specify a file name after -u command");
             exit(1);
         }
     }
@@ -184,13 +245,13 @@ int main(int argc, char *argv[])
             }
             catch (const std::invalid_argument& ia)
             {
-                cout << "The specified timeout argument is not a valid number: " << timeoutSecondsParam << endl;
+                logMessage(LOG_LEVEL_ERROR, "The specified timeout argument is not a valid number: " + timeoutSecondsParam);
                 exit(1);
             }
         }
         else
         {
-            cout << "Please specify a timeout after -t command" << endl << endl;
+            logMessage(LOG_LEVEL_ERROR, "Please specify a timeout after -t command");
             exit(1);
         }
     }
@@ -199,33 +260,32 @@ int main(int argc, char *argv[])
     char * version;
     hs_datalog_get_version(&version);
 
-    cout << "STWIN Command Line Interface example\n";
-    cout << "Version: 2.0.0\n";
-    cout << "Based on : ";
-    cout << version;
-    cout << "\n";
+    logMessage(LOG_LEVEL_INFO, "STWIN Command Line Interface example");
+    logMessage(LOG_LEVEL_INFO, "Version: 2.0.0");
+    logMessage(LOG_LEVEL_INFO, "Based on : " + string(version));
 
     if(hs_datalog_open() != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while initializing datalog\n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while initializing datalog");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
     }
+
+
 
     int nDevices = 0;
     if(hs_datalog_get_device_number(&nDevices) != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while retrieving device number\n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while retrieving device number");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
-
     }
 
     if(nDevices == 0)
     {
-        cout << "No devices, exiting\n";
+        logMessage(LOG_LEVEL_ERROR, "No devices, exiting");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
@@ -242,22 +302,22 @@ int main(int argc, char *argv[])
     char* fwInfo_str = (char*)"firmware_info";
     if(hs_datalog_get_component_status(deviceID, &fwInfo, fwInfo_str) != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while retrieving FW Information Component\n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while retrieving FW Information Component");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
     }
 
     auto json = nlohmann::json::parse(fwInfo);
-    cout << "Firmware Information: \n";
+    
+    logMessage(LOG_LEVEL_INFO, "Firmware Info:");
     deviceAlias = json["firmware_info"]["alias"];
-
-    cout << json.dump(1) << "\n";
+    logMessage(LOG_LEVEL_INFO, json.dump(1));
 
     /* Free memory */
     if(hs_datalog_free(fwInfo) != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while freeing memory\n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
@@ -265,20 +325,19 @@ int main(int argc, char *argv[])
     char* deviceInfo_str = (char*)"DeviceInformation";
     if(hs_datalog_get_component_status(deviceID, &deviceInfo, deviceInfo_str) != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while retrieving FW Information Component\n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while retrieving Device Information Component");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
     }
 
     json = nlohmann::json::parse(deviceInfo);
-    cout << "Device Information: \n";
-    cout << json.dump(1) << "\n";
+    logMessage(LOG_LEVEL_INFO, "Device Information: \n" + json.dump(1));
 
     /* Free memory */
     if(hs_datalog_free(deviceInfo) != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while freeing memory\n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
@@ -286,18 +345,13 @@ int main(int argc, char *argv[])
 
     if(hs_datalog_get_sensor_components_number(deviceID, &nSensors, true) != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while retrieving Sensor Components number\n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while retrieving Sensor Components number");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
     }
 
-    std::cout << "----------------------> N Active Sensor Components: " << nSensors <<endl <<endl;
-
-//TODO
-//    char acq_name[] = "testName";
-//    char acq_description[] = "descriptionTest";
-//    hs_datalog_set_acquisition_param(deviceID, acq_name, acq_description);
+    logMessage(LOG_LEVEL_INFO, "----------------------> N Active Sensor Components: " + to_string(nSensors) + "\n");
 
     /* -------------------- Load device configuration from JSON file (if requested) or use default configuration  -------------------- */
 
@@ -308,7 +362,7 @@ int main(int argc, char *argv[])
     if (configFile.is_open())
     {
         configFromFile = true;
-        cout << endl <<"Device Status imported from Json file " << endl << endl;
+        logMessage(LOG_LEVEL_INFO, "\nDevice Status imported from Json file\n");
 
         configFile.seekg (0, configFile.end);
         long long size = configFile.tellg();
@@ -325,56 +379,37 @@ int main(int argc, char *argv[])
 
         if(hs_datalog_free(jsonChar) != ST_HS_DATALOG_OK)
         {
-         cout << "Error occurred while freeing memory\n";
-         cout << "Press any key to exit \n";
-         getchar();
-         return -1;
-        }
-
-        if(hs_datalog_get_sensor_components_number(deviceID, &nSensors, true) != ST_HS_DATALOG_OK)
-        {
-            cout << "Error occurred while retrieving Sensor Components number\n";
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
             cout << "Press any key to exit \n";
             getchar();
             return -1;
         }
 
-        std::cout << "----------------------> N Active Sensor Components: " << nSensors <<endl <<endl;
+        if(hs_datalog_get_sensor_components_number(deviceID, &nSensors, true) != ST_HS_DATALOG_OK)
+        {
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while retrieving Sensor Components number");
+            cout << "Press any key to exit \n";
+            getchar();
+            return -1;
+        }
+
+        logMessage(LOG_LEVEL_INFO, "----------------------> N Active Sensor Components: " + to_string(nSensors) + "\n");
     }
     else
     {   /* if JSON device_donfig file is not specified, simply get all the sensors status with their default configuration */
-        cout <<"Using default configuration stored in the device" << endl << endl;
+        logMessage(LOG_LEVEL_INFO, "Using default configuration stored in the device\n");
     }
 
     /* send UCF file to MLC if present */
     if (ucfFile.is_open())
     {
-        ucfFile.seekg (0, ucfFile.end);
-        long long size_ucf = ucfFile.tellg();
-        ucfFile.seekg (0, ucfFile.beg);
-
-        /* Read the whole file */
-        char * ucfData = new char [unsigned(size_ucf+1)];
-        ucfFile.seekg (0, ios::beg);
-        ucfFile.read (ucfData, static_cast<int>(size_ucf));
-
-        //TODO REDESIGN THIS!
         char* pnpl_response = nullptr;
-        char* ism330dhcx_str = (char*)"ism330dhcx";
-        hs_datalog_load_ucf_to_mlc(0, ism330dhcx_str, (uint8_t *)ucfData, size_ucf, &pnpl_response);
-
-        if(hs_datalog_free(ucfData) != ST_HS_DATALOG_OK)
-        {
-         cout << "Error occurred while freeing memory\n";
-         cout << "Press any key to exit \n";
-         getchar();
-         return -1;
-        }
+        hs_datalog_load_ucf_file_to_mlc(0, mlc_comp_str, const_cast<char*>(fileUCFParam.c_str()), &pnpl_response);
 
         if(pnpl_response != nullptr){
             if(hs_datalog_free(pnpl_response) != ST_HS_DATALOG_OK)
             {
-            cout << "Error occurred while freeing memory\n";
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
             cout << "Press any key to exit \n";
             getchar();
             return -1;
@@ -386,7 +421,7 @@ int main(int argc, char *argv[])
 
     if(!input.cmdOptionExists("-y"))
     {
-        cout << "Press Enter key to start logging\n";
+        cout << "Press Enter key to start logging: " << endl;
         getchar();
     }
 
@@ -396,13 +431,19 @@ int main(int argc, char *argv[])
         char *tagsInfo;
 //        hs_datalog_get_tags_info(deviceID, &tagsInfo);
         char* tagsInfo_str = (char*)"tags_info";
-        hs_datalog_get_component_status(deviceID, &tagsInfo, tagsInfo_str);
+        if(hs_datalog_get_component_status(deviceID, &tagsInfo, tagsInfo_str) != ST_HS_DATALOG_OK)
+        {
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while retrieving tags information");
+            cout << "Press any key to exit \n";
+            getchar();
+            return -1;
+        }
 
-        cout << tagsInfo << endl;
+        logMessage(LOG_LEVEL_DEBUG, "Tags Information: \n" + string(tagsInfo));
         auto tags_json = nlohmann::json::parse(tagsInfo);
         int counter = 0;                                                  
         for (auto& tag_el : tags_json["tags_info"].items()) {
-            cout << tag_el << endl;
+            logMessage(LOG_LEVEL_DEBUG, tag_el.key() + ": " + tag_el.value().dump());
             if(tag_el.key().find("sw_tag") != std::string::npos){ //only SW_Tag could be used for SW Tagging
                 auto ta = std::make_tuple (counter, tag_el.key(), tag_el.value().at("label"));
                 counter++;
@@ -412,10 +453,10 @@ int main(int argc, char *argv[])
 
         if(hs_datalog_free(tagsInfo) != ST_HS_DATALOG_OK)
         {
-         cout << "Error occurred while freeing memory\n";
-         cout << "Press any key to exit \n";
-         getchar();
-         return -1;
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
+            cout << "Press any key to exit \n";
+            getchar();
+            return -1;
         }
     }
 
@@ -431,10 +472,12 @@ int main(int argc, char *argv[])
     timeinfo = localtime(&rawtime);
 
     strftime(&time_buff[2],sizeof(time_buff) - 2,"%Y%m%d_%H_%M_%S",timeinfo);
-#ifdef __linux__
+#ifdef __linux__ 
     mkdir(time_buff, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 #elif _WIN32
     mkdir(time_buff);
+#elif __APPLE__
+    mkdir(time_buff, 0755);
 #endif
 
     /* save UCF file in Acquisition folder and enable MLC */
@@ -451,13 +494,12 @@ int main(int argc, char *argv[])
         dst << ucfFile.rdbuf();
         ucfFile.close();
 
-        //TODO like @row 344
-//        hs_datalog_set_Enable_pnpl(deviceID, true, "ism330dhcx","mlc");
-//        hs_datalog_set_Enable_pnpl(deviceID, true, "ism330dhcx_mlc");
-        char* ism330dhcx_mlc_str = (char*)"ism330dhcx_mlc";
+        char* mlc_str = new char[strlen(mlc_comp_str) + 5]; // 4 for "_mlc" and 1 for null terminator
+        strcpy(mlc_str, mlc_comp_str);
+        strcat(mlc_str, "_mlc");
         char* enable_str = (char*)"enable";
         char * pnpl_response = nullptr;
-        hs_datalog_set_boolean_property(deviceID, true, ism330dhcx_mlc_str, enable_str, nullptr, &pnpl_response);
+        hs_datalog_set_boolean_property(deviceID, true, mlc_str, enable_str, nullptr, &pnpl_response);
 
         char * deviceStatus;
         hs_datalog_get_device_status(deviceID, &deviceStatus);
@@ -466,7 +508,7 @@ int main(int argc, char *argv[])
         /* Free memory */
         if(hs_datalog_free(deviceStatus) != ST_HS_DATALOG_OK)
         {
-            cout << "Error occurred while freeing memory\n";
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
             cout << "Press any key to exit \n";
             getchar();
             return -1;
@@ -475,14 +517,13 @@ int main(int argc, char *argv[])
             /* Free memory */
             if(hs_datalog_free(pnpl_response) != ST_HS_DATALOG_OK)
             {
-                cout << "Error occurred while freeing memory\n";
+                logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
                 cout << "Press any key to exit \n";
                 getchar();
                 return -1;
             }
         }
     }
-
 
     //update nSensors (check if any sensors have been disabled)
     hs_datalog_get_sensor_components_number(deviceID, &nSensors, true);
@@ -514,7 +555,7 @@ int main(int argc, char *argv[])
         /* Free memory */
         if(hs_datalog_free(pnpl_response) != ST_HS_DATALOG_OK)
         {
-            cout << "Error occurred while freeing memory\n";
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
             cout << "Press any key to exit \n";
             getchar();
             return -1;
@@ -528,7 +569,7 @@ int main(int argc, char *argv[])
         /* Free memory */
         if(hs_datalog_free(pnpl_response) != ST_HS_DATALOG_OK)
         {
-            cout << "Error occurred while freeing memory\n";
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
             cout << "Press any key to exit \n";
             getchar();
             return -1;
@@ -555,6 +596,9 @@ int main(int argc, char *argv[])
 #elif _WIN32
         Sleep(1000);
         system("CLS");
+#elif __APPLE__
+        sleep(1);
+        system("clear");
 #endif
         cout << "+--------------HSDatalog CLI----------------+"  << endl;
         cout << "| Streaming from: ";
@@ -645,11 +689,11 @@ int main(int argc, char *argv[])
         if(taggingEnabled)
         {
             auto result = std::find_if(
-                      tags.begin(),
-                      tags.end(),
-                      [num_tag](const std::pair<std::tuple<int,string,string>, bool>& mo) {
-                            return std::get<0>(mo.first) == num_tag;
-                      });
+                    tags.begin(),
+                    tags.end(),
+                    [num_tag](const std::pair<std::tuple<int,string,string>, bool>& mo) {
+                        return std::get<0>(mo.first) == num_tag;
+                    });
 
             if(result != tags.end())
             {
@@ -705,7 +749,7 @@ int main(int argc, char *argv[])
         /* Free memory */
         if(hs_datalog_free(pnpl_response) != ST_HS_DATALOG_OK)
         {
-            cout << "Error occurred while freeing memory\n";
+            logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
             cout << "Press any key to exit \n";
             getchar();
             return -1;
@@ -713,15 +757,19 @@ int main(int argc, char *argv[])
     }
 
     /* close files */
+#ifdef __APPLE__
+    _closeFiles(sNames, nSensors, pFiles);
+#else
     for (auto c: sNames)
     {
         fclose(pFiles.at(c));
     }
+#endif
 
     char * deviceStatus;
     if(hs_datalog_get_device_status(deviceID, &deviceStatus) != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while retrieving device status \n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while retrieving device status");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
@@ -743,17 +791,21 @@ int main(int argc, char *argv[])
 
     string jsonS = json_final.dump(1,'\t'); // pretty format
 
-    char * jsonFileName = new char[strlen(time_buff) + strlen("device_config.json") + 1];
-    snprintf(jsonFileName, strlen(time_buff) + strlen("device_config.json") + 2, "%s/device_config.json", time_buff);
+    // Calculate the required buffer size
+    size_t bufferSize = strlen(time_buff) + strlen("/device_config.json") + 1; // +1 for the null terminator
+    // Allocate memory for the buffer
+    char *deviceConfigFileName = new char[bufferSize];
+    // Safely format the string into the buffer
+    snprintf(deviceConfigFileName, bufferSize, "%s/device_config.json", time_buff);
 
-    FILE * jsonFile = fopen(jsonFileName, "wt");
+    FILE * jsonFile = fopen(deviceConfigFileName, "wt");
     fwrite(jsonS.c_str(), sizeof(char), jsonS.size(), jsonFile);
     fclose(jsonFile);
 
     /* Free memory */
     if(hs_datalog_free(deviceStatus) != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while freeing memory\n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
@@ -764,7 +816,7 @@ int main(int argc, char *argv[])
     char* acquisitionInfo_str = (char*)"acquisition_info";
     if(hs_datalog_get_component_status(deviceID, &acquisitionInfo, acquisitionInfo_str) != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while retrieving device status \n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while retrieving Acquisition Info");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
@@ -772,56 +824,33 @@ int main(int argc, char *argv[])
     json_final = nlohmann::json::parse(acquisitionInfo);
     jsonS = json_final["acquisition_info"].dump(1,'\t'); // pretty format
 
-    jsonFileName = new char[strlen(time_buff) + strlen("acquisition_info.json") + 1];
-    snprintf(jsonFileName, strlen(time_buff) + strlen("acquisition_info.json") + 2, "%s/acquisition_info.json", time_buff);
-
-    jsonFile = fopen(jsonFileName, "wt");
+    // Calculate the required buffer size
+    bufferSize = strlen(time_buff) + strlen("/acquisition_info.json") + 1; // +1 for the null terminator
+    // Allocate memory for the buffer
+    char *acquisitionInfoFileName = new char[bufferSize];
+    // Safely format the string into the buffer
+    snprintf(acquisitionInfoFileName, bufferSize, "%s/acquisition_info.json", time_buff);
+    
+    jsonFile = fopen(acquisitionInfoFileName, "wt");
     fwrite(jsonS.c_str(), sizeof(char), jsonS.size(), jsonFile);
     fclose(jsonFile);
 
     /* Free memory */
     if(hs_datalog_free(acquisitionInfo) != ST_HS_DATALOG_OK)
     {
-        cout << "Error occurred while freeing memory\n";
+        logMessage(LOG_LEVEL_ERROR, "Error occurred while freeing memory");
         cout << "Press any key to exit \n";
         getchar();
         return -1;
     }
-
-    //TODO CHECK Acquisition Info!!!
-//    char * acquisitionInfo;
-//    if(hs_datalog_get_acquisition_info(deviceID, &acquisitionInfo) != ST_HS_DATALOG_OK)
-//    {
-//        cout << "Error occurred while retrieving Acquisition Information \n";
-//        cout << "Press any key to exit \n";
-//        getchar();
-//        return -1;
-//    }
-
-//    cout << acquisitionInfo << endl;
-
-//    auto json_acq = nlohmann::json::parse(acquisitionInfo);
-//    string jsonS_acq = json_acq.dump(1,'\t'); // pretty format
-
-//    char * jsonFileName_acq = new char[strlen(time_buff) + strlen("AcquisitionInfo.json") + 1];
-//    snprintf(jsonFileName_acq, strlen(time_buff) + strlen("AcquisitionInfo.json") + 2, "%s/AcquisitionInfo.json", time_buff);
-
-//    FILE * jsonFile_acq = fopen(jsonFileName_acq, "wt");
-//    fwrite(jsonS_acq.c_str(), sizeof(char), jsonS_acq.size(), jsonFile_acq);
-//    fclose(jsonFile_acq);
-
-//    /* Free memory */
-//    if(hs_datalog_free(acquisitionInfo) != ST_HS_DATALOG_OK)
-//    {
-//        cout << "Error occurred while freeing memory\n";
-//        cout << "Press any key to exit \n";
-//        getchar();
-//        return -1;
-//    }
-
     hs_datalog_close();
 
+    // TODO: Next version --> Hotplug events notification support
+    // hs_datalog_stop_hotplug_monitor();
+    // TODO: Next version --> Hotplug events notification support
+
     return 0;
+
 }
 
 #ifdef __linux__
@@ -852,4 +881,51 @@ int _kbhit() {
     ioctl(STDIN, FIONREAD, &bytesWaiting);
     return bytesWaiting;
 }
+
+#elif __APPLE__
+
+#include <iostream>
+#include <unistd.h>
+#include <termios.h>
+#include <fcntl.h>
+#include <sys/select.h>
+
+int _kbhit() {
+    struct termios oldt, newt;
+    int ch;
+    int oldf;
+
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+
+    ch = getchar();
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    fcntl(STDIN_FILENO, F_SETFL, oldf);
+
+    if(ch != EOF) {
+        ungetc(ch, stdin);
+        return 1;
+    }
+
+    return 0;
+}
+
+void _closeFiles(char* sNames[], int nSensors, std::map<std::string, FILE*>& pFiles) {
+    for (int i = 0; i < nSensors; ++i) {
+        std::string name(sNames[i]);
+        if (pFiles.find(name) != pFiles.end() && pFiles[name] != nullptr) {
+            logMessage(LOG_LEVEL_DEBUG, "Closing file: " + name);
+            fclose(pFiles[name]);
+            pFiles[name] = nullptr; // Set the pointer to nullptr after closing
+        } else {
+            logMessage(LOG_LEVEL_ERROR, "Attempted to close an invalid or already closed file: " + name);
+        }
+    }
+}
 #endif
+
