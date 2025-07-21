@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -380,7 +380,7 @@ sys_error_code_t DatalogAppTask_vtblDoEnterPowerMode(AManagedTask *_this, const 
       p_obj->datalog_model->log_controller_model.status = FALSE;
 
       uint8_t stream_id;
-      for (int ii = 0; ii < SENSOR_NUMBER; ii++)
+      for (int32_t ii = 0; ii < SENSOR_NUMBER; ii++)
       {
         if (p_obj->datalog_model->s_models[ii]->sensor_status.is_active)
         {
@@ -391,7 +391,7 @@ sys_error_code_t DatalogAppTask_vtblDoEnterPowerMode(AManagedTask *_this, const 
         }
       }
 
-      for (int ii = 0; ii < ALGORITHM_NUMBER; ii++)
+      for (int32_t ii = 0; ii < ALGORITHM_NUMBER; ii++)
       {
         if (NULL != p_obj->datalog_model->a_models[ii] && p_obj->datalog_model->a_models[ii]->enable)
         {
@@ -628,8 +628,8 @@ sys_error_code_t sensorEvtListener_ProcessOnNewDataReady_vtbl(IEventListener *_t
           data_buf += p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample;
           samplesToSend -= p_obj->sensorContext[sId].n_samples_to_timestamp;
 
-          float measuredODR;
-          double newTS;
+          float_t measuredODR;
+          double_t newTS;
 
           SensorStatus_t sensor_status = SMSensorGetStatus(sId);
           if (sensor_status.isensor_class == ISENSOR_CLASS_MEMS)
@@ -648,7 +648,7 @@ sys_error_code_t sensorEvtListener_ProcessOnNewDataReady_vtbl(IEventListener *_t
 
           if (measuredODR != 0.0f)
           {
-            newTS = pxEvt->timestamp - ((1.0 / (double) measuredODR) * samplesToSend);
+            newTS = pxEvt->timestamp - ((1.0 / (double_t) measuredODR) * samplesToSend);
           }
           else
           {
@@ -683,7 +683,7 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_
 
   DatalogAppTask *p_obj = (DatalogAppTask *)((uint32_t) _this - offsetof(DatalogAppTask, parser));
 
-  int pnp_res = PnPLParseCommand(commandString, &p_obj->outPnPLCommand);
+  int32_t pnp_res = PnPLParseCommand(commandString, &p_obj->outPnPLCommand);
   if (pnp_res == SYS_NO_ERROR_CODE)
   {
     if (IStream_is_enabled((IStream_t *) p_obj->usbx_device))
@@ -744,7 +744,7 @@ uint8_t DatalogAppTask_start_vtbl(ILog_Controller_t *_this, uint32_t interface)
     IStream_enable((IStream_t *) p_obj->usbx_device);
   }
 
-  for (int ii = 0; ii < SENSOR_NUMBER; ii++)
+  for (int32_t ii = 0; ii < SENSOR_NUMBER; ii++)
   {
     if (p_obj->datalog_model->s_models[ii]->sensor_status.is_active)
     {
@@ -758,7 +758,7 @@ uint8_t DatalogAppTask_start_vtbl(ILog_Controller_t *_this, uint32_t interface)
     }
   }
 
-  for (int ii = 0; ii < ALGORITHM_NUMBER; ii++)
+  for (int32_t ii = 0; ii < ALGORITHM_NUMBER; ii++)
   {
     if (NULL != p_obj->datalog_model->a_models[ii] && p_obj->datalog_model->a_models[ii]->enable)
     {

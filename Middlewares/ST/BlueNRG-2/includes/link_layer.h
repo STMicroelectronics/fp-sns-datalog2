@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2015 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,6 +17,10 @@
   */
 #ifndef _LINK_LAYER_H
 #define _LINK_LAYER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "ble_types.h"
 #include <ble_status.h>
@@ -44,10 +48,14 @@
   *Advertising policy for filtering (white list related)
   *@{
   */
-#define NO_WHITE_LIST_USE           (0x00)  /**< Process scan and connection requests from all devices (i.e., the White List is not in use) */
-#define WHITE_LIST_FOR_ONLY_SCAN    (0x01)  /**< Process connection requests from all devices and only scan requests from devices that are in the White List */
-#define WHITE_LIST_FOR_ONLY_CONN    (0x02)  /**< Process scan requests from all devices and only connection requests from devices that are in the White List */
-#define WHITE_LIST_FOR_ALL          (0x03)  /**< Process scan and connection requests only from devices in the White List. */
+/* Process scan and connection requests from all devices (i.e., the White List is not in use) */
+#define NO_WHITE_LIST_USE           (0x00)
+/* Process connection requests from all devices and only scan requests from devices that are in the White List */
+#define WHITE_LIST_FOR_ONLY_SCAN    (0x01)
+/* Process scan requests from all devices and only connection requests from devices that are in the White List */
+#define WHITE_LIST_FOR_ONLY_CONN    (0x02)
+/* Process scan and connection requests only from devices in the White List. */
+#define WHITE_LIST_FOR_ALL          (0x03)
 /**
   * @}
   */
@@ -56,7 +64,7 @@
 /**
   * Bluetooth 48 bit address (in little-endian order).
   */
-typedef uint8_t tBDAddr[6];
+typedef uint8_t bd_addr_t[6];
 
 
 /**
@@ -181,5 +189,9 @@ typedef uint8_t tBDAddr[6];
 /**
   * @}
   */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _LINK_LAYER_H */

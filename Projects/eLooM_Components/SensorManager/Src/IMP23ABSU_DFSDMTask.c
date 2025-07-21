@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -475,7 +475,7 @@ sys_error_code_t IMP23ABSUTask_vtblDoEnterPowerMode(AManagedTask *_this, const E
         .sensorMessage.nCmdID = SENSOR_CMD_ID_INIT
       };
 
-      if (tx_queue_send(&p_obj->in_queue, &xReport, AMT_MS_TO_TICKS(50)) != TX_SUCCESS)
+      if (tx_queue_send(&p_obj->in_queue, &xReport, AMT_MS_TO_TICKS(100)) != TX_SUCCESS)
       {
         res = SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE;
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE);
@@ -911,7 +911,7 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
         p_obj->half = report.sensorDataReadyMessage.half;
 
         // notify the listeners...
-        double timestamp = report.sensorDataReadyMessage.fTimestamp;
+        double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
         p_obj->prev_timestamp = timestamp;
         uint16_t samples = (uint16_t)(p_obj->sensor_status.type.audio.frequency / 1000u);
 
@@ -921,7 +921,7 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
         IMP23ABSUTaskWriteDummyData(p_obj);
         EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
 #else
-        float gain = (float)p_obj->sensor_status.type.audio.volume * 0.01f; /*volume is expressed as percentage*/
+        float_t gain = (float_t)p_obj->sensor_status.type.audio.volume * 0.01f; /*volume is expressed as percentage*/
         int32_t *p32 = (int32_t *) &p_obj->p_dma_data_buff[(p_obj->half - 1) * samples];
         int16_t *p16 = p_obj->p_sensor_data_buff;
         uint16_t idx = 0;
@@ -937,7 +937,7 @@ static sys_error_code_t IMP23ABSUTaskExecuteStepDatalog(AManagedTask *_this)
         DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
         IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-        SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP23ABSU: ts = %f\r\n", (float)timestamp));
+        SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP23ABSU: ts = %f\r\n", (float_t)timestamp));
 //        }
         break;
       }

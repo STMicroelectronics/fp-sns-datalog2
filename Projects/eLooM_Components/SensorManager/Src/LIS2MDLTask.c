@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -673,7 +673,7 @@ IEventSrc *LIS2MDLTask_vtblMagGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_mag_event_src;
 }
 
-sys_error_code_t LIS2MDLTask_vtblMagGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t LIS2MDLTask_vtblMagGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -695,20 +695,20 @@ sys_error_code_t LIS2MDLTask_vtblMagGetODR(ISensorMems_t *_this, float *p_measur
   return res;
 }
 
-float LIS2MDLTask_vtblMagGetFS(ISensorMems_t *_this)
+float_t LIS2MDLTask_vtblMagGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LIS2MDLTask *p_if_owner = (LIS2MDLTask *)((uint32_t) _this - offsetof(LIS2MDLTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.fs;
+  float_t res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float LIS2MDLTask_vtblMagGetSensitivity(ISensorMems_t *_this)
+float_t LIS2MDLTask_vtblMagGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LIS2MDLTask *p_if_owner = (LIS2MDLTask *)((uint32_t) _this - offsetof(LIS2MDLTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -722,7 +722,7 @@ EMData_t LIS2MDLTask_vtblMagGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t LIS2MDLTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t LIS2MDLTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -750,7 +750,7 @@ sys_error_code_t LIS2MDLTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = LIS2MDLTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -758,7 +758,7 @@ sys_error_code_t LIS2MDLTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t LIS2MDLTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t LIS2MDLTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -782,7 +782,7 @@ sys_error_code_t LIS2MDLTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) fs
+      .sensorMessage.fParam = (float_t) fs
     };
     res = LIS2MDLTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -994,12 +994,12 @@ static sys_error_code_t LIS2MDLTaskExecuteStepDatalog(AManagedTask *_this)
           if (p_obj->first_data_ready == 1)
           {
             // notify the listeners...
-            double timestamp = report.sensorDataReadyMessage.fTimestamp;
-            double delta_timestamp = timestamp - p_obj->prev_timestamp;
+            double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+            double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
             p_obj->prev_timestamp = timestamp;
 
             /* update measuredODR */
-            p_obj->sensor_status.type.mems.measured_odr = 1.0f / (float) delta_timestamp;
+            p_obj->sensor_status.type.mems.measured_odr = 1.0f / (float_t) delta_timestamp;
 
             /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (1):
              * [X0, Y0, Z0]
@@ -1014,7 +1014,7 @@ static sys_error_code_t LIS2MDLTaskExecuteStepDatalog(AManagedTask *_this)
             DataEventInit((IEvent *) &evt, p_obj->p_mag_event_src, &p_obj->data, timestamp, p_obj->mag_id);
             IEventSrcSendEvent(p_obj->p_mag_event_src, (IEvent *) &evt, NULL);
 
-            SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("LIS2MDL: ts = %f\r\n", (float)timestamp));
+            SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("LIS2MDL: ts = %f\r\n", (float_t)timestamp));
           }
           else
           {
@@ -1274,7 +1274,7 @@ static sys_error_code_t LIS2MDLTaskSensorSetODR(LIS2MDLTask *_this, SMMessage re
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->mag_id)
@@ -1324,7 +1324,7 @@ static sys_error_code_t LIS2MDLTaskSensorSetFS(LIS2MDLTask *_this, SMMessage rep
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float fs = (float) report.sensorMessage.fParam;
+  float_t fs = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->mag_id)

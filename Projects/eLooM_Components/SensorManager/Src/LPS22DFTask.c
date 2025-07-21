@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -475,6 +475,7 @@ sys_error_code_t LPS22DFTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
   p_obj->fifo_level = 0;
   p_obj->samples_per_it = 0;
   p_obj->task_delay = 0;
+  p_obj->first_data_ready = 0;
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
 
   *pTaskCode = AMTExRun;
@@ -531,6 +532,7 @@ sys_error_code_t LPS22DFTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
 
       // reset the variables for the actual odr computation.
       p_obj->prev_timestamp = 0.0f;
+      p_obj->first_data_ready = 0;
     }
 
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("LPS22DF: -> SENSORS_ACTIVE\r\n"));
@@ -692,7 +694,7 @@ IEventSrc *LPS22DFTask_vtblPressGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_press_event_src;
 }
 
-sys_error_code_t LPS22DFTask_vtblPressGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t LPS22DFTask_vtblPressGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -714,20 +716,20 @@ sys_error_code_t LPS22DFTask_vtblPressGetODR(ISensorMems_t *_this, float *p_meas
   return res;
 }
 
-float LPS22DFTask_vtblPressGetFS(ISensorMems_t *_this)
+float_t LPS22DFTask_vtblPressGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LPS22DFTask *p_if_owner = (LPS22DFTask *)((uint32_t) _this - offsetof(LPS22DFTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.fs;
+  float_t res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float LPS22DFTask_vtblPressGetSensitivity(ISensorMems_t *_this)
+float_t LPS22DFTask_vtblPressGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LPS22DFTask *p_if_owner = (LPS22DFTask *)((uint32_t) _this - offsetof(LPS22DFTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -741,7 +743,7 @@ EMData_t LPS22DFTask_vtblPressGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t LPS22DFTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t LPS22DFTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -766,7 +768,7 @@ sys_error_code_t LPS22DFTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = LPS22DFTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -774,7 +776,7 @@ sys_error_code_t LPS22DFTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t LPS22DFTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t LPS22DFTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -798,7 +800,7 @@ sys_error_code_t LPS22DFTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) fs
+      .sensorMessage.fParam = (float_t) fs
     };
     res = LPS22DFTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1028,46 +1030,52 @@ static sys_error_code_t LPS22DFTaskExecuteStepDatalog(AManagedTask *_this)
       case SM_MESSAGE_ID_DATA_READY:
       {
         SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("LPS22DF: new data.\r\n"));
-//          if(p_obj->pIRQConfig == NULL)
-//          {
-//            if(TX_SUCCESS != tx_timer_change(&p_obj->read_fifo_timer, AMT_MS_TO_TICKS(p_obj->task_delay), AMT_MS_TO_TICKS(p_obj->task_delay)))
-//            {
-//              return SYS_UNDEFINED_ERROR_CODE;
-//            }
-//          }
-
         res = LPS22DFTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
-#if LPS22DF_FIFO_ENABLED
-          if (p_obj->fifo_level != 0)
+          if (p_obj->first_data_ready == 1)
           {
-#endif
-            // notify the listeners...
-            double timestamp = report.sensorDataReadyMessage.fTimestamp;
-            double delta_timestamp = timestamp - p_obj->prev_timestamp;
-            p_obj->prev_timestamp = timestamp;
-
-            /* update measuredODR */
-            p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
-
-            EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_press_data_buff[0], E_EM_FLOAT, p_obj->samples_per_it);
-
-            DataEvent_t evt;
-
-            DataEventInit((IEvent *) &evt, p_obj->p_press_event_src, &p_obj->data, timestamp, p_obj->press_id);
-            IEventSrcSendEvent(p_obj->p_press_event_src, (IEvent *) &evt, NULL);
 #if LPS22DF_FIFO_ENABLED
-          }
+            if (p_obj->fifo_level != 0)
+            {
 #endif
+              // notify the listeners...
+              double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+              double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
+              p_obj->prev_timestamp = timestamp;
+
+              /* update measuredODR */
+              // Update the sums
+              p_obj->delta_timestamp_sum += delta_timestamp;
+              p_obj->samples_sum += p_obj->samples_per_it;
+              if (p_obj->odr_count < MEAS_ODR_AVG)
+              {
+                p_obj->odr_count++;
+              }
+              // Calculate the average
+              if (p_obj->odr_count == MEAS_ODR_AVG)
+              {
+                p_obj->sensor_status.type.mems.measured_odr = (float_t) p_obj->samples_sum / p_obj->delta_timestamp_sum;
+                p_obj->delta_timestamp_sum = 0.0f;
+                p_obj->samples_sum = 0;
+                p_obj->odr_count = 0;
+              }
+
+              EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_press_data_buff[0], E_EM_FLOAT, p_obj->samples_per_it);
+
+              DataEvent_t evt;
+
+              DataEventInit((IEvent *) &evt, p_obj->p_press_event_src, &p_obj->data, timestamp, p_obj->press_id);
+              IEventSrcSendEvent(p_obj->p_press_event_src, (IEvent *) &evt, NULL);
+#if LPS22DF_FIFO_ENABLED
+            }
+#endif
+          }
+          else
+          {
+            p_obj->first_data_ready = 1;
+          }
         }
-//            if(p_obj->pIRQConfig == NULL)
-//            {
-//              if(TX_SUCCESS != tx_timer_activate(&p_obj->read_fifo_timer))
-//              {
-//                res = SYS_UNDEFINED_ERROR_CODE;
-//              }
-//            }
         break;
       }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -1198,6 +1206,7 @@ static sys_error_code_t LPS22DFTaskSensorInit(LPS22DFTask *_this)
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
   int32_t ret_val = 0;
+  lps22df_pin_int_route_t int_route;
 
   /* Set bdu and if_inc recommended for driver usage */
   lps22df_init_set(p_sensor_drv, LPS22DF_DRV_RDY);
@@ -1255,13 +1264,7 @@ static sys_error_code_t LPS22DFTaskSensorInit(LPS22DFTask *_this)
   /* Set odr and fs */
   lps22df_mode_get(p_sensor_drv, &md);
 
-  /* Currently, the INT pin is not exposed */
-  if (_this->pIRQConfig != NULL)
-  {
-    /* you should enable the INT here */
-  }
-
-  float lps22df_odr;
+  float_t lps22df_odr;
   lps22df_odr = _this->sensor_status.type.mems.odr;
   if (lps22df_odr < 2.0f)
   {
@@ -1308,23 +1311,37 @@ static sys_error_code_t LPS22DFTaskSensorInit(LPS22DFTask *_this)
     _this->sensor_status.is_active = false;
   }
 
-  lps22df_fifo_level_get(p_sensor_drv, &_this->fifo_level);
-
-  if (_this->fifo_level >= _this->samples_per_it)
+  if (_this->pIRQConfig != NULL)
   {
-    lps22df_read_reg(p_sensor_drv, LPS22DF_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_fifo_data_buff,
-                     _this->samples_per_it * 3);
+    lps22df_pin_int_route_get(p_sensor_drv, &int_route);
+#if LPS22DF_FIFO_ENABLED
+    int_route.fifo_th   = PROPERTY_ENABLE;
+#else
+    int_route.drdy_pres   = PROPERTY_ENABLE;
+#endif
+    lps22df_pin_int_route_set(p_sensor_drv, &int_route);
   }
+
+//  lps22df_fifo_level_get(p_sensor_drv, &_this->fifo_level);
+//
+//  if (_this->fifo_level >= _this->samples_per_it)
+//  {
+//    lps22df_read_reg(p_sensor_drv, LPS22DF_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_fifo_data_buff,
+//                     _this->samples_per_it * 3);
+//  }
 
   if (_this->sensor_status.is_active)
   {
 #if LPS22DF_FIFO_ENABLED
-    _this->task_delay = (uint16_t)((1000.0f / lps22df_odr) * (((float)(_this->samples_per_it)) / 2.0f));
+    _this->task_delay = (uint16_t)((1000.0f / lps22df_odr) * (((float_t)(_this->samples_per_it)) / 2.0f));
 #else
     _this->task_delay = (uint16_t)(1000.0f / lps22df_odr);
 #endif
   }
 
+  _this->odr_count = 0;
+  _this->delta_timestamp_sum = 0.0f;
+  _this->samples_sum = 0;
   return res;
 }
 
@@ -1343,7 +1360,7 @@ static sys_error_code_t LPS22DFTaskSensorReadData(LPS22DFTask *_this)
   if (_this->fifo_level >= samples_per_it)
   {
     res = lps22df_read_reg(p_sensor_drv, LPS22DF_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_fifo_data_buff,
-                      samples_per_it * 3);
+                           samples_per_it * 3);
   }
   else
   {
@@ -1361,7 +1378,7 @@ static sys_error_code_t LPS22DFTaskSensorReadData(LPS22DFTask *_this)
 #if (HSD_USE_DUMMY_DATA == 1)
       for (i = 0; i < samples_per_it ; i++)
       {
-        _this->p_press_data_buff[i]  = (float)(dummyDataCounter_press++);
+        _this->p_press_data_buff[i]  = (float_t)(dummyDataCounter_press++);
       }
     }
 #else
@@ -1422,7 +1439,7 @@ static sys_error_code_t LPS22DFTaskSensorSetODR(LPS22DFTask *_this, SMMessage re
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   lps22df_md_t md;

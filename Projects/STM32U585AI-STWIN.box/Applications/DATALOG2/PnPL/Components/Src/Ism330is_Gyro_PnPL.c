@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -117,7 +117,7 @@ uint8_t Ism330is_Gyro_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   json_object_dotset_number(JSON_Status, "ism330is_gyro.samples_per_ts", temp_i);
   ism330is_gyro_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330is_gyro.dim", temp_i);
-  float temp_f = 0;
+  float_t temp_f = 0;
   ism330is_gyro_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "ism330is_gyro.ioffset", temp_f);
   ism330is_gyro_get_measodr(&temp_f);
@@ -425,8 +425,8 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "ism330is_gyro.st_ble_stream.gyro.multiply_factor"))
     {
-      float st_ble_stream__gyro_multiply_factor = (float)json_object_dotget_number(tempJSONObject,
-                                                                                   "ism330is_gyro.st_ble_stream.gyro.multiply_factor");
+      float_t st_ble_stream__gyro_multiply_factor = (float_t)json_object_dotget_number(tempJSONObject,
+                                                    "ism330is_gyro.st_ble_stream.gyro.multiply_factor");
       valid_property = true;
       ret = ism330is_gyro_set_st_ble_stream__gyro_multiply_factor(st_ble_stream__gyro_multiply_factor, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -437,7 +437,7 @@ uint8_t Ism330is_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
       }
       else
       {
-        float old_st_ble_stream__gyro_multiply_factor;
+        float_t old_st_ble_stream__gyro_multiply_factor;
         ism330is_gyro_get_st_ble_stream__gyro_multiply_factor(&old_st_ble_stream__gyro_multiply_factor);
         json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__gyro_multiply_factor);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);

@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -46,6 +46,8 @@ static int32_t ext_sensor_i2c_write(void *handle, uint8_t reg, uint8_t *p_data, 
 
 /* Public functions declaration */
 /*********************************/
+
+
 /**
   * Detect an external PDETECT
   *

@@ -4,13 +4,30 @@
   * @author  SRA
   * @brief   Define the Application main entry points
   *
-  * The framework `weak` function are redefined in this file and they link
-  * the application specific code with the framework.
+  *
+  * This file is the main entry point for the user code.
+  *
+  * The framework `weak` functions are redefined in this file and they link
+  * the application specific code with the framework:
+  * - SysLoadApplicationContext(): it is the first application defined function
+  *   called by the framework. Here we define all managed tasks. A managed task
+  *   implements one or more application specific feature.
+  * - SysOnStartApplication(): this function is called by the framework
+  *   when the system is initialized (all managed task objects have been
+  *   initialized), and before the INIT task release the control. Here we
+  *   link the application objects according to the application design.
+  *
+  * The execution time  between the two above functions is called
+  * *system initialization*. During this period only the INIT task is running.
+  *
+  * Each managed task will be activated in turn to initialize its hardware
+  * resources, if any - MyTask_vtblHardwareInit() - and its software
+  * resources - MyTask_vtblOnCreateTask().
   *
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -42,6 +59,7 @@
 #include "IIS2DLPCTask.h"
 #include "IIS2DULPXTask.h"
 #include "ILPS22QSTask.h"
+#include "ILPS28QSWTask.h"
 #include "STTS22HTask.h"
 #include "IMP34DT05Task.h"
 #include "IIS2ICLXTask.h"
@@ -67,6 +85,7 @@
 #include "Iis2dulpx_Acc_PnPL.h"
 #include "Iis2dulpx_Mlc_PnPL.h"
 #include "Iis3dwb_Ext_Acc_PnPL.h"
+#include "Ilps28qsw_Press_PnPL.h"
 #include "Ism330bx_Acc_PnPL.h"
 #include "Ism330bx_Gyro_PnPL.h"
 #include "Ism330bx_Mlc_PnPL.h"
@@ -82,7 +101,6 @@
 #include "Acquisition_Info_PnPL.h"
 #include "Firmware_Info_PnPL.h"
 #include "Deviceinformation_PnPL.h"
-#include "parson.h"
 
 static uint8_t BoardId = BOARD_ID_BOXA;
 static uint8_t FwId = USB_FW_ID_DATALOG2_BOXA;
@@ -110,15 +128,14 @@ static IPnPLComponent_t *pIIS2DULPX_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pSTTS22H_TEMP_PnPLObj = NULL;
 static IPnPLComponent_t *pSTTS22H_Ext_TEMP_PnPLObj = NULL;
 static IPnPLComponent_t *pILPS22QS_PRESS_PnPLObj = NULL;
+static IPnPLComponent_t *pILPS28QSW_PRESS_PnPLObj = NULL;
 static IPnPLComponent_t *pIMP34DT05_MIC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2ICLX_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2ICLX_MLC_PnPLObj = NULL;
 static IPnPLComponent_t *pAutomodePnPLObj = NULL;
 static IPnPLComponent_t *pTSC1641_POW_PnPLObj = NULL;
 
-#if (DATALOG2_USE_WIFI == 1)
 static IPnPLComponent_t *pWifiConfigPnPLObj = NULL;
-#endif
 
 /**
   * Utility task object.
@@ -144,6 +161,7 @@ static AManagedTaskEx *sIMP23ABSUObj = NULL;
 static AManagedTaskEx *sIIS2DLPCObj = NULL;
 static AManagedTaskEx *sIIS2DULPXObj = NULL;
 static AManagedTaskEx *sILPS22QSObj = NULL;
+static AManagedTaskEx *sILPS28QSWObj = NULL;
 static AManagedTaskEx *sSTTS22HObj = NULL;
 static AManagedTaskEx *sSTTS22HExtObj = NULL;
 static AManagedTaskEx *sIMP34DT05Obj = NULL;
@@ -170,7 +188,6 @@ static void PnPL_unlock_fp(void);
 /* eLooM framework entry points definition */
 /*******************************************/
 
-
 sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 {
   assert_param(pAppContext);
@@ -178,6 +195,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   uint8_t stts22h_address;
   boolean_t ext_iis2dulpx = FALSE;
   boolean_t ext_iis3dwb = FALSE;
+  boolean_t ext_ilps28qsw = FALSE;
   boolean_t ext_ism330bx = FALSE;
   boolean_t ext_iis330is = FALSE;
   boolean_t ext_stts22h = FALSE;
@@ -195,6 +213,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   /* Check availability of external sensors */
   ext_iis2dulpx = HardwareDetection_Check_Ext_IIS2DULPX();
   ext_iis3dwb = HardwareDetection_Check_Ext_IIS3DWB();
+  ext_ilps28qsw = HardwareDetection_Check_Ext_ILPS28QSW();
   ext_ism330bx = HardwareDetection_Check_Ext_ISM330BX();
   ext_iis330is = HardwareDetection_Check_Ext_ISM330IS();
   ext_stts22h = HardwareDetection_Check_Ext_STTS22H(&stts22h_address);
@@ -239,7 +258,12 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   }
   if (ext_iis2dulpx)
   {
-    sIIS2DULPXObj = IIS2DULPXTaskAlloc(NULL, NULL, &MX_GPIO_CS_EXTERNALInitParams);
+    sIIS2DULPXObj = IIS2DULPXTaskAlloc(&MX_GPIO_INT1_EXTERNAL_InitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
+  }
+  if (ext_ilps28qsw)
+  {
+    sILPS28QSWObj = ILPS28QSWTaskAlloc(NULL, NULL);
+    sI2C3BusObj = I2CBusTaskAlloc(&MX_I2C3InitParams);
   }
 
   /* Use the onboard STTS22H (address low) */
@@ -278,20 +302,42 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   res = ACAddTask(pAppContext, (AManagedTask *) sI2C3BusObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sSPI2BusObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS2DLPCObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sIIS2DULPXObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS2ICLXObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS2MDCObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIIS3DWBObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sIIS3DWBExtObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sILPS22QSObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIMP23ABSUObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIMP34DT05Obj);
   res = ACAddTask(pAppContext, (AManagedTask *) sSTTS22HObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sSTTS22HExtObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sISM330BXObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sISM330DHCXObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sISM330ISObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sTSC1641Obj);
+  if (ext_iis2dulpx)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) sIIS2DULPXObj);
+  }
+  if (ext_iis3dwb)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) sIIS3DWBExtObj);
+  }
+  if (ext_ilps28qsw)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) sILPS28QSWObj);
+  }
+  if (ext_ism330bx)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) sISM330BXObj);
+  }
+  if (ext_iis330is)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) sISM330ISObj);
+  }
+  if (ext_stts22h)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) sSTTS22HExtObj);
+  }
+  if (ext_tsc1641)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) sTSC1641Obj);
+  }
 
   pIIS2DLPC_ACC_PnPLObj = Iis2dlpc_Acc_PnPLAlloc();
   pIIS2ICLX_ACC_PnPLObj = Iis2iclx_Acc_PnPLAlloc();
@@ -337,6 +383,10 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   {
     pIIS2DULPX_ACC_PnPLObj = Iis2dulpx_Acc_PnPLAlloc();
   }
+  if (sILPS28QSWObj)
+  {
+    pILPS28QSW_PRESS_PnPLObj = Ilps28qsw_Press_PnPLAlloc();
+  }
 
   pDeviceInfoPnPLObj = Deviceinformation_PnPLAlloc();
   pAcquisitionInfoPnPLObj = Acquisition_Info_PnPLAlloc();
@@ -345,9 +395,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   pLogControllerPnPLObj = Log_Controller_PnPLAlloc();
   pAutomodePnPLObj = Automode_PnPLAlloc();
 
-#if (DATALOG2_USE_WIFI == 1)
   pWifiConfigPnPLObj = Wifi_Config_PnPLAlloc();
-#endif
 
   PnPLSetBOARDID(BoardId);
   PnPLSetFWID(FwId);
@@ -402,6 +450,11 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj,
                             (SPIBusIF *)IIS2DULPXTaskGetSensorIF((IIS2DULPXTask *) sIIS2DULPXObj));
   }
+  if (sILPS28QSWObj)
+  {
+    I2CBusTaskConnectDevice((I2CBusTask *) sI2C3BusObj,
+                            (I2CBusIF *)ILPS28QSWTaskGetSensorIF((ILPS28QSWTask *) sILPS28QSWObj));
+  }
 
 
   /************ Connect the Sensor events to the DatalogAppTask ************/
@@ -449,6 +502,10 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     IEventSrcAddEventListener(IIS2DULPXTaskGetEventSrcIF((IIS2DULPXTask *)sIIS2DULPXObj), DatalogAppListener);
   }
+  if (sILPS28QSWObj)
+  {
+    IEventSrcAddEventListener(ILPS28QSWTaskGetPressEventSrcIF((ILPS28QSWTask *) sILPS28QSWObj), DatalogAppListener);
+  }
 
   /************ Connect Sensor LL to be used for ucf management to the DatalogAppTask ************/
   if (sISM330DHCXObj)
@@ -470,9 +527,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   Log_Controller_PnPLInit(pLogControllerPnPLObj);
   Automode_PnPLInit(pAutomodePnPLObj);
 
-#if (DATALOG2_USE_WIFI == 1)
   Wifi_Config_PnPLInit(pWifiConfigPnPLObj);
-#endif
 
   /************ Sensor PnPL Components ************/
   Iis2dlpc_Acc_PnPLInit(pIIS2DLPC_ACC_PnPLObj);
@@ -528,13 +583,17 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     Iis2dulpx_Acc_PnPLInit(pIIS2DULPX_ACC_PnPLObj);
   }
+  if (sILPS28QSWObj)
+  {
+    Ilps28qsw_Press_PnPLInit(pILPS28QSW_PRESS_PnPLObj);
+  }
 
   return SYS_NO_ERROR_CODE;
 }
 
 IAppPowerModeHelper *SysGetPowerModeHelper(void)
 {
-  // Install the application power mode helper.
+  /* Install the application power mode helper. */
   static IAppPowerModeHelper *s_pxPowerModeHelper = NULL;
   if (s_pxPowerModeHelper == NULL)
   {
@@ -558,6 +617,10 @@ void EXT_INT1_EXTI_Callback(uint16_t nPin)
   else if (sISM330ISObj)
   {
     ISM330ISTask_EXTI_Callback(nPin);
+  }
+  else if (sIIS2DULPXObj)
+  {
+    IIS2DULPXTask_EXTI_Callback(nPin);
   }
   else
   {

@@ -11,7 +11,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -37,19 +37,22 @@ extern "C" {
   */
 typedef struct _AppPowerModeHelper AppPowerModeHelper;
 
-// Public API declaration
-//***********************
+
+/* Public API declaration */
+/**************************/
 
 /**
-  * Allocate an instance of AppPowerModeHelper. It is allocated in the FreeRTOS heap.
+  * Allocate an instance of AppPowerModeHelper. It is allocated in the framework heap.
   *
   * @return a pointer to the generic interface ::IApplicationErrorDelegate if success,
   * or SYS_OUT_OF_MEMORY_ERROR_CODE otherwise.
   */
 IAppPowerModeHelper *AppPowerModeHelperAlloc();
 
-// Inline functions definition
-// ***************************
+
+/* Inline functions definition */
+/*******************************/
+
 
 #ifdef __cplusplus
 }

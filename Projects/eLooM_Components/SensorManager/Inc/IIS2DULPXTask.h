@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -37,7 +37,7 @@ extern "C" {
 #define IIS2DULPX_MAX_DRDY_PERIOD           (1.0)    /* seconds */
 
 #ifndef IIS2DULPX_MAX_WTM_LEVEL
-#define IIS2DULPX_MAX_WTM_LEVEL             (128)    /* samples */
+#define IIS2DULPX_MAX_WTM_LEVEL             (64)    /* samples */
 #endif
 
 #define IIS2DULPX_CFG_MAX_LISTENERS         2
@@ -192,7 +192,7 @@ struct _IIS2DULPXTask
   /**
     * Used to update the instantaneous odr.
     */
-  double prev_timestamp;
+  double_t prev_timestamp;
 
   /**
     * Internal model (FW) is in sync with the component (HW registers)
@@ -203,6 +203,10 @@ struct _IIS2DULPXTask
     * First data ready flag: fist data must be discarded, see sensor AN
     * */
   uint8_t first_data_ready;
+
+  uint8_t odr_count;
+  float_t delta_timestamp_sum;
+  uint16_t samples_sum;
 };
 
 // Public API declaration

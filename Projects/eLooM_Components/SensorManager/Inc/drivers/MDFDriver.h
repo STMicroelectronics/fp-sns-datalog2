@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -106,7 +106,7 @@ struct _MDFDriver_t
   */
 IDriver *MDFDriverAlloc(void);
 
-sys_error_code_t MDFSetMDFConfig(IDriver *_this, float ODR);
+sys_error_code_t MDFSetMDFConfig(IDriver *_this, float_t ODR);
 
 /**
   * Register a callback function with the HAL driver.

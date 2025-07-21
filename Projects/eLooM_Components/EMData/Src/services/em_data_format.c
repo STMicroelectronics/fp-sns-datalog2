@@ -11,7 +11,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -23,7 +23,7 @@
 #include "services/em_data_format.h"
 #include <stdbool.h>
 
-#define EM_IS_SUPPORTED_DATA_TYPE(_dt)     (((_dt) <= E_EM_FLOAT))
+#define EM_IS_SUPPORTED_DATA_TYPE(_dt)     (((_dt) <= E_EM_UINT24))
 #define EM_IS_SUPPORTED_DATA_MODE(_dm)     (((_dm) == E_EM_MODE_LINEAR) ||\
                                             ((_dm) == E_EM_MODE_INTERLEAVED) || ((_dm) == E_EM_MODE_NONE))
 
@@ -42,11 +42,13 @@ static const EMDataClass s_TheClass =
     sizeof(int16_t),
     sizeof(uint32_t),
     sizeof(int32_t),
-    sizeof(float),
+    sizeof(float_t),
+    3 * sizeof(uint8_t), // sizeof(int24_t) = 3*sizeof(uint8_t)
+    3 * sizeof(uint8_t), // sizeof(uint24_t) = 3*sizeof(uint8_t)
 #if 0
     sizeof(uint64_t),
     sizeof(int64_t),
-    sizeof(double)
+    sizeof(double_t)
 #endif
   }
 };
@@ -85,7 +87,7 @@ sys_error_code_t EMD_Init(EMData_t *p_data, uint8_t *p_payload, uint16_t type, u
     va_start(valist, dimensions);
     for (uint8_t i = 0; i < dimensions; ++i)
     {
-      p_data->shapes[i] = (uint16_t)va_arg(valist, int);
+      p_data->shapes[i] = (uint16_t)va_arg(valist, int32_t);
       if (p_data->shapes[i] == 0)
       {
         res = SYS_EM_DATA_INVALID_FORMAT_ERROR_CODE;
@@ -135,7 +137,7 @@ sys_error_code_t EMD_InitWithCustomType(EMData_t *p_data, uint8_t *p_payload, ui
     va_start(valist, dimensions);
     for (uint8_t i = 0; i < dimensions; ++i)
     {
-      p_data->shapes[i] = (uint16_t)va_arg(valist, int);
+      p_data->shapes[i] = (uint16_t)va_arg(valist, int32_t);
       if (p_data->shapes[i] == 0)
       {
         res = SYS_EM_DATA_INVALID_FORMAT_ERROR_CODE;
@@ -186,7 +188,7 @@ sys_error_code_t EMD_GetValueAt(const EMData_t *p_data, void *p_val, uint32_t di
     va_start(valist, dimensions);
     for (uint8_t i = 0; i < dimensions; ++i)
     {
-      index[i] = (uint16_t)va_arg(valist, int);
+      index[i] = (uint16_t)va_arg(valist, int32_t);
       /* validate the argument */
       if (!(index[i] < p_data->shapes[i]))
       {
@@ -234,7 +236,7 @@ uint8_t *EMD_DataAt(EMData_t *p_data, uint32_t dimensions, ...)
     va_start(valist, dimensions);
     for (uint8_t i = 0; i < dimensions; ++i)
     {
-      index[i] = (uint16_t)va_arg(valist, int);
+      index[i] = (uint16_t)va_arg(valist, int32_t);
       /* validate the argument */
       if (!(index[i] < p_data->shapes[i]))
       {

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -69,7 +69,7 @@ uint8_t lsm6dsv16x_mlc_get_enable(bool *value);
 uint8_t lsm6dsv16x_mlc_get_samples_per_ts(int32_t *value);
 uint8_t lsm6dsv16x_mlc_get_ucf_status(bool *value);
 uint8_t lsm6dsv16x_mlc_get_dim(int32_t *value);
-uint8_t lsm6dsv16x_mlc_get_ioffset(float *value);
+uint8_t lsm6dsv16x_mlc_get_ioffset(float_t *value);
 uint8_t lsm6dsv16x_mlc_get_data_type(char **value);
 uint8_t lsm6dsv16x_mlc_get_usb_dps(int32_t *value);
 uint8_t lsm6dsv16x_mlc_get_sd_dps(int32_t *value);
@@ -81,7 +81,7 @@ uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_unit(char **value);
 uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_format(char **value);
 uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_elements(int32_t *value);
 uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_channels(int32_t *value);
-uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_multiply_factor(float *value);
+uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_multiply_factor(float_t *value);
 uint8_t lsm6dsv16x_mlc_get_st_ble_stream__mlc_odr(int32_t *value);
 uint8_t lsm6dsv16x_mlc_get_stream_id(int8_t *value);
 uint8_t lsm6dsv16x_mlc_get_ep_id(int8_t *value);
@@ -94,7 +94,7 @@ uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_unit(const char *value, char **res
 uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_format(const char *value, char **response_message);
 uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_elements(int32_t value, char **response_message);
 uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_channels(int32_t value, char **response_message);
-uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_multiply_factor(float value, char **response_message);
+uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_multiply_factor(float_t value, char **response_message);
 uint8_t lsm6dsv16x_mlc_set_st_ble_stream__mlc_odr(int32_t value, char **response_message);
 uint8_t lsm6dsv16x_mlc_load_file(const char *data, int32_t size);
 

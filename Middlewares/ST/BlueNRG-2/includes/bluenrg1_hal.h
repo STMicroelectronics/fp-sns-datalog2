@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2015 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,6 +17,10 @@
   */
 #ifndef __BLUENRG_HAL_H__
 #define __BLUENRG_HAL_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
   * @defgroup Config_vals Offsets and lengths for configuration values.
@@ -35,8 +39,8 @@
 #define CONFIG_DATA_ER_OFFSET               (0x08) /**< Encryption root key used to derive LTK and CSRK */
 #define CONFIG_DATA_IR_OFFSET               (0x18) /**< Identity root key used to derive LTK and CSRK */
 #define CONFIG_DATA_LL_WITHOUT_HOST         (0x2C) /**< Switch on/off Link Layer only mode. Set to 1 to disable Host.
-                                                                                               It can be written only if aci_hal_write_config_data() is the first command
-                                                                                               after reset. */
+                                                        It can be written only if aci_hal_write_config_data() is the
+                                                        first command after reset. */
 
 /**
   * Select the BlueNRG roles and mode configurations.\n
@@ -73,5 +77,8 @@
   * @}
   */
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __BLUENRG_HAL_ACI_H__ */

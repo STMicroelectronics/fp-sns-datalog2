@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -69,3 +69,5 @@ void OTG_FS_IRQHandler(void);
 #endif
 
 #endif /* __STM32U5xx_IT_H */
+
+

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -52,10 +52,10 @@ SensorStatus_t *VD6283TXTask_vtblSensorGetStatusPointer(ISensor_t *_this);
 sys_error_code_t VD6283TXTask_vtblLightGetIntermeasurementTime(ISensorLight_t *_this, uint32_t *p_measured,
                                                                uint32_t *p_nominal);
 uint32_t VD6283TXTask_vtblLightGetExposureTime(ISensorLight_t *_this);
-sys_error_code_t VD6283TXTask_vtblLightGetLightGain(ISensorLight_t *_this, float *LightGain);
+sys_error_code_t VD6283TXTask_vtblLightGetLightGain(ISensorLight_t *_this, float_t *LightGain);
 sys_error_code_t VD6283TXTask_vtblSensorSetIntermeasurementTime(ISensorLight_t *_this, uint32_t intermeasurement_time);
 sys_error_code_t VD6283TXTask_vtblSensorSetExposureTime(ISensorLight_t *_this, uint32_t exposure_time);
-sys_error_code_t VD6283TXTask_vtblSensorSetLightGain(ISensorLight_t *_this, float LightGain, uint8_t channel);
+sys_error_code_t VD6283TXTask_vtblSensorSetLightGain(ISensorLight_t *_this, float_t LightGain, uint8_t channel);
 
 #ifdef __cplusplus
 }

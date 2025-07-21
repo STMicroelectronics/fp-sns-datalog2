@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -680,7 +680,7 @@ IEventSrc *IIS2DLPCTask_vtblGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_event_src;
 }
 
-sys_error_code_t IIS2DLPCTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t IIS2DLPCTask_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -702,20 +702,20 @@ sys_error_code_t IIS2DLPCTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measu
   return res;
 }
 
-float IIS2DLPCTask_vtblAccGetFS(ISensorMems_t *_this)
+float_t IIS2DLPCTask_vtblAccGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   IIS2DLPCTask *p_if_owner = (IIS2DLPCTask *)((uint32_t) _this - offsetof(IIS2DLPCTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.fs;
+  float_t res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float IIS2DLPCTask_vtblAccGetSensitivity(ISensorMems_t *_this)
+float_t IIS2DLPCTask_vtblAccGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   IIS2DLPCTask *p_if_owner = (IIS2DLPCTask *)((uint32_t) _this - offsetof(IIS2DLPCTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -729,7 +729,7 @@ EMData_t IIS2DLPCTask_vtblAccGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t IIS2DLPCTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t IIS2DLPCTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -757,7 +757,7 @@ sys_error_code_t IIS2DLPCTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = IIS2DLPCTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -765,7 +765,7 @@ sys_error_code_t IIS2DLPCTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t IIS2DLPCTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t IIS2DLPCTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -787,7 +787,7 @@ sys_error_code_t IIS2DLPCTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) fs
+      .sensorMessage.fParam = (float_t) fs
     };
     res = IIS2DLPCTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1022,19 +1022,33 @@ static sys_error_code_t IIS2DLPCTaskExecuteStepDatalog(AManagedTask *_this)
         res = IIS2DLPCTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
-          if (p_obj->first_data_ready == 1)
+          if (p_obj->first_data_ready == 2)
           {
 #if IIS2DLPC_FIFO_ENABLED
             if (p_obj->fifo_level != 0)
             {
 #endif
               // notify the listeners...
-              double timestamp = report.sensorDataReadyMessage.fTimestamp;
-              double delta_timestamp = timestamp - p_obj->prev_timestamp;
+              double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+              double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
               p_obj->prev_timestamp = timestamp;
 
               /* update measuredODR */
-              p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
+              // Update the sums
+              p_obj->delta_timestamp_sum += delta_timestamp;
+              p_obj->samples_sum += p_obj->samples_per_it;
+              if (p_obj->odr_count < MEAS_ODR_AVG)
+              {
+                p_obj->odr_count++;
+              }
+              // Calculate the average
+              if (p_obj->odr_count == MEAS_ODR_AVG)
+              {
+                p_obj->sensor_status.type.mems.measured_odr = (float_t) p_obj->samples_sum / p_obj->delta_timestamp_sum;
+                p_obj->delta_timestamp_sum = 0.0f;
+                p_obj->samples_sum = 0;
+                p_obj->odr_count = 0;
+              }
 
               /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
                * [X0, Y0, Z0]
@@ -1048,14 +1062,14 @@ static sys_error_code_t IIS2DLPCTaskExecuteStepDatalog(AManagedTask *_this)
 
               DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
               IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
-              SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2DLPC: ts = %f\r\n", (float)timestamp));
+              SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2DLPC: ts = %f\r\n", (float_t)timestamp));
 #if IIS2DLPC_FIFO_ENABLED
             }
 #endif
           }
           else
           {
-            p_obj->first_data_ready = 1;
+            p_obj->first_data_ready++;
           }
         }
         break;
@@ -1347,12 +1361,15 @@ static sys_error_code_t IIS2DLPCTaskSensorInit(IIS2DLPCTask *_this)
   if (_this->sensor_status.is_active)
   {
 #if IIS2DLPC_FIFO_ENABLED
-    _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
+    _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float_t)(_this->samples_per_it)) / 2.0f));
 #else
     _this->iis2dlpc_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 #endif
   }
 
+  _this->odr_count = 0;
+  _this->delta_timestamp_sum = 0.0f;
+  _this->samples_sum = 0;
   return res;
 }
 
@@ -1369,7 +1386,7 @@ static sys_error_code_t IIS2DLPCTaskSensorReadData(IIS2DLPCTask *_this)
   if (_this->fifo_level >= samples_per_it)
   {
     res = iis2dlpc_read_reg(p_sensor_drv, IIS2DLPC_OUT_X_L, (uint8_t *) _this->p_sensor_data_buff,
-                      ((uint16_t) samples_per_it * 6u));
+                            ((uint16_t) samples_per_it * 6u));
   }
   else
   {
@@ -1435,7 +1452,7 @@ static sys_error_code_t IIS2DLPCTaskSensorSetODR(IIS2DLPCTask *_this, SMMessage 
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -1505,7 +1522,7 @@ static sys_error_code_t IIS2DLPCTaskSensorSetFS(IIS2DLPCTask *_this, SMMessage r
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float fs = (float) report.sensorMessage.fParam;
+  float_t fs = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)

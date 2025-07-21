@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -29,33 +29,23 @@ extern "C" {
 #include "drivers/IDriver_vtbl.h"
 #include "events/IDataEventListener.h"
 #include "events/IDataEventListener_vtbl.h"
-#include "filex_dctrl_class.h"
 #include "usbx_dctrl_class.h"
-#include "ble_stream_class.h"
+#include "filex_dctrl_class.h"
 
 #include "ICommandParse.h"
 #include "ICommandParse_vtbl.h"
 #include "PnPLCompManager.h"
 
-#include "App_model.h"
-
-#include "LSM6DSV16BXTask.h"
-#include "LSM6DSV16XTask.h"
-#include "LSM6DSV32XTask.h"
-#include "ISM330ISTask.h"
-#include "services/SQuery.h"
-#include "services/SUcfProtocol.h"
-
-
 /* Datalog messages ID */
 #define DT_USER_BUTTON                            (0x0010)
 #define DT_SWITCH_BANK                            (0x0020)
+#define DT_DFU_MODE                               (0x0040)
 #define DT_FORCE_STEP                             (0x00F0)
 
 
 typedef struct
 {
-  double old_time_stamp;
+  double_t old_time_stamp;
   uint16_t n_samples_to_timestamp;
 } SensorContext_t;
 
@@ -64,52 +54,6 @@ typedef struct
   */
 typedef struct _DatalogAppTask DatalogAppTask;
 
-/**
-  *  DatalogAppTask internal structure.
-  */
-struct _DatalogAppTask
-{
-  /**
-    * Base class object.
-    */
-  AManagedTaskEx super;
-  TX_QUEUE in_queue;
-
-  /** Software timer used to send periodical ble advertise messages **/
-  TX_TIMER ble_advertise_timer;
-
-  /** Data Event Listener **/
-  IDataEventListener_t sensorListener;
-  void *owner;
-
-  /** USBX ctrl class **/
-  usbx_dctrl_class_t *usbx_device;
-
-  /** FILEX ctrl class **/
-  filex_dctrl_class_t *filex_device;
-
-  /** FILEX ctrl class **/
-  ble_stream_class_t *ble_device;
-
-  ICommandParse_t parser;
-//TODO could be more useful to have a CommandParse Class? (ICommandParse + PnPLCommand_t)
-  PnPLCommand_t outPnPLCommand;
-
-  /** SensorLL interface for MLC **/
-  ISensorLL_t *mlc_sensor_ll;
-
-  /** SensorLL interface for ISPU **/
-  ISensorLL_t *ispu_sensor_ll;
-
-  AppModel_t *datalog_model;
-
-  SensorContext_t sensorContext[SM_MAX_SENSORS];
-
-  uint32_t mode;  /* logging interface */
-
-  filex_threshold_config_t filex_threshold_config;
-
-};
 
 // Public API declaration
 //***********************
@@ -139,9 +83,12 @@ uint8_t DatalogAppTask_enable_all(bool);
 void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
 
 uint8_t DatalogAppTask_SetMLCIF(AManagedTask *task_obj);
+uint8_t DatalogAppTask_SetMLC320XIF(AManagedTask *task_obj);
 uint8_t DatalogAppTask_load_lsm6dsv16x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 uint8_t DatalogAppTask_load_lsm6dsv16bx_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 uint8_t DatalogAppTask_load_lsm6dsv32x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
+uint8_t DatalogAppTask_load_lsm6dsv80x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
+uint8_t DatalogAppTask_load_lsm6dsv320x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 
 uint8_t DatalogAppTask_SetIspuIF(AManagedTask *task_obj);
 uint8_t DatalogAppTask_load_ism330is_ucf_vtbl(const char *ucf_data, int32_t ucf_size,

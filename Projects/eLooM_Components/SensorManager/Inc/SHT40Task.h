@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -112,12 +112,12 @@ struct _SHT40Task
   /**
     * Buffer to store the temperature data read.
     */
-  float temperature;
+  float_t temperature;
 
   /**
     * Buffer to store the humidity data read.
     */
-  float humidity;
+  float_t humidity;
 
   /**
     * ::IEventSrc interface implementation for this class.
@@ -132,7 +132,7 @@ struct _SHT40Task
   /**
     * Used to update the instantaneous odr.
     */
-  double prev_timestamp;
+  double_t prev_timestamp;
 
   /**
     * Software timer used to generate the read command

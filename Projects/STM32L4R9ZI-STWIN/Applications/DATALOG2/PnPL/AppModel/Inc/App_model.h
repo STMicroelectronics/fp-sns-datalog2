@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -93,7 +93,7 @@ extern "C" {
 #define LOG_CTRL_MODE_USB         0x01
 #define LOG_CTRL_MODE_BLE         0x02
 
-#define SENSOR_NUMBER             11
+#define SENSOR_NUMBER             SM_MAX_SENSORS
 #define ALGORITHM_NUMBER          0
 #define ACTUATOR_NUMBER           0
 #define OTHER_COMP_NUMBER         5
@@ -105,7 +105,7 @@ extern "C" {
 #define FORMAT_LEN 10U
 
 #define FW_VERSION_MAJOR    "3"
-#define FW_VERSION_MINOR    "0"
+#define FW_VERSION_MINOR    "1"
 #define FW_VERSION_PATCH    "0"
 
 /* Max BLE bandwidth for each sensor (in Byte) */
@@ -123,8 +123,8 @@ typedef struct _StreamParams_t
   uint32_t usb_dps;
   uint32_t ble_dps;
   uint32_t serial_dps;
-  float ioffset;
-  float bandwidth;
+  float_t ioffset;
+  float_t bandwidth;
   /* Stream Parameters Model USER code */
 } StreamParams_t;
 
@@ -137,7 +137,7 @@ typedef struct _StBleStreamSensorObjectModel_t
   char unit[UNIT_LEN];
   uint32_t elements;
   uint32_t channel;
-  float multiply_factor;
+  float_t multiply_factor;
   uint32_t odr;
 } StBleStreamSensorObjectModel_t;
 

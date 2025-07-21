@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -35,8 +35,8 @@ typedef struct _ISensorPresence_vtbl ISensorPresence_vtbl;
 struct _ISensorPresence_vtbl
 {
   ISensor_vtbl vtbl;
-  sys_error_code_t (*SensorGetDataFrequency)(ISensorPresence_t *_this, float *p_measured, float *p_nominal);
-  float (*SensorGetTransmittance)(ISensorPresence_t *_this);
+  sys_error_code_t (*SensorGetDataFrequency)(ISensorPresence_t *_this, float_t *p_measured, float_t *p_nominal);
+  float_t (*SensorGetTransmittance)(ISensorPresence_t *_this);
   uint16_t (*SensorGetAverageTObject)(ISensorPresence_t *_this);
   uint16_t (*SensorGetAverageTAmbient)(ISensorPresence_t *_this);
   uint16_t (*SensorGetPresenceThreshold)(ISensorPresence_t *_this);
@@ -52,8 +52,8 @@ struct _ISensorPresence_vtbl
   uint8_t (*SensorGetSoftwareCompensation)(ISensorPresence_t *_this);
   sys_error_code_t (*SensorGetSoftwareCompensationAlgorithmConfig)(ISensorPresence_t *_this,
                                                                    CompensationAlgorithmConfig_t *pAlgorithmConfig);
-  sys_error_code_t (*SensorSetDataFrequency)(ISensorPresence_t *_this, float DataFrequency);
-  sys_error_code_t (*SensorSetTransmittance)(ISensorPresence_t *_this, float Transmittance);
+  sys_error_code_t (*SensorSetDataFrequency)(ISensorPresence_t *_this, float_t DataFrequency);
+  sys_error_code_t (*SensorSetTransmittance)(ISensorPresence_t *_this, float_t Transmittance);
   sys_error_code_t (*SensorSetAverageTObject)(ISensorPresence_t *_this, uint16_t avgTobject);
   sys_error_code_t (*SensorSetAverageTAmbient)(ISensorPresence_t *_this, uint16_t avgTambient);
   sys_error_code_t (*SensorSetPresenceThreshold)(ISensorPresence_t *_this, uint16_t PresenceThreshold);
@@ -82,12 +82,13 @@ struct _ISensorPresence_t
 // Inline functions definition
 // ***************************
 
-static inline sys_error_code_t ISensorGetDataFrequency(ISensorPresence_t *_this, float *p_measured, float *p_nominal)
+static inline sys_error_code_t ISensorGetDataFrequency(ISensorPresence_t *_this, float_t *p_measured,
+                                                       float_t *p_nominal)
 {
   return _this->vptr->SensorGetDataFrequency(_this, p_measured, p_nominal);
 }
 
-static inline float ISensorGetTransmittance(ISensorPresence_t *_this)
+static inline float_t ISensorGetTransmittance(ISensorPresence_t *_this)
 {
   return _this->vptr->SensorGetTransmittance(_this);
 }
@@ -163,12 +164,12 @@ static inline sys_error_code_t ISensorGetSoftwareCompensationAlgorithmConfig(ISe
   return _this->vptr->SensorGetSoftwareCompensationAlgorithmConfig(_this, pAlgorithmConfig);
 }
 
-static inline sys_error_code_t ISensorSetDataFrequency(ISensorPresence_t *_this, float DataFrequency)
+static inline sys_error_code_t ISensorSetDataFrequency(ISensorPresence_t *_this, float_t DataFrequency)
 {
   return _this->vptr->SensorSetDataFrequency(_this, DataFrequency);
 }
 
-static inline sys_error_code_t ISensorSetTransmittance(ISensorPresence_t *_this, float Transmittance)
+static inline sys_error_code_t ISensorSetTransmittance(ISensorPresence_t *_this, float_t Transmittance)
 {
   return _this->vptr->SensorSetTransmittance(_this, Transmittance);
 }

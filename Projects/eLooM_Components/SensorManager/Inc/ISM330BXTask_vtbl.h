@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -54,19 +54,19 @@ sys_error_code_t ISM330BXTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const 
 
 uint8_t ISM330BXTask_vtblAccGetId(ISourceObservable *_this);
 IEventSrc *ISM330BXTask_vtblAccGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t ISM330BXTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float ISM330BXTask_vtblAccGetFS(ISensorMems_t *_this);
-float ISM330BXTask_vtblAccGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t ISM330BXTask_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t ISM330BXTask_vtblAccGetFS(ISensorMems_t *_this);
+float_t ISM330BXTask_vtblAccGetSensitivity(ISensorMems_t *_this);
 EMData_t ISM330BXTask_vtblAccGetDataInfo(ISourceObservable *_this);
 uint8_t ISM330BXTask_vtblGyroGetId(ISourceObservable *_this);
 IEventSrc *ISM330BXTask_vtblGyroGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t ISM330BXTask_vtblGyroGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float ISM330BXTask_vtblGyroGetFS(ISensorMems_t *_this);
-float ISM330BXTask_vtblGyroGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t ISM330BXTask_vtblGyroGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t ISM330BXTask_vtblGyroGetFS(ISensorMems_t *_this);
+float_t ISM330BXTask_vtblGyroGetSensitivity(ISensorMems_t *_this);
 EMData_t ISM330BXTask_vtblGyroGetDataInfo(ISourceObservable *_this);
 
-sys_error_code_t ISM330BXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
-sys_error_code_t ISM330BXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t ISM330BXTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr);
+sys_error_code_t ISM330BXTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs);
 sys_error_code_t ISM330BXTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 sys_error_code_t ISM330BXTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t ISM330BXTask_vtblSensorDisable(ISensor_t *_this);
@@ -84,9 +84,9 @@ sys_error_code_t ISM330BXTask_vtblSensorSyncModel(ISensorLL_t *_this);
 
 uint8_t ISM330BXTask_vtblMlcGetId(ISourceObservable *_this);
 IEventSrc *ISM330BXTask_vtblMlcGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t ISM330BXTask_vtblMlcGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float ISM330BXTask_vtblMlcGetFS(ISensorMems_t *_this);
-float ISM330BXTask_vtblMlcGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t ISM330BXTask_vtblMlcGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t ISM330BXTask_vtblMlcGetFS(ISensorMems_t *_this);
+float_t ISM330BXTask_vtblMlcGetSensitivity(ISensorMems_t *_this);
 EMData_t ISM330BXTask_vtblMlcGetDataInfo(ISourceObservable *_this);
 SensorDescriptor_t ISM330BXTask_vtblMlcGetDescription(ISensor_t *_this);
 SensorStatus_t ISM330BXTask_vtblMlcGetStatus(ISensor_t *_this);

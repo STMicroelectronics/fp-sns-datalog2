@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -73,7 +73,7 @@ uint8_t h3lis331dl_acc_comp_init(void)
   int32_t value = 0;
   h3lis331dl_acc_get_dim(&value);
   h3lis331dl_acc_set_st_ble_stream__acc_channels(value, NULL);
-  float sensitivity = 0.0f;
+  float_t sensitivity = 0.0f;
   h3lis331dl_acc_get_sensitivity(&sensitivity);
   h3lis331dl_acc_set_st_ble_stream__acc_multiply_factor(sensitivity, NULL);
 
@@ -91,7 +91,7 @@ char *h3lis331dl_acc_get_key(void)
 
 uint8_t h3lis331dl_acc_get_odr(pnpl_h3lis331dl_acc_odr_t *enum_id)
 {
-  float odr = h3lis331dl_acc_model.sensor_status->type.mems.odr;
+  float_t odr = h3lis331dl_acc_model.sensor_status->type.mems.odr;
   if (odr < 1.0f)
   {
     *enum_id = pnpl_h3lis331dl_acc_odr_hz0_5;
@@ -133,7 +133,7 @@ uint8_t h3lis331dl_acc_get_odr(pnpl_h3lis331dl_acc_odr_t *enum_id)
 
 uint8_t h3lis331dl_acc_get_fs(pnpl_h3lis331dl_acc_fs_t *enum_id)
 {
-  float fs = h3lis331dl_acc_model.sensor_status->type.mems.fs;
+  float_t fs = h3lis331dl_acc_model.sensor_status->type.mems.fs;
   if (fs < 101.0f)
   {
     *enum_id = pnpl_h3lis331dl_acc_fs_g100;
@@ -169,14 +169,14 @@ uint8_t h3lis331dl_acc_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t h3lis331dl_acc_get_ioffset(float *value)
+uint8_t h3lis331dl_acc_get_ioffset(float_t *value)
 {
   *value = h3lis331dl_acc_model.stream_params.ioffset;
   /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t h3lis331dl_acc_get_measodr(float *value)
+uint8_t h3lis331dl_acc_get_measodr(float_t *value)
 {
   *value = h3lis331dl_acc_model.sensor_status->type.mems.measured_odr;
   /* USER Code */
@@ -197,7 +197,7 @@ uint8_t h3lis331dl_acc_get_sd_dps(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t h3lis331dl_acc_get_sensitivity(float *value)
+uint8_t h3lis331dl_acc_get_sensitivity(float_t *value)
 {
   *value = h3lis331dl_acc_model.sensor_status->type.mems.sensitivity;
   /* USER Code */
@@ -265,7 +265,7 @@ uint8_t h3lis331dl_acc_get_st_ble_stream__acc_channels(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t h3lis331dl_acc_get_st_ble_stream__acc_multiply_factor(float *value)
+uint8_t h3lis331dl_acc_get_st_ble_stream__acc_multiply_factor(float_t *value)
 {
   *value = h3lis331dl_acc_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
@@ -299,7 +299,7 @@ uint8_t h3lis331dl_acc_set_odr(pnpl_h3lis331dl_acc_odr_t enum_id, char **respons
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_h3lis331dl_acc_odr_hz0_5:
@@ -351,7 +351,7 @@ uint8_t h3lis331dl_acc_set_fs(pnpl_h3lis331dl_acc_fs_t enum_id, char **response_
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_h3lis331dl_acc_fs_g100:
@@ -372,7 +372,7 @@ uint8_t h3lis331dl_acc_set_fs(pnpl_h3lis331dl_acc_fs_t enum_id, char **response_
     /* USER Code */
   }
 
-  float sensitivity = 0.0f;
+  float_t sensitivity = 0.0f;
   h3lis331dl_acc_get_sensitivity(&sensitivity);
   h3lis331dl_acc_set_st_ble_stream__acc_multiply_factor(sensitivity, NULL);
 
@@ -504,7 +504,7 @@ uint8_t h3lis331dl_acc_set_st_ble_stream__acc_channels(int32_t value, char **res
   return ret;
 }
 
-uint8_t h3lis331dl_acc_set_st_ble_stream__acc_multiply_factor(float value, char **response_message)
+uint8_t h3lis331dl_acc_set_st_ble_stream__acc_multiply_factor(float_t value, char **response_message)
 {
   if (response_message != NULL)
   {

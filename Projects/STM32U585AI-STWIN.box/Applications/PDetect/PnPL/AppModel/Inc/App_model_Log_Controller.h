@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -68,6 +68,7 @@ typedef struct _LogControllerModel_t
   /* LogController Component Model USER code */
   bool status;
   bool sd_mounted;
+  bool sd_failed;
   int8_t interface;
 } LogControllerModel_t;
 
@@ -76,6 +77,7 @@ uint8_t log_controller_comp_init(void);
 char *log_controller_get_key(void);
 uint8_t log_controller_get_log_status(bool *value);
 uint8_t log_controller_get_sd_mounted(bool *value);
+uint8_t log_controller_get_sd_failed(bool *value);
 uint8_t log_controller_get_controller_type(int32_t *value);
 uint8_t log_controller_save_config(void);
 uint8_t log_controller_start_log(int32_t interface);

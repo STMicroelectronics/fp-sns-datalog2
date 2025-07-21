@@ -10,7 +10,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -36,7 +36,7 @@ extern "C" {
 
 
 #define SYS_DBG_INIT                       SYS_DBG_ON                 ///< Init task debug control byte
-#define SYS_DBG_DRIVERS                    SYS_DBG_ON                 ///< Drivers debug control byte
+#define SYS_DBG_DRIVERS                    SYS_DBG_OFF                ///< Drivers debug control byte
 #define SYS_DBG_APP                        SYS_DBG_ON                 ///< Generic Application debug control byte
 #define SYS_DBG_APMH                       SYS_DBG_ON                 ///< Application Power Mode Helper debug control byte
 #define SYS_DBG_SPIBUS                     SYS_DBG_ON                 ///< SPIBus task debug control byte
@@ -46,6 +46,8 @@ extern "C" {
 #define SYS_DBG_LSM6DSV16BX                SYS_DBG_ON                 ///< LSM6DSV16BX sensor task debug control byte
 #define SYS_DBG_LSM6DSV16X                 SYS_DBG_ON                 ///< LSM6DSV16X sensor task debug control byte
 #define SYS_DBG_LSM6DSV32X                 SYS_DBG_ON                 ///< LSM6DSV32X sensor task debug control byte
+#define SYS_DBG_LSM6DSV80X                 SYS_DBG_ON                 ///< LSM6DSV80X sensor task debug control byte
+#define SYS_DBG_LSM6DSV320X                SYS_DBG_ON                 ///< LSM6DSV320X sensor task debug control byte
 #define SYS_DBG_ISM330IS                   SYS_DBG_ON                 ///< ISM330IS sensor task debug control byte
 #define SYS_DBG_MP23DB01HP                 SYS_DBG_ON                 ///< MP23DB01HP task debug control byte
 #define SYS_DBG_LIS2MDL                    SYS_DBG_ON                 ///< LIS2MDL task debug control byte
@@ -60,29 +62,23 @@ extern "C" {
 #define SYS_DBG_SYSTS                      SYS_DBG_ON                 ///< SysTimestamp debug control byte
 #define SYS_DBG_BCP                        SYS_DBG_ON                 ///< Battery Charger Protocol debug control byte
 
-#include "mx.h"
 /* ODeV - hardware configuration for the debug services provided by the framework */
 /**********************************************************************************/
 
-/* ODeV test point PINs */
-//#define SYS_DBG_TP1_PORT                   SYS_DBG_TP1_GPIO_Port
-//#define SYS_DBG_TP1_PIN                    SYS_DBG_TP1_Pin
-//#define SYS_DBG_TP1_CLK_ENABLE             __HAL_RCC_GPIOG_CLK_ENABLE
-//#define SYS_DBG_TP2_PORT                   SYS_DBG_TP2_GPIO_Port
-//#define SYS_DBG_TP2_PIN                    SYS_DBG_TP2_Pin
-//#define SYS_DBG_TP2_CLK_ENABLE             __HAL_RCC_GPIOG_CLK_ENABLE
+#include "mx.h"
 
-/* ODeV DBG UART used for the system log */
+/* eLooM DBG UART used for the system log */
 extern UART_HandleTypeDef huart4;
 void MX_UART4_Init(void);
 
 #define SYS_DBG_UART                       huart4
 #define SYS_DBG_UART_INIT                  MX_UART4_Init
 #define SYS_DBG_UART_TIMEOUT_MS            5000
-#endif /* SYS_DEBUG */
 
 
 #ifdef __cplusplus
 }
 #endif
 
+
+#endif /* SYS_DEBUG */

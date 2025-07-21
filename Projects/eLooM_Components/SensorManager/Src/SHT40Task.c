@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -708,7 +708,7 @@ IEventSrc *SHT40Task_vtblHumGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_hum_event_src;
 }
 
-sys_error_code_t SHT40Task_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t SHT40Task_vtblTempGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -730,20 +730,20 @@ sys_error_code_t SHT40Task_vtblTempGetODR(ISensorMems_t *_this, float *p_measure
   return res;
 }
 
-float SHT40Task_vtblTempGetFS(ISensorMems_t *_this)
+float_t SHT40Task_vtblTempGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   SHT40Task *p_if_owner = SHT40TaskGetOwnerFromISensorIF((ISensor_t *)_this);
-  float res = p_if_owner->temp_sensor_status.type.mems.fs;
+  float_t res = p_if_owner->temp_sensor_status.type.mems.fs;
 
   return res;
 }
 
-float SHT40Task_vtblTempGetSensitivity(ISensorMems_t *_this)
+float_t SHT40Task_vtblTempGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   SHT40Task *p_if_owner = SHT40TaskGetOwnerFromISensorIF((ISensor_t *)_this);
-  float res = p_if_owner->temp_sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->temp_sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -757,7 +757,7 @@ EMData_t SHT40Task_vtblTempGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t SHT40Task_vtblHumGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t SHT40Task_vtblHumGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -779,20 +779,20 @@ sys_error_code_t SHT40Task_vtblHumGetODR(ISensorMems_t *_this, float *p_measured
   return res;
 }
 
-float SHT40Task_vtblHumGetFS(ISensorMems_t *_this)
+float_t SHT40Task_vtblHumGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   SHT40Task *p_if_owner = SHT40TaskGetOwnerFromISensorIF((ISensor_t *)_this);
-  float res = p_if_owner->hum_sensor_status.type.mems.fs;
+  float_t res = p_if_owner->hum_sensor_status.type.mems.fs;
 
   return res;
 }
 
-float SHT40Task_vtblHumGetSensitivity(ISensorMems_t *_this)
+float_t SHT40Task_vtblHumGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   SHT40Task *p_if_owner = SHT40TaskGetOwnerFromISensorIF((ISensor_t *)_this);
-  float res = p_if_owner->hum_sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->hum_sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -806,7 +806,7 @@ EMData_t SHT40Task_vtblHumGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t SHT40Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t SHT40Task_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -834,7 +834,7 @@ sys_error_code_t SHT40Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = SHT40TaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -842,7 +842,7 @@ sys_error_code_t SHT40Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t SHT40Task_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t SHT40Task_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   /* Does not support this virtual function.*/
@@ -1075,14 +1075,14 @@ static sys_error_code_t SHT40TaskExecuteStepDatalog(AManagedTask *_this)
         if (!SYS_IS_ERROR_CODE(res))
         {
           // notify the listeners...
-          double timestamp = report.sensorDataReadyMessage.fTimestamp;
-          double delta_timestamp = timestamp - p_obj->prev_timestamp;
+          double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+          double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
           p_obj->prev_timestamp = timestamp;
 
           if (p_obj->temp_sensor_status.is_active)
           {
             /* update measuredODR */
-            p_obj->temp_sensor_status.type.mems.measured_odr = 1.0f / (float) delta_timestamp;
+            p_obj->temp_sensor_status.type.mems.measured_odr = 1.0f / (float_t) delta_timestamp;
 
             EMD_1dInit(&p_obj->temp_data, (uint8_t *) &p_obj->temperature, E_EM_FLOAT, 1);
 
@@ -1094,7 +1094,7 @@ static sys_error_code_t SHT40TaskExecuteStepDatalog(AManagedTask *_this)
           if (p_obj->hum_sensor_status.is_active)
           {
             /* update measuredODR */
-            p_obj->hum_sensor_status.type.mems.measured_odr = 1.0f / (float) delta_timestamp;
+            p_obj->hum_sensor_status.type.mems.measured_odr = 1.0f / (float_t) delta_timestamp;
 
             EMD_1dInit(&p_obj->hum_data, (uint8_t *) &p_obj->humidity, E_EM_FLOAT, 1);
 
@@ -1104,7 +1104,7 @@ static sys_error_code_t SHT40TaskExecuteStepDatalog(AManagedTask *_this)
             IEventSrcSendEvent(p_obj->p_hum_event_src, (IEvent *) &hum_evt, NULL);
           }
 
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("SHT40: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("SHT40: ts = %f\r\n", (float_t)timestamp));
         }
         break;
       }
@@ -1239,7 +1239,7 @@ static sys_error_code_t SHT40TaskSensorReadData(SHT40Task *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float data[2];
+  float_t data[2];
 
   res = sht40ad1b_data_get(p_sensor_drv, data);
 
@@ -1249,8 +1249,8 @@ static sys_error_code_t SHT40TaskSensorReadData(SHT40Task *_this)
     _this->temperature = data[1];
 
 #if (HSD_USE_DUMMY_DATA == 1)
-    _this->temperature = (float) dummyDataCounter++;
-    _this->humidity = (float) dummyDataCounter++;
+    _this->temperature = (float_t) dummyDataCounter++;
+    _this->humidity = (float_t) dummyDataCounter++;
 #endif
   }
   return res;
@@ -1300,7 +1300,7 @@ static sys_error_code_t SHT40TaskSensorSetODR(SHT40Task *_this, SMMessage report
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->temp_id || id == _this->hum_id)

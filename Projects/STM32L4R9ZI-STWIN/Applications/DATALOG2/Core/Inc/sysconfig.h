@@ -1,25 +1,24 @@
 /**
   ******************************************************************************
   * @file    sysconfig.h
-  * @author  SRA - GPM
-  *
-  *
+  * @author  SRA
   * @brief   Global System configuration file
   *
   * This file include some configuration parameters grouped here for user
   * convenience. This file override the default configuration value, and it is
-  * used in the "Preinclude file" section of the "compiler > prepocessor"
+  * used in the "Preinclude file" section of the "compiler > preprocessor"
   * options.
   *
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   *
   ******************************************************************************
   */
@@ -27,12 +26,13 @@
 #ifndef SYSCONFIG_H_
 #define SYSCONFIG_H_
 
+
 // Board ID and FW_ID
 // *********************
 
 #define BOARD_ID           0x09
-#define BLE_FW_ID_DATALOG2 0x10
-#define USB_FW_ID_DATALOG2 0x03
+#define BLE_FW_ID_DATALOG2 0x11
+#define USB_FW_ID_DATALOG2 0x0F
 
 // Other hardware configuration
 // ****************************
@@ -51,15 +51,28 @@
 // *******************
 
 // file IManagedTask.h
-#define MT_ALLOWED_ERROR_COUNT                    0x2
+#define MT_ALLOWED_ERROR_COUNT                    0x2U
 
 // file sysinit.c
 #define INIT_TASK_CFG_ENABLE_BOOT_IF              0
 #define INIT_TASK_CFG_STACK_SIZE                  (TX_MINIMUM_STACK*10)
 
-// HEAP memory used for SysAlloc
+//memory used by eloom to build up the system using azure rtos
 #define INIT_TASK_CFG_HEAP_SIZE                   (545*1024)
 
+
+/* SensorManager configuration */
+#define SM_MAX_SENSORS                            11U
+
+
+// file UtilTask.c
+#define UTIL_TASK_CFG_STACK_DEPTH               (TX_MINIMUM_STACK*7)
+#define UTIL_TASK_CFG_PRIORITY                  (14)
+
+// App configuration
+
+// file DatalogAppTask.c
+// uncomment the following lines to change the task common parameters
 #define DT_TASK_CFG_STACK_DEPTH                   (TX_MINIMUM_STACK*12)
 #define DT_TASK_CFG_PRIORITY                      (12)
 #ifdef ENABLE_THREADX_DBG_PIN
@@ -91,15 +104,6 @@
 #ifdef ENABLE_THREADX_DBG_PIN
 #define BLE_RECEIVE_TASK_CFG_TAG                  (CON34_PIN_5)
 #endif
-
-/* SensorManager configuration */
-#define SM_MAX_SENSORS                            13U
-
-// file UtilTask.c
-#define UTIL_TASK_CFG_STACK_DEPTH               (TX_MINIMUM_STACK*7)
-#define UTIL_TASK_CFG_PRIORITY                  (14)
-
-// App configuration
 
 // USBX Tasks
 #define USB_EP_BULKIN_CFG_STACK_DEPTH             (1 * 1024)
@@ -133,11 +137,5 @@
 
 #define SYS_TS_CFG_TSDRIVER_FREQ_HZ SystemCoreClock ///< hardware timer clock frequency in Hz
 //#define SYS_TS_CFG_TSDRIVER_FREQ_HZ TX_TIMER_TICKS_PER_SECOND ///< ThreadX clock frequency in Hz
-
-
-// file HelloWorldTask.c
-// uncomment the following lines to change the task common parameters
-#define HW_TASK_CFG_STACK_DEPTH                    (TX_MINIMUM_STACK*7)
-#define HW_TASK_CFG_PRIORITY                       (TX_MAX_PRIORITIES-2)
 
 #endif /* SYSCONFIG_H_ */

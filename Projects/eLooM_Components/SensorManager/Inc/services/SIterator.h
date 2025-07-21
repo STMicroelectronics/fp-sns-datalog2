@@ -16,7 +16,7 @@
   *   uint16_t sensor_id = SINext(&iterator);
   *   // do something with the sensor
   *   ISourceObservable *p_sensor_observer = SMGetSensorObserver(sensor_id);
-  *   float odr = ISourceGetODR(p_sensor_observer);
+  *   float_t odr = ISourceGetODR(p_sensor_observer);
   *   SMSensorSetODR(sensor_id,  odr+1000);
   * }
   * \endcode
@@ -24,7 +24,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in

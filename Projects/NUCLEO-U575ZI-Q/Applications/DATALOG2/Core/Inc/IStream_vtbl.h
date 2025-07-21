@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -43,6 +43,7 @@ struct _IStream_vtbl
   sys_error_code_t (*set_mode_stream)(IStream_t *_this, IStreamMode_t mode);
   sys_error_code_t (*dealloc)(IStream_t *_this, uint8_t id_stream);
   sys_error_code_t (*set_parse_IF)(IStream_t *_this, ICommandParse_t *ifn);
+  sys_error_code_t (*send_async_stream)(IStream_t *_this, uint8_t *buf, uint32_t size);
 };
 
 struct _IStream_t
@@ -90,6 +91,7 @@ inline sys_error_code_t IStream_stop(IStream_t *_this)
 {
   return _this->vptr->stop_stream(_this);
 }
+
 inline sys_error_code_t IStream_post_data(IStream_t *_this, uint8_t id_stream, uint8_t *buf, uint32_t size)
 {
   return _this->vptr->post_data_stream(_this, id_stream, buf, size);
@@ -114,6 +116,11 @@ inline sys_error_code_t IStream_dealloc(IStream_t *_this, uint8_t id_stream)
 inline sys_error_code_t IStream_set_parse_IF(IStream_t *_this, ICommandParse_t *ifn)
 {
   return _this->vptr->set_parse_IF(_this, ifn);
+}
+
+inline sys_error_code_t IStream_send_async(IStream_t *_this, uint8_t *buf, uint32_t size)
+{
+  return _this->vptr->send_async_stream(_this, buf, size);
 }
 
 #ifdef __cplusplus

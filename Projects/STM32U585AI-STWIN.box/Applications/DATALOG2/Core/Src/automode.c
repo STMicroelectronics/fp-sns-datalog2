@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -43,8 +43,18 @@ uint8_t automode_setup(void)
   if (automode_setup_internal() == 0)
   {
     /* If automode is enabled, setup timer to start/stop acquisitions automatically */
+    if (automode_model.start_delay_s == 0)
+    {
+      /* If start_delay_s is 0, set the timer to start immediately */
+      ret = tx_timer_create(&automode_timer, "automode_T", automode_timer_callback, (ULONG) TX_NULL,
+                            1, 0, TX_AUTO_ACTIVATE);
+    }
+    else
+    {
+      /* If start_delay_s is not 0, set the timer to start after the specified delay */
     ret = tx_timer_create(&automode_timer, "automode_T", automode_timer_callback, (ULONG) TX_NULL,
                           (automode_model.start_delay_s) * 1000, 0, TX_AUTO_ACTIVATE);
+    }
     automode_set_started(true, NULL);
   }
   else

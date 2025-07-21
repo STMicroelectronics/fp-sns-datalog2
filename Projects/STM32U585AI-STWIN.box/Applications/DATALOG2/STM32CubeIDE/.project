@@ -1033,16 +1033,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/AppPowerModeHelper_vtbl.h</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Inc/BLE_Implementation.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/BLE_Implementation.h</locationURI>
-		</link>
-		<link>
-			<name>User/Core/Inc/BLE_Manager_Conf.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/BLE_Manager_Conf.h</locationURI>
-		</link>
-		<link>
 			<name>User/Core/Inc/DatalogAppTask.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/DatalogAppTask.h</locationURI>
@@ -1098,6 +1088,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/PnPLCompManager_conf.h</locationURI>
 		</link>
 		<link>
+			<name>User/Core/Inc/RTE_Components.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/RTE_Components.h</locationURI>
+		</link>
+		<link>
 			<name>User/Core/Inc/STWIN.box_conf.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/STWIN.box_conf.h</locationURI>
@@ -1128,11 +1123,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/app_messages_parser.h</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Inc/app_threadx.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/app_threadx.h</locationURI>
-		</link>
-		<link>
 			<name>User/Core/Inc/apperror.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/apperror.h</locationURI>
@@ -1148,9 +1138,19 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/automode.h</locationURI>
 		</link>
 		<link>
+			<name>User/Core/Inc/ble_implementation.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_implementation.h</locationURI>
+		</link>
+		<link>
 			<name>User/Core/Inc/ble_list_utils.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_list_utils.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Inc/ble_manager_conf.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_manager_conf.h</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Inc/ble_stream_class.h</name>
@@ -1208,11 +1208,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/AppPowerModeHelper.c</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Src/BLE_Implementation.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/BLE_Implementation.c</locationURI>
-		</link>
-		<link>
 			<name>User/Core/Src/DatalogAppTask.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/DatalogAppTask.c</locationURI>
@@ -1256,6 +1251,11 @@
 			<name>User/Core/Src/automode.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/automode.c</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Src/ble_implementation.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/ble_implementation.c</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Src/ble_stream_class.c</name>
@@ -1693,6 +1693,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/ilps22qs/ilps22qs_reg.h</locationURI>
 		</link>
 		<link>
+			<name>Drivers/BSP/Components/ilps28qsw/ilps28qsw_reg.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/ilps28qsw/ilps28qsw_reg.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/Components/ilps28qsw/ilps28qsw_reg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/ilps28qsw/ilps28qsw_reg.h</locationURI>
+		</link>
+		<link>
 			<name>Drivers/BSP/Components/ism330bx/ism330bx_reg.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/ism330bx/ism330bx_reg.c</locationURI>
@@ -1793,9 +1803,9 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/stts22h/stts22h_reg.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/BlueNRG-2/hci/bluenrg1_devConfig.c</name>
+			<name>Middlewares/ST/BlueNRG-2/hci/bluenrg1_dev_config.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/BlueNRG-2/hci/bluenrg1_devConfig.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/BlueNRG-2/hci/bluenrg1_dev_config.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/BlueNRG-2/hci/bluenrg1_events.c</name>
@@ -1988,64 +1998,64 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Src/PnPLCompManager.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_HighSpeedDataLog.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_high_speed_data_log.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_HighSpeedDataLog.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_high_speed_data_log.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_MachineLearningCore.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_machine_learning_core.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_MachineLearningCore.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_machine_learning_core.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_Manager.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_Manager.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_ManagerCommon.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager_common.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_ManagerCommon.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager_common.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_ManagerControl.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager_control.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_ManagerControl.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager_control.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_PnPLike.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_pn_p_like.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_PnPLike.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_pn_p_like.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_RawPnPLControlled.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_raw_pn_pl_controlled.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_RawPnPLControlled.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_raw_pn_pl_controlled.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Src/BLE_HighSpeedDataLog.c</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Src/ble_high_speed_data_log.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_HighSpeedDataLog.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/ble_high_speed_data_log.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Src/BLE_MachineLearningCore.c</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Src/ble_machine_learning_core.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_MachineLearningCore.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/ble_machine_learning_core.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Src/BLE_Manager.c</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Src/ble_manager.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_Manager.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/ble_manager.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Src/BLE_PnPLike.c</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Src/ble_pn_p_like.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_PnPLike.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/ble_pn_p_like.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Src/BLE_RawPnPLControlled.c</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Src/ble_raw_pn_pl_controlled.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_RawPnPLControlled.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/ble_raw_pn_pl_controlled.c</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Inc/drivers/BCAdcDriver.h</name>
@@ -2171,6 +2181,11 @@
 			<name>User/PnPL/AppModel/Inc/App_model_Ilps22qs_Press.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Ilps22qs_Press.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Ilps28qsw_Press.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Ilps28qsw_Press.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/AppModel/Inc/App_model_Imp23absu_Mic.h</name>
@@ -2328,6 +2343,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Ilps22qs_Press.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Ilps28qsw_Press.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Ilps28qsw_Press.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Src/App_model_Imp23absu_Mic.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Imp23absu_Mic.c</locationURI>
@@ -2478,6 +2498,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Ilps22qs_Press_PnPL.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Components/Inc/Ilps28qsw_Press_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Ilps28qsw_Press_PnPL.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Components/Inc/Imp23absu_Mic_PnPL.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Imp23absu_Mic_PnPL.h</locationURI>
@@ -2626,6 +2651,11 @@
 			<name>User/PnPL/Components/Src/Ilps22qs_Press_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Ilps22qs_Press_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Ilps28qsw_Press_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Ilps28qsw_Press_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Components/Src/Imp23absu_Mic_PnPL.c</name>
@@ -2801,6 +2831,16 @@
 			<name>User/eLooM_Components/SensorManager/Inc/ILPS22QSTask_vtbl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ILPS22QSTask_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/ILPS28QSWTask.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ILPS28QSWTask.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/ILPS28QSWTask_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ILPS28QSWTask_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Inc/IMP23ABSUTask.h</name>
@@ -3011,6 +3051,11 @@
 			<name>User/eLooM_Components/SensorManager/Src/ILPS22QSTask.c</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/ILPS22QSTask.c</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Src/ILPS28QSWTask.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/ILPS28QSWTask.c</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Src/IMP23ABSUTask.c</name>

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -77,7 +77,7 @@ char *iis2iclx_acc_get_key(void)
 
 uint8_t iis2iclx_acc_get_odr(pnpl_iis2iclx_acc_odr_t *enum_id)
 {
-  float odr = iis2iclx_acc_model.sensor_status->type.mems.odr;
+  float_t odr = iis2iclx_acc_model.sensor_status->type.mems.odr;
   if (odr < 13.0f)
   {
     *enum_id = pnpl_iis2iclx_acc_odr_hz12_5;
@@ -115,7 +115,7 @@ uint8_t iis2iclx_acc_get_odr(pnpl_iis2iclx_acc_odr_t *enum_id)
 
 uint8_t iis2iclx_acc_get_fs(pnpl_iis2iclx_acc_fs_t *enum_id)
 {
-  float fs = iis2iclx_acc_model.sensor_status->type.mems.fs;
+  float_t fs = iis2iclx_acc_model.sensor_status->type.mems.fs;
   if (fs < 1.0f)
   {
     *enum_id = pnpl_iis2iclx_acc_fs_g0_5;
@@ -159,14 +159,14 @@ uint8_t iis2iclx_acc_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_get_ioffset(float *value)
+uint8_t iis2iclx_acc_get_ioffset(float_t *value)
 {
   *value = iis2iclx_acc_model.stream_params.ioffset;
   /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_get_measodr(float *value)
+uint8_t iis2iclx_acc_get_measodr(float_t *value)
 {
   *value = iis2iclx_acc_model.sensor_status->type.mems.measured_odr;
   /* USER Code */
@@ -187,7 +187,7 @@ uint8_t iis2iclx_acc_get_sd_dps(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_acc_get_sensitivity(float *value)
+uint8_t iis2iclx_acc_get_sensitivity(float_t *value)
 {
   *value = iis2iclx_acc_model.sensor_status->type.mems.sensitivity;
   /* USER Code */
@@ -235,7 +235,7 @@ uint8_t iis2iclx_acc_set_odr(pnpl_iis2iclx_acc_odr_t enum_id, char **response_me
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_iis2iclx_acc_odr_hz12_5:
@@ -280,7 +280,7 @@ uint8_t iis2iclx_acc_set_fs(pnpl_iis2iclx_acc_fs_t enum_id, char **response_mess
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_iis2iclx_acc_fs_g0_5:

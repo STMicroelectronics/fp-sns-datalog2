@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -29,10 +29,16 @@
 #define SPIDRV_CFG_HARDWARE_PERIPHERALS_COUNT   2
 #define I2CDRV_CFG_HARDWARE_PERIPHERALS_COUNT   2
 
-#define LIS2DU12_FIFO_ENABLED 1
+
+//#define LIS2DU12_FIFO_ENABLED 1
 #define LSM6DSV16X_FIFO_ENABLED 1
 #define LSM6DSV16BX_FIFO_ENABLED 1
 #define LSM6DSV32X_FIFO_ENABLED 1
+#define LSM6DSV80X_FIFO_ENABLED 1
+#define LSM6DSV320X_FIFO_ENABLED 1
+
+#define LSM6DSV80X_MAX_WTM_LEVEL 100
+#define LSM6DSV320X_MAX_WTM_LEVEL 100
 
 //#define HSD_USE_DUMMY_DATA 1
 
@@ -84,6 +90,14 @@
 #define LSM6DSV32X_TASK_CFG_STACK_DEPTH           (TX_MINIMUM_STACK*8)
 #define LSM6DSV32X_TASK_CFG_PRIORITY              (8)
 
+// file LSM6DSV80XTask.c
+#define LSM6DSV80X_TASK_CFG_STACK_DEPTH           (TX_MINIMUM_STACK*8)
+#define LSM6DSV80X_TASK_CFG_PRIORITY              (8)
+
+// file LSM6DSV320XTask.c
+#define LSM6DSV320X_TASK_CFG_STACK_DEPTH           (TX_MINIMUM_STACK*8)
+#define LSM6DSV320X_TASK_CFG_PRIORITY              (8)
+
 // file H3LIS331DLXTask.c
 #define H3LIS331DL_TASK_CFG_STACK_DEPTH           (TX_MINIMUM_STACK*8)
 #define H3LIS331DL_TASK_CFG_PRIORITY              (8)
@@ -99,5 +113,6 @@
 // file SPIBusTask.c
 #define SPIBUS_TASK_CFG_STACK_DEPTH               (TX_MINIMUM_STACK*6)
 #define SPIBUS_TASK_CFG_PRIORITY                  (4)
+
 
 #endif /* SENSORMANAGERCONF_H_ */

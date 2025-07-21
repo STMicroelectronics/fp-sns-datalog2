@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    ble_const.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.3.0
-  * @date    20-July-2023
+  * @version 2.0.0
+  * @date    25-September-2024
   * @brief   Header file that includes BLE stack defines for APIs
   ******************************************************************************
   * @attention
@@ -21,11 +21,19 @@
 #ifndef __BLE_CONST_H__
 #define __BLE_CONST_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "ble_status.h"
 #include "bluenrg_lp_hal.h"
 #include "bluenrg_lp_gap.h"
 #include "bluenrg_lp_gatt_server.h"
 #include "link_layer.h"
 #include "sm.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __BLE_CONST_H__ */

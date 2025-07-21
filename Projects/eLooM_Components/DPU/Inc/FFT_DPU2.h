@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -51,7 +51,7 @@ typedef struct
                   *  sum it and averaged. In this case the FFT_DPU2 output will be the average FFT.
                   */
 
-  float overlap;            /** FFT input overlap expressed in percentage  between 0 and 1 */
+  float_t overlap;            /** FFT input overlap expressed in percentage  between 0 and 1 */
 
 
 } FFT_DPU2_Input_param_t;

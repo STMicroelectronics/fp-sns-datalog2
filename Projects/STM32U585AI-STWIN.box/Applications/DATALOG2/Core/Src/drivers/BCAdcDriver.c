@@ -37,7 +37,7 @@
 
 #define ADC_BATMS_RUP                   56000.0                 // divider upper resistor
 #define ADC_BATMS_RDOWN                 100000.0                // divider lower resistor
-#define ADC_BATMS_RATIO                 (float)((ADC_BATMS_RUP+ADC_BATMS_RDOWN)/ADC_BATMS_RDOWN)
+#define ADC_BATMS_RATIO                 (float_t)((ADC_BATMS_RUP+ADC_BATMS_RDOWN)/ADC_BATMS_RDOWN)
 
 
 /**
@@ -148,7 +148,7 @@ sys_error_code_t BCAdcDriver_GetValue(IDriver *_this, uint16_t *p_value)
   if (HAL_ADC_PollForConversion(p_adc, 10) == HAL_OK)
   {
     measured_voltage = __LL_ADC_CALC_DATA_TO_VOLTAGE(p_adc->Instance, ADC_VREF, HAL_ADC_GetValue(p_adc), LL_ADC_RESOLUTION_12B);
-    *p_value = (uint16_t)((float)(measured_voltage) * ADC_BATMS_RATIO);
+    *p_value = (uint16_t)((float_t)(measured_voltage) * ADC_BATMS_RATIO);
   }
   else
   {

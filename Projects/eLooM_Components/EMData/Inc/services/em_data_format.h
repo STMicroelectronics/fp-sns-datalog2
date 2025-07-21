@@ -31,6 +31,8 @@
   * - E_EM_INT32
   * - E_EM_UINT32
   * - E_EM_FLOAT
+  * - E_EM_INT24
+  * - E_EM_UINT24
   *
   * The `mode` specifies how the data are stored in memory. It can be:
   * - E_EM_MODE_NONE
@@ -40,7 +42,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -86,12 +88,14 @@ extern "C" {
 #define E_EM_UINT32                    0x04  /**< E_EM_UINT32 */
 #define E_EM_INT32                     0x05  /**< E_EM_INT32  */
 #define E_EM_FLOAT                     0x06  /**< E_EM_FLOAT  */
+#define E_EM_INT24                     0x07  /**< E_EM_INT24  */
+#define E_EM_UINT24                    0x08  /**< E_EM_UINT24 */
 #if 0
 #define E_EM_UINT64                    0x08  /**< E_EM_UINT64 */
 #define E_EM_INT64                     0x09  /**< E_EM_INT64  */
 #define E_EM_DOUBLE                    0x0A  /**< E_EM_DOUBLE */
 #endif
-#define EM_N_KNOWN_DATA_TYPE       7    /** Specifies the number of data type well known in the framework.*/
+#define EM_N_KNOWN_DATA_TYPE       9    /** Specifies the number of data type well known in the framework.*/
 
 /*
  * Specifies how the data are stored in memory.
@@ -176,6 +180,8 @@ struct _EMData
   *   - E_EM_INT32
   *   - E_EM_UINT32
   *   - E_EM_FLOAT
+  *   - E_EM_INT24
+  *
   *
   *   To use a new application defined type use the initialization function EMD_InitWithCustomType().
   * @param mode [IN] specifies how the data value are stored / interpreted. Valid value:
@@ -225,6 +231,8 @@ sys_error_code_t EMD_InitWithCustomType(EMData_t *p_data, uint8_t *p_payload, ui
   *   - E_EM_INT32
   *   - E_EM_UINT32
   *   - E_EM_FLOAT
+  *   - E_EM_INT24
+  *   - E_EM_UINT24
   *
   *   To use a new application defined type use the initialization function EMD_InitWithCustomType().
   * @param elements [IN] specifies the numbers of element for shape[0] (or dimension).
@@ -275,6 +283,8 @@ size_t EMD_GetElementSize(const EMData_t *p_data);
   *   - E_EM_INT32
   *   - E_EM_UINT32
   *   - E_EM_FLOAT
+  *   - E_EM_INT24
+  *   - E_EM_UINT24
   *
   * @param p_data [IN] specifies a pointer to a data object.
   * @return the type of the data.

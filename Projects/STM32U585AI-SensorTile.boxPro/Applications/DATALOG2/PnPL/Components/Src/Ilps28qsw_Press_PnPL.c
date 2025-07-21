@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -118,7 +118,7 @@ uint8_t Ilps28qsw_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seria
   json_object_dotset_number(JSON_Status, "ilps28qsw_press.samples_per_ts", temp_i);
   ilps28qsw_press_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "ilps28qsw_press.dim", temp_i);
-  float temp_f = 0;
+  float_t temp_f = 0;
   ilps28qsw_press_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "ilps28qsw_press.ioffset", temp_f);
   ilps28qsw_press_get_measodr(&temp_f);
@@ -427,8 +427,8 @@ uint8_t Ilps28qsw_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "ilps28qsw_press.st_ble_stream.press.multiply_factor"))
     {
-      float st_ble_stream__press_multiply_factor = (float)json_object_dotget_number(tempJSONObject,
-                                                                                    "ilps28qsw_press.st_ble_stream.press.multiply_factor");
+      float_t st_ble_stream__press_multiply_factor = (float_t)json_object_dotget_number(tempJSONObject,
+                                                     "ilps28qsw_press.st_ble_stream.press.multiply_factor");
       valid_property = true;
       ret = ilps28qsw_press_set_st_ble_stream__press_multiply_factor(st_ble_stream__press_multiply_factor, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -439,7 +439,7 @@ uint8_t Ilps28qsw_Press_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
       }
       else
       {
-        float old_st_ble_stream__press_multiply_factor;
+        float_t old_st_ble_stream__press_multiply_factor;
         ilps28qsw_press_get_st_ble_stream__press_multiply_factor(&old_st_ble_stream__press_multiply_factor);
         json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_st_ble_stream__press_multiply_factor);
         json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);

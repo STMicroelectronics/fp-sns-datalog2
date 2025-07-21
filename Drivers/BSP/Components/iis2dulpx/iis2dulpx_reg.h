@@ -2425,6 +2425,12 @@ typedef enum
   IIS2DULPX_BDR_XL_ODR_OFF         = 0x7,
 } iis2dulpx_bdr_xl_t;
 
+typedef enum
+{
+  IIS2DULPX_FIFO_EV_WTM           = 0x0,
+  IIS2DULPX_FIFO_EV_FULL          = 0x1,
+} iis2dulpx_fifo_event_t;
+
 typedef struct
 {
   iis2dulpx_operation_t operation;
@@ -2432,6 +2438,7 @@ typedef struct
   uint8_t xl_only                      : 1; /* only XL samples (16-bit) are stored in FIFO */
   uint8_t watermark                    : 7; /* (0 disable) max 127 @16bit, even and max 256 @8bit.*/
   uint8_t cfg_change_in_fifo           : 1;
+  iis2dulpx_fifo_event_t fifo_event      : 1; /* 0: FIFO watermark, 1: FIFO full */
   struct
   {
     iis2dulpx_dec_ts_t dec_ts; /* decimation for timestamp batching*/

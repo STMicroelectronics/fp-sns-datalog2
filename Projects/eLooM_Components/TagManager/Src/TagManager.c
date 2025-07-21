@@ -9,7 +9,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -31,7 +31,7 @@ static HSD_Tag_t TagList[HSD_MAX_TAGS_NUM];
 static uint8_t TagsN = 0;
 static _tm StartTime;
 
-double TMGetTimestamp(void);
+double_t TMGetTimestamp(void);
 
 sys_error_code_t TMInit(uint8_t n_sw_tags, uint8_t n_hw_tags)
 {
@@ -83,8 +83,8 @@ sys_error_code_t TMCalculateEndTime(char *end_time)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   _tm endTime = StartTime;
-  double timestamp_end = TMGetTimestamp();
-  int timestamp_int = (int) timestamp_end;
+  double_t timestamp_end = TMGetTimestamp();
+  int32_t timestamp_int = (int32_t) timestamp_end;
 
   endTime.tm_sec += timestamp_int;
   if (mktime(&endTime) == -1)
@@ -93,11 +93,11 @@ sys_error_code_t TMCalculateEndTime(char *end_time)
   }
   else
   {
-    double timestamp_dec = timestamp_end - (double) timestamp_int;
+    double_t timestamp_dec = timestamp_end - (double_t) timestamp_int;
     timestamp_dec = timestamp_dec * 1000.0;
     (void) sprintf(end_time, "%04d-%02d-%02dT%02d:%02d:%02d.%03dZ", endTime.tm_year, endTime.tm_mon + 1, endTime.tm_mday,
                    endTime.tm_hour, endTime.tm_min,
-                   endTime.tm_sec, (int) timestamp_dec);
+                   endTime.tm_sec, (int16_t) timestamp_dec);
     // WHY THIS +1 (in months) ???
     //  struct tm {
     //     int tm_sec;         /* seconds,  range 0 to 59          */
@@ -266,7 +266,7 @@ sys_error_code_t TMSetSWTag(bool status, uint8_t id)
     (void) snprintf(TagList[TagsN].label, HSD_TAGS_LABEL_LENGTH, "%s", SWTagClasses[id].label);
 
     _tm tagTime = StartTime;
-    int timestamp_int = (int) TagList[TagsN].timestamp;
+    int32_t timestamp_int = (int32_t) TagList[TagsN].timestamp;
     tagTime.tm_sec += timestamp_int;
 
     if (mktime(&tagTime) == -1)
@@ -275,12 +275,12 @@ sys_error_code_t TMSetSWTag(bool status, uint8_t id)
     }
     else
     {
-      double timestamp_dec = TagList[TagsN].timestamp - (double) timestamp_int;
+      double_t timestamp_dec = TagList[TagsN].timestamp - (double_t) timestamp_int;
       timestamp_dec = timestamp_dec * 1000.0;
       char local_timestamp[86];
       (void) sprintf(local_timestamp, "%04d-%02d-%02dT%02d:%02d:%02d.%03dZ", tagTime.tm_year, tagTime.tm_mon + 1,
                      tagTime.tm_mday, tagTime.tm_hour,
-                     tagTime.tm_min, tagTime.tm_sec, (int) timestamp_dec);
+                     tagTime.tm_min, tagTime.tm_sec, (int16_t) timestamp_dec);
       (void) memcpy(TagList[TagsN].abs_timestamp, local_timestamp, sizeof(TagList[TagsN].abs_timestamp) - 1);
       // WHY THIS +1 (in months) ???
       //  struct tm {
@@ -318,7 +318,7 @@ sys_error_code_t TMSetHWTag(bool status, uint8_t id)
     (void) snprintf(TagList[TagsN].label, HSD_TAGS_LABEL_LENGTH, "%s", HWTagClasses[id].label);
 
     _tm tagTime = StartTime;
-    int timestamp_int = (int) TagList[TagsN].timestamp;
+    int32_t timestamp_int = (int32_t) TagList[TagsN].timestamp;
     tagTime.tm_sec += timestamp_int;
 
     if (mktime(&tagTime) == -1)
@@ -327,12 +327,12 @@ sys_error_code_t TMSetHWTag(bool status, uint8_t id)
     }
     else
     {
-      double timestamp_dec = TagList[TagsN].timestamp - (double) timestamp_int;
+      double_t timestamp_dec = TagList[TagsN].timestamp - (double_t) timestamp_int;
       timestamp_dec = timestamp_dec * 1000.0;
       char local_timestamp[86];
       (void) sprintf(local_timestamp, "%04d-%02d-%02dT%02d:%02d:%02d.%03dZ", tagTime.tm_year, tagTime.tm_mon + 1,
                      tagTime.tm_mday, tagTime.tm_hour,
-                     tagTime.tm_min, tagTime.tm_sec, (int) timestamp_dec);
+                     tagTime.tm_min, tagTime.tm_sec, (int16_t) timestamp_dec);
       (void) memcpy(TagList[TagsN].abs_timestamp, local_timestamp, sizeof(TagList[TagsN].abs_timestamp) - 1);
       // WHY THIS +1 (in months) ???
       //  struct tm {
@@ -362,7 +362,7 @@ uint8_t TMGetTagListSize(void)
   return TagsN;
 }
 
-double TMGetTimestamp(void)
+double_t TMGetTimestamp(void)
 {
   return SysTsGetTimestampF(SysGetTimestampSrv());
 }

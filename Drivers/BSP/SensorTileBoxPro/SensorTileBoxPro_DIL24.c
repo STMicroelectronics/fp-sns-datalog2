@@ -568,9 +568,85 @@ int32_t BSP_DIL_SENSOR_Init(uint32_t Instance, uint32_t Functions)
         }
         break;
 #endif
-      default:
-        ret = BSP_ERROR_WRONG_PARAM;
+        //LSM6DSV80X
+#if (USE_DIL_SENSOR_LSM6DSV80X_0 == 1)
+      case LSM6DSV80X_0:
+        if (LSM6DSV80X_0_Probe(Functions) != BSP_ERROR_NONE)
+        {
+          return BSP_ERROR_NO_INIT;
+        }
+//      if (MotionDrv[Instance]->GetCapabilities(DilMotionCompObj[Instance], (void *)&cap_mot) != BSP_ERROR_NONE)
+        if (MotionDrv[Instance]->GetCapabilities(DilMotionCompObj[Instance], (void *)&cap_mot) != BSP_ERROR_NONE)
+        {
+          return BSP_ERROR_UNKNOWN_COMPONENT;
+        }
+        if (cap_mot.Acc == 1U)
+        {
+          component_functions |= MOTION_ACCELERO;
+        }
+        if (cap_mot.Gyro == 1U)
+        {
+          component_functions |= MOTION_GYRO;
+        }
+        if (cap_mot.Magneto == 1U)
+        {
+          component_functions |= MOTION_MAGNETO;
+        }
         break;
+#endif        
+          //ST1VAFE6AX
+#if (USE_DIL_SENSOR_ST1VAFE6AX_0 == 1)
+    case   ST1VAFE6AX_0:
+      if (  ST1VAFE6AX_0_Probe(Functions) != BSP_ERROR_NONE)
+      {
+        return BSP_ERROR_NO_INIT;
+      }
+      if (MotionDrv[Instance]->GetCapabilities(DilMotionCompObj[Instance], (void *)&cap_mot) != BSP_ERROR_NONE)
+      {
+        return BSP_ERROR_UNKNOWN_COMPONENT;
+      }
+      if (cap_mot.Acc == 1U)
+      {
+        component_functions |= MOTION_ACCELERO;
+      }
+      if (cap_mot.Gyro == 1U)
+      {
+        component_functions |= MOTION_GYRO;
+      }
+      if (cap_mot.Magneto == 1U)
+      {
+        component_functions |= MOTION_MAGNETO;
+      }
+      break;
+#endif
+      //ST1VAFE3BX
+#if (USE_DIL_SENSOR_ST1VAFE3BX_0 == 1)
+    case ST1VAFE3BX_0:
+      if (ST1VAFE3BX_0_Probe(Functions) != BSP_ERROR_NONE)
+      {
+        return BSP_ERROR_NO_INIT;
+      }
+      if (MotionDrv[Instance]->GetCapabilities(DilMotionCompObj[Instance], (void *)&cap_mot) != BSP_ERROR_NONE)
+      {
+        return BSP_ERROR_UNKNOWN_COMPONENT;
+      }
+      if (cap_mot.Acc == 1U)
+      {
+        component_functions |= MOTION_ACCELERO;
+      }
+      if (cap_mot.Gyro == 1U)
+      {
+        component_functions |= MOTION_GYRO;
+      }
+      if (cap_mot.Magneto == 1U)
+      {
+        component_functions |= MOTION_MAGNETO;
+      }
+      break;
+#endif
+    default:
+      ret = BSP_ERROR_WRONG_PARAM;
+      break;
     }
 
     if (ret != BSP_ERROR_NONE)
@@ -864,6 +940,52 @@ int32_t BSP_DIL_SENSOR_GetOutputDataRate(uint32_t Instance, uint32_t Functions, 
     ret = BSP_ERROR_FEATURE_NOT_SUPPORTED;
   }
 
+  return ret;
+}
+
+
+/**
+* @brief  Select Full Scale on a DIL24 sensor
+* @param  Instance: sensor instance to be used
+* @param  Functions: sensor functions. Could be :
+*         - DIL24_TEMPERATURE
+*         - DIL24_PRESSURE
+*         - DIL24_HUMIDITY
+*         - DIL24_GYRO
+*         - DIL24_ACCELERO
+*         - DIL24_MAGNETO
+*         - DIL24_TMOS // Not currently supported
+*         - DIL24_ACCELERO_HG
+* @retval BSP status
+*/
+int32_t BSP_DIL_SENSOR_SetFullScale(uint32_t Instance, uint32_t Functions, float full_scale)
+{
+  int32_t ret = BSP_ERROR_NONE;
+
+  /// to use the DIL24 functions set but use Functions right as before I make this check
+  if(Functions < 8){
+    /// ENVIRONMENTAL should not have a full scale
+  }else if(Functions < 64){
+    /// sensor is MOTION
+    Functions = Functions>>3;   /// to use the DIL24 functions set but get Functions right as for ENV/MOT
+    if ((MotionCtx[Instance].Functions & Functions) == Functions)
+    {
+      if (MotionFuncDrv[Instance][FunctionIndex[Functions]]->SetFullScale(DilMotionCompObj[Instance], full_scale) != BSP_ERROR_NONE)
+      {
+        ret = BSP_ERROR_COMPONENT_FAILURE;
+      }
+      else
+      {
+        ret = BSP_ERROR_NONE;
+      }
+    }
+    else
+    {
+      ret = BSP_ERROR_WRONG_PARAM;
+    }
+  }else{
+    ret = BSP_ERROR_FEATURE_NOT_SUPPORTED;
+  }
   return ret;
 }
 
@@ -1473,6 +1595,254 @@ static int32_t LSM6DSV16BX_0_Probe(uint32_t Functions)
 #endif
 
 
+
+#if (USE_DIL_SENSOR_LSM6DSV80X_0 == 1)
+/**
+  * @brief  Register Bus IOs for LSM6DSV16X instance
+  * @param  Functions Motion sensor functions. Could be :
+  *         - MOTION_GYRO and/or MOTION_ACCELERO
+  * @retval BSP status
+  */
+static int32_t LSM6DSV80X_0_Probe(uint32_t Functions)
+{
+  LSM6DSV80X_IO_t            io_ctx;
+  uint8_t                    id;
+  static LSM6DSV80X_Object_t lsm6dsv80x_obj_0;
+  LSM6DSV80X_Capabilities_t  cap;
+  int32_t                    ret = BSP_ERROR_NONE;
+
+  /* Configure the driver */
+
+  io_ctx.BusType     = LSM6DSV80X_I2C_BUS; /* I2C */
+  io_ctx.Address     = LSM6DSV80X_I2C_ADD_L;
+  io_ctx.Init        = BSP_I2C3_Init;
+  io_ctx.DeInit      = BSP_I2C3_DeInit;
+  io_ctx.ReadReg     = BSP_I2C3_ReadReg;
+  io_ctx.WriteReg    = BSP_I2C3_WriteReg;
+  io_ctx.GetTick     = BSP_GetTick;
+
+  if (LSM6DSV80X_RegisterBusIO(&lsm6dsv80x_obj_0, &io_ctx) != LSM6DSV80X_OK)
+  {
+    ret = BSP_ERROR_UNKNOWN_COMPONENT;
+  }
+  else if (LSM6DSV80X_ReadID(&lsm6dsv80x_obj_0, &id) != LSM6DSV80X_OK)
+  {
+    ret = BSP_ERROR_UNKNOWN_COMPONENT;
+  }
+  else if (id != LSM6DSV80X_ID)
+  {
+    ret = BSP_ERROR_UNKNOWN_COMPONENT;
+  }
+  else
+  {
+    (void)LSM6DSV80X_GetCapabilities(&lsm6dsv80x_obj_0, &cap);
+    MotionCtx[LSM6DSV80X_0].Functions = ((uint32_t)cap.Gyro) | ((uint32_t)cap.Acc << 1) | ((uint32_t)cap.Magneto << 2);
+
+    DilMotionCompObj[LSM6DSV80X_0] = &lsm6dsv80x_obj_0;
+    /* The second cast (void *) is added to bypass Misra R11.3 rule */
+    MotionDrv[LSM6DSV80X_0] = (MOTION_SENSOR_CommonDrv_t *)(void *)&LSM6DSV80X_COMMON_Driver;
+
+    if ((ret == BSP_ERROR_NONE) && ((Functions & MOTION_GYRO) == MOTION_GYRO) && (cap.Gyro == 1U))
+    {
+      /* The second cast (void *) is added to bypass Misra R11.3 rule */
+      MotionFuncDrv[LSM6DSV80X_0][FunctionIndex[MOTION_GYRO]] = (MOTION_SENSOR_FuncDrv_t *)(void *)&LSM6DSV80X_GYRO_Driver;
+
+      if (MotionDrv[LSM6DSV80X_0]->Init(DilMotionCompObj[LSM6DSV80X_0]) != LSM6DSV80X_OK)
+      {
+        ret = BSP_ERROR_COMPONENT_FAILURE;
+      }
+      else
+      {
+        ret = BSP_ERROR_NONE;
+      }
+    }
+    if ((ret == BSP_ERROR_NONE) && ((Functions & MOTION_ACCELERO) == MOTION_ACCELERO) && (cap.Acc == 1U))
+    {
+      /* The second cast (void *) is added to bypass Misra R11.3 rule */
+      MotionFuncDrv[LSM6DSV80X_0][FunctionIndex[MOTION_ACCELERO]] = (MOTION_SENSOR_FuncDrv_t *)(void *)&LSM6DSV80X_ACC_Driver;
+
+      if (MotionDrv[LSM6DSV80X_0]->Init(DilMotionCompObj[LSM6DSV80X_0]) != LSM6DSV80X_OK)
+      {
+        ret = BSP_ERROR_COMPONENT_FAILURE;
+      }
+      else
+      {
+        ret = BSP_ERROR_NONE;
+      }
+    }
+    if ((ret == BSP_ERROR_NONE) && ((Functions & MOTION_MAGNETO) == MOTION_MAGNETO))
+    {
+      /* Return an error if the application try to initialize a function not supported by the component */
+      ret = BSP_ERROR_COMPONENT_FAILURE;
+    }
+  }
+
+  return ret;
+}
+#endif
+
+
+#if (USE_DIL_SENSOR_ST1VAFE6AX_0 == 1)
+/**
+ * @brief  Register Bus IOs for ST1VAFE6AX instance
+ * @param  Functions Motion sensor functions. Could be :
+ *         - MOTION_GYRO and/or MOTION_ACCELERO
+ * @retval BSP status
+ */
+static int32_t ST1VAFE6AX_0_Probe(uint32_t Functions)
+{
+  ST1VAFE6AX_IO_t            io_ctx;
+  uint8_t                     id;
+  static ST1VAFE6AX_Object_t st1vafe6ax_obj_0;
+  ST1VAFE6AX_Capabilities_t  cap;
+  int32_t                     ret = BSP_ERROR_NONE;
+
+  /* Configure the driver */
+
+  io_ctx.BusType     = ST1VAFE6AX_I2C_BUS; /* I2C */
+  io_ctx.Address     = ST1VAFE6AX_I2C_ADD_L;
+  io_ctx.Init        = BSP_I2C3_Init;
+  io_ctx.DeInit      = BSP_I2C3_DeInit;
+  io_ctx.ReadReg     = BSP_I2C3_ReadReg;
+  io_ctx.WriteReg    = BSP_I2C3_WriteReg;
+  io_ctx.GetTick     = BSP_GetTick;
+
+  if (ST1VAFE6AX_RegisterBusIO(&st1vafe6ax_obj_0, &io_ctx) != ST1VAFE6AX_OK)
+  {
+    ret = BSP_ERROR_UNKNOWN_COMPONENT;
+  }
+  else if (ST1VAFE6AX_ReadID(&st1vafe6ax_obj_0, &id) != ST1VAFE6AX_OK)
+  {
+    ret = BSP_ERROR_UNKNOWN_COMPONENT;
+  }
+  else if (id != ST1VAFE6AX_ID)
+  {
+    ret = BSP_ERROR_UNKNOWN_COMPONENT;
+  }
+  else
+  {
+    (void)ST1VAFE6AX_GetCapabilities(&st1vafe6ax_obj_0, &cap);
+    MotionCtx[ST1VAFE6AX_0].Functions = ((uint32_t)cap.Gyro) | ((uint32_t)cap.Acc << 1) | ((uint32_t)cap.Magneto << 2);
+
+    DilMotionCompObj[ST1VAFE6AX_0] = &st1vafe6ax_obj_0;
+    /* The second cast (void *) is added to bypass Misra R11.3 rule */
+    MotionDrv[ST1VAFE6AX_0] = (MOTION_SENSOR_CommonDrv_t *)(void *)&ST1VAFE6AX_COMMON_Driver;
+
+    if ((ret == BSP_ERROR_NONE) && ((Functions & MOTION_GYRO) == MOTION_GYRO) && (cap.Gyro == 1U))
+    {
+      /* The second cast (void *) is added to bypass Misra R11.3 rule */
+      MotionFuncDrv[ST1VAFE6AX_0][FunctionIndex[MOTION_GYRO]] = (MOTION_SENSOR_FuncDrv_t *)(void *)&ST1VAFE6AX_GYRO_Driver;
+
+      if (MotionDrv[ST1VAFE6AX_0]->Init(DilMotionCompObj[ST1VAFE6AX_0]) != ST1VAFE6AX_OK)
+      {
+        ret = BSP_ERROR_COMPONENT_FAILURE;
+      }
+      else
+      {
+        ret = BSP_ERROR_NONE;
+      }
+    }
+    if ((ret == BSP_ERROR_NONE) && ((Functions & MOTION_ACCELERO) == MOTION_ACCELERO) && (cap.Acc == 1U))
+    {
+      /* The second cast (void *) is added to bypass Misra R11.3 rule */
+      MotionFuncDrv[ST1VAFE6AX_0][FunctionIndex[MOTION_ACCELERO]] = (MOTION_SENSOR_FuncDrv_t *)(void *)&ST1VAFE6AX_ACC_Driver;
+
+      if (MotionDrv[ST1VAFE6AX_0]->Init(DilMotionCompObj[ST1VAFE6AX_0]) != ST1VAFE6AX_OK)
+      {
+        ret = BSP_ERROR_COMPONENT_FAILURE;
+      }
+      else
+      {
+        ret = BSP_ERROR_NONE;
+      }
+    }
+    if ((ret == BSP_ERROR_NONE) && ((Functions & MOTION_MAGNETO) == MOTION_MAGNETO))
+    {
+      /* Return an error if the application try to initialize a function not supported by the component */
+      ret = BSP_ERROR_COMPONENT_FAILURE;
+    }
+  }
+
+  return ret;
+}
+#endif
+
+
+
+#if (USE_DIL_SENSOR_ST1VAFE3BX_0 == 1)
+/**
+ * @brief  Register Bus IOs for ST1VAFE3BX instance
+ * @param  Functions Motion sensor functions. Could be :
+ *         - MOTION_GYRO and/or MOTION_ACCELERO
+ * @retval BSP status
+ */
+static int32_t ST1VAFE3BX_0_Probe(uint32_t Functions)
+{
+  ST1VAFE3BX_IO_t            io_ctx;
+  uint8_t                     id;
+  static ST1VAFE3BX_Object_t st1vafe3bx_obj_0;
+  ST1VAFE3BX_Capabilities_t  cap;
+  int32_t                     ret = BSP_ERROR_NONE;
+
+  /* Configure the driver */
+
+  io_ctx.BusType     = ST1VAFE3BX_I2C_BUS; /* I2C */
+  io_ctx.Address     = ST1VAFE3BX_I2C_ADD_L;
+  io_ctx.Init        = BSP_I2C3_Init;
+  io_ctx.DeInit      = BSP_I2C3_DeInit;
+  io_ctx.ReadReg     = BSP_I2C3_ReadReg;
+  io_ctx.WriteReg    = BSP_I2C3_WriteReg;
+  io_ctx.GetTick     = BSP_GetTick;
+  io_ctx.Delay       = HAL_Delay;
+
+  if (ST1VAFE3BX_RegisterBusIO(&st1vafe3bx_obj_0, &io_ctx) != ST1VAFE3BX_OK)
+  {
+    ret = BSP_ERROR_UNKNOWN_COMPONENT;
+  }
+  else if (ST1VAFE3BX_ReadID(&st1vafe3bx_obj_0, &id) != ST1VAFE3BX_OK)
+  {
+    ret = BSP_ERROR_UNKNOWN_COMPONENT;
+  }
+  else if (id != ST1VAFE3BX_ID)
+  {
+    ret = BSP_ERROR_UNKNOWN_COMPONENT;
+  }
+  else
+  {
+    (void)ST1VAFE3BX_GetCapabilities(&st1vafe3bx_obj_0, &cap);
+    MotionCtx[ST1VAFE3BX_0].Functions = ((uint32_t)cap.Gyro) | ((uint32_t)cap.Acc << 1) | ((uint32_t)cap.Magneto << 2);
+
+    DilMotionCompObj[ST1VAFE3BX_0] = &st1vafe3bx_obj_0;
+    /* The second cast (void *) is added to bypass Misra R11.3 rule */
+    MotionDrv[ST1VAFE3BX_0] = (MOTION_SENSOR_CommonDrv_t *)(void *)&ST1VAFE3BX_COMMON_Driver;
+
+    
+    if ((ret == BSP_ERROR_NONE) && ((Functions & MOTION_ACCELERO) == MOTION_ACCELERO) && (cap.Acc == 1U))
+    {
+      /* The second cast (void *) is added to bypass Misra R11.3 rule */
+      MotionFuncDrv[ST1VAFE3BX_0][FunctionIndex[MOTION_ACCELERO]] = (MOTION_SENSOR_FuncDrv_t *)(void *)&ST1VAFE3BX_ACC_Driver;
+
+      if (MotionDrv[ST1VAFE3BX_0]->Init(DilMotionCompObj[ST1VAFE3BX_0]) != ST1VAFE3BX_OK)
+      {
+        ret = BSP_ERROR_COMPONENT_FAILURE;
+      }
+      else
+      {
+        ret = BSP_ERROR_NONE;
+      }
+    }
+    if ((ret == BSP_ERROR_NONE) && ((Functions & MOTION_MAGNETO) == MOTION_MAGNETO))
+    {
+      /* Return an error if the application try to initialize a function not supported by the component */
+      ret = BSP_ERROR_COMPONENT_FAILURE;
+    }
+  }
+
+  return ret;
+}
+#endif
+
+
 #if (USE_DIL_SENSOR_STHS34PF80_0 == 1)
 /**
   * @brief  Register Bus IOs for STHS34PF80 instance
@@ -1645,6 +2015,108 @@ int32_t BSP_DIL_TMOS_SENSOR_CompensationDeInit(uint32_t Instance)
 
 #endif
 
+/**
+  * @brief  Get DIL24 sensor data
+  * @param  Instance  sensor instance to be used
+  * @param  Data pointer to sensor output
+  * @retval BSP status
+  */
+int32_t BSP_MOTION_SENSOR_ACC_HG_GetAxes(uint32_t Instance, BSP_DIL24_Data_t *Data)
+{ //custom read function for Acc HG 80x
+  int32_t ret = BSP_ERROR_NONE;
+  switch (Instance)
+  {
+#if (USE_DIL_SENSOR_LSM6DSV80X_0 == 1)
+    case LSM6DSV80X_0:
+     
+      if (LSM6DSV80X_ACC_HG_GetAxes(DilMotionCompObj[Instance], (LSM6DSV80X_Axes_t*)&Data->accHG) != BSP_ERROR_NONE)
+      {
+        ret = BSP_ERROR_COMPONENT_FAILURE;
+      }
+      else
+      {
+        ret = BSP_ERROR_NONE;
+      }
+      break;
+#endif /* USE_DIL_SENSOR_LSM6DSV80X_0 == 1 */
+
+    default:
+      ret = BSP_ERROR_WRONG_PARAM;
+      break;
+  }
+  
+  
+  
+  return ret;
+}
+
+/**
+  * @brief  Set FS HigG value
+  * @param  Instance the device instance
+  * @param  Odr FIFO ODR value
+  * @retval BSP status
+  */
+int32_t BSP_MOTION_SENSOR_ACC_HG_SetOutputDataRate(uint32_t Instance, float_t Odr)
+{
+  int32_t ret;
+
+  switch (Instance)
+  {
+
+#if (USE_DIL_SENSOR_LSM6DSV80X_0 == 1)
+    case LSM6DSV80X_0:
+      if (LSM6DSV80X_ACC_HG_SetOutputDataRate(DilMotionCompObj[Instance], Odr) != BSP_ERROR_NONE)
+      {
+        ret = BSP_ERROR_COMPONENT_FAILURE;
+      }
+      else
+      {
+        ret = BSP_ERROR_NONE;
+      }
+      break;
+#endif /* USE_DIL_SENSOR_LSM6DSV80X_0 == 1 */
+
+    default:
+      ret = BSP_ERROR_WRONG_PARAM;
+      break;
+  }
+
+  return ret;
+}
+
+/**
+  * @brief  Set FS HigG value
+  * @param  Instance the device instance
+  * @param  Odr FIFO ODR value
+  * @retval BSP status
+  */
+int32_t BSP_MOTION_SENSOR_ACC_HG_SetFullScale(uint32_t Instance, int32_t FullScale)
+{
+  int32_t ret;
+
+  switch (Instance)
+  {
+
+#if (USE_DIL_SENSOR_LSM6DSV80X_0 == 1)
+    case LSM6DSV80X_0:
+      if (LSM6DSV80X_ACC_HG_SetFullScale(DilMotionCompObj[Instance], FullScale) != BSP_ERROR_NONE)
+      {
+        ret = BSP_ERROR_COMPONENT_FAILURE;
+      }
+      else
+      {
+        ret = BSP_ERROR_NONE;
+      }
+      break;
+#endif /* USE_DIL_SENSOR_LSM6DSV80X_0 == 1 */
+
+    default:
+      ret = BSP_ERROR_WRONG_PARAM;
+      break;
+  }
+
+  return ret;
+}
 
 //uint8_t supported_adapter_address[N_SUPPORTED_ADAPTERS-1] = {STHS34PF80_I2C_ADD,LSM6DSO32_I2C_ADD_L}; /// -1 because sensirion has no address
 //adapter_data_t adapter;

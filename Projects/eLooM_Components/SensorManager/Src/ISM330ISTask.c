@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -967,7 +967,7 @@ IEventSrc *ISM330ISTask_vtblIspuGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_ispu_event_src;
 }
 
-sys_error_code_t ISM330ISTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t ISM330ISTask_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -989,20 +989,20 @@ sys_error_code_t ISM330ISTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measu
   return res;
 }
 
-float ISM330ISTask_vtblAccGetFS(ISensorMems_t *_this)
+float_t ISM330ISTask_vtblAccGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   ISM330ISTask *p_if_owner = (ISM330ISTask *)((uint32_t) _this - offsetof(ISM330ISTask, acc_sensor_if));
-  float res = p_if_owner->acc_sensor_status.type.mems.fs;
+  float_t res = p_if_owner->acc_sensor_status.type.mems.fs;
 
   return res;
 }
 
-float ISM330ISTask_vtblAccGetSensitivity(ISensorMems_t *_this)
+float_t ISM330ISTask_vtblAccGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   ISM330ISTask *p_if_owner = (ISM330ISTask *)((uint32_t) _this - offsetof(ISM330ISTask, acc_sensor_if));
-  float res = p_if_owner->acc_sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->acc_sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -1016,7 +1016,7 @@ EMData_t ISM330ISTask_vtblAccGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t ISM330ISTask_vtblGyroGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t ISM330ISTask_vtblGyroGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -1038,20 +1038,20 @@ sys_error_code_t ISM330ISTask_vtblGyroGetODR(ISensorMems_t *_this, float *p_meas
   return res;
 }
 
-float ISM330ISTask_vtblGyroGetFS(ISensorMems_t *_this)
+float_t ISM330ISTask_vtblGyroGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   ISM330ISTask *p_if_owner = (ISM330ISTask *)((uint32_t) _this - offsetof(ISM330ISTask, gyro_sensor_if));
-  float res = p_if_owner->gyro_sensor_status.type.mems.fs;
+  float_t res = p_if_owner->gyro_sensor_status.type.mems.fs;
 
   return res;
 }
 
-float ISM330ISTask_vtblGyroGetSensitivity(ISensorMems_t *_this)
+float_t ISM330ISTask_vtblGyroGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   ISM330ISTask *p_if_owner = (ISM330ISTask *)((uint32_t) _this - offsetof(ISM330ISTask, gyro_sensor_if));
-  float res = p_if_owner->gyro_sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->gyro_sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -1065,7 +1065,7 @@ EMData_t ISM330ISTask_vtblGyroGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t ISM330ISTask_vtblIspuGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t ISM330ISTask_vtblIspuGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -1087,7 +1087,7 @@ sys_error_code_t ISM330ISTask_vtblIspuGetODR(ISensorMems_t *_this, float *p_meas
   return res;
 }
 
-float ISM330ISTask_vtblIspuGetFS(ISensorMems_t *_this)
+float_t ISM330ISTask_vtblIspuGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   /* ISPU does not support this virtual function.*/
@@ -1096,7 +1096,7 @@ float ISM330ISTask_vtblIspuGetFS(ISensorMems_t *_this)
   return SYS_INVALID_FUNC_CALL_ERROR_CODE;
 }
 
-float ISM330ISTask_vtblIspuGetSensitivity(ISensorMems_t *_this)
+float_t ISM330ISTask_vtblIspuGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
 
@@ -1117,7 +1117,7 @@ EMData_t ISM330ISTask_vtblIspuGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t ISM330ISTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t ISM330ISTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1163,7 +1163,7 @@ sys_error_code_t ISM330ISTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = ISM330ISTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1171,7 +1171,7 @@ sys_error_code_t ISM330ISTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t ISM330ISTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t ISM330ISTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1210,7 +1210,7 @@ sys_error_code_t ISM330ISTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) fs
+      .sensorMessage.fParam = (float_t) fs
     };
     res = ISM330ISTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1565,10 +1565,10 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
         res = ISM330ISTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
-          if (p_obj->first_data_ready == 7)
+          if (p_obj->first_data_ready >= p_obj->first_data_ready_threshold)
           {
             // notify the listeners...
-            double timestamp = report.sensorDataReadyMessage.fTimestamp;
+            double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
 
             /* Create a bidimensional data interleaved [m x 3], m is the number of samples (1 in this case)
              * [X0, Y0, Z0]
@@ -1576,11 +1576,11 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
             if ((p_obj->acc_sensor_status.is_active) && (p_obj->acc_samples_count != 0))
             {
               DataEvent_t evt_acc;
-              double delta_timestamp = timestamp - p_obj->acc_prev_timestamp;
+              double_t delta_timestamp = timestamp - p_obj->acc_prev_timestamp;
               p_obj->acc_prev_timestamp = timestamp;
 
               /* update measuredODR */
-              p_obj->acc_sensor_status.type.mems.measured_odr = (float)p_obj->acc_samples_count / (float)delta_timestamp;
+              p_obj->acc_sensor_status.type.mems.measured_odr = (float_t)p_obj->acc_samples_count / (float_t)delta_timestamp;
 
               EMD_Init(&p_obj->data_acc, p_obj->p_acc_sample, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->acc_samples_count, 3);
               DataEventInit((IEvent *) &evt_acc, p_obj->p_acc_event_src, &p_obj->data_acc, timestamp, p_obj->acc_id);
@@ -1590,11 +1590,11 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
             if ((p_obj->gyro_sensor_status.is_active) && (p_obj->gyro_samples_count != 0))
             {
               DataEvent_t evt_gyro;
-              double delta_timestamp = timestamp - p_obj->gyro_prev_timestamp;
+              double_t delta_timestamp = timestamp - p_obj->gyro_prev_timestamp;
               p_obj->gyro_prev_timestamp = timestamp;
 
               /* update measuredODR */
-              p_obj->gyro_sensor_status.type.mems.measured_odr = (float)p_obj->gyro_samples_count / (float)delta_timestamp;
+              p_obj->gyro_sensor_status.type.mems.measured_odr = (float_t)p_obj->gyro_samples_count / (float_t)delta_timestamp;
 
               EMD_Init(&p_obj->data_gyro, p_obj->p_gyro_sample, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->gyro_samples_count, 3);
               DataEventInit((IEvent *) &evt_gyro, p_obj->p_gyro_event_src, &p_obj->data_gyro, timestamp, p_obj->gyro_id);
@@ -1602,7 +1602,7 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
               IEventSrcSendEvent(p_obj->p_gyro_event_src, (IEvent *) &evt_gyro, NULL);
             }
 
-            SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("ISM330IS: ts = %f\r\n", (float)timestamp));
+            SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("ISM330IS: ts = %f\r\n", (float_t)timestamp));
           }
           else
           {
@@ -1618,7 +1618,7 @@ static sys_error_code_t ISM330ISTaskExecuteStepDatalog(AManagedTask *_this)
         if (!SYS_IS_ERROR_CODE(res))
         {
           // notify the listeners...
-          double timestamp = report.sensorDataReadyMessage.fTimestamp;
+          double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
 
           if (p_obj->ispu_enable)
           {
@@ -1791,10 +1791,8 @@ static sys_error_code_t ISM330ISTaskSensorInit(ISM330ISTask *_this)
   ism330is_xl_data_rate_t ism330is_odr_xl = ISM330IS_XL_ODR_OFF;
   ism330is_gy_data_rate_t ism330is_odr_g = ISM330IS_GY_ODR_OFF;
   int32_t ret_val = 0;
-  ism330is_pin_int2_route_t int2_route =
-  {
-    0
-  };
+//  ism330is_pin_int1_route_t int1_route = {0};
+  ism330is_pin_int2_route_t int2_route = {0};
 
   ret_val = ism330is_device_id_get(p_sensor_drv, (uint8_t *) &reg0);
   if (!ret_val)
@@ -1805,7 +1803,37 @@ static sys_error_code_t ISM330ISTaskSensorInit(ISM330ISTask *_this)
 
 //  ism330is_software_reset(p_sensor_drv); /* TODO: avoid reset: reset also sensor ODR --> break ISPU */
   ism330is_mem_bank_set(p_sensor_drv, ISM330IS_MAIN_MEM_BANK);
-  ism330is_ui_i2c_mode_set(p_sensor_drv, ISM330IS_I2C_DISABLE);
+
+//  ism330is_pin_int1_route_get(p_sensor_drv, &int1_route);
+  ism330is_pin_int2_route_get(p_sensor_drv, &int2_route);
+  if (_this->p_irq_config != NULL)
+  {
+    if (_this->acc_sensor_status.is_active && _this->gyro_sensor_status.is_active) /* Both subSensor is active */
+    {
+      int2_route.drdy_xl = 1;
+      int2_route.drdy_gy = 1;
+    }
+    else if (_this->acc_sensor_status.is_active)
+    {
+      int2_route.drdy_xl = 1;
+      int2_route.drdy_gy = 0;
+    }
+    else
+    {
+      int2_route.drdy_gy = 1;
+      int2_route.drdy_xl = 0;
+    }
+  }
+  else
+  {
+    int2_route.drdy_xl = 0;
+    int2_route.drdy_gy = 0;
+  }
+
+  if (_this->ispu_enable == false)
+  {
+    ism330is_pin_int2_route_set(p_sensor_drv, int2_route);
+  }
 
   /* AXL fs */
   if (_this->acc_sensor_status.type.mems.fs < 3.0f)
@@ -1845,131 +1873,103 @@ static sys_error_code_t ISM330ISTaskSensorInit(ISM330ISTask *_this)
     ism330is_gy_full_scale_set(p_sensor_drv, ISM330IS_2000dps);
   }
 
-  if (_this->acc_sensor_status.type.mems.odr < 13.0f)
-  {
-    ism330is_odr_xl = ISM330IS_XL_ODR_AT_12Hz5_HP;
-  }
-  else if (_this->acc_sensor_status.type.mems.odr < 27.0f)
-  {
-    ism330is_odr_xl = ISM330IS_XL_ODR_AT_26H_HP;
-  }
-  else if (_this->acc_sensor_status.type.mems.odr < 53.0f)
-  {
-    ism330is_odr_xl = ISM330IS_XL_ODR_AT_52Hz_HP;
-  }
-  else if (_this->acc_sensor_status.type.mems.odr < 105.0f)
-  {
-    ism330is_odr_xl = ISM330IS_XL_ODR_AT_104Hz_HP;
-  }
-  else if (_this->acc_sensor_status.type.mems.odr < 209.0f)
-  {
-    ism330is_odr_xl = ISM330IS_XL_ODR_AT_208Hz_HP;
-  }
-  else if (_this->acc_sensor_status.type.mems.odr < 417.0f)
-  {
-    ism330is_odr_xl = ISM330IS_XL_ODR_AT_416Hz_HP;
-  }
-  else if (_this->acc_sensor_status.type.mems.odr < 834.0f)
-  {
-    ism330is_odr_xl = ISM330IS_XL_ODR_AT_833Hz_HP;
-  }
-  else if (_this->acc_sensor_status.type.mems.odr < 1668.0f)
-  {
-    ism330is_odr_xl = ISM330IS_XL_ODR_AT_1667Hz_HP;
-  }
-  else if (_this->acc_sensor_status.type.mems.odr < 3334.0f)
-  {
-    ism330is_odr_xl = ISM330IS_XL_ODR_AT_3333Hz_HP;
-  }
-  else
-  {
-    ism330is_odr_xl = ISM330IS_XL_ODR_AT_6667Hz_HP;
-  }
-
-  if (_this->gyro_sensor_status.type.mems.odr < 13.0f)
-  {
-    ism330is_odr_g = ISM330IS_GY_ODR_AT_12Hz5_HP;
-  }
-  else if (_this->gyro_sensor_status.type.mems.odr < 27.0f)
-  {
-    ism330is_odr_g = ISM330IS_GY_ODR_AT_26H_HP;
-  }
-  else if (_this->gyro_sensor_status.type.mems.odr < 53.0f)
-  {
-    ism330is_odr_g = ISM330IS_GY_ODR_AT_52Hz_HP;
-  }
-  else if (_this->gyro_sensor_status.type.mems.odr < 105.0f)
-  {
-    ism330is_odr_g = ISM330IS_GY_ODR_AT_104Hz_HP;
-  }
-  else if (_this->gyro_sensor_status.type.mems.odr < 209.0f)
-  {
-    ism330is_odr_g = ISM330IS_GY_ODR_AT_208Hz_HP;
-  }
-  else if (_this->gyro_sensor_status.type.mems.odr < 417.0f)
-  {
-    ism330is_odr_g = ISM330IS_GY_ODR_AT_416Hz_HP;
-  }
-  else if (_this->gyro_sensor_status.type.mems.odr < 834.0f)
-  {
-    ism330is_odr_g = ISM330IS_GY_ODR_AT_833Hz_HP;
-  }
-  else if (_this->gyro_sensor_status.type.mems.odr < 1668.0f)
-  {
-    ism330is_odr_g = ISM330IS_GY_ODR_AT_1667Hz_HP;
-  }
-  else if (_this->gyro_sensor_status.type.mems.odr < 3334.0f)
-  {
-    ism330is_odr_g = ISM330IS_GY_ODR_AT_3333Hz_HP;
-  }
-  else
-  {
-    ism330is_odr_g = ISM330IS_GY_ODR_AT_6667Hz_HP;
-  }
-
+  /* AXL ODR */
   if (_this->acc_sensor_status.is_active)
   {
+    if (_this->acc_sensor_status.type.mems.odr < 13.0f)
+    {
+      ism330is_odr_xl = ISM330IS_XL_ODR_AT_12Hz5_HP;
+    }
+    else if (_this->acc_sensor_status.type.mems.odr < 27.0f)
+    {
+      ism330is_odr_xl = ISM330IS_XL_ODR_AT_26H_HP;
+    }
+    else if (_this->acc_sensor_status.type.mems.odr < 53.0f)
+    {
+      ism330is_odr_xl = ISM330IS_XL_ODR_AT_52Hz_HP;
+    }
+    else if (_this->acc_sensor_status.type.mems.odr < 105.0f)
+    {
+      ism330is_odr_xl = ISM330IS_XL_ODR_AT_104Hz_HP;
+    }
+    else if (_this->acc_sensor_status.type.mems.odr < 209.0f)
+    {
+      ism330is_odr_xl = ISM330IS_XL_ODR_AT_208Hz_HP;
+    }
+    else if (_this->acc_sensor_status.type.mems.odr < 417.0f)
+    {
+      ism330is_odr_xl = ISM330IS_XL_ODR_AT_416Hz_HP;
+    }
+    else if (_this->acc_sensor_status.type.mems.odr < 834.0f)
+    {
+      ism330is_odr_xl = ISM330IS_XL_ODR_AT_833Hz_HP;
+    }
+    else if (_this->acc_sensor_status.type.mems.odr < 1668.0f)
+    {
+      ism330is_odr_xl = ISM330IS_XL_ODR_AT_1667Hz_HP;
+    }
+    else if (_this->acc_sensor_status.type.mems.odr < 3334.0f)
+    {
+      ism330is_odr_xl = ISM330IS_XL_ODR_AT_3333Hz_HP;
+    }
+    else
+    {
+      ism330is_odr_xl = ISM330IS_XL_ODR_AT_6667Hz_HP;
+    }
     ism330is_xl_data_rate_set(p_sensor_drv, ism330is_odr_xl);
   }
   else
   {
     ism330is_xl_data_rate_set(p_sensor_drv, ISM330IS_XL_ODR_OFF);
   }
-
+  /* GYRO ODR */
   if (_this->gyro_sensor_status.is_active)
   {
+    if (_this->gyro_sensor_status.type.mems.odr < 13.0f)
+    {
+      ism330is_odr_g = ISM330IS_GY_ODR_AT_12Hz5_HP;
+    }
+    else if (_this->gyro_sensor_status.type.mems.odr < 27.0f)
+    {
+      ism330is_odr_g = ISM330IS_GY_ODR_AT_26H_HP;
+    }
+    else if (_this->gyro_sensor_status.type.mems.odr < 53.0f)
+    {
+      ism330is_odr_g = ISM330IS_GY_ODR_AT_52Hz_HP;
+    }
+    else if (_this->gyro_sensor_status.type.mems.odr < 105.0f)
+    {
+      ism330is_odr_g = ISM330IS_GY_ODR_AT_104Hz_HP;
+    }
+    else if (_this->gyro_sensor_status.type.mems.odr < 209.0f)
+    {
+      ism330is_odr_g = ISM330IS_GY_ODR_AT_208Hz_HP;
+    }
+    else if (_this->gyro_sensor_status.type.mems.odr < 417.0f)
+    {
+      ism330is_odr_g = ISM330IS_GY_ODR_AT_416Hz_HP;
+    }
+    else if (_this->gyro_sensor_status.type.mems.odr < 834.0f)
+    {
+      ism330is_odr_g = ISM330IS_GY_ODR_AT_833Hz_HP;
+    }
+    else if (_this->gyro_sensor_status.type.mems.odr < 1668.0f)
+    {
+      ism330is_odr_g = ISM330IS_GY_ODR_AT_1667Hz_HP;
+    }
+    else if (_this->gyro_sensor_status.type.mems.odr < 3334.0f)
+    {
+      ism330is_odr_g = ISM330IS_GY_ODR_AT_3333Hz_HP;
+    }
+    else
+    {
+      ism330is_odr_g = ISM330IS_GY_ODR_AT_6667Hz_HP;
+    }
     ism330is_gy_data_rate_set(p_sensor_drv, ism330is_odr_g);
   }
   else
   {
     ism330is_gy_data_rate_set(p_sensor_drv, ISM330IS_GY_ODR_OFF);
-  }
-
-  if (_this->p_irq_config != NULL)
-  {
-    if (_this->acc_sensor_status.is_active && _this->gyro_sensor_status.is_active) /* Both subSensor is active */
-    {
-      int2_route.drdy_xl = 1;
-      int2_route.drdy_gy = 1;
-    }
-    else if (_this->acc_sensor_status.is_active)
-    {
-      int2_route.drdy_xl = 1;
-    }
-    else
-    {
-      int2_route.drdy_gy = 1;
-    }
-  }
-  else
-  {
-    int2_route.drdy_xl = 0;
-    int2_route.drdy_gy = 0;
-  }
-
-  if (_this->ispu_enable == false)
-  {
-    ism330is_pin_int2_route_set(p_sensor_drv, int2_route);
   }
 
   if ((_this->acc_sensor_status.is_active) && (_this->gyro_sensor_status.is_active))
@@ -1990,10 +1990,19 @@ static sys_error_code_t ISM330ISTaskSensorInit(ISM330ISTask *_this)
   else
   {
   }
-
   _this->ism330is_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->ism330is_task_cfg_timer_period_ms);
-
   _this->samples_per_it = 1;
+
+  _this->first_data_ready_threshold = (uint16_t)((_this->acc_sensor_status.type.mems.odr > _this->gyro_sensor_status.type.mems.odr ? _this->acc_sensor_status.type.mems.odr : _this->gyro_sensor_status.type.mems.odr) * (0.070f));
+  if (_this->acc_sensor_status.type.mems.odr > 833.0f || _this->gyro_sensor_status.type.mems.odr > 833.0f)
+  {
+    _this->first_data_ready_threshold += 540;
+  }
+  else
+  {
+    _this->first_data_ready_threshold += 4;
+  }
+
   return res;
 }
 
@@ -2187,7 +2196,7 @@ static sys_error_code_t ISM330ISTaskSensorSetODR(ISM330ISTask *_this, SMMessage 
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -2336,7 +2345,7 @@ static sys_error_code_t ISM330ISTaskSensorSetFS(ISM330ISTask *_this, SMMessage r
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float fs = (float) report.sensorMessage.fParam;
+  float_t fs = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   /* Changing fs must disable ISPU sensor: ISPU can work properly only when setup from UCF */
@@ -2667,7 +2676,7 @@ static sys_error_code_t ISM330IS_ODR_Sync(ISM330ISTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  float odr = 0.0f;
+  float_t odr = 0.0f;
   ism330is_xl_data_rate_t ism330is_odr_xl;
   if (ism330is_xl_data_rate_get(p_sensor_drv, &ism330is_odr_xl) == 0)
   {
@@ -2786,7 +2795,7 @@ static sys_error_code_t ISM330IS_FS_Sync(ISM330ISTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  float full_scale = 2.0;
+  float_t full_scale = 2.0;
   ism330is_xl_full_scale_t fs_xl;
   if (ism330is_xl_full_scale_get(p_sensor_drv, &fs_xl) == 0)
   {

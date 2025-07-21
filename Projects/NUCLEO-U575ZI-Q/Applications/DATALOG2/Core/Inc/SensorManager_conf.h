@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    SensorManager_conf_template.h
+  * @file    SensorManager_conf.h
   * @author  SRA
   * @brief   Global System configuration file
   *
@@ -8,13 +8,11 @@
   * convenience. This file override the default configuration value, and it is
   * used in the "Preinclude file" section of the "compiler > prepocessor"
   * options.
-  * This file must be moved in the application folder by the user
-  * and renamed 'SensorManager_conf'
   *
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -63,5 +61,6 @@
 // file SPIBusTask.c
 #define SPIBUS_TASK_CFG_STACK_DEPTH               (TX_MINIMUM_STACK*6)
 #define SPIBUS_TASK_CFG_PRIORITY                  (4)
+
 
 #endif /* SENSORMANAGERCONF_H_ */

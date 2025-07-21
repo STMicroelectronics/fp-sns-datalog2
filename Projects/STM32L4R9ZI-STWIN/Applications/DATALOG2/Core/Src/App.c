@@ -1,13 +1,9 @@
 /**
   ******************************************************************************
   * @file    App.c
-  * @author  SRA - GPM
-  *
-  *
-  *
+  * @author  SRA
   * @brief   Define the Application main entry points
   *
-  * ## Introduction
   *
   * This file is the main entry point for the user code.
   *
@@ -28,33 +24,18 @@
   * resources, if any - MyTask_vtblHardwareInit() - and its software
   * resources - MyTask_vtblOnCreateTask().
   *
-  * ## About this demo
-  *
-  * This is the most simple eLooM application. It shows how to setup an eLooM project.
-  * It create one managed task (::HelloWorldTask_t). The task display
-  * a greeting message in the debug log every second.
-  *
-  * ## How to use the demo
-  *
-  * connect the board through the ST-Link. Open a terminal
-  * like [Tera Term](http://www.teraterm.org) to display the debug log using these parameters:
-  * - Speed       : 115200
-  * - Data        : 8 bit
-  * - Parity      : none
-  * - Stop bits   : 1
-  * - Flow control: none
-  *
-  * Build the project and program the board.
-  *********************************************************************************
+  ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
-  *********************************************************************************
+  *
+  *
+  ******************************************************************************
   */
 
 #include "services/sysdebug.h"
@@ -78,11 +59,6 @@
 #include "App_model.h"
 
 #include "PnPLCompManager.h"
-#include "Deviceinformation_PnPL.h"
-#include "Firmware_Info_PnPL.h"
-#include "Acquisition_Info_PnPL.h"
-#include "Tags_Info_PnPL.h"
-#include "Log_Controller_PnPL.h"
 #include "Iis3dwb_Acc_PnPL.h"
 #include "Ism330dhcx_Acc_PnPL.h"
 #include "Ism330dhcx_Gyro_PnPL.h"
@@ -95,6 +71,11 @@
 #include "Imp23absu_Mic_PnPL.h"
 #include "Imp34dt05_Mic_PnPL.h"
 #include "Automode_PnPL.h"
+#include "Log_Controller_PnPL.h"
+#include "Tags_Info_PnPL.h"
+#include "Acquisition_Info_PnPL.h"
+#include "Firmware_Info_PnPL.h"
+#include "Deviceinformation_PnPL.h"
 
 static IPnPLComponent_t *pIis3dwb_Acc_PnPLObj = NULL;
 static IPnPLComponent_t *pIis2mdc_Mag_PnPLObj = NULL;
@@ -153,13 +134,12 @@ static TX_MUTEX pnpl_mutex;
 static void PnPL_lock_fp(void);
 static void PnPL_unlock_fp(void);
 
-
 /* eLooM framework entry points definition */
 /*******************************************/
 
 sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 {
-  assert_param(pAppContext != NULL);
+  assert_param(pAppContext);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* PnPL thread safe mutex creation */
@@ -170,13 +150,13 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 
   PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
-  /* Allocate the task objects */
+  /************ Allocate task objects ************/
   sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams, &MX_GPIO_PF6InitParams, &MX_GPIO_PB0InitParams, &MX_GPIO_PF8InitParams, &MX_TIM3InitParams, &MX_ADC1InitParams,
                            &MX_GPIO_UBInitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams);
+  sDatalogAppObj = DatalogAppTaskAlloc();
 
   sSPI3BusObj = SPIBusTaskAlloc(&MX_SPI3InitParams);
   sI2C2BusObj = I2CBusTaskAlloc(&MX_I2C2InitParams);
-  sDatalogAppObj = DatalogAppTaskAlloc();
   sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_DWBInitParams, &MX_GPIO_CS_DWBInitParams);
   sIIS2MDCObj = IIS2MDCTaskAlloc(&MX_GPIO_INT_MAGInitParams, NULL);
   sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams, &MX_GPIO_CS_DHCXInitParams);
@@ -186,9 +166,9 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   sIMP23ABSUObj = IMP23ABSUTaskAlloc(&MX_DFSDMCH0F1InitParams, &MX_ADC1InitParams);
   sIMP34DT05Obj = IMP34DT05TaskAlloc(&MX_DFSDMCH5F0InitParams);
 
-  /* Add the task object to the context. */
 
   /************ Add the task object to the context ************/
+  res = ACAddTask(pAppContext, (AManagedTask *) sUtilObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sDatalogAppObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sSPI3BusObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sI2C2BusObj);
@@ -200,9 +180,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   res = ACAddTask(pAppContext, (AManagedTask *) sSTTS751Obj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIMP23ABSUObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sIMP34DT05Obj);
-  res = ACAddTask(pAppContext, (AManagedTask *) sUtilObj);
 
-  /* PnPL Components Allocation */
   pIis3dwb_Acc_PnPLObj = Iis3dwb_Acc_PnPLAlloc();
   pIis2mdc_Mag_PnPLObj = Iis2mdc_Mag_PnPLAlloc();
   pImp23absu_Mic_PnPLObj = Imp23absu_Mic_PnPLAlloc();
@@ -214,12 +192,13 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   pStts751_Temp_PnPLObj = Stts751_Temp_PnPLAlloc();
   pLps22hh_Press_PnPLObj = Lps22hh_Press_PnPLAlloc();
   pLps22hh_Temp_PnPLObj = Lps22hh_Temp_PnPLAlloc();
-  pAutomode_PnPLObj = Automode_PnPLAlloc();
-  pLog_Controller_PnPLObj = Log_Controller_PnPLAlloc();
-  pTags_Info_PnPLObj = Tags_Info_PnPLAlloc();
-  pAcquisition_Info_PnPLObj = Acquisition_Info_PnPLAlloc();
-  pFirmware_Info_PnPLObj = Firmware_Info_PnPLAlloc();
+
   pDeviceinformation_PnPLObj = Deviceinformation_PnPLAlloc();
+  pAcquisition_Info_PnPLObj = Acquisition_Info_PnPLAlloc();
+  pTags_Info_PnPLObj = Tags_Info_PnPLAlloc();
+  pFirmware_Info_PnPLObj = Firmware_Info_PnPLAlloc();
+  pLog_Controller_PnPLObj = Log_Controller_PnPLAlloc();
+  pAutomode_PnPLObj = Automode_PnPLAlloc();
 
   PnPLSetFWID(USB_FW_ID_DATALOG2);
 
@@ -256,13 +235,15 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   /************ Connect Sensor LL to be used for ucf management to the DatalogAppTask ************/
   DatalogAppTask_SetMLCIF((AManagedTask *) sISM330DHCXObj);
 
-  /* Init&Add PnPL Components */
+  /************ Other PnPL Components ************/
   Automode_PnPLInit(pAutomode_PnPLObj);
   Log_Controller_PnPLInit(pLog_Controller_PnPLObj);
   Tags_Info_PnPLInit(pTags_Info_PnPLObj);
   Acquisition_Info_PnPLInit(pAcquisition_Info_PnPLObj);
   Firmware_Info_PnPLInit(pFirmware_Info_PnPLObj);
   Deviceinformation_PnPLInit(pDeviceinformation_PnPLObj);
+
+  /************ Sensor PnPL Components ************/
   Iis3dwb_Acc_PnPLInit(pIis3dwb_Acc_PnPLObj);
   Iis2mdc_Mag_PnPLInit(pIis2mdc_Mag_PnPLObj);
   Imp23absu_Mic_PnPLInit(pImp23absu_Mic_PnPLObj);
@@ -299,4 +280,3 @@ static void PnPL_unlock_fp(void)
 {
   tx_mutex_put(&pnpl_mutex);
 }
-

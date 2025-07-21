@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -71,11 +71,11 @@ uint8_t ism330dhcx_mlc_comp_init(void)
   int32_t value = 0;
   ism330dhcx_mlc_get_dim(&value);
   ism330dhcx_mlc_set_st_ble_stream__mlc_channels(value, NULL);
-  float sensitivity = 1.0f;
+  float_t sensitivity = 1.0f;
   ism330dhcx_mlc_set_st_ble_stream__mlc_multiply_factor(sensitivity, NULL);
 
   __stream_control(true);
-  app_model.mlc_ucf_valid = false;
+  app_model.ism330dhcx_mlc_ucf_valid = false;
   __sc_set_ble_stream_params(ism330dhcx_mlc_model.id);
   /* USER Component initialization code */
   return PNPL_NO_ERROR_CODE;
@@ -103,7 +103,7 @@ uint8_t ism330dhcx_mlc_get_samples_per_ts(int32_t *value)
 
 uint8_t ism330dhcx_mlc_get_ucf_status(bool *value)
 {
-  *value = app_model.mlc_ucf_valid;
+  *value = app_model.ism330dhcx_mlc_ucf_valid;
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -113,7 +113,7 @@ uint8_t ism330dhcx_mlc_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_get_ioffset(float *value)
+uint8_t ism330dhcx_mlc_get_ioffset(float_t *value)
 {
   *value = ism330dhcx_mlc_model.stream_params.ioffset;
   /* USER Code */
@@ -189,7 +189,7 @@ uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc_channels(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc_multiply_factor(float *value)
+uint8_t ism330dhcx_mlc_get_st_ble_stream__mlc_multiply_factor(float_t *value)
 {
   *value = ism330dhcx_mlc_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
@@ -223,7 +223,7 @@ uint8_t ism330dhcx_mlc_set_enable(bool value, char **response_message)
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  if (app_model.mlc_ucf_valid == true)
+  if (app_model.ism330dhcx_mlc_ucf_valid == true)
   {
     if (value)
     {
@@ -245,6 +245,14 @@ uint8_t ism330dhcx_mlc_set_enable(bool value, char **response_message)
       {
         *response_message = "Error: Failed to enable the sensor";
       }
+    }
+  }
+  else
+  {
+    ret = PNPL_BASE_ERROR_CODE;
+    if (response_message != NULL)
+    {
+      *response_message = "UCF not loaded";
     }
   }
   return ret;
@@ -327,7 +335,7 @@ uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_channels(int32_t value, char **res
   return ret;
 }
 
-uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_multiply_factor(float value, char **response_message)
+uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_multiply_factor(float_t value, char **response_message)
 {
   if (response_message != NULL)
   {
@@ -353,7 +361,7 @@ uint8_t ism330dhcx_mlc_set_st_ble_stream__mlc_odr(int32_t value, char **response
 uint8_t ism330dhcx_mlc_load_file(const char *data, int32_t size)
 {
   DatalogAppTask_load_ism330dhcx_ucf_vtbl(data, size);
-  app_model.mlc_ucf_valid = true;
+  app_model.ism330dhcx_mlc_ucf_valid = true;
   __stream_control(true);
   __sc_set_ble_stream_params(ism330dhcx_mlc_model.id);
   /* UCF modifies also acc and gyro parameters.

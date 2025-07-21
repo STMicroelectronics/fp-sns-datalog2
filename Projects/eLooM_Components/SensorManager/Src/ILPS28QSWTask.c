@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -473,6 +473,7 @@ sys_error_code_t ILPS28QSWTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_fu
   p_obj->fifo_level = 0;
   p_obj->samples_per_it = 0;
   p_obj->task_delay = 0;
+  p_obj->first_data_ready = 0;
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
 
   *pTaskCode = AMTExRun;
@@ -529,6 +530,7 @@ sys_error_code_t ILPS28QSWTask_vtblDoEnterPowerMode(AManagedTask *_this, const E
 
       // reset the variables for the actual odr computation.
       p_obj->prev_timestamp = 0.0f;
+      p_obj->first_data_ready = 0;
     }
 
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("ILPS28QSW: -> SENSORS_ACTIVE\r\n"));
@@ -689,7 +691,7 @@ IEventSrc *ILPS28QSWTask_vtblPressGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_press_event_src;
 }
 
-sys_error_code_t ILPS28QSWTask_vtblPressGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t ILPS28QSWTask_vtblPressGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -711,20 +713,20 @@ sys_error_code_t ILPS28QSWTask_vtblPressGetODR(ISensorMems_t *_this, float *p_me
   return res;
 }
 
-float ILPS28QSWTask_vtblPressGetFS(ISensorMems_t *_this)
+float_t ILPS28QSWTask_vtblPressGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   ILPS28QSWTask *p_if_owner = (ILPS28QSWTask *)((uint32_t) _this - offsetof(ILPS28QSWTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.fs;
+  float_t res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float ILPS28QSWTask_vtblPressGetSensitivity(ISensorMems_t *_this)
+float_t ILPS28QSWTask_vtblPressGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   ILPS28QSWTask *p_if_owner = (ILPS28QSWTask *)((uint32_t) _this - offsetof(ILPS28QSWTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -738,7 +740,7 @@ EMData_t ILPS28QSWTask_vtblPressGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t ILPS28QSWTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t ILPS28QSWTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -766,7 +768,7 @@ sys_error_code_t ILPS28QSWTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = ILPS28QSWTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -774,7 +776,7 @@ sys_error_code_t ILPS28QSWTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t ILPS28QSWTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t ILPS28QSWTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -794,7 +796,7 @@ sys_error_code_t ILPS28QSWTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) fs
+      .sensorMessage.fParam = (float_t) fs
     };
     res = ILPS28QSWTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1028,29 +1030,50 @@ static sys_error_code_t ILPS28QSWTaskExecuteStepDatalog(AManagedTask *_this)
         res = ILPS28QSWTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
-#if ILPS28QSW_FIFO_ENABLED
-          if (p_obj->fifo_level != 0)
+          if (p_obj->first_data_ready == 1)
           {
-#endif
-            // notify the listeners...
-            double timestamp = report.sensorDataReadyMessage.fTimestamp;
-            double delta_timestamp = timestamp - p_obj->prev_timestamp;
-            p_obj->prev_timestamp = timestamp;
-
-            /* update measuredODR */
-            p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
-
-            EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_press_data_buff[0], E_EM_FLOAT, p_obj->samples_per_it);
-
-            DataEvent_t evt;
-
-            DataEventInit((IEvent *) &evt, p_obj->p_press_event_src, &p_obj->data, timestamp, p_obj->press_id);
-            IEventSrcSendEvent(p_obj->p_press_event_src, (IEvent *) &evt, NULL);
-
-            SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("ILPS28QSW: ts = %f\r\n", (float)timestamp));
 #if ILPS28QSW_FIFO_ENABLED
-          }
+            if (p_obj->fifo_level != 0)
+            {
 #endif
+              // notify the listeners...
+              double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+              double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
+              p_obj->prev_timestamp = timestamp;
+
+              /* update measuredODR */
+              // Update the sums
+              p_obj->delta_timestamp_sum += delta_timestamp;
+              p_obj->samples_sum += p_obj->samples_per_it;
+              if (p_obj->odr_count < MEAS_ODR_AVG)
+              {
+                p_obj->odr_count++;
+              }
+              // Calculate the average
+              if (p_obj->odr_count == MEAS_ODR_AVG)
+              {
+                p_obj->sensor_status.type.mems.measured_odr = (float_t) p_obj->samples_sum / p_obj->delta_timestamp_sum;
+                p_obj->delta_timestamp_sum = 0.0f;
+                p_obj->samples_sum = 0;
+                p_obj->odr_count = 0;
+              }
+
+              EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_press_data_buff[0], E_EM_FLOAT, p_obj->samples_per_it);
+
+              DataEvent_t evt;
+
+              DataEventInit((IEvent *) &evt, p_obj->p_press_event_src, &p_obj->data, timestamp, p_obj->press_id);
+              IEventSrcSendEvent(p_obj->p_press_event_src, (IEvent *) &evt, NULL);
+
+              SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("ILPS28QSW: ts = %f\r\n", (float_t)timestamp));
+#if ILPS28QSW_FIFO_ENABLED
+            }
+#endif
+          }
+          else
+          {
+            p_obj->first_data_ready = 1;
+          }
         }
         break;
       }
@@ -1256,7 +1279,7 @@ static sys_error_code_t ILPS28QSWTaskSensorInit(ILPS28QSWTask *_this)
     /* you should enable the INT here */
   }
 
-  float ilps28qsw_odr;
+  float_t ilps28qsw_odr;
   ilps28qsw_odr = _this->sensor_status.type.mems.odr;
   if (ilps28qsw_odr < 2.0f)
   {
@@ -1291,7 +1314,7 @@ static sys_error_code_t ILPS28QSWTaskSensorInit(ILPS28QSWTask *_this)
     md.odr = ILPS28QSW_200Hz;
   }
 
-  float ilps28qsw_fs;
+  float_t ilps28qsw_fs;
   ilps28qsw_fs = _this->sensor_status.type.mems.fs;
   if (ilps28qsw_fs < 1261.0f)
   {
@@ -1324,12 +1347,15 @@ static sys_error_code_t ILPS28QSWTaskSensorInit(ILPS28QSWTask *_this)
   if (_this->sensor_status.is_active)
   {
 #if ILPS28QSW_FIFO_ENABLED
-    _this->task_delay = (uint16_t)((1000.0f / ilps28qsw_odr) * (((float)(_this->samples_per_it)) / 2.0f));
+    _this->task_delay = (uint16_t)((1000.0f / ilps28qsw_odr) * (((float_t)(_this->samples_per_it)) / 2.0f));
 #else
     _this->task_delay = (uint16_t)(1000.0f / ilps28qsw_odr);
 #endif
   }
 
+  _this->odr_count = 0;
+  _this->delta_timestamp_sum = 0.0f;
+  _this->samples_sum = 0;
   return res;
 }
 
@@ -1366,13 +1392,13 @@ static sys_error_code_t ILPS28QSWTaskSensorReadData(ILPS28QSWTask *_this)
 #if (HSD_USE_DUMMY_DATA == 1)
       for (i = 0; i < samples_per_it ; i++)
       {
-        _this->p_press_data_buff[i]  = (float)(dummyDataCounter_press++);
+        _this->p_press_data_buff[i]  = (float_t)(dummyDataCounter_press++);
       }
 #else
       /* Arrange Data */
       int32_t data;
       uint8_t *p8_src = _this->p_fifo_data_buff;
-      float fs = _this->sensor_status.type.mems.fs;
+      float_t fs = _this->sensor_status.type.mems.fs;
 
       for (i = 0; i < samples_per_it; i++)
       {
@@ -1434,7 +1460,7 @@ static sys_error_code_t ILPS28QSWTaskSensorSetODR(ILPS28QSWTask *_this, SMMessag
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   ilps28qsw_md_t md;
@@ -1501,7 +1527,7 @@ static sys_error_code_t ILPS28QSWTaskSensorSetFS(ILPS28QSWTask *_this, SMMessage
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float fs = (float) report.sensorMessage.fParam;
+  float_t fs = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->press_id)

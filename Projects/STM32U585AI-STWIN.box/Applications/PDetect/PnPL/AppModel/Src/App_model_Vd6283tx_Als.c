@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -103,7 +103,7 @@ uint8_t vd6283tx_als_get_intermeasurement_time(int32_t *value)
 
 uint8_t vd6283tx_als_get_channel1_gain(pnpl_vd6283tx_als_channel1_gain_t *enum_id)
 {
-  float channel1_gain = vd6283tx_als_model.sensor_status->type.light.gain[0];
+  float_t channel1_gain = vd6283tx_als_model.sensor_status->type.light.gain[0];
   if (channel1_gain < 0.77)
   {
     *enum_id = pnpl_vd6283tx_als_channel1_gain_n0_71;
@@ -170,7 +170,7 @@ uint8_t vd6283tx_als_get_channel1_gain(pnpl_vd6283tx_als_channel1_gain_t *enum_i
 
 uint8_t vd6283tx_als_get_channel2_gain(pnpl_vd6283tx_als_channel2_gain_t *enum_id)
 {
-  float channel2_gain = vd6283tx_als_model.sensor_status->type.light.gain[1];
+  float_t channel2_gain = vd6283tx_als_model.sensor_status->type.light.gain[1];
   if (channel2_gain < 0.77)
   {
     *enum_id = pnpl_vd6283tx_als_channel2_gain_n0_71;
@@ -237,7 +237,7 @@ uint8_t vd6283tx_als_get_channel2_gain(pnpl_vd6283tx_als_channel2_gain_t *enum_i
 
 uint8_t vd6283tx_als_get_channel3_gain(pnpl_vd6283tx_als_channel3_gain_t *enum_id)
 {
-  float channel3_gain = vd6283tx_als_model.sensor_status->type.light.gain[2];
+  float_t channel3_gain = vd6283tx_als_model.sensor_status->type.light.gain[2];
   if (channel3_gain < 0.77)
   {
     *enum_id = pnpl_vd6283tx_als_channel3_gain_n0_71;
@@ -304,7 +304,7 @@ uint8_t vd6283tx_als_get_channel3_gain(pnpl_vd6283tx_als_channel3_gain_t *enum_i
 
 uint8_t vd6283tx_als_get_channel4_gain(pnpl_vd6283tx_als_channel4_gain_t *enum_id)
 {
-  float channel4_gain = vd6283tx_als_model.sensor_status->type.light.gain[3];
+  float_t channel4_gain = vd6283tx_als_model.sensor_status->type.light.gain[3];
   if (channel4_gain < 0.77)
   {
     *enum_id = pnpl_vd6283tx_als_channel4_gain_n0_71;
@@ -371,7 +371,7 @@ uint8_t vd6283tx_als_get_channel4_gain(pnpl_vd6283tx_als_channel4_gain_t *enum_i
 
 uint8_t vd6283tx_als_get_channel5_gain(pnpl_vd6283tx_als_channel5_gain_t *enum_id)
 {
-  float channel5_gain = vd6283tx_als_model.sensor_status->type.light.gain[4];
+  float_t channel5_gain = vd6283tx_als_model.sensor_status->type.light.gain[4];
   if (channel5_gain < 0.77)
   {
     *enum_id = pnpl_vd6283tx_als_channel5_gain_n0_71;
@@ -438,7 +438,7 @@ uint8_t vd6283tx_als_get_channel5_gain(pnpl_vd6283tx_als_channel5_gain_t *enum_i
 
 uint8_t vd6283tx_als_get_channel6_gain(pnpl_vd6283tx_als_channel6_gain_t *enum_id)
 {
-  float channel6_gain = vd6283tx_als_model.sensor_status->type.light.gain[5];
+  float_t channel6_gain = vd6283tx_als_model.sensor_status->type.light.gain[5];
   if (channel6_gain < 0.77)
   {
     *enum_id = pnpl_vd6283tx_als_channel6_gain_n0_71;
@@ -510,7 +510,7 @@ uint8_t vd6283tx_als_get_samples_per_ts(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t vd6283tx_als_get_ioffset(float *value)
+uint8_t vd6283tx_als_get_ioffset(float_t *value)
 {
   *value = vd6283tx_als_model.stream_params.ioffset;
   /* USER Code */
@@ -617,15 +617,15 @@ uint8_t vd6283tx_als_set_exposure_time(int32_t value, char **response_message)
     if (ret == SYS_NO_ERROR_CODE)
     {
 #if (HSD_USE_DUMMY_DATA != 1)
-      float spts;
+      float_t spts;
       if (vd6283tx_als_model.sensor_status->type.light.intermeasurement_time >
           vd6283tx_als_model.sensor_status->type.light.exposure_time / 1000 + 6)
       {
-        spts = (1000.0f / (float)(vd6283tx_als_model.sensor_status->type.light.intermeasurement_time));
+        spts = (1000.0f / (float_t)(vd6283tx_als_model.sensor_status->type.light.intermeasurement_time));
       }
       else
       {
-        spts = (1000.0f / (float)(vd6283tx_als_model.sensor_status->type.light.exposure_time / 1000 + 6));
+        spts = (1000.0f / (float_t)(vd6283tx_als_model.sensor_status->type.light.exposure_time / 1000 + 6));
       }
       vd6283tx_als_set_samples_per_ts((uint32_t)spts, NULL);
 #endif
@@ -654,15 +654,15 @@ uint8_t vd6283tx_als_set_intermeasurement_time(int32_t value, char **response_me
     if (ret == SYS_NO_ERROR_CODE)
     {
 #if (HSD_USE_DUMMY_DATA != 1)
-      float spts;
+      float_t spts;
       if (vd6283tx_als_model.sensor_status->type.light.intermeasurement_time >
           vd6283tx_als_model.sensor_status->type.light.exposure_time / 1000 + 6)
       {
-        spts = (1000.0f / (float)(vd6283tx_als_model.sensor_status->type.light.intermeasurement_time));
+        spts = (1000.0f / (float_t)(vd6283tx_als_model.sensor_status->type.light.intermeasurement_time));
       }
       else
       {
-        spts = (1000.0f / (float)(vd6283tx_als_model.sensor_status->type.light.exposure_time / 1000 + 6));
+        spts = (1000.0f / (float_t)(vd6283tx_als_model.sensor_status->type.light.exposure_time / 1000 + 6));
       }
       vd6283tx_als_set_samples_per_ts((uint32_t)spts, NULL);
 #endif
@@ -683,7 +683,7 @@ uint8_t vd6283tx_als_set_channel1_gain(pnpl_vd6283tx_als_channel1_gain_t enum_id
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_vd6283tx_als_channel1_gain_n0_71:
@@ -749,7 +749,7 @@ uint8_t vd6283tx_als_set_channel2_gain(pnpl_vd6283tx_als_channel2_gain_t enum_id
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_vd6283tx_als_channel2_gain_n0_71:
@@ -815,7 +815,7 @@ uint8_t vd6283tx_als_set_channel3_gain(pnpl_vd6283tx_als_channel3_gain_t enum_id
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_vd6283tx_als_channel3_gain_n0_71:
@@ -881,7 +881,7 @@ uint8_t vd6283tx_als_set_channel4_gain(pnpl_vd6283tx_als_channel4_gain_t enum_id
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_vd6283tx_als_channel4_gain_n0_71:
@@ -947,7 +947,7 @@ uint8_t vd6283tx_als_set_channel5_gain(pnpl_vd6283tx_als_channel5_gain_t enum_id
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_vd6283tx_als_channel5_gain_n0_71:
@@ -1013,7 +1013,7 @@ uint8_t vd6283tx_als_set_channel6_gain(pnpl_vd6283tx_als_channel6_gain_t enum_id
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_vd6283tx_als_channel6_gain_n0_71:

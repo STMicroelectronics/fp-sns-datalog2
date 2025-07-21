@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -56,7 +56,7 @@ uint8_t ilps28qsw_press_comp_init(void)
   ilps28qsw_press_model.stream_params.usb_ep = -1;
 
   ilps28qsw_press_set_st_ble_stream__press_unit("hPa", NULL);
-  ilps28qsw_press_set_st_ble_stream__press_format("float", NULL);
+  ilps28qsw_press_set_st_ble_stream__press_format("float_t", NULL);
 
   addSensorToAppModel(id, &ilps28qsw_press_model);
 
@@ -73,7 +73,7 @@ uint8_t ilps28qsw_press_comp_init(void)
   int32_t value = 0;
   ilps28qsw_press_get_dim(&value);
   ilps28qsw_press_set_st_ble_stream__press_channels(value, NULL);
-  float sensitivity = 0.0f;
+  float_t sensitivity = 0.0f;
   ilps28qsw_press_get_sensitivity(&sensitivity);
   ilps28qsw_press_set_st_ble_stream__press_multiply_factor(sensitivity, NULL);
 
@@ -91,7 +91,7 @@ char *ilps28qsw_press_get_key(void)
 
 uint8_t ilps28qsw_press_get_odr(pnpl_ilps28qsw_press_odr_t *enum_id)
 {
-  float odr = ilps28qsw_press_model.sensor_status->type.mems.odr;
+  float_t odr = ilps28qsw_press_model.sensor_status->type.mems.odr;
   if (odr < 2.0f)
   {
     *enum_id = pnpl_ilps28qsw_press_odr_hz1;
@@ -129,7 +129,7 @@ uint8_t ilps28qsw_press_get_odr(pnpl_ilps28qsw_press_odr_t *enum_id)
 
 uint8_t ilps28qsw_press_get_fs(pnpl_ilps28qsw_press_fs_t *enum_id)
 {
-  float fs = ilps28qsw_press_model.sensor_status->type.mems.fs;
+  float_t fs = ilps28qsw_press_model.sensor_status->type.mems.fs;
   if (fs < 1261.0f)
   {
     *enum_id = pnpl_ilps28qsw_press_fs_hpa1260;
@@ -161,14 +161,14 @@ uint8_t ilps28qsw_press_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ilps28qsw_press_get_ioffset(float *value)
+uint8_t ilps28qsw_press_get_ioffset(float_t *value)
 {
   *value = ilps28qsw_press_model.stream_params.ioffset;
   /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ilps28qsw_press_get_measodr(float *value)
+uint8_t ilps28qsw_press_get_measodr(float_t *value)
 {
   *value = ilps28qsw_press_model.sensor_status->type.mems.measured_odr;
   /* USER Code */
@@ -189,7 +189,7 @@ uint8_t ilps28qsw_press_get_sd_dps(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ilps28qsw_press_get_sensitivity(float *value)
+uint8_t ilps28qsw_press_get_sensitivity(float_t *value)
 {
   *value = ilps28qsw_press_model.sensor_status->type.mems.sensitivity;
   /* USER Code */
@@ -198,7 +198,7 @@ uint8_t ilps28qsw_press_get_sensitivity(float *value)
 
 uint8_t ilps28qsw_press_get_data_type(char **value)
 {
-  *value = "float";
+  *value = "float_t";
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -257,7 +257,7 @@ uint8_t ilps28qsw_press_get_st_ble_stream__press_channels(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ilps28qsw_press_get_st_ble_stream__press_multiply_factor(float *value)
+uint8_t ilps28qsw_press_get_st_ble_stream__press_multiply_factor(float_t *value)
 {
   *value = ilps28qsw_press_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
@@ -291,7 +291,7 @@ uint8_t ilps28qsw_press_set_odr(pnpl_ilps28qsw_press_odr_t enum_id, char **respo
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_ilps28qsw_press_odr_hz1:
@@ -340,7 +340,7 @@ uint8_t ilps28qsw_press_set_fs(pnpl_ilps28qsw_press_fs_t enum_id, char **respons
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_ilps28qsw_press_fs_hpa1260:
@@ -358,7 +358,7 @@ uint8_t ilps28qsw_press_set_fs(pnpl_ilps28qsw_press_fs_t enum_id, char **respons
     /* USER Code */
   }
 
-  float sensitivity = 0.0f;
+  float_t sensitivity = 0.0f;
   ilps28qsw_press_get_sensitivity(&sensitivity);
   ilps28qsw_press_set_st_ble_stream__press_multiply_factor(sensitivity, NULL);
 
@@ -490,7 +490,7 @@ uint8_t ilps28qsw_press_set_st_ble_stream__press_channels(int32_t value, char **
   return ret;
 }
 
-uint8_t ilps28qsw_press_set_st_ble_stream__press_multiply_factor(float value, char **response_message)
+uint8_t ilps28qsw_press_set_st_ble_stream__press_multiply_factor(float_t value, char **response_message)
 {
   if (response_message != NULL)
   {

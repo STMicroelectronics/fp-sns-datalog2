@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -72,7 +72,7 @@ uint8_t ism330is_gyro_comp_init(void)
   int32_t value = 0;
   ism330is_gyro_get_dim(&value);
   ism330is_gyro_set_st_ble_stream__gyro_channels(value, NULL);
-  float sensitivity = 0.0f;
+  float_t sensitivity = 0.0f;
   ism330is_gyro_get_sensitivity(&sensitivity);
   ism330is_gyro_set_st_ble_stream__gyro_multiply_factor(sensitivity, NULL);
 
@@ -90,7 +90,7 @@ char *ism330is_gyro_get_key(void)
 
 uint8_t ism330is_gyro_get_odr(pnpl_ism330is_gyro_odr_t *enum_id)
 {
-  float odr = ism330is_gyro_model.sensor_status->type.mems.odr;
+  float_t odr = ism330is_gyro_model.sensor_status->type.mems.odr;
   if (odr < 13.0f)
   {
     *enum_id = pnpl_ism330is_gyro_odr_hz12_5;
@@ -140,7 +140,7 @@ uint8_t ism330is_gyro_get_odr(pnpl_ism330is_gyro_odr_t *enum_id)
 
 uint8_t ism330is_gyro_get_fs(pnpl_ism330is_gyro_fs_t *enum_id)
 {
-  float fs = ism330is_gyro_model.sensor_status->type.mems.fs;
+  float_t fs = ism330is_gyro_model.sensor_status->type.mems.fs;
   if (fs < 126.0f)
   {
     *enum_id = pnpl_ism330is_gyro_fs_dps125;
@@ -188,14 +188,14 @@ uint8_t ism330is_gyro_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330is_gyro_get_ioffset(float *value)
+uint8_t ism330is_gyro_get_ioffset(float_t *value)
 {
   *value = ism330is_gyro_model.stream_params.ioffset;
   /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330is_gyro_get_measodr(float *value)
+uint8_t ism330is_gyro_get_measodr(float_t *value)
 {
   *value = ism330is_gyro_model.sensor_status->type.mems.measured_odr;
   /* USER Code */
@@ -216,7 +216,7 @@ uint8_t ism330is_gyro_get_sd_dps(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330is_gyro_get_sensitivity(float *value)
+uint8_t ism330is_gyro_get_sensitivity(float_t *value)
 {
   *value = ism330is_gyro_model.sensor_status->type.mems.sensitivity;
   /* USER Code */
@@ -284,7 +284,7 @@ uint8_t ism330is_gyro_get_st_ble_stream__gyro_channels(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330is_gyro_get_st_ble_stream__gyro_multiply_factor(float *value)
+uint8_t ism330is_gyro_get_st_ble_stream__gyro_multiply_factor(float_t *value)
 {
   *value = ism330is_gyro_model.st_ble_stream.st_ble_stream_objects.multiply_factor;
   return PNPL_NO_ERROR_CODE;
@@ -318,7 +318,7 @@ uint8_t ism330is_gyro_set_odr(pnpl_ism330is_gyro_odr_t enum_id, char **response_
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_ism330is_gyro_odr_hz12_5:
@@ -374,7 +374,7 @@ uint8_t ism330is_gyro_set_fs(pnpl_ism330is_gyro_fs_t enum_id, char **response_me
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_ism330is_gyro_fs_dps125:
@@ -401,7 +401,7 @@ uint8_t ism330is_gyro_set_fs(pnpl_ism330is_gyro_fs_t enum_id, char **response_me
     app_model.ispu_ucf_valid = false;
   }
 
-  float sensitivity = 0.0f;
+  float_t sensitivity = 0.0f;
   ism330is_gyro_get_sensitivity(&sensitivity);
   ism330is_gyro_set_st_ble_stream__gyro_multiply_factor(sensitivity, NULL);
 
@@ -533,7 +533,7 @@ uint8_t ism330is_gyro_set_st_ble_stream__gyro_channels(int32_t value, char **res
   return ret;
 }
 
-uint8_t ism330is_gyro_set_st_ble_stream__gyro_multiply_factor(float value, char **response_message)
+uint8_t ism330is_gyro_set_st_ble_stream__gyro_multiply_factor(float_t value, char **response_message)
 {
   if (response_message != NULL)
   {

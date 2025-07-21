@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -71,8 +71,8 @@ uint8_t DeviceInformation_get_swVersion(char **value);
 uint8_t DeviceInformation_get_osName(char **value);
 uint8_t DeviceInformation_get_processorArchitecture(char **value);
 uint8_t DeviceInformation_get_processorManufacturer(char **value);
-uint8_t DeviceInformation_get_totalStorage(float *value);
-uint8_t DeviceInformation_get_totalMemory(float *value);
+uint8_t DeviceInformation_get_totalStorage(float_t *value);
+uint8_t DeviceInformation_get_totalMemory(float_t *value);
 
 
 #ifdef __cplusplus

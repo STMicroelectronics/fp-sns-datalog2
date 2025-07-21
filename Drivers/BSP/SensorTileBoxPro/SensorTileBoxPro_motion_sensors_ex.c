@@ -23,6 +23,7 @@
 #include "SensorTileBoxPro_motion_sensors_ex.h"
 
 extern void *MotionCompObj[BSP_MOTION_INSTANCES_NBR];
+extern void *DilMotionCompObj[];
 
 /**
   * @brief  Get the register value

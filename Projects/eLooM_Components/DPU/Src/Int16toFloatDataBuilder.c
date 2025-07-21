@@ -11,7 +11,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -89,7 +89,7 @@ sys_error_code_t Int16ToFloatDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t 
   EMD_1dInit(&reshaped_in_data, EMD_Data(p_new_in_data), EMD_GetType(p_new_in_data), in_elements);
   EMD_1dInit(&reshaped_target_data, EMD_Data(p_target_data), E_EM_FLOAT, target_elements);
 
-  register float *p_target_val = (float *)EMD_1dDataAt(&reshaped_target_data, p_obj->index);
+  register float_t *p_target_val = (float_t *)EMD_1dDataAt(&reshaped_target_data, p_obj->index);
   register int16_t *p_src_val = (int16_t *)EMD_1dDataAt(&reshaped_in_data, 0);
   /*consume all the new input data*/
   while (in_elements > 0U)
@@ -100,7 +100,7 @@ sys_error_code_t Int16ToFloatDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t 
     /*copy the input data elements in the target data payload*/
     for (uint32_t i = 0; i < element_to_copy; ++i)
     {
-      *p_target_val++ = (float) * p_src_val++;
+      *p_target_val++ = (float_t) * p_src_val++;
     }
 
     in_elements -= element_to_copy;
@@ -126,7 +126,7 @@ sys_error_code_t Int16ToFloatDB_vtblOnNewInData(IDataBuilder_t *_this, EMData_t 
             {
               /*I have a buffer to build a new data, so I reset the index.*/
               p_obj->index = 0;
-              p_target_val = (float *)EMD_1dDataAt(&reshaped_target_data, p_obj->index);
+              p_target_val = (float_t *)EMD_1dDataAt(&reshaped_target_data, p_obj->index);
             }
             break;
 

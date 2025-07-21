@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -80,19 +80,19 @@ sys_error_code_t NeaiNccDPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   NeaiNccDPU_t *p_obj = (NeaiNccDPU_t *)_this;
-  float *p_out = (float *)EMD_Data(&out_data);
+  float_t *p_out = (float_t *)EMD_Data(&out_data);
 
   uint8_t status;
-  float *p_signal = (float *)EMD_Data(&in_data);
+  float_t *p_signal = (float_t *)EMD_Data(&in_data);
 
   uint16_t id_class;
   status = INeaiNcc_Classification((INeaiNcc_Model_t *)p_obj->p_ANeaiNcc_Model, p_signal, &p_out[NEAI_NCC_PREDICTION_PREDICTION_CLASSES_IDX], &id_class);
 
   /* Set NanoEdge classification return value */
-  p_out[NEAI_NCC_PREDICTION_RETVAL_IDX] = (float)status;
+  p_out[NEAI_NCC_PREDICTION_RETVAL_IDX] = (float_t)status;
 
   /* Set NanoEdge prediction class index */
-  p_out[NEAI_NCC_PREDICTION_PREDICTED_CLASS_IDX] = (float)id_class;
+  p_out[NEAI_NCC_PREDICTION_PREDICTED_CLASS_IDX] = (float_t)id_class;
 
   return res;
 }

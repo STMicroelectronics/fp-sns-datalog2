@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -94,7 +94,7 @@ uint8_t fft_dpu_get_enable(bool *value)
 }
 uint8_t fft_dpu_get_data_type(char **value)
 {
-  *value = "float";
+  *value = "float_t";
   return 0;
 }
 uint8_t fft_dpu_get_fft_length(int32_t *value)
@@ -162,7 +162,7 @@ char *imp23absu_mic_get_key(void)
   return "imp23absu_mic";
 }
 
-uint8_t imp23absu_mic_get_odr(float *value) /* TODO: uint8_t imp23absu_mic_get_frequency(uint32_t *value) */
+uint8_t imp23absu_mic_get_odr(float_t *value) /* TODO: uint8_t imp23absu_mic_get_frequency(uint32_t *value) */
 {
   /* Status update to check if the value has been updated by the FW */
   uint16_t id = imp23absu_mic_model.id;
@@ -170,7 +170,7 @@ uint8_t imp23absu_mic_get_odr(float *value) /* TODO: uint8_t imp23absu_mic_get_f
   *value = imp23absu_mic_model.sensor_status.type.audio.frequency;
   return 0;
 }
-uint8_t imp23absu_mic_get_aop(float *value) /* TODO: uint8_t imp23absu_mic_get_volume(uint8_t *value) */
+uint8_t imp23absu_mic_get_aop(float_t *value) /* TODO: uint8_t imp23absu_mic_get_volume(uint8_t *value) */
 {
   uint16_t id = imp23absu_mic_model.id;
   imp23absu_mic_model.sensor_status = SMSensorGetStatus(id);
@@ -196,12 +196,12 @@ uint8_t imp23absu_mic_get_dim(int32_t *value)
   *value = 1;
   return 0;
 }
-uint8_t imp23absu_mic_get_ioffset(float *value)
+uint8_t imp23absu_mic_get_ioffset(float_t *value)
 {
   *value = imp23absu_mic_model.stream_params.ioffset;
   return 0;
 }
-uint8_t imp23absu_mic_get_measodr(float *value) /* TODO: delete */
+uint8_t imp23absu_mic_get_measodr(float_t *value) /* TODO: delete */
 {
   /* Status update to check if the value has been updated by the FW */
   uint16_t id = imp23absu_mic_model.id;
@@ -219,7 +219,7 @@ uint8_t imp23absu_mic_get_sd_dps(int32_t *value)
   *value = imp23absu_mic_model.stream_params.sd_dps;
   return 0;
 }
-uint8_t imp23absu_mic_get_sensitivity(float *value) /* TODO: uint8_t imp23absu_mic_get_resolution(uint8_t *value) */
+uint8_t imp23absu_mic_get_sensitivity(float_t *value) /* TODO: uint8_t imp23absu_mic_get_resolution(uint8_t *value) */
 {
   *value = 0.000030517578125; //2/(2^imp23absu_mic_model.sensor_status.type.audio.resolution);
   return 0;
@@ -325,15 +325,15 @@ uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
 
   // WHY THIS -1 (in months) ???
   //  struct tm {
-  //     int tm_sec;         /* seconds,  range 0 to 59          */
-  //     int tm_min;         /* minutes, range 0 to 59           */
-  //     int tm_hour;        /* hours, range 0 to 23             */
-  //     int tm_mday;        /* day of the month, range 1 to 31  */
-  //     int tm_mon;         /* month, range 0 to 11             */ <------ (-1) months here (0..11), months from RTC (1..12)
-  //     int tm_year;        /* The number of years since 1900   */
-  //     int tm_wday;        /* day of the week, range 0 to 6    */
-  //     int tm_yday;        /* day in the year, range 0 to 365  */
-  //     int tm_isdst;       /* daylight saving time             */
+  //     int32_t tm_sec;         /* seconds,  range 0 to 59          */
+  //     int32_t tm_min;         /* minutes, range 0 to 59           */
+  //     int32_t tm_hour;        /* hours, range 0 to 23             */
+  //     int32_t tm_mday;        /* day of the month, range 1 to 31  */
+  //     int32_t tm_mon;         /* month, range 0 to 11             */ <------ (-1) months here (0..11), months from RTC (1..12)
+  //     int32_t tm_year;        /* The number of years since 1900   */
+  //     int32_t tm_wday;        /* day of the week, range 0 to 6    */
+  //     int32_t tm_yday;        /* day in the year, range 0 to 365  */
+  //     int32_t tm_isdst;       /* daylight saving time             */
   //  };
 
   TMSetStartTime(t);
@@ -522,12 +522,12 @@ uint8_t DeviceInformation_get_processorManufacturer(char **value)
   *value = "STMicroelectronics";
   return 0;
 }
-uint8_t DeviceInformation_get_totalStorage(float *value)
+uint8_t DeviceInformation_get_totalStorage(float_t *value)
 {
   *value = 0;
   return 0;
 }
-uint8_t DeviceInformation_get_totalMemory(float *value)
+uint8_t DeviceInformation_get_totalMemory(float_t *value)
 {
   *value = (SRAM1_SIZE + SRAM2_SIZE + SRAM3_SIZE + SRAM4_SIZE) / 1024;
   return 0;
@@ -661,7 +661,7 @@ static uint8_t __stream_control(ILog_Controller_t *ifn, bool status)
           else if (app_model.log_controller_model.interface == LOG_CTRL_MODE_USB)
           {
             /* in case of slow sensor send 1 sample for each usb packet */
-            float low_odr = 0;
+            float_t low_odr = 0;
             if (app_model.s_models[i]->sensor_status.isensor_class == ISENSOR_CLASS_MEMS)
             {
               low_odr = app_model.s_models[i]->sensor_status.type.mems.odr;
@@ -713,7 +713,7 @@ static uint8_t __stream_control(ILog_Controller_t *ifn, bool status)
             }
 #ifdef SYS_DEBUG
             SensorDescriptor_t descriptor = SMSensorGetDescription(i);
-            float ms = app_model.s_models[i]->stream_params.usb_dps / app_model.s_models[i]->stream_params.bandwidth;
+            float_t ms = app_model.s_models[i]->stream_params.usb_dps / app_model.s_models[i]->stream_params.bandwidth;
             SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("**** %s, odr: %f, DPS: %d, ms: %f, proposed FIFO WM: %d \r\n", descriptor.p_name,
                                                app_model.s_models[i]->sensor_status.type.mems.odr, app_model.s_models[i]->stream_params.usb_dps, ms, proposed_fifoWM));
 #endif

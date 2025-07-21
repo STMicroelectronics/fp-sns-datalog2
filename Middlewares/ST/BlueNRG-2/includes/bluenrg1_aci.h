@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2014 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,9 +18,17 @@
 #ifndef __BLUENRG1_ACI_H__
 #define __BLUENRG1_ACI_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "bluenrg1_gap_aci.h"
 #include "bluenrg1_gatt_aci.h"
 #include "bluenrg1_l2cap_aci.h"
 #include "bluenrg1_hal_aci.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __BLUENRG1_ACI_H__ */

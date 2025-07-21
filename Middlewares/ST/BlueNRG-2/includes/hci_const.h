@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2016 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,6 +18,10 @@
   */
 #ifndef HCI_CONST_H
 #define HCI_CONST_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "compiler.h"
 #include "link_layer.h"
@@ -31,7 +35,7 @@
   */
 #ifndef HCI_MAX_PAYLOAD_SIZE
 #define HCI_MAX_PAYLOAD_SIZE 128
-#endif
+#endif /* HCI_MAX_PAYLOAD_SIZE */
 
 /* HCI Packet types */
 #define HCI_COMMAND_PKT   0x01
@@ -128,7 +132,7 @@ typedef PACKED(struct) _read_local_version_rp
 typedef PACKED(struct) _read_bd_addr_rp
 {
   uint8_t status;
-  tBDAddr bdaddr;
+  bd_addr_t bdaddr;
 } read_bd_addr_rp;
 #define READ_BD_ADDR_RP_SIZE            7
 
@@ -180,7 +184,7 @@ typedef PACKED(struct) _le_read_local_supported_features_rp
 #define OCF_LE_SET_RANDOM_ADDRESS   0x0005
 typedef PACKED(struct) _le_set_random_address_cp
 {
-  tBDAddr bdaddr;
+  bd_addr_t bdaddr;
 } le_set_random_address_cp;
 #define LE_SET_RANDOM_ADDRESS_CP_SIZE 6
 
@@ -192,7 +196,7 @@ typedef PACKED(struct) _le_set_adv_parameters_cp
   uint8_t  advtype;
   uint8_t  own_bdaddr_type;
   uint8_t  direct_bdaddr_type;
-  tBDAddr  direct_bdaddr;
+  bd_addr_t  direct_bdaddr;
   uint8_t  chan_map;
   uint8_t  filter;
 } le_set_adv_parameters_cp;
@@ -255,7 +259,7 @@ typedef PACKED(struct) _le_create_connection_cp
   uint16_t window;
   uint8_t  initiator_filter;
   uint8_t  peer_bdaddr_type;
-  tBDAddr  peer_bdaddr;
+  bd_addr_t  peer_bdaddr;
   uint8_t  own_bdaddr_type;
   uint16_t min_interval;
   uint16_t max_interval;
@@ -282,7 +286,7 @@ typedef PACKED(struct) _le_read_white_list_size_rp
 typedef PACKED(struct) _le_add_device_to_white_list_cp
 {
   uint8_t bdaddr_type;
-  tBDAddr bdaddr;
+  bd_addr_t bdaddr;
 } le_add_device_to_white_list_cp;
 #define LE_ADD_DEVICE_TO_WHITE_LIST_CP_SIZE 7
 
@@ -290,7 +294,7 @@ typedef PACKED(struct) _le_add_device_to_white_list_cp
 typedef PACKED(struct) _le_remove_device_from_white_list_cp
 {
   uint8_t bdaddr_type;
-  tBDAddr bdaddr;
+  bd_addr_t bdaddr;
 } le_remove_device_from_white_list_cp;
 #define LE_REMOVE_DEVICE_FROM_WHITE_LIST_CP_SIZE 7
 
@@ -440,7 +444,7 @@ typedef PACKED(struct) _evt_conn_complete
 {
   uint8_t  status;
   uint16_t handle;
-  tBDAddr  bdaddr;
+  bd_addr_t  bdaddr;
   uint8_t  link_type;
   uint8_t  encr_mode;
 } evt_conn_complete;
@@ -536,7 +540,7 @@ typedef PACKED(struct) _evt_le_connection_complete
   uint16_t handle;
   uint8_t  role;
   uint8_t  peer_bdaddr_type;
-  tBDAddr  peer_bdaddr;
+  bd_addr_t  peer_bdaddr;
   uint16_t interval;
   uint16_t latency;
   uint16_t supervision_timeout;
@@ -549,9 +553,9 @@ typedef PACKED(struct) _le_advertising_info
 {
   uint8_t evt_type;
   uint8_t bdaddr_type;
-  tBDAddr bdaddr;
+  bd_addr_t bdaddr;
   uint8_t data_length;
-  uint8_t data_RSSI[VARIABLE_SIZE]; // RSSI is last octect (signed integer).
+  uint8_t data_rssi[VARIABLE_SIZE]; /* RSSI is last octet (signed integer). */
 } le_advertising_info;
 #define LE_ADVERTISING_INFO_SIZE 9
 
@@ -600,8 +604,12 @@ typedef PACKED(struct) _evt_blue_aci
 } evt_blue_aci;
 
 /* Command opcode pack/unpack */
-#define cmd_opcode_pack(ogf, ocf) (uint16_t)((ocf & 0x03ff)|(ogf << 10))
-#define cmd_opcode_ogf(op)    (op >> 10)
-#define cmd_opcode_ocf(op)    (op & 0x03ff)
+#define CMD_OPCODE_PACK(ogf, ocf) (uint16_t)((ocf & 0x03ff)|(ogf << 10))
+#define CMD_OPCODE_OGF(op)    (op >> 10)
+#define CMD_OPCODE_OCF(op)    (op & 0x03ff)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* HCI_CONST_H */

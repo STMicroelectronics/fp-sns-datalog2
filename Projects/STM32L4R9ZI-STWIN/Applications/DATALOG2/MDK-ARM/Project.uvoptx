@@ -450,8 +450,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\Core\Src\BLE_Implementation.c</PathWithFileName>
-      <FilenameWithoutPath>BLE_Implementation.c</FilenameWithoutPath>
+      <PathWithFileName>..\Core\Src\ble_implementation.c</PathWithFileName>
+      <FilenameWithoutPath>ble_implementation.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -2870,8 +2870,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\Middlewares\ST\BlueNRG-2\hci\bluenrg1_devConfig.c</PathWithFileName>
-      <FilenameWithoutPath>bluenrg1_devConfig.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\Middlewares\ST\BlueNRG-2\hci\bluenrg1_dev_config.c</PathWithFileName>
+      <FilenameWithoutPath>bluenrg1_dev_config.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -5414,8 +5414,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_MachineLearningCore.c</PathWithFileName>
-      <FilenameWithoutPath>BLE_MachineLearningCore.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_machine_learning_core.c</PathWithFileName>
+      <FilenameWithoutPath>ble_machine_learning_core.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -5426,8 +5426,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_Manager.c</PathWithFileName>
-      <FilenameWithoutPath>BLE_Manager.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_manager.c</PathWithFileName>
+      <FilenameWithoutPath>ble_manager.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -5438,8 +5438,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_PnPLike.c</PathWithFileName>
-      <FilenameWithoutPath>BLE_PnPLike.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_pn_p_like.c</PathWithFileName>
+      <FilenameWithoutPath>ble_pn_p_like.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -5450,8 +5450,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_HighSpeedDataLog.c</PathWithFileName>
-      <FilenameWithoutPath>BLE_HighSpeedDataLog.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_high_speed_data_log.c</PathWithFileName>
+      <FilenameWithoutPath>ble_high_speed_data_log.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -5462,8 +5462,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_RawPnPLControlled.c</PathWithFileName>
-      <FilenameWithoutPath>BLE_RawPnPLControlled.c</FilenameWithoutPath>
+      <PathWithFileName>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_raw_pn_pl_controlled.c</PathWithFileName>
+      <FilenameWithoutPath>ble_raw_pn_pl_controlled.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

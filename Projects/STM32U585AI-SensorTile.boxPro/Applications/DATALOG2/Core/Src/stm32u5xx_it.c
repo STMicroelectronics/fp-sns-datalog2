@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -72,7 +72,7 @@ extern void xPortSysTickHandler(void);
 void ExtiDefISR(uint16_t exti_pin)
 {
   EXTIPin2CallbckMap xMap = EXTI_GET_P2F_MAP();
-  for (int i = 0; xMap[i].pfCallback != NULL; i++)
+  for (int32_t i = 0; xMap[i].pfCallback != NULL; i++)
   {
     if (__HAL_GPIO_EXTI_GET_IT(xMap[i].nPin) && exti_pin == xMap[i].nPin)
     {
@@ -388,9 +388,9 @@ void GPDMA1_Channel4_IRQHandler(void)
 
   /* USER CODE END GPDMA1_Channel4_IRQn 0 */
   HAL_DMA_IRQHandler(&handle_GPDMA1_Channel4);
-  /* USER CODE BEGIN GPDMA4_Channel3_IRQn 1 */
+  /* USER CODE BEGIN GPDMA1_Channel4_IRQn 1 */
 
-  /* USER CODE END GPDMA4_Channel3_IRQn 1 */
+  /* USER CODE END GPDMA1_Channel4_IRQn 1 */
 }
 
 /**
@@ -408,36 +408,33 @@ void GPDMA1_Channel5_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles GPDMA1 Channel 3 global interrupt.
+  * @brief This function handles GPDMA1 Channel 6 global interrupt.
   */
 void GPDMA1_Channel6_IRQHandler(void)
 {
-  /* USER CODE BEGIN GPDMA1_Channel3_IRQn 0 */
+  /* USER CODE BEGIN GPDMA1_Channel6_IRQn 0 */
 
-  /* USER CODE END GPDMA1_Channel3_IRQn 0 */
+  /* USER CODE END GPDMA1_Channel6_IRQn 0 */
   HAL_DMA_IRQHandler(&handle_GPDMA1_Channel6);
-  /* USER CODE BEGIN GPDMA1_Channel3_IRQn 1 */
+  /* USER CODE BEGIN GPDMA1_Channel6_IRQn 1 */
 
-  /* USER CODE END GPDMA1_Channel3_IRQn 1 */
+  /* USER CODE END GPDMA1_Channel6_IRQn 1 */
 }
 
 /**
-  * @brief This function handles GPDMA1 Channel 5 global interrupt.
+  * @brief This function handles GPDMA1 Channel 7 global interrupt.
   */
 void GPDMA1_Channel7_IRQHandler(void)
 {
-  /* USER CODE BEGIN GPDMA1_Channel5_IRQn 0 */
+  /* USER CODE BEGIN GPDMA1_Channel7_IRQn 0 */
 
-  /* USER CODE END GPDMA1_Channel5_IRQn 0 */
+  /* USER CODE END GPDMA1_Channel7_IRQn 0 */
   HAL_DMA_IRQHandler(&handle_GPDMA1_Channel7);
-  /* USER CODE BEGIN GPDMA1_Channel5_IRQn 1 */
+  /* USER CODE BEGIN GPDMA1_Channel7_IRQn 1 */
 
-  /* USER CODE END GPDMA1_Channel5_IRQn 1 */
+  /* USER CODE END GPDMA1_Channel7_IRQn 1 */
 }
 
-/**
-  * @brief This function handles GPDMA1 Channel 8 global interrupt.
-  */
 void GPDMA1_Channel8_IRQHandler(void)
 {
   /* USER CODE BEGIN GPDMA1_Channel8_IRQn 0 */

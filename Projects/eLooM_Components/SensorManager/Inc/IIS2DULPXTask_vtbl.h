@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -55,14 +55,14 @@ SensorStatus_t *IIS2DULPXTask_vtblSensorGetStatusPointer(ISensor_t *_this);
 SensorDescriptor_t IIS2DULPXTask_vtblMlcGetDescription(ISensor_t *_this);
 SensorStatus_t IIS2DULPXTask_vtblMlcGetStatus(ISensor_t *_this);
 SensorStatus_t *IIS2DULPXTask_vtblMlcGetStatusPointer(ISensor_t *_this);
-sys_error_code_t IIS2DULPXTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float IIS2DULPXTask_vtblAccGetFS(ISensorMems_t *_this);
-float IIS2DULPXTask_vtblAccGetSensitivity(ISensorMems_t *_this);
-sys_error_code_t IIS2DULPXTask_vtblMlcGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float IIS2DULPXTask_vtblMlcGetFS(ISensorMems_t *_this);
-float IIS2DULPXTask_vtblMlcGetSensitivity(ISensorMems_t *_this);
-sys_error_code_t IIS2DULPXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
-sys_error_code_t IIS2DULPXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t IIS2DULPXTask_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t IIS2DULPXTask_vtblAccGetFS(ISensorMems_t *_this);
+float_t IIS2DULPXTask_vtblAccGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t IIS2DULPXTask_vtblMlcGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t IIS2DULPXTask_vtblMlcGetFS(ISensorMems_t *_this);
+float_t IIS2DULPXTask_vtblMlcGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t IIS2DULPXTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr);
+sys_error_code_t IIS2DULPXTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs);
 sys_error_code_t IIS2DULPXTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 
 sys_error_code_t IIS2DULPXTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len);

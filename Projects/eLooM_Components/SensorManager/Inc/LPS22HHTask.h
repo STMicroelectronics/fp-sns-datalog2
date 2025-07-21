@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -130,12 +130,12 @@ struct _LPS22HHTask
   /**
     * Temperature data
     */
-  float p_temp_data_buff[LPS22HH_MAX_WTM_LEVEL];
+  float_t p_temp_data_buff[LPS22HH_MAX_WTM_LEVEL];
 
   /**
     * Pressure data
     */
-  float p_press_data_buff[LPS22HH_MAX_WTM_LEVEL];
+  float_t p_press_data_buff[LPS22HH_MAX_WTM_LEVEL];
 
   /**
     * ::IEventSrc interface implementation for this class.
@@ -170,7 +170,7 @@ struct _LPS22HHTask
   /**
     * Used to update the instantaneous odr.
     */
-  double prev_timestamp;
+  double_t prev_timestamp;
 };
 
 // Public API declaration

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -74,10 +74,10 @@ uint8_t imp23absu_mic_get_volume(int32_t *value);
 uint8_t imp23absu_mic_get_resolution(pnpl_imp23absu_mic_resolution_t *enum_id);
 uint8_t imp23absu_mic_get_samples_per_ts(int32_t *value);
 uint8_t imp23absu_mic_get_dim(int32_t *value);
-uint8_t imp23absu_mic_get_ioffset(float *value);
+uint8_t imp23absu_mic_get_ioffset(float_t *value);
 uint8_t imp23absu_mic_get_usb_dps(int32_t *value);
 uint8_t imp23absu_mic_get_sd_dps(int32_t *value);
-uint8_t imp23absu_mic_get_sensitivity(float *value);
+uint8_t imp23absu_mic_get_sensitivity(float_t *value);
 uint8_t imp23absu_mic_get_data_type(char **value);
 uint8_t imp23absu_mic_get_sensor_annotation(char **value);
 uint8_t imp23absu_mic_get_sensor_category(int32_t *value);

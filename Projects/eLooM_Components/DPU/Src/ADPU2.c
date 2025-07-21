@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -677,7 +677,7 @@ sys_error_code_t ADPU2_ProcessAndDispatch(ADPU2_t *_this)
   in_data.p_payload = CB_GetItemData(p_ready_item);
   res = IDPU2_Process((IDPU2_t *)_this, in_data, _this->out_data);
   CB_ReleaseItem(_this->cbh.p_cb, p_ready_item);
-  double timestamp = SysTsGetTimestampF(SysGetTimestampSrv());
+  double_t timestamp = SysTsGetTimestampF(SysGetTimestampSrv());
   if (!SYS_IS_ERROR_CODE(res))
   {
     DataEvent_t data_evt;

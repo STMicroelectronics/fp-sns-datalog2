@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -44,7 +44,7 @@ extern "C" {
 
 typedef struct
 {
-  double old_time_stamp;
+  double_t old_time_stamp;
   uint16_t n_samples_to_timestamp;
 } SensorContext_t;
 
@@ -76,6 +76,9 @@ uint8_t DatalogAppTask_stop_vtbl(void);
 uint8_t DatalogAppTask_save_config_vtbl(void);
 uint8_t DatalogAppTask_set_time_vtbl(const char *datetime);
 uint8_t DatalogAppTask_switch_bank_vtbl(void);
+uint8_t DatalogAppTask_set_dfu_mode(void);
+uint8_t DatalogAppTask_enable_all(bool);
+
 void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
 
 sys_error_code_t DatalogAppTask_msg(ULONG msg);

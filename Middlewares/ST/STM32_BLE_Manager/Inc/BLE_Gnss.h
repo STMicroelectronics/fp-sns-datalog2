@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    BLE_Gnss.h
+  * @file    ble_gnss.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.11.0
-  * @date    15-February-2024
+  * @version 2.1.0
+  * @date    11-March-2025
   * @brief   Gnss info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -26,32 +26,30 @@
 extern "C" {
 #endif
 
-/* Exported typedef --------------------------------------------------------- */
-typedef void (*CustomNotifyEventGnss_t)(BLE_NotifyEvent_t Gnss);
-
-/* Exported Variables ------------------------------------------------------- */
-extern CustomNotifyEventGnss_t CustomNotifyEventGnss;
-
 /* Exported functions ------------------------------------------------------- */
-
 /**
   * @brief  Init gnss info service
   * @param  None
-  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for gnss info service
+  * @retval ble_char_object_t* ble_char_pointer: Data structure pointer for gnss info service
   */
-extern BleCharTypeDef *BLE_InitGnssService(void);
+extern ble_char_object_t *ble_init_gnss_service(void);
 
 /**
   * @brief  Update Gnss characteristic
-  * @param  int32_t GnssLat latitude
-  * @param  int32_t GnssLon longitude
-  * @param  uint32_t GnssAlt altitude
-  * @param  uint8_t N_SAT Number of satellites in view
-  * @param  uint8_t SIG_QUAL GNSS signal quality indicator
-  * @retval tBleStatus   Status
+  * @param  int32_t  latitude    Gnss latitude
+  * @param  int32_t  longitude   Gnss longitude
+  * @param  uint32_t altitude    Gnss altitude
+  * @param  uint8_t  number_sat  Number of satellites in view
+  * @param  uint8_t  sig_quality Signal quality indicator
+  * @retval ble_status_t   Status
   */
-tBleStatus BLE_GnssUpdate(int32_t Latitude, int32_t Longitude, uint32_t Altitude, uint8_t NumberSat,
-                          uint8_t SigQuality);
+extern ble_status_t ble_gnss_update(int32_t latitude, int32_t longitude, uint32_t altitude, uint8_t number_sat,
+                                    uint8_t sig_quality);
+
+/************************************************************
+  * Callback function prototype to manage the notify events *
+  ***********************************************************/
+extern void notify_event_gnss(ble_notify_event_t event);
 
 #ifdef __cplusplus
 }
@@ -59,4 +57,3 @@ tBleStatus BLE_GnssUpdate(int32_t Latitude, int32_t Longitude, uint32_t Altitude
 
 #endif /* _BLE_GNSS_H_ */
 
-/******************* (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

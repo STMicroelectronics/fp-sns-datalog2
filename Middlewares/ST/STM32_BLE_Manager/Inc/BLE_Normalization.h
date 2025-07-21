@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    BLE_Normalization.h
+  * @file    ble_normalization.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.11.0
-  * @date    15-February-2024
+  * @version 2.1.0
+  * @date    11-March-2025
   * @brief   Event Counter info service APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -26,29 +26,25 @@
 extern "C" {
 #endif
 
-/* Exported defines ---------------------------------------------------------*/
-
-/* Exported typedef --------------------------------------------------------- */
-typedef void (*CustomNotifyEventNormalization_t)(BLE_NotifyEvent_t Event);
-
-/* Exported Variables ------------------------------------------------------- */
-extern CustomNotifyEventNormalization_t CustomNotifyEventNormalization;
-
 /* Exported functions ------------------------------------------------------- */
-
 /**
   * @brief  Init Event Counter info service
   * @param  None
-  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Normalization info service
+  * @retval ble_char_object_t* ble_char_pointer: Data structure pointer for normalization info service
   */
-extern BleCharTypeDef *BLE_InitNormalizationService(void);
+extern ble_char_object_t *ble_init_normalization_service(void);
 
 /**
   * @brief  Update Event Counter characteristic
   * @param float Event Counter Number
-  * @retval tBleStatus   Status
+  * @retval ble_status_t   Status
   */
-extern tBleStatus BLE_NormalizationUpdate(float Normalization);
+extern ble_status_t ble_normalization_update(float normalization);
+
+/************************************************************
+  * Callback function prototype to manage the notify events *
+  ***********************************************************/
+extern void notify_event_normalization(ble_notify_event_t event);
 
 #ifdef __cplusplus
 }

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -106,17 +106,17 @@ sys_error_code_t   SMDeviceGetDescription(SensorDescriptor_t *device_description
 
 uint32_t SMGetnBytesPerSample(uint8_t id);
 
-float SMSensorGetSamplesPerSecond(uint8_t id);
+float_t SMSensorGetSamplesPerSecond(uint8_t id);
 
 /*
   * Return the sensor bandwidth [Bytes/s] with the current configuration
   * Example for 3-axis acc: 2Bytes * 3Axis * 1333Hz = 7998 Bytes/s
   */
-float SMSensorGetBandwidth(uint8_t id);
+float_t SMSensorGetBandwidth(uint8_t id);
 
 /* Specialized for ISensorMems class */
-sys_error_code_t SMSensorSetODR(uint8_t id, float odr);
-sys_error_code_t SMSensorSetFS(uint8_t id, float fs);
+sys_error_code_t SMSensorSetODR(uint8_t id, float_t odr);
+sys_error_code_t SMSensorSetFS(uint8_t id, float_t fs);
 sys_error_code_t SMSensorSetFifoWM(uint8_t id, uint16_t fifoWM);
 
 /* Specialized for ISensorAudio class */
@@ -134,8 +134,8 @@ sys_error_code_t SMSensorSetAddress(uint8_t id, uint32_t address);
 sys_error_code_t SMSensorSetPowerMode(uint8_t id, uint32_t power_mode);
 
 /* Specialized for ISensorPresence class */
-sys_error_code_t SMSensorSetDataFrequency(uint8_t id, float data_frequency);
-sys_error_code_t SMSensorSetTransmittance(uint8_t id, float Transmittance);
+sys_error_code_t SMSensorSetDataFrequency(uint8_t id, float_t data_frequency);
+sys_error_code_t SMSensorSetTransmittance(uint8_t id, float_t Transmittance);
 sys_error_code_t SMSensorSetAverageTObject(uint8_t id, uint16_t average_tobject);
 sys_error_code_t SMSensorSetAverageTAmbient(uint8_t id, uint16_t average_tambient);
 sys_error_code_t SMSensorSetPresenceThreshold(uint8_t id, uint16_t presence_threshold);
@@ -156,7 +156,7 @@ sys_error_code_t SMSensorSetSoftwareCompensationAlgorithmConfig(uint8_t id,
 /* Specialized for ISensorLight class */
 sys_error_code_t SMSensorSetIntermeasurementTime(uint8_t id, uint32_t intermeasurement_time);
 sys_error_code_t SMSensorSetExposureTime(uint8_t id, uint32_t exposure_time);
-sys_error_code_t SMSensorSetLightGain(uint8_t id, float LightGain, uint8_t channel);
+sys_error_code_t SMSensorSetLightGain(uint8_t id, float_t LightGain, uint8_t channel);
 
 /* Specialized for ISensorPowerMeter class */
 sys_error_code_t SMSensorSetADCConversionTime(uint8_t id, uint32_t adc_conversion_time);

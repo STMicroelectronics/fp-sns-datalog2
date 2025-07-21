@@ -1,24 +1,25 @@
 /**
   ******************************************************************************
-  * @file    BLEDualProgram\Src\OTA.c
-  * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.5.0
-  * @date    27-Mar-2023
+  * @file    OTA.c
+  * @author  SRA
   * @brief   Over-the-Air Update API implementation
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   *
   ******************************************************************************
   */
+
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -35,6 +36,8 @@
 #define OTA_ADDRESS_START_BANK  0x08100000
 #define OTA_FW_ID_BANK1 0x080FF000
 #define OTA_FW_ID_BANK2 0x081FF000
+
+/* Magic number for a valid Fw Id saved on flash */
 #define OTA_FW_ID_MAGIC_NUM 0xDEADBEEF
 
 /* Uncomment the following define for enabling the PRINTF capability if it's supported */
@@ -46,7 +49,7 @@
 #define OTA_PRINTF(...)
 #endif /* OTA_ENABLE_PRINTF */
 
-/* Local Macros -------------------------------------------------------------*/
+/* Local Macros --------------------------------------------------------------*/
 #define OTA_ERROR_FUNCTION() { while(1);}
 
 /* Private variables ---------------------------------------------------------*/
@@ -54,16 +57,11 @@ static uint32_t SizeOfUpdateBlueFW = 0;
 static uint32_t AspecteduwCRCValue = 0;
 static uint32_t WritingAddress;
 
-extern int32_t CurrentActiveBank;
-
-/* CRC handler declaration */
-CRC_HandleTypeDef   CrcHandle;
-
 /* Private Function Prototypes -----------------------------------------------*/
 static void DeleteOtherFlashBankFwId(void);
 
-/* Exported functions  --------------------------------------------------*/
-
+/* Exported functions --------------------------------------------------------*/
+extern uint8_t CurrentActiveBank;
 /**
   * @brief Function for Updating the Firmware
   * @param uint32_t *SizeOfUpdate Remaining size of the firmware image [bytes]
@@ -90,7 +88,6 @@ int8_t UpdateFWBlueMS(uint32_t *SizeOfUpdate, uint8_t *att_data, int32_t data_le
   {
     uint64_t ValueToWrite;
     int32_t Counter;
-    //OTA_PRINTF("OTA chunk data_length=%ld RemSizeOfUpdate=%ld\r\n",data_length,(*SizeOfUpdate));
     /* Save the received OTA packed ad save it to flash */
     /* Unlock the Flash to enable the flash control register access *************/
     HAL_FLASH_Unlock();
@@ -125,6 +122,10 @@ int8_t UpdateFWBlueMS(uint32_t *SizeOfUpdate, uint8_t *att_data, int32_t data_le
 
         if (AspecteduwCRCValue)
         {
+          /* Make the CRC integrity check */
+          /* CRC handler declaration */
+          CRC_HandleTypeDef   CrcHandle;
+
           /* Init CRC for OTA-integrity check */
           CrcHandle.Instance = CRC;
           /* The default polynomial is used */
@@ -260,7 +261,6 @@ void StartUpdateFWBlueMS(uint32_t SizeOfUpdate, uint32_t uwCRCValue)
   DeleteOtherFlashBankFwId();
 }
 
-
 /**
   * @brief Function for reading the Fw ID of the 2 Banks
   * @param uint16_t *FwId1 Firmware Id present on First Bank
@@ -315,6 +315,7 @@ static void DeleteOtherFlashBankFwId(void)
   FLASH_EraseInitTypeDef EraseInitStruct;
   uint32_t SectorError = 0;
 
+  /* Read the Other Bank's info */
   if (CurrentActiveBank == 1)
   {
     EraseInitStruct.Banks  = FLASH_BANK_2;

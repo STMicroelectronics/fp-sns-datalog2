@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -19,67 +19,67 @@
   */
 #include <stdint.h>
 #include "bluenrg1_events.h"
-tBleStatus hci_disconnection_complete_event_process(uint8_t *buffer_in);
-tBleStatus hci_encryption_change_event_process(uint8_t *buffer_in);
-tBleStatus hci_read_remote_version_information_complete_event_process(uint8_t *buffer_in);
-tBleStatus hci_hardware_error_event_process(uint8_t *buffer_in);
-tBleStatus hci_number_of_completed_packets_event_process(uint8_t *buffer_in);
-tBleStatus hci_data_buffer_overflow_event_process(uint8_t *buffer_in);
-tBleStatus hci_encryption_key_refresh_complete_event_process(uint8_t *buffer_in);
-tBleStatus aci_blue_initialized_event_process(uint8_t *buffer_in);
-tBleStatus aci_blue_events_lost_event_process(uint8_t *buffer_in);
-tBleStatus aci_blue_crash_info_event_process(uint8_t *buffer_in);
-tBleStatus aci_hal_end_of_radio_activity_event_process(uint8_t *buffer_in);
-tBleStatus aci_hal_scan_req_report_event_process(uint8_t *buffer_in);
-tBleStatus aci_hal_fw_error_event_process(uint8_t *buffer_in);
-tBleStatus aci_gap_limited_discoverable_event_process(uint8_t *buffer_in);
-tBleStatus aci_gap_pairing_complete_event_process(uint8_t *buffer_in);
-tBleStatus aci_gap_pass_key_req_event_process(uint8_t *buffer_in);
-tBleStatus aci_gap_authorization_req_event_process(uint8_t *buffer_in);
-tBleStatus aci_gap_slave_security_initiated_event_process(uint8_t *buffer_in);
-tBleStatus aci_gap_bond_lost_event_process(uint8_t *buffer_in);
-tBleStatus aci_gap_proc_complete_event_process(uint8_t *buffer_in);
-tBleStatus aci_gap_addr_not_resolved_event_process(uint8_t *buffer_in);
-tBleStatus aci_gap_numeric_comparison_value_event_process(uint8_t *buffer_in);
-tBleStatus aci_gap_keypress_notification_event_process(uint8_t *buffer_in);
-tBleStatus aci_l2cap_connection_update_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_l2cap_proc_timeout_event_process(uint8_t *buffer_in);
-tBleStatus aci_l2cap_connection_update_req_event_process(uint8_t *buffer_in);
-tBleStatus aci_l2cap_command_reject_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_attribute_modified_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_proc_timeout_event_process(uint8_t *buffer_in);
-tBleStatus aci_att_exchange_mtu_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_att_find_info_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_att_find_by_type_value_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_att_read_by_type_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_att_read_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_att_read_blob_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_att_read_multiple_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_att_read_by_group_type_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_att_prepare_write_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_att_exec_write_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_indication_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_notification_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_proc_complete_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_error_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_disc_read_char_by_uuid_resp_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_write_permit_req_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_read_permit_req_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_read_multi_permit_req_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_tx_pool_available_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_server_confirmation_event_process(uint8_t *buffer_in);
-tBleStatus aci_gatt_prepare_write_permit_req_event_process(uint8_t *buffer_in);
-tBleStatus hci_le_connection_complete_event_process(uint8_t *buffer_in);
-tBleStatus hci_le_advertising_report_event_process(uint8_t *buffer_in);
-tBleStatus hci_le_connection_update_complete_event_process(uint8_t *buffer_in);
-tBleStatus hci_le_read_remote_used_features_complete_event_process(uint8_t *buffer_in);
-tBleStatus hci_le_long_term_key_request_event_process(uint8_t *buffer_in);
-tBleStatus hci_le_data_length_change_event_process(uint8_t *buffer_in);
-tBleStatus hci_le_read_local_p256_public_key_complete_event_process(uint8_t *buffer_in);
-tBleStatus hci_le_generate_dhkey_complete_event_process(uint8_t *buffer_in);
-tBleStatus hci_le_enhanced_connection_complete_event_process(uint8_t *buffer_in);
-tBleStatus hci_le_direct_advertising_report_event_process(uint8_t *buffer_in);
-const hci_events_table_type hci_events_table[7] =
+ble_status_t hci_disconnection_complete_event_process(uint8_t *buffer_in);
+ble_status_t hci_encryption_change_event_process(uint8_t *buffer_in);
+ble_status_t hci_read_remote_version_information_complete_event_process(uint8_t *buffer_in);
+ble_status_t hci_hardware_error_event_process(uint8_t *buffer_in);
+ble_status_t hci_number_of_completed_packets_event_process(uint8_t *buffer_in);
+ble_status_t hci_data_buffer_overflow_event_process(uint8_t *buffer_in);
+ble_status_t hci_encryption_key_refresh_complete_event_process(uint8_t *buffer_in);
+ble_status_t aci_blue_initialized_event_process(uint8_t *buffer_in);
+ble_status_t aci_blue_events_lost_event_process(uint8_t *buffer_in);
+ble_status_t aci_blue_crash_info_event_process(uint8_t *buffer_in);
+ble_status_t aci_hal_end_of_radio_activity_event_process(uint8_t *buffer_in);
+ble_status_t aci_hal_scan_req_report_event_process(uint8_t *buffer_in);
+ble_status_t aci_hal_fw_error_event_process(uint8_t *buffer_in);
+ble_status_t aci_gap_limited_discoverable_event_process(uint8_t *buffer_in);
+ble_status_t aci_gap_pairing_complete_event_process(uint8_t *buffer_in);
+ble_status_t aci_gap_pass_key_req_event_process(uint8_t *buffer_in);
+ble_status_t aci_gap_authorization_req_event_process(uint8_t *buffer_in);
+ble_status_t aci_gap_slave_security_initiated_event_process(uint8_t *buffer_in);
+ble_status_t aci_gap_bond_lost_event_process(uint8_t *buffer_in);
+ble_status_t aci_gap_proc_complete_event_process(uint8_t *buffer_in);
+ble_status_t aci_gap_addr_not_resolved_event_process(uint8_t *buffer_in);
+ble_status_t aci_gap_numeric_comparison_value_event_process(uint8_t *buffer_in);
+ble_status_t aci_gap_keypress_notification_event_process(uint8_t *buffer_in);
+ble_status_t aci_l2cap_connection_update_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_l2cap_proc_timeout_event_process(uint8_t *buffer_in);
+ble_status_t aci_l2cap_connection_update_req_event_process(uint8_t *buffer_in);
+ble_status_t aci_l2cap_command_reject_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_attribute_modified_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_proc_timeout_event_process(uint8_t *buffer_in);
+ble_status_t aci_att_exchange_mtu_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_att_find_info_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_att_find_by_type_value_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_att_read_by_type_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_att_read_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_att_read_blob_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_att_read_multiple_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_att_read_by_group_type_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_att_prepare_write_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_att_exec_write_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_indication_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_notification_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_proc_complete_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_error_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_disc_read_char_by_uuid_resp_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_write_permit_req_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_read_permit_req_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_read_multi_permit_req_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_tx_pool_available_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_server_confirmation_event_process(uint8_t *buffer_in);
+ble_status_t aci_gatt_prepare_write_permit_req_event_process(uint8_t *buffer_in);
+ble_status_t hci_le_connection_complete_event_process(uint8_t *buffer_in);
+ble_status_t hci_le_advertising_report_event_process(uint8_t *buffer_in);
+ble_status_t hci_le_connection_update_complete_event_process(uint8_t *buffer_in);
+ble_status_t hci_le_read_remote_used_features_complete_event_process(uint8_t *buffer_in);
+ble_status_t hci_le_long_term_key_request_event_process(uint8_t *buffer_in);
+ble_status_t hci_le_data_length_change_event_process(uint8_t *buffer_in);
+ble_status_t hci_le_read_local_p256_public_key_complete_event_process(uint8_t *buffer_in);
+ble_status_t hci_le_generate_dhkey_complete_event_process(uint8_t *buffer_in);
+ble_status_t hci_le_enhanced_connection_complete_event_process(uint8_t *buffer_in);
+ble_status_t hci_le_direct_advertising_report_event_process(uint8_t *buffer_in);
+const hci_events_table_type_t hci_events_table[7] =
 {
   /* hci_disconnection_complete_event */
   {0x0005, hci_disconnection_complete_event_process},
@@ -96,7 +96,7 @@ const hci_events_table_type hci_events_table[7] =
   /* hci_encryption_key_refresh_complete_event */
   {0x0030, hci_encryption_key_refresh_complete_event_process}
 };
-const hci_le_meta_events_table_type hci_le_meta_events_table[10] =
+const hci_le_meta_events_table_type_t hci_le_meta_events_table[10] =
 {
   /* hci_le_connection_complete_event */
   {0x0001, hci_le_connection_complete_event_process},
@@ -119,7 +119,7 @@ const hci_le_meta_events_table_type hci_le_meta_events_table[10] =
   /* hci_le_direct_advertising_report_event */
   {0x000b, hci_le_direct_advertising_report_event_process}
 };
-const hci_vendor_specific_events_table_type hci_vendor_specific_events_table[43] =
+const hci_vendor_specific_events_table_type_t hci_vendor_specific_events_table[43] =
 {
   /* aci_blue_initialized_event */
   {0x0001, aci_blue_initialized_event_process},
@@ -219,24 +219,24 @@ const hci_vendor_specific_events_table_type hci_vendor_specific_events_table[43]
   *        can be ignored by the Host. For example, this can be the case if the
   *        Host has issued the Disconnect command and there was a parameter
   *        error, or the command was not presently allowed, or a
-  *        Connection_Handle that didn't correspond to a connection was given.
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  *        connection_handle that didn't correspond to a connection was given.
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param Connection_Handle Connection_Handle which was disconnected.
+  * @param connection_handle connection_handle which was disconnected.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Reason Reason for disconnection. See Error Codes.
+  * @param reason Reason for disconnection. See Error Codes.
   * @retval None
   */
 
-tBleStatus hci_disconnection_complete_event_process(uint8_t *buffer_in)
+ble_status_t hci_disconnection_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_disconnection_complete_event_rp0 *rp0 = (hci_disconnection_complete_event_rp0 *)buffer_in;
-  hci_disconnection_complete_event(rp0->Status,
-                                   rp0->Connection_Handle,
-                                   rp0->Reason);
+  hci_disconnection_complete_event(rp0->status,
+                                   rp0->connection_handle,
+                                   rp0->reason);
 
   return status;
 }
@@ -244,41 +244,41 @@ tBleStatus hci_disconnection_complete_event_process(uint8_t *buffer_in)
 /* Event len: 1 + 2 + 1 */
 /**
   * @brief The Encryption Change event is used to indicate that the change of the
-  *        encryption mode has been completed. The Connection_Handle will be a
-  *        Connection_Handle for an ACL connection. The Encryption_Enabled event
-  *        parameter specifies the new Encryption_Enabled parameter for the
-  *        Connection_Handle specified by the Connection_Handle event parameter.
+  *        encryption mode has been completed. The connection_handle will be a
+  *        connection_handle for an ACL connection. The encryption_enabled event
+  *        parameter specifies the new encryption_enabled parameter for the
+  *        connection_handle specified by the connection_handle event parameter.
   *        This event will occur on both devices to notify the Hosts when
-  *        Encryption has changed for the specified Connection_Handle between two
+  *        Encryption has changed for the specified connection_handle between two
   *        devices. Note: This event shall not be generated if encryption is
   *        paused or resumed; during a role switch, for example. The meaning of
-  *        the Encryption_Enabled parameter depends on whether the Host has
+  *        the encryption_enabled parameter depends on whether the Host has
   *        indicated support for Secure Connections in the
   *        Secure_Connections_Host_Support parameter. When
-  *        Secure_Connections_Host_Support is 'disabled' or the Connection_Handle
-  *        refers to an LE link, the Controller shall only use Encryption_Enabled
+  *        Secure_Connections_Host_Support is 'disabled' or the connection_handle
+  *        refers to an LE link, the Controller shall only use encryption_enabled
   *        values 0x00 (OFF) and 0x01 (ON). (See Bluetooth Specification v.4.1,
   *        Vol. 2, Part E, 7.7.8)
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Encryption_Enabled Link Level Encryption.
+  * @param encryption_enabled Link Level Encryption.
   *        Values:
   *        - 0x00: Link Level Encryption OFF
   *        - 0x01: Link Level Encryption is ON with AES-CCM
   * @retval None
   */
 
-tBleStatus hci_encryption_change_event_process(uint8_t *buffer_in)
+ble_status_t hci_encryption_change_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_encryption_change_event_rp0 *rp0 = (hci_encryption_change_event_rp0 *)buffer_in;
-  hci_encryption_change_event(rp0->Status,
-                              rp0->Connection_Handle,
-                              rp0->Encryption_Enabled);
+  hci_encryption_change_event(rp0->status,
+                              rp0->connection_handle,
+                              rp0->encryption_enabled);
 
   return status;
 }
@@ -287,43 +287,44 @@ tBleStatus hci_encryption_change_event_process(uint8_t *buffer_in)
 /**
   * @brief The Read Remote Version Information Complete event is used to indicate
   *        the completion of the process obtaining the version information of the
-  *        remote Controller specified by the Connection_Handle event parameter.
-  *        The Connection_Handle shall be for an ACL connection. The Version
+  *        remote Controller specified by the connection_handle event parameter.
+  *        The connection_handle shall be for an ACL connection. The Version
   *        event parameter defines the specification version of the LE
-  *        Controller. The Manufacturer_Name event parameter indicates the
+  *        Controller. The manufacturer_name event parameter indicates the
   *        manufacturer of the remote Controller. The Subversion event parameter
   *        is controlled by the manufacturer and is implementation dependent. The
   *        Subversion event parameter defines the various revisions that each
   *        version of the Bluetooth hardware will go through as design processes
   *        change and errors are fixed. This allows the software to determine
   *        what Bluetooth hardware is being used and, if necessary, to work
-  *        around various bugs in the hardware. When the Connection_Handle is
+  *        around various bugs in the hardware. When the connection_handle is
   *        associated with an LE-U logical link, the Version event parameter
-  *        shall be Link Layer VersNr parameter, the Manufacturer_Name event
+  *        shall be Link Layer VersNr parameter, the manufacturer_name event
   *        parameter shall be the CompId parameter, and the Subversion event
   *        parameter shall be the SubVersNr parameter. (See Bluetooth
   *        Specification v.4.1, Vol. 2, Part E, 7.7.12)
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Version Version of the Current LMP in the remote Controller
-  * @param Manufacturer_Name Manufacturer Name of the remote Controller
-  * @param Subversion Subversion of the LMP in the remote Controller
+  * @param version Version of the Current LMP in the remote Controller
+  * @param manufacturer_name Manufacturer Name of the remote Controller
+  * @param subversion Subversion of the LMP in the remote Controller
   * @retval None
   */
 
-tBleStatus hci_read_remote_version_information_complete_event_process(uint8_t *buffer_in)
+ble_status_t hci_read_remote_version_information_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
-  hci_read_remote_version_information_complete_event_rp0 *rp0 = (hci_read_remote_version_information_complete_event_rp0 *)buffer_in;
-  hci_read_remote_version_information_complete_event(rp0->Status,
-                                                     rp0->Connection_Handle,
-                                                     rp0->Version,
-                                                     rp0->Manufacturer_Name,
-                                                     rp0->Subversion);
+  hci_read_remote_version_information_complete_event_rp0 *rp0 =
+    (hci_read_remote_version_information_complete_event_rp0 *)buffer_in;
+  hci_read_remote_version_information_complete_event(rp0->status,
+                                                     rp0->connection_handle,
+                                                     rp0->version,
+                                                     rp0->manufacturer_name,
+                                                     rp0->subversion);
 
   return status;
 }
@@ -334,7 +335,7 @@ tBleStatus hci_read_remote_version_information_complete_event_process(uint8_t *b
   *        specific type of hardware failure for the controller. This event is
   *        used to notify the Host that a hardware failure has occurred in the
   *        Controller.
-  * @param Hardware_Code Hardware Error Event code. Error code 0x01 and 0x02 are
+  * @param hardware_code Hardware Error Event code. Error code 0x01 and 0x02 are
   *        errors generally caused by hardware issue on the PCB; another possible
   *        cause is a slow crystal startup. In the latter case, the
   *        HS_STARTUP_TIME in the device configuration needs to be tuned. Error
@@ -347,21 +348,21 @@ tBleStatus hci_read_remote_version_information_complete_event_process(uint8_t *b
   * @retval None
   */
 
-tBleStatus hci_hardware_error_event_process(uint8_t *buffer_in)
+ble_status_t hci_hardware_error_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_hardware_error_event_rp0 *rp0 = (hci_hardware_error_event_rp0 *)buffer_in;
-  hci_hardware_error_event(rp0->Hardware_Code);
+  hci_hardware_error_event(rp0->hardware_code);
 
   return status;
 }
 /* hci_number_of_completed_packets_event */
-/* Event len: 1 + rp0->Number_of_Handles * (sizeof(Handle_Packets_Pair_Entry_t)) */
+/* Event len: 1 + rp0->number_of_handles * (sizeof(handle_packets_pair_entry_t)) */
 /**
   * @brief 'The Number Of Completed Packets event is used by the Controller to
   *        indicate to the Host how many HCI Data Packets have been completed
-  *        (transmitted or flushed) for each Connection_Handle since the previous
+  *        (transmitted or flushed) for each connection_handle since the previous
   *        Number Of Completed Packets event was sent to the Host. This means
   *        that the corresponding buffer space has been freed in the Controller.
   *        Based on this information, and the HC_Total_Num_ACL_Data_Packets and
@@ -374,29 +375,30 @@ tBleStatus hci_hardware_error_event_process(uint8_t *buffer_in)
   *        the Number Of Completed Packets event to the Host at least
   *        periodically, until it finally reports that all the pending ACL Data
   *        Packets have been transmitted or flushed.
-  * @param Number_of_Handles The number of Connection_Handles and
+  * @param number_of_handles The number of Connection_Handles and
   *        Num_HCI_Data_Packets parameters pairs contained in this event
-  * @param Handle_Packets_Pair_Entry See @ref Handle_Packets_Pair_Entry_t
+  * @param handle_packets_pair_entry See @ref handle_packets_pair_entry_t
   * @retval None
   */
 
-tBleStatus hci_number_of_completed_packets_event_process(uint8_t *buffer_in)
+ble_status_t hci_number_of_completed_packets_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_number_of_completed_packets_event_rp0 *rp0 = (hci_number_of_completed_packets_event_rp0 *)buffer_in;
   uint8_t size = 1;
-  int i;
-  Handle_Packets_Pair_Entry_t Handle_Packets_Pair_Entry[HCI_MAX_PAYLOAD_SIZE / sizeof(Handle_Packets_Pair_Entry_t)];
-  for (i = 0; i < rp0->Number_of_Handles; i++)
+  int32_t i;
+  handle_packets_pair_entry_t handle_packets_pair_entry[HCI_MAX_PAYLOAD_SIZE / sizeof(handle_packets_pair_entry_t)];
+  for (i = 0; i < rp0->number_of_handles; i++)
   {
-    Handle_Packets_Pair_Entry[i].Connection_Handle = rp0->Handle_Packets_Pair_Entry[i].Connection_Handle;
+    handle_packets_pair_entry[i].connection_handle = rp0->handle_packets_pair_entry[i].connection_handle;
     size += 2;
-    Handle_Packets_Pair_Entry[i].HC_Num_Of_Completed_Packets = rp0->Handle_Packets_Pair_Entry[i].HC_Num_Of_Completed_Packets;
+    handle_packets_pair_entry[i].hc_num_of_completed_packets =
+      rp0->handle_packets_pair_entry[i].hc_num_of_completed_packets;
     size += 2;
   }
-  hci_number_of_completed_packets_event(rp0->Number_of_Handles,
-                                        Handle_Packets_Pair_Entry);
+  hci_number_of_completed_packets_event(rp0->number_of_handles,
+                                        handle_packets_pair_entry);
 
   return status;
 }
@@ -405,20 +407,20 @@ tBleStatus hci_number_of_completed_packets_event_process(uint8_t *buffer_in)
 /**
   * @brief 'This event is used to indicate that the Controller's data buffers
   *        have been overflowed. This can occur if the Host has sent more packets
-  *        than allowed. The Link_Type parameter is used to indicate that the
+  *        than allowed. The link_type parameter is used to indicate that the
   *        overflow was caused by ACL data.
-  * @param Link_Type On wich type of channel overflow has occurred.
+  * @param link_type On which type of channel overflow has occurred.
   *        Values:
   *        - 0x01: ACL Buffer Overflow
   * @retval None
   */
 
-tBleStatus hci_data_buffer_overflow_event_process(uint8_t *buffer_in)
+ble_status_t hci_data_buffer_overflow_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_data_buffer_overflow_event_rp0 *rp0 = (hci_data_buffer_overflow_event_rp0 *)buffer_in;
-  hci_data_buffer_overflow_event(rp0->Link_Type);
+  hci_data_buffer_overflow_event(rp0->link_type);
 
   return status;
 }
@@ -427,7 +429,7 @@ tBleStatus hci_data_buffer_overflow_event_process(uint8_t *buffer_in)
 /**
   * @brief 'The Encryption Key Refresh Complete event is used to indicate to the
   *        Host that the encryption key was refreshed on the given
-  *        Connection_Handle any time encryption is paused and then resumed. If
+  *        connection_handle any time encryption is paused and then resumed. If
   *        the Encryption Key Refresh Complete event was generated due to an
   *        encryption pause and resume operation embedded within a change
   *        connection link key procedure, the Encryption Key Refresh Complete
@@ -436,21 +438,21 @@ tBleStatus hci_data_buffer_overflow_event_process(uint8_t *buffer_in)
   *        to an encryption pause and resume operation embedded within a role
   *        switch procedure, the Encryption Key Refresh Complete event shall be
   *        sent prior to the Role Change event.
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
   * @retval None
   */
 
-tBleStatus hci_encryption_key_refresh_complete_event_process(uint8_t *buffer_in)
+ble_status_t hci_encryption_key_refresh_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_encryption_key_refresh_complete_event_rp0 *rp0 = (hci_encryption_key_refresh_complete_event_rp0 *)buffer_in;
-  hci_encryption_key_refresh_complete_event(rp0->Status,
-                                            rp0->Connection_Handle);
+  hci_encryption_key_refresh_complete_event(rp0->status,
+                                            rp0->connection_handle);
 
   return status;
 }
@@ -461,7 +463,7 @@ tBleStatus hci_encryption_key_refresh_complete_event_process(uint8_t *buffer_in)
   *        been reset. If the reason code is a system crash, a following event
   *        @ref aci_blue_crash_info_event will provide more information regarding
   *        the system crash details.
-  * @param Reason_Code Reason code describing why device was reset and in which
+  * @param reason_code Reason code describing why device was reset and in which
   *        mode is operating (Updater or Normal mode)
   *        Values:
   *        - 0x01: Firmware started properly
@@ -476,12 +478,12 @@ tBleStatus hci_encryption_key_refresh_complete_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus aci_blue_initialized_event_process(uint8_t *buffer_in)
+ble_status_t aci_blue_initialized_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_blue_initialized_event_rp0 *rp0 = (aci_blue_initialized_event_rp0 *)buffer_in;
-  aci_blue_initialized_event(rp0->Reason_Code);
+  aci_blue_initialized_event(rp0->reason_code);
 
   return status;
 }
@@ -500,7 +502,7 @@ tBleStatus aci_blue_initialized_event_process(uint8_t *buffer_in)
   *        signaled by IRQ pin. It is provided to detected unexpected behavior of
   *        the external microcontroller or to allow application to recover
   *        situations where critical events are lost.
-  * @param Lost_Events Bitmap of lost events. Each bit indicates one or more
+  * @param lost_events Bitmap of lost events. Each bit indicates one or more
   *        occurrences of the specific event.
   *        Flags:
   *        - 0x0000000000000001: HCI_DISCONNECTION_COMPLETE_EVENT
@@ -562,59 +564,59 @@ tBleStatus aci_blue_initialized_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus aci_blue_events_lost_event_process(uint8_t *buffer_in)
+ble_status_t aci_blue_events_lost_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_blue_events_lost_event_rp0 *rp0 = (aci_blue_events_lost_event_rp0 *)buffer_in;
-  aci_blue_events_lost_event(rp0->Lost_Events);
+  aci_blue_events_lost_event(rp0->lost_events);
 
   return status;
 }
 /* aci_blue_crash_info_event */
-/* Event len: 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1 + rp0->Debug_Data_Length * (sizeof(uint8_t)) */
+/* Event len: 1 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 4 + 1 + rp0->debug_data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is given to the application after the @ref
   *        aci_blue_initialized_event when a system crash is detected. This
   *        events returns system crash information for debugging purposes.
   *        Information reported are useful to understand the root cause of the
   *        crash.
-  * @param Crash_Type Crash type
+  * @param crash_type Crash type
   *        Values:
   *        - 0x00: Assert failed
   *        - 0x01: NMI fault
   *        - 0x02: Hard fault
-  * @param SP Stack pointer
-  * @param R0 Register R0
-  * @param R1 Register R1
-  * @param R2 Register R2
-  * @param R3 Register R3
-  * @param R12 Register R12
-  * @param LR Link register
-  * @param PC Program counter where crash occurred
-  * @param xPSR xPSR register
-  * @param Debug_Data_Length Length of Debug_Data field
-  * @param Debug_Data Debug data
+  * @param sp Stack pointer
+  * @param r0 Register r0
+  * @param r1 Register r1
+  * @param r2 Register r2
+  * @param r3 Register r3
+  * @param r12 Register r12
+  * @param lr Link register
+  * @param pc Program counter where crash occurred
+  * @param x_psr x_psr register
+  * @param debug_data_length Length of debug_data field
+  * @param debug_data Debug data
   * @retval None
   */
 
-tBleStatus aci_blue_crash_info_event_process(uint8_t *buffer_in)
+ble_status_t aci_blue_crash_info_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_blue_crash_info_event_rp0 *rp0 = (aci_blue_crash_info_event_rp0 *)buffer_in;
-  aci_blue_crash_info_event(rp0->Crash_Type,
-                            rp0->SP,
-                            rp0->R0,
-                            rp0->R1,
-                            rp0->R2,
-                            rp0->R3,
-                            rp0->R12,
-                            rp0->LR,
-                            rp0->PC,
-                            rp0->xPSR,
-                            rp0->Debug_Data_Length,
-                            rp0->Debug_Data);
+  aci_blue_crash_info_event(rp0->crash_type,
+                            rp0->sp,
+                            rp0->r0,
+                            rp0->r1,
+                            rp0->r2,
+                            rp0->r3,
+                            rp0->r12,
+                            rp0->lr,
+                            rp0->pc,
+                            rp0->x_psr,
+                            rp0->debug_data_length,
+                            rp0->debug_data);
 
   return status;
 }
@@ -634,7 +636,7 @@ tBleStatus aci_blue_crash_info_event_process(uint8_t *buffer_in)
   *        generated. Application use cases includes synchronizing notification
   *        with connection interval, switching  antenna at the end of advertising
   *        or performing flash erase operation while radio is idle.
-  * @param Last_State Completed radio events
+  * @param last_state Completed radio events
   *        Values:
   *        - 0x00: Idle
   *        - 0x01: Advertising
@@ -644,7 +646,7 @@ tBleStatus aci_blue_crash_info_event_process(uint8_t *buffer_in)
   *        - 0x05: Connection event master
   *        - 0x06: TX test mode
   *        - 0x07: RX test mode
-  * @param Next_State Incoming radio events
+  * @param next_state Incoming radio events
   *        Values:
   *        - 0x00: Idle
   *        - 0x01: Advertising
@@ -654,19 +656,19 @@ tBleStatus aci_blue_crash_info_event_process(uint8_t *buffer_in)
   *        - 0x05: Connection event master
   *        - 0x06: TX test mode
   *        - 0x07: RX test mode
-  * @param Next_State_SysTime 32bit absolute current time expressed in internal
+  * @param next_state_sys_time 32bit absolute current time expressed in internal
   *        time units.
   * @retval None
   */
 
-tBleStatus aci_hal_end_of_radio_activity_event_process(uint8_t *buffer_in)
+ble_status_t aci_hal_end_of_radio_activity_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_hal_end_of_radio_activity_event_rp0 *rp0 = (aci_hal_end_of_radio_activity_event_rp0 *)buffer_in;
-  aci_hal_end_of_radio_activity_event(rp0->Last_State,
-                                      rp0->Next_State,
-                                      rp0->Next_State_SysTime);
+  aci_hal_end_of_radio_activity_event(rp0->last_state,
+                                      rp0->next_state,
+                                      rp0->next_state_sys_time);
 
   return status;
 }
@@ -674,12 +676,12 @@ tBleStatus aci_hal_end_of_radio_activity_event_process(uint8_t *buffer_in)
 /* Event len: 1 + 1 + 6 */
 /**
   * @brief This event is reported to the application after a scan request is
-  *        received and a scan reponse is scheduled to be transmitted.
-  * @param RSSI N Size: 1 Octet (signed integer) Units: dBm
+  *        received and a scan response is scheduled to be transmitted.
+  * @param rssi N Size: 1 Octet (signed integer) Units: dBm
   *        Values:
   *        - 127: RSSI not available
   *        - -127 ... 20
-  * @param Peer_Address_Type 0x00 Public Device Address 0x01 Random Device
+  * @param peer_address_type 0x00 Public Device Address 0x01 Random Device
   *        Address 0x02 Public Identity Address (Corresponds to Resolved Private
   *        Address) 0x03 Random (Static) Identity Address (Corresponds to
   *        Resolved Private Address)
@@ -688,48 +690,48 @@ tBleStatus aci_hal_end_of_radio_activity_event_process(uint8_t *buffer_in)
   *        - 0x01: Random Device Address
   *        - 0x02: Public Identity Address
   *        - 0x03: Random (Static) Identity Address
-  * @param Peer_Address Public Device Address or Random Device Address of the
+  * @param peer_address Public Device Address or Random Device Address of the
   *        peer device
   * @retval None
   */
 
-tBleStatus aci_hal_scan_req_report_event_process(uint8_t *buffer_in)
+ble_status_t aci_hal_scan_req_report_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_hal_scan_req_report_event_rp0 *rp0 = (aci_hal_scan_req_report_event_rp0 *)buffer_in;
-  aci_hal_scan_req_report_event(rp0->RSSI,
-                                rp0->Peer_Address_Type,
-                                rp0->Peer_Address);
+  aci_hal_scan_req_report_event(rp0->rssi,
+                                rp0->peer_address_type,
+                                rp0->peer_address);
 
   return status;
 }
 /* aci_hal_fw_error_event */
-/* Event len: 1 + 1 + rp0->Data_Length * (sizeof(uint8_t)) */
+/* Event len: 1 + 1 + rp0->data_length * (sizeof(uint8_t)) */
 /**
-  * @brief This event is generated to report firmware error informations. After
+  * @brief This event is generated to report firmware error information. After
   *        this event with error type equal to either 0x01, 0x02 or 0x3, it is
   *        recommended to disconnect the link (handle is reported in Data field).
-  * @param FW_Error_Type Errore code identifying the type of error that has
+  * @param fw_error_type Errore code identifying the type of error that has
   *        occurred.
   *        Values:
   *        - 0x01: HAL_FW_L2CAP_RECOMBINATION_ERROR
   *        - 0x02: HAL_FW_GATT_UNEXPECTED_RESPONSE_ERROR
   *        - 0x03: HAL_FW_GATT_SEQUENTIAL_PROTOCOL_ERROR
-  * @param Data_Length Length of Data in octets
-  * @param Data If FW_Error_Type is 0x01, 0x02 or 0x03, this parameter contains
+  * @param data_length Length of Data in octets
+  * @param data If fw_error_type is 0x01, 0x02 or 0x03, this parameter contains
   *        the connection handle where the abnormal condition has occurred.
   * @retval None
   */
 
-tBleStatus aci_hal_fw_error_event_process(uint8_t *buffer_in)
+ble_status_t aci_hal_fw_error_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_hal_fw_error_event_rp0 *rp0 = (aci_hal_fw_error_event_rp0 *)buffer_in;
-  aci_hal_fw_error_event(rp0->FW_Error_Type,
-                         rp0->Data_Length,
-                         rp0->Data);
+  aci_hal_fw_error_event(rp0->fw_error_type,
+                         rp0->data_length,
+                         rp0->data);
 
   return status;
 }
@@ -741,9 +743,9 @@ tBleStatus aci_hal_fw_error_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus aci_gap_limited_discoverable_event_process(uint8_t *buffer_in)
+ble_status_t aci_gap_limited_discoverable_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   aci_gap_limited_discoverable_event();
 
   return status;
@@ -757,9 +759,9 @@ tBleStatus aci_gap_limited_discoverable_event_process(uint8_t *buffer_in)
   *        paired with a remote device so that it can take further actions or to
   *        notify that a timeout has occurred so that the upper layer can decide
   *        to disconnect the link.
-  * @param Connection_Handle Connection handle on which the pairing procedure
+  * @param connection_handle Connection handle on which the pairing procedure
   *        completed
-  * @param Status Pairing status. If 0x02, see Reason code.
+  * @param status Pairing status. If 0x02, see Reason code.
   *        Values:
   *        - 0x00: Success
   *        - 0x01: Timeout
@@ -767,7 +769,7 @@ tBleStatus aci_gap_limited_discoverable_event_process(uint8_t *buffer_in)
   *        - 0x03: Encryption failed, LTK missing on local device
   *        - 0x04: Encryption failed, LTK missing on peer device
   *        - 0x05: Encryption not supported by remote device
-  * @param Reason Pairing reason error code. Valid if Status is 0x02.
+  * @param reason Pairing reason error code. Valid if status is 0x02.
   *        Values:
   *        - 0x00
   *        - 0x01: PASSKEY_ENTRY_FAILED
@@ -785,14 +787,14 @@ tBleStatus aci_gap_limited_discoverable_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus aci_gap_pairing_complete_event_process(uint8_t *buffer_in)
+ble_status_t aci_gap_pairing_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gap_pairing_complete_event_rp0 *rp0 = (aci_gap_pairing_complete_event_rp0 *)buffer_in;
-  aci_gap_pairing_complete_event(rp0->Connection_Handle,
-                                 rp0->Status,
-                                 rp0->Reason);
+  aci_gap_pairing_complete_event(rp0->connection_handle,
+                                 rp0->status,
+                                 rp0->reason);
 
   return status;
 }
@@ -803,17 +805,17 @@ tBleStatus aci_gap_pairing_complete_event_process(uint8_t *buffer_in)
   *        when a passkey is required for pairing. When this event is received,
   *        the application has to respond with the @ref aci_gap_pass_key_resp
   *        command.
-  * @param Connection_Handle Connection handle for which the passkey has been
+  * @param connection_handle Connection handle for which the passkey has been
   *        requested.
   * @retval None
   */
 
-tBleStatus aci_gap_pass_key_req_event_process(uint8_t *buffer_in)
+ble_status_t aci_gap_pass_key_req_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gap_pass_key_req_event_rp0 *rp0 = (aci_gap_pass_key_req_event_rp0 *)buffer_in;
-  aci_gap_pass_key_req_event(rp0->Connection_Handle);
+  aci_gap_pass_key_req_event(rp0->connection_handle);
 
   return status;
 }
@@ -826,17 +828,17 @@ tBleStatus aci_gap_pass_key_req_event_process(uint8_t *buffer_in)
   *        the pairing is complete. When this event is received, @ref
   *        aci_gap_authorization_resp command should be used to respond by the
   *        application.
-  * @param Connection_Handle Connection handle for which authorization has been
+  * @param connection_handle Connection handle for which authorization has been
   *        requested.
   * @retval None
   */
 
-tBleStatus aci_gap_authorization_req_event_process(uint8_t *buffer_in)
+ble_status_t aci_gap_authorization_req_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gap_authorization_req_event_rp0 *rp0 = (aci_gap_authorization_req_event_rp0 *)buffer_in;
-  aci_gap_authorization_req_event(rp0->Connection_Handle);
+  aci_gap_authorization_req_event(rp0->connection_handle);
 
   return status;
 }
@@ -848,9 +850,9 @@ tBleStatus aci_gap_authorization_req_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus aci_gap_slave_security_initiated_event_process(uint8_t *buffer_in)
+ble_status_t aci_gap_slave_security_initiated_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   aci_gap_slave_security_initiated_event();
 
   return status;
@@ -871,20 +873,20 @@ tBleStatus aci_gap_slave_security_initiated_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus aci_gap_bond_lost_event_process(uint8_t *buffer_in)
+ble_status_t aci_gap_bond_lost_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   aci_gap_bond_lost_event();
 
   return status;
 }
 /* aci_gap_proc_complete_event */
-/* Event len: 1 + 1 + 1 + rp0->Data_Length * (sizeof(uint8_t)) */
+/* Event len: 1 + 1 + 1 + rp0->data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is sent by the GAP to the upper layers when a procedure
   *        previously started has been terminated by the upper layer or has
   *        completed for any other reason
-  * @param Procedure_Code Terminated procedure.
+  * @param procedure_code Terminated procedure.
   *        Values:
   *        - 0x01: GAP_LIMITED_DISCOVERY_PROC_BIT
   *        - 0x02: GAP_GENERAL_DISCOVERY_PROC_BIT
@@ -894,23 +896,23 @@ tBleStatus aci_gap_bond_lost_event_process(uint8_t *buffer_in)
   *        - 0x20: GAP_SELECTIVE_CONNECTION_ESTABLISHMENT_PROC_BIT
   *        - 0x40: GAP_DIRECT_CONNECTION_ESTABLISHMENT_PROC_BIT
   *        - 0x80: GAP_OBSERVATION_PROC_BIT
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param Data_Length Length of Data in octets
-  * @param Data Procedure Specific Data: - For Name Discovery Procedure: the name
+  * @param data_length Length of Data in octets
+  * @param data Procedure Specific Data: - For Name Discovery Procedure: the name
   *        of the peer device if the procedure completed successfully.
   * @retval None
   */
 
-tBleStatus aci_gap_proc_complete_event_process(uint8_t *buffer_in)
+ble_status_t aci_gap_proc_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gap_proc_complete_event_rp0 *rp0 = (aci_gap_proc_complete_event_rp0 *)buffer_in;
-  aci_gap_proc_complete_event(rp0->Procedure_Code,
-                              rp0->Status,
-                              rp0->Data_Length,
-                              rp0->Data);
+  aci_gap_proc_complete_event(rp0->procedure_code,
+                              rp0->status,
+                              rp0->data_length,
+                              rp0->data);
 
   return status;
 }
@@ -921,17 +923,17 @@ tBleStatus aci_gap_proc_complete_event_process(uint8_t *buffer_in)
   *        sent to the upper layers when the peripheral is unsuccessful in
   *        resolving the resolvable address of the peer device after connecting
   *        to it.
-  * @param Connection_Handle Connection handle for which the private address
+  * @param connection_handle Connection handle for which the private address
   *        could not be resolved with any of the stored IRK's.
   * @retval None
   */
 
-tBleStatus aci_gap_addr_not_resolved_event_process(uint8_t *buffer_in)
+ble_status_t aci_gap_addr_not_resolved_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gap_addr_not_resolved_event_rp0 *rp0 = (aci_gap_addr_not_resolved_event_rp0 *)buffer_in;
-  aci_gap_addr_not_resolved_event(rp0->Connection_Handle);
+  aci_gap_addr_not_resolved_event(rp0->connection_handle);
 
   return status;
 }
@@ -943,18 +945,18 @@ tBleStatus aci_gap_addr_not_resolved_event_process(uint8_t *buffer_in)
   *        Value generated, and to ask for Confirmation to the User. When this
   *        event is received, the application has to respond with the  @ref
   *        aci_gap_numeric_comparison_value_confirm_yesno command
-  * @param Connection_Handle Connection handle related to the underlying Pairing
-  * @param Numeric_Value
+  * @param connection_handle Connection handle related to the underlying Pairing
+  * @param numeric_value
   * @retval None
   */
 
-tBleStatus aci_gap_numeric_comparison_value_event_process(uint8_t *buffer_in)
+ble_status_t aci_gap_numeric_comparison_value_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gap_numeric_comparison_value_event_rp0 *rp0 = (aci_gap_numeric_comparison_value_event_rp0 *)buffer_in;
-  aci_gap_numeric_comparison_value_event(rp0->Connection_Handle,
-                                         rp0->Numeric_Value);
+  aci_gap_numeric_comparison_value_event(rp0->connection_handle,
+                                         rp0->numeric_value);
 
   return status;
 }
@@ -965,8 +967,8 @@ tBleStatus aci_gap_numeric_comparison_value_event_process(uint8_t *buffer_in)
   *        Notifications are supported, in order to show the input type signalled
   *        by the peer device, having Keyboard only I/O capabilities. When this
   *        event is received, no action is required to the User.
-  * @param Connection_Handle Connection handle related to the underlying Pairing
-  * @param Notification_Type Type of Keypress input notified/signaled by peer
+  * @param connection_handle Connection handle related to the underlying Pairing
+  * @param notification_type Type of Keypress input notified/signaled by peer
   *        device
   *        Values:
   *        - 0x00: PASSKEY_ENTRY_STARTED
@@ -977,13 +979,13 @@ tBleStatus aci_gap_numeric_comparison_value_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus aci_gap_keypress_notification_event_process(uint8_t *buffer_in)
+ble_status_t aci_gap_keypress_notification_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gap_keypress_notification_event_rp0 *rp0 = (aci_gap_keypress_notification_event_rp0 *)buffer_in;
-  aci_gap_keypress_notification_event(rp0->Connection_Handle,
-                                      rp0->Notification_Type);
+  aci_gap_keypress_notification_event(rp0->connection_handle,
+                                      rp0->notification_type);
 
   return status;
 }
@@ -992,43 +994,43 @@ tBleStatus aci_gap_keypress_notification_event_process(uint8_t *buffer_in)
 /**
   * @brief This event is generated when the master responds to the connection
   *        update request packet with a connection update response packet.
-  * @param Connection_Handle Connection handle referring to the COS Channel where
+  * @param connection_handle Connection handle referring to the COS Channel where
   *        the Disconnection has been received.
-  * @param Result
+  * @param result
   * @retval None
   */
 
-tBleStatus aci_l2cap_connection_update_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_l2cap_connection_update_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_l2cap_connection_update_resp_event_rp0 *rp0 = (aci_l2cap_connection_update_resp_event_rp0 *)buffer_in;
-  aci_l2cap_connection_update_resp_event(rp0->Connection_Handle,
-                                         rp0->Result);
+  aci_l2cap_connection_update_resp_event(rp0->connection_handle,
+                                         rp0->result);
 
   return status;
 }
 /* aci_l2cap_proc_timeout_event */
-/* Event len: 2 + 1 + rp0->Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 1 + rp0->data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated when the master does not respond to the
   *        connection update request packet with a connection update response
   *        packet or a command reject packet within 30 seconds.
-  * @param Connection_Handle Handle of the connection related to this L2CAP
+  * @param connection_handle Handle of the connection related to this L2CAP
   *        procedure.
-  * @param Data_Length Length of following data
-  * @param Data
+  * @param data_length Length of following data
+  * @param data
   * @retval None
   */
 
-tBleStatus aci_l2cap_proc_timeout_event_process(uint8_t *buffer_in)
+ble_status_t aci_l2cap_proc_timeout_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_l2cap_proc_timeout_event_rp0 *rp0 = (aci_l2cap_proc_timeout_event_rp0 *)buffer_in;
-  aci_l2cap_proc_timeout_event(rp0->Connection_Handle,
-                               rp0->Data_Length,
-                               rp0->Data);
+  aci_l2cap_proc_timeout_event(rp0->connection_handle,
+                               rp0->data_length,
+                               rp0->data);
 
   return status;
 }
@@ -1039,106 +1041,106 @@ tBleStatus aci_l2cap_proc_timeout_event_process(uint8_t *buffer_in)
   *        is received from the slave. The upper layer which receives this event
   *        has to respond by sending a @ref
   *        aci_l2cap_connection_parameter_update_resp command.
-  * @param Connection_Handle Handle of the connection related to this L2CAP
+  * @param connection_handle Handle of the connection related to this L2CAP
   *        procedure.
-  * @param Identifier This is the identifier which associate the request to the
+  * @param identifier This is the identifier which associate the request to the
   *        response.
-  * @param L2CAP_Length Length of the L2CAP connection update request.
-  * @param Interval_Min Minimum value for the connection event interval. This
-  *        shall be less than or equal to Conn_Interval_Max. Time = N * 1.25
+  * @param l2_cap_length Length of the L2CAP connection update request.
+  * @param interval_min Minimum value for the connection event interval. This
+  *        shall be less than or equal to conn_interval_max. Time = N * 1.25
   *        msec.
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Interval_Max Maximum value for the connection event interval. This
-  *        shall be greater than or equal to Conn_Interval_Min. Time = N * 1.25
+  * @param interval_max Maximum value for the connection event interval. This
+  *        shall be greater than or equal to conn_interval_min. Time = N * 1.25
   *        msec.
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Slave_Latency Slave latency for the connection in number of connection
+  * @param slave_latency Slave latency for the connection in number of connection
   *        events.
   *        Values:
   *        - 0x0000 ... 0x01F3
-  * @param Timeout_Multiplier Defines connection timeout parameter in the
+  * @param timeout_multiplier Defines connection timeout parameter in the
   *        following manner: Timeout Multiplier * 10ms.
   *        Values:
   *        - 10 (100 ms)  ... 3200 (32000 ms)
   * @retval None
   */
 
-tBleStatus aci_l2cap_connection_update_req_event_process(uint8_t *buffer_in)
+ble_status_t aci_l2cap_connection_update_req_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_l2cap_connection_update_req_event_rp0 *rp0 = (aci_l2cap_connection_update_req_event_rp0 *)buffer_in;
-  aci_l2cap_connection_update_req_event(rp0->Connection_Handle,
-                                        rp0->Identifier,
-                                        rp0->L2CAP_Length,
-                                        rp0->Interval_Min,
-                                        rp0->Interval_Max,
-                                        rp0->Slave_Latency,
-                                        rp0->Timeout_Multiplier);
+  aci_l2cap_connection_update_req_event(rp0->connection_handle,
+                                        rp0->identifier,
+                                        rp0->l2_cap_length,
+                                        rp0->interval_min,
+                                        rp0->interval_max,
+                                        rp0->slave_latency,
+                                        rp0->timeout_multiplier);
 
   return status;
 }
 /* aci_l2cap_command_reject_event */
-/* Event len: 2 + 1 + 2 + 1 + rp0->Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 1 + 2 + 1 + rp0->data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated when the master responds to the connection
   *        update request packet with a command reject packet.
-  * @param Connection_Handle Connection handle referring to the COS Channel where
+  * @param connection_handle Connection handle referring to the COS Channel where
   *        the Disconnection has been received.
-  * @param Identifier This is the identifier which associate the request to the
+  * @param identifier This is the identifier which associate the request to the
   *        response.
-  * @param Reason Reason
-  * @param Data_Length Length of following data
-  * @param Data Data field associated with Reason
+  * @param reason Reason
+  * @param data_length Length of following data
+  * @param data Data field associated with Reason
   * @retval None
   */
 
-tBleStatus aci_l2cap_command_reject_event_process(uint8_t *buffer_in)
+ble_status_t aci_l2cap_command_reject_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_l2cap_command_reject_event_rp0 *rp0 = (aci_l2cap_command_reject_event_rp0 *)buffer_in;
-  aci_l2cap_command_reject_event(rp0->Connection_Handle,
-                                 rp0->Identifier,
-                                 rp0->Reason,
-                                 rp0->Data_Length,
-                                 rp0->Data);
+  aci_l2cap_command_reject_event(rp0->connection_handle,
+                                 rp0->identifier,
+                                 rp0->reason,
+                                 rp0->data_length,
+                                 rp0->data);
 
   return status;
 }
 /* aci_gatt_attribute_modified_event */
-/* Event len: 2 + 2 + 2 + 2 + rp0->Attr_Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 2 + 2 + 2 + rp0->attr_data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated to the application by the GATT server when a
   *        client modifies any attribute on the server, as consequence of one of
   *        the following GATT procedures: - write without response - signed write
   *        without response - write characteristic value - write long
   *        characteristic value - reliable write.
-  * @param Connection_Handle The connection handle which modified the attribute.
-  * @param Attr_Handle Handle of the attribute that was modified.
-  * @param Offset SoC mode: the offset is never used and it is always 0. Network
+  * @param connection_handle The connection handle which modified the attribute.
+  * @param attr_handle Handle of the attribute that was modified.
+  * @param offset SoC mode: the offset is never used and it is always 0. Network
   *        coprocessor mode:     - Bits 0-14: offset of the reported value inside
   *        the attribute.     - Bit 15: if the entire value of the attribute does
   *        not fit inside a single ACI_GATT_ATTRIBUTE_MODIFIED_EVENT event, this
   *        bit is set to 1 to notify that other ACI_GATT_ATTRIBUTE_MODIFIED_EVENT
   *        events will follow to report the remaining value.
-  * @param Attr_Data_Length Length of Attr_Data in octets
-  * @param Attr_Data The modified value
+  * @param attr_data_length Length of attr_data in octets
+  * @param attr_data The modified value
   * @retval None
   */
 
-tBleStatus aci_gatt_attribute_modified_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_attribute_modified_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_attribute_modified_event_rp0 *rp0 = (aci_gatt_attribute_modified_event_rp0 *)buffer_in;
-  aci_gatt_attribute_modified_event(rp0->Connection_Handle,
-                                    rp0->Attr_Handle,
-                                    rp0->Offset,
-                                    rp0->Attr_Data_Length,
-                                    rp0->Attr_Data);
+  aci_gatt_attribute_modified_event(rp0->connection_handle,
+                                    rp0->attr_handle,
+                                    rp0->offset,
+                                    rp0->attr_data_length,
+                                    rp0->attr_data);
 
   return status;
 }
@@ -1151,22 +1153,22 @@ tBleStatus aci_gatt_attribute_modified_event_process(uint8_t *buffer_in)
   *        either a major disruption in the communication link or a mistake in
   *        the application which does not provide a reply to GATT procedures.
   *        After this event, the GATT channel is closed and no more GATT
-  *        communication can be performed. The applications is exptected to issue
+  *        communication can be performed. The applications is expected to issue
   *        an @ref aci_gap_terminate to disconnect from the peer device. It is
   *        important to leave an 100 ms blank window before sending the @ref
   *        aci_gap_terminate, since immediately after this event, system could
   *        save important information in non volatile memory.
-  * @param Connection_Handle Connection handle on which the GATT procedure has
+  * @param connection_handle Connection handle on which the GATT procedure has
   *        timed out
   * @retval None
   */
 
-tBleStatus aci_gatt_proc_timeout_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_proc_timeout_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_proc_timeout_event_rp0 *rp0 = (aci_gatt_proc_timeout_event_rp0 *)buffer_in;
-  aci_gatt_proc_timeout_event(rp0->Connection_Handle);
+  aci_gatt_proc_timeout_event(rp0->connection_handle);
 
   return status;
 }
@@ -1175,225 +1177,226 @@ tBleStatus aci_gatt_proc_timeout_event_process(uint8_t *buffer_in)
 /**
   * @brief This event is generated in response to an Exchange MTU request (local
   *        or from the peer). See @ref aci_gatt_exchange_config.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Server_RX_MTU ATT_MTU value agreed between server and client
+  * @param connection_handle Connection handle related to the response
+  * @param server_rx_mtu ATT_MTU value agreed between server and client
   * @retval None
   */
 
-tBleStatus aci_att_exchange_mtu_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_att_exchange_mtu_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_att_exchange_mtu_resp_event_rp0 *rp0 = (aci_att_exchange_mtu_resp_event_rp0 *)buffer_in;
-  aci_att_exchange_mtu_resp_event(rp0->Connection_Handle,
-                                  rp0->Server_RX_MTU);
+  aci_att_exchange_mtu_resp_event(rp0->connection_handle,
+                                  rp0->server_rx_mtu);
 
   return status;
 }
 /* aci_att_find_info_resp_event */
-/* Event len: 2 + 1 + 1 + rp0->Event_Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 1 + 1 + rp0->event_data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated in response to a Find Information Request. See
   *        @ref aci_att_find_info_req and Find Information Response in Bluetooth
   *        Core v4.1 spec.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Format Format of the hanndle-uuid pairs
-  * @param Event_Data_Length Length of Handle_UUID_Pair in octets
-  * @param Handle_UUID_Pair A sequence of handle-uuid pairs. if format=1, each
+  * @param connection_handle Connection handle related to the response
+  * @param format Format of the hanndle-uuid pairs
+  * @param event_data_length Length of handle_uuid_pair in octets
+  * @param handle_uuid_pair A sequence of handle-uuid pairs. if format=1, each
   *        pair is:[2 octets for handle, 2 octets for UUIDs], if format=2, each
   *        pair is:[2 octets for handle, 16 octets for UUIDs]
   * @retval None
   */
 
-tBleStatus aci_att_find_info_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_att_find_info_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_att_find_info_resp_event_rp0 *rp0 = (aci_att_find_info_resp_event_rp0 *)buffer_in;
-  aci_att_find_info_resp_event(rp0->Connection_Handle,
-                               rp0->Format,
-                               rp0->Event_Data_Length,
-                               rp0->Handle_UUID_Pair);
+  aci_att_find_info_resp_event(rp0->connection_handle,
+                               rp0->format,
+                               rp0->event_data_length,
+                               rp0->handle_uuid_pair);
 
   return status;
 }
 /* aci_att_find_by_type_value_resp_event */
-/* Event len: 2 + 1 + rp0->Num_of_Handle_Pair * (sizeof(Attribute_Group_Handle_Pair_t)) */
+/* Event len: 2 + 1 + rp0->num_of_handle_pair * (sizeof(attribute_group_handle_pair_t)) */
 /**
   * @brief This event is generated in response to a @ref
   *        aci_att_find_by_type_value_req
-  * @param Connection_Handle Connection handle related to the response
-  * @param Num_of_Handle_Pair Number of attribute, group handle pairs
-  * @param Attribute_Group_Handle_Pair See @ref Attribute_Group_Handle_Pair_t
+  * @param connection_handle Connection handle related to the response
+  * @param num_of_handle_pair Number of attribute, group handle pairs
+  * @param attribute_group_handle_pair See @ref attribute_group_handle_pair_t
   * @retval None
   */
 
-tBleStatus aci_att_find_by_type_value_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_att_find_by_type_value_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_att_find_by_type_value_resp_event_rp0 *rp0 = (aci_att_find_by_type_value_resp_event_rp0 *)buffer_in;
   uint8_t size = 3;
-  int i;
-  Attribute_Group_Handle_Pair_t Attribute_Group_Handle_Pair[HCI_MAX_PAYLOAD_SIZE / sizeof(Attribute_Group_Handle_Pair_t)];
-  for (i = 0; i < rp0->Num_of_Handle_Pair; i++)
+  int32_t i;
+  attribute_group_handle_pair_t attribute_group_handle_pair[HCI_MAX_PAYLOAD_SIZE /
+                                                            sizeof(attribute_group_handle_pair_t)];
+  for (i = 0; i < rp0->num_of_handle_pair; i++)
   {
-    Attribute_Group_Handle_Pair[i].Found_Attribute_Handle = rp0->Attribute_Group_Handle_Pair[i].Found_Attribute_Handle;
+    attribute_group_handle_pair[i].found_attribute_handle = rp0->attribute_group_handle_pair[i].found_attribute_handle;
     size += 2;
-    Attribute_Group_Handle_Pair[i].Group_End_Handle = rp0->Attribute_Group_Handle_Pair[i].Group_End_Handle;
+    attribute_group_handle_pair[i].group_end_handle = rp0->attribute_group_handle_pair[i].group_end_handle;
     size += 2;
   }
-  aci_att_find_by_type_value_resp_event(rp0->Connection_Handle,
-                                        rp0->Num_of_Handle_Pair,
-                                        Attribute_Group_Handle_Pair);
+  aci_att_find_by_type_value_resp_event(rp0->connection_handle,
+                                        rp0->num_of_handle_pair,
+                                        attribute_group_handle_pair);
 
   return status;
 }
 /* aci_att_read_by_type_resp_event */
-/* Event len: 2 + 1 + 1 + rp0->Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 1 + 1 + rp0->data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated in response to a @ref
   *        aci_att_read_by_type_req. See @ref aci_gatt_find_included_services and
   *        @ref aci_gatt_disc_all_char_desc.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Handle_Value_Pair_Length The size of each attribute handle-value pair
-  * @param Data_Length Length of Handle_Value_Pair_Data in octets
-  * @param Handle_Value_Pair_Data Attribute Data List as defined in Bluetooth
+  * @param connection_handle Connection handle related to the response
+  * @param handle_value_pair_length The size of each attribute handle-value pair
+  * @param data_length Length of handle_value_pair_data in octets
+  * @param handle_value_pair_data Attribute Data List as defined in Bluetooth
   *        Core v4.1 spec. A sequence of handle-value pairs: [2 octets for
-  *        Attribute Handle, (Handle_Value_Pair_Length - 2 octets) for Attribute
+  *        Attribute Handle, (handle_value_pair_length - 2 octets) for Attribute
   *        Value]
   * @retval None
   */
 
-tBleStatus aci_att_read_by_type_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_att_read_by_type_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_att_read_by_type_resp_event_rp0 *rp0 = (aci_att_read_by_type_resp_event_rp0 *)buffer_in;
-  aci_att_read_by_type_resp_event(rp0->Connection_Handle,
-                                  rp0->Handle_Value_Pair_Length,
-                                  rp0->Data_Length,
-                                  rp0->Handle_Value_Pair_Data);
+  aci_att_read_by_type_resp_event(rp0->connection_handle,
+                                  rp0->handle_value_pair_length,
+                                  rp0->data_length,
+                                  rp0->handle_value_pair_data);
 
   return status;
 }
 /* aci_att_read_resp_event */
-/* Event len: 2 + 1 + rp0->Event_Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 1 + rp0->event_data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated in response to a Read Request. See @ref
   *        aci_gatt_read_char_value.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Event_Data_Length Length of following data
-  * @param Attribute_Value The value of the attribute.
+  * @param connection_handle Connection handle related to the response
+  * @param event_data_length Length of following data
+  * @param attribute_value The value of the attribute.
   * @retval None
   */
 
-tBleStatus aci_att_read_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_att_read_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_att_read_resp_event_rp0 *rp0 = (aci_att_read_resp_event_rp0 *)buffer_in;
-  aci_att_read_resp_event(rp0->Connection_Handle,
-                          rp0->Event_Data_Length,
-                          rp0->Attribute_Value);
+  aci_att_read_resp_event(rp0->connection_handle,
+                          rp0->event_data_length,
+                          rp0->attribute_value);
 
   return status;
 }
 /* aci_att_read_blob_resp_event */
-/* Event len: 2 + 1 + rp0->Event_Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 1 + rp0->event_data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event can be generated during a read long characteristic value
   *        procedure. See @ref aci_gatt_read_long_char_value.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Event_Data_Length Length of following data
-  * @param Attribute_Value Part of the attribute value.
+  * @param connection_handle Connection handle related to the response
+  * @param event_data_length Length of following data
+  * @param attribute_value Part of the attribute value.
   * @retval None
   */
 
-tBleStatus aci_att_read_blob_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_att_read_blob_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_att_read_blob_resp_event_rp0 *rp0 = (aci_att_read_blob_resp_event_rp0 *)buffer_in;
-  aci_att_read_blob_resp_event(rp0->Connection_Handle,
-                               rp0->Event_Data_Length,
-                               rp0->Attribute_Value);
+  aci_att_read_blob_resp_event(rp0->connection_handle,
+                               rp0->event_data_length,
+                               rp0->attribute_value);
 
   return status;
 }
 /* aci_att_read_multiple_resp_event */
-/* Event len: 2 + 1 + rp0->Event_Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 1 + rp0->event_data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated in response to a Read Multiple Request.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Event_Data_Length Length of following data
-  * @param Set_Of_Values A set of two or more values. A concatenation of
+  * @param connection_handle Connection handle related to the response
+  * @param event_data_length Length of following data
+  * @param set_of_values A set of two or more values. A concatenation of
   *        attribute values for each of the attribute handles in the request in
   *        the order that they were requested.
   * @retval None
   */
 
-tBleStatus aci_att_read_multiple_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_att_read_multiple_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_att_read_multiple_resp_event_rp0 *rp0 = (aci_att_read_multiple_resp_event_rp0 *)buffer_in;
-  aci_att_read_multiple_resp_event(rp0->Connection_Handle,
-                                   rp0->Event_Data_Length,
-                                   rp0->Set_Of_Values);
+  aci_att_read_multiple_resp_event(rp0->connection_handle,
+                                   rp0->event_data_length,
+                                   rp0->set_of_values);
 
   return status;
 }
 /* aci_att_read_by_group_type_resp_event */
-/* Event len: 2 + 1 + 1 + rp0->Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 1 + 1 + rp0->data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated in response to a Read By Group Type Request.
   *        See @ref aci_gatt_disc_all_primary_services.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Attribute_Data_Length The size of each attribute data
-  * @param Data_Length Length of Attribute_Data_List in octets
-  * @param Attribute_Data_List Attribute Data List as defined in Bluetooth Core
+  * @param connection_handle Connection handle related to the response
+  * @param attribute_data_length The size of each attribute data
+  * @param data_length Length of attribute_data_list in octets
+  * @param attribute_data_list Attribute Data List as defined in Bluetooth Core
   *        v4.1 spec. A sequence of attribute handle, end group handle, attribute
   *        value tuples: [2 octets for Attribute Handle, 2 octets End Group
-  *        Handle, (Attribute_Data_Length - 4 octets) for Attribute Value]
+  *        Handle, (attribute_data_length - 4 octets) for Attribute Value]
   * @retval None
   */
 
-tBleStatus aci_att_read_by_group_type_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_att_read_by_group_type_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_att_read_by_group_type_resp_event_rp0 *rp0 = (aci_att_read_by_group_type_resp_event_rp0 *)buffer_in;
-  aci_att_read_by_group_type_resp_event(rp0->Connection_Handle,
-                                        rp0->Attribute_Data_Length,
-                                        rp0->Data_Length,
-                                        rp0->Attribute_Data_List);
+  aci_att_read_by_group_type_resp_event(rp0->connection_handle,
+                                        rp0->attribute_data_length,
+                                        rp0->data_length,
+                                        rp0->attribute_data_list);
 
   return status;
 }
 /* aci_att_prepare_write_resp_event */
-/* Event len: 2 + 2 + 2 + 1 + rp0->Part_Attribute_Value_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 2 + 2 + 1 + rp0->part_attribute_value_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated in response to a @ref
   *        aci_att_prepare_write_req.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Attribute_Handle The handle of the attribute to be written
-  * @param Offset The offset of the first octet to be written.
-  * @param Part_Attribute_Value_Length Length of Part_Attribute_Value in octets
-  * @param Part_Attribute_Value The value of the attribute to be written
+  * @param connection_handle Connection handle related to the response
+  * @param attribute_handle The handle of the attribute to be written
+  * @param offset The offset of the first octet to be written.
+  * @param part_attribute_value_length Length of part_attribute_value in octets
+  * @param part_attribute_value The value of the attribute to be written
   * @retval None
   */
 
-tBleStatus aci_att_prepare_write_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_att_prepare_write_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_att_prepare_write_resp_event_rp0 *rp0 = (aci_att_prepare_write_resp_event_rp0 *)buffer_in;
-  aci_att_prepare_write_resp_event(rp0->Connection_Handle,
-                                   rp0->Attribute_Handle,
-                                   rp0->Offset,
-                                   rp0->Part_Attribute_Value_Length,
-                                   rp0->Part_Attribute_Value);
+  aci_att_prepare_write_resp_event(rp0->connection_handle,
+                                   rp0->attribute_handle,
+                                   rp0->offset,
+                                   rp0->part_attribute_value_length,
+                                   rp0->part_attribute_value);
 
   return status;
 }
@@ -1401,64 +1404,64 @@ tBleStatus aci_att_prepare_write_resp_event_process(uint8_t *buffer_in)
 /* Event len: 2 */
 /**
   * @brief This event is generated in response to an Execute Write Request.
-  * @param Connection_Handle Connection handle related to the response
+  * @param connection_handle Connection handle related to the response
   * @retval None
   */
 
-tBleStatus aci_att_exec_write_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_att_exec_write_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_att_exec_write_resp_event_rp0 *rp0 = (aci_att_exec_write_resp_event_rp0 *)buffer_in;
-  aci_att_exec_write_resp_event(rp0->Connection_Handle);
+  aci_att_exec_write_resp_event(rp0->connection_handle);
 
   return status;
 }
 /* aci_gatt_indication_event */
-/* Event len: 2 + 2 + 1 + rp0->Attribute_Value_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 2 + 1 + rp0->attribute_value_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated when an indication is received from the
   *        server.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Attribute_Handle The handle of the attribute
-  * @param Attribute_Value_Length Length of Attribute_Value in octets
-  * @param Attribute_Value The current value of the attribute
+  * @param connection_handle Connection handle related to the response
+  * @param attribute_handle The handle of the attribute
+  * @param attribute_value_length Length of attribute_value in octets
+  * @param attribute_value The current value of the attribute
   * @retval None
   */
 
-tBleStatus aci_gatt_indication_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_indication_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_indication_event_rp0 *rp0 = (aci_gatt_indication_event_rp0 *)buffer_in;
-  aci_gatt_indication_event(rp0->Connection_Handle,
-                            rp0->Attribute_Handle,
-                            rp0->Attribute_Value_Length,
-                            rp0->Attribute_Value);
+  aci_gatt_indication_event(rp0->connection_handle,
+                            rp0->attribute_handle,
+                            rp0->attribute_value_length,
+                            rp0->attribute_value);
 
   return status;
 }
 /* aci_gatt_notification_event */
-/* Event len: 2 + 2 + 1 + rp0->Attribute_Value_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 2 + 1 + rp0->attribute_value_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is generated when a notification is received from the
   *        server.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Attribute_Handle The handle of the attribute
-  * @param Attribute_Value_Length Length of Attribute_Value in octets
-  * @param Attribute_Value The current value of the attribute
+  * @param connection_handle Connection handle related to the response
+  * @param attribute_handle The handle of the attribute
+  * @param attribute_value_length Length of attribute_value in octets
+  * @param attribute_value The current value of the attribute
   * @retval None
   */
 
-tBleStatus aci_gatt_notification_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_notification_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_notification_event_rp0 *rp0 = (aci_gatt_notification_event_rp0 *)buffer_in;
-  aci_gatt_notification_event(rp0->Connection_Handle,
-                              rp0->Attribute_Handle,
-                              rp0->Attribute_Value_Length,
-                              rp0->Attribute_Value);
+  aci_gatt_notification_event(rp0->connection_handle,
+                              rp0->attribute_handle,
+                              rp0->attribute_value_length,
+                              rp0->attribute_value);
 
   return status;
 }
@@ -1467,19 +1470,19 @@ tBleStatus aci_gatt_notification_event_process(uint8_t *buffer_in)
 /**
   * @brief This event is generated when a GATT client procedure completes either
   *        with error or successfully.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Error_Code Indicates whether the procedure completed with an error or
+  * @param connection_handle Connection handle related to the response
+  * @param error_code Indicates whether the procedure completed with an error or
   *        was successful.
   * @retval None
   */
 
-tBleStatus aci_gatt_proc_complete_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_proc_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_proc_complete_event_rp0 *rp0 = (aci_gatt_proc_complete_event_rp0 *)buffer_in;
-  aci_gatt_proc_complete_event(rp0->Connection_Handle,
-                               rp0->Error_Code);
+  aci_gatt_proc_complete_event(rp0->connection_handle,
+                               rp0->error_code);
 
   return status;
 }
@@ -1491,11 +1494,11 @@ tBleStatus aci_gatt_proc_complete_event_process(uint8_t *buffer_in)
   *        one of the GATT discovery procedures. This does not mean that the
   *        procedure ended with an error, but this error event is part of the
   *        procedure itself.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Req_Opcode The request that generated this error response
-  * @param Attribute_Handle The attribute handle that generated this error
+  * @param connection_handle Connection handle related to the response
+  * @param req_op_code The request that generated this error response
+  * @param attribute_handle The attribute handle that generated this error
   *        response
-  * @param Error_Code The reason why the request has generated an error response
+  * @param error_code The reason why the request has generated an error response
   *        (ATT error codes)
   *        Values:
   *        - 0x01: Invalid handle
@@ -1518,20 +1521,20 @@ tBleStatus aci_gatt_proc_complete_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus aci_gatt_error_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_error_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_error_resp_event_rp0 *rp0 = (aci_gatt_error_resp_event_rp0 *)buffer_in;
-  aci_gatt_error_resp_event(rp0->Connection_Handle,
-                            rp0->Req_Opcode,
-                            rp0->Attribute_Handle,
-                            rp0->Error_Code);
+  aci_gatt_error_resp_event(rp0->connection_handle,
+                            rp0->req_op_code,
+                            rp0->attribute_handle,
+                            rp0->error_code);
 
   return status;
 }
 /* aci_gatt_disc_read_char_by_uuid_resp_event */
-/* Event len: 2 + 2 + 1 + rp0->Attribute_Value_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 2 + 1 + rp0->attribute_value_length * (sizeof(uint8_t)) */
 /**
   * @brief This event can be generated during a "Discover Characteristics By
   *        UUID" procedure or a "Read using Characteristic UUID" procedure. The
@@ -1540,10 +1543,10 @@ tBleStatus aci_gatt_error_resp_event_process(uint8_t *buffer_in)
   *        Characteristics By UUID" has been started. It will be the value of the
   *        Characteristic if a* "Read using Characteristic UUID" has been
   *        performed.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Attribute_Handle The handle of the attribute
-  * @param Attribute_Value_Length Length of Attribute_Value in octets
-  * @param Attribute_Value The attribute value will be a service declaration as
+  * @param connection_handle Connection handle related to the response
+  * @param attribute_handle The handle of the attribute
+  * @param attribute_value_length Length of attribute_value in octets
+  * @param attribute_value The attribute value will be a service declaration as
   *        defined in Bluetooth Core v4.0 spec  (vol.3, Part G, ch. 3.3.1), when
   *        a "Discover Characteristics By UUID" has been started.  It will be the
   *        value of the Characteristic if a "Read using Characteristic UUID" has
@@ -1551,20 +1554,20 @@ tBleStatus aci_gatt_error_resp_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus aci_gatt_disc_read_char_by_uuid_resp_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_disc_read_char_by_uuid_resp_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_disc_read_char_by_uuid_resp_event_rp0 *rp0 = (aci_gatt_disc_read_char_by_uuid_resp_event_rp0 *)buffer_in;
-  aci_gatt_disc_read_char_by_uuid_resp_event(rp0->Connection_Handle,
-                                             rp0->Attribute_Handle,
-                                             rp0->Attribute_Value_Length,
-                                             rp0->Attribute_Value);
+  aci_gatt_disc_read_char_by_uuid_resp_event(rp0->connection_handle,
+                                             rp0->attribute_handle,
+                                             rp0->attribute_value_length,
+                                             rp0->attribute_value);
 
   return status;
 }
 /* aci_gatt_write_permit_req_event */
-/* Event len: 2 + 2 + 1 + rp0->Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 2 + 1 + rp0->data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is given to the application when a write request, write
   *        command or signed write command is received by the server from the
@@ -1580,23 +1583,23 @@ tBleStatus aci_gatt_disc_read_char_by_uuid_resp_event_process(uint8_t *buffer_in
   *        error response will be sent to the client, with the error code as
   *        specified by the application. In case of write/signed write commands,
   *        no response is sent to the client but the attribute is not modified.
-  * @param Connection_Handle Handle of the connection on which there was the
+  * @param connection_handle Handle of the connection on which there was the
   *        request to write the attribute
-  * @param Attribute_Handle The handle of the attribute
-  * @param Data_Length Length of Data field
-  * @param Data The data that the client has requested to write
+  * @param attribute_handle The handle of the attribute
+  * @param data_length Length of Data field
+  * @param data The data that the client has requested to write
   * @retval None
   */
 
-tBleStatus aci_gatt_write_permit_req_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_write_permit_req_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_write_permit_req_event_rp0 *rp0 = (aci_gatt_write_permit_req_event_rp0 *)buffer_in;
-  aci_gatt_write_permit_req_event(rp0->Connection_Handle,
-                                  rp0->Attribute_Handle,
-                                  rp0->Data_Length,
-                                  rp0->Data);
+  aci_gatt_write_permit_req_event(rp0->connection_handle,
+                                  rp0->attribute_handle,
+                                  rp0->data_length,
+                                  rp0->data);
 
   return status;
 }
@@ -1611,25 +1614,25 @@ tBleStatus aci_gatt_write_permit_req_event_process(uint8_t *buffer_in)
   *        desires and when done, it has to send the @ref aci_gatt_allow_read
   *        command to indicate to the stack that it can send the response to the
   *        client.
-  * @param Connection_Handle Connection handle related to the response
-  * @param Attribute_Handle The handle of the attribute
-  * @param Offset Contains the offset from which the read has been requested
+  * @param connection_handle Connection handle related to the response
+  * @param attribute_handle The handle of the attribute
+  * @param offset Contains the offset from which the read has been requested
   * @retval None
   */
 
-tBleStatus aci_gatt_read_permit_req_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_read_permit_req_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_read_permit_req_event_rp0 *rp0 = (aci_gatt_read_permit_req_event_rp0 *)buffer_in;
-  aci_gatt_read_permit_req_event(rp0->Connection_Handle,
-                                 rp0->Attribute_Handle,
-                                 rp0->Offset);
+  aci_gatt_read_permit_req_event(rp0->connection_handle,
+                                 rp0->attribute_handle,
+                                 rp0->offset);
 
   return status;
 }
 /* aci_gatt_read_multi_permit_req_event */
-/* Event len: 2 + 1 + rp0->Number_of_Handles * (sizeof(Handle_Item_t)) */
+/* Event len: 2 + 1 + rp0->number_of_handles * (sizeof(handle_item_t)) */
 /**
   * @brief This event is given to the application when a read multiple request or
   *        read by type request is received by the server from the client. This
@@ -1639,29 +1642,29 @@ tBleStatus aci_gatt_read_permit_req_event_process(uint8_t *buffer_in)
   *        handles if it desires and when done, it has to send the @ref
   *        aci_gatt_allow_read command to indicate to the stack that it can send
   *        the response to the client.
-  * @param Connection_Handle Handle of the connection which requested to read the
+  * @param connection_handle Handle of the connection which requested to read the
   *        attribute
-  * @param Number_of_Handles
-  * @param Handle_Item See @ref Handle_Item_t
+  * @param number_of_handles
+  * @param handle_item See @ref handle_item_t
   * @retval None
   */
 
-tBleStatus aci_gatt_read_multi_permit_req_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_read_multi_permit_req_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_read_multi_permit_req_event_rp0 *rp0 = (aci_gatt_read_multi_permit_req_event_rp0 *)buffer_in;
   uint8_t size = 3;
-  int i;
-  Handle_Item_t Handle_Item[HCI_MAX_PAYLOAD_SIZE / sizeof(Handle_Item_t)];
-  for (i = 0; i < rp0->Number_of_Handles; i++)
+  int32_t i;
+  handle_item_t handle_item[HCI_MAX_PAYLOAD_SIZE / sizeof(handle_item_t)];
+  for (i = 0; i < rp0->number_of_handles; i++)
   {
-    Handle_Item[i].Handle = rp0->Handle_Item[i].Handle;
+    handle_item[i].handle = rp0->handle_item[i].handle;
     size += 2;
   }
-  aci_gatt_read_multi_permit_req_event(rp0->Connection_Handle,
-                                       rp0->Number_of_Handles,
-                                       Handle_Item);
+  aci_gatt_read_multi_permit_req_event(rp0->connection_handle,
+                                       rp0->number_of_handles,
+                                       handle_item);
 
   return status;
 }
@@ -1674,18 +1677,18 @@ tBleStatus aci_gatt_read_multi_permit_req_event_process(uint8_t *buffer_in)
   *        available buffer size  is greater than maximum ATT MTU (on stack
   *        versions below v2.1 this event is generated when at least 2 packets
   *        with MTU of 23 bytes are available).
-  * @param Connection_Handle Connection handle related to the request
-  * @param Available_Buffers Not used.
+  * @param connection_handle Connection handle related to the request
+  * @param available_buffers Not used.
   * @retval None
   */
 
-tBleStatus aci_gatt_tx_pool_available_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_tx_pool_available_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_tx_pool_available_event_rp0 *rp0 = (aci_gatt_tx_pool_available_event_rp0 *)buffer_in;
-  aci_gatt_tx_pool_available_event(rp0->Connection_Handle,
-                                   rp0->Available_Buffers);
+  aci_gatt_tx_pool_available_event(rp0->connection_handle,
+                                   rp0->available_buffers);
 
   return status;
 }
@@ -1694,21 +1697,21 @@ tBleStatus aci_gatt_tx_pool_available_event_process(uint8_t *buffer_in)
 /**
   * @brief This event is generated when the client has sent the confirmation to a
   *        previously sent indication
-  * @param Connection_Handle Connection handle related to the event
+  * @param connection_handle Connection handle related to the event
   * @retval None
   */
 
-tBleStatus aci_gatt_server_confirmation_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_server_confirmation_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_server_confirmation_event_rp0 *rp0 = (aci_gatt_server_confirmation_event_rp0 *)buffer_in;
-  aci_gatt_server_confirmation_event(rp0->Connection_Handle);
+  aci_gatt_server_confirmation_event(rp0->connection_handle);
 
   return status;
 }
 /* aci_gatt_prepare_write_permit_req_event */
-/* Event len: 2 + 2 + 2 + 1 + rp0->Data_Length * (sizeof(uint8_t)) */
+/* Event len: 2 + 2 + 2 + 1 + rp0->data_length * (sizeof(uint8_t)) */
 /**
   * @brief This event is given to the application when a prepare write request is
   *        received by the server from the client. This event will be given to
@@ -1721,25 +1724,25 @@ tBleStatus aci_gatt_server_confirmation_event_process(uint8_t *buffer_in)
   *        rejected by the application, then the value of the attribute will not
   *        be modified and an error response will be sent to the client, with the
   *        error code as specified by the application.
-  * @param Connection_Handle Handle of the connection on which there was the
+  * @param connection_handle Handle of the connection on which there was the
   *        request to write the attribute
-  * @param Attribute_Handle The handle of the attribute
-  * @param Offset The offset from which the prepare write has been requested
-  * @param Data_Length Length of Data field
-  * @param Data The data that the client has requested to write
+  * @param attribute_handle The handle of the attribute
+  * @param offset The offset from which the prepare write has been requested
+  * @param data_length Length of Data field
+  * @param data The data that the client has requested to write
   * @retval None
   */
 
-tBleStatus aci_gatt_prepare_write_permit_req_event_process(uint8_t *buffer_in)
+ble_status_t aci_gatt_prepare_write_permit_req_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   aci_gatt_prepare_write_permit_req_event_rp0 *rp0 = (aci_gatt_prepare_write_permit_req_event_rp0 *)buffer_in;
-  aci_gatt_prepare_write_permit_req_event(rp0->Connection_Handle,
-                                          rp0->Attribute_Handle,
-                                          rp0->Offset,
-                                          rp0->Data_Length,
-                                          rp0->Data);
+  aci_gatt_prepare_write_permit_req_event(rp0->connection_handle,
+                                          rp0->attribute_handle,
+                                          rp0->offset,
+                                          rp0->data_length,
+                                          rp0->data);
 
   return status;
 }
@@ -1748,44 +1751,44 @@ tBleStatus aci_gatt_prepare_write_permit_req_event_process(uint8_t *buffer_in)
 /**
   * @brief The LE Connection Complete event indicates to both of the Hosts
   *        forming the connection that a new connection has been created. Upon
-  *        the creation of the connection a Connection_Handle shall be assigned
+  *        the creation of the connection a connection_handle shall be assigned
   *        by the Controller, and passed to the Host in this event. If the
   *        connection establishment fails this event shall be provided to the
   *        Host that had issued the LE_Create_Connection command. This event
   *        indicates to the Host which issued a LE_Create_Connection command and
-  *        received a Command Status event if the connection establishment failed
-  *        or was successful. The Master_Clock_Accuracy parameter is only valid
+  *        received a Command status event if the connection establishment failed
+  *        or was successful. The master_clock_accuracy parameter is only valid
   *        for a slave. On a master, this parameter shall be set to 0x00.
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param Connection_Handle Connection handle to be used to identify the
+  * @param connection_handle Connection handle to be used to identify the
   *        connection with the peer device.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Role Role of the local device in the connection.
+  * @param role Role of the local device in the connection.
   *        Values:
   *        - 0x00: Master
   *        - 0x01: Slave
-  * @param Peer_Address_Type The address type of the peer device.
+  * @param peer_address_type The address type of the peer device.
   *        Values:
   *        - 0x00: Public Device Address
   *        - 0x01: Random Device Address
-  * @param Peer_Address Public Device Address or Random Device Address of the
+  * @param peer_address Public Device Address or Random Device Address of the
   *        peer device
-  * @param Conn_Interval Connection interval used on this connection. Time = N *
+  * @param conn_interval Connection interval used on this connection. Time = N *
   *        1.25 msec
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Latency Slave latency for the connection in number of connection
+  * @param conn_latency Slave latency for the connection in number of connection
   *        events.
   *        Values:
   *        - 0x0000 ... 0x01F3
-  * @param Supervision_Timeout Supervision timeout for the LE Link. It shall be a
+  * @param supervision_timeout Supervision timeout for the LE Link. It shall be a
   *        multiple of 10 ms and larger than (1 + connSlaveLatency) *
   *        connInterval * 2. Time = N * 10 msec.
   *        Values:
   *        - 0x000A (100 ms)  ... 0x0C80 (32000 ms)
-  * @param Master_Clock_Accuracy Master clock accuracy. Only valid for a slave.
+  * @param master_clock_accuracy Master clock accuracy. Only valid for a slave.
   *        Values:
   *        - 0x00: 500 ppm
   *        - 0x01: 250 ppm
@@ -1798,63 +1801,63 @@ tBleStatus aci_gatt_prepare_write_permit_req_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus hci_le_connection_complete_event_process(uint8_t *buffer_in)
+ble_status_t hci_le_connection_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_le_connection_complete_event_rp0 *rp0 = (hci_le_connection_complete_event_rp0 *)buffer_in;
-  hci_le_connection_complete_event(rp0->Status,
-                                   rp0->Connection_Handle,
-                                   rp0->Role,
-                                   rp0->Peer_Address_Type,
-                                   rp0->Peer_Address,
-                                   rp0->Conn_Interval,
-                                   rp0->Conn_Latency,
-                                   rp0->Supervision_Timeout,
-                                   rp0->Master_Clock_Accuracy);
+  hci_le_connection_complete_event(rp0->status,
+                                   rp0->connection_handle,
+                                   rp0->role,
+                                   rp0->peer_address_type,
+                                   rp0->peer_address,
+                                   rp0->conn_interval,
+                                   rp0->conn_latency,
+                                   rp0->supervision_timeout,
+                                   rp0->master_clock_accuracy);
 
   return status;
 }
 /* hci_le_advertising_report_event */
-/* Event len: 1 + rp0->Num_Reports * (sizeof(Advertising_Report_t)) */
+/* Event len: 1 + rp0->num_reports * (sizeof(advertising_report_t)) */
 /**
   * @brief The LE Advertising Report event indicates that a Bluetooth device or
   *        multiple Bluetooth devices have responded to an active scan or
   *        received some information during a passive scan. The Controller may
   *        queue these advertising reports and send information from multiple
   *        devices in one LE Advertising Report event.
-  * @param Num_Reports Number of responses in this event.
+  * @param num_reports Number of responses in this event.
   *        Values:
   *        - 0x01
-  * @param Advertising_Report See @ref Advertising_Report_t
+  * @param advertising_report See @ref advertising_report_t
   * @retval None
   */
 
-tBleStatus hci_le_advertising_report_event_process(uint8_t *buffer_in)
+ble_status_t hci_le_advertising_report_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_le_advertising_report_event_rp0 *rp0 = (hci_le_advertising_report_event_rp0 *)buffer_in;
   uint8_t size = 1;
-  int i;
-  Advertising_Report_t Advertising_Report[HCI_MAX_PAYLOAD_SIZE / sizeof(Advertising_Report_t)];
-  for (i = 0; i < rp0->Num_Reports; i++)
+  int32_t i;
+  advertising_report_t advertising_report[HCI_MAX_PAYLOAD_SIZE / sizeof(advertising_report_t)];
+  for (i = 0; i < rp0->num_reports; i++)
   {
-    Advertising_Report[i].Event_Type = rp0->Advertising_Report[i].Event_Type;
+    advertising_report[i].event_type = rp0->advertising_report[i].event_type;
     size += 1;
-    Advertising_Report[i].Address_Type = rp0->Advertising_Report[i].Address_Type;
+    advertising_report[i].address_type = rp0->advertising_report[i].address_type;
     size += 1;
-    BLUENRG_memcpy((void *) Advertising_Report[i].Address, (const void *) rp0->Advertising_Report[i].Address, 6);
+    BLUENRG_MEMCPY((void *) advertising_report[i].address, (const void *) rp0->advertising_report[i].address, 6);
     size += 6;
-    Advertising_Report[i].Length_Data = rp0->Advertising_Report[i].Length_Data;
+    advertising_report[i].length_data = rp0->advertising_report[i].length_data;
     size += 1;
-    Advertising_Report[i].Data = rp0->Advertising_Report[i].Data;
-    size += rp0->Advertising_Report[i].Length_Data;
-    Advertising_Report[i].RSSI = (uint8_t)buffer_in[size];
+    advertising_report[i].data = rp0->advertising_report[i].data;
+    size += rp0->advertising_report[i].length_data;
+    advertising_report[i].rssi = (uint8_t)buffer_in[size];
     size += 1;
   }
-  hci_le_advertising_report_event(rp0->Num_Reports,
-                                  Advertising_Report);
+  hci_le_advertising_report_event(rp0->num_reports,
+                                  advertising_report);
 
   return status;
 }
@@ -1866,21 +1869,21 @@ tBleStatus hci_le_advertising_report_event_process(uint8_t *buffer_in)
   *        if no connection parameters are updated, then this event shall not be
   *        issued. On a master, this event shall be issued if the
   *        Connection_Update command was sent.
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param Connection_Handle Connection handle to be used to identify the
+  * @param connection_handle Connection handle to be used to identify the
   *        connection with the peer device.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Conn_Interval Connection interval used on this connection. Time = N *
+  * @param conn_interval Connection interval used on this connection. Time = N *
   *        1.25 msec
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Latency Slave latency for the connection in number of connection
+  * @param conn_latency Slave latency for the connection in number of connection
   *        events.
   *        Values:
   *        - 0x0000 ... 0x01F3
-  * @param Supervision_Timeout Supervision timeout for the LE Link. It shall be a
+  * @param supervision_timeout Supervision timeout for the LE Link. It shall be a
   *        multiple of 10 ms and larger than (1 + connSlaveLatency) *
   *        connInterval * 2. Time = N * 10 msec.
   *        Values:
@@ -1888,16 +1891,16 @@ tBleStatus hci_le_advertising_report_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus hci_le_connection_update_complete_event_process(uint8_t *buffer_in)
+ble_status_t hci_le_connection_update_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_le_connection_update_complete_event_rp0 *rp0 = (hci_le_connection_update_complete_event_rp0 *)buffer_in;
-  hci_le_connection_update_complete_event(rp0->Status,
-                                          rp0->Connection_Handle,
-                                          rp0->Conn_Interval,
-                                          rp0->Conn_Latency,
-                                          rp0->Supervision_Timeout);
+  hci_le_connection_update_complete_event(rp0->status,
+                                          rp0->connection_handle,
+                                          rp0->conn_interval,
+                                          rp0->conn_latency,
+                                          rp0->supervision_timeout);
 
   return status;
 }
@@ -1907,26 +1910,27 @@ tBleStatus hci_le_connection_update_complete_event_process(uint8_t *buffer_in)
   * @brief The LE Read Remote Used Features Complete event is used to indicate
   *        the completion of the process of the Controller obtaining the used
   *        features of the remote Bluetooth device specified by the
-  *        Connection_Handle event parameter.
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  *        connection_handle event parameter.
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param Connection_Handle Connection handle to be used to identify the
+  * @param connection_handle Connection handle to be used to identify the
   *        connection with the peer device.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param LE_Features Bit Mask List of used LE features. For details see LE Link
+  * @param le_features Bit Mask List of used LE features. For details see LE Link
   *        Layer specification.
   * @retval None
   */
 
-tBleStatus hci_le_read_remote_used_features_complete_event_process(uint8_t *buffer_in)
+ble_status_t hci_le_read_remote_used_features_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
-  hci_le_read_remote_used_features_complete_event_rp0 *rp0 = (hci_le_read_remote_used_features_complete_event_rp0 *)buffer_in;
-  hci_le_read_remote_used_features_complete_event(rp0->Status,
-                                                  rp0->Connection_Handle,
-                                                  rp0->LE_Features);
+  hci_le_read_remote_used_features_complete_event_rp0 *rp0 =
+    (hci_le_read_remote_used_features_complete_event_rp0 *)buffer_in;
+  hci_le_read_remote_used_features_complete_event(rp0->status,
+                                                  rp0->connection_handle,
+                                                  rp0->le_features);
 
   return status;
 }
@@ -1936,23 +1940,23 @@ tBleStatus hci_le_read_remote_used_features_complete_event_process(uint8_t *buff
   * @brief The LE Long Term Key Request event indicates that the master device is
   *        attempting to encrypt or re-encrypt the link and is requesting the
   *        Long Term Key from the Host. (See [Vol 6] Part B, Section 5.1.3).
-  * @param Connection_Handle Connection handle to be used to identify the
+  * @param connection_handle Connection handle to be used to identify the
   *        connection with the peer device.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Random_Number 64-bit random number
-  * @param Encrypted_Diversifier 16-bit encrypted diversifier
+  * @param random_number 64-bit random number
+  * @param encrypted_diversifier 16-bit encrypted diversifier
   * @retval None
   */
 
-tBleStatus hci_le_long_term_key_request_event_process(uint8_t *buffer_in)
+ble_status_t hci_le_long_term_key_request_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_le_long_term_key_request_event_rp0 *rp0 = (hci_le_long_term_key_request_event_rp0 *)buffer_in;
-  hci_le_long_term_key_request_event(rp0->Connection_Handle,
-                                     rp0->Random_Number,
-                                     rp0->Encrypted_Diversifier);
+  hci_le_long_term_key_request_event(rp0->connection_handle,
+                                     rp0->random_number,
+                                     rp0->encrypted_diversifier);
 
   return status;
 }
@@ -1964,23 +1968,23 @@ tBleStatus hci_le_long_term_key_request_event_process(uint8_t *buffer_in)
   *        Data Channel PDUs in either direction. The values reported are the
   *        maximum that will actually be used on the connection following the
   *        change.
-  * @param Connection_Handle Connection_Handle to be used to identify a
+  * @param connection_handle connection_handle to be used to identify a
   *        connection.
-  * @param MaxTxOctets The maximum number of payload octets in a Link Layer Data
+  * @param max_tx_octets The maximum number of payload octets in a Link Layer Data
   *        Channel PDU that the local Controller will send on this connection
   *        (connEffectiveMaxTxOctets defined in [Vol 6] Part B, Section 4.5.10).
   *        Range 0x001B-0x00FB (0x0000 - 0x001A and 0x00FC - 0xFFFF Reserved for
   *        future use)
-  * @param MaxTxTime The maximum time that the local Controller will take to send
+  * @param max_tx_time The maximum time that the local Controller will take to send
   *        a Link Layer Data Channel PDU on this connection (connEffectiveMaxTx-
   *        Time defined in [Vol 6] Part B, Section 4.5.10). Range 0x0148-0x0848
   *        (0x0000 - 0x0127 and 0x0849 - 0xFFFF Reserved for future use)
-  * @param MaxRxOctets The maximum number of payload octets in a Link Layer Data
+  * @param max_rx_octets The maximum number of payload octets in a Link Layer Data
   *        Channel PDU that the local controller expects to receive on this
   *        connection (connEfectiveMaxRxOctets defined in [Vol 6] Part B, Section
   *        4.5.10). Range 0x001B-0x00FB (0x0000 - 0x001A and 0x00FC - 0xFFFF
   *        Reserved for future use)
-  * @param MaxRxTime The maximum time that the local Controller expects to take
+  * @param max_rx_time The maximum time that the local Controller expects to take
   *        to receive a Link Layer Data Channel PDU on this connection
   *        (connEffectiveMax-RxTime defined in [Vol 6] Part B, Section 4.5.10).
   *        Range 0x0148-0x0848 (0x0000 - 0x0127 and 0x0849 - 0xFFFF Reserved for
@@ -1988,16 +1992,16 @@ tBleStatus hci_le_long_term_key_request_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus hci_le_data_length_change_event_process(uint8_t *buffer_in)
+ble_status_t hci_le_data_length_change_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_le_data_length_change_event_rp0 *rp0 = (hci_le_data_length_change_event_rp0 *)buffer_in;
-  hci_le_data_length_change_event(rp0->Connection_Handle,
-                                  rp0->MaxTxOctets,
-                                  rp0->MaxTxTime,
-                                  rp0->MaxRxOctets,
-                                  rp0->MaxRxTime);
+  hci_le_data_length_change_event(rp0->connection_handle,
+                                  rp0->max_tx_octets,
+                                  rp0->max_tx_time,
+                                  rp0->max_rx_octets,
+                                  rp0->max_rx_time);
 
   return status;
 }
@@ -2005,19 +2009,20 @@ tBleStatus hci_le_data_length_change_event_process(uint8_t *buffer_in)
 /* Event len: 1 + 64 */
 /**
   * @brief This event is generated when local P-256 key generation is complete.
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param Local_P256_Public_Key Local P-256 public key.
+  * @param local_p256_public_key Local P-256 public key.
   * @retval None
   */
 
-tBleStatus hci_le_read_local_p256_public_key_complete_event_process(uint8_t *buffer_in)
+ble_status_t hci_le_read_local_p256_public_key_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
-  hci_le_read_local_p256_public_key_complete_event_rp0 *rp0 = (hci_le_read_local_p256_public_key_complete_event_rp0 *)buffer_in;
-  hci_le_read_local_p256_public_key_complete_event(rp0->Status,
-                                                   rp0->Local_P256_Public_Key);
+  hci_le_read_local_p256_public_key_complete_event_rp0 *rp0 =
+    (hci_le_read_local_p256_public_key_complete_event_rp0 *)buffer_in;
+  hci_le_read_local_p256_public_key_complete_event(rp0->status,
+                                                   rp0->local_p256_public_key);
 
   return status;
 }
@@ -2026,19 +2031,19 @@ tBleStatus hci_le_read_local_p256_public_key_complete_event_process(uint8_t *buf
 /**
   * @brief This event indicates that LE Diffie Hellman key generation has been
   *        completed by the Controller.
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param DHKey Diffie Hellman Key
+  * @param dh_key Diffie Hellman Key
   * @retval None
   */
 
-tBleStatus hci_le_generate_dhkey_complete_event_process(uint8_t *buffer_in)
+ble_status_t hci_le_generate_dhkey_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_le_generate_dhkey_complete_event_rp0 *rp0 = (hci_le_generate_dhkey_complete_event_rp0 *)buffer_in;
-  hci_le_generate_dhkey_complete_event(rp0->Status,
-                                       rp0->DHKey);
+  hci_le_generate_dhkey_complete_event(rp0->status,
+                                       rp0->dh_key);
 
   return status;
 }
@@ -2047,28 +2052,28 @@ tBleStatus hci_le_generate_dhkey_complete_event_process(uint8_t *buffer_in)
 /**
   * @brief The LE Enhanced Connection Complete event indicates to both of the
   *        Hosts forming the connection that a new connection has been created.
-  *        Upon the creation of the connection a Connection_Handle shall be
+  *        Upon the creation of the connection a connection_handle shall be
   *        assigned by the Controller, and passed to the Host in this event. If
   *        the connection establishment fails, this event shall be provided to
   *        the Host that had issued the LE_Create_Connection command. If this
   *        event is unmasked and LE Connection Complete event is unmasked, only
   *        the LE Enhanced Connection Complete event is sent when a new
   *        connection has been completed. This event indicates to the Host that
-  *        issued a LE_Create_Connection command and received a Command Status
+  *        issued a LE_Create_Connection command and received a Command status
   *        event if the connection establishment failed or was successful. The
-  *        Master_Clock_Accuracy parameter is only valid for a slave. On a
+  *        master_clock_accuracy parameter is only valid for a slave. On a
   *        master, this parameter shall be set to 0x00.
-  * @param Status For standard error codes see Bluetooth specification, Vol. 2,
+  * @param status For standard error codes see Bluetooth specification, Vol. 2,
   *        part D. For proprietary error code refer to Error codes section
-  * @param Connection_Handle Connection handle to be used to identify the
+  * @param connection_handle Connection handle to be used to identify the
   *        connection with the peer device.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Role Role of the local device in the connection.
+  * @param role Role of the local device in the connection.
   *        Values:
   *        - 0x00: Master
   *        - 0x01: Slave
-  * @param Peer_Address_Type 0x00 Public Device Address 0x01 Random Device
+  * @param peer_address_type 0x00 Public Device Address 0x01 Random Device
   *        Address 0x02 Public Identity Address (Corresponds to Resolved Private
   *        Address) 0x03 Random (Static) Identity Address (Corresponds to
   *        Resolved Private Address)
@@ -2077,31 +2082,31 @@ tBleStatus hci_le_generate_dhkey_complete_event_process(uint8_t *buffer_in)
   *        - 0x01: Random Device Address
   *        - 0x02: Public Identity Address
   *        - 0x03: Random (Static) Identity Address
-  * @param Peer_Address Public Device Address, Random Device Address, Public
+  * @param peer_address Public Device Address, Random Device Address, Public
   *        Identity Address or Random (static) Identity Address of the device to
   *        be connected.
-  * @param Local_Resolvable_Private_Address Resolvable Private Address being used
+  * @param local_resolvable_private_address Resolvable Private Address being used
   *        by the local device for this connection. This is only valid when the
-  *        Own_Address_Type is set to 0x02 or 0x03. For other Own_Address_Type
+  *        own_address_type is set to 0x02 or 0x03. For other own_address_type
   *        values, the Controller shall return all zeros.
-  * @param Peer_Resolvable_Private_Address Resolvable Private Address being used
+  * @param peer_resolvable_private_address Resolvable Private Address being used
   *        by the peer device for this connection. This is only valid for
-  *        Peer_Address_Type 0x02 and 0x03. For other Peer_Address_Type values,
+  *        peer_address_type 0x02 and 0x03. For other peer_address_type values,
   *        the Controller shall return all zeros.
-  * @param Conn_Interval Connection interval used on this connection. Time = N *
+  * @param conn_interval Connection interval used on this connection. Time = N *
   *        1.25 msec
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Latency Slave latency for the connection in number of connection
+  * @param conn_latency Slave latency for the connection in number of connection
   *        events.
   *        Values:
   *        - 0x0000 ... 0x01F3
-  * @param Supervision_Timeout Supervision timeout for the LE Link. It shall be a
+  * @param supervision_timeout Supervision timeout for the LE Link. It shall be a
   *        multiple of 10 ms and larger than (1 + connSlaveLatency) *
   *        connInterval * 2. Time = N * 10 msec.
   *        Values:
   *        - 0x000A (100 ms)  ... 0x0C80 (32000 ms)
-  * @param Master_Clock_Accuracy Master clock accuracy. Only valid for a slave.
+  * @param master_clock_accuracy Master clock accuracy. Only valid for a slave.
   *        Values:
   *        - 0x00: 500 ppm
   *        - 0x01: 250 ppm
@@ -2114,70 +2119,71 @@ tBleStatus hci_le_generate_dhkey_complete_event_process(uint8_t *buffer_in)
   * @retval None
   */
 
-tBleStatus hci_le_enhanced_connection_complete_event_process(uint8_t *buffer_in)
+ble_status_t hci_le_enhanced_connection_complete_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_le_enhanced_connection_complete_event_rp0 *rp0 = (hci_le_enhanced_connection_complete_event_rp0 *)buffer_in;
-  hci_le_enhanced_connection_complete_event(rp0->Status,
-                                            rp0->Connection_Handle,
-                                            rp0->Role,
-                                            rp0->Peer_Address_Type,
-                                            rp0->Peer_Address,
-                                            rp0->Local_Resolvable_Private_Address,
-                                            rp0->Peer_Resolvable_Private_Address,
-                                            rp0->Conn_Interval,
-                                            rp0->Conn_Latency,
-                                            rp0->Supervision_Timeout,
-                                            rp0->Master_Clock_Accuracy);
+  hci_le_enhanced_connection_complete_event(rp0->status,
+                                            rp0->connection_handle,
+                                            rp0->role,
+                                            rp0->peer_address_type,
+                                            rp0->peer_address,
+                                            rp0->local_resolvable_private_address,
+                                            rp0->peer_resolvable_private_address,
+                                            rp0->conn_interval,
+                                            rp0->conn_latency,
+                                            rp0->supervision_timeout,
+                                            rp0->master_clock_accuracy);
 
   return status;
 }
 /* hci_le_direct_advertising_report_event */
-/* Event len: 1 + rp0->Num_Reports * (sizeof(Direct_Advertising_Report_t)) */
+/* Event len: 1 + rp0->num_reports * (sizeof(direct_advertising_report_t)) */
 /**
   * @brief The LE Direct Advertising Report event indicates that directed
   *        advertisements have been received where the advertiser is using a
   *        resolvable private address for the InitA field in the ADV_DIRECT_IND
-  *        PDU and the Scanning_Filter_Policy is equal to 0x02 or 0x03, see
-  *        HCI_LE_Set_Scan_Parameters. Direct_Address_Type and Direct_Addres is
+  *        PDU and the scanning_filter_policy is equal to 0x02 or 0x03, see
+  *        HCI_LE_Set_Scan_Parameters. direct_address_type and Direct_Addres is
   *        the address the directed advertisements are being directed to.
-  *        Address_Type and Address is the address of the advertiser sending the
+  *        address_type and Address is the address of the advertiser sending the
   *        directed advertisements.
-  * @param Num_Reports Number of responses in this event.
+  * @param num_reports Number of responses in this event.
   *        Values:
   *        - 0x01
-  * @param Direct_Advertising_Report See @ref Direct_Advertising_Report_t
+  * @param direct_advertising_report See @ref direct_advertising_report_t
   * @retval None
   */
 
-tBleStatus hci_le_direct_advertising_report_event_process(uint8_t *buffer_in)
+ble_status_t hci_le_direct_advertising_report_event_process(uint8_t *buffer_in)
 {
-  tBleStatus status = BLE_STATUS_SUCCESS;
+  ble_status_t status = BLE_STATUS_SUCCESS;
   /* Input params */
   hci_le_direct_advertising_report_event_rp0 *rp0 = (hci_le_direct_advertising_report_event_rp0 *)buffer_in;
   uint8_t size = 1;
-  int i;
-  Direct_Advertising_Report_t Direct_Advertising_Report[HCI_MAX_PAYLOAD_SIZE / sizeof(Direct_Advertising_Report_t)];
-  for (i = 0; i < rp0->Num_Reports; i++)
+  int32_t i;
+  direct_advertising_report_t direct_advertising_report[HCI_MAX_PAYLOAD_SIZE / sizeof(direct_advertising_report_t)];
+  for (i = 0; i < rp0->num_reports; i++)
   {
-    Direct_Advertising_Report[i].Event_Type = rp0->Direct_Advertising_Report[i].Event_Type;
+    direct_advertising_report[i].event_type = rp0->direct_advertising_report[i].event_type;
     size += 1;
-    Direct_Advertising_Report[i].Address_Type = rp0->Direct_Advertising_Report[i].Address_Type;
+    direct_advertising_report[i].address_type = rp0->direct_advertising_report[i].address_type;
     size += 1;
-    BLUENRG_memcpy((void *) Direct_Advertising_Report[i].Address, (const void *) rp0->Direct_Advertising_Report[i].Address,
-                                 6);
+    BLUENRG_MEMCPY((void *) direct_advertising_report[i].address,
+                   (const void *) rp0->direct_advertising_report[i].address,
+                   6);
     size += 6;
-    Direct_Advertising_Report[i].Direct_Address_Type = rp0->Direct_Advertising_Report[i].Direct_Address_Type;
+    direct_advertising_report[i].direct_address_type = rp0->direct_advertising_report[i].direct_address_type;
     size += 1;
-    BLUENRG_memcpy((void *) Direct_Advertising_Report[i].Direct_Address,
-                                 (const void *) rp0->Direct_Advertising_Report[i].Direct_Address, 6);
+    BLUENRG_MEMCPY((void *) direct_advertising_report[i].direct_address,
+                   (const void *) rp0->direct_advertising_report[i].direct_address, 6);
     size += 6;
-    Direct_Advertising_Report[i].RSSI = rp0->Direct_Advertising_Report[i].RSSI;
+    direct_advertising_report[i].rssi = rp0->direct_advertising_report[i].rssi;
     size += 1;
   }
-  hci_le_direct_advertising_report_event(rp0->Num_Reports,
-                                         Direct_Advertising_Report);
+  hci_le_direct_advertising_report_event(rp0->num_reports,
+                                         direct_advertising_report);
 
   return status;
 }

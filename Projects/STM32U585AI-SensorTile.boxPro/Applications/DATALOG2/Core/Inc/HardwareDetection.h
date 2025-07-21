@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -26,6 +26,7 @@ extern "C" {
 
 #include "stdint.h"
 
+
 typedef enum
 {
   ST25DV04 = 0,
@@ -40,6 +41,7 @@ boolean_t HardwareDetection_Check_Ext_ILPS28QSW(void);
 boolean_t HardwareDetection_Check_Ext_ISM330IS(void);
 boolean_t HardwareDetection_Check_Ext_LSM6DSV16BX(void);
 boolean_t HardwareDetection_Check_Ext_LSM6DSV32X(void);
+boolean_t HardwareDetection_Check_Ext_LSM6DSV80X(void);
 hwd_st25dv_version HardwareDetection_Check_ST25DV(void);
 
 #ifdef __cplusplus

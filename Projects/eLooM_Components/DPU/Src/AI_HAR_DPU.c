@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -68,13 +68,13 @@ sys_error_code_t AI_HAR_DPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   AI_HAR_DPU_t *p_obj = (AI_HAR_DPU_t *)_this;
 
-  float scale = p_obj->scale;
-  float *p_in  = (float *)EMD_Data(&in_data);
-  float *p_out = (float *)EMD_Data(&out_data);
+  float_t scale = p_obj->scale;
+  float_t *p_in  = (float_t *)EMD_Data(&in_data);
+  float_t *p_out = (float_t *)EMD_Data(&out_data);
   GRAV_input_t gravIn[AI_HAR_DPU_NB_SAMPLE_IN];
   GRAV_input_t gravOut[AI_HAR_DPU_NB_SAMPLE_IN];
 
-  for (int i = 0 ; i < AI_HAR_DPU_NB_SAMPLE_IN ; i++)
+  for (int32_t i = 0 ; i < AI_HAR_DPU_NB_SAMPLE_IN ; i++)
   {
     gravIn[i].AccX = *p_in++ * scale;
     gravIn[i].AccY = *p_in++ * scale;
@@ -83,7 +83,7 @@ sys_error_code_t AI_HAR_DPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData
   }
 
   /* call Ai library. */
-  p_obj->ai_processing_f(AI_HAR_DPU_NAME, (float *)gravOut, p_out);
+  p_obj->ai_processing_f(AI_HAR_DPU_NAME, (float_t *)gravOut, p_out);
 
   return res;
 }
@@ -117,7 +117,7 @@ IDPU2_t *AI_HAR_DPU_StaticAlloc(void *p_mem_block)
   return (IDPU2_t *)p_obj;
 }
 
-sys_error_code_t AI_HAR_DPU_SetSensitivity(AI_HAR_DPU_t *_this, float sensi)
+sys_error_code_t AI_HAR_DPU_SetSensitivity(AI_HAR_DPU_t *_this, float_t sensi)
 {
   assert_param(_this != NULL);
 

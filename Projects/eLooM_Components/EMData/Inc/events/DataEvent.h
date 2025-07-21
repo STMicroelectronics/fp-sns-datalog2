@@ -15,7 +15,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -59,7 +59,7 @@ struct _DataEvent
   /**
     * Specifies the timestamp of the data acquisition / generation.
     */
-  double timestamp;
+  double_t timestamp;
 
   /**
     * An application specific tag.
@@ -82,7 +82,7 @@ struct _DataEvent
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
   */
 static inline
-sys_error_code_t DataEventInit(IEvent *_this, const IEventSrc *p_source, const EMData_t *p_data, double timestamp,
+sys_error_code_t DataEventInit(IEvent *_this, const IEventSrc *p_source, const EMData_t *p_data, double_t timestamp,
                                uint32_t tag);
 
 
@@ -90,7 +90,7 @@ sys_error_code_t DataEventInit(IEvent *_this, const IEventSrc *p_source, const E
 // ***************************
 
 static inline
-sys_error_code_t DataEventInit(IEvent *_this, const IEventSrc *p_source, const EMData_t *p_data, double timestamp,
+sys_error_code_t DataEventInit(IEvent *_this, const IEventSrc *p_source, const EMData_t *p_data, double_t timestamp,
                                uint32_t tag)
 {
   assert_param(_this != NULL);

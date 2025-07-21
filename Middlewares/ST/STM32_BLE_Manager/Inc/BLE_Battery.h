@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    BLE_Battery.h
+  * @file    ble_battery.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.11.0
-  * @date    15-February-2024
+  * @version 2.1.0
+  * @date    11-March-2025
   * @brief   Battery info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -26,20 +26,13 @@
 extern "C" {
 #endif
 
-/* Exported typedef --------------------------------------------------------- */
-typedef void (*CustomNotifyEventBattery_t)(BLE_NotifyEvent_t Battery);
-
-/* Exported Variables ------------------------------------------------------- */
-extern CustomNotifyEventBattery_t CustomNotifyEventBattery;
-
 /* Exported functions ------------------------------------------------------- */
-
 /**
   * @brief  Init battery info service
   * @param  None
-  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for battery info service
+  * @retval ble_char_object_t* ble_char_pointer: Data structure pointer for battery info service
   */
-extern BleCharTypeDef *BLE_InitBatteryService(void);
+extern ble_char_object_t *ble_init_battery_service(void);
 
 #ifndef BLE_MANAGER_SDKV2
 /**
@@ -47,18 +40,23 @@ extern BleCharTypeDef *BLE_InitBatteryService(void);
   * @param  uint8_t *manuf_data: Advertise Data
   * @retval None
   */
-extern void BLE_SetBatteryAdvertiseData(uint8_t *manuf_data);
+extern void ble_set_battery_advertise_data(uint8_t *manuf_data);
 #endif /* BLE_MANAGER_SDKV2 */
 
 /**
   * @brief  Update Battery characteristic
-  * @param  int32_t BatteryLevel %Charge level
-  * @param  uint32_t Voltage Battery Voltage
-  * @param  uint32_t Current Battery Current (0x8000 if not available)
-  * @param  uint32_t Status Charging/Discharging
-  * @retval tBleStatus   Status
+  * @param  int32_t battery_level %Charge level
+  * @param  uint32_t voltage Battery voltage
+  * @param  uint32_t current Battery current (0x8000 if not available)
+  * @param  uint32_t status Charging/Discharging
+  * @retval ble_status_t   Status
   */
-tBleStatus BLE_BatteryUpdate(uint32_t BatteryLevel, uint32_t Voltage, uint32_t Current, uint32_t Status);
+extern ble_status_t ble_battery_update(uint32_t battery_level, uint32_t voltage, uint32_t current, uint32_t status);
+
+/************************************************************
+  * Callback function prototype to manage the notify events *
+  ***********************************************************/
+extern void notify_event_battery(ble_notify_event_t event);
 
 #ifdef __cplusplus
 }

@@ -15,7 +15,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -62,7 +62,7 @@ typedef union _SMMessage
     uint8_t messageId;                                // Report ID = 0x01 (1)
     uint8_t half;                                     // used only by the microphone
     uint8_t nReserved[2];                             // Reserved
-    double fTimestamp;                               // timestamp in s.
+    double_t fTimestamp;                               // timestamp in s.
   } sensorDataReadyMessage;
 
   //--------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ typedef union _SMMessage
     uint8_t nSensorId;                               // Specify the sensor ID
     uint16_t nCmdID;                                  // Specify the command ID
     uint32_t nParam;                                  // Specify an optional parameter.
-    float fParam;                                  // Specify an optional parameter.
+    float_t fParam;                                  // Specify an optional parameter.
   } sensorMessage;
 
   //--------------------------------------------------------------------------------

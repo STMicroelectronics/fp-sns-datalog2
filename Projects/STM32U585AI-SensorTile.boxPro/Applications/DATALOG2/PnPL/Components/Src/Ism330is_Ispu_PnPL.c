@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -117,7 +117,7 @@ uint8_t Ism330is_Ispu_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **seriali
   json_object_dotset_number(JSON_Status, "ism330is_ispu.samples_per_ts", temp_i);
   ism330is_ispu_get_ucf_status(&temp_b);
   json_object_dotset_boolean(JSON_Status, "ism330is_ispu.ucf_status", temp_b);
-  float temp_f = 0;
+  float_t temp_f = 0;
   ism330is_ispu_get_usb_dps(&temp_f);
   json_object_dotset_number(JSON_Status, "ism330is_ispu.usb_dps", temp_f);
   ism330is_ispu_get_sd_dps(&temp_f);

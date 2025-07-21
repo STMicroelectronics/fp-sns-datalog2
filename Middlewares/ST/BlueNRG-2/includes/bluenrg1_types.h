@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -18,154 +18,158 @@
 #ifndef _BLUENRG1_TYPES_H_
 #define _BLUENRG1_TYPES_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "compiler.h"
 #include "ble_const.h"
 #include "ble_types.h"
 
-typedef uint8_t tBleStatus;
+typedef uint8_t ble_status_t;
 
-typedef tBleStatus(*hci_event_process)(uint8_t *buffer_in);
+typedef ble_status_t(*hci_event_process)(uint8_t *buffer_in);
 typedef struct hci_command_table_type_s
 {
   uint16_t evt_code;
   hci_event_process process;
-} hci_events_table_type, hci_le_meta_events_table_type, hci_vendor_specific_events_table_type;
+} hci_events_table_type_t, hci_le_meta_events_table_type_t, hci_vendor_specific_events_table_type_t;
 
-extern const hci_events_table_type hci_events_table[7];
-extern const hci_le_meta_events_table_type hci_le_meta_events_table[10];
-extern const hci_vendor_specific_events_table_type hci_vendor_specific_events_table[43];
+extern const hci_events_table_type_t hci_events_table[7];
+extern const hci_le_meta_events_table_type_t hci_le_meta_events_table[10];
+extern const hci_vendor_specific_events_table_type_t hci_vendor_specific_events_table[43];
 #include <stdint.h>
-/** Documentation for C struct Whitelist_Entry_t */
-typedef PACKED(struct) packed_Whitelist_Entry_t_s
+/** Documentation for C struct whitelist_entry_t */
+typedef PACKED(struct) packed_whitelist_entry_t_s
 {
   /** Address type.
     *  Values:
     *  - 0x00: Public Device Address
     *  - 0x01: Random Device Address
     */
-  uint8_t Peer_Address_Type;
+  uint8_t peer_address_type;
   /** Public Device Address or Random Device Address of the device to be added to the
     *  white list.
     */
-  uint8_t Peer_Address[6];
-} packed_Whitelist_Entry_t;
-/** Documentation for C struct Bonded_Device_Entry_t */
-typedef PACKED(struct) packed_Bonded_Device_Entry_t_s
+  uint8_t peer_address[6];
+} packed_whitelist_entry_t;
+/** Documentation for C struct bonded_device_entry_t */
+typedef PACKED(struct) packed_bonded_device_entry_t_s
 {
   /** Address type.
     *  Values:
     *  - 0x00: Public Device Address
     *  - 0x01: Random Device Address
     */
-  uint8_t Address_Type;
+  uint8_t address_type;
   /** Public Device Address or Random Device Address of the device to be added to the
     *  white list.
     */
-  uint8_t Address[6];
-} packed_Bonded_Device_Entry_t;
-/** Documentation for C struct Whitelist_Identity_Entry_t */
-typedef PACKED(struct) packed_Whitelist_Identity_Entry_t_s
+  uint8_t address[6];
+} packed_bonded_device_entry_t;
+/** Documentation for C struct whitelist_identity_entry_t */
+typedef PACKED(struct) packed_whitelist_identity_entry_t_s
 {
   /** Identity address type.
     *  Values:
     *  - 0x00: Public Identity Address
     *  - 0x01: Random (static) Identity Address
     */
-  uint8_t Peer_Identity_Address_Type;
+  uint8_t peer_identity_address_type;
   /** Public or Random (static) Identity address of the peer device
    */
-  uint8_t Peer_Identity_Address[6];
-} packed_Whitelist_Identity_Entry_t;
-/** Documentation for C union Service_UUID_t */
-typedef PACKED(union) packed_Service_UUID_t_s
+  uint8_t peer_identity_address[6];
+} packed_whitelist_identity_entry_t;
+/** Documentation for C union service_uuid_t */
+typedef PACKED(union) packed_service_uuid_t_s
 {
   /** 16-bit UUID
    */
-  uint16_t Service_UUID_16;
+  uint16_t service_uuid_16;
   /** 128-bit UUID
    */
-  uint8_t Service_UUID_128[16];
-} packed_Service_UUID_t;
-/** Documentation for C union Include_UUID_t */
-typedef PACKED(union) packed_Include_UUID_t_s
+  uint8_t service_uuid_128[16];
+} packed_service_uuid_t;
+/** Documentation for C union include_uuid_t */
+typedef PACKED(union) packed_include_uuid_t_s
 {
   /** 16-bit UUID
    */
-  uint16_t Include_UUID_16;
+  uint16_t include_uuid_16;
   /** 128-bit UUID
    */
-  uint8_t Include_UUID_128[16];
-} packed_Include_UUID_t;
-/** Documentation for C union Char_UUID_t */
-typedef PACKED(union) packed_Char_UUID_t_s
+  uint8_t include_uuid_128[16];
+} packed_include_uuid_t;
+/** Documentation for C union char_uuid_t */
+typedef PACKED(union) packed_char_uuid_t_s
 {
   /** 16-bit UUID
    */
-  uint16_t Char_UUID_16;
+  uint16_t char_uuid_16;
   /** 128-bit UUID
    */
-  uint8_t Char_UUID_128[16];
-} packed_Char_UUID_t;
-/** Documentation for C union Char_Desc_Uuid_t */
-typedef PACKED(union) packed_Char_Desc_Uuid_t_s
+  uint8_t char_uuid_128[16];
+} packed_char_uuid_t;
+/** Documentation for C union char_desc_uuid_t */
+typedef PACKED(union) packed_char_desc_uuid_t_s
 {
   /** 16-bit UUID
    */
-  uint16_t Char_UUID_16;
+  uint16_t char_uuid_16;
   /** 128-bit UUID
    */
-  uint8_t Char_UUID_128[16];
-} packed_Char_Desc_Uuid_t;
-/** Documentation for C union UUID_t */
-typedef PACKED(union) packed_UUID_t_s
+  uint8_t char_uuid_128[16];
+} packed_char_desc_uuid_t;
+/** Documentation for C union uuid_t */
+typedef PACKED(union) packed_uuid_t_s
 {
   /** 16-bit UUID
    */
-  uint16_t UUID_16;
+  uint16_t uuid_16;
   /** 128-bit UUID
    */
-  uint8_t UUID_128[16];
-} packed_UUID_t;
-/** Documentation for C struct Handle_Entry_t */
-typedef PACKED(struct) packed_Handle_Entry_t_s
+  uint8_t uuid_128[16];
+} packed_uuid_t;
+/** Documentation for C struct handle_entry_t */
+typedef PACKED(struct) packed_handle_entry_t_s
 {
   /** The handles for which the attribute value has to be read
     *  Values:
     *  - 0x0001 ... 0xFFFF
     */
-  uint16_t Handle;
-} packed_Handle_Entry_t;
-/** Documentation for C struct Handle_Packets_Pair_Entry_t */
-typedef PACKED(struct) packed_Handle_Packets_Pair_Entry_t_s
+  uint16_t handle;
+} packed_handle_entry_t;
+/** Documentation for C struct handle_packets_pair_entry_t */
+typedef PACKED(struct) packed_handle_packets_pair_entry_t_s
 {
   /** Connection handle
    */
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
   /** The number of HCI Data Packets that have been completed (transmitted or flushed)
-    *  for the associated Connection_Handle since the previous time the event was
+    *  for the associated connection_handle since the previous time the event was
     *  returned.
     */
-  uint16_t HC_Num_Of_Completed_Packets;
-} packed_Handle_Packets_Pair_Entry_t;
-/** Documentation for C struct Attribute_Group_Handle_Pair_t */
-typedef PACKED(struct) packed_Attribute_Group_Handle_Pair_t_s
+  uint16_t hc_num_of_completed_packets;
+} packed_handle_packets_pair_entry_t;
+/** Documentation for C struct attribute_group_handle_pair_t */
+typedef PACKED(struct) packed_attribute_group_handle_pair_t_s
 {
   /** Found Attribute handle
    */
-  uint16_t Found_Attribute_Handle;
+  uint16_t found_attribute_handle;
   /** Group End handle
    */
-  uint16_t Group_End_Handle;
-} packed_Attribute_Group_Handle_Pair_t;
-/** Documentation for C struct Handle_Item_t */
-typedef PACKED(struct) packed_Handle_Item_t_s
+  uint16_t group_end_handle;
+} packed_attribute_group_handle_pair_t;
+/** Documentation for C struct handle_item_t */
+typedef PACKED(struct) packed_handle_item_t_s
 {
   /**
    */
-  uint16_t Handle;
-} packed_Handle_Item_t;
-/** Documentation for C struct Advertising_Report_t */
-typedef PACKED(struct) packed_Advertising_Report_t_s
+  uint16_t handle;
+} packed_handle_item_t;
+/** Documentation for C struct advertising_report_t */
+typedef PACKED(struct) packed_advertising_report_t_s
 {
   /** Type of advertising report event: ADV_IND: Connectable undirected advertising',
     *  ADV_DIRECT_IND: Connectable directed advertising, ADV_SCAN_IND: Scannable
@@ -178,7 +182,7 @@ typedef PACKED(struct) packed_Advertising_Report_t_s
     *  - 0x03: ADV_NONCONN_IND
     *  - 0x04: SCAN_RSP
     */
-  uint8_t Event_Type;
+  uint8_t event_type;
   /** 0x00 Public Device Address 0x01 Random Device Address 0x02 Public Identity
     *  Address (Corresponds to Resolved Private Address) 0x03 Random (Static)
     *  Identity Address (Corresponds to Resolved Private Address)
@@ -188,35 +192,35 @@ typedef PACKED(struct) packed_Advertising_Report_t_s
     *  - 0x02: Public Identity Address
     *  - 0x03: Random (Static) Identity Address
     */
-  uint8_t Address_Type;
+  uint8_t address_type;
   /** Public Device Address, Random Device Address, Public Identity Address or Random
     *  (static) Identity Address of the advertising device.
     */
-  uint8_t Address[6];
+  uint8_t address[6];
   /** Length of the Data[i] field for each device which responded.
     *  Values:
     *  - 0 ... 31
     */
-  uint8_t Length_Data;
-  /** Length_Data[i] octets of advertising or scan response data formatted as defined
+  uint8_t length_data;
+  /** length_data[i] octets of advertising or scan response data formatted as defined
     *  in [Vol 3] Part C, Section 8.
     */
-  uint8_t Data[1];
+  uint8_t data[1];
   /** N Size: 1 Octet (signed integer) Units: dBm
     *  Values:
     *  - 127: RSSI not available
     *  - -127 ... 20
     */
-  int8_t RSSI;
-} packed_Advertising_Report_t;
-/** Documentation for C struct Direct_Advertising_Report_t */
-typedef PACKED(struct) packed_Direct_Advertising_Report_t_s
+  int8_t rssi;
+} packed_advertising_report_t;
+/** Documentation for C struct direct_advertising_report_t */
+typedef PACKED(struct) packed_direct_advertising_report_t_s
 {
   /** Advertising type
     *  Values:
     *  - 0x01: Connectable directed advertising (ADV_DIRECT_IND)
     */
-  uint8_t Event_Type;
+  uint8_t event_type;
   /** 0x00 Public Device Address 0x01 Random Device Address 0x02 Public Identity
     *  Address (Corresponds to Resolved Private Address) 0x03 Random (Static)
     *  Identity Address (Corresponds to Resolved Private Address)
@@ -226,551 +230,551 @@ typedef PACKED(struct) packed_Direct_Advertising_Report_t_s
     *  - 0x02: Public Identity Address
     *  - 0x03: Random (Static) Identity Address
     */
-  uint8_t Address_Type;
+  uint8_t address_type;
   /** Public Device Address, Random Device Address, Public Identity Address or Random
     *  (static) Identity Address of the advertising device.
     */
-  uint8_t Address[6];
+  uint8_t address[6];
   /** 0x01 Random Device Address
     *  Values:
     *  - 0x01: Random Device Address
     */
-  uint8_t Direct_Address_Type;
+  uint8_t direct_address_type;
   /** Random Device Address
    */
-  uint8_t Direct_Address[6];
+  uint8_t direct_address[6];
   /** N Size: 1 Octet (signed integer) Units: dBm
     *  Values:
     *  - 127: RSSI not available
     *  - -127 ... 20
     */
-  int8_t RSSI;
-} packed_Direct_Advertising_Report_t;
+  int8_t rssi;
+} packed_direct_advertising_report_t;
 typedef PACKED(struct) hci_disconnect_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Reason;
+  uint16_t connection_handle;
+  uint8_t reason;
 } hci_disconnect_cp0;
 
 typedef PACKED(struct) hci_disconnect_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_disconnect_rp0;
 
 typedef PACKED(struct) hci_read_remote_version_information_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } hci_read_remote_version_information_cp0;
 
 typedef PACKED(struct) hci_read_remote_version_information_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_read_remote_version_information_rp0;
 
 typedef PACKED(struct) hci_set_event_mask_cp0_s
 {
-  uint8_t Event_Mask[8];
+  uint8_t event_mask[8];
 } hci_set_event_mask_cp0;
 
 typedef PACKED(struct) hci_set_event_mask_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_set_event_mask_rp0;
 
 typedef PACKED(struct) hci_reset_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_reset_rp0;
 
 typedef PACKED(struct) hci_read_transmit_power_level_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Type;
+  uint16_t connection_handle;
+  uint8_t type;
 } hci_read_transmit_power_level_cp0;
 
 typedef PACKED(struct) hci_read_transmit_power_level_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
-  int8_t Transmit_Power_Level;
+  uint8_t status;
+  uint16_t connection_handle;
+  int8_t transmit_power_level;
 } hci_read_transmit_power_level_rp0;
 
 typedef PACKED(struct) hci_read_local_version_information_rp0_s
 {
-  uint8_t Status;
-  uint8_t HCI_Version;
-  uint16_t HCI_Revision;
-  uint8_t LMP_PAL_Version;
-  uint16_t Manufacturer_Name;
-  uint16_t LMP_PAL_Subversion;
+  uint8_t status;
+  uint8_t hci_version;
+  uint16_t hci_revision;
+  uint8_t lmp_pal_version;
+  uint16_t manufacturer_name;
+  uint16_t lmp_pal_subversion;
 } hci_read_local_version_information_rp0;
 
 typedef PACKED(struct) hci_read_local_supported_commands_rp0_s
 {
-  uint8_t Status;
-  uint8_t Supported_Commands[64];
+  uint8_t status;
+  uint8_t supported_commands[64];
 } hci_read_local_supported_commands_rp0;
 
 typedef PACKED(struct) hci_read_local_supported_features_rp0_s
 {
-  uint8_t Status;
-  uint8_t LMP_Features[8];
+  uint8_t status;
+  uint8_t lmp_features[8];
 } hci_read_local_supported_features_rp0;
 
 typedef PACKED(struct) hci_read_bd_addr_rp0_s
 {
-  uint8_t Status;
-  uint8_t BD_ADDR[6];
+  uint8_t status;
+  uint8_t bd_addr[6];
 } hci_read_bd_addr_rp0;
 
 typedef PACKED(struct) hci_read_rssi_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } hci_read_rssi_cp0;
 
 typedef PACKED(struct) hci_read_rssi_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
-  int8_t RSSI;
+  uint8_t status;
+  uint16_t connection_handle;
+  int8_t rssi;
 } hci_read_rssi_rp0;
 
 typedef PACKED(struct) hci_le_set_event_mask_cp0_s
 {
-  uint8_t LE_Event_Mask[8];
+  uint8_t le_event_mask[8];
 } hci_le_set_event_mask_cp0;
 
 typedef PACKED(struct) hci_le_set_event_mask_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_event_mask_rp0;
 
 typedef PACKED(struct) hci_le_read_buffer_size_rp0_s
 {
-  uint8_t Status;
-  uint16_t HC_LE_ACL_Data_Packet_Length;
-  uint8_t HC_Total_Num_LE_ACL_Data_Packets;
+  uint8_t status;
+  uint16_t hc_le_acl_data_packet_length;
+  uint8_t hc_total_num_le_acl_data_packets;
 } hci_le_read_buffer_size_rp0;
 
 typedef PACKED(struct) hci_le_read_local_supported_features_rp0_s
 {
-  uint8_t Status;
-  uint8_t LE_Features[8];
+  uint8_t status;
+  uint8_t le_features[8];
 } hci_le_read_local_supported_features_rp0;
 
 typedef PACKED(struct) hci_le_set_random_address_cp0_s
 {
-  uint8_t Random_Address[6];
+  uint8_t random_address[6];
 } hci_le_set_random_address_cp0;
 
 typedef PACKED(struct) hci_le_set_random_address_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_random_address_rp0;
 
 typedef PACKED(struct) hci_le_set_advertising_parameters_cp0_s
 {
-  uint16_t Advertising_Interval_Min;
-  uint16_t Advertising_Interval_Max;
-  uint8_t Advertising_Type;
-  uint8_t Own_Address_Type;
-  uint8_t Peer_Address_Type;
-  uint8_t Peer_Address[6];
-  uint8_t Advertising_Channel_Map;
-  uint8_t Advertising_Filter_Policy;
+  uint16_t advertising_interval_min;
+  uint16_t advertising_interval_max;
+  uint8_t advertising_type;
+  uint8_t own_address_type;
+  uint8_t peer_address_type;
+  uint8_t peer_address[6];
+  uint8_t advertising_channel_map;
+  uint8_t advertising_filter_policy;
 } hci_le_set_advertising_parameters_cp0;
 
 typedef PACKED(struct) hci_le_set_advertising_parameters_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_advertising_parameters_rp0;
 
 typedef PACKED(struct) hci_le_read_advertising_channel_tx_power_rp0_s
 {
-  uint8_t Status;
-  int8_t Transmit_Power_Level;
+  uint8_t status;
+  int8_t transmit_power_level;
 } hci_le_read_advertising_channel_tx_power_rp0;
 
 typedef PACKED(struct) hci_le_set_advertising_data_cp0_s
 {
-  uint8_t Advertising_Data_Length;
-  uint8_t Advertising_Data[31];
+  uint8_t advertising_data_length;
+  uint8_t advertising_data[31];
 } hci_le_set_advertising_data_cp0;
 
 typedef PACKED(struct) hci_le_set_advertising_data_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_advertising_data_rp0;
 
 typedef PACKED(struct) hci_le_set_scan_response_data_cp0_s
 {
-  uint8_t Scan_Response_Data_Length;
-  uint8_t Scan_Response_Data[31];
+  uint8_t scan_response_data_length;
+  uint8_t scan_response_data[31];
 } hci_le_set_scan_response_data_cp0;
 
 typedef PACKED(struct) hci_le_set_scan_response_data_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_scan_response_data_rp0;
 
 typedef PACKED(struct) hci_le_set_advertise_enable_cp0_s
 {
-  uint8_t Advertising_Enable;
+  uint8_t advertising_enable;
 } hci_le_set_advertise_enable_cp0;
 
 typedef PACKED(struct) hci_le_set_advertise_enable_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_advertise_enable_rp0;
 
 typedef PACKED(struct) hci_le_set_scan_parameters_cp0_s
 {
-  uint8_t LE_Scan_Type;
-  uint16_t LE_Scan_Interval;
-  uint16_t LE_Scan_Window;
-  uint8_t Own_Address_Type;
-  uint8_t Scanning_Filter_Policy;
+  uint8_t le_scan_type;
+  uint16_t le_scan_interval;
+  uint16_t le_scan_window;
+  uint8_t own_address_type;
+  uint8_t scanning_filter_policy;
 } hci_le_set_scan_parameters_cp0;
 
 typedef PACKED(struct) hci_le_set_scan_parameters_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_scan_parameters_rp0;
 
 typedef PACKED(struct) hci_le_set_scan_enable_cp0_s
 {
-  uint8_t LE_Scan_Enable;
-  uint8_t Filter_Duplicates;
+  uint8_t le_scan_enable;
+  uint8_t filter_duplicates;
 } hci_le_set_scan_enable_cp0;
 
 typedef PACKED(struct) hci_le_set_scan_enable_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_scan_enable_rp0;
 
 typedef PACKED(struct) hci_le_create_connection_cp0_s
 {
-  uint16_t LE_Scan_Interval;
-  uint16_t LE_Scan_Window;
-  uint8_t Initiator_Filter_Policy;
-  uint8_t Peer_Address_Type;
-  uint8_t Peer_Address[6];
-  uint8_t Own_Address_Type;
-  uint16_t Conn_Interval_Min;
-  uint16_t Conn_Interval_Max;
-  uint16_t Conn_Latency;
-  uint16_t Supervision_Timeout;
-  uint16_t Minimum_CE_Length;
-  uint16_t Maximum_CE_Length;
+  uint16_t le_scan_interval;
+  uint16_t le_scan_window;
+  uint8_t initiator_filter_policy;
+  uint8_t peer_address_type;
+  uint8_t peer_address[6];
+  uint8_t own_address_type;
+  uint16_t conn_interval_min;
+  uint16_t conn_interval_max;
+  uint16_t conn_latency;
+  uint16_t supervision_timeout;
+  uint16_t minimum_ce_length;
+  uint16_t maximum_ce_length;
 } hci_le_create_connection_cp0;
 
 typedef PACKED(struct) hci_le_create_connection_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_create_connection_rp0;
 
 typedef PACKED(struct) hci_le_create_connection_cancel_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_create_connection_cancel_rp0;
 
 typedef PACKED(struct) hci_le_read_white_list_size_rp0_s
 {
-  uint8_t Status;
-  uint8_t White_List_Size;
+  uint8_t status;
+  uint8_t white_list_size;
 } hci_le_read_white_list_size_rp0;
 
 typedef PACKED(struct) hci_le_clear_white_list_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_clear_white_list_rp0;
 
 typedef PACKED(struct) hci_le_add_device_to_white_list_cp0_s
 {
-  uint8_t Address_Type;
-  uint8_t Address[6];
+  uint8_t address_type;
+  uint8_t address[6];
 } hci_le_add_device_to_white_list_cp0;
 
 typedef PACKED(struct) hci_le_add_device_to_white_list_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_add_device_to_white_list_rp0;
 
 typedef PACKED(struct) hci_le_remove_device_from_white_list_cp0_s
 {
-  uint8_t Address_Type;
-  uint8_t Address[6];
+  uint8_t address_type;
+  uint8_t address[6];
 } hci_le_remove_device_from_white_list_cp0;
 
 typedef PACKED(struct) hci_le_remove_device_from_white_list_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_remove_device_from_white_list_rp0;
 
 typedef PACKED(struct) hci_le_connection_update_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Conn_Interval_Min;
-  uint16_t Conn_Interval_Max;
-  uint16_t Conn_Latency;
-  uint16_t Supervision_Timeout;
-  uint16_t Minimum_CE_Length;
-  uint16_t Maximum_CE_Length;
+  uint16_t connection_handle;
+  uint16_t conn_interval_min;
+  uint16_t conn_interval_max;
+  uint16_t conn_latency;
+  uint16_t supervision_timeout;
+  uint16_t minimum_ce_length;
+  uint16_t maximum_ce_length;
 } hci_le_connection_update_cp0;
 
 typedef PACKED(struct) hci_le_connection_update_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_connection_update_rp0;
 
 typedef PACKED(struct) hci_le_set_host_channel_classification_cp0_s
 {
-  uint8_t LE_Channel_Map[5];
+  uint8_t le_channel_map[5];
 } hci_le_set_host_channel_classification_cp0;
 
 typedef PACKED(struct) hci_le_set_host_channel_classification_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_host_channel_classification_rp0;
 
 typedef PACKED(struct) hci_le_read_channel_map_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } hci_le_read_channel_map_cp0;
 
 typedef PACKED(struct) hci_le_read_channel_map_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
-  uint8_t LE_Channel_Map[5];
+  uint8_t status;
+  uint16_t connection_handle;
+  uint8_t le_channel_map[5];
 } hci_le_read_channel_map_rp0;
 
 typedef PACKED(struct) hci_le_read_remote_used_features_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } hci_le_read_remote_used_features_cp0;
 
 typedef PACKED(struct) hci_le_read_remote_used_features_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_read_remote_used_features_rp0;
 
 typedef PACKED(struct) hci_le_encrypt_cp0_s
 {
-  uint8_t Key[16];
-  uint8_t Plaintext_Data[16];
+  uint8_t key[16];
+  uint8_t plaintext_data[16];
 } hci_le_encrypt_cp0;
 
 typedef PACKED(struct) hci_le_encrypt_rp0_s
 {
-  uint8_t Status;
-  uint8_t Encrypted_Data[16];
+  uint8_t status;
+  uint8_t encrypted_data[16];
 } hci_le_encrypt_rp0;
 
 typedef PACKED(struct) hci_le_rand_rp0_s
 {
-  uint8_t Status;
-  uint8_t Random_Number[8];
+  uint8_t status;
+  uint8_t random_number[8];
 } hci_le_rand_rp0;
 
 typedef PACKED(struct) hci_le_start_encryption_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Random_Number[8];
-  uint16_t Encrypted_Diversifier;
-  uint8_t Long_Term_Key[16];
+  uint16_t connection_handle;
+  uint8_t random_number[8];
+  uint16_t encrypted_diversifier;
+  uint8_t long_term_key[16];
 } hci_le_start_encryption_cp0;
 
 typedef PACKED(struct) hci_le_start_encryption_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_start_encryption_rp0;
 
 typedef PACKED(struct) hci_le_long_term_key_request_reply_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Long_Term_Key[16];
+  uint16_t connection_handle;
+  uint8_t long_term_key[16];
 } hci_le_long_term_key_request_reply_cp0;
 
 typedef PACKED(struct) hci_le_long_term_key_request_reply_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
+  uint8_t status;
+  uint16_t connection_handle;
 } hci_le_long_term_key_request_reply_rp0;
 
 typedef PACKED(struct) hci_le_long_term_key_requested_negative_reply_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } hci_le_long_term_key_requested_negative_reply_cp0;
 
 typedef PACKED(struct) hci_le_long_term_key_requested_negative_reply_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
+  uint8_t status;
+  uint16_t connection_handle;
 } hci_le_long_term_key_requested_negative_reply_rp0;
 
 typedef PACKED(struct) hci_le_read_supported_states_rp0_s
 {
-  uint8_t Status;
-  uint8_t LE_States[8];
+  uint8_t status;
+  uint8_t le_states[8];
 } hci_le_read_supported_states_rp0;
 
 typedef PACKED(struct) hci_le_receiver_test_cp0_s
 {
-  uint8_t RX_Frequency;
+  uint8_t rx_frequency;
 } hci_le_receiver_test_cp0;
 
 typedef PACKED(struct) hci_le_receiver_test_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_receiver_test_rp0;
 
 typedef PACKED(struct) hci_le_transmitter_test_cp0_s
 {
-  uint8_t TX_Frequency;
-  uint8_t Length_Of_Test_Data;
-  uint8_t Packet_Payload;
+  uint8_t tx_frequency;
+  uint8_t length_of_test_data;
+  uint8_t packet_payload;
 } hci_le_transmitter_test_cp0;
 
 typedef PACKED(struct) hci_le_transmitter_test_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_transmitter_test_rp0;
 
 typedef PACKED(struct) hci_le_test_end_rp0_s
 {
-  uint8_t Status;
-  uint16_t Number_Of_Packets;
+  uint8_t status;
+  uint16_t number_of_packets;
 } hci_le_test_end_rp0;
 
 typedef PACKED(struct) hci_le_set_data_length_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t TxOctets;
-  uint16_t TxTime;
+  uint16_t connection_handle;
+  uint16_t tx_octets;
+  uint16_t tx_time;
 } hci_le_set_data_length_cp0;
 
 typedef PACKED(struct) hci_le_set_data_length_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
+  uint8_t status;
+  uint16_t connection_handle;
 } hci_le_set_data_length_rp0;
 
 typedef PACKED(struct) hci_le_read_suggested_default_data_length_rp0_s
 {
-  uint8_t Status;
-  uint16_t SuggestedMaxTxOctets;
-  uint16_t SuggestedMaxTxTime;
+  uint8_t status;
+  uint16_t suggested_max_tx_octets;
+  uint16_t suggested_max_tx_time;
 } hci_le_read_suggested_default_data_length_rp0;
 
 typedef PACKED(struct) hci_le_write_suggested_default_data_length_cp0_s
 {
-  uint16_t SuggestedMaxTxOctets;
-  uint16_t SuggestedMaxTxTime;
+  uint16_t suggested_max_tx_octets;
+  uint16_t suggested_max_tx_time;
 } hci_le_write_suggested_default_data_length_cp0;
 
 typedef PACKED(struct) hci_le_write_suggested_default_data_length_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_write_suggested_default_data_length_rp0;
 
 typedef PACKED(struct) hci_le_read_local_p256_public_key_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_read_local_p256_public_key_rp0;
 
 typedef PACKED(struct) hci_le_generate_dhkey_cp0_s
 {
-  uint8_t Remote_P256_Public_Key[64];
+  uint8_t remote_p256_public_key[64];
 } hci_le_generate_dhkey_cp0;
 
 typedef PACKED(struct) hci_le_generate_dhkey_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_generate_dhkey_rp0;
 
 typedef PACKED(struct) hci_le_add_device_to_resolving_list_cp0_s
 {
-  uint8_t Peer_Identity_Address_Type;
-  uint8_t Peer_Identity_Address[6];
-  uint8_t Peer_IRK[16];
-  uint8_t Local_IRK[16];
+  uint8_t peer_identity_address_type;
+  uint8_t peer_identity_address[6];
+  uint8_t peer_irk[16];
+  uint8_t local_irk[16];
 } hci_le_add_device_to_resolving_list_cp0;
 
 typedef PACKED(struct) hci_le_add_device_to_resolving_list_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_add_device_to_resolving_list_rp0;
 
 typedef PACKED(struct) hci_le_remove_device_from_resolving_list_cp0_s
 {
-  uint8_t Peer_Identity_Address_Type;
-  uint8_t Peer_Identity_Address[6];
+  uint8_t peer_identity_address_type;
+  uint8_t peer_identity_address[6];
 } hci_le_remove_device_from_resolving_list_cp0;
 
 typedef PACKED(struct) hci_le_remove_device_from_resolving_list_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_remove_device_from_resolving_list_rp0;
 
 typedef PACKED(struct) hci_le_clear_resolving_list_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_clear_resolving_list_rp0;
 
 typedef PACKED(struct) hci_le_read_resolving_list_size_rp0_s
 {
-  uint8_t Status;
-  uint8_t Resolving_List_Size;
+  uint8_t status;
+  uint8_t resolving_list_size;
 } hci_le_read_resolving_list_size_rp0;
 
 typedef PACKED(struct) hci_le_read_peer_resolvable_address_cp0_s
 {
-  uint8_t Peer_Identity_Address_Type;
-  uint8_t Peer_Identity_Address[6];
+  uint8_t peer_identity_address_type;
+  uint8_t peer_identity_address[6];
 } hci_le_read_peer_resolvable_address_cp0;
 
 typedef PACKED(struct) hci_le_read_peer_resolvable_address_rp0_s
 {
-  uint8_t Status;
-  uint8_t Peer_Resolvable_Address[6];
+  uint8_t status;
+  uint8_t peer_resolvable_address[6];
 } hci_le_read_peer_resolvable_address_rp0;
 
 typedef PACKED(struct) hci_le_read_local_resolvable_address_cp0_s
 {
-  uint8_t Peer_Identity_Address_Type;
-  uint8_t Peer_Identity_Address[6];
+  uint8_t peer_identity_address_type;
+  uint8_t peer_identity_address[6];
 } hci_le_read_local_resolvable_address_cp0;
 
 typedef PACKED(struct) hci_le_read_local_resolvable_address_rp0_s
 {
-  uint8_t Status;
-  uint8_t Local_Resolvable_Address[6];
+  uint8_t status;
+  uint8_t local_resolvable_address[6];
 } hci_le_read_local_resolvable_address_rp0;
 
 typedef PACKED(struct) hci_le_set_address_resolution_enable_cp0_s
 {
-  uint8_t Address_Resolution_Enable;
+  uint8_t address_resolution_enable;
 } hci_le_set_address_resolution_enable_cp0;
 
 typedef PACKED(struct) hci_le_set_address_resolution_enable_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_address_resolution_enable_rp0;
 
 typedef PACKED(struct) hci_le_set_resolvable_private_address_timeout_cp0_s
 {
-  uint16_t RPA_Timeout;
+  uint16_t rpa_timeout;
 } hci_le_set_resolvable_private_address_timeout_cp0;
 
 typedef PACKED(struct) hci_le_set_resolvable_private_address_timeout_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_resolvable_private_address_timeout_rp0;
 
 typedef PACKED(struct) hci_le_read_maximum_data_length_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
   uint16_t supportedMaxTxOctets;
   uint16_t supportedMaxTxTime;
   uint16_t supportedMaxRxOctets;
@@ -779,1819 +783,1828 @@ typedef PACKED(struct) hci_le_read_maximum_data_length_rp0_s
 
 typedef PACKED(struct) hci_le_set_privacy_mode_cp0_s
 {
-  uint8_t Peer_Identity_Address_Type;
-  uint8_t Peer_Identity_Address[6];
-  uint8_t Privacy_Mode;
+  uint8_t peer_identity_address_type;
+  uint8_t peer_identity_address[6];
+  uint8_t privacy_mode;
 } hci_le_set_privacy_mode_cp0;
 
 typedef PACKED(struct) hci_le_set_privacy_mode_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } hci_le_set_privacy_mode_rp0;
 
 typedef PACKED(struct) aci_hal_get_fw_build_number_rp0_s
 {
-  uint8_t Status;
-  uint16_t Build_Number;
+  uint8_t status;
+  uint16_t build_number;
 } aci_hal_get_fw_build_number_rp0;
 
 typedef PACKED(struct) aci_hal_get_firmware_details_rp0_s
 {
-  uint8_t Status;
-  uint8_t DTM_version_major;
-  uint8_t DTM_version_minor;
-  uint8_t DTM_version_patch;
-  uint8_t DTM_variant;
-  uint16_t DTM_Build_Number;
-  uint8_t BTLE_Stack_version_major;
-  uint8_t BTLE_Stack_version_minor;
-  uint8_t BTLE_Stack_version_patch;
-  uint8_t BTLE_Stack_development;
-  uint16_t BTLE_Stack_variant;
-  uint16_t BTLE_Stack_Build_Number;
+  uint8_t status;
+  uint8_t dtm_version_major;
+  uint8_t dtm_version_minor;
+  uint8_t dtm_version_patch;
+  uint8_t dtm_variant;
+  uint16_t dtm_Build_Number;
+  uint8_t btle_Stack_version_major;
+  uint8_t btle_Stack_version_minor;
+  uint8_t btle_Stack_version_patch;
+  uint8_t btle_Stack_development;
+  uint16_t btle_Stack_variant;
+  uint16_t btle_Stack_Build_Number;
 } aci_hal_get_firmware_details_rp0;
 
 typedef PACKED(struct) aci_hal_write_config_data_cp0_s
 {
-  uint8_t Offset;
-  uint8_t Length;
-  uint8_t Value[(HCI_MAX_PAYLOAD_SIZE - 2) / sizeof(uint8_t)];
+  uint8_t offset;
+  uint8_t length;
+  uint8_t value[(HCI_MAX_PAYLOAD_SIZE - 2) / sizeof(uint8_t)];
 } aci_hal_write_config_data_cp0;
 
 typedef PACKED(struct) aci_hal_write_config_data_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_write_config_data_rp0;
 
 typedef PACKED(struct) aci_hal_read_config_data_cp0_s
 {
-  uint8_t Offset;
+  uint8_t offset;
 } aci_hal_read_config_data_cp0;
 
 typedef PACKED(struct) aci_hal_read_config_data_rp0_s
 {
-  uint8_t Status;
-  uint8_t Data_Length;
-  uint8_t Data[(HCI_MAX_PAYLOAD_SIZE - 2) / sizeof(uint8_t)];
+  uint8_t status;
+  uint8_t data_length;
+  uint8_t data[(HCI_MAX_PAYLOAD_SIZE - 2) / sizeof(uint8_t)];
 } aci_hal_read_config_data_rp0;
 
 typedef PACKED(struct) aci_hal_set_tx_power_level_cp0_s
 {
-  uint8_t En_High_Power;
-  uint8_t PA_Level;
+  uint8_t en_high_power;
+  uint8_t pa_level;
 } aci_hal_set_tx_power_level_cp0;
 
 typedef PACKED(struct) aci_hal_set_tx_power_level_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_set_tx_power_level_rp0;
 
 typedef PACKED(struct) aci_hal_le_tx_test_packet_number_rp0_s
 {
-  uint8_t Status;
-  uint32_t Number_Of_Packets;
+  uint8_t status;
+  uint32_t number_of_packets;
 } aci_hal_le_tx_test_packet_number_rp0;
 
 typedef PACKED(struct) aci_hal_tone_start_cp0_s
 {
-  uint8_t RF_Channel;
-  uint8_t Offset;
+  uint8_t rf_channel;
+  uint8_t offset;
 } aci_hal_tone_start_cp0;
 
 typedef PACKED(struct) aci_hal_tone_start_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_tone_start_rp0;
 
 typedef PACKED(struct) aci_hal_tone_stop_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_tone_stop_rp0;
 
 typedef PACKED(struct) aci_hal_get_link_status_rp0_s
 {
-  uint8_t Status;
-  uint8_t Link_Status[8];
-  uint16_t Link_Connection_Handle[16 / 2];
+  uint8_t status;
+  uint8_t link_status[8];
+  uint16_t link_connection_handle[16 / 2];
 } aci_hal_get_link_status_rp0;
 
 typedef PACKED(struct) aci_hal_set_radio_activity_mask_cp0_s
 {
-  uint16_t Radio_Activity_Mask;
+  uint16_t radio_activity_mask;
 } aci_hal_set_radio_activity_mask_cp0;
 
 typedef PACKED(struct) aci_hal_set_radio_activity_mask_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_set_radio_activity_mask_rp0;
 
 typedef PACKED(struct) aci_hal_get_anchor_period_rp0_s
 {
-  uint8_t Status;
-  uint32_t Anchor_Period;
-  uint32_t Max_Free_Slot;
+  uint8_t status;
+  uint32_t anchor_period;
+  uint32_t max_free_slot;
 } aci_hal_get_anchor_period_rp0;
 
 typedef PACKED(struct) aci_hal_set_event_mask_cp0_s
 {
-  uint32_t Event_Mask;
+  uint32_t event_mask;
 } aci_hal_set_event_mask_cp0;
 
 typedef PACKED(struct) aci_hal_set_event_mask_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_set_event_mask_rp0;
 
 typedef PACKED(struct) aci_hal_updater_start_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_updater_start_rp0;
 
 typedef PACKED(struct) aci_hal_get_updater_version_rp0_s
 {
-  uint8_t Status;
-  uint8_t Version;
+  uint8_t status;
+  uint8_t version;
 } aci_hal_get_updater_version_rp0;
 
 typedef PACKED(struct) aci_hal_get_updater_bufsize_rp0_s
 {
-  uint8_t Status;
-  uint8_t Buffer_Size;
+  uint8_t status;
+  uint8_t buffer_size;
 } aci_hal_get_updater_bufsize_rp0;
 
 typedef PACKED(struct) aci_hal_updater_erase_blue_flag_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_updater_erase_blue_flag_rp0;
 
 typedef PACKED(struct) aci_hal_updater_reset_blue_flag_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_updater_reset_blue_flag_rp0;
 
 typedef PACKED(struct) aci_hal_updater_erase_sector_cp0_s
 {
-  uint32_t Address;
+  uint32_t address;
 } aci_hal_updater_erase_sector_cp0;
 
 typedef PACKED(struct) aci_hal_updater_erase_sector_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_updater_erase_sector_rp0;
 
 typedef PACKED(struct) aci_hal_updater_prog_data_blk_cp0_s
 {
-  uint32_t Address;
-  uint16_t Data_Length;
-  uint8_t Data[(HCI_MAX_PAYLOAD_SIZE - 6) / sizeof(uint8_t)];
+  uint32_t address;
+  uint16_t data_length;
+  uint8_t data[(HCI_MAX_PAYLOAD_SIZE - 6) / sizeof(uint8_t)];
 } aci_hal_updater_prog_data_blk_cp0;
 
 typedef PACKED(struct) aci_hal_updater_prog_data_blk_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_updater_prog_data_blk_rp0;
 
 typedef PACKED(struct) aci_hal_updater_read_data_blk_cp0_s
 {
-  uint32_t Address;
-  uint16_t Data_Length;
+  uint32_t address;
+  uint16_t data_length;
 } aci_hal_updater_read_data_blk_cp0;
 
 typedef PACKED(struct) aci_hal_updater_read_data_blk_rp0_s
 {
-  uint8_t Status;
-  uint8_t Data[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(uint8_t)];
+  uint8_t status;
+  uint8_t data[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(uint8_t)];
 } aci_hal_updater_read_data_blk_rp0;
 
 typedef PACKED(struct) aci_hal_updater_calc_crc_cp0_s
 {
-  uint32_t Address;
-  uint8_t Num_Of_Sectors;
+  uint32_t address;
+  uint8_t num_of_sectors;
 } aci_hal_updater_calc_crc_cp0;
 
 typedef PACKED(struct) aci_hal_updater_calc_crc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
   uint32_t crc;
 } aci_hal_updater_calc_crc_rp0;
 
 typedef PACKED(struct) aci_hal_updater_hw_version_rp0_s
 {
-  uint8_t Status;
-  uint8_t HW_Version;
+  uint8_t status;
+  uint8_t hw_version;
 } aci_hal_updater_hw_version_rp0;
 
 typedef PACKED(struct) aci_hal_transmitter_test_packets_cp0_s
 {
-  uint8_t TX_Frequency;
-  uint8_t Length_Of_Test_Data;
-  uint8_t Packet_Payload;
-  uint16_t Number_Of_Packets;
+  uint8_t tx_frequency;
+  uint8_t length_of_test_data;
+  uint8_t packet_payload;
+  uint16_t number_of_packets;
 } aci_hal_transmitter_test_packets_cp0;
 
 typedef PACKED(struct) aci_hal_transmitter_test_packets_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_hal_transmitter_test_packets_rp0;
 
 typedef PACKED(struct) aci_gap_set_non_discoverable_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_non_discoverable_rp0;
 
 typedef PACKED(struct) aci_gap_set_limited_discoverable_cp0_s
 {
-  uint8_t Advertising_Type;
-  uint16_t Advertising_Interval_Min;
-  uint16_t Advertising_Interval_Max;
-  uint8_t Own_Address_Type;
-  uint8_t Advertising_Filter_Policy;
-  uint8_t Local_Name_Length;
-  uint8_t Local_Name[(HCI_MAX_PAYLOAD_SIZE - 8) / sizeof(uint8_t)];
+  uint8_t advertising_type;
+  uint16_t advertising_interval_min;
+  uint16_t advertising_interval_max;
+  uint8_t own_address_type;
+  uint8_t advertising_filter_policy;
+  uint8_t local_name_length;
+  uint8_t local_name[(HCI_MAX_PAYLOAD_SIZE - 8) / sizeof(uint8_t)];
 } aci_gap_set_limited_discoverable_cp0;
 
 typedef PACKED(struct) aci_gap_set_limited_discoverable_cp1_s
 {
-  uint8_t Service_Uuid_length;
-  uint8_t Service_Uuid_List[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(uint8_t)];
+  uint8_t service_uuid_length;
+  uint8_t service_uuid_list[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(uint8_t)];
 } aci_gap_set_limited_discoverable_cp1;
 
 typedef PACKED(struct) aci_gap_set_limited_discoverable_cp2_s
 {
-  uint16_t Slave_Conn_Interval_Min;
-  uint16_t Slave_Conn_Interval_Max;
+  uint16_t slave_conn_interval_min;
+  uint16_t slave_conn_interval_max;
 } aci_gap_set_limited_discoverable_cp2;
 
 typedef PACKED(struct) aci_gap_set_limited_discoverable_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_limited_discoverable_rp0;
 
 typedef PACKED(struct) aci_gap_set_discoverable_cp0_s
 {
-  uint8_t Advertising_Type;
-  uint16_t Advertising_Interval_Min;
-  uint16_t Advertising_Interval_Max;
-  uint8_t Own_Address_Type;
-  uint8_t Advertising_Filter_Policy;
-  uint8_t Local_Name_Length;
-  uint8_t Local_Name[(HCI_MAX_PAYLOAD_SIZE - 8) / sizeof(uint8_t)];
+  uint8_t advertising_type;
+  uint16_t advertising_interval_min;
+  uint16_t advertising_interval_max;
+  uint8_t own_address_type;
+  uint8_t advertising_filter_policy;
+  uint8_t local_name_length;
+  uint8_t local_name[(HCI_MAX_PAYLOAD_SIZE - 8) / sizeof(uint8_t)];
 } aci_gap_set_discoverable_cp0;
 
 typedef PACKED(struct) aci_gap_set_discoverable_cp1_s
 {
-  uint8_t Service_Uuid_length;
-  uint8_t Service_Uuid_List[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(uint8_t)];
+  uint8_t service_uuid_length;
+  uint8_t service_uuid_list[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(uint8_t)];
 } aci_gap_set_discoverable_cp1;
 
 typedef PACKED(struct) aci_gap_set_discoverable_cp2_s
 {
-  uint16_t Slave_Conn_Interval_Min;
-  uint16_t Slave_Conn_Interval_Max;
+  uint16_t slave_conn_interval_min;
+  uint16_t slave_conn_interval_max;
 } aci_gap_set_discoverable_cp2;
 
 typedef PACKED(struct) aci_gap_set_discoverable_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_discoverable_rp0;
 
 typedef PACKED(struct) aci_gap_set_direct_connectable_cp0_s
 {
-  uint8_t Own_Address_Type;
-  uint8_t Directed_Advertising_Type;
-  uint8_t Direct_Address_Type;
-  uint8_t Direct_Address[6];
-  uint16_t Advertising_Interval_Min;
-  uint16_t Advertising_Interval_Max;
+  uint8_t own_address_type;
+  uint8_t directed_advertising_type;
+  uint8_t direct_address_type;
+  uint8_t direct_address[6];
+  uint16_t advertising_interval_min;
+  uint16_t advertising_interval_max;
 } aci_gap_set_direct_connectable_cp0;
 
 typedef PACKED(struct) aci_gap_set_direct_connectable_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_direct_connectable_rp0;
 
 typedef PACKED(struct) aci_gap_set_io_capability_cp0_s
 {
-  uint8_t IO_Capability;
+  uint8_t io_capability;
 } aci_gap_set_io_capability_cp0;
 
 typedef PACKED(struct) aci_gap_set_io_capability_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_io_capability_rp0;
 
 typedef PACKED(struct) aci_gap_set_authentication_requirement_cp0_s
 {
-  uint8_t Bonding_Mode;
-  uint8_t MITM_Mode;
-  uint8_t SC_Support;
-  uint8_t KeyPress_Notification_Support;
-  uint8_t Min_Encryption_Key_Size;
-  uint8_t Max_Encryption_Key_Size;
-  uint8_t Use_Fixed_Pin;
-  uint32_t Fixed_Pin;
-  uint8_t Identity_Address_Type;
+  uint8_t bonding_mode;
+  uint8_t mitm_mode;
+  uint8_t sc_support;
+  uint8_t key_press_notification_support;
+  uint8_t min_encryption_key_size;
+  uint8_t max_encryption_key_size;
+  uint8_t use_fixed_pin;
+  uint32_t fixed_pin;
+  uint8_t identity_address_type;
 } aci_gap_set_authentication_requirement_cp0;
 
 typedef PACKED(struct) aci_gap_set_authentication_requirement_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_authentication_requirement_rp0;
 
 typedef PACKED(struct) aci_gap_set_authorization_requirement_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Authorization_Enable;
+  uint16_t connection_handle;
+  uint8_t authorization_enable;
 } aci_gap_set_authorization_requirement_cp0;
 
 typedef PACKED(struct) aci_gap_set_authorization_requirement_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_authorization_requirement_rp0;
 
 typedef PACKED(struct) aci_gap_pass_key_resp_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint32_t Pass_Key;
+  uint16_t connection_handle;
+  uint32_t pass_key;
 } aci_gap_pass_key_resp_cp0;
 
 typedef PACKED(struct) aci_gap_pass_key_resp_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_pass_key_resp_rp0;
 
 typedef PACKED(struct) aci_gap_authorization_resp_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Authorize;
+  uint16_t connection_handle;
+  uint8_t authorize;
 } aci_gap_authorization_resp_cp0;
 
 typedef PACKED(struct) aci_gap_authorization_resp_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_authorization_resp_rp0;
 
 typedef PACKED(struct) aci_gap_init_cp0_s
 {
-  uint8_t Role;
+  uint8_t role;
   uint8_t privacy_enabled;
   uint8_t device_name_char_len;
 } aci_gap_init_cp0;
 
 typedef PACKED(struct) aci_gap_init_rp0_s
 {
-  uint8_t Status;
-  uint16_t Service_Handle;
-  uint16_t Dev_Name_Char_Handle;
-  uint16_t Appearance_Char_Handle;
+  uint8_t status;
+  uint16_t service_handle;
+  uint16_t dev_name_char_handle;
+  uint16_t appearance_char_handle;
 } aci_gap_init_rp0;
 
 typedef PACKED(struct) aci_gap_set_non_connectable_cp0_s
 {
-  uint8_t Advertising_Event_Type;
-  uint8_t Own_Address_Type;
+  uint8_t advertising_event_type;
+  uint8_t own_address_type;
 } aci_gap_set_non_connectable_cp0;
 
 typedef PACKED(struct) aci_gap_set_non_connectable_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_non_connectable_rp0;
 
 typedef PACKED(struct) aci_gap_set_undirected_connectable_cp0_s
 {
-  uint16_t Advertising_Interval_Min;
-  uint16_t Advertising_Interval_Max;
-  uint8_t Own_Address_Type;
-  uint8_t Adv_Filter_Policy;
+  uint16_t advertising_interval_min;
+  uint16_t advertising_interval_max;
+  uint8_t own_address_type;
+  uint8_t adv_filter_policy;
 } aci_gap_set_undirected_connectable_cp0;
 
 typedef PACKED(struct) aci_gap_set_undirected_connectable_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_undirected_connectable_rp0;
 
 typedef PACKED(struct) aci_gap_slave_security_req_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gap_slave_security_req_cp0;
 
 typedef PACKED(struct) aci_gap_slave_security_req_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_slave_security_req_rp0;
 
 typedef PACKED(struct) aci_gap_update_adv_data_cp0_s
 {
-  uint8_t AdvDataLen;
-  uint8_t AdvData[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(uint8_t)];
+  uint8_t adv_data_len;
+  uint8_t adv_data[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(uint8_t)];
 } aci_gap_update_adv_data_cp0;
 
 typedef PACKED(struct) aci_gap_update_adv_data_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_update_adv_data_rp0;
 
 typedef PACKED(struct) aci_gap_delete_ad_type_cp0_s
 {
-  uint8_t ADType;
+  uint8_t ad_type;
 } aci_gap_delete_ad_type_cp0;
 
 typedef PACKED(struct) aci_gap_delete_ad_type_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_delete_ad_type_rp0;
 
 typedef PACKED(struct) aci_gap_get_security_level_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gap_get_security_level_cp0;
 
 typedef PACKED(struct) aci_gap_get_security_level_rp0_s
 {
-  uint8_t Status;
-  uint8_t Security_Mode;
-  uint8_t Security_Level;
+  uint8_t status;
+  uint8_t security_mode;
+  uint8_t security_level;
 } aci_gap_get_security_level_rp0;
 
 typedef PACKED(struct) aci_gap_set_event_mask_cp0_s
 {
-  uint16_t GAP_Evt_Mask;
+  uint16_t gap_evt_mask;
 } aci_gap_set_event_mask_cp0;
 
 typedef PACKED(struct) aci_gap_set_event_mask_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_event_mask_rp0;
 
 typedef PACKED(struct) aci_gap_configure_whitelist_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_configure_whitelist_rp0;
 
 typedef PACKED(struct) aci_gap_terminate_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Reason;
+  uint16_t connection_handle;
+  uint8_t reason;
 } aci_gap_terminate_cp0;
 
 typedef PACKED(struct) aci_gap_terminate_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_terminate_rp0;
 
 typedef PACKED(struct) aci_gap_clear_security_db_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_clear_security_db_rp0;
 
 typedef PACKED(struct) aci_gap_allow_rebond_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gap_allow_rebond_cp0;
 
 typedef PACKED(struct) aci_gap_allow_rebond_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_allow_rebond_rp0;
 
 typedef PACKED(struct) aci_gap_start_limited_discovery_proc_cp0_s
 {
-  uint16_t LE_Scan_Interval;
-  uint16_t LE_Scan_Window;
-  uint8_t Own_Address_Type;
-  uint8_t Filter_Duplicates;
+  uint16_t le_scan_interval;
+  uint16_t le_scan_window;
+  uint8_t own_address_type;
+  uint8_t filter_duplicates;
 } aci_gap_start_limited_discovery_proc_cp0;
 
 typedef PACKED(struct) aci_gap_start_limited_discovery_proc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_start_limited_discovery_proc_rp0;
 
 typedef PACKED(struct) aci_gap_start_general_discovery_proc_cp0_s
 {
-  uint16_t LE_Scan_Interval;
-  uint16_t LE_Scan_Window;
-  uint8_t Own_Address_Type;
-  uint8_t Filter_Duplicates;
+  uint16_t le_scan_interval;
+  uint16_t le_scan_window;
+  uint8_t own_address_type;
+  uint8_t filter_duplicates;
 } aci_gap_start_general_discovery_proc_cp0;
 
 typedef PACKED(struct) aci_gap_start_general_discovery_proc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_start_general_discovery_proc_rp0;
 
 typedef PACKED(struct) aci_gap_start_name_discovery_proc_cp0_s
 {
-  uint16_t LE_Scan_Interval;
-  uint16_t LE_Scan_Window;
-  uint8_t Peer_Address_Type;
-  uint8_t Peer_Address[6];
-  uint8_t Own_Address_Type;
-  uint16_t Conn_Interval_Min;
-  uint16_t Conn_Interval_Max;
-  uint16_t Conn_Latency;
-  uint16_t Supervision_Timeout;
-  uint16_t Minimum_CE_Length;
-  uint16_t Maximum_CE_Length;
+  uint16_t le_scan_interval;
+  uint16_t le_scan_window;
+  uint8_t peer_address_type;
+  uint8_t peer_address[6];
+  uint8_t own_address_type;
+  uint16_t conn_interval_min;
+  uint16_t conn_interval_max;
+  uint16_t conn_latency;
+  uint16_t supervision_timeout;
+  uint16_t minimum_ce_length;
+  uint16_t maximum_ce_length;
 } aci_gap_start_name_discovery_proc_cp0;
 
 typedef PACKED(struct) aci_gap_start_name_discovery_proc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_start_name_discovery_proc_rp0;
 
 typedef PACKED(struct) aci_gap_start_auto_connection_establish_proc_cp0_s
 {
-  uint16_t LE_Scan_Interval;
-  uint16_t LE_Scan_Window;
-  uint8_t Own_Address_Type;
-  uint16_t Conn_Interval_Min;
-  uint16_t Conn_Interval_Max;
-  uint16_t Conn_Latency;
-  uint16_t Supervision_Timeout;
-  uint16_t Minimum_CE_Length;
-  uint16_t Maximum_CE_Length;
-  uint8_t Num_of_Whitelist_Entries;
-  packed_Whitelist_Entry_t Whitelist_Entry[(HCI_MAX_PAYLOAD_SIZE - 18) / sizeof(packed_Whitelist_Entry_t)];
+  uint16_t le_scan_interval;
+  uint16_t le_scan_window;
+  uint8_t own_address_type;
+  uint16_t conn_interval_min;
+  uint16_t conn_interval_max;
+  uint16_t conn_latency;
+  uint16_t supervision_timeout;
+  uint16_t minimum_ce_length;
+  uint16_t maximum_ce_length;
+  uint8_t num_of_whitelist_entries;
+  packed_whitelist_entry_t whitelist_entry[(HCI_MAX_PAYLOAD_SIZE - 18) / sizeof(packed_whitelist_entry_t)];
 } aci_gap_start_auto_connection_establish_proc_cp0;
 
 typedef PACKED(struct) aci_gap_start_auto_connection_establish_proc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_start_auto_connection_establish_proc_rp0;
 
 typedef PACKED(struct) aci_gap_start_general_connection_establish_proc_cp0_s
 {
-  uint8_t LE_Scan_Type;
-  uint16_t LE_Scan_Interval;
-  uint16_t LE_Scan_Window;
-  uint8_t Own_Address_Type;
-  uint8_t Scanning_Filter_Policy;
-  uint8_t Filter_Duplicates;
+  uint8_t le_scan_type;
+  uint16_t le_scan_interval;
+  uint16_t le_scan_window;
+  uint8_t own_address_type;
+  uint8_t scanning_filter_policy;
+  uint8_t filter_duplicates;
 } aci_gap_start_general_connection_establish_proc_cp0;
 
 typedef PACKED(struct) aci_gap_start_general_connection_establish_proc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_start_general_connection_establish_proc_rp0;
 
 typedef PACKED(struct) aci_gap_start_selective_connection_establish_proc_cp0_s
 {
-  uint8_t LE_Scan_Type;
-  uint16_t LE_Scan_Interval;
-  uint16_t LE_Scan_Window;
-  uint8_t Own_Address_Type;
-  uint8_t Scanning_Filter_Policy;
-  uint8_t Filter_Duplicates;
-  uint8_t Num_of_Whitelist_Entries;
-  packed_Whitelist_Entry_t Whitelist_Entry[(HCI_MAX_PAYLOAD_SIZE - 9) / sizeof(packed_Whitelist_Entry_t)];
+  uint8_t le_scan_type;
+  uint16_t le_scan_interval;
+  uint16_t le_scan_window;
+  uint8_t own_address_type;
+  uint8_t scanning_filter_policy;
+  uint8_t filter_duplicates;
+  uint8_t num_of_whitelist_entries;
+  packed_whitelist_entry_t whitelist_entry[(HCI_MAX_PAYLOAD_SIZE - 9) / sizeof(packed_whitelist_entry_t)];
 } aci_gap_start_selective_connection_establish_proc_cp0;
 
 typedef PACKED(struct) aci_gap_start_selective_connection_establish_proc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_start_selective_connection_establish_proc_rp0;
 
 typedef PACKED(struct) aci_gap_create_connection_cp0_s
 {
-  uint16_t LE_Scan_Interval;
-  uint16_t LE_Scan_Window;
-  uint8_t Peer_Address_Type;
-  uint8_t Peer_Address[6];
-  uint8_t Own_Address_Type;
-  uint16_t Conn_Interval_Min;
-  uint16_t Conn_Interval_Max;
-  uint16_t Conn_Latency;
-  uint16_t Supervision_Timeout;
-  uint16_t Minimum_CE_Length;
-  uint16_t Maximum_CE_Length;
+  uint16_t le_scan_interval;
+  uint16_t le_scan_window;
+  uint8_t peer_address_type;
+  uint8_t peer_address[6];
+  uint8_t own_address_type;
+  uint16_t conn_interval_min;
+  uint16_t conn_interval_max;
+  uint16_t conn_latency;
+  uint16_t supervision_timeout;
+  uint16_t minimum_ce_length;
+  uint16_t maximum_ce_length;
 } aci_gap_create_connection_cp0;
 
 typedef PACKED(struct) aci_gap_create_connection_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_create_connection_rp0;
 
 typedef PACKED(struct) aci_gap_terminate_gap_proc_cp0_s
 {
-  uint8_t Procedure_Code;
+  uint8_t procedure_code;
 } aci_gap_terminate_gap_proc_cp0;
 
 typedef PACKED(struct) aci_gap_terminate_gap_proc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_terminate_gap_proc_rp0;
 
 typedef PACKED(struct) aci_gap_start_connection_update_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Conn_Interval_Min;
-  uint16_t Conn_Interval_Max;
-  uint16_t Conn_Latency;
-  uint16_t Supervision_Timeout;
-  uint16_t Minimum_CE_Length;
-  uint16_t Maximum_CE_Length;
+  uint16_t connection_handle;
+  uint16_t conn_interval_min;
+  uint16_t conn_interval_max;
+  uint16_t conn_latency;
+  uint16_t supervision_timeout;
+  uint16_t minimum_ce_length;
+  uint16_t maximum_ce_length;
 } aci_gap_start_connection_update_cp0;
 
 typedef PACKED(struct) aci_gap_start_connection_update_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_start_connection_update_rp0;
 
 typedef PACKED(struct) aci_gap_send_pairing_req_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Force_Rebond;
+  uint16_t connection_handle;
+  uint8_t force_rebond;
 } aci_gap_send_pairing_req_cp0;
 
 typedef PACKED(struct) aci_gap_send_pairing_req_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_send_pairing_req_rp0;
 
 typedef PACKED(struct) aci_gap_resolve_private_addr_cp0_s
 {
-  uint8_t Address[6];
+  uint8_t address[6];
 } aci_gap_resolve_private_addr_cp0;
 
 typedef PACKED(struct) aci_gap_resolve_private_addr_rp0_s
 {
-  uint8_t Status;
-  uint8_t Actual_Address[6];
+  uint8_t status;
+  uint8_t actual_address[6];
 } aci_gap_resolve_private_addr_rp0;
 
 typedef PACKED(struct) aci_gap_set_broadcast_mode_cp0_s
 {
-  uint16_t Advertising_Interval_Min;
-  uint16_t Advertising_Interval_Max;
-  uint8_t Advertising_Type;
-  uint8_t Own_Address_Type;
-  uint8_t Adv_Data_Length;
-  uint8_t Adv_Data[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
+  uint16_t advertising_interval_min;
+  uint16_t advertising_interval_max;
+  uint8_t advertising_type;
+  uint8_t own_address_type;
+  uint8_t adv_data_length;
+  uint8_t adv_data[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
 } aci_gap_set_broadcast_mode_cp0;
 
 typedef PACKED(struct) aci_gap_set_broadcast_mode_cp1_s
 {
-  uint8_t Num_of_Whitelist_Entries;
-  packed_Whitelist_Entry_t Whitelist_Entry[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(packed_Whitelist_Entry_t)];
+  uint8_t num_of_whitelist_entries;
+  packed_whitelist_entry_t whitelist_entry[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(packed_whitelist_entry_t)];
 } aci_gap_set_broadcast_mode_cp1;
 
 typedef PACKED(struct) aci_gap_set_broadcast_mode_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_broadcast_mode_rp0;
 
 typedef PACKED(struct) aci_gap_start_observation_proc_cp0_s
 {
-  uint16_t LE_Scan_Interval;
-  uint16_t LE_Scan_Window;
-  uint8_t LE_Scan_Type;
-  uint8_t Own_Address_Type;
-  uint8_t Filter_Duplicates;
-  uint8_t Scanning_Filter_Policy;
+  uint16_t le_scan_interval;
+  uint16_t le_scan_window;
+  uint8_t le_scan_type;
+  uint8_t own_address_type;
+  uint8_t filter_duplicates;
+  uint8_t scanning_filter_policy;
 } aci_gap_start_observation_proc_cp0;
 
 typedef PACKED(struct) aci_gap_start_observation_proc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_start_observation_proc_rp0;
 
 typedef PACKED(struct) aci_gap_get_bonded_devices_rp0_s
 {
-  uint8_t Status;
-  uint8_t Num_of_Addresses;
-  packed_Bonded_Device_Entry_t Bonded_Device_Entry[(HCI_MAX_PAYLOAD_SIZE - 2) / sizeof(packed_Bonded_Device_Entry_t)];
+  uint8_t status;
+  uint8_t num_of_addresses;
+  packed_bonded_device_entry_t bonded_device_entry[(HCI_MAX_PAYLOAD_SIZE - 2) / sizeof(packed_bonded_device_entry_t)];
 } aci_gap_get_bonded_devices_rp0;
 
 typedef PACKED(struct) aci_gap_is_device_bonded_cp0_s
 {
-  uint8_t Peer_Address_Type;
-  uint8_t Peer_Address[6];
+  uint8_t peer_address_type;
+  uint8_t peer_address[6];
 } aci_gap_is_device_bonded_cp0;
 
 typedef PACKED(struct) aci_gap_is_device_bonded_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_is_device_bonded_rp0;
 
 typedef PACKED(struct) aci_gap_numeric_comparison_value_confirm_yesno_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Confirm_Yes_No;
+  uint16_t connection_handle;
+  uint8_t confirm_yes_no;
 } aci_gap_numeric_comparison_value_confirm_yesno_cp0;
 
 typedef PACKED(struct) aci_gap_numeric_comparison_value_confirm_yesno_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_numeric_comparison_value_confirm_yesno_rp0;
 
 typedef PACKED(struct) aci_gap_passkey_input_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Input_Type;
+  uint16_t connection_handle;
+  uint8_t input_type;
 } aci_gap_passkey_input_cp0;
 
 typedef PACKED(struct) aci_gap_passkey_input_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_passkey_input_rp0;
 
 typedef PACKED(struct) aci_gap_get_oob_data_cp0_s
 {
-  uint8_t OOB_Data_Type;
+  uint8_t oob_data_type;
 } aci_gap_get_oob_data_cp0;
 
 typedef PACKED(struct) aci_gap_get_oob_data_rp0_s
 {
-  uint8_t Status;
-  uint8_t Address_Type;
-  uint8_t Address[6];
-  uint8_t OOB_Data_Type;
-  uint8_t OOB_Data_Len;
-  uint8_t OOB_Data[16];
+  uint8_t status;
+  uint8_t address_type;
+  uint8_t address[6];
+  uint8_t oob_data_type;
+  uint8_t oob_data_len;
+  uint8_t oob_data[16];
 } aci_gap_get_oob_data_rp0;
 
 typedef PACKED(struct) aci_gap_set_oob_data_cp0_s
 {
-  uint8_t Device_Type;
-  uint8_t Address_Type;
-  uint8_t Address[6];
-  uint8_t OOB_Data_Type;
-  uint8_t OOB_Data_Len;
-  uint8_t OOB_Data[16];
+  uint8_t device_type;
+  uint8_t address_type;
+  uint8_t address[6];
+  uint8_t oob_data_type;
+  uint8_t oob_data_len;
+  uint8_t oob_data[16];
 } aci_gap_set_oob_data_cp0;
 
 typedef PACKED(struct) aci_gap_set_oob_data_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_set_oob_data_rp0;
 
 typedef PACKED(struct) aci_gap_add_devices_to_resolving_list_cp0_s
 {
-  uint8_t Num_of_Resolving_list_Entries;
-  packed_Whitelist_Identity_Entry_t Whitelist_Identity_Entry[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(packed_Whitelist_Identity_Entry_t)];
+  uint8_t num_of_resolving_list_entries;
+  packed_whitelist_identity_entry_t whitelist_identity_entry[(HCI_MAX_PAYLOAD_SIZE - 1) /
+                                                             sizeof(packed_whitelist_identity_entry_t)];
 } aci_gap_add_devices_to_resolving_list_cp0;
 
 typedef PACKED(struct) aci_gap_add_devices_to_resolving_list_cp1_s
 {
-  uint8_t Clear_Resolving_List;
+  uint8_t clear_resolving_list;
 } aci_gap_add_devices_to_resolving_list_cp1;
 
 typedef PACKED(struct) aci_gap_add_devices_to_resolving_list_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_add_devices_to_resolving_list_rp0;
 
 typedef PACKED(struct) aci_gap_remove_bonded_device_cp0_s
 {
-  uint8_t Peer_Identity_Address_Type;
-  uint8_t Peer_Identity_Address[6];
+  uint8_t peer_identity_address_type;
+  uint8_t peer_identity_address[6];
 } aci_gap_remove_bonded_device_cp0;
 
 typedef PACKED(struct) aci_gap_remove_bonded_device_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gap_remove_bonded_device_rp0;
 
 typedef PACKED(struct) aci_gatt_init_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_init_rp0;
 
 typedef PACKED(struct) aci_gatt_add_service_cp0_s
 {
-  uint8_t Service_UUID_Type;
-  packed_Service_UUID_t Service_UUID;
+  uint8_t service_uuid_type;
+  packed_service_uuid_t service_uuid;
 } aci_gatt_add_service_cp0;
 
 typedef PACKED(struct) aci_gatt_add_service_cp1_s
 {
-  uint8_t Service_Type;
-  uint8_t Max_Attribute_Records;
+  uint8_t service_type;
+  uint8_t max_attribute_records;
 } aci_gatt_add_service_cp1;
 
 typedef PACKED(struct) aci_gatt_add_service_rp0_s
 {
-  uint8_t Status;
-  uint16_t Service_Handle;
+  uint8_t status;
+  uint16_t service_handle;
 } aci_gatt_add_service_rp0;
 
 typedef PACKED(struct) aci_gatt_include_service_cp0_s
 {
-  uint16_t Service_Handle;
-  uint16_t Include_Start_Handle;
-  uint16_t Include_End_Handle;
-  uint8_t Include_UUID_Type;
-  packed_Include_UUID_t Include_UUID;
+  uint16_t service_handle;
+  uint16_t include_start_handle;
+  uint16_t include_end_handle;
+  uint8_t include_uuid_type;
+  packed_include_uuid_t include_uuid;
 } aci_gatt_include_service_cp0;
 
 typedef PACKED(struct) aci_gatt_include_service_rp0_s
 {
-  uint8_t Status;
-  uint16_t Include_Handle;
+  uint8_t status;
+  uint16_t include_handle;
 } aci_gatt_include_service_rp0;
 
 typedef PACKED(struct) aci_gatt_add_char_cp0_s
 {
-  uint16_t Service_Handle;
-  uint8_t Char_UUID_Type;
-  packed_Char_UUID_t Char_UUID;
+  uint16_t service_handle;
+  uint8_t char_uuid_type;
+  packed_char_uuid_t char_uuid;
 } aci_gatt_add_char_cp0;
 
 typedef PACKED(struct) aci_gatt_add_char_cp1_s
 {
-  uint16_t Char_Value_Length;
-  uint8_t Char_Properties;
-  uint8_t Security_Permissions;
-  uint8_t GATT_Evt_Mask;
-  uint8_t Enc_Key_Size;
-  uint8_t Is_Variable;
+  uint16_t char_value_length;
+  uint8_t char_properties;
+  uint8_t security_permissions;
+  uint8_t gatt_evt_mask;
+  uint8_t enc_key_size;
+  uint8_t is_variable;
 } aci_gatt_add_char_cp1;
 
 typedef PACKED(struct) aci_gatt_add_char_rp0_s
 {
-  uint8_t Status;
-  uint16_t Char_Handle;
+  uint8_t status;
+  uint16_t char_handle;
 } aci_gatt_add_char_rp0;
 
 typedef PACKED(struct) aci_gatt_add_char_desc_cp0_s
 {
-  uint16_t Service_Handle;
-  uint16_t Char_Handle;
-  uint8_t Char_Desc_Uuid_Type;
-  packed_Char_Desc_Uuid_t Char_Desc_Uuid;
+  uint16_t service_handle;
+  uint16_t char_handle;
+  uint8_t char_desc_uuid_type;
+  packed_char_desc_uuid_t char_desc_uuid;
 } aci_gatt_add_char_desc_cp0;
 
 typedef PACKED(struct) aci_gatt_add_char_desc_cp1_s
 {
-  uint8_t Char_Desc_Value_Max_Len;
-  uint8_t Char_Desc_Value_Length;
-  uint8_t Char_Desc_Value[(HCI_MAX_PAYLOAD_SIZE - 2) / sizeof(uint8_t)];
+  uint8_t char_desc_value_max_len;
+  uint8_t char_desc_value_length;
+  uint8_t char_desc_value[(HCI_MAX_PAYLOAD_SIZE - 2) / sizeof(uint8_t)];
 } aci_gatt_add_char_desc_cp1;
 
 typedef PACKED(struct) aci_gatt_add_char_desc_cp2_s
 {
-  uint8_t Security_Permissions;
-  uint8_t Access_Permissions;
-  uint8_t GATT_Evt_Mask;
-  uint8_t Enc_Key_Size;
-  uint8_t Is_Variable;
+  uint8_t security_permissions;
+  uint8_t access_permissions;
+  uint8_t gatt_evt_mask;
+  uint8_t enc_key_size;
+  uint8_t is_variable;
 } aci_gatt_add_char_desc_cp2;
 
 typedef PACKED(struct) aci_gatt_add_char_desc_rp0_s
 {
-  uint8_t Status;
-  uint16_t Char_Desc_Handle;
+  uint8_t status;
+  uint16_t char_desc_handle;
 } aci_gatt_add_char_desc_rp0;
 
 typedef PACKED(struct) aci_gatt_update_char_value_cp0_s
 {
-  uint16_t Service_Handle;
-  uint16_t Char_Handle;
-  uint8_t Val_Offset;
-  uint8_t Char_Value_Length;
-  uint8_t Char_Value[(HCI_MAX_PAYLOAD_SIZE - 6) / sizeof(uint8_t)];
+  uint16_t service_handle;
+  uint16_t char_handle;
+  uint8_t val_offset;
+  uint8_t char_value_length;
+  uint8_t char_value[(HCI_MAX_PAYLOAD_SIZE - 6) / sizeof(uint8_t)];
 } aci_gatt_update_char_value_cp0;
 
 typedef PACKED(struct) aci_gatt_update_char_value_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_update_char_value_rp0;
 
 typedef PACKED(struct) aci_gatt_del_char_cp0_s
 {
-  uint16_t Serv_Handle;
-  uint16_t Char_Handle;
+  uint16_t serv_handle;
+  uint16_t char_handle;
 } aci_gatt_del_char_cp0;
 
 typedef PACKED(struct) aci_gatt_del_char_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_del_char_rp0;
 
 typedef PACKED(struct) aci_gatt_del_service_cp0_s
 {
-  uint16_t Serv_Handle;
+  uint16_t serv_handle;
 } aci_gatt_del_service_cp0;
 
 typedef PACKED(struct) aci_gatt_del_service_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_del_service_rp0;
 
 typedef PACKED(struct) aci_gatt_del_include_service_cp0_s
 {
-  uint16_t Serv_Handle;
-  uint16_t Include_Handle;
+  uint16_t serv_handle;
+  uint16_t include_handle;
 } aci_gatt_del_include_service_cp0;
 
 typedef PACKED(struct) aci_gatt_del_include_service_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_del_include_service_rp0;
 
 typedef PACKED(struct) aci_gatt_set_event_mask_cp0_s
 {
-  uint32_t GATT_Evt_Mask;
+  uint32_t gatt_evt_mask;
 } aci_gatt_set_event_mask_cp0;
 
 typedef PACKED(struct) aci_gatt_set_event_mask_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_set_event_mask_rp0;
 
 typedef PACKED(struct) aci_gatt_exchange_config_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gatt_exchange_config_cp0;
 
 typedef PACKED(struct) aci_gatt_exchange_config_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_exchange_config_rp0;
 
 typedef PACKED(struct) aci_att_find_info_req_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Start_Handle;
-  uint16_t End_Handle;
+  uint16_t connection_handle;
+  uint16_t start_handle;
+  uint16_t end_handle;
 } aci_att_find_info_req_cp0;
 
 typedef PACKED(struct) aci_att_find_info_req_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_att_find_info_req_rp0;
 
 typedef PACKED(struct) aci_att_find_by_type_value_req_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Start_Handle;
-  uint16_t End_Handle;
-  uint16_t UUID;
-  uint8_t Attribute_Val_Length;
-  uint8_t Attribute_Val[(HCI_MAX_PAYLOAD_SIZE - 9) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t start_handle;
+  uint16_t end_handle;
+  uint16_t uuid;
+  uint8_t attribute_val_length;
+  uint8_t attribute_val[(HCI_MAX_PAYLOAD_SIZE - 9) / sizeof(uint8_t)];
 } aci_att_find_by_type_value_req_cp0;
 
 typedef PACKED(struct) aci_att_find_by_type_value_req_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_att_find_by_type_value_req_rp0;
 
 typedef PACKED(struct) aci_att_read_by_type_req_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Start_Handle;
-  uint16_t End_Handle;
-  uint8_t UUID_Type;
-  packed_UUID_t UUID;
+  uint16_t connection_handle;
+  uint16_t start_handle;
+  uint16_t end_handle;
+  uint8_t uuid_type;
+  packed_uuid_t uuid;
 } aci_att_read_by_type_req_cp0;
 
 typedef PACKED(struct) aci_att_read_by_type_req_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_att_read_by_type_req_rp0;
 
 typedef PACKED(struct) aci_att_read_by_group_type_req_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Start_Handle;
-  uint16_t End_Handle;
-  uint8_t UUID_Type;
-  packed_UUID_t UUID;
+  uint16_t connection_handle;
+  uint16_t start_handle;
+  uint16_t end_handle;
+  uint8_t uuid_type;
+  packed_uuid_t uuid;
 } aci_att_read_by_group_type_req_cp0;
 
 typedef PACKED(struct) aci_att_read_by_group_type_req_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_att_read_by_group_type_req_rp0;
 
 typedef PACKED(struct) aci_att_prepare_write_req_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint16_t Val_Offset;
-  uint8_t Attribute_Val_Length;
-  uint8_t Attribute_Val[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint16_t val_offset;
+  uint8_t attribute_val_length;
+  uint8_t attribute_val[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
 } aci_att_prepare_write_req_cp0;
 
 typedef PACKED(struct) aci_att_prepare_write_req_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_att_prepare_write_req_rp0;
 
 typedef PACKED(struct) aci_att_execute_write_req_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Execute;
+  uint16_t connection_handle;
+  uint8_t execute;
 } aci_att_execute_write_req_cp0;
 
 typedef PACKED(struct) aci_att_execute_write_req_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_att_execute_write_req_rp0;
 
 typedef PACKED(struct) aci_gatt_disc_all_primary_services_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gatt_disc_all_primary_services_cp0;
 
 typedef PACKED(struct) aci_gatt_disc_all_primary_services_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_disc_all_primary_services_rp0;
 
 typedef PACKED(struct) aci_gatt_disc_primary_service_by_uuid_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t UUID_Type;
-  packed_UUID_t UUID;
+  uint16_t connection_handle;
+  uint8_t uuid_type;
+  packed_uuid_t uuid;
 } aci_gatt_disc_primary_service_by_uuid_cp0;
 
 typedef PACKED(struct) aci_gatt_disc_primary_service_by_uuid_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_disc_primary_service_by_uuid_rp0;
 
 typedef PACKED(struct) aci_gatt_find_included_services_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Start_Handle;
-  uint16_t End_Handle;
+  uint16_t connection_handle;
+  uint16_t start_handle;
+  uint16_t end_handle;
 } aci_gatt_find_included_services_cp0;
 
 typedef PACKED(struct) aci_gatt_find_included_services_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_find_included_services_rp0;
 
 typedef PACKED(struct) aci_gatt_disc_all_char_of_service_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Start_Handle;
-  uint16_t End_Handle;
+  uint16_t connection_handle;
+  uint16_t start_handle;
+  uint16_t end_handle;
 } aci_gatt_disc_all_char_of_service_cp0;
 
 typedef PACKED(struct) aci_gatt_disc_all_char_of_service_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_disc_all_char_of_service_rp0;
 
 typedef PACKED(struct) aci_gatt_disc_char_by_uuid_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Start_Handle;
-  uint16_t End_Handle;
-  uint8_t UUID_Type;
-  packed_UUID_t UUID;
+  uint16_t connection_handle;
+  uint16_t start_handle;
+  uint16_t end_handle;
+  uint8_t uuid_type;
+  packed_uuid_t uuid;
 } aci_gatt_disc_char_by_uuid_cp0;
 
 typedef PACKED(struct) aci_gatt_disc_char_by_uuid_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_disc_char_by_uuid_rp0;
 
 typedef PACKED(struct) aci_gatt_disc_all_char_desc_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Char_Handle;
-  uint16_t End_Handle;
+  uint16_t connection_handle;
+  uint16_t char_handle;
+  uint16_t end_handle;
 } aci_gatt_disc_all_char_desc_cp0;
 
 typedef PACKED(struct) aci_gatt_disc_all_char_desc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_disc_all_char_desc_rp0;
 
 typedef PACKED(struct) aci_gatt_read_char_value_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
+  uint16_t connection_handle;
+  uint16_t attr_handle;
 } aci_gatt_read_char_value_cp0;
 
 typedef PACKED(struct) aci_gatt_read_char_value_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_read_char_value_rp0;
 
 typedef PACKED(struct) aci_gatt_read_using_char_uuid_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Start_Handle;
-  uint16_t End_Handle;
-  uint8_t UUID_Type;
-  packed_UUID_t UUID;
+  uint16_t connection_handle;
+  uint16_t start_handle;
+  uint16_t end_handle;
+  uint8_t uuid_type;
+  packed_uuid_t uuid;
 } aci_gatt_read_using_char_uuid_cp0;
 
 typedef PACKED(struct) aci_gatt_read_using_char_uuid_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_read_using_char_uuid_rp0;
 
 typedef PACKED(struct) aci_gatt_read_long_char_value_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint16_t Val_Offset;
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint16_t val_offset;
 } aci_gatt_read_long_char_value_cp0;
 
 typedef PACKED(struct) aci_gatt_read_long_char_value_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_read_long_char_value_rp0;
 
 typedef PACKED(struct) aci_gatt_read_multiple_char_value_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Number_of_Handles;
-  packed_Handle_Entry_t Handle_Entry[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(packed_Handle_Entry_t)];
+  uint16_t connection_handle;
+  uint8_t number_of_handles;
+  packed_handle_entry_t handle_entry[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(packed_handle_entry_t)];
 } aci_gatt_read_multiple_char_value_cp0;
 
 typedef PACKED(struct) aci_gatt_read_multiple_char_value_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_read_multiple_char_value_rp0;
 
 typedef PACKED(struct) aci_gatt_write_char_value_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint8_t Attribute_Val_Length;
-  uint8_t Attribute_Val[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint8_t attribute_val_length;
+  uint8_t attribute_val[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
 } aci_gatt_write_char_value_cp0;
 
 typedef PACKED(struct) aci_gatt_write_char_value_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_write_char_value_rp0;
 
 typedef PACKED(struct) aci_gatt_write_long_char_value_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint16_t Val_Offset;
-  uint8_t Attribute_Val_Length;
-  uint8_t Attribute_Val[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint16_t val_offset;
+  uint8_t attribute_val_length;
+  uint8_t attribute_val[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
 } aci_gatt_write_long_char_value_cp0;
 
 typedef PACKED(struct) aci_gatt_write_long_char_value_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_write_long_char_value_rp0;
 
 typedef PACKED(struct) aci_gatt_write_char_reliable_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint16_t Val_Offset;
-  uint8_t Attribute_Val_Length;
-  uint8_t Attribute_Val[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint16_t val_offset;
+  uint8_t attribute_val_length;
+  uint8_t attribute_val[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
 } aci_gatt_write_char_reliable_cp0;
 
 typedef PACKED(struct) aci_gatt_write_char_reliable_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_write_char_reliable_rp0;
 
 typedef PACKED(struct) aci_gatt_write_long_char_desc_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint16_t Val_Offset;
-  uint8_t Attribute_Val_Length;
-  uint8_t Attribute_Val[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint16_t val_offset;
+  uint8_t attribute_val_length;
+  uint8_t attribute_val[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
 } aci_gatt_write_long_char_desc_cp0;
 
 typedef PACKED(struct) aci_gatt_write_long_char_desc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_write_long_char_desc_rp0;
 
 typedef PACKED(struct) aci_gatt_read_long_char_desc_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint16_t Val_Offset;
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint16_t val_offset;
 } aci_gatt_read_long_char_desc_cp0;
 
 typedef PACKED(struct) aci_gatt_read_long_char_desc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_read_long_char_desc_rp0;
 
 typedef PACKED(struct) aci_gatt_write_char_desc_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint8_t Attribute_Val_Length;
-  uint8_t Attribute_Val[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint8_t attribute_val_length;
+  uint8_t attribute_val[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
 } aci_gatt_write_char_desc_cp0;
 
 typedef PACKED(struct) aci_gatt_write_char_desc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_write_char_desc_rp0;
 
 typedef PACKED(struct) aci_gatt_read_char_desc_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
+  uint16_t connection_handle;
+  uint16_t attr_handle;
 } aci_gatt_read_char_desc_cp0;
 
 typedef PACKED(struct) aci_gatt_read_char_desc_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_read_char_desc_rp0;
 
 typedef PACKED(struct) aci_gatt_write_without_resp_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint8_t Attribute_Val_Length;
-  uint8_t Attribute_Val[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint8_t attribute_val_length;
+  uint8_t attribute_val[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
 } aci_gatt_write_without_resp_cp0;
 
 typedef PACKED(struct) aci_gatt_write_without_resp_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_write_without_resp_rp0;
 
 typedef PACKED(struct) aci_gatt_signed_write_without_resp_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint8_t Attribute_Val_Length;
-  uint8_t Attribute_Val[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint8_t attribute_val_length;
+  uint8_t attribute_val[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
 } aci_gatt_signed_write_without_resp_cp0;
 
 typedef PACKED(struct) aci_gatt_signed_write_without_resp_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_signed_write_without_resp_rp0;
 
 typedef PACKED(struct) aci_gatt_confirm_indication_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gatt_confirm_indication_cp0;
 
 typedef PACKED(struct) aci_gatt_confirm_indication_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_confirm_indication_rp0;
 
 typedef PACKED(struct) aci_gatt_write_resp_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint8_t Write_status;
-  uint8_t Error_Code;
-  uint8_t Attribute_Val_Length;
-  uint8_t Attribute_Val[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint8_t write_status;
+  uint8_t error_code;
+  uint8_t attribute_val_length;
+  uint8_t attribute_val[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
 } aci_gatt_write_resp_cp0;
 
 typedef PACKED(struct) aci_gatt_write_resp_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_write_resp_rp0;
 
 typedef PACKED(struct) aci_gatt_allow_read_cp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gatt_allow_read_cp0;
 
 typedef PACKED(struct) aci_gatt_allow_read_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_allow_read_rp0;
 
 typedef PACKED(struct) aci_gatt_set_security_permission_cp0_s
 {
-  uint16_t Serv_Handle;
-  uint16_t Attr_Handle;
-  uint8_t Security_Permissions;
+  uint16_t serv_handle;
+  uint16_t attr_handle;
+  uint8_t security_permissions;
 } aci_gatt_set_security_permission_cp0;
 
 typedef PACKED(struct) aci_gatt_set_security_permission_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_set_security_permission_rp0;
 
 typedef PACKED(struct) aci_gatt_set_desc_value_cp0_s
 {
-  uint16_t Serv_Handle;
-  uint16_t Char_Handle;
-  uint16_t Char_Desc_Handle;
-  uint16_t Val_Offset;
-  uint8_t Char_Desc_Value_Length;
-  uint8_t Char_Desc_Value[(HCI_MAX_PAYLOAD_SIZE - 9) / sizeof(uint8_t)];
+  uint16_t serv_handle;
+  uint16_t char_handle;
+  uint16_t char_desc_handle;
+  uint16_t val_offset;
+  uint8_t char_desc_value_length;
+  uint8_t char_desc_value[(HCI_MAX_PAYLOAD_SIZE - 9) / sizeof(uint8_t)];
 } aci_gatt_set_desc_value_cp0;
 
 typedef PACKED(struct) aci_gatt_set_desc_value_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_set_desc_value_rp0;
 
 typedef PACKED(struct) aci_gatt_read_handle_value_cp0_s
 {
-  uint16_t Attr_Handle;
-  uint16_t Offset;
-  uint16_t Value_Length_Requested;
+  uint16_t attr_handle;
+  uint16_t offset;
+  uint16_t value_length_requested;
 } aci_gatt_read_handle_value_cp0;
 
 typedef PACKED(struct) aci_gatt_read_handle_value_rp0_s
 {
-  uint8_t Status;
-  uint16_t Length;
-  uint16_t Value_Length;
-  uint8_t Value[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
+  uint8_t status;
+  uint16_t length;
+  uint16_t value_length;
+  uint8_t value[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
 } aci_gatt_read_handle_value_rp0;
 
 typedef PACKED(struct) aci_gatt_update_char_value_ext_cp0_s
 {
-  uint16_t Conn_Handle_To_Notify;
-  uint16_t Service_Handle;
-  uint16_t Char_Handle;
-  uint8_t Update_Type;
-  uint16_t Char_Length;
-  uint16_t Value_Offset;
-  uint8_t Value_Length;
-  uint8_t Value[(HCI_MAX_PAYLOAD_SIZE - 12) / sizeof(uint8_t)];
+  uint16_t conn_handle_to_notify;
+  uint16_t service_handle;
+  uint16_t char_handle;
+  uint8_t update_type;
+  uint16_t char_length;
+  uint16_t value_offset;
+  uint8_t value_length;
+  uint8_t value[(HCI_MAX_PAYLOAD_SIZE - 12) / sizeof(uint8_t)];
 } aci_gatt_update_char_value_ext_cp0;
 
 typedef PACKED(struct) aci_gatt_update_char_value_ext_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_update_char_value_ext_rp0;
 
 typedef PACKED(struct) aci_gatt_deny_read_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Error_Code;
+  uint16_t connection_handle;
+  uint8_t error_code;
 } aci_gatt_deny_read_cp0;
 
 typedef PACKED(struct) aci_gatt_deny_read_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_deny_read_rp0;
 
 typedef PACKED(struct) aci_gatt_set_access_permission_cp0_s
 {
-  uint16_t Serv_Handle;
-  uint16_t Attr_Handle;
-  uint8_t Access_Permissions;
+  uint16_t serv_handle;
+  uint16_t attr_handle;
+  uint8_t access_permissions;
 } aci_gatt_set_access_permission_cp0;
 
 typedef PACKED(struct) aci_gatt_set_access_permission_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_gatt_set_access_permission_rp0;
 
 typedef PACKED(struct) aci_l2cap_connection_parameter_update_req_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Conn_Interval_Min;
-  uint16_t Conn_Interval_Max;
-  uint16_t Slave_latency;
-  uint16_t Timeout_Multiplier;
+  uint16_t connection_handle;
+  uint16_t conn_interval_min;
+  uint16_t conn_interval_max;
+  uint16_t slave_latency;
+  uint16_t timeout_multiplier;
 } aci_l2cap_connection_parameter_update_req_cp0;
 
 typedef PACKED(struct) aci_l2cap_connection_parameter_update_req_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_l2cap_connection_parameter_update_req_rp0;
 
 typedef PACKED(struct) aci_l2cap_connection_parameter_update_resp_cp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Conn_Interval_Min;
-  uint16_t Conn_Interval_Max;
-  uint16_t Slave_latency;
-  uint16_t Timeout_Multiplier;
-  uint16_t Minimum_CE_Length;
-  uint16_t Maximum_CE_Length;
-  uint8_t Identifier;
-  uint8_t Accept;
+  uint16_t connection_handle;
+  uint16_t conn_interval_min;
+  uint16_t conn_interval_max;
+  uint16_t slave_latency;
+  uint16_t timeout_multiplier;
+  uint16_t minimum_ce_length;
+  uint16_t maximum_ce_length;
+  uint8_t identifier;
+  uint8_t accept;
 } aci_l2cap_connection_parameter_update_resp_cp0;
 
 typedef PACKED(struct) aci_l2cap_connection_parameter_update_resp_rp0_s
 {
-  uint8_t Status;
+  uint8_t status;
 } aci_l2cap_connection_parameter_update_resp_rp0;
 
 typedef PACKED(struct) hci_disconnection_complete_event_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
-  uint8_t Reason;
+  uint8_t status;
+  uint16_t connection_handle;
+  uint8_t reason;
 } hci_disconnection_complete_event_rp0;
 
 typedef PACKED(struct) hci_encryption_change_event_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
-  uint8_t Encryption_Enabled;
+  uint8_t status;
+  uint16_t connection_handle;
+  uint8_t encryption_enabled;
 } hci_encryption_change_event_rp0;
 
 typedef PACKED(struct) hci_read_remote_version_information_complete_event_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
-  uint8_t Version;
-  uint16_t Manufacturer_Name;
-  uint16_t Subversion;
+  uint8_t status;
+  uint16_t connection_handle;
+  uint8_t version;
+  uint16_t manufacturer_name;
+  uint16_t subversion;
 } hci_read_remote_version_information_complete_event_rp0;
 
 typedef PACKED(struct) hci_hardware_error_event_rp0_s
 {
-  uint8_t Hardware_Code;
+  uint8_t hardware_code;
 } hci_hardware_error_event_rp0;
 
 typedef PACKED(struct) hci_number_of_completed_packets_event_rp0_s
 {
-  uint8_t Number_of_Handles;
-  packed_Handle_Packets_Pair_Entry_t Handle_Packets_Pair_Entry[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(packed_Handle_Packets_Pair_Entry_t)];
+  uint8_t number_of_handles;
+  packed_handle_packets_pair_entry_t handle_packets_pair_entry[(HCI_MAX_PAYLOAD_SIZE - 1) /
+                                                               sizeof(packed_handle_packets_pair_entry_t)];
 } hci_number_of_completed_packets_event_rp0;
 
 typedef PACKED(struct) hci_data_buffer_overflow_event_rp0_s
 {
-  uint8_t Link_Type;
+  uint8_t link_type;
 } hci_data_buffer_overflow_event_rp0;
 
 typedef PACKED(struct) hci_encryption_key_refresh_complete_event_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
+  uint8_t status;
+  uint16_t connection_handle;
 } hci_encryption_key_refresh_complete_event_rp0;
 
 typedef PACKED(struct) aci_blue_initialized_event_rp0_s
 {
-  uint8_t Reason_Code;
+  uint8_t reason_code;
 } aci_blue_initialized_event_rp0;
 
 typedef PACKED(struct) aci_blue_events_lost_event_rp0_s
 {
-  uint8_t Lost_Events[8];
+  uint8_t lost_events[8];
 } aci_blue_events_lost_event_rp0;
 
 typedef PACKED(struct) aci_blue_crash_info_event_rp0_s
 {
-  uint8_t Crash_Type;
-  uint32_t SP;
-  uint32_t R0;
-  uint32_t R1;
-  uint32_t R2;
-  uint32_t R3;
-  uint32_t R12;
-  uint32_t LR;
-  uint32_t PC;
-  uint32_t xPSR;
-  uint8_t Debug_Data_Length;
-  uint8_t Debug_Data[(HCI_MAX_PAYLOAD_SIZE - 38) / sizeof(uint8_t)];
+  uint8_t crash_type;
+  uint32_t sp;
+  uint32_t r0;
+  uint32_t r1;
+  uint32_t r2;
+  uint32_t r3;
+  uint32_t r12;
+  uint32_t lr;
+  uint32_t pc;
+  uint32_t x_psr;
+  uint8_t debug_data_length;
+  uint8_t debug_data[(HCI_MAX_PAYLOAD_SIZE - 38) / sizeof(uint8_t)];
 } aci_blue_crash_info_event_rp0;
 
 typedef PACKED(struct) aci_hal_end_of_radio_activity_event_rp0_s
 {
-  uint8_t Last_State;
-  uint8_t Next_State;
-  uint32_t Next_State_SysTime;
+  uint8_t last_state;
+  uint8_t next_state;
+  uint32_t next_state_sys_time;
 } aci_hal_end_of_radio_activity_event_rp0;
 
 typedef PACKED(struct) aci_hal_scan_req_report_event_rp0_s
 {
-  int8_t RSSI;
-  uint8_t Peer_Address_Type;
-  uint8_t Peer_Address[6];
+  int8_t rssi;
+  uint8_t peer_address_type;
+  uint8_t peer_address[6];
 } aci_hal_scan_req_report_event_rp0;
 
 typedef PACKED(struct) aci_hal_fw_error_event_rp0_s
 {
-  uint8_t FW_Error_Type;
-  uint8_t Data_Length;
-  uint8_t Data[(HCI_MAX_PAYLOAD_SIZE - 2) / sizeof(uint8_t)];
+  uint8_t fw_error_type;
+  uint8_t data_length;
+  uint8_t data[(HCI_MAX_PAYLOAD_SIZE - 2) / sizeof(uint8_t)];
 } aci_hal_fw_error_event_rp0;
 
 typedef PACKED(struct) aci_gap_pairing_complete_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Status;
-  uint8_t Reason;
+  uint16_t connection_handle;
+  uint8_t status;
+  uint8_t reason;
 } aci_gap_pairing_complete_event_rp0;
 
 typedef PACKED(struct) aci_gap_pass_key_req_event_rp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gap_pass_key_req_event_rp0;
 
 typedef PACKED(struct) aci_gap_authorization_req_event_rp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gap_authorization_req_event_rp0;
 
 typedef PACKED(struct) aci_gap_proc_complete_event_rp0_s
 {
-  uint8_t Procedure_Code;
-  uint8_t Status;
-  uint8_t Data_Length;
-  uint8_t Data[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(uint8_t)];
+  uint8_t procedure_code;
+  uint8_t status;
+  uint8_t data_length;
+  uint8_t data[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(uint8_t)];
 } aci_gap_proc_complete_event_rp0;
 
 typedef PACKED(struct) aci_gap_addr_not_resolved_event_rp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gap_addr_not_resolved_event_rp0;
 
 typedef PACKED(struct) aci_gap_numeric_comparison_value_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint32_t Numeric_Value;
+  uint16_t connection_handle;
+  uint32_t numeric_value;
 } aci_gap_numeric_comparison_value_event_rp0;
 
 typedef PACKED(struct) aci_gap_keypress_notification_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Notification_Type;
+  uint16_t connection_handle;
+  uint8_t notification_type;
 } aci_gap_keypress_notification_event_rp0;
 
 typedef PACKED(struct) aci_l2cap_connection_update_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Result;
+  uint16_t connection_handle;
+  uint16_t result;
 } aci_l2cap_connection_update_resp_event_rp0;
 
 typedef PACKED(struct) aci_l2cap_proc_timeout_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Data_Length;
-  uint8_t Data[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint8_t data_length;
+  uint8_t data[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(uint8_t)];
 } aci_l2cap_proc_timeout_event_rp0;
 
 typedef PACKED(struct) aci_l2cap_connection_update_req_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Identifier;
-  uint16_t L2CAP_Length;
-  uint16_t Interval_Min;
-  uint16_t Interval_Max;
-  uint16_t Slave_Latency;
-  uint16_t Timeout_Multiplier;
+  uint16_t connection_handle;
+  uint8_t identifier;
+  uint16_t l2_cap_length;
+  uint16_t interval_min;
+  uint16_t interval_max;
+  uint16_t slave_latency;
+  uint16_t timeout_multiplier;
 } aci_l2cap_connection_update_req_event_rp0;
 
 typedef PACKED(struct) aci_l2cap_command_reject_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Identifier;
-  uint16_t Reason;
-  uint8_t Data_Length;
-  uint8_t Data[(HCI_MAX_PAYLOAD_SIZE - 6) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint8_t identifier;
+  uint16_t reason;
+  uint8_t data_length;
+  uint8_t data[(HCI_MAX_PAYLOAD_SIZE - 6) / sizeof(uint8_t)];
 } aci_l2cap_command_reject_event_rp0;
 
 typedef PACKED(struct) aci_gatt_attribute_modified_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attr_Handle;
-  uint16_t Offset;
-  uint16_t Attr_Data_Length;
-  uint8_t Attr_Data[(HCI_MAX_PAYLOAD_SIZE - 8) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attr_handle;
+  uint16_t offset;
+  uint16_t attr_data_length;
+  uint8_t attr_data[(HCI_MAX_PAYLOAD_SIZE - 8) / sizeof(uint8_t)];
 } aci_gatt_attribute_modified_event_rp0;
 
 typedef PACKED(struct) aci_gatt_proc_timeout_event_rp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gatt_proc_timeout_event_rp0;
 
 typedef PACKED(struct) aci_att_exchange_mtu_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Server_RX_MTU;
+  uint16_t connection_handle;
+  uint16_t server_rx_mtu;
 } aci_att_exchange_mtu_resp_event_rp0;
 
 typedef PACKED(struct) aci_att_find_info_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Format;
-  uint8_t Event_Data_Length;
-  uint8_t Handle_UUID_Pair[(HCI_MAX_PAYLOAD_SIZE - 4) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint8_t format;
+  uint8_t event_data_length;
+  uint8_t handle_uuid_pair[(HCI_MAX_PAYLOAD_SIZE - 4) / sizeof(uint8_t)];
 } aci_att_find_info_resp_event_rp0;
 
 typedef PACKED(struct) aci_att_find_by_type_value_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Num_of_Handle_Pair;
-  packed_Attribute_Group_Handle_Pair_t Attribute_Group_Handle_Pair[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(packed_Attribute_Group_Handle_Pair_t)];
+  uint16_t connection_handle;
+  uint8_t num_of_handle_pair;
+  packed_attribute_group_handle_pair_t attribute_group_handle_pair[(HCI_MAX_PAYLOAD_SIZE - 3) /
+                                                                   sizeof(packed_attribute_group_handle_pair_t)];
 } aci_att_find_by_type_value_resp_event_rp0;
 
 typedef PACKED(struct) aci_att_read_by_type_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Handle_Value_Pair_Length;
-  uint8_t Data_Length;
-  uint8_t Handle_Value_Pair_Data[(HCI_MAX_PAYLOAD_SIZE - 4) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint8_t handle_value_pair_length;
+  uint8_t data_length;
+  uint8_t handle_value_pair_data[(HCI_MAX_PAYLOAD_SIZE - 4) / sizeof(uint8_t)];
 } aci_att_read_by_type_resp_event_rp0;
 
 typedef PACKED(struct) aci_att_read_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Event_Data_Length;
-  uint8_t Attribute_Value[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint8_t event_data_length;
+  uint8_t attribute_value[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(uint8_t)];
 } aci_att_read_resp_event_rp0;
 
 typedef PACKED(struct) aci_att_read_blob_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Event_Data_Length;
-  uint8_t Attribute_Value[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint8_t event_data_length;
+  uint8_t attribute_value[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(uint8_t)];
 } aci_att_read_blob_resp_event_rp0;
 
 typedef PACKED(struct) aci_att_read_multiple_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Event_Data_Length;
-  uint8_t Set_Of_Values[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint8_t event_data_length;
+  uint8_t set_of_values[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(uint8_t)];
 } aci_att_read_multiple_resp_event_rp0;
 
 typedef PACKED(struct) aci_att_read_by_group_type_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Attribute_Data_Length;
-  uint8_t Data_Length;
-  uint8_t Attribute_Data_List[(HCI_MAX_PAYLOAD_SIZE - 4) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint8_t attribute_data_length;
+  uint8_t data_length;
+  uint8_t attribute_data_list[(HCI_MAX_PAYLOAD_SIZE - 4) / sizeof(uint8_t)];
 } aci_att_read_by_group_type_resp_event_rp0;
 
 typedef PACKED(struct) aci_att_prepare_write_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attribute_Handle;
-  uint16_t Offset;
-  uint8_t Part_Attribute_Value_Length;
-  uint8_t Part_Attribute_Value[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attribute_handle;
+  uint16_t offset;
+  uint8_t part_attribute_value_length;
+  uint8_t part_attribute_value[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
 } aci_att_prepare_write_resp_event_rp0;
 
 typedef PACKED(struct) aci_att_exec_write_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_att_exec_write_resp_event_rp0;
 
 typedef PACKED(struct) aci_gatt_indication_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attribute_Handle;
-  uint8_t Attribute_Value_Length;
-  uint8_t Attribute_Value[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attribute_handle;
+  uint8_t attribute_value_length;
+  uint8_t attribute_value[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
 } aci_gatt_indication_event_rp0;
 
 typedef PACKED(struct) aci_gatt_notification_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attribute_Handle;
-  uint8_t Attribute_Value_Length;
-  uint8_t Attribute_Value[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attribute_handle;
+  uint8_t attribute_value_length;
+  uint8_t attribute_value[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
 } aci_gatt_notification_event_rp0;
 
 typedef PACKED(struct) aci_gatt_proc_complete_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Error_Code;
+  uint16_t connection_handle;
+  uint8_t error_code;
 } aci_gatt_proc_complete_event_rp0;
 
 typedef PACKED(struct) aci_gatt_error_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Req_Opcode;
-  uint16_t Attribute_Handle;
-  uint8_t Error_Code;
+  uint16_t connection_handle;
+  uint8_t req_op_code;
+  uint16_t attribute_handle;
+  uint8_t error_code;
 } aci_gatt_error_resp_event_rp0;
 
 typedef PACKED(struct) aci_gatt_disc_read_char_by_uuid_resp_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attribute_Handle;
-  uint8_t Attribute_Value_Length;
-  uint8_t Attribute_Value[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attribute_handle;
+  uint8_t attribute_value_length;
+  uint8_t attribute_value[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
 } aci_gatt_disc_read_char_by_uuid_resp_event_rp0;
 
 typedef PACKED(struct) aci_gatt_write_permit_req_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attribute_Handle;
-  uint8_t Data_Length;
-  uint8_t Data[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attribute_handle;
+  uint8_t data_length;
+  uint8_t data[(HCI_MAX_PAYLOAD_SIZE - 5) / sizeof(uint8_t)];
 } aci_gatt_write_permit_req_event_rp0;
 
 typedef PACKED(struct) aci_gatt_read_permit_req_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attribute_Handle;
-  uint16_t Offset;
+  uint16_t connection_handle;
+  uint16_t attribute_handle;
+  uint16_t offset;
 } aci_gatt_read_permit_req_event_rp0;
 
 typedef PACKED(struct) aci_gatt_read_multi_permit_req_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Number_of_Handles;
-  packed_Handle_Item_t Handle_Item[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(packed_Handle_Item_t)];
+  uint16_t connection_handle;
+  uint8_t number_of_handles;
+  packed_handle_item_t handle_item[(HCI_MAX_PAYLOAD_SIZE - 3) / sizeof(packed_handle_item_t)];
 } aci_gatt_read_multi_permit_req_event_rp0;
 
 typedef PACKED(struct) aci_gatt_tx_pool_available_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Available_Buffers;
+  uint16_t connection_handle;
+  uint16_t available_buffers;
 } aci_gatt_tx_pool_available_event_rp0;
 
 typedef PACKED(struct) aci_gatt_server_confirmation_event_rp0_s
 {
-  uint16_t Connection_Handle;
+  uint16_t connection_handle;
 } aci_gatt_server_confirmation_event_rp0;
 
 typedef PACKED(struct) aci_gatt_prepare_write_permit_req_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t Attribute_Handle;
-  uint16_t Offset;
-  uint8_t Data_Length;
-  uint8_t Data[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
+  uint16_t connection_handle;
+  uint16_t attribute_handle;
+  uint16_t offset;
+  uint8_t data_length;
+  uint8_t data[(HCI_MAX_PAYLOAD_SIZE - 7) / sizeof(uint8_t)];
 } aci_gatt_prepare_write_permit_req_event_rp0;
 
 typedef PACKED(struct) hci_le_connection_complete_event_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
-  uint8_t Role;
-  uint8_t Peer_Address_Type;
-  uint8_t Peer_Address[6];
-  uint16_t Conn_Interval;
-  uint16_t Conn_Latency;
-  uint16_t Supervision_Timeout;
-  uint8_t Master_Clock_Accuracy;
+  uint8_t status;
+  uint16_t connection_handle;
+  uint8_t role;
+  uint8_t peer_address_type;
+  uint8_t peer_address[6];
+  uint16_t conn_interval;
+  uint16_t conn_latency;
+  uint16_t supervision_timeout;
+  uint8_t master_clock_accuracy;
 } hci_le_connection_complete_event_rp0;
 
 typedef PACKED(struct) hci_le_advertising_report_event_rp0_s
 {
-  uint8_t Num_Reports;
-  packed_Advertising_Report_t Advertising_Report[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(packed_Advertising_Report_t)];
+  uint8_t num_reports;
+  packed_advertising_report_t advertising_report[(HCI_MAX_PAYLOAD_SIZE - 1) /
+                                                 sizeof(packed_advertising_report_t)];
 } hci_le_advertising_report_event_rp0;
 
 typedef PACKED(struct) hci_le_connection_update_complete_event_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
-  uint16_t Conn_Interval;
-  uint16_t Conn_Latency;
-  uint16_t Supervision_Timeout;
+  uint8_t status;
+  uint16_t connection_handle;
+  uint16_t conn_interval;
+  uint16_t conn_latency;
+  uint16_t supervision_timeout;
 } hci_le_connection_update_complete_event_rp0;
 
 typedef PACKED(struct) hci_le_read_remote_used_features_complete_event_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
-  uint8_t LE_Features[8];
+  uint8_t status;
+  uint16_t connection_handle;
+  uint8_t le_features[8];
 } hci_le_read_remote_used_features_complete_event_rp0;
 
 typedef PACKED(struct) hci_le_long_term_key_request_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint8_t Random_Number[8];
-  uint16_t Encrypted_Diversifier;
+  uint16_t connection_handle;
+  uint8_t random_number[8];
+  uint16_t encrypted_diversifier;
 } hci_le_long_term_key_request_event_rp0;
 
 typedef PACKED(struct) hci_le_data_length_change_event_rp0_s
 {
-  uint16_t Connection_Handle;
-  uint16_t MaxTxOctets;
-  uint16_t MaxTxTime;
-  uint16_t MaxRxOctets;
-  uint16_t MaxRxTime;
+  uint16_t connection_handle;
+  uint16_t max_tx_octets;
+  uint16_t max_tx_time;
+  uint16_t max_rx_octets;
+  uint16_t max_rx_time;
 } hci_le_data_length_change_event_rp0;
 
 typedef PACKED(struct) hci_le_read_local_p256_public_key_complete_event_rp0_s
 {
-  uint8_t Status;
-  uint8_t Local_P256_Public_Key[64];
+  uint8_t status;
+  uint8_t local_p256_public_key[64];
 } hci_le_read_local_p256_public_key_complete_event_rp0;
 
 typedef PACKED(struct) hci_le_generate_dhkey_complete_event_rp0_s
 {
-  uint8_t Status;
-  uint8_t DHKey[32];
+  uint8_t status;
+  uint8_t dh_key[32];
 } hci_le_generate_dhkey_complete_event_rp0;
 
 typedef PACKED(struct) hci_le_enhanced_connection_complete_event_rp0_s
 {
-  uint8_t Status;
-  uint16_t Connection_Handle;
-  uint8_t Role;
-  uint8_t Peer_Address_Type;
-  uint8_t Peer_Address[6];
-  uint8_t Local_Resolvable_Private_Address[6];
-  uint8_t Peer_Resolvable_Private_Address[6];
-  uint16_t Conn_Interval;
-  uint16_t Conn_Latency;
-  uint16_t Supervision_Timeout;
-  uint8_t Master_Clock_Accuracy;
+  uint8_t status;
+  uint16_t connection_handle;
+  uint8_t role;
+  uint8_t peer_address_type;
+  uint8_t peer_address[6];
+  uint8_t local_resolvable_private_address[6];
+  uint8_t peer_resolvable_private_address[6];
+  uint16_t conn_interval;
+  uint16_t conn_latency;
+  uint16_t supervision_timeout;
+  uint8_t master_clock_accuracy;
 } hci_le_enhanced_connection_complete_event_rp0;
 
 typedef PACKED(struct) hci_le_direct_advertising_report_event_rp0_s
 {
-  uint8_t Num_Reports;
-  packed_Direct_Advertising_Report_t Direct_Advertising_Report[(HCI_MAX_PAYLOAD_SIZE - 1) / sizeof(packed_Direct_Advertising_Report_t)];
+  uint8_t num_reports;
+  packed_direct_advertising_report_t direct_advertising_report[(HCI_MAX_PAYLOAD_SIZE - 1) /
+                                                               sizeof(packed_direct_advertising_report_t)];
 } hci_le_direct_advertising_report_event_rp0;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BLUENRG1_TYPES_H_ */

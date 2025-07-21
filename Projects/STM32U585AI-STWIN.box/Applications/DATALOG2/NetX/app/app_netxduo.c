@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -134,12 +134,12 @@ static UINT server_login(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG clie
                          CHAR *name, CHAR *password, CHAR *extra_info);
 static UINT server_logout(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG client_ip_address, UINT client_port,
                           CHAR *name, CHAR *password, CHAR *extra_info);
-static int FTP_Srv_Init(void);
-static int FTP_Srv_Start(void);
-static int FTP_Srv_Stop(void);
-static int FTP_Srv_DeInit(void);
-static int WIFI_Connect(void);
-static int WIFI_Disconnect(void);
+static int16_t FTP_Srv_Init(void);
+static int16_t FTP_Srv_Start(void);
+static int16_t FTP_Srv_Stop(void);
+static int16_t FTP_Srv_DeInit(void);
+static int16_t WIFI_Connect(void);
+static int16_t WIFI_Disconnect(void);
 
 static void netx_app_notify_command_execution(void);
 
@@ -181,7 +181,7 @@ static const IWifi_Config_vtbl wifi_config_functions =
 /**
   * @brief  Application NetXDuo Initialization.
   * @param memory_ptr: memory pointer
-  * @retval int
+  * @retval int16_t
   */
 UINT MX_NetXDuo_Init(VOID *memory_ptr)
 {
@@ -459,7 +459,7 @@ static VOID NetX_Thread_Entry(ULONG thread_input)
         if (ret != NX_SUCCESS)
         {
           message = "nx_ip_status_check failed status";
-          printf("nx_ip_status_check failed status: 0x%x, ret: 0x%x\n\r", (unsigned int) actual_status, ret);
+          printf("nx_ip_status_check failed status: 0x%x, ret: 0x%x\n\r", (uint16_t) actual_status, ret);
           PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, false);
         }
         else
@@ -886,7 +886,7 @@ VOID link_status_change_notify_callback(NX_IP *ip_ptr, UINT interface_index, UIN
   }
 }
 
-static int WIFI_Connect(void)
+static int16_t WIFI_Connect(void)
 {
   INT ret = 0;
 
@@ -1033,10 +1033,10 @@ static int WIFI_Connect(void)
   ret = tx_semaphore_get(&dhcp_sem, NX_IP_PERIODIC_RATE * 20);
   if (ret != TX_SUCCESS)
   {
-    printf("ERROR IP Addr not acquired in %d sec\n\r", NX_IP_PERIODIC_RATE * 20 / NX_IP_PERIODIC_RATE);
+    printf("ERROR IP Addr not acquired in %ld sec\n\r", NX_IP_PERIODIC_RATE * 20 / NX_IP_PERIODIC_RATE);
     if (nx_dhcp_release(&dhcp_client) != NX_SUCCESS)
     {
-      /* what to do in this case of double error ? */
+      /* what to do in this case of double_t error ? */
       printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
     }
 
@@ -1084,7 +1084,7 @@ static int WIFI_Connect(void)
   return ret;
 }
 
-static int WIFI_Disconnect(void)
+static int16_t WIFI_Disconnect(void)
 {
   INT ret = 0;
   /* WiFi disconnection and resources roll back  */
@@ -1189,7 +1189,7 @@ static int WIFI_Disconnect(void)
   return ret;
 }
 
-static int FTP_Srv_Init(void)
+static int16_t FTP_Srv_Init(void)
 {
   INT ret = 0;
 
@@ -1240,9 +1240,9 @@ static int FTP_Srv_Init(void)
   return ret;
 }
 
-static int FTP_Srv_Start(void)
+static int16_t FTP_Srv_Start(void)
 {
-  int ret = nx_ftp_server_start(&ftp_server);
+  int16_t ret = nx_ftp_server_start(&ftp_server);
 
   if (ret != NX_SUCCESS)
   {
@@ -1252,9 +1252,9 @@ static int FTP_Srv_Start(void)
   return ret;
 }
 
-static int FTP_Srv_Stop(void)
+static int16_t FTP_Srv_Stop(void)
 {
-  int ret = nx_ftp_server_stop(&ftp_server);
+  int16_t ret = nx_ftp_server_stop(&ftp_server);
   if (ret != NX_SUCCESS)
   {
     printf("FTP Server stop failed: 0x%02x\n", ret);
@@ -1266,7 +1266,7 @@ static int FTP_Srv_Stop(void)
   return ret;
 }
 
-static int FTP_Srv_DeInit(void)
+static int16_t FTP_Srv_DeInit(void)
 {
   INT ret = 0;
 

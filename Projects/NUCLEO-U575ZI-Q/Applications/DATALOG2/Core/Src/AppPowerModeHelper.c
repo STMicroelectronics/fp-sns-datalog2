@@ -2,22 +2,22 @@
   ******************************************************************************
   * @file    AppPowerModeHelper.c
   * @author  SRA
-  *
   * @brief   Define the Power Mode State Machine for this application.
   *
   * Implement the interface ::IAppPowerModeHelper.
   *
-  *********************************************************************************
+  ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
-  *********************************************************************************
+  *
+  ******************************************************************************
   */
 
 #include "AppPowerModeHelper.h"
@@ -26,14 +26,12 @@
 #include "services/sysmem.h"
 #include "services/sysdebug.h"
 
-
 #define SYS_DEBUGF(level, message)      SYS_DEBUGF3(SYS_DBG_APMH, level, message)
-
 
 /**
   * Application Power Mode Helper virtual table.
   */
-static const IAppPowerModeHelper_vtbl sAppPowerModeHelper_vtbl =
+static const IAppPowerModeHelper_vtbl s_xAppPowerModeHelper_vtbl =
 {
   AppPowerModeHelper_vtblInit,
   AppPowerModeHelper_vtblComputeNewPowerMode,
@@ -79,7 +77,7 @@ extern void SystemClock_Restore(void);
 
 IAppPowerModeHelper *AppPowerModeHelperAlloc(void)
 {
-  IAppPowerModeHelper *p_new_obj = (IAppPowerModeHelper *)SysAlloc(sizeof(AppPowerModeHelper_t));
+  IAppPowerModeHelper *p_new_obj = (IAppPowerModeHelper *) SysAlloc(sizeof(AppPowerModeHelper));
 
   if (p_new_obj == NULL)
   {
@@ -87,12 +85,11 @@ IAppPowerModeHelper *AppPowerModeHelperAlloc(void)
   }
   else
   {
-    p_new_obj->vptr = &sAppPowerModeHelper_vtbl;
+    p_new_obj->vptr = &s_xAppPowerModeHelper_vtbl;
   }
 
   return p_new_obj;
 }
-
 
 /* Virtual functions definition */
 /********************************/
@@ -101,7 +98,7 @@ sys_error_code_t AppPowerModeHelper_vtblInit(IAppPowerModeHelper *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  AppPowerModeHelper_t *p_obj = (AppPowerModeHelper_t *)_this;
+  AppPowerModeHelper *p_obj = (AppPowerModeHelper *) _this;
 
   p_obj->status.active_power_mode = E_POWER_MODE_STATE1;
   p_obj->previous_run_state = E_POWER_MODE_STATE1;
@@ -112,13 +109,12 @@ sys_error_code_t AppPowerModeHelper_vtblInit(IAppPowerModeHelper *_this)
 EPowerMode AppPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *_this, const SysEvent event)
 {
   assert_param(_this != NULL);
-  AppPowerModeHelper_t *p_obj = (AppPowerModeHelper_t *)_this;
+  AppPowerModeHelper *p_obj = (AppPowerModeHelper *) _this;
 
   EPowerMode power_mode = p_obj->status.active_power_mode;
 
   switch (event.xEvent.nSource)
   {
-
     case SYS_PM_EVT_SRC_DATALOG:
       if (power_mode == E_POWER_MODE_SLEEP_1)
       {
@@ -129,21 +125,6 @@ EPowerMode AppPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *_this
         power_mode = E_POWER_MODE_SENSORS_ACTIVE;
       }
       else if (power_mode == E_POWER_MODE_SENSORS_ACTIVE)
-      {
-        power_mode = E_POWER_MODE_STATE1;
-      }
-      break;
-
-    case SYS_PM_EVT_SRC_PB:
-      if (power_mode == E_POWER_MODE_STATE1)
-      {
-        power_mode = E_POWER_MODE_SENSORS_ACTIVE;
-      }
-      else if (power_mode == E_POWER_MODE_SENSORS_ACTIVE)
-      {
-        power_mode = E_POWER_MODE_STATE1;
-      }
-      else if (power_mode == E_POWER_MODE_SLEEP_1)
       {
         power_mode = E_POWER_MODE_STATE1;
       }
@@ -197,6 +178,7 @@ boolean_t AppPowerModeHelper_vtblCheckPowerModeTransaction(IAppPowerModeHelper *
         res = TRUE;
       }
       break;
+
     default:
       res = FALSE;
   }
@@ -220,7 +202,7 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  AppPowerModeHelper_t *p_obj = (AppPowerModeHelper_t *)_this;
+  AppPowerModeHelper *p_obj = (AppPowerModeHelper *) _this;
 
   p_obj->status.active_power_mode = power_mode;
 
@@ -230,7 +212,7 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
 
       /* before put the MCU in STOP check if there are event pending in the system queue*/
 
-      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("PMH: try SLEEP_1\r\n"));
+      SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("PMH: try SLEEP_1\r\n"));
 
       /* disable the IRQ*/
       __asm volatile("cpsid i");
@@ -268,17 +250,16 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
 
     case E_POWER_MODE_STATE1:
 
-      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("PMH: STATE1\r\n"));
+      SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("PMH: STATE1\r\n"));
 
 #if defined(SYS_DEBUG)
       SysDebugLogFreeHeapSize();
 #endif
       break;
 
-
     case E_POWER_MODE_SENSORS_ACTIVE:
 
-      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("PMH: E_POWER_MODE_SENSORS_ACTIVE\r\n"));
+      SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("PMH: DATALOG\r\n"));
 
 #if defined(SYS_DEBUG)
       SysDebugLogFreeHeapSize();
@@ -295,23 +276,23 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
 
 EPowerMode AppPowerModeHelper_vtblGetActivePowerMode(IAppPowerModeHelper *_this)
 {
-  assert_param(_this != NULL);
-  AppPowerModeHelper_t *p_obj = (AppPowerModeHelper_t *)_this;
+  assert_param(_this);
+  AppPowerModeHelper *p_obj = (AppPowerModeHelper *) _this;
 
   return p_obj->status.active_power_mode;
 }
 
 SysPowerStatus AppPowerModeHelper_vtblGetPowerStatus(IAppPowerModeHelper *_this)
 {
-  assert_param(_this != NULL);
-  AppPowerModeHelper_t *p_obj = (AppPowerModeHelper_t *)_this;
+  assert_param(_this);
+  AppPowerModeHelper *p_obj = (AppPowerModeHelper *) _this;
 
   return p_obj->status;
 }
 
 boolean_t AppPowerModeHelper_vtblIsLowPowerMode(IAppPowerModeHelper *_this, const EPowerMode power_mode)
 {
-  assert_param(_this != NULL);
   UNUSED(_this);
+
   return power_mode == E_POWER_MODE_SLEEP_1 ? TRUE : FALSE;
 }

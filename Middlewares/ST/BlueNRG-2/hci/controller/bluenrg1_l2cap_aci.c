@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2018 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -19,36 +19,36 @@
   */
 #include "ble_types.h"
 #include "bluenrg1_l2cap_aci.h"
-tBleStatus aci_l2cap_connection_parameter_update_req(uint16_t Connection_Handle,
-                                                     uint16_t Conn_Interval_Min,
-                                                     uint16_t Conn_Interval_Max,
-                                                     uint16_t Slave_latency,
-                                                     uint16_t Timeout_Multiplier)
+ble_status_t aci_l2cap_connection_parameter_update_req(uint16_t connection_handle,
+                                                       uint16_t conn_interval_min,
+                                                       uint16_t conn_interval_max,
+                                                       uint16_t slave_latency,
+                                                       uint16_t timeout_multiplier)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_l2cap_connection_parameter_update_req_cp0 *cp0 = (aci_l2cap_connection_parameter_update_req_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Conn_Interval_Min = htob(Conn_Interval_Min, 2);
+  cp0->conn_interval_min = HTOB(conn_interval_min, 2);
   index_input += 2;
-  cp0->Conn_Interval_Max = htob(Conn_Interval_Max, 2);
+  cp0->conn_interval_max = HTOB(conn_interval_max, 2);
   index_input += 2;
-  cp0->Slave_latency = htob(Slave_latency, 2);
+  cp0->slave_latency = HTOB(slave_latency, 2);
   index_input += 2;
-  cp0->Timeout_Multiplier = htob(Timeout_Multiplier, 2);
+  cp0->timeout_multiplier = HTOB(timeout_multiplier, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x181;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x181;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -58,47 +58,47 @@ tBleStatus aci_l2cap_connection_parameter_update_req(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_l2cap_connection_parameter_update_resp(uint16_t Connection_Handle,
-                                                      uint16_t Conn_Interval_Min,
-                                                      uint16_t Conn_Interval_Max,
-                                                      uint16_t Slave_latency,
-                                                      uint16_t Timeout_Multiplier,
-                                                      uint16_t Minimum_CE_Length,
-                                                      uint16_t Maximum_CE_Length,
-                                                      uint8_t Identifier,
-                                                      uint8_t Accept)
+ble_status_t aci_l2cap_connection_parameter_update_resp(uint16_t connection_handle,
+                                                        uint16_t conn_interval_min,
+                                                        uint16_t conn_interval_max,
+                                                        uint16_t slave_latency,
+                                                        uint16_t timeout_multiplier,
+                                                        uint16_t minimum_ce_length,
+                                                        uint16_t maximum_ce_length,
+                                                        uint8_t identifier,
+                                                        uint8_t accept)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_l2cap_connection_parameter_update_resp_cp0 *cp0 = (aci_l2cap_connection_parameter_update_resp_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Conn_Interval_Min = htob(Conn_Interval_Min, 2);
+  cp0->conn_interval_min = HTOB(conn_interval_min, 2);
   index_input += 2;
-  cp0->Conn_Interval_Max = htob(Conn_Interval_Max, 2);
+  cp0->conn_interval_max = HTOB(conn_interval_max, 2);
   index_input += 2;
-  cp0->Slave_latency = htob(Slave_latency, 2);
+  cp0->slave_latency = HTOB(slave_latency, 2);
   index_input += 2;
-  cp0->Timeout_Multiplier = htob(Timeout_Multiplier, 2);
+  cp0->timeout_multiplier = HTOB(timeout_multiplier, 2);
   index_input += 2;
-  cp0->Minimum_CE_Length = htob(Minimum_CE_Length, 2);
+  cp0->minimum_ce_length = HTOB(minimum_ce_length, 2);
   index_input += 2;
-  cp0->Maximum_CE_Length = htob(Maximum_CE_Length, 2);
+  cp0->maximum_ce_length = HTOB(maximum_ce_length, 2);
   index_input += 2;
-  cp0->Identifier = htob(Identifier, 1);
+  cp0->identifier = HTOB(identifier, 1);
   index_input += 1;
-  cp0->Accept = htob(Accept, 1);
+  cp0->accept = HTOB(accept, 1);
   index_input += 1;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x182;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x182;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -38,11 +38,11 @@ typedef struct _ISensorMems_t ISensorMems_t;
 // Public API declaration
 //***********************
 /** Public interface **/
-static inline sys_error_code_t ISensorGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-static inline float ISensorGetFS(ISensorMems_t *_this);
-static inline float ISensorGetSensitivity(ISensorMems_t *_this);
-static inline sys_error_code_t ISensorSetODR(ISensorMems_t *_this, float odr);
-static inline sys_error_code_t ISensorSetFS(ISensorMems_t *_this, float fs);
+static inline sys_error_code_t ISensorGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+static inline float_t ISensorGetFS(ISensorMems_t *_this);
+static inline float_t ISensorGetSensitivity(ISensorMems_t *_this);
+static inline sys_error_code_t ISensorSetODR(ISensorMems_t *_this, float_t odr);
+static inline sys_error_code_t ISensorSetFS(ISensorMems_t *_this, float_t fs);
 static inline sys_error_code_t ISensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 
 #ifdef __cplusplus

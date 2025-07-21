@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -907,7 +907,7 @@ static sys_error_code_t IMP34DT05TaskExecuteStepDatalog(AManagedTask *_this)
         p_obj->half = report.sensorDataReadyMessage.half;
 
         // notify the listeners...
-        double timestamp = report.sensorDataReadyMessage.fTimestamp;
+        double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
         p_obj->prev_timestamp = timestamp;
 
         uint16_t samples = (uint16_t)(p_obj->sensor_status.type.audio.frequency / 1000u);
@@ -919,8 +919,8 @@ static sys_error_code_t IMP34DT05TaskExecuteStepDatalog(AManagedTask *_this)
           IMP34DT05TaskWriteDummyData(p_obj);
           EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_dummy_data_buff[0], E_EM_INT16, samples);
 #else
-          float gain = (float)p_obj->sensor_status.type.audio.volume * 0.01f; /*volume is expressed as percentage*/
-          for (int i = 0; i < samples; i++)
+          float_t gain = (float_t)p_obj->sensor_status.type.audio.volume * 0.01f; /*volume is expressed as percentage*/
+          for (int32_t i = 0; i < samples; i++)
           {
             p_obj->p_sensor_data_buff[((p_obj->half - 1) * samples) + i] *= gain;
           }
@@ -931,7 +931,7 @@ static sys_error_code_t IMP34DT05TaskExecuteStepDatalog(AManagedTask *_this)
           DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->mic_id);
           IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP34DT05: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IMP34DT05: ts = %f\r\n", (float_t)timestamp));
         }
         break;
       }

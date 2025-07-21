@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -766,7 +766,7 @@ uint32_t VD6283TXTask_vtblLightGetExposureTime(ISensorLight_t *_this)
   return res;
 }
 
-sys_error_code_t VD6283TXTask_vtblLightGetLightGain(ISensorLight_t *_this, float *LightGain)
+sys_error_code_t VD6283TXTask_vtblLightGetLightGain(ISensorLight_t *_this, float_t *LightGain)
 {
   assert_param(_this != NULL);
   VD6283TXTask *p_if_owner = (VD6283TXTask *)((uint32_t) _this - offsetof(VD6283TXTask, sensor_if));
@@ -856,7 +856,7 @@ sys_error_code_t VD6283TXTask_vtblSensorSetExposureTime(ISensorLight_t *_this, u
 
 }
 
-sys_error_code_t VD6283TXTask_vtblSensorSetLightGain(ISensorLight_t *_this, float LightGain, uint8_t channel)
+sys_error_code_t VD6283TXTask_vtblSensorSetLightGain(ISensorLight_t *_this, float_t LightGain, uint8_t channel)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1136,19 +1136,19 @@ static sys_error_code_t VD6283TXTaskExecuteStepDatalog(AManagedTask *_this)
         if (!SYS_IS_ERROR_CODE(res))
         {
           // notify the listeners...
-          double timestamp = report.sensorDataReadyMessage.fTimestamp;
-          double delta_timestamp = timestamp - p_obj->prev_timestamp;
+          double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+          double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
           p_obj->prev_timestamp = timestamp;
 
           /* update measured data frequency: one sample in delta_timestamp time */
-          p_obj->sensor_status.type.light.measured_intermeasurement_time = (float)(delta_timestamp);
+          p_obj->sensor_status.type.light.measured_intermeasurement_time = (float_t)(delta_timestamp);
           EMD_Init(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[0], E_EM_UINT32, E_EM_MODE_INTERLEAVED, 2, 1, 6);
 
           DataEvent_t evt;
 
           DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->id);
           IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("VD6283TX: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("VD6283TX: ts = %f\r\n", (float_t)timestamp));
         }
         break;
       }
@@ -1308,7 +1308,7 @@ static sys_error_code_t VD6283TXTaskSensorInit(VD6283TXTask *_this)
     for (uint8_t channel = 0; (channel < VD6283TX_MAX_CHANNELS) && (status == VD6283TX_OK); channel++)
     {
       uint32_t ch_gain_fp;
-      float ch_gain = _this->sensor_status.type.light.gain[channel];
+      float_t ch_gain = _this->sensor_status.type.light.gain[channel];
 
       if (ch_gain < 0.77)
       {
@@ -1370,7 +1370,7 @@ static sys_error_code_t VD6283TXTaskSensorInit(VD6283TXTask *_this)
       {
         ch_gain_fp = GainRange[0];
       }
-      /* ch_gain float value has been converted to 8.8 fixed point format */
+      /* ch_gain float_t value has been converted to 8.8 fixed point format */
       status = VD6283TX_SetGain(p_platform_drv, channel, ch_gain_fp);
     }
   }

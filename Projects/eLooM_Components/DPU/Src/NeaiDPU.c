@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -76,35 +76,35 @@ sys_error_code_t NeaiDPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t 
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   NeaiDPU_t *p_obj = (NeaiDPU_t *)_this;
-  float *p_out = (float *)EMD_Data(&out_data);
+  float_t *p_out = (float_t *)EMD_Data(&out_data);
 
   enum neai_state status;
-  float *p_signal = (float *)EMD_Data(&in_data);
+  float_t *p_signal = (float_t *)EMD_Data(&in_data);
   if (p_obj->proc_mode ==  E_NEAI_ANOMALY_LEARN && p_obj->proc.anomalyLearn)
   {
     status = p_obj->proc.anomalyLearn(p_signal);
-    p_out[0] = (float)status;
+    p_out[0] = (float_t)status;
   }
   else if (p_obj->proc_mode ==  E_NEAI_ANOMALY_DETECT && p_obj->proc.anomalyDetect)
   {
     uint8_t proc_out;
     status = p_obj->proc.anomalyDetect(p_signal, &proc_out);
-    p_out[0] = (float)status;
-    p_out[1] = (float)proc_out;
+    p_out[0] = (float_t)status;
+    p_out[1] = (float_t)proc_out;
   }
   else if (p_obj->proc_mode ==  E_NEAI_CLASSIFICATION && p_obj->proc.classification)
   {
     uint16_t id_class;
     status = p_obj->proc.classification(p_signal, &p_out[2], &id_class);
-    p_out[0] = (float)status;
-    p_out[1] = (float)id_class;
+    p_out[0] = (float_t)status;
+    p_out[1] = (float_t)id_class;
   }
   else if (p_obj->proc_mode ==  E_NEAI_EXTRAPOLATION && p_obj->proc.extrapolation)
   {
-    float extrapolated_value;
+    float_t extrapolated_value;
     status = p_obj->proc.extrapolation(p_signal, &extrapolated_value);
-    p_out[0] = (float)status;
-    p_out[1] = (float)extrapolated_value;
+    p_out[0] = (float_t)status;
+    p_out[1] = (float_t)extrapolated_value;
   }
   else
   {

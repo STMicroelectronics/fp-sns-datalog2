@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -28,7 +28,7 @@
   * \par
   * <pre>for(i = 0; i < N; i++)
   * {
-  *   hannWin[i]= 0.5 - 0.5 * cos(2 * i * PI / (float) N);
+  *   hannWin[i]= 0.5 - 0.5 * cos(2 * i * PI / (float_t) N);
   * } </pre>
   * \par
   * where N = 4096  and PI = 3.14159265358979
@@ -556,7 +556,7 @@ const float32_t hannWin_4096[4096] =
   * \par
   * <pre>for(i = 0; i < N; i++)
   * {
-  *   hannWin[i]= 0.5 - 0.5 * cos(2 * i * PI / (float) N);
+  *   hannWin[i]= 0.5 - 0.5 * cos(2 * i * PI / (float_t) N);
   * } </pre>
   * \par
   * where N = 8192  and PI = 3.14159265358979
@@ -3611,7 +3611,7 @@ const float32_t dct2_60_128[60 * 128] =
 
 };
 
-const float dct2_32_32[32 * 32] =
+const float_t dct2_32_32[32 * 32] =
 {
   1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01,
   1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01, 1.7677669227e-01,

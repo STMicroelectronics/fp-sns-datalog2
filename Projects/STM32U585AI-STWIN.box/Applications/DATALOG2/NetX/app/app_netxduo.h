@@ -7,7 +7,7 @@
   ******************************************************************************
     * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -41,7 +41,7 @@ extern "C" {
 #include "stm32u5xx_hal_rtc.h"
 #include "fx_api.h"
 #include "PnPLCompManager.h"
-#include "BLE_Manager_Conf.h"
+#include "ble_manager_conf.h"
 #include "IWifi_Config.h"
 #include "IWifi_Config_vtbl.h"
 

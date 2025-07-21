@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -49,11 +49,11 @@ boolean_t IIS3DWBTask_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t IIS3DWBTask_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t IIS3DWBTask_vtblSensorGetStatus(ISensor_t *_this);
 SensorStatus_t *IIS3DWBTask_vtblSensorGetStatusPointer(ISensor_t *_this);
-sys_error_code_t IIS3DWBTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float IIS3DWBTask_vtblAccGetFS(ISensorMems_t *_this);
-float IIS3DWBTask_vtblAccGetSensitivity(ISensorMems_t *_this);
-sys_error_code_t IIS3DWBTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
-sys_error_code_t IIS3DWBTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t IIS3DWBTask_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t IIS3DWBTask_vtblAccGetFS(ISensorMems_t *_this);
+float_t IIS3DWBTask_vtblAccGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t IIS3DWBTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr);
+sys_error_code_t IIS3DWBTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs);
 sys_error_code_t IIS3DWBTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 
 #ifdef __cplusplus

@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2018 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -20,17 +20,71 @@
 #include "hci.h"
 #include "hci_tl.h"
 
-static tHciContext    hciContext;
+static hci_context_t    hci_context;
 
-void hci_init(void(* UserEvtRx)(void *pData), void *pConf)
+/***************************** Exported functions *****************************/
+
+/**
+  * @brief Reset BlueNRG module.
+  *
+  * @param  None
+  * @retval int32_t 0
+  */
+WEAK_FUNCTION(int32_t hci_tl_spi_reset(void))
+{
+  /* NOTE : This function Should not be modified, when needed,
+            the callback could be implemented in the user file
+   */
+  BLUENRG_PRINTF("hci_tl_spi_reset\r\n");
+
+  return 0;
+}
+
+/**
+  * @brief  Writes data from local buffer to SPI.
+  *
+  * @param  buffer : data buffer to be written
+  * @param  size   : size of first data buffer to be written
+  * @retval int32_t: Number of read bytes
+  */
+WEAK_FUNCTION(int32_t hci_tl_spi_send(uint8_t *buffer, uint16_t size))
+{
+  /* NOTE : This function Should not be modified, when needed,
+            the callback could be implemented in the user file
+   */
+  BLUENRG_PRINTF("hci_tl_spi_send\r\n");
+
+  return 0;
+}
+
+/**
+  * @brief  Reads from BlueNRG SPI buffer and store data into local buffer.
+  *
+  * @param  buffer : Buffer where data from SPI are stored
+  * @param  size   : Buffer size
+  * @retval int32_t: Number of read bytes
+  */
+WEAK_FUNCTION(int32_t hci_tl_spi_receive(uint8_t *buffer, uint16_t size))
+{
+  /* NOTE : This function Should not be modified, when needed,
+            the callback could be implemented in the user file
+   */
+  BLUENRG_PRINTF("hci_tl_spi_receive\r\n");
+
+  return 0;
+}
+
+/*********************** HCI Transport layer functions ************************/
+
+void hci_init(void(* user_evt_rx)(void *p_data), void *p_conf)
 {
   /* USER CODE BEGIN hci_init 1 */
 
   /* USER CODE END hci_init 1 */
 
-  if (UserEvtRx != NULL)
+  if (user_evt_rx != NULL)
   {
-    hciContext.UserEvtRx = UserEvtRx;
+    hci_context.user_evt_rx = user_evt_rx;
   }
 
   /* Initialize TL BLE layer */
@@ -41,21 +95,10 @@ void hci_init(void(* UserEvtRx)(void *pData), void *pConf)
   /* USER CODE END hci_init 2 */
 
   /* Initialize low level driver */
-  if (hciContext.io.Init) { hciContext.io.Init(NULL); }
-  if (hciContext.io.Reset) { hciContext.io.Reset(); }
+  hci_tl_spi_reset();
 }
 
-void hci_register_io_bus(tHciIO *fops)
-{
-  /* Register bus function */
-  hciContext.io.Init    = fops->Init;
-  hciContext.io.Receive = fops->Receive;
-  hciContext.io.Send    = fops->Send;
-  hciContext.io.GetTick = fops->GetTick;
-  hciContext.io.Reset   = fops->Reset;
-}
-
-int hci_send_req(struct hci_request *r, BOOL async)
+int32_t hci_send_req(struct hci_request *r, BOOL async)
 {
   /* USER CODE BEGIN hci_send_req */
 

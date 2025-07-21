@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -55,12 +55,12 @@ struct _AI_HAR_DPU_t
   /**
     * Specifies AI processing scale factor.
     */
-  float scale;
+  float_t scale;
 
   /**
     * Specifies AI processing function to use in order to process the signals.
     */
-  int (*ai_processing_f)(const char *, float *, float[2]);
+  int32_t (*ai_processing_f)(const char *, float_t *, float_t[2]);
 };
 
 
@@ -113,7 +113,7 @@ sys_error_code_t AI_HAR_DPU_Init(AI_HAR_DPU_t *_this);
   * @param sensi [IN] specifies the sensitivity of the sensor
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
   */
-sys_error_code_t AI_HAR_DPU_SetSensitivity(AI_HAR_DPU_t *_this, float sensi);
+sys_error_code_t AI_HAR_DPU_SetSensitivity(AI_HAR_DPU_t *_this, float_t sensi);
 
 /**
   * Partial reset of the DPU internal state: all input and output buffers are re-initialized to prepare

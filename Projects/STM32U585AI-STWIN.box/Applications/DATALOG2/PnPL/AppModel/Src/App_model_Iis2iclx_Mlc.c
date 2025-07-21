@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -63,7 +63,7 @@ uint8_t iis2iclx_mlc_comp_init(void)
   iis2iclx_mlc_model.stream_params.spts = 1;
 #endif
   __stream_control(true);
-  app_model.mlc_ucf_valid = false;
+  app_model.iis2iclx_mlc_ucf_valid = false;
   /* USER Component initialization code */
   return PNPL_NO_ERROR_CODE;
 }
@@ -90,7 +90,7 @@ uint8_t iis2iclx_mlc_get_samples_per_ts(int32_t *value)
 
 uint8_t iis2iclx_mlc_get_ucf_status(bool *value)
 {
-  *value = app_model.mlc_ucf_valid;
+  *value = app_model.iis2iclx_mlc_ucf_valid;
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -100,7 +100,7 @@ uint8_t iis2iclx_mlc_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2iclx_mlc_get_ioffset(float *value)
+uint8_t iis2iclx_mlc_get_ioffset(float_t *value)
 {
   *value = iis2iclx_mlc_model.stream_params.ioffset;
   /* USER Code */
@@ -162,7 +162,7 @@ uint8_t iis2iclx_mlc_set_enable(bool value, char **response_message)
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  if (app_model.mlc_ucf_valid == true)
+  if (app_model.iis2iclx_mlc_ucf_valid == true)
   {
     if (value)
     {
@@ -185,6 +185,14 @@ uint8_t iis2iclx_mlc_set_enable(bool value, char **response_message)
       }
     }
   }
+  else
+  {
+    ret = PNPL_BASE_ERROR_CODE;
+    if (response_message != NULL)
+    {
+      *response_message = "UCF not loaded";
+    }
+  }
   return ret;
 }
 
@@ -202,7 +210,7 @@ uint8_t iis2iclx_mlc_set_sensor_annotation(const char *value, char **response_me
 uint8_t iis2iclx_mlc_load_file(const char *data, int32_t size)
 {
   DatalogAppTask_load_iis2iclx_ucf_vtbl(data, size);
-  app_model.mlc_ucf_valid = true;
+  app_model.iis2iclx_mlc_ucf_valid = true;
   __stream_control(true);
   return PNPL_NO_ERROR_CODE;
 }

@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -29,6 +29,7 @@
 #include "ism330is_reg.h"
 #include "lsm6dsv16bx_reg.h"
 #include "lsm6dsv32x_reg.h"
+#include "lsm6dsv80x_reg.h"
 
 #define HW_DETECTION_I2C_TIMEOUT  500U
 
@@ -50,6 +51,7 @@ static int32_t ext_sensor_spi_write(void *handle, uint8_t reg, uint8_t *p_data, 
 
 /* Public functions declaration */
 /*********************************/
+
 
 /**
   * Detect an external H3LIS331DL sensor
@@ -156,6 +158,7 @@ boolean_t HardwareDetection_Check_Ext_LSM6DSV16BX(void)
   return found;
 }
 
+
 /**
   * Detect an external LSM6DSV32X sensor
   *
@@ -177,6 +180,34 @@ boolean_t HardwareDetection_Check_Ext_LSM6DSV32X(void)
   HAL_SPI_DeInit(&hspi3);
 
   if (whoami_val == LSM6DSV32X_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
+
+
+/**
+  * Detect an external LSM6DSV80X sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_LSM6DSV80X(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+
+  MX_SPI3_Init();
+
+  lsm6dsv80x_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi3);
+
+  if (whoami_val == LSM6DSV80X_ID)
   {
     found = TRUE;
   }
@@ -223,7 +254,6 @@ hwd_st25dv_version HardwareDetection_Check_ST25DV(void)
 
   return ret;
 }
-
 
 /* Private function definition */
 /*******************************/

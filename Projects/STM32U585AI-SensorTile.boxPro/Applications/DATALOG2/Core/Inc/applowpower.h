@@ -25,7 +25,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -50,17 +50,10 @@ extern "C" {
 /* PB parameters */
 #define SYS_PM_EVT_PARAM_SHORT_PRESS        0x01U  ///< Event parameter: short press (< NNN ms).
 #define SYS_PM_EVT_PARAM_LONG_PRESS         0x02U  ///< Event parameter: long press (>= NNN ms).
-/* CTRL parameters */
-#define SYS_PM_EVENT_PARAM_START_ML         0x01U  ///< Event parameter: start the X-CUBE-AI processing.
-#define SYS_PM_EVENT_PARAM_START_NEAI       0x02U  ///< Event parameter: start the NanoEdge AI processing.
-#define SYS_PM_EVENT_PARAM_STOP_PROCESSING  0x03U  ///< Event parameter: stop processing.
-// Generic event parameters
+/* Generic event parameters */
 #define SYS_PM_EVT_PARAM_ENTER_LP           0x01U  ///< Event parameter: enter low power mode command.
 #define SYS_PM_EVT_PARAM_EXIT_LP            0x02U  ///< Event parameter: exit low power mode command.
 
-/* These value identify the active processing AI library in the ::SysPowerStatus */
-#define SYS_X_CUBE_AI_ID                    0x15U ///< X-CUBE-AI ID
-#define SYS_NEAI_ID                         0x55U ///< NanoEdge AI ID
 
 /**
   * Specifies the possible power states of the system.
@@ -106,17 +99,14 @@ typedef struct _SysPowerStatus
     */
   EPowerMode active_power_mode;
 
-  /**
-    * Specifies the ID of the active AI processing library. Valid value are:
-    * - SYS_X_CUBE_AI_ID
-    * - SYS_NEAI_ID
-    */
-  uint8_t active_ai_lib_id;
+  /* Add system level power state variable here.*/
 
 } SysPowerStatus;
 
-// Inline functions definition
-// ***************************
+
+/* Inline functions definition */
+/*******************************/
+
 
 #ifdef __cplusplus
 }

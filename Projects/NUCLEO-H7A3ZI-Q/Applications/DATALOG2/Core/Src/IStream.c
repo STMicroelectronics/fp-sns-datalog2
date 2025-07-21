@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -37,4 +37,5 @@ extern sys_error_code_t IStream_alloc_resource(IStream_t *_this, uint8_t id_stre
 extern sys_error_code_t IStream_set_mode(IStream_t *_this, IStreamMode_t mode);
 extern sys_error_code_t IStream_dealloc(IStream_t *_this, uint8_t id_stream);
 extern sys_error_code_t IStream_set_parse_IF(IStream_t *_this, ICommandParse_t *ifn);
+extern sys_error_code_t IStream_send_async(IStream_t *_this, uint8_t *buf, uint32_t size);
 #endif

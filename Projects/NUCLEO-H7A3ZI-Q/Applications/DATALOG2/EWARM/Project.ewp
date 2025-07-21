@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-    <fileVersion>3</fileVersion>
+    <fileVersion>4</fileVersion>
     <configuration>
         <name>DATALOG2 - Release</name>
         <toolchain>
@@ -11,7 +11,7 @@
             <name>General</name>
             <archiveVersion>3</archiveVersion>
             <data>
-                <version>34</version>
+                <version>37</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>0</debug>
                 <option>
@@ -70,7 +70,7 @@
                 </option>
                 <option>
                     <name>OGLastSavedByProductVersion</name>
-                    <state>9.20.1.43525</state>
+                    <state>9.60.3.7274</state>
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
@@ -98,7 +98,7 @@
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
-                    <version>31</version>
+                    <version>34</version>
                     <state>41</state>
                 </option>
                 <option>
@@ -115,7 +115,7 @@
                 </option>
                 <option>
                     <name>CoreVariant</name>
-                    <version>31</version>
+                    <version>34</version>
                     <state>41</state>
                 </option>
                 <option>
@@ -138,7 +138,7 @@
                 </option>
                 <option>
                     <name>GFPUCoreSlave2</name>
-                    <version>31</version>
+                    <version>34</version>
                     <state>41</state>
                 </option>
                 <option>
@@ -203,13 +203,30 @@
                     <name>BuildFilesPath</name>
                     <state>DATALOG2 - Release\</state>
                 </option>
+                <option>
+                    <name>PointerAuthentication</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>FPU64</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>OG_32_64DeviceCoreSlave</name>
+                    <version>34</version>
+                    <state>41</state>
+                </option>
+                <option>
+                    <name>GOutputSo</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
             <name>ICCARM</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>37</version>
+                <version>39</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>0</debug>
                 <option>
@@ -348,7 +365,8 @@
                 <option>
                     <name>CCIncludePath2</name>
                     <state>$PROJ_DIR$\..\Core\Inc</state>
-                    <state>$PROJ_DIR$\..\PnPL\Inc</state>
+                    <state>$PROJ_DIR$\..\PnPL\AppModel\Inc</state>
+                    <state>$PROJ_DIR$\..\PnPL\Components\Inc</state>
                     <state>$PROJ_DIR$\..\mx\Inc</state>
                     <state>$PROJ_DIR$\..\USBX\App</state>
                     <state>$PROJ_DIR$\..\USBX\Target</state>
@@ -483,13 +501,29 @@
                     <name>CCStackProtection</name>
                     <state>0</state>
                 </option>
+                <option>
+                    <name>CCPointerAutentiction</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCBranchTargetIdentification</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCPosRadRwpi</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCPosSharedSlave</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
             <name>AARM</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>11</version>
+                <version>12</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>0</debug>
                 <option>
@@ -650,6 +684,10 @@
                     <name>PreInclude</name>
                     <state></state>
                 </option>
+                <option>
+                    <name>A_32_64Device</name>
+                    <state>1</state>
+                </option>
             </data>
         </settings>
         <settings>
@@ -684,27 +722,18 @@
         </settings>
         <settings>
             <name>CUSTOM</name>
-            <archiveVersion>3</archiveVersion>
+            <archiveVersion>4</archiveVersion>
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>0</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
-            </data>
-        </settings>
-        <settings>
-            <name>BUILDACTION</name>
-            <archiveVersion>1</archiveVersion>
-            <data>
-                <prebuild></prebuild>
-                <postbuild></postbuild>
             </data>
         </settings>
         <settings>
             <name>ILINK</name>
             <archiveVersion>0</archiveVersion>
             <data>
-                <version>26</version>
+                <version>28</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>0</debug>
                 <option>
@@ -1064,6 +1093,18 @@
                     <name>IlinkWrapperFile</name>
                     <state></state>
                 </option>
+                <option>
+                    <name>IlinkProcessor</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>IlinkFpuProcessor</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>IlinkSharedSlave</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
@@ -1087,6 +1128,11 @@
                 </option>
             </data>
         </settings>
+        <settings>
+            <name>BUILDACTION</name>
+            <archiveVersion>2</archiveVersion>
+            <data />
+        </settings>
     </configuration>
     <configuration>
         <name>DATALOG2 - Debug</name>
@@ -1098,7 +1144,7 @@
             <name>General</name>
             <archiveVersion>3</archiveVersion>
             <data>
-                <version>34</version>
+                <version>37</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -1157,7 +1203,7 @@
                 </option>
                 <option>
                     <name>OGLastSavedByProductVersion</name>
-                    <state>9.20.1.43525</state>
+                    <state>9.60.3.7274</state>
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
@@ -1185,7 +1231,7 @@
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
-                    <version>31</version>
+                    <version>34</version>
                     <state>41</state>
                 </option>
                 <option>
@@ -1202,7 +1248,7 @@
                 </option>
                 <option>
                     <name>CoreVariant</name>
-                    <version>31</version>
+                    <version>34</version>
                     <state>41</state>
                 </option>
                 <option>
@@ -1225,7 +1271,7 @@
                 </option>
                 <option>
                     <name>GFPUCoreSlave2</name>
-                    <version>31</version>
+                    <version>34</version>
                     <state>41</state>
                 </option>
                 <option>
@@ -1290,13 +1336,30 @@
                     <name>BuildFilesPath</name>
                     <state>DATALOG2 - Debug\</state>
                 </option>
+                <option>
+                    <name>PointerAuthentication</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>FPU64</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>OG_32_64DeviceCoreSlave</name>
+                    <version>34</version>
+                    <state>41</state>
+                </option>
+                <option>
+                    <name>GOutputSo</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
             <name>ICCARM</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>37</version>
+                <version>39</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -1437,7 +1500,8 @@
                 <option>
                     <name>CCIncludePath2</name>
                     <state>$PROJ_DIR$\..\Core\Inc</state>
-                    <state>$PROJ_DIR$\..\PnPL\Inc</state>
+                    <state>$PROJ_DIR$\..\PnPL\AppModel\Inc</state>
+                    <state>$PROJ_DIR$\..\PnPL\Components\Inc</state>
                     <state>$PROJ_DIR$\..\mx\Inc</state>
                     <state>$PROJ_DIR$\..\USBX\App</state>
                     <state>$PROJ_DIR$\..\USBX\Target</state>
@@ -1572,13 +1636,29 @@
                     <name>CCStackProtection</name>
                     <state>0</state>
                 </option>
+                <option>
+                    <name>CCPointerAutentiction</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCBranchTargetIdentification</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCPosRadRwpi</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCPosSharedSlave</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
             <name>AARM</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>11</version>
+                <version>12</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -1740,6 +1820,10 @@
                     <name>PreInclude</name>
                     <state></state>
                 </option>
+                <option>
+                    <name>A_32_64Device</name>
+                    <state>1</state>
+                </option>
             </data>
         </settings>
         <settings>
@@ -1774,27 +1858,18 @@
         </settings>
         <settings>
             <name>CUSTOM</name>
-            <archiveVersion>3</archiveVersion>
+            <archiveVersion>4</archiveVersion>
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>0</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
-            </data>
-        </settings>
-        <settings>
-            <name>BUILDACTION</name>
-            <archiveVersion>1</archiveVersion>
-            <data>
-                <prebuild></prebuild>
-                <postbuild></postbuild>
             </data>
         </settings>
         <settings>
             <name>ILINK</name>
             <archiveVersion>0</archiveVersion>
             <data>
-                <version>26</version>
+                <version>28</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -2154,6 +2229,18 @@
                     <name>IlinkWrapperFile</name>
                     <state></state>
                 </option>
+                <option>
+                    <name>IlinkProcessor</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>IlinkFpuProcessor</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>IlinkSharedSlave</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
@@ -2176,6 +2263,11 @@
                     <state>###Unitialized###</state>
                 </option>
             </data>
+        </settings>
+        <settings>
+            <name>BUILDACTION</name>
+            <archiveVersion>2</archiveVersion>
+            <data />
         </settings>
     </configuration>
     <group>
@@ -2409,9 +2501,6 @@
                 <group>
                     <name>Inc</name>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\App_model.h</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\apperror.h</name>
                     </file>
                     <file>
@@ -2436,18 +2525,6 @@
                         <name>$PROJ_DIR$\..\Core\Inc\ICommandParse_vtbl.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\IIsm330dhcx_Mlc.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\IIsm330dhcx_Mlc_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\ILog_Controller.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\ILog_Controller_vtbl.h</name>
-                    </file>
-                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\IStream.h</name>
                     </file>
                     <file>
@@ -2458,9 +2535,6 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Inc\SensorManager_conf.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\stm32_assert.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Inc\stm32h7xx_hal_conf.h</name>
@@ -2475,16 +2549,22 @@
                         <name>$PROJ_DIR$\..\Core\Inc\sysdebug_config.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\Core\Inc\TagManager_conf.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\tx_user.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Core\Inc\UtilTask.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Core\Inc\UtilTask_vtbl.h</name>
                     </file>
                 </group>
                 <group>
                     <name>Src</name>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\App.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Src\App_model.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\AppPowerModeHelper.c</name>
@@ -2497,12 +2577,6 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\ICommandParse.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Src\IIsm330dhcx_Mlc.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Src\ILog_Controller.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\IStream.c</name>
@@ -2521,6 +2595,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\tx_initialize_low_level.s</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Core\Src\UtilTask.c</name>
                     </file>
                 </group>
             </group>
@@ -2596,109 +2673,160 @@
             <group>
                 <name>PnPL</name>
                 <group>
-                    <name>Inc</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Acquisition_Info_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Acquisition_Info_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Automode_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Automode_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Deviceinformation_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Deviceinformation_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Firmware_Info_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Firmware_Info_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis2dlpc_Acc_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis2dlpc_Acc_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis2mdc_Mag_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Iis2mdc_Mag_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Acc_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Acc_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Gyro_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Gyro_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Mlc_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Ism330dhcx_Mlc_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Log_Controller_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Log_Controller_PnPL_vtbl.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Tags_Info_PnPL.h</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Inc\Tags_Info_PnPL_vtbl.h</name>
-                    </file>
+                    <name>AppModel</name>
+                    <group>
+                        <name>Inc</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Acquisition_Info.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Automode.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Deviceinformation.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Firmware_Info.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Iis2dlpc_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Iis2mdc_Mag.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism330dhcx_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism330dhcx_Gyro.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism330dhcx_Mlc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Log_Controller.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Tags_Info.h</name>
+                        </file>
+                    </group>
+                    <group>
+                        <name>Src</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Acquisition_Info.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Automode.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Deviceinformation.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Firmware_Info.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Iis2dlpc_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Iis2mdc_Mag.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism330dhcx_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism330dhcx_Gyro.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism330dhcx_Mlc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Log_Controller.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Tags_Info.c</name>
+                        </file>
+                    </group>
                 </group>
                 <group>
-                    <name>Src</name>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Acquisition_Info_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Automode_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Deviceinformation_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Firmware_Info_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Iis2dlpc_Acc_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Iis2mdc_Mag_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330dhcx_Acc_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330dhcx_Gyro_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Ism330dhcx_Mlc_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Log_Controller_PnPL.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\PnPL\Src\Tags_Info_PnPL.c</name>
-                    </file>
+                    <name>Components</name>
+                    <group>
+                        <name>Inc</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Acquisition_Info_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Automode_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Deviceinformation_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Firmware_Info_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Iis2dlpc_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Iis2mdc_Mag_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism330dhcx_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism330dhcx_Gyro_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism330dhcx_Mlc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Log_Controller_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Tags_Info_PnPL.h</name>
+                        </file>
+                    </group>
+                    <group>
+                        <name>Src</name>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Acquisition_Info_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Automode_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Deviceinformation_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Firmware_Info_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Iis2dlpc_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Iis2mdc_Mag_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism330dhcx_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism330dhcx_Gyro_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism330dhcx_Mlc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Log_Controller_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Tags_Info_PnPL.c</name>
+                        </file>
+                    </group>
                 </group>
             </group>
             <group>

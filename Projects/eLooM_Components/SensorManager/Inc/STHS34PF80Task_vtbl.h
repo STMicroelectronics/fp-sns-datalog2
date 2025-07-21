@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -49,9 +49,9 @@ boolean_t STHS34PF80Task_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t STHS34PF80Task_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t STHS34PF80Task_vtblSensorGetStatus(ISensor_t *_this);
 SensorStatus_t *STHS34PF80Task_vtblSensorGetStatusPointer(ISensor_t *_this);
-sys_error_code_t STHS34PF80Task_vtblPresenceGetDataFrequency(ISensorPresence_t *_this, float *p_measured,
-                                                             float *p_nominal);
-float STHS34PF80Task_vtblPresenceGetTransmittance(ISensorPresence_t *_this);
+sys_error_code_t STHS34PF80Task_vtblPresenceGetDataFrequency(ISensorPresence_t *_this, float_t *p_measured,
+                                                             float_t *p_nominal);
+float_t STHS34PF80Task_vtblPresenceGetTransmittance(ISensorPresence_t *_this);
 uint16_t STHS34PF80Task_vtblPresenceGetAverageTObject(ISensorPresence_t *_this);
 uint16_t STHS34PF80Task_vtblPresenceGetAverageTAmbient(ISensorPresence_t *_this);
 uint16_t STHS34PF80Task_vtblPresenceGetPresenceThreshold(ISensorPresence_t *_this);
@@ -67,8 +67,8 @@ uint8_t STHS34PF80Task_vtblPresenceGetEmbeddedCompensation(ISensorPresence_t *_t
 uint8_t STHS34PF80Task_vtblPresenceGetSoftwareCompensation(ISensorPresence_t *_this);
 sys_error_code_t STHS34PF80Task_vtblPresenceGetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this,
     CompensationAlgorithmConfig_t *pAlgorithmConfig);
-sys_error_code_t STHS34PF80Task_vtblSensorSetDataFrequency(ISensorPresence_t *_this, float data_frequency);
-sys_error_code_t STHS34PF80Task_vtblSensorSetTransmittance(ISensorPresence_t *_this, float Transmittance);
+sys_error_code_t STHS34PF80Task_vtblSensorSetDataFrequency(ISensorPresence_t *_this, float_t data_frequency);
+sys_error_code_t STHS34PF80Task_vtblSensorSetTransmittance(ISensorPresence_t *_this, float_t Transmittance);
 sys_error_code_t STHS34PF80Task_vtblSensorSetAverageTObject(ISensorPresence_t *_this, uint16_t average_tobject);
 sys_error_code_t STHS34PF80Task_vtblSensorSetAverageTAmbient(ISensorPresence_t *_this, uint16_t average_tambient);
 sys_error_code_t STHS34PF80Task_vtblSensorSetPresenceThreshold(ISensorPresence_t *_this, uint16_t presence_threshold);

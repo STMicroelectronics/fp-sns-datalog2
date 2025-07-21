@@ -973,16 +973,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/AppPowerModeHelper_vtbl.h</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Inc/BLE_Implementation.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/BLE_Implementation.h</locationURI>
-		</link>
-		<link>
-			<name>User/Core/Inc/BLE_Manager_Conf.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/BLE_Manager_Conf.h</locationURI>
-		</link>
-		<link>
 			<name>User/Core/Inc/DatalogAppTask.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/DatalogAppTask.h</locationURI>
@@ -1058,11 +1048,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/app_messages_parser.h</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Inc/app_threadx.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/app_threadx.h</locationURI>
-		</link>
-		<link>
 			<name>User/Core/Inc/apperror.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/apperror.h</locationURI>
@@ -1078,9 +1063,19 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/automode.h</locationURI>
 		</link>
 		<link>
+			<name>User/Core/Inc/ble_implementation.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_implementation.h</locationURI>
+		</link>
+		<link>
 			<name>User/Core/Inc/ble_list_utils.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_list_utils.h</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Inc/ble_manager_conf.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/ble_manager_conf.h</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Inc/ble_stream_class.h</name>
@@ -1143,11 +1138,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/AppPowerModeHelper.c</locationURI>
 		</link>
 		<link>
-			<name>User/Core/Src/BLE_Implementation.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/BLE_Implementation.c</locationURI>
-		</link>
-		<link>
 			<name>User/Core/Src/DatalogAppTask.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/DatalogAppTask.c</locationURI>
@@ -1181,6 +1171,11 @@
 			<name>User/Core/Src/automode.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/automode.c</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Src/ble_implementation.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/ble_implementation.c</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Src/ble_stream_class.c</name>
@@ -1588,6 +1583,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lsm6dsv16x/lsm6dsv16x_reg.h</locationURI>
 		</link>
 		<link>
+			<name>Drivers/BSP/Components/lsm6dsv320x/lsm6dsv320x_reg.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lsm6dsv320x/lsm6dsv320x_reg.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/Components/lsm6dsv320x/lsm6dsv320x_reg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lsm6dsv320x/lsm6dsv320x_reg.h</locationURI>
+		</link>
+		<link>
 			<name>Drivers/BSP/Components/lsm6dsv32x/lsm6dsv32x_reg.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lsm6dsv32x/lsm6dsv32x_reg.c</locationURI>
@@ -1596,6 +1601,16 @@
 			<name>Drivers/BSP/Components/lsm6dsv32x/lsm6dsv32x_reg.h</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lsm6dsv32x/lsm6dsv32x_reg.h</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/Components/lsm6dsv80x/lsm6dsv80x_reg.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lsm6dsv80x/lsm6dsv80x_reg.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/Components/lsm6dsv80x/lsm6dsv80x_reg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lsm6dsv80x/lsm6dsv80x_reg.h</locationURI>
 		</link>
 		<link>
 			<name>Drivers/BSP/Components/stts22h/stts22h_reg.c</name>
@@ -1648,64 +1663,64 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/PnPLCompManager/Src/PnPLCompManager.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_HighSpeedDataLog.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_high_speed_data_log.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_HighSpeedDataLog.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_high_speed_data_log.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_MachineLearningCore.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_machine_learning_core.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_MachineLearningCore.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_machine_learning_core.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_Manager.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_Manager.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_ManagerCommon.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager_common.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_ManagerCommon.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager_common.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_ManagerControl.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager_control.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_ManagerControl.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_manager_control.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_PnPLike.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_pn_p_like.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_PnPLike.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_pn_p_like.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Inc/BLE_RawPnPLControlled.h</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Inc/ble_raw_pn_pl_controlled.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/BLE_RawPnPLControlled.h</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Inc/ble_raw_pn_pl_controlled.h</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Src/BLE_HighSpeedDataLog.c</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Src/ble_high_speed_data_log.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_HighSpeedDataLog.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/ble_high_speed_data_log.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Src/BLE_MachineLearningCore.c</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Src/ble_machine_learning_core.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_MachineLearningCore.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/ble_machine_learning_core.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Src/BLE_Manager.c</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Src/ble_manager.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_Manager.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/ble_manager.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Src/BLE_PnPLike.c</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Src/ble_pn_p_like.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_PnPLike.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/ble_pn_p_like.c</locationURI>
 		</link>
 		<link>
-			<name>Middlewares/ST/STM32_BLE_Manager/Src/BLE_RawPnPLControlled.c</name>
+			<name>Middlewares/ST/STM32_BLE_Manager/Src/ble_raw_pn_pl_controlled.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/BLE_RawPnPLControlled.c</locationURI>
+			<locationURI>PARENT-5-PROJECT_LOC/Middlewares/ST/STM32_BLE_Manager/Src/ble_raw_pn_pl_controlled.c</locationURI>
 		</link>
 		<link>
 			<name>Middlewares/ST/usbx/controller/ux_dcd_stm32.h</name>
@@ -1953,6 +1968,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv16x_Mlc.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv320x_Gyro.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv320x_Gyro.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv320x_H_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv320x_H_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv320x_L_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv320x_L_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv320x_Mlc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv320x_Mlc.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv32x_Acc.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv32x_Acc.h</locationURI>
@@ -1966,6 +2001,26 @@
 			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv32x_Mlc.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv32x_Mlc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv80x_Gyro.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv80x_Gyro.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv80x_H_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv80x_H_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv80x_L_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv80x_L_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv80x_Mlc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv80x_Mlc.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/AppModel/Inc/App_model_Mp23db01hp_Mic.h</name>
@@ -2083,6 +2138,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv16x_Mlc.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv320x_Gyro.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv320x_Gyro.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv320x_H_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv320x_H_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv320x_L_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv320x_L_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv320x_Mlc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv320x_Mlc.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv32x_Acc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv32x_Acc.c</locationURI>
@@ -2096,6 +2171,26 @@
 			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv32x_Mlc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv32x_Mlc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv80x_Gyro.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv80x_Gyro.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv80x_H_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv80x_H_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv80x_L_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv80x_L_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv80x_Mlc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv80x_Mlc.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/AppModel/Src/App_model_Mp23db01hp_Mic.c</name>
@@ -2208,6 +2303,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv16x_Mlc_PnPL.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsv320x_Gyro_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv320x_Gyro_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsv320x_H_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv320x_H_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsv320x_L_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv320x_L_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsv320x_Mlc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv320x_Mlc_PnPL.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Components/Inc/Lsm6dsv32x_Acc_PnPL.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv32x_Acc_PnPL.h</locationURI>
@@ -2221,6 +2336,26 @@
 			<name>User/PnPL/Components/Inc/Lsm6dsv32x_Mlc_PnPL.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv32x_Mlc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsv80x_Gyro_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv80x_Gyro_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsv80x_H_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv80x_H_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsv80x_L_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv80x_L_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsv80x_Mlc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv80x_Mlc_PnPL.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Components/Inc/Mp23db01hp_Mic_PnPL.h</name>
@@ -2333,6 +2468,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv16x_Mlc_PnPL.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsv320x_Gyro_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv320x_Gyro_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsv320x_H_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv320x_H_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsv320x_L_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv320x_L_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsv320x_Mlc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv320x_Mlc_PnPL.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Components/Src/Lsm6dsv32x_Acc_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv32x_Acc_PnPL.c</locationURI>
@@ -2346,6 +2501,26 @@
 			<name>User/PnPL/Components/Src/Lsm6dsv32x_Mlc_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv32x_Mlc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsv80x_Gyro_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv80x_Gyro_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsv80x_H_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv80x_H_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsv80x_L_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv80x_L_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsv80x_Mlc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv80x_Mlc_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Components/Src/Mp23db01hp_Mic_PnPL.c</name>
@@ -2513,6 +2688,16 @@
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LSM6DSV16XTask_vtbl.h</locationURI>
 		</link>
 		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/LSM6DSV320XTask.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LSM6DSV320XTask.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/LSM6DSV320XTask_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LSM6DSV320XTask_vtbl.h</locationURI>
+		</link>
+		<link>
 			<name>User/eLooM_Components/SensorManager/Inc/LSM6DSV32XTask.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LSM6DSV32XTask.h</locationURI>
@@ -2521,6 +2706,16 @@
 			<name>User/eLooM_Components/SensorManager/Inc/LSM6DSV32XTask_vtbl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LSM6DSV32XTask_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/LSM6DSV80XTask.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LSM6DSV80XTask.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/LSM6DSV80XTask_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LSM6DSV80XTask_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Inc/MP23DB01HPTask.h</name>
@@ -2638,9 +2833,19 @@
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/LSM6DSV16XTask.c</locationURI>
 		</link>
 		<link>
+			<name>User/eLooM_Components/SensorManager/Src/LSM6DSV320XTask.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/LSM6DSV320XTask.c</locationURI>
+		</link>
+		<link>
 			<name>User/eLooM_Components/SensorManager/Src/LSM6DSV32XTask.c</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/LSM6DSV32XTask.c</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Src/LSM6DSV80XTask.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/LSM6DSV80XTask.c</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Src/MP23DB01HPTask.c</name>

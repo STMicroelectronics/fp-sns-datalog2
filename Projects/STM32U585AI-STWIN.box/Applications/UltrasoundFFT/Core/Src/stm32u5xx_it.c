@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -67,7 +67,7 @@ extern void xPortSysTickHandler(void);
 void ExtiDefISR()
 {
   EXTIPin2CallbckMap xMap = EXTI_GET_P2F_MAP();
-  for (int i = 0; xMap[i].pfCallback != NULL; i++)
+  for (int32_t i = 0; xMap[i].pfCallback != NULL; i++)
   {
     if (__HAL_GPIO_EXTI_GET_IT(xMap[i].nPin))
     {

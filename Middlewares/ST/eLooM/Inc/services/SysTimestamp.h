@@ -30,7 +30,7 @@
   *
   *   To use the service the application call the SysTsStart() first, then
   *   it can use SysTsGetTimestampF() or SysTsGetTimestampN() to get the current
-  *   value of the timestamp in second as a double , or in tick as 64 bit
+  *   value of the timestamp in second as a double_t , or in tick as 64 bit
   *   integer. These functions can be used both in the code of a task and in an
   *   ISR.
   *
@@ -59,7 +59,7 @@
   *
   *     vTaskDelay(pdMS_TO_TICKS(1000));
   *
-  *     double fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
+  *     double_t fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
   *     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("Hello STWINCSV1!! ts=%f\r\n", fTimestamp));
   *     __NOP();
   *     __NOP();
@@ -151,7 +151,7 @@ sys_error_code_t SysTsStop(SysTimestamp_t *_this);
   * @param _this [IN] specifies a system timestamp object.
   * @return the value of the system timestamp in seconds.
   */
-double SysTsGetTimestampF(SysTimestamp_t *_this);
+double_t SysTsGetTimestampF(SysTimestamp_t *_this);
 
 /**
   * Get the system timestamp in ??tick??. If the service was not started then the value is undefined.

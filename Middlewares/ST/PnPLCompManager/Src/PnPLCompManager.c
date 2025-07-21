@@ -386,15 +386,15 @@ uint8_t PnPLGetPresentationJSON(char **serializedJSON, uint32_t *size)
   JSON_GetPresentation = json_value_get_object(tempJSON);
 
 #ifndef BOARD_ID
-  (void)json_object_dotset_number(JSON_GetPresentation, "board_id", (float)board_id);
+  (void)json_object_dotset_number(JSON_GetPresentation, "board_id", (float_t)board_id);
 #else
-  (void)json_object_dotset_number(JSON_GetPresentation, "board_id", (float)BOARD_ID);
+  (void)json_object_dotset_number(JSON_GetPresentation, "board_id", (float_t)BOARD_ID);
 #endif
 
 #ifndef FW_ID
-  (void)json_object_dotset_number(JSON_GetPresentation, "fw_id", (float)fw_id);
+  (void)json_object_dotset_number(JSON_GetPresentation, "fw_id", (float_t)fw_id);
 #else
-  (void)json_object_dotset_number(JSON_GetPresentation, "fw_id", (float)FW_ID);
+  (void)json_object_dotset_number(JSON_GetPresentation, "fw_id", (float_t)FW_ID);
 #endif
 
   *serializedJSON = json_serialize_to_string(tempJSON);
@@ -473,15 +473,15 @@ uint8_t PnPLGetDeviceStatusJSON(char **serializedJSON, uint32_t *size, uint8_t p
   (void)json_array_append_value(JSON_DeviceArray, tempJSONDevice);
 
 #ifndef BOARD_ID
-  (void)json_object_dotset_number(JSON_Device, "board_id", (float)board_id);
+  (void)json_object_dotset_number(JSON_Device, "board_id", (float_t)board_id);
 #else
-  (void)json_object_dotset_number(JSON_Device, "board_id", (float)BOARD_ID);
+  (void)json_object_dotset_number(JSON_Device, "board_id", (float_t)BOARD_ID);
 #endif
 
 #ifndef FW_ID
-  (void)json_object_dotset_number(JSON_Device, "fw_id", (float)fw_id);
+  (void)json_object_dotset_number(JSON_Device, "fw_id", (float_t)fw_id);
 #else
-  (void)json_object_dotset_number(JSON_Device, "fw_id", (float)FW_ID);
+  (void)json_object_dotset_number(JSON_Device, "fw_id", (float_t)FW_ID);
 #endif
 
   (void)json_object_dotset_number(JSON_Device, "protocol_id", 2); /* 0: BLE, 1: serial, 2:libusb */
@@ -600,15 +600,15 @@ uint8_t PnPLGetFilteredDeviceStatusJSON(char **serializedJSON, uint32_t *size, c
   (void)json_array_append_value(JSON_DeviceArray, tempJSONDevice);
 
 #ifndef BOARD_ID
-  (void)json_object_dotset_number(JSON_Device, "board_id", (float)board_id);
+  (void)json_object_dotset_number(JSON_Device, "board_id", (float_t)board_id);
 #else
-  (void)json_object_dotset_number(JSON_Device, "board_id", (float)BOARD_ID);
+  (void)json_object_dotset_number(JSON_Device, "board_id", (float_t)BOARD_ID);
 #endif
 
 #ifndef FW_ID
-  (void)json_object_dotset_number(JSON_Device, "fw_id", (float)fw_id);
+  (void)json_object_dotset_number(JSON_Device, "fw_id", (float_t)fw_id);
 #else
-  (void)json_object_dotset_number(JSON_Device, "fw_id", (float)FW_ID);
+  (void)json_object_dotset_number(JSON_Device, "fw_id", (float_t)FW_ID);
 #endif
 
   (void)json_object_dotset_number(JSON_Device, "protocol_id", 2); /* 0: BLE, 1: serial, 2:libusb */
@@ -964,17 +964,23 @@ uint8_t PnPLSerializeResponse(PnPLCommand_t *command, char **SerializedJSON, uin
 #if defined(PNPL_RESPONSES) || defined(PNPL_BLE_RESPONSES)
   else if (command->comm_type == PNPL_CMD_SET)
   {
-    *size = strlen(command->response) + 1;
-    *SerializedJSON = (char*)pnpl_malloc(*size);
-    (void)strcpy(*SerializedJSON, command->response);
-    pnpl_free(command->response);
+    if (command->response != NULL)
+    {
+      *size = strlen(command->response) + 1;
+      *SerializedJSON = (char*)pnpl_malloc(*size);
+      (void)strcpy(*SerializedJSON, command->response);
+      pnpl_free(command->response);
+    }
   }
   else if (command->comm_type == PNPL_CMD_COMMAND)
   {
-    *size = strlen(command->response) + 1;
-    *SerializedJSON = (char*)pnpl_malloc(*size);
-    (void)strcpy(*SerializedJSON, command->response);
-    pnpl_free(command->response);
+    if (command->response != NULL)
+    {
+      *size = strlen(command->response) + 1;
+      *SerializedJSON = (char*)pnpl_malloc(*size);
+      (void)strcpy(*SerializedJSON, command->response);
+      pnpl_free(command->response);
+    }
   }
 #endif
   else if (command->comm_type == PNPL_CMD_ERROR)
@@ -1275,16 +1281,16 @@ static uint8_t setTelemetryValue(uint8_t type, JSON_Object *json_obj, char *name
   switch (type)
   {
     case PNPL_INT:
-      (void)json_object_dotset_number(json_obj, name, (double) * (int *) value);
+      (void)json_object_dotset_number(json_obj, name, (double_t) * (int32_t *) value);
       break;
     case PNPL_FLOAT:
-      (void)json_object_dotset_number(json_obj, name, *(float *) value);
+      (void)json_object_dotset_number(json_obj, name, *(float_t *) value);
       break;
     case PNPL_STRING:
       (void)json_object_dotset_string(json_obj, name, (const char *) value);
       break;
     case PNPL_BOOLEAN:
-      (void)json_object_dotset_boolean(json_obj, name, *(int *) value);
+      (void)json_object_dotset_boolean(json_obj, name, *(int32_t *) value);
       break;
     case PNPL_TELEMETRY:
       for (uint8_t j = 0; j < n_sub_telemetries; j++)
@@ -1322,15 +1328,15 @@ static uint8_t _PnPLGetPresentationJSON(char **serializedJSON, uint32_t *size)
   JSON_GetPresentation = json_value_get_object(tempJSON);
 
 #ifndef BOARD_ID
-  (void)json_object_dotset_number(JSON_GetPresentation, "board_id", (float)board_id);
+  (void)json_object_dotset_number(JSON_GetPresentation, "board_id", (float_t)board_id);
 #else
-  (void)json_object_dotset_number(JSON_GetPresentation, "board_id", (float)BOARD_ID);
+  (void)json_object_dotset_number(JSON_GetPresentation, "board_id", (float_t)BOARD_ID);
 #endif
 
 #ifndef FW_ID
-  (void)json_object_dotset_number(JSON_GetPresentation, "fw_id", (float)fw_id);
+  (void)json_object_dotset_number(JSON_GetPresentation, "fw_id", (float_t)fw_id);
 #else
-  (void)json_object_dotset_number(JSON_GetPresentation, "fw_id", (float)FW_ID);
+  (void)json_object_dotset_number(JSON_GetPresentation, "fw_id", (float_t)FW_ID);
 #endif
 
   *serializedJSON = json_serialize_to_string(tempJSON);
@@ -1408,15 +1414,15 @@ static uint8_t _PnPLGetDeviceStatusJSON(char **serializedJSON, uint32_t *size, u
   (void)json_array_append_value(JSON_DeviceArray, tempJSONDevice);
 
 #ifndef BOARD_ID
-  (void)json_object_dotset_number(JSON_Device, "board_id", (float)board_id);
+  (void)json_object_dotset_number(JSON_Device, "board_id", (float_t)board_id);
 #else
-  (void)json_object_dotset_number(JSON_Device, "board_id", (float)BOARD_ID);
+  (void)json_object_dotset_number(JSON_Device, "board_id", (float_t)BOARD_ID);
 #endif
 
 #ifndef FW_ID
-  (void)json_object_dotset_number(JSON_Device, "fw_id", (float)fw_id);
+  (void)json_object_dotset_number(JSON_Device, "fw_id", (float_t)fw_id);
 #else
-  (void)json_object_dotset_number(JSON_Device, "fw_id", (float)FW_ID);
+  (void)json_object_dotset_number(JSON_Device, "fw_id", (float_t)FW_ID);
 #endif
 
   (void)json_object_dotset_number(JSON_Device, "protocol_id", 2); /* 0: BLE, 1: serial, 2:libusb */

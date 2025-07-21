@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -25,14 +25,13 @@
 #include "App_model.h"
 #include "spi.h"
 
-/* TODO: change XXX with a short id for the task */
 
 #ifndef UTIL_TASK_CFG_STACK_DEPTH
-#define UTIL_TASK_CFG_STACK_DEPTH              (120)
+#define UTIL_TASK_CFG_STACK_DEPTH              TX_MINIMUM_STACK*4
 #endif
 
 #ifndef UTIL_TASK_CFG_PRIORITY
-#define UTIL_TASK_CFG_PRIORITY                 (tskIDLE_PRIORITY)
+#define UTIL_TASK_CFG_PRIORITY                 (7)
 #endif
 
 #ifndef UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE
@@ -55,7 +54,6 @@
 #define RCG_BAT_MIN_VOLTAGE                   3000 //! Rechargeable battery minimum voltage in mV
 #define RCG_BAT_MAX_VOLTAGE                   4200 //! Rechargeable battery maximum voltage in mV
 
-/* TODO: define the symbol SYS_DBG_UTIL in the file sysdebug_config.h */
 #define SYS_DEBUGF(level, message)             SYS_DEBUGF3(SYS_DBG_UTIL, level, message)
 
 #if defined(DEBUG) || defined (SYS_DEBUG)

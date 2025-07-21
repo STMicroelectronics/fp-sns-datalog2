@@ -4,13 +4,30 @@
   * @author  SRA
   * @brief   Define the Application main entry points
   *
-  * The framework `weak` function are redefined in this file and they link
-  * the application specific code with the framework.
+  *
+  * This file is the main entry point for the user code.
+  *
+  * The framework `weak` functions are redefined in this file and they link
+  * the application specific code with the framework:
+  * - SysLoadApplicationContext(): it is the first application defined function
+  *   called by the framework. Here we define all managed tasks. A managed task
+  *   implements one or more application specific feature.
+  * - SysOnStartApplication(): this function is called by the framework
+  *   when the system is initialized (all managed task objects have been
+  *   initialized), and before the INIT task release the control. Here we
+  *   link the application objects according to the application design.
+  *
+  * The execution time  between the two above functions is called
+  * *system initialization*. During this period only the INIT task is running.
+  *
+  * Each managed task will be activated in turn to initialize its hardware
+  * resources, if any - MyTask_vtblHardwareInit() - and its software
+  * resources - MyTask_vtblOnCreateTask().
   *
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -52,11 +69,6 @@
 #include "App_model.h"
 
 #include "PnPLCompManager.h"
-#include "Deviceinformation_PnPL.h"
-#include "Firmware_Info_PnPL.h"
-#include "Acquisition_Info_PnPL.h"
-#include "Tags_Info_PnPL.h"
-#include "Log_Controller_PnPL.h"
 #include "Ism330dhcx_Acc_PnPL.h"
 #include "Ism330dhcx_Gyro_PnPL.h"
 #include "Iis2mdc_Mag_PnPL.h"
@@ -65,7 +77,11 @@
 #include "Imp34dt05_Mic_PnPL.h"
 #include "Iis2iclx_Acc_PnPL.h"
 #include "Automode_PnPL.h"
-#include "parson.h"
+#include "Log_Controller_PnPL.h"
+#include "Tags_Info_PnPL.h"
+#include "Acquisition_Info_PnPL.h"
+#include "Firmware_Info_PnPL.h"
+#include "Deviceinformation_PnPL.h"
 
 #include "Vl53l8cx_Tof_PnPL.h"
 #include "Vd6283tx_Als_PnPL.h"
@@ -116,9 +132,6 @@ static IPnPLComponent_t *pSht40_Hum_PnPLObj = NULL;
 static IPnPLComponent_t *pSht40_Temp_PnPLObj = NULL;
 static IPnPLComponent_t *pLps22df_Press_PnPLObj = NULL;
 
-#if (DATALOG2_USE_WIFI == 1)
-static IPnPLComponent_t *pWifiConfigPnPLObj = NULL;
-#endif
 
 /**
   * Utility task object.
@@ -173,10 +186,8 @@ static TX_MUTEX pnpl_mutex;
 static void PnPL_lock_fp(void);
 static void PnPL_unlock_fp(void);
 
-
 /* eLooM framework entry points definition */
 /*******************************************/
-
 
 sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 {
@@ -337,9 +348,6 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   pLogControllerPnPLObj = Log_Controller_PnPLAlloc();
   pAutomodePnPLObj = Automode_PnPLAlloc();
 
-#if (DATALOG2_USE_WIFI == 1)
-  pWifiConfigPnPLObj = Wifi_Config_PnPLAlloc();
-#endif
 
   PnPLSetBOARDID(BoardId);
   PnPLSetFWID(FwId);
@@ -469,16 +477,12 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     Lps22df_Press_PnPLInit(pLps22df_Press_PnPLObj);
   }
 
-#if (DATALOG2_USE_WIFI == 1)
-  Wifi_Config_PnPLInit(pWifiConfigPnPLObj, AppNetXDuo_GetIWifi_ConfigIF());
-#endif
-
   return SYS_NO_ERROR_CODE;
 }
 
 IAppPowerModeHelper *SysGetPowerModeHelper(void)
 {
-  // Install the application power mode helper.
+  /* Install the application power mode helper. */
   static IAppPowerModeHelper *s_pxPowerModeHelper = NULL;
   if (s_pxPowerModeHelper == NULL)
   {
@@ -497,4 +501,3 @@ static void PnPL_unlock_fp(void)
 {
   tx_mutex_put(&pnpl_mutex);
 }
-

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -54,13 +54,13 @@ sys_error_code_t LPS22DFTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const E
 
 uint8_t LPS22DFTask_vtblPressGetId(ISourceObservable *_this);
 IEventSrc *LPS22DFTask_vtblPressGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t LPS22DFTask_vtblPressGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float LPS22DFTask_vtblPressGetFS(ISensorMems_t *_this);
-float LPS22DFTask_vtblPressGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t LPS22DFTask_vtblPressGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t LPS22DFTask_vtblPressGetFS(ISensorMems_t *_this);
+float_t LPS22DFTask_vtblPressGetSensitivity(ISensorMems_t *_this);
 EMData_t LPS22DFTask_vtblPressGetDataInfo(ISourceObservable *_this);
 
-sys_error_code_t LPS22DFTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
-sys_error_code_t LPS22DFTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t LPS22DFTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr);
+sys_error_code_t LPS22DFTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs);
 sys_error_code_t LPS22DFTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 sys_error_code_t LPS22DFTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t LPS22DFTask_vtblSensorDisable(ISensor_t *_this);

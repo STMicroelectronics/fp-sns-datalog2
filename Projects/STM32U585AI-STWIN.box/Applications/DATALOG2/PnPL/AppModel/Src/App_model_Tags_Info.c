@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -33,12 +33,12 @@
 /* USER includes -------------------------------------------------------------*/
 #include "TagManager.h"
 /* USER private function prototypes ------------------------------------------*/
-uint8_t __tags_info_set_sw_tagN__label(const char *value, char **response_message, int n);
-uint8_t __tags_info_set_sw_tagN__enabled(bool value, char **response_message, int n);
-uint8_t __tags_info_set_sw_tagN__status(bool value, char **response_message, int n);
-uint8_t __tags_info_set_hw_tagN__label(const char *value, char **response_message, int n);
-uint8_t __tags_info_set_hw_tagN__enabled(bool value, char **response_message, int n);
-uint8_t __tags_info_set_hw_tagN__status(bool value, char **response_message, int n);
+uint8_t __tags_info_set_sw_tagN__label(const char *value, char **response_message, int32_t n);
+uint8_t __tags_info_set_sw_tagN__enabled(bool value, char **response_message, int32_t n);
+uint8_t __tags_info_set_sw_tagN__status(bool value, char **response_message, int32_t n);
+uint8_t __tags_info_set_hw_tagN__label(const char *value, char **response_message, int32_t n);
+uint8_t __tags_info_set_hw_tagN__enabled(bool value, char **response_message, int32_t n);
+uint8_t __tags_info_set_hw_tagN__status(bool value, char **response_message, int32_t n);
 
 /* USER defines --------------------------------------------------------------*/
 
@@ -458,7 +458,7 @@ uint8_t tags_info_get_sw_tag15__status(bool *value)
 }
 
 /* USER CODE */
-uint8_t __tags_info_set_sw_tagN__label(const char *value, char **response_message, int n)
+uint8_t __tags_info_set_sw_tagN__label(const char *value, char **response_message, int32_t n)
 {
   if (response_message != NULL)
   {
@@ -476,7 +476,7 @@ uint8_t __tags_info_set_sw_tagN__label(const char *value, char **response_messag
   return ret;
 }
 
-uint8_t __tags_info_set_sw_tagN__enabled(bool value, char **response_message, int n)
+uint8_t __tags_info_set_sw_tagN__enabled(bool value, char **response_message, int32_t n)
 {
   if (response_message != NULL)
   {
@@ -494,7 +494,7 @@ uint8_t __tags_info_set_sw_tagN__enabled(bool value, char **response_message, in
   return ret;
 }
 
-uint8_t __tags_info_set_sw_tagN__status(bool value, char **response_message, int n)
+uint8_t __tags_info_set_sw_tagN__status(bool value, char **response_message, int32_t n)
 {
   if (response_message != NULL)
   {
@@ -523,7 +523,7 @@ uint8_t __tags_info_set_sw_tagN__status(bool value, char **response_message, int
 }
 
 /* USER CODE */
-uint8_t __tags_info_set_hw_tagN__label(const char *value, char **response_message, int n)
+uint8_t __tags_info_set_hw_tagN__label(const char *value, char **response_message, int32_t n)
 {
   if (response_message != NULL)
   {
@@ -541,7 +541,7 @@ uint8_t __tags_info_set_hw_tagN__label(const char *value, char **response_messag
   return ret;
 }
 
-uint8_t __tags_info_set_hw_tagN__enabled(bool value, char **response_message, int n)
+uint8_t __tags_info_set_hw_tagN__enabled(bool value, char **response_message, int32_t n)
 {
   if (response_message != NULL)
   {
@@ -559,7 +559,7 @@ uint8_t __tags_info_set_hw_tagN__enabled(bool value, char **response_message, in
   return ret;
 }
 
-uint8_t __tags_info_set_hw_tagN__status(bool value, char **response_message, int n)
+uint8_t __tags_info_set_hw_tagN__status(bool value, char **response_message, int32_t n)
 {
   if (response_message != NULL)
   {

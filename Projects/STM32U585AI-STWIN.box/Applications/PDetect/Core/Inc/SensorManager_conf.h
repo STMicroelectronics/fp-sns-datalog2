@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -44,7 +44,6 @@
 
 //#define HSD_USE_DUMMY_DATA 1
 
-//#define EXTERNAL_IIS3DWB 1
 
 // file ISM330DHCXTask.c
 #define ISM330DHCX_TASK_CFG_STACK_DEPTH           (TX_MINIMUM_STACK*7)

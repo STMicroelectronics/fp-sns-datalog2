@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -37,9 +37,9 @@
 #define ISM330BX_FIFO_ENABLED 1
 #define IIS2DULPX_FIFO_ENABLED 1
 
+#define IIS2DULPX_MLC_DISABLED 1
 //#define HSD_USE_DUMMY_DATA 1
 
-//#define EXTERNAL_IIS3DWB 1
 
 // file ISM330BXTask.c
 #define ISM330BX_TASK_CFG_STACK_DEPTH             (TX_MINIMUM_STACK*7)
@@ -60,6 +60,10 @@
 #define IIS3DWB_TASK_CFG_TAG                      (CON34_PIN_5)
 #endif
 #define IIS3DWB_TASK_CFG_MAX_INSTANCES_COUNT    2
+
+// file ILPS28QSWTask.c
+#define ILPS28QSW_TASK_CFG_STACK_DEPTH            (TX_MINIMUM_STACK*8)
+#define ILPS28QSW_TASK_CFG_PRIORITY               (8)
 
 // file IIS2DLPCTask.c
 #define IIS2DLPC_TASK_CFG_STACK_DEPTH             (TX_MINIMUM_STACK*7)

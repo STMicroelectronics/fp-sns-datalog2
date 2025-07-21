@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -19,6 +19,10 @@
   */
 #ifndef _BLUENRG1_GAP_ACI_H_
 #define _BLUENRG1_GAP_ACI_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bluenrg1_types.h"
 /** @addtogroup Middlewares
@@ -45,53 +49,53 @@
   *@{
   */
 
-/** Documentation for C struct Whitelist_Entry_t */
-typedef struct Whitelist_Entry_t_s
+/** Documentation for C struct whitelist_entry_t */
+typedef struct whitelist_entry_t_s
 {
   /** Address type.
     *  Values:
     *  - 0x00: Public Device Address
     *  - 0x01: Random Device Address
     */
-  uint8_t Peer_Address_Type;
+  uint8_t peer_address_type;
   /** Public Device Address or Random Device Address of the device to be added to the
     *  white list.
     */
-  uint8_t Peer_Address[6];
-} Whitelist_Entry_t;
-/** Documentation for C struct Bonded_Device_Entry_t */
-typedef struct Bonded_Device_Entry_t_s
+  uint8_t peer_address[6];
+} whitelist_entry_t;
+/** Documentation for C struct bonded_device_entry_t */
+typedef struct bonded_device_entry_t_s
 {
   /** Address type.
     *  Values:
     *  - 0x00: Public Device Address
     *  - 0x01: Random Device Address
     */
-  uint8_t Address_Type;
+  uint8_t address_type;
   /** Public Device Address or Random Device Address of the device to be added to the
     *  white list.
     */
-  uint8_t Address[6];
-} Bonded_Device_Entry_t;
-/** Documentation for C struct Whitelist_Identity_Entry_t */
-typedef struct Whitelist_Identity_Entry_t_s
+  uint8_t address[6];
+} bonded_device_entry_t;
+/** Documentation for C struct whitelist_identity_entry_t */
+typedef struct whitelist_identity_entry_t_s
 {
   /** Identity address type.
     *  Values:
     *  - 0x00: Public Identity Address
     *  - 0x01: Random (static) Identity Address
     */
-  uint8_t Peer_Identity_Address_Type;
+  uint8_t peer_identity_address_type;
   /** Public or Random (static) Identity address of the peer device
    */
-  uint8_t Peer_Identity_Address[6];
-} Whitelist_Identity_Entry_t;
+  uint8_t peer_identity_address[6];
+} whitelist_identity_entry_t;
 /**
   * @brief Put the device in non-discoverable mode. This command disables the LL
   *        advertising.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_non_discoverable(void);
+ble_status_t aci_gap_set_non_discoverable(void);
 /**
   * @brief Put the device in limited discoverable mode (as defined in Bluetooth
   *        Specification v.4.1, Vol. 3, Part C, section 9.2.3). The device will
@@ -101,8 +105,8 @@ tBleStatus aci_gap_set_non_discoverable(void);
   *        Adv_Interval_Min and Adv_Interval_Max parameters are optional. If both
   *        are set to 0, the GAP will use default values for adv intervals for
   *        limited discoverable mode (250 ms and 500 ms respectively). To allow a
-  *        fast connection, the host can set Local_Name, Service_Uuid_List,
-  *        Slave_Conn_Interval_Min and Slave_Conn_Interval_Max. If provided,
+  *        fast connection, the host can set local_name, service_uuid_list,
+  *        slave_conn_interval_min and slave_conn_interval_max. If provided,
   *        these data will be  inserted into the advertising packet payload as AD
   *        data. These parameters are optional in this command. These values can
   *        be set in advertised data using GAP_Update_Adv_Data command
@@ -112,22 +116,22 @@ tBleStatus aci_gap_set_non_discoverable(void);
   *        advertising timeout happens (i.e. limited discovery period has
   *        elapsed), controller generates @ref aci_gap_limited_discoverable_event
   *        event.
-  * @param Advertising_Type Advertising type. Advertising_Type type cannot be any
+  * @param advertising_type Advertising type. advertising_type type cannot be any
   *        of GAP_ADV_HIGH_DC_DIRECT_IND or GAP_ADV_HIGH_DC_DIRECT_IND.
   *        Values:
   *        - 0x00: ADV_IND (Connectable undirected advertising)
   *        - 0x01: ADV_DIRECT_IND (Connectable directed advertising)
   *        - 0x02: ADV_SCAN_IND (Scannable undirected advertising)
   *        - 0x03: ADV_NONCONN_IND (Non connectable undirected advertising)
-  * @param Advertising_Interval_Min Minimum advertising interval for undirected
+  * @param advertising_interval_min Minimum advertising interval for undirected
   *        and low duty cycle directed advertising. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0020 (20.000 ms)  ... 0x4000 (10240.000 ms)
-  * @param Advertising_Interval_Max Maximum advertising interval. Time = N *
+  * @param advertising_interval_max Maximum advertising interval. Time = N *
   *        0.625 msec.
   *        Values:
   *        - 0x0020 (20.000 ms)  ... 0x4000 (10240.000 ms)
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -138,52 +142,52 @@ tBleStatus aci_gap_set_non_discoverable(void);
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Advertising_Filter_Policy Advertising filter policy: not applicable
-  *        (the value of Advertising_Filter_Policy parameter is not used inside
+  * @param advertising_filter_policy Advertising filter policy: not applicable
+  *        (the value of advertising_filter_policy parameter is not used inside
   *        the Stack)
-  * @param Local_Name_Length Length of the local_name field in octets. If length
-  *        is set to 0x00, Local_Name parameter is not used.
-  * @param Local_Name Local name of the device. First byte must be 0x08 for
+  * @param local_name_length Length of the local_name field in octets. If length
+  *        is set to 0x00, local_name parameter is not used.
+  * @param local_name Local name of the device. First byte must be 0x08 for
   *        Shortened Local Name  or 0x09 for Complete Local Name. No NULL
   *        character at the end.
-  * @param Service_Uuid_length Length of the Service Uuid List in octets. If
+  * @param service_uuid_length Length of the Service Uuid List in octets. If
   *        there is no service to be advertised, set this field to 0x00.
-  * @param Service_Uuid_List This is the list of the UUIDs as defined in Volume
+  * @param service_uuid_list This is the list of the UUIDs as defined in Volume
   *        3, Section 11 of GAP Specification. First byte is the AD Type. See
   *        also Supplement to the Bluetooth Core specification.
-  * @param Slave_Conn_Interval_Min Minimum value for slave connection interval
-  *        suggested by the Peripheral. If Slave_Conn_Interval_Min and
-  *        Slave_Conn_Interval_Max are not 0x0000, Slave Connection Interval
+  * @param slave_conn_interval_min Minimum value for slave connection interval
+  *        suggested by the Peripheral. If slave_conn_interval_min and
+  *        slave_conn_interval_max are not 0x0000, Slave Connection Interval
   *        Range AD structure will be added in advertising data. Connection
   *        interval is defined in the following manner: connIntervalmin =
-  *        Slave_Conn_Interval_Min x 1.25ms.
+  *        slave_conn_interval_min x 1.25ms.
   *        Values:
   *        - 0x0000 (NaN)
   *        - 0xFFFF (NaN) : No specific minimum
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Slave_Conn_Interval_Max Slave connection interval maximum value
-  *        suggested by Peripheral. If Slave_Conn_Interval_Min and
-  *        Slave_Conn_Interval_Max are not 0x0000, Slave Connection Interval
+  * @param slave_conn_interval_max Slave connection interval maximum value
+  *        suggested by Peripheral. If slave_conn_interval_min and
+  *        slave_conn_interval_max are not 0x0000, Slave Connection Interval
   *        Range AD structure will be added in advertising data. Connection
   *        interval is defined in the following manner: connIntervalmax =
-  *        Slave_Conn_Interval_Max x 1.25ms
+  *        slave_conn_interval_max x 1.25ms
   *        Values:
   *        - 0x0000 (NaN)
   *        - 0xFFFF (NaN) : No specific maximum
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_limited_discoverable(uint8_t Advertising_Type,
-                                            uint16_t Advertising_Interval_Min,
-                                            uint16_t Advertising_Interval_Max,
-                                            uint8_t Own_Address_Type,
-                                            uint8_t Advertising_Filter_Policy,
-                                            uint8_t Local_Name_Length,
-                                            uint8_t Local_Name[],
-                                            uint8_t Service_Uuid_length,
-                                            uint8_t Service_Uuid_List[],
-                                            uint16_t Slave_Conn_Interval_Min,
-                                            uint16_t Slave_Conn_Interval_Max);
+ble_status_t aci_gap_set_limited_discoverable(uint8_t advertising_type,
+                                              uint16_t advertising_interval_min,
+                                              uint16_t advertising_interval_max,
+                                              uint8_t own_address_type,
+                                              uint8_t advertising_filter_policy,
+                                              uint8_t local_name_length,
+                                              uint8_t local_name[],
+                                              uint8_t service_uuid_length,
+                                              uint8_t service_uuid_list[],
+                                              uint16_t slave_conn_interval_min,
+                                              uint16_t slave_conn_interval_max);
 /**
   * @brief Put the device in general discoverable mode (as defined in Bluetooth
   *        Specification v.4.1, Vol. 3, Part C, section 9.2.4). The device will
@@ -203,22 +207,22 @@ tBleStatus aci_gap_set_limited_discoverable(uint8_t Advertising_Type,
   *        advertising packet cannot exceed 31 bytes. With this command, the BLE
   *        Stack will also add automatically the following standard AD types: -
   *        AD Flags - TX Power Level
-  * @param Advertising_Type Advertising type. Advertising_Type type cannot be any
+  * @param advertising_type Advertising type. advertising_type type cannot be any
   *        of GAP_ADV_HIGH_DC_DIRECT_IND or GAP_ADV_HIGH_DC_DIRECT_IND.
   *        Values:
   *        - 0x00: ADV_IND (Connectable undirected advertising)
   *        - 0x01: ADV_DIRECT_IND (Connectable directed advertising)
   *        - 0x02: ADV_SCAN_IND (Scannable undirected advertising)
   *        - 0x03: ADV_NONCONN_IND (Non connectable undirected advertising)
-  * @param Advertising_Interval_Min Minimum advertising interval for undirected
+  * @param advertising_interval_min Minimum advertising interval for undirected
   *        and low duty cycle directed advertising. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0020 (20.000 ms)  ... 0x4000 (10240.000 ms)
-  * @param Advertising_Interval_Max Maximum advertising interval. Time = N *
+  * @param advertising_interval_max Maximum advertising interval. Time = N *
   *        0.625 msec.
   *        Values:
   *        - 0x0020 (20.000 ms)  ... 0x4000 (10240.000 ms)
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -229,52 +233,52 @@ tBleStatus aci_gap_set_limited_discoverable(uint8_t Advertising_Type,
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Advertising_Filter_Policy Advertising filter policy: not applicable
-  *        (the value of Advertising_Filter_Policy parameter is not used inside
+  * @param advertising_filter_policy Advertising filter policy: not applicable
+  *        (the value of advertising_filter_policy parameter is not used inside
   *        the Stack)
-  * @param Local_Name_Length Length of the local_name field in octets. If length
-  *        is set to 0x00, Local_Name parameter is not used.
-  * @param Local_Name Local name of the device. First byte must be 0x08 for
+  * @param local_name_length Length of the local_name field in octets. If length
+  *        is set to 0x00, local_name parameter is not used.
+  * @param local_name Local name of the device. First byte must be 0x08 for
   *        Shortened Local Name  or 0x09 for Complete Local Name. No NULL
   *        character at the end.
-  * @param Service_Uuid_length Length of the Service Uuid List in octets. If
+  * @param service_uuid_length Length of the Service Uuid List in octets. If
   *        there is no service to be advertised, set this field to 0x00.
-  * @param Service_Uuid_List This is the list of the UUIDs as defined in Volume
+  * @param service_uuid_list This is the list of the UUIDs as defined in Volume
   *        3, Section 11 of GAP Specification. First byte is the AD Type. See
   *        also Supplement to the Bluetooth Core specification.
-  * @param Slave_Conn_Interval_Min Minimum value for slave connection interval
-  *        suggested by the Peripheral. If Slave_Conn_Interval_Min and
-  *        Slave_Conn_Interval_Max are not 0x0000, Slave Connection Interval
+  * @param slave_conn_interval_min Minimum value for slave connection interval
+  *        suggested by the Peripheral. If slave_conn_interval_min and
+  *        slave_conn_interval_max are not 0x0000, Slave Connection Interval
   *        Range AD structure will be added in advertising data. Connection
   *        interval is defined in the following manner: connIntervalmin =
-  *        Slave_Conn_Interval_Min x 1.25ms.
+  *        slave_conn_interval_min x 1.25ms.
   *        Values:
   *        - 0x0000 (NaN)
   *        - 0xFFFF (NaN) : No specific minimum
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Slave_Conn_Interval_Max Slave connection interval maximum value
-  *        suggested by Peripheral. If Slave_Conn_Interval_Min and
-  *        Slave_Conn_Interval_Max are not 0x0000, Slave Connection Interval
+  * @param slave_conn_interval_max Slave connection interval maximum value
+  *        suggested by Peripheral. If slave_conn_interval_min and
+  *        slave_conn_interval_max are not 0x0000, Slave Connection Interval
   *        Range AD structure will be added in advertising data. Connection
   *        interval is defined in the following manner: connIntervalmax =
-  *        Slave_Conn_Interval_Max x 1.25ms
+  *        slave_conn_interval_max x 1.25ms
   *        Values:
   *        - 0x0000 (NaN)
   *        - 0xFFFF (NaN) : No specific maximum
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_discoverable(uint8_t Advertising_Type,
-                                    uint16_t Advertising_Interval_Min,
-                                    uint16_t Advertising_Interval_Max,
-                                    uint8_t Own_Address_Type,
-                                    uint8_t Advertising_Filter_Policy,
-                                    uint8_t Local_Name_Length,
-                                    uint8_t Local_Name[],
-                                    uint8_t Service_Uuid_length,
-                                    uint8_t Service_Uuid_List[],
-                                    uint16_t Slave_Conn_Interval_Min,
-                                    uint16_t Slave_Conn_Interval_Max);
+ble_status_t aci_gap_set_discoverable(uint8_t advertising_type,
+                                      uint16_t advertising_interval_min,
+                                      uint16_t advertising_interval_max,
+                                      uint8_t own_address_type,
+                                      uint8_t advertising_filter_policy,
+                                      uint8_t local_name_length,
+                                      uint8_t local_name[],
+                                      uint8_t service_uuid_length,
+                                      uint8_t service_uuid_list[],
+                                      uint16_t slave_conn_interval_min,
+                                      uint16_t slave_conn_interval_max);
 /**
   * @brief      Set the device in direct connectable mode (as defined in
   *        Bluetooth Specification v.4.1, Vol. 3, Part C, section 9.3.3). Device
@@ -293,7 +297,7 @@ tBleStatus aci_gap_set_discoverable(uint8_t Advertising_Type,
   *        and 0x00 if the connection was successfully established. If Host
   *        privacy (i.e. privacy 1.1) is enabled this command returns
   *        BLE_STATUS_INVALID_PARAMS.
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address
+  * @param own_address_type Own address type:  - 0x00: Public Device Address
   *        (only if privacy is disabled)  - 0x01: Random Device Address (only if
   *        privacy is disabled)  - 0x02: Resolvable Private Address (only if
   *        privacy is enabled)
@@ -301,35 +305,35 @@ tBleStatus aci_gap_set_discoverable(uint8_t Advertising_Type,
   *        - 0x00: Public Device Address
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
-  * @param Directed_Advertising_Type Type of directed advertising.
+  * @param directed_advertising_type Type of directed advertising.
   *        Values:
   *        - 0x01: High Duty Cycle Directed Advertising
   *        - 0x04: Low Duty Cycle Directed Advertising
-  * @param Direct_Address_Type Peer Address type.
+  * @param direct_address_type Peer Address type.
   *        Values:
   *        - 0x00: Public Device Address or Public Identity Address
   *        - 0x01: Random Device Address or Random (static) Identity Address
-  * @param Direct_Address Initiator Bluetooth address
-  * @param Advertising_Interval_Min Minimum advertising interval for undirected
+  * @param direct_address Initiator Bluetooth address
+  * @param advertising_interval_min Minimum advertising interval for undirected
   *        and low duty cycle directed advertising. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0020 (20.000 ms)  ... 0x4000 (10240.000 ms)
-  * @param Advertising_Interval_Max Maximum advertising interval. Time = N *
+  * @param advertising_interval_max Maximum advertising interval. Time = N *
   *        0.625 msec.
   *        Values:
   *        - 0x0020 (20.000 ms)  ... 0x4000 (10240.000 ms)
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_direct_connectable(uint8_t Own_Address_Type,
-                                          uint8_t Directed_Advertising_Type,
-                                          uint8_t Direct_Address_Type,
-                                          uint8_t Direct_Address[6],
-                                          uint16_t Advertising_Interval_Min,
-                                          uint16_t Advertising_Interval_Max);
+ble_status_t aci_gap_set_direct_connectable(uint8_t own_address_type,
+                                            uint8_t directed_advertising_type,
+                                            uint8_t direct_address_type,
+                                            uint8_t direct_address[6],
+                                            uint16_t advertising_interval_min,
+                                            uint16_t advertising_interval_max);
 /**
   * @brief Set the IO capabilities of the device. This command has to be given
   *        only when the device is not in a connected state.
-  * @param IO_Capability IO capability of the device.
+  * @param io_capability IO capability of the device.
   *        Values:
   *        - 0x00: IO_CAP_DISPLAY_ONLY
   *        - 0x01: IO_CAP_DISPLAY_YES_NO
@@ -338,20 +342,20 @@ tBleStatus aci_gap_set_direct_connectable(uint8_t Own_Address_Type,
   *        - 0x04: IO_CAP_KEYBOARD_DISPLAY
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_io_capability(uint8_t IO_Capability);
+ble_status_t aci_gap_set_io_capability(uint8_t io_capability);
 /**
   * @brief Set the authentication requirements for the device. This command has
   *        to be given only when the device is not in a connected state.
-  * @param Bonding_Mode Bonding mode. Only if bonding is enabled (0x01), the
+  * @param bonding_mode Bonding mode. Only if bonding is enabled (0x01), the
   *        bonding information is stored in flash
   *        Values:
   *        - 0x00: NO_BONDING
   *        - 0x01: BONDING
-  * @param MITM_Mode MITM mode.
+  * @param mitm_mode MITM mode.
   *        Values:
   *        - 0x00: MITM_PROTECTION_NOT_REQUIRED
   *        - 0x01: MITM_PROTECTION_REQUIRED
-  * @param SC_Support LE Secure connections support. - 0x00: Secure Connections
+  * @param sc_support LE Secure connections support. - 0x00: Secure Connections
   *        Pairing not supported - 0x01: Secure Connections Pairing supported but
   *        optional - 0x02: Secure Connections Pairing supported and mandatory
   *        (SC Only Mode)
@@ -359,48 +363,48 @@ tBleStatus aci_gap_set_io_capability(uint8_t IO_Capability);
   *        - 0x00: SC_IS_NOT_SUPPORTED
   *        - 0x01: SC_IS_SUPPORTED
   *        - 0x02: SC_IS_MANDATORY
-  * @param KeyPress_Notification_Support Keypress notification support
+  * @param key_press_notification_support Keypress notification support
   *        Values:
   *        - 0x00: KEYPRESS_IS_NOT_SUPPORTED
   *        - 0x01: KEYPRESS_IS_SUPPORTED
-  * @param Min_Encryption_Key_Size Minimum encryption key size to be used during
+  * @param min_encryption_key_size Minimum encryption key size to be used during
   *        pairing
-  * @param Max_Encryption_Key_Size Maximum encryption key size to be used during
+  * @param max_encryption_key_size Maximum encryption key size to be used during
   *        pairing
-  * @param Use_Fixed_Pin Use or not fixed pin. If set to 0x00, then during the
+  * @param use_fixed_pin Use or not fixed pin. If set to 0x00, then during the
   *        pairing process the application will not be requested for a pin
-  *        (Fixed_Pin will be used). If set to 0x01, then during pairing process
+  *        (fixed_pin will be used). If set to 0x01, then during pairing process
   *        if a passkey is required the application will be notified
   *        Values:
   *        - 0x00: USE_FIXED_PIN_FOR_PAIRING
   *        - 0x01: DONOT_USE_FIXED_PIN_FOR_PAIRING
-  * @param Fixed_Pin Fixed pin to be used during pairing if MIMT protection is
+  * @param fixed_pin Fixed pin to be used during pairing if MIMT protection is
   *        enabled. Any random value between 0 to 999999
   *        Values:
   *        - 0 ... 999999
-  * @param Identity_Address_Type Identity address type.
+  * @param identity_address_type Identity address type.
   *        Values:
   *        - 0x00: Public Identity Address
   *        - 0x01: Random (static) Identity Address
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_authentication_requirement(uint8_t Bonding_Mode,
-                                                  uint8_t MITM_Mode,
-                                                  uint8_t SC_Support,
-                                                  uint8_t KeyPress_Notification_Support,
-                                                  uint8_t Min_Encryption_Key_Size,
-                                                  uint8_t Max_Encryption_Key_Size,
-                                                  uint8_t Use_Fixed_Pin,
-                                                  uint32_t Fixed_Pin,
-                                                  uint8_t Identity_Address_Type);
+ble_status_t aci_gap_set_authentication_requirement(uint8_t bonding_mode,
+                                                    uint8_t mitm_mode,
+                                                    uint8_t sc_support,
+                                                    uint8_t key_press_notification_support,
+                                                    uint8_t min_encryption_key_size,
+                                                    uint8_t max_encryption_key_size,
+                                                    uint8_t use_fixed_pin,
+                                                    uint32_t fixed_pin,
+                                                    uint8_t identity_address_type);
 /**
   * @brief Set the authorization requirements of the device. This command has to
   *        be given when connected to a device if authorization is required to
   *        access services which require authorization.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Authorization_Enable Enable the authorization in the device and when a
+  * @param authorization_enable Enable the authorization in the device and when a
   *        remote device tries to read/write a characteristic with authorization
   *        requirements, the stack will send back an error response with
   *        "Insufficient authorization" error code. After pairing is complete a
@@ -410,37 +414,37 @@ tBleStatus aci_gap_set_authentication_requirement(uint8_t Bonding_Mode,
   *        - 0x01: AUTHORIZATION_REQUIRED
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_authorization_requirement(uint16_t Connection_Handle,
-                                                 uint8_t Authorization_Enable);
+ble_status_t aci_gap_set_authorization_requirement(uint16_t connection_handle,
+                                                   uint8_t authorization_enable);
 /**
   * @brief This command should be send by the host in response to @ref
   *        aci_gap_pass_key_req_event event. The command parameter contains the
   *        pass key which will be used during the pairing process.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Pass_Key Pass key that will be used during the pairing process.  Must
+  * @param pass_key Pass key that will be used during the pairing process.  Must
   *        be a six-digit decimal number.
   *        Values:
   *        - 0 ... 999999
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_pass_key_resp(uint16_t Connection_Handle,
-                                 uint32_t Pass_Key);
+ble_status_t aci_gap_pass_key_resp(uint16_t connection_handle,
+                                   uint32_t pass_key);
 /**
   * @brief Authorize a device to access attributes. This command should be send
   *        by the host in response to @ref aci_gap_authorization_req_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Authorize Authorization response.
+  * @param authorize Authorization response.
   *        Values:
   *        - 0x01: Authorize
   *        - 0x02: Reject
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_authorization_resp(uint16_t Connection_Handle,
-                                      uint8_t Authorize);
+ble_status_t aci_gap_authorization_resp(uint16_t connection_handle,
+                                        uint8_t authorize);
 /**
   * @brief Initialize the GAP layer. Register the GAP service with the GATT. All
   *        the standard GAP characteristics will also be added: - Device Name -
@@ -456,7 +460,7 @@ tBleStatus aci_gap_authorization_resp(uint16_t Connection_Handle,
   *        due to a power loss during the first call to aci_gap_init()). To fix
   *        the problem, that flash area has to be erased, so that the
   *        aci_gap_init() can reinitialize it correctly.
-  * @param Role Bitmap of allowed roles.
+  * @param role Bitmap of allowed roles.
   *        Flags:
   *        - 0x01: Peripheral
   *        - 0x02: Broadcaster
@@ -470,27 +474,27 @@ tBleStatus aci_gap_authorization_resp(uint16_t Connection_Handle,
   * @param device_name_char_len Length of the device name characteristic
   *        Values:
   *        - 0 ... 248
-  * @param[out] Service_Handle Handle of the GAP service
-  * @param[out] Dev_Name_Char_Handle Device Name Characteristic handle
-  * @param[out] Appearance_Char_Handle Appearance Characteristic handle
+  * @param[out] service_handle Handle of the GAP service
+  * @param[out] dev_name_char_handle Device Name Characteristic handle
+  * @param[out] appearance_char_handle Appearance Characteristic handle
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_init(uint8_t Role,
-                        uint8_t privacy_enabled,
-                        uint8_t device_name_char_len,
-                        uint16_t *Service_Handle,
-                        uint16_t *Dev_Name_Char_Handle,
-                        uint16_t *Appearance_Char_Handle);
+ble_status_t aci_gap_init(uint8_t role,
+                          uint8_t privacy_enabled,
+                          uint8_t device_name_char_len,
+                          uint16_t *service_handle,
+                          uint16_t *dev_name_char_handle,
+                          uint16_t *appearance_char_handle);
 /**
   * @brief Put the device into non connectable mode. This mode does not support
   *        connection. The privacy setting done in the @ref aci_gap_init command
   *        plays a role in deciding the valid  parameters for this command.
   *        Advertiser filter policy is internally set to 0x00
-  * @param Advertising_Event_Type Advertising type.
+  * @param advertising_event_type Advertising type.
   *        Values:
   *        - 0x02: ADV_SCAN_IND (Scannable undirected advertising)
   *        - 0x03: ADV_NONCONN_IND (Non connectable undirected advertising)
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -503,22 +507,22 @@ tBleStatus aci_gap_init(uint8_t Role,
   *        - 0x03: Non Resolvable Private Address
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_non_connectable(uint8_t Advertising_Event_Type,
-                                       uint8_t Own_Address_Type);
+ble_status_t aci_gap_set_non_connectable(uint8_t advertising_event_type,
+                                         uint8_t own_address_type);
 /**
   * @brief Put the device into undirected connectable mode. If privacy is enabled
   *        in the device, a resolvable private address is generated and used as
   *        the  advertiser's address. If not, the address of the type specified
   *        in own_addr_type is used for advertising.
-  * @param Advertising_Interval_Min Minimum advertising interval for undirected
+  * @param advertising_interval_min Minimum advertising interval for undirected
   *        and low duty cycle directed advertising. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0020 (20.000 ms)  ... 0x4000 (10240.000 ms)
-  * @param Advertising_Interval_Max Maximum advertising interval. Time = N *
+  * @param advertising_interval_max Maximum advertising interval. Time = N *
   *        0.625 msec.
   *        Values:
   *        - 0x0020 (20.000 ms)  ... 0x4000 (10240.000 ms)
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if controller privacy is enabled
@@ -530,7 +534,7 @@ tBleStatus aci_gap_set_non_connectable(uint8_t Advertising_Event_Type,
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Adv_Filter_Policy Advertising filter policy. - 0x00: Allow Scan
+  * @param adv_filter_policy Advertising filter policy. - 0x00: Allow Scan
   *        Request from Any, Allow Connect Request from Any - 0x03: Allow Scan
   *        Request from White List Only, Allow Connect Request from White List
   *        Only
@@ -539,52 +543,52 @@ tBleStatus aci_gap_set_non_connectable(uint8_t Advertising_Event_Type,
   *        - 0x03: WHITE_LIST_FOR_ALL
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_undirected_connectable(uint16_t Advertising_Interval_Min,
-                                              uint16_t Advertising_Interval_Max,
-                                              uint8_t Own_Address_Type,
-                                              uint8_t Adv_Filter_Policy);
+ble_status_t aci_gap_set_undirected_connectable(uint16_t advertising_interval_min,
+                                                uint16_t advertising_interval_max,
+                                                uint8_t own_address_type,
+                                                uint8_t adv_filter_policy);
 /**
   * @brief Send a slave security request to the master. This command has to be
   *        issued to notify the master of the security requirements of the slave.
   *        The master may encrypt the link, initiate the pairing procedure, or
   *        reject the request.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_slave_security_req(uint16_t Connection_Handle);
+ble_status_t aci_gap_slave_security_req(uint16_t connection_handle);
 /**
   * @brief This command can be used to update the advertising data for a
   *        particular AD type. If the AD type specified does not exist, then it
   *        is added to the advertising data. If the overall advertising data
   *        length is more than 31 octets after the update, then the command is
   *        rejected and the old data is retained.
-  * @param AdvDataLen Length of AdvData in octets
-  * @param AdvData Advertising data used by the device while advertising.
+  * @param adv_data_len Length of adv_data in octets
+  * @param adv_data Advertising data used by the device while advertising.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_update_adv_data(uint8_t AdvDataLen,
-                                   uint8_t AdvData[]);
+ble_status_t aci_gap_update_adv_data(uint8_t adv_data_len,
+                                     uint8_t adv_data[]);
 /**
   * @brief This command can be used to delete the specified AD type from the
   *        advertisement data if present.
-  * @param ADType One of the AD types like in Bluetooth specification (see volume
+  * @param ad_type One of the AD types like in Bluetooth specification (see volume
   *        3, Part C, 11.1)
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_delete_ad_type(uint8_t ADType);
+ble_status_t aci_gap_delete_ad_type(uint8_t ad_type);
 /**
   * @brief This command can be used to get the current security settings of the
   *        device.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param[out] Security_Mode Security mode.
+  * @param[out] security_mode Security mode.
   *             Values:
   *             - 0x01: Security Mode 1
   *             - 0x02: Security Mode 2
-  * @param[out] Security_Level Security Level.
+  * @param[out] security_level Security Level.
   *             Values:
   *             - 0x01: Security Level 1
   *             - 0x02: Security Level 2
@@ -592,13 +596,13 @@ tBleStatus aci_gap_delete_ad_type(uint8_t ADType);
   *             - 0x04: Security Level 4
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_get_security_level(uint16_t Connection_Handle,
-                                      uint8_t *Security_Mode,
-                                      uint8_t *Security_Level);
+ble_status_t aci_gap_get_security_level(uint16_t connection_handle,
+                                        uint8_t *security_mode,
+                                        uint8_t *security_level);
 /**
   * @brief It allows masking events from the GAP. The default configuration is
   *        all the events masked.
-  * @param GAP_Evt_Mask GAP event mask. Default: 0xFFFF.
+  * @param gap_evt_mask GAP event mask. Default: 0xFFFF.
   *        Flags:
   *        - 0x0000: No events
   *        - 0x0001: ACI_GAP_LIMITED_DISCOVERABLE_EVENT
@@ -614,14 +618,14 @@ tBleStatus aci_gap_get_security_level(uint16_t Connection_Handle,
   *        - 0x0800: ACI_GAP_ADDR_NOT_RESOLVED_EVENT
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_event_mask(uint16_t GAP_Evt_Mask);
+ble_status_t aci_gap_set_event_mask(uint16_t gap_evt_mask);
 /**
   * @brief Add addresses of bonded devices into the controller's whitelist. The
   *        command will return an error if there are no devices in the database
   *        or if it was   unable to add the device into the whitelist.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_configure_whitelist(void);
+ble_status_t aci_gap_configure_whitelist(void);
 /**
   * @brief Command the controller to terminate the connection. A @ref
   *        hci_disconnection_complete_event event will be generated when the link
@@ -629,10 +633,10 @@ tBleStatus aci_gap_configure_whitelist(void);
   *        before sending any new command (including system hardware reset),
   *        since immediately after @ref hci_disconnection_complete_event event,
   *        system could save important information in non volatile memory.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Reason The reason for ending the connection.
+  * @param reason The reason for ending the connection.
   *        Values:
   *        - 0x05: Authentication Failure
   *        - 0x13: Remote User Terminated Connection
@@ -642,26 +646,26 @@ tBleStatus aci_gap_configure_whitelist(void);
   *        - 0x3B: Unacceptable Connection Parameters
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_terminate(uint16_t Connection_Handle,
-                             uint8_t Reason);
+ble_status_t aci_gap_terminate(uint16_t connection_handle,
+                               uint8_t reason);
 /**
   * @brief Clear the security database. All the devices in the security database
   *        will be removed.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_clear_security_db(void);
+ble_status_t aci_gap_clear_security_db(void);
 /**
   * @brief Allows the security manager to complete the pairing procedure and re-
   *        bond with the master. This command should be given by the application
   *        when it receives the ACI_GAP_BOND_LOST_EVENT if it wants the re-
   *        bonding to happen successfully. If this command is not given on
   *        receiving the event, the bonding procedure will timeout.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_allow_rebond(uint16_t Connection_Handle);
+ble_status_t aci_gap_allow_rebond(uint16_t connection_handle);
 /**
   * @brief Start the limited discovery procedure. The controller is commanded to
   *        start active scanning. When this procedure is started, only the
@@ -674,16 +678,16 @@ tBleStatus aci_gap_allow_rebond(uint16_t Connection_Handle);
   *        with the procedure code set to 0x01. The device found when the
   *        procedure is ongoing is returned to the upper layers through the event
   *        @ref hci_le_advertising_report_event.
-  * @param LE_Scan_Interval This is defined as the time interval from when the
+  * @param le_scan_interval This is defined as the time interval from when the
   *        Controller started its last LE scan until it begins the subsequent LE
   *        scan. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param LE_Scan_Window The duration of the LE scan. LE_Scan_Window shall be
-  *        less than or equal to LE_Scan_Interval. Time = N * 0.625 msec.
+  * @param le_scan_window The duration of the LE scan. le_scan_window shall be
+  *        less than or equal to le_scan_interval. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -694,16 +698,16 @@ tBleStatus aci_gap_allow_rebond(uint16_t Connection_Handle);
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Filter_Duplicates Enable/disable duplicate filtering.
+  * @param filter_duplicates Enable/disable duplicate filtering.
   *        Values:
   *        - 0x00: Duplicate filtering disabled
   *        - 0x01: Duplicate filtering enabled
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_start_limited_discovery_proc(uint16_t LE_Scan_Interval,
-                                                uint16_t LE_Scan_Window,
-                                                uint8_t Own_Address_Type,
-                                                uint8_t Filter_Duplicates);
+ble_status_t aci_gap_start_limited_discovery_proc(uint16_t le_scan_interval,
+                                                  uint16_t le_scan_window,
+                                                  uint8_t own_address_type,
+                                                  uint8_t filter_duplicates);
 /**
   * @brief Start the general discovery procedure. The controller is commanded to
   *        start active scanning. The procedure is terminated when  either the
@@ -714,16 +718,16 @@ tBleStatus aci_gap_start_limited_discovery_proc(uint16_t LE_Scan_Interval,
   *        returned with the procedure code set to 0x02. The device found when
   *        the procedure is ongoing is returned to @ref
   *        hci_le_advertising_report_event.
-  * @param LE_Scan_Interval This is defined as the time interval from when the
+  * @param le_scan_interval This is defined as the time interval from when the
   *        Controller started its last LE scan until it begins the subsequent LE
   *        scan. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param LE_Scan_Window The duration of the LE scan. LE_Scan_Window shall be
-  *        less than or equal to LE_Scan_Interval. Time = N * 0.625 msec.
+  * @param le_scan_window The duration of the LE scan. le_scan_window shall be
+  *        less than or equal to le_scan_interval. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -734,16 +738,16 @@ tBleStatus aci_gap_start_limited_discovery_proc(uint16_t LE_Scan_Interval,
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Filter_Duplicates Enable/disable duplicate filtering.
+  * @param filter_duplicates Enable/disable duplicate filtering.
   *        Values:
   *        - 0x00: Duplicate filtering disabled
   *        - 0x01: Duplicate filtering enabled
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_start_general_discovery_proc(uint16_t LE_Scan_Interval,
-                                                uint16_t LE_Scan_Window,
-                                                uint8_t Own_Address_Type,
-                                                uint8_t Filter_Duplicates);
+ble_status_t aci_gap_start_general_discovery_proc(uint16_t le_scan_interval,
+                                                  uint16_t le_scan_window,
+                                                  uint8_t own_address_type,
+                                                  uint8_t filter_duplicates);
 /**
   * @brief Start the name discovery procedure. A LE_Create_Connection call will
   *        be made to the controller by GAP with the initiator filter policy set
@@ -754,23 +758,23 @@ tBleStatus aci_gap_start_general_discovery_proc(uint16_t LE_Scan_Interval,
   *        aci_gap_proc_complete_event event is given to the upper layer. The
   *        event also contains the name of the device if the device name was read
   *        successfully.
-  * @param LE_Scan_Interval This is defined as the time interval from when the
+  * @param le_scan_interval This is defined as the time interval from when the
   *        Controller started its last LE scan until it begins the subsequent LE
   *        scan. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param LE_Scan_Window The duration of the LE scan. LE_Scan_Window shall be
-  *        less than or equal to LE_Scan_Interval. Time = N * 0.625 msec.
+  * @param le_scan_window The duration of the LE scan. le_scan_window shall be
+  *        less than or equal to le_scan_interval. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param Peer_Address_Type Address type.
+  * @param peer_address_type Address type.
   *        Values:
   *        - 0x00: Public Device Address
   *        - 0x01: Random Device Address
-  * @param Peer_Address Public Device Address, Random Device Address, Public
+  * @param peer_address Public Device Address, Random Device Address, Public
   *        Identity Address or Random (static) Identity Address of the
   *        advertising device.
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -781,42 +785,42 @@ tBleStatus aci_gap_start_general_discovery_proc(uint16_t LE_Scan_Interval,
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Conn_Interval_Min Minimum value for the connection event interval.
-  *        This shall be less than or equal to Conn_Interval_Max. Time = N * 1.25
+  * @param conn_interval_min Minimum value for the connection event interval.
+  *        This shall be less than or equal to conn_interval_max. Time = N * 1.25
   *        msec.
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Interval_Max Maximum value for the connection event interval.
-  *        This shall be greater than or equal to Conn_Interval_Min. Time = N *
+  * @param conn_interval_max Maximum value for the connection event interval.
+  *        This shall be greater than or equal to conn_interval_min. Time = N *
   *        1.25 msec.
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Latency Slave latency for the connection in number of connection
+  * @param conn_latency Slave latency for the connection in number of connection
   *        events.
   *        Values:
   *        - 0x0000 ... 0x01F3
-  * @param Supervision_Timeout Supervision timeout for the LE Link. It shall be a
+  * @param supervision_timeout Supervision timeout for the LE Link. It shall be a
   *        multiple of 10 ms and larger than (1 + connSlaveLatency) *
   *        connInterval * 2. Time = N * 10 msec.
   *        Values:
   *        - 0x000A (100 ms)  ... 0x0C80 (32000 ms)
-  * @param Minimum_CE_Length Information parameter about the minimum length of
+  * @param minimum_ce_length Information parameter about the minimum length of
   *        connection needed for this LE connection. Time = N * 0.625 msec.
-  * @param Maximum_CE_Length Information parameter about the maximum length of
+  * @param maximum_ce_length Information parameter about the maximum length of
   *        connection needed for this LE connection. Time = N * 0.625 msec.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_start_name_discovery_proc(uint16_t LE_Scan_Interval,
-                                             uint16_t LE_Scan_Window,
-                                             uint8_t Peer_Address_Type,
-                                             uint8_t Peer_Address[6],
-                                             uint8_t Own_Address_Type,
-                                             uint16_t Conn_Interval_Min,
-                                             uint16_t Conn_Interval_Max,
-                                             uint16_t Conn_Latency,
-                                             uint16_t Supervision_Timeout,
-                                             uint16_t Minimum_CE_Length,
-                                             uint16_t Maximum_CE_Length);
+ble_status_t aci_gap_start_name_discovery_proc(uint16_t le_scan_interval,
+                                               uint16_t le_scan_window,
+                                               uint8_t peer_address_type,
+                                               uint8_t peer_address[6],
+                                               uint8_t own_address_type,
+                                               uint16_t conn_interval_min,
+                                               uint16_t conn_interval_max,
+                                               uint16_t conn_latency,
+                                               uint16_t supervision_timeout,
+                                               uint16_t minimum_ce_length,
+                                               uint16_t maximum_ce_length);
 /**
   * @brief Start the auto connection establishment procedure. The devices
   *        specified are added to the white list of the controller and a
@@ -833,16 +837,16 @@ tBleStatus aci_gap_start_name_discovery_proc(uint16_t LE_Scan_Interval,
   *        and the peer device (advertiser) is in the resolving list then  the
   *        link layer will generate a RPA, if it is not then the RPA/NRPA
   *        generated by the Host will be used.
-  * @param LE_Scan_Interval This is defined as the time interval from when the
+  * @param le_scan_interval This is defined as the time interval from when the
   *        Controller started its last LE scan until it begins the subsequent LE
   *        scan. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param LE_Scan_Window The duration of the LE scan. LE_Scan_Window shall be
-  *        less than or equal to LE_Scan_Interval. Time = N * 0.625 msec.
+  * @param le_scan_window The duration of the LE scan. le_scan_window shall be
+  *        less than or equal to le_scan_interval. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -853,47 +857,47 @@ tBleStatus aci_gap_start_name_discovery_proc(uint16_t LE_Scan_Interval,
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Conn_Interval_Min Minimum value for the connection event interval.
-  *        This shall be less than or equal to Conn_Interval_Max. Time = N * 1.25
+  * @param conn_interval_min Minimum value for the connection event interval.
+  *        This shall be less than or equal to conn_interval_max. Time = N * 1.25
   *        msec.
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Interval_Max Maximum value for the connection event interval.
-  *        This shall be greater than or equal to Conn_Interval_Min. Time = N *
+  * @param conn_interval_max Maximum value for the connection event interval.
+  *        This shall be greater than or equal to conn_interval_min. Time = N *
   *        1.25 msec.
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Latency Slave latency for the connection in number of connection
+  * @param conn_latency Slave latency for the connection in number of connection
   *        events.
   *        Values:
   *        - 0x0000 ... 0x01F3
-  * @param Supervision_Timeout Supervision timeout for the LE Link. It shall be a
+  * @param supervision_timeout Supervision timeout for the LE Link. It shall be a
   *        multiple of 10 ms and larger than (1 + connSlaveLatency) *
   *        connInterval * 2. Time = N * 10 msec.
   *        Values:
   *        - 0x000A (100 ms)  ... 0x0C80 (32000 ms)
-  * @param Minimum_CE_Length Information parameter about the minimum length of
+  * @param minimum_ce_length Information parameter about the minimum length of
   *        connection needed for this LE connection. Time = N * 0.625 msec.
-  * @param Maximum_CE_Length Information parameter about the maximum length of
+  * @param maximum_ce_length Information parameter about the maximum length of
   *        connection needed for this LE connection. Time = N * 0.625 msec.
-  * @param Num_of_Whitelist_Entries Number of devices that have to be added to
+  * @param num_of_whitelist_entries Number of devices that have to be added to
   *        the whitelist.
   *        Values:
   *        - 0x00 ... 0xFF
-  * @param Whitelist_Entry See @ref Whitelist_Entry_t
+  * @param whitelist_entry See @ref whitelist_entry_t
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_start_auto_connection_establish_proc(uint16_t LE_Scan_Interval,
-                                                        uint16_t LE_Scan_Window,
-                                                        uint8_t Own_Address_Type,
-                                                        uint16_t Conn_Interval_Min,
-                                                        uint16_t Conn_Interval_Max,
-                                                        uint16_t Conn_Latency,
-                                                        uint16_t Supervision_Timeout,
-                                                        uint16_t Minimum_CE_Length,
-                                                        uint16_t Maximum_CE_Length,
-                                                        uint8_t Num_of_Whitelist_Entries,
-                                                        Whitelist_Entry_t Whitelist_Entry[]);
+ble_status_t aci_gap_start_auto_connection_establish_proc(uint16_t le_scan_interval,
+                                                          uint16_t le_scan_window,
+                                                          uint8_t own_address_type,
+                                                          uint16_t conn_interval_min,
+                                                          uint16_t conn_interval_max,
+                                                          uint16_t conn_latency,
+                                                          uint16_t supervision_timeout,
+                                                          uint16_t minimum_ce_length,
+                                                          uint16_t maximum_ce_length,
+                                                          uint8_t num_of_whitelist_entries,
+                                                          whitelist_entry_t whitelist_entry[]);
 /**
   * @brief Start a general connection establishment procedure. The host enables
   *        scanning in the controller with the scanner filter policy set to
@@ -914,21 +918,21 @@ tBleStatus aci_gap_start_auto_connection_establish_proc(uint16_t LE_Scan_Interva
   *        privacy is enabled and the peer device (advertiser) is in the
   *        resolving list then the link layer will generate a RPA, if it is not
   *        then the RPA/NRPA generated by the Host will be used.
-  * @param LE_Scan_Type Passive or active scanning. With active scanning SCAN_REQ
+  * @param le_scan_type Passive or active scanning. With active scanning SCAN_REQ
   *        packets are sent.
   *        Values:
   *        - 0x00: Passive Scanning
   *        - 0x01: Active scanning
-  * @param LE_Scan_Interval This is defined as the time interval from when the
+  * @param le_scan_interval This is defined as the time interval from when the
   *        Controller started its last LE scan until it begins the subsequent LE
   *        scan. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param LE_Scan_Window The duration of the LE scan. LE_Scan_Window shall be
-  *        less than or equal to LE_Scan_Interval. Time = N * 0.625 msec.
+  * @param le_scan_window The duration of the LE scan. le_scan_window shall be
+  *        less than or equal to le_scan_interval. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -939,7 +943,7 @@ tBleStatus aci_gap_start_auto_connection_establish_proc(uint16_t LE_Scan_Interva
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Scanning_Filter_Policy Scanning filter policy:  - 0x00 Accept all
+  * @param scanning_filter_policy Scanning filter policy:  - 0x00 Accept all
   *        advertisement packets.Directed advertising packets which are not
   *        addressed for this device shall be ignored.  - 0x01 Ignore
   *        advertisement packets from devices not in the White List Only.Directed
@@ -952,26 +956,26 @@ tBleStatus aci_gap_start_auto_connection_establish_proc(uint16_t LE_Scan_Interva
   *        devices that are in the White List.Directed advertisement packets
   *        where initiator address is RPA and Directed advertisement packets
   *        addressed to this device shall be accepted.  - NOTE: if controller
-  *        privacy is enabled Scanning_Filter_Policy can only assume values 0x00
-  *        or 0x02; if Host privacy is enabled Scanning_Filter_Policy can only
+  *        privacy is enabled scanning_filter_policy can only assume values 0x00
+  *        or 0x02; if Host privacy is enabled scanning_filter_policy can only
   *        assume value 0x00.
   *        Values:
   *        - 0x00: Accept all
   *        - 0x01: Ignore devices not in the White List
   *        - 0x02: Accept all (use resolving list)
   *        - 0x03: Ignore devices not in the White List (use resolving list)
-  * @param Filter_Duplicates Enable/disable duplicate filtering.
+  * @param filter_duplicates Enable/disable duplicate filtering.
   *        Values:
   *        - 0x00: Duplicate filtering disabled
   *        - 0x01: Duplicate filtering enabled
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_start_general_connection_establish_proc(uint8_t LE_Scan_Type,
-                                                           uint16_t LE_Scan_Interval,
-                                                           uint16_t LE_Scan_Window,
-                                                           uint8_t Own_Address_Type,
-                                                           uint8_t Scanning_Filter_Policy,
-                                                           uint8_t Filter_Duplicates);
+ble_status_t aci_gap_start_general_connection_establish_proc(uint8_t le_scan_type,
+                                                             uint16_t le_scan_interval,
+                                                             uint16_t le_scan_window,
+                                                             uint8_t own_address_type,
+                                                             uint8_t scanning_filter_policy,
+                                                             uint8_t filter_duplicates);
 /**
   * @brief Start a selective connection establishment procedure. The GAP adds the
   *        specified device addresses into white list and enables scanning in the
@@ -988,21 +992,21 @@ tBleStatus aci_gap_start_general_connection_establish_proc(uint8_t LE_Scan_Type,
   *        controller privacy is enabled and the peer device (advertiser) is in
   *        the resolving list then  the link layer will generate a RPA, if it is
   *        not then the RPA/NRPA generated by the Host will be used.
-  * @param LE_Scan_Type Passive or active scanning. With active scanning SCAN_REQ
+  * @param le_scan_type Passive or active scanning. With active scanning SCAN_REQ
   *        packets are sent.
   *        Values:
   *        - 0x00: Passive Scanning
   *        - 0x01: Active scanning
-  * @param LE_Scan_Interval This is defined as the time interval from when the
+  * @param le_scan_interval This is defined as the time interval from when the
   *        Controller started its last LE scan until it begins the subsequent LE
   *        scan. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param LE_Scan_Window The duration of the LE scan. LE_Scan_Window shall be
-  *        less than or equal to LE_Scan_Interval. Time = N * 0.625 msec.
+  * @param le_scan_window The duration of the LE scan. le_scan_window shall be
+  *        less than or equal to le_scan_interval. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -1013,7 +1017,7 @@ tBleStatus aci_gap_start_general_connection_establish_proc(uint8_t LE_Scan_Type,
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Scanning_Filter_Policy Scanning filter policy:  - 0x00 Accept all
+  * @param scanning_filter_policy Scanning filter policy:  - 0x00 Accept all
   *        advertisement packets.Directed advertising packets which are not
   *        addressed for this device shall be ignored.  - 0x01 Ignore
   *        advertisement packets from devices not in the White List Only.Directed
@@ -1026,33 +1030,33 @@ tBleStatus aci_gap_start_general_connection_establish_proc(uint8_t LE_Scan_Type,
   *        devices that are in the White List.Directed advertisement packets
   *        where initiator address is RPA and Directed advertisement packets
   *        addressed to this device shall be accepted.  - NOTE: if controller
-  *        privacy is enabled Scanning_Filter_Policy can only assume values 0x01
-  *        or 0x03; if Host privacy is enabled Scanning_Filter_Policy can only
+  *        privacy is enabled scanning_filter_policy can only assume values 0x01
+  *        or 0x03; if Host privacy is enabled scanning_filter_policy can only
   *        assume value 0x01.
   *        Values:
   *        - 0x00: Accept all
   *        - 0x01: Ignore devices not in the White List
   *        - 0x02: Accept all (use resolving list)
   *        - 0x03: Ignore devices not in the White List (use resolving list)
-  * @param Filter_Duplicates Enable/disable duplicate filtering.
+  * @param filter_duplicates Enable/disable duplicate filtering.
   *        Values:
   *        - 0x00: Duplicate filtering disabled
   *        - 0x01: Duplicate filtering enabled
-  * @param Num_of_Whitelist_Entries Number of devices that have to be added to
+  * @param num_of_whitelist_entries Number of devices that have to be added to
   *        the whitelist.
   *        Values:
   *        - 0x00 ... 0xFF
-  * @param Whitelist_Entry See @ref Whitelist_Entry_t
+  * @param whitelist_entry See @ref whitelist_entry_t
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_start_selective_connection_establish_proc(uint8_t LE_Scan_Type,
-                                                             uint16_t LE_Scan_Interval,
-                                                             uint16_t LE_Scan_Window,
-                                                             uint8_t Own_Address_Type,
-                                                             uint8_t Scanning_Filter_Policy,
-                                                             uint8_t Filter_Duplicates,
-                                                             uint8_t Num_of_Whitelist_Entries,
-                                                             Whitelist_Entry_t Whitelist_Entry[]);
+ble_status_t aci_gap_start_selective_connection_establish_proc(uint8_t le_scan_type,
+                                                               uint16_t le_scan_interval,
+                                                               uint16_t le_scan_window,
+                                                               uint8_t own_address_type,
+                                                               uint8_t scanning_filter_policy,
+                                                               uint8_t filter_duplicates,
+                                                               uint8_t num_of_whitelist_entries,
+                                                               whitelist_entry_t whitelist_entry[]);
 /**
   * @brief Start the direct connection establishment procedure. A
   *        LE_Create_Connection call will be made to the controller by GAP with
@@ -1069,23 +1073,23 @@ tBleStatus aci_gap_start_selective_connection_establish_proc(uint8_t LE_Scan_Typ
   *        If controller privacy is enabled and the peer device (advertiser) is
   *        in the resolving list then the link layer will generate a RPA, if it
   *        is not then the RPA/NRPA generated by the Host will be used.
-  * @param LE_Scan_Interval This is defined as the time interval from when the
+  * @param le_scan_interval This is defined as the time interval from when the
   *        Controller started its last LE scan until it begins the subsequent LE
   *        scan. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param LE_Scan_Window The duration of the LE scan. LE_Scan_Window shall be
-  *        less than or equal to LE_Scan_Interval. Time = N * 0.625 msec.
+  * @param le_scan_window The duration of the LE scan. le_scan_window shall be
+  *        less than or equal to le_scan_interval. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param Peer_Address_Type Peer Address type.
+  * @param peer_address_type Peer Address type.
   *        Values:
   *        - 0x00: Public Device Address or Public Identity Address
   *        - 0x01: Random Device Address or Random (static) Identity Address
-  * @param Peer_Address Public Device Address, Random Device Address, Public
+  * @param peer_address Public Device Address, Random Device Address, Public
   *        Identity Address or Random (static) Identity Address of the
   *        advertising device.
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -1096,47 +1100,47 @@ tBleStatus aci_gap_start_selective_connection_establish_proc(uint8_t LE_Scan_Typ
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Conn_Interval_Min Minimum value for the connection event interval.
-  *        This shall be less than or equal to Conn_Interval_Max. Time = N * 1.25
+  * @param conn_interval_min Minimum value for the connection event interval.
+  *        This shall be less than or equal to conn_interval_max. Time = N * 1.25
   *        msec.
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Interval_Max Maximum value for the connection event interval.
-  *        This shall be greater than or equal to Conn_Interval_Min. Time = N *
+  * @param conn_interval_max Maximum value for the connection event interval.
+  *        This shall be greater than or equal to conn_interval_min. Time = N *
   *        1.25 msec.
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Latency Slave latency for the connection in number of connection
+  * @param conn_latency Slave latency for the connection in number of connection
   *        events.
   *        Values:
   *        - 0x0000 ... 0x01F3
-  * @param Supervision_Timeout Supervision timeout for the LE Link. It shall be a
+  * @param supervision_timeout Supervision timeout for the LE Link. It shall be a
   *        multiple of 10 ms and larger than (1 + connSlaveLatency) *
   *        connInterval * 2. Time = N * 10 msec.
   *        Values:
   *        - 0x000A (100 ms)  ... 0x0C80 (32000 ms)
-  * @param Minimum_CE_Length Information parameter about the minimum length of
+  * @param minimum_ce_length Information parameter about the minimum length of
   *        connection needed for this LE connection. Time = N * 0.625 msec.
-  * @param Maximum_CE_Length Information parameter about the maximum length of
+  * @param maximum_ce_length Information parameter about the maximum length of
   *        connection needed for this LE connection. Time = N * 0.625 msec.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_create_connection(uint16_t LE_Scan_Interval,
-                                     uint16_t LE_Scan_Window,
-                                     uint8_t Peer_Address_Type,
-                                     uint8_t Peer_Address[6],
-                                     uint8_t Own_Address_Type,
-                                     uint16_t Conn_Interval_Min,
-                                     uint16_t Conn_Interval_Max,
-                                     uint16_t Conn_Latency,
-                                     uint16_t Supervision_Timeout,
-                                     uint16_t Minimum_CE_Length,
-                                     uint16_t Maximum_CE_Length);
+ble_status_t aci_gap_create_connection(uint16_t le_scan_interval,
+                                       uint16_t le_scan_window,
+                                       uint8_t peer_address_type,
+                                       uint8_t peer_address[6],
+                                       uint8_t own_address_type,
+                                       uint16_t conn_interval_min,
+                                       uint16_t conn_interval_max,
+                                       uint16_t conn_latency,
+                                       uint16_t supervision_timeout,
+                                       uint16_t minimum_ce_length,
+                                       uint16_t maximum_ce_length);
 /**
   * @brief Terminate the specified GATT procedure. An @ref
   *        aci_gap_proc_complete_event event is returned with the procedure code
   *        set to the corresponding procedure.
-  * @param Procedure_Code GAP procedure bitmap.
+  * @param procedure_code GAP procedure bitmap.
   *        Values:
   *        - 0x00: No events
   *        - 0x01: LIMITED_DISCOVERY_PROC
@@ -1149,47 +1153,47 @@ tBleStatus aci_gap_create_connection(uint16_t LE_Scan_Interval,
   *        - 0x80: OBSERVATION_PROC
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_terminate_gap_proc(uint8_t Procedure_Code);
+ble_status_t aci_gap_terminate_gap_proc(uint8_t procedure_code);
 /**
   * @brief Start the connection update procedure (only when role is Master). A
   *        @ref hci_le_connection_update is called. On completion of the
   *        procedure, an @ref hci_le_connection_update_complete_event event is
   *        returned to the upper layer.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Conn_Interval_Min Minimum value for the connection event interval.
-  *        This shall be less than or equal to Conn_Interval_Max. Time = N * 1.25
+  * @param conn_interval_min Minimum value for the connection event interval.
+  *        This shall be less than or equal to conn_interval_max. Time = N * 1.25
   *        msec.
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Interval_Max Maximum value for the connection event interval.
-  *        This shall be greater than or equal to Conn_Interval_Min. Time = N *
+  * @param conn_interval_max Maximum value for the connection event interval.
+  *        This shall be greater than or equal to conn_interval_min. Time = N *
   *        1.25 msec.
   *        Values:
   *        - 0x0006 (7.50 ms)  ... 0x0C80 (4000.00 ms)
-  * @param Conn_Latency Slave latency for the connection in number of connection
+  * @param conn_latency Slave latency for the connection in number of connection
   *        events.
   *        Values:
   *        - 0x0000 ... 0x01F3
-  * @param Supervision_Timeout Supervision timeout for the LE Link. It shall be a
+  * @param supervision_timeout Supervision timeout for the LE Link. It shall be a
   *        multiple of 10 ms and larger than (1 + connSlaveLatency) *
   *        connInterval * 2. Time = N * 10 msec.
   *        Values:
   *        - 0x000A (100 ms)  ... 0x0C80 (32000 ms)
-  * @param Minimum_CE_Length Information parameter about the minimum length of
+  * @param minimum_ce_length Information parameter about the minimum length of
   *        connection needed for this LE connection. Time = N * 0.625 msec.
-  * @param Maximum_CE_Length Information parameter about the maximum length of
+  * @param maximum_ce_length Information parameter about the maximum length of
   *        connection needed for this LE connection. Time = N * 0.625 msec.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_start_connection_update(uint16_t Connection_Handle,
-                                           uint16_t Conn_Interval_Min,
-                                           uint16_t Conn_Interval_Max,
-                                           uint16_t Conn_Latency,
-                                           uint16_t Supervision_Timeout,
-                                           uint16_t Minimum_CE_Length,
-                                           uint16_t Maximum_CE_Length);
+ble_status_t aci_gap_start_connection_update(uint16_t connection_handle,
+                                             uint16_t conn_interval_min,
+                                             uint16_t conn_interval_max,
+                                             uint16_t conn_latency,
+                                             uint16_t supervision_timeout,
+                                             uint16_t minimum_ce_length,
+                                             uint16_t maximum_ce_length);
 /**
   * @brief Send the SM pairing request to start a pairing process. The
   *        authentication requirements and IO capabilities should be set before
@@ -1197,49 +1201,49 @@ tBleStatus aci_gap_start_connection_update(uint16_t Connection_Handle,
   *        aci_gap_set_authentication_requirement commands. A @ref
   *        aci_gap_pairing_complete_event event is returned after the pairing
   *        process is completed.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Force_Rebond If 1, Pairing request will be sent even if the device was
+  * @param force_rebond If 1, Pairing request will be sent even if the device was
   *        previously bonded,  otherwise pairing request is not sent.
   *        Values:
   *        - 0x00: NO
   *        - 0x01: YES
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_send_pairing_req(uint16_t Connection_Handle,
-                                    uint8_t Force_Rebond);
+ble_status_t aci_gap_send_pairing_req(uint16_t connection_handle,
+                                      uint8_t force_rebond);
 /**
   * @brief This command tries to resolve the address provided with the IRKs
   *        present in its database. If the address is resolved successfully with
   *        any one of the IRKs present in the database, it returns success and
   *        also the corresponding public/static random address stored with the
   *        IRK in the database.
-  * @param Address Address to be resolved
-  * @param[out] Actual_Address The public or static random address of the peer
+  * @param address Address to be resolved
+  * @param[out] actual_address The public or static random address of the peer
   *             device, distributed during pairing phase.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_resolve_private_addr(uint8_t Address[6],
-                                        uint8_t Actual_Address[6]);
+ble_status_t aci_gap_resolve_private_addr(uint8_t address[6],
+                                          uint8_t actual_address[6]);
 /**
   * @brief This command puts the device into broadcast mode. A privacy enabled
   *        device uses either a resolvable private address or a non-resolvable
   *        private address as specified in the Own_Addr_Type parameter of the
   *        command.
-  * @param Advertising_Interval_Min Minimum advertising interval for undirected
+  * @param advertising_interval_min Minimum advertising interval for undirected
   *        and low duty cycle directed advertising. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0020 (20.000 ms)  ... 0x4000 (10240.000 ms)
-  * @param Advertising_Interval_Max Maximum advertising interval. Time = N *
+  * @param advertising_interval_max Maximum advertising interval. Time = N *
   *        0.625 msec.
   *        Values:
   *        - 0x0020 (20.000 ms)  ... 0x4000 (10240.000 ms)
-  * @param Advertising_Type Non connectable advertising type
+  * @param advertising_type Non connectable advertising type
   *        Values:
   *        - 0x02: ADV_SCAN_IND (Scannable undirected advertising)
   *        - 0x03: ADV_NONCONN_IND (Non connectable undirected advertising)
-  * @param Own_Address_Type If Privacy is disabled, then the address can be
+  * @param own_address_type If Privacy is disabled, then the address can be
   *        public or static random. If Privacy is enabled, then the address can
   *        be a resolvable private address or a non-resolvable private address.
   *        Values:
@@ -1247,24 +1251,24 @@ tBleStatus aci_gap_resolve_private_addr(uint8_t Address[6],
   *        - 0x01: Static random address
   *        - 0x02: Resolvable private address
   *        - 0x03: Non-resolvable private address
-  * @param Adv_Data_Length Length of the advertising data in the advertising
+  * @param adv_data_length Length of the advertising data in the advertising
   *        packet.
-  * @param Adv_Data Advertising data used by the device while advertising.
-  * @param Num_of_Whitelist_Entries Number of devices that have to be added to
+  * @param adv_data Advertising data used by the device while advertising.
+  * @param num_of_whitelist_entries Number of devices that have to be added to
   *        the whitelist.
   *        Values:
   *        - 0x00 ... 0xFF
-  * @param Whitelist_Entry See @ref Whitelist_Entry_t
+  * @param whitelist_entry See @ref whitelist_entry_t
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_broadcast_mode(uint16_t Advertising_Interval_Min,
-                                      uint16_t Advertising_Interval_Max,
-                                      uint8_t Advertising_Type,
-                                      uint8_t Own_Address_Type,
-                                      uint8_t Adv_Data_Length,
-                                      uint8_t Adv_Data[],
-                                      uint8_t Num_of_Whitelist_Entries,
-                                      Whitelist_Entry_t Whitelist_Entry[]);
+ble_status_t aci_gap_set_broadcast_mode(uint16_t advertising_interval_min,
+                                        uint16_t advertising_interval_max,
+                                        uint8_t advertising_type,
+                                        uint8_t own_address_type,
+                                        uint8_t adv_data_length,
+                                        uint8_t adv_data[],
+                                        uint8_t num_of_whitelist_entries,
+                                        whitelist_entry_t whitelist_entry[]);
 /**
   * @brief Starts an Observation procedure, when the device is in Observer Role.
   *        The host enables scanning in the controller. The advertising reports
@@ -1274,21 +1278,21 @@ tBleStatus aci_gap_set_broadcast_mode(uint16_t Advertising_Interval_Min,
   *        peer device (advertiser) is in the resolving list then the link layer
   *        will generate a RPA, if it is not then the RPA/NRPA generated by the
   *        Host will be used.
-  * @param LE_Scan_Interval This is defined as the time interval from when the
+  * @param le_scan_interval This is defined as the time interval from when the
   *        Controller started its last LE scan until it begins the subsequent LE
   *        scan. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param LE_Scan_Window The duration of the LE scan. LE_Scan_Window shall be
-  *        less than or equal to LE_Scan_Interval. Time = N * 0.625 msec.
+  * @param le_scan_window The duration of the LE scan. le_scan_window shall be
+  *        less than or equal to le_scan_interval. Time = N * 0.625 msec.
   *        Values:
   *        - 0x0004 (2.500 ms)  ... 0x4000 (10240.000 ms)
-  * @param LE_Scan_Type Passive or active scanning. With active scanning SCAN_REQ
+  * @param le_scan_type Passive or active scanning. With active scanning SCAN_REQ
   *        packets are sent.
   *        Values:
   *        - 0x00: Passive Scanning
   *        - 0x01: Active scanning
-  * @param Own_Address_Type Own address type:  - 0x00: Public Device Address (it
+  * @param own_address_type Own address type:  - 0x00: Public Device Address (it
   *        is allowed only if privacy is disabled)  - 0x01: Random Device Address
   *        (it is allowed only if privacy is disabled)  - 0x02: Resolvable
   *        Private Address (it is allowed only if privacy is enabled)  - 0x03:
@@ -1299,11 +1303,11 @@ tBleStatus aci_gap_set_broadcast_mode(uint16_t Advertising_Interval_Min,
   *        - 0x01: Random Device Address
   *        - 0x02: Resolvable Private Address
   *        - 0x03: Non Resolvable Private Address
-  * @param Filter_Duplicates Enable/disable duplicate filtering.
+  * @param filter_duplicates Enable/disable duplicate filtering.
   *        Values:
   *        - 0x00: Duplicate filtering disabled
   *        - 0x01: Duplicate filtering enabled
-  * @param Scanning_Filter_Policy Scanning filter policy:  - 0x00 Accept all
+  * @param scanning_filter_policy Scanning filter policy:  - 0x00 Accept all
   *        advertisement packets (it is allowed only if controller privacy is
   *        enabled).Directed advertising packets which are not addressed for this
   *        device shall be ignored.  - 0x01 Ignore advertisement packets from
@@ -1316,7 +1320,7 @@ tBleStatus aci_gap_set_broadcast_mode(uint16_t Advertising_Interval_Min,
   *        undirected advertisement packets from devices that are in the White
   *        List.Directed advertisement packets where initiator address is RPA and
   *        Directed advertisement packets addressed to this device shall be
-  *        accepted.  - NOTE: If Host privacy is enabled Scanning_Filter_Policy
+  *        accepted.  - NOTE: If Host privacy is enabled scanning_filter_policy
   *        can only take values 0x00 or 0x01;
   *        Values:
   *        - 0x00: Accept all
@@ -1325,45 +1329,45 @@ tBleStatus aci_gap_set_broadcast_mode(uint16_t Advertising_Interval_Min,
   *        - 0x03: Ignore devices not in the White List (use resolving list)
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_start_observation_proc(uint16_t LE_Scan_Interval,
-                                          uint16_t LE_Scan_Window,
-                                          uint8_t LE_Scan_Type,
-                                          uint8_t Own_Address_Type,
-                                          uint8_t Filter_Duplicates,
-                                          uint8_t Scanning_Filter_Policy);
+ble_status_t aci_gap_start_observation_proc(uint16_t le_scan_interval,
+                                            uint16_t le_scan_window,
+                                            uint8_t le_scan_type,
+                                            uint8_t own_address_type,
+                                            uint8_t filter_duplicates,
+                                            uint8_t scanning_filter_policy);
 /**
   * @brief This command gets the list of the devices which are bonded. It returns
   *        the number of addresses and the corresponding address types and
   *        values. The maximum number of devices that can be returned is
   *        MAX_NUM_BONDED_DEVICES (12).
-  * @param[out] Num_of_Addresses The number of bonded devices
-  * @param[out] Bonded_Device_Entry See @ref Bonded_Device_Entry_t
+  * @param[out] num_of_addresses The number of bonded devices
+  * @param[out] bonded_device_entry See @ref bonded_device_entry_t
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_get_bonded_devices(uint8_t *Num_of_Addresses,
-                                      Bonded_Device_Entry_t Bonded_Device_Entry[]);
+ble_status_t aci_gap_get_bonded_devices(uint8_t *num_of_addresses,
+                                        bonded_device_entry_t bonded_device_entry[]);
 /**
   * @brief The command finds whether the device, whose address is specified in
   *        the command, is bonded. If the device is using a resolvable private
   *        address and it has been bonded, then the command will return
   *        BLE_STATUS_SUCCESS.
-  * @param Peer_Address_Type Address type.
+  * @param peer_address_type Address type.
   *        Values:
   *        - 0x00: Public Device Address
   *        - 0x01: Random Device Address
-  * @param Peer_Address Address used by the peer device while advertising
+  * @param peer_address Address used by the peer device while advertising
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_is_device_bonded(uint8_t Peer_Address_Type,
-                                    uint8_t Peer_Address[6]);
+ble_status_t aci_gap_is_device_bonded(uint8_t peer_address_type,
+                                      uint8_t peer_address[6]);
 /**
   * @brief This command allows the User to validate/confirm or not the Numeric
   *        Comparison value showed through the
   *        ACI_GAP_Numeric_Comparison_Value_Event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Confirm_Yes_No 0 : The Numeric Values showed on both local and peer
+  * @param confirm_yes_no 0 : The Numeric Values showed on both local and peer
   *        device are different! 1 : The Numeric Values showed on both local and
   *        peer device are equal!
   *        Values:
@@ -1371,15 +1375,15 @@ tBleStatus aci_gap_is_device_bonded(uint8_t Peer_Address_Type,
   *        - 0x01: YES
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_numeric_comparison_value_confirm_yesno(uint16_t Connection_Handle,
-                                                          uint8_t Confirm_Yes_No);
+ble_status_t aci_gap_numeric_comparison_value_confirm_yesno(uint16_t connection_handle,
+                                                            uint8_t confirm_yes_no);
 /**
   * @brief This command permits to signal to the Stack the input type detected
   *        during Passkey input.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Input_Type Passkey input type detected
+  * @param input_type Passkey input type detected
   *        Values:
   *        - 0x00: Passkey entry started
   *        - 0x01: Passkey digit entered
@@ -1388,8 +1392,8 @@ tBleStatus aci_gap_numeric_comparison_value_confirm_yesno(uint16_t Connection_Ha
   *        - 0x04: Passkey entry completed
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_passkey_input(uint16_t Connection_Handle,
-                                 uint8_t Input_Type);
+ble_status_t aci_gap_passkey_input(uint16_t connection_handle,
+                                   uint8_t input_type);
 /**
   * @brief This command is sent by the User to get (i.e. to extract from the
   *        Stack) the OOB data generated by the Stack itself. In a complete
@@ -1399,7 +1403,7 @@ tBleStatus aci_gap_passkey_input(uint16_t Connection_Handle,
   *        candidate device. The requested OOB data are returned in response to
   *        the incoming command. The OOB data are not generated on the fly, but
   *        they are already available in the Stack.
-  * @param OOB_Data_Type OOB Data type. - 0x00: Legacy Privacy (LP) v.4.1 TK
+  * @param oob_data_type OOB Data type. - 0x00: Legacy Privacy (LP) v.4.1 TK
   *        (Temporary Key) - 0x01: Secure Connections (SC) v.4.2 Random value r
   *        used for generation of Confirm - 0x02: Secure Connections (SC) v.4.2
   *        Confirm value C generated through AES-CMAC-128 based cryptographic
@@ -1408,25 +1412,25 @@ tBleStatus aci_gap_passkey_input(uint16_t Connection_Handle,
   *        - 0x00: SM_TK
   *        - 0x01: SM_RANDOM_VALUE
   *        - 0x02: SM_CONFIRM_VALUE
-  * @param[out] Address_Type Identity address type.
+  * @param[out] address_type Identity address type.
   *             Values:
   *             - 0x00: Public Identity Address
   *             - 0x01: Random (static) Identity Address
-  * @param[out] Address Public or Random (static) address of this  device
-  * @param[out] OOB_Data_Len Length of OOB Data carried by next data field
-  * @param[out] OOB_Data OOB Data to be exported via OOB.
+  * @param[out] address Public or Random (static) address of this  device
+  * @param[out] oob_data_len Length of OOB Data carried by next data field
+  * @param[out] oob_data OOB Data to be exported via OOB.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_get_oob_data(uint8_t OOB_Data_Type,
-                                uint8_t *Address_Type,
-                                uint8_t Address[6],
-                                uint8_t *OOB_Data_Len,
-                                uint8_t OOB_Data[16]);
+ble_status_t aci_gap_get_oob_data(uint8_t oob_data_type,
+                                  uint8_t *address_type,
+                                  uint8_t address[6],
+                                  uint8_t *oob_data_len,
+                                  uint8_t oob_data[16]);
 /**
   * @brief This command is sent (by the User) to input the OOB data arrived via
   *        OOB communication. It may be sent to set either the OOB Authentication
   *        data of the Local device, or the data received via OOB by the Remote
-  *        peer candidate device. It can be used with OOB_Data_Len set to 0 to
+  *        peer candidate device. It can be used with oob_data_len set to 0 to
   *        generate OOB authentication data for Secure Connections. In a complete
   *        system (i.e. having an OOB channel fully handled) this command should
   *        be invoked by the OOB Channel manager when receiving the OOB data
@@ -1434,26 +1438,26 @@ tBleStatus aci_gap_get_oob_data(uint8_t OOB_Data_Type,
   *        implementation supports just one entry for the Remote peer candidate
   *        list containing the OOB data, at every command invocation the data
   *        existing in that entry are overwritten.
-  * @param Device_Type OOB Device type:  - 0x00: The Address information are
-  *        ignored.    - OOB_Data_Len= 0x00: this triggers the automatic
+  * @param device_type OOB Device type:  - 0x00: The Address information are
+  *        ignored.    - oob_data_len= 0x00: this triggers the automatic
   *        regeneration of OOB Authentication data (for Secure Connections only;
-  *        a ECDH-Public Key must).    - OOB_Data_Len in [0..16]: the OOB_Data
+  *        a ECDH-Public Key must).    - oob_data_len in [0..16]: the oob_data
   *        carried by the command will overwrite the current local Authentication
   *        OOB Data.  - 0x01: The Address information is used to search the entry
   *        of the Remote peer candidate list containing the OOB data for that
   *        specific remote device; if no entry exists, the a new entry is used,
   *        if available (current implementation supports just 1 entry in this
-  *        list).    - OOB_Data_Len in [0..16]: the OOB_Data carried by the
+  *        list).    - oob_data_len in [0..16]: the oob_data carried by the
   *        command overwrites (if present) the remote Authentication OOB Data.
   *        Values:
   *        - 0x00: Local device
   *        - 0x01: Remote device
-  * @param Address_Type Identity address type.
+  * @param address_type Identity address type.
   *        Values:
   *        - 0x00: Public Identity Address
   *        - 0x01: Random (static) Identity Address
-  * @param Address Public or Random (static) address of the peer device
-  * @param OOB_Data_Type OOB Data type. - 0x00: Legacy Privacy (LP) v.4.1 TK
+  * @param address Public or Random (static) address of the peer device
+  * @param oob_data_type OOB Data type. - 0x00: Legacy Privacy (LP) v.4.1 TK
   *        (Temporary Key) - 0x01: Secure Connections (SC) v.4.2 Random value r
   *        used for generation of Confirm - 0x02: Secure Connections (SC) v.4.2
   *        Confirm value C generated through AES-CMAC-128 based cryptographic
@@ -1462,45 +1466,45 @@ tBleStatus aci_gap_get_oob_data(uint8_t OOB_Data_Type,
   *        - 0x00: SM_TK
   *        - 0x01: SM_RANDOM_VALUE
   *        - 0x02: SM_CONFIRM_VALUE
-  * @param OOB_Data_Len Length of OOB Data carried by next data field
+  * @param oob_data_len Length of OOB Data carried by next data field
   *        Values:
   *        - 0x00 ... 0x10
-  * @param OOB_Data OOB Data to be exported via OOB.
+  * @param oob_data OOB Data to be exported via OOB.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_set_oob_data(uint8_t Device_Type,
-                                uint8_t Address_Type,
-                                uint8_t Address[6],
-                                uint8_t OOB_Data_Type,
-                                uint8_t OOB_Data_Len,
-                                uint8_t OOB_Data[16]);
+ble_status_t aci_gap_set_oob_data(uint8_t device_type,
+                                  uint8_t address_type,
+                                  uint8_t address[6],
+                                  uint8_t oob_data_type,
+                                  uint8_t oob_data_len,
+                                  uint8_t oob_data[16]);
 /**
   * @brief This  command is used to add one device to the list of address
   *        translations used to resolve Resolvable Private Addresses in the
   *        Controller.
-  * @param Num_of_Resolving_list_Entries Number of devices that have to be added
+  * @param num_of_resolving_list_entries Number of devices that have to be added
   *        to the resolving list.
-  * @param Whitelist_Identity_Entry See @ref Whitelist_Identity_Entry_t
-  * @param Clear_Resolving_List Clear the resolving list before adding the
+  * @param whitelist_identity_entry See @ref whitelist_identity_entry_t
+  * @param clear_resolving_list Clear the resolving list before adding the
   *        devices.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_add_devices_to_resolving_list(uint8_t Num_of_Resolving_list_Entries,
-                                                 Whitelist_Identity_Entry_t Whitelist_Identity_Entry[],
-                                                 uint8_t Clear_Resolving_List);
+ble_status_t aci_gap_add_devices_to_resolving_list(uint8_t num_of_resolving_list_entries,
+                                                   whitelist_identity_entry_t whitelist_identity_entry[],
+                                                   uint8_t clear_resolving_list);
 /**
   * @brief This command can be used to remove a specified device from the bonding
   *        table.
-  * @param Peer_Identity_Address_Type Identity address type.
+  * @param peer_identity_address_type Identity address type.
   *        Values:
   *        - 0x00: Public Identity Address
   *        - 0x01: Random (static) Identity Address
-  * @param Peer_Identity_Address Public or Random (static) Identity address of
+  * @param peer_identity_address Public or Random (static) Identity address of
   *        the peer device
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gap_remove_bonded_device(uint8_t Peer_Identity_Address_Type,
-                                        uint8_t Peer_Identity_Address[6]);
+ble_status_t aci_gap_remove_bonded_device(uint8_t peer_identity_address_type,
+                                          uint8_t peer_identity_address[6]);
 /**
   * @}
   */
@@ -1520,5 +1524,9 @@ tBleStatus aci_gap_remove_bonded_device(uint8_t Peer_Identity_Address_Type,
 /**
   * @}
   */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _BLUENRG1_GAP_ACI_H_ */

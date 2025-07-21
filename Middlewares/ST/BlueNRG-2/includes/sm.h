@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2015 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,6 +17,10 @@
   */
 #ifndef __SM_H__
 #define __SM_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /******************************************************************************
   * Macros
@@ -77,7 +81,7 @@
   */
 
 /**
-  * @anchor OOB_Data
+  * @anchor oob_data
   * @name Out-Of-Band data
   * @{
   */
@@ -172,7 +176,8 @@
   */
 #define SC_IS_NOT_SUPPORTED (0x00) /* Not supported */
 #define SC_IS_SUPPORTED     (0x01) /* Supported but optional (i.e. a Legacy Pairing may be accepted) */
-#define SC_IS_MANDATORY     (0x02) /* Supported but mandatory (i.e. do not accept Legacy Pairing but only Secure Connections v.4.2 Pairing) */
+#define SC_IS_MANDATORY     (0x02) /* Supported but mandatory (i.e. do not accept Legacy Pairing but
+                                      only Secure Connections v.4.2 Pairing) */
 
 /**
   * @}
@@ -206,5 +211,9 @@
 /**
   * @}
   */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __SM_H__ */

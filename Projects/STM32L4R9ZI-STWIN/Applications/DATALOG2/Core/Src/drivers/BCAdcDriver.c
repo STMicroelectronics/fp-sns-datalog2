@@ -37,7 +37,7 @@
 
 #define ADC_BATMS_RUP                   56000.0                 // divider upper resistor
 #define ADC_BATMS_RDOWN                 100000.0                // divider lower resistor
-#define ADC_BATMS_RATIO                 (float)((ADC_BATMS_RUP+ADC_BATMS_RDOWN)/ADC_BATMS_RDOWN)
+#define ADC_BATMS_RATIO                 (float_t)((ADC_BATMS_RUP+ADC_BATMS_RDOWN)/ADC_BATMS_RDOWN)
 
 
 /**

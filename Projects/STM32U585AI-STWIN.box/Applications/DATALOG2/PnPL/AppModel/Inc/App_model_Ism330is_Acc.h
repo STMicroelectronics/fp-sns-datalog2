@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -72,11 +72,11 @@ uint8_t ism330is_acc_get_fs(pnpl_ism330is_acc_fs_t *enum_id);
 uint8_t ism330is_acc_get_enable(bool *value);
 uint8_t ism330is_acc_get_samples_per_ts(int32_t *value);
 uint8_t ism330is_acc_get_dim(int32_t *value);
-uint8_t ism330is_acc_get_ioffset(float *value);
-uint8_t ism330is_acc_get_measodr(float *value);
+uint8_t ism330is_acc_get_ioffset(float_t *value);
+uint8_t ism330is_acc_get_measodr(float_t *value);
 uint8_t ism330is_acc_get_usb_dps(int32_t *value);
 uint8_t ism330is_acc_get_sd_dps(int32_t *value);
-uint8_t ism330is_acc_get_sensitivity(float *value);
+uint8_t ism330is_acc_get_sensitivity(float_t *value);
 uint8_t ism330is_acc_get_data_type(char **value);
 uint8_t ism330is_acc_get_sensor_annotation(char **value);
 uint8_t ism330is_acc_get_sensor_category(int32_t *value);
@@ -87,7 +87,7 @@ uint8_t ism330is_acc_get_st_ble_stream__acc_unit(char **value);
 uint8_t ism330is_acc_get_st_ble_stream__acc_format(char **value);
 uint8_t ism330is_acc_get_st_ble_stream__acc_elements(int32_t *value);
 uint8_t ism330is_acc_get_st_ble_stream__acc_channels(int32_t *value);
-uint8_t ism330is_acc_get_st_ble_stream__acc_multiply_factor(float *value);
+uint8_t ism330is_acc_get_st_ble_stream__acc_multiply_factor(float_t *value);
 uint8_t ism330is_acc_get_st_ble_stream__acc_odr(int32_t *value);
 uint8_t ism330is_acc_get_stream_id(int8_t *value);
 uint8_t ism330is_acc_get_ep_id(int8_t *value);
@@ -102,7 +102,7 @@ uint8_t ism330is_acc_set_st_ble_stream__acc_unit(const char *value, char **respo
 uint8_t ism330is_acc_set_st_ble_stream__acc_format(const char *value, char **response_message);
 uint8_t ism330is_acc_set_st_ble_stream__acc_elements(int32_t value, char **response_message);
 uint8_t ism330is_acc_set_st_ble_stream__acc_channels(int32_t value, char **response_message);
-uint8_t ism330is_acc_set_st_ble_stream__acc_multiply_factor(float value, char **response_message);
+uint8_t ism330is_acc_set_st_ble_stream__acc_multiply_factor(float_t value, char **response_message);
 uint8_t ism330is_acc_set_st_ble_stream__acc_odr(int32_t value, char **response_message);
 
 

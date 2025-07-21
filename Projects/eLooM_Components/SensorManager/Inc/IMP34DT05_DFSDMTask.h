@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -122,7 +122,7 @@ struct _IMP34DT05Task
   /**
     * Used to update the instantaneous ODR.
     */
-  double prev_timestamp;
+  double_t prev_timestamp;
 
   uint8_t half;
 

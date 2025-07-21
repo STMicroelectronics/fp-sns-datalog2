@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -116,7 +116,7 @@ uint8_t Tsc1641_Pow_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialize
   json_object_dotset_number(JSON_Status, "tsc1641_pow.samples_per_ts", temp_i);
   tsc1641_pow_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "tsc1641_pow.dim", temp_i);
-  float temp_f = 0;
+  float_t temp_f = 0;
   tsc1641_pow_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "tsc1641_pow.ioffset", temp_f);
   char *temp_s = "";

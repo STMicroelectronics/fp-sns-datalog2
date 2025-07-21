@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -221,6 +221,7 @@ static void IIS2DULPXTaskMLCTimerCallbackFunction(ULONG param);
   * @return the instance of the task object that implements the given interface.
   */
 static inline IIS2DULPXTask *IIS2DULPXTaskGetOwnerFromISensorIF(ISensor_t *p_if);
+static inline IIS2DULPXTask *IIS2DULPXTaskGetOwnerFromISensorLLIF(ISensorLL_t *p_if);
 
 /**
   * Read the odr value from the sensor and update the internal model
@@ -835,7 +836,7 @@ sys_error_code_t IIS2DULPXTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const
 uint8_t IIS2DULPXTask_vtblAccGetId(ISourceObservable *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   uint8_t res = p_if_owner->acc_id;
 
   return res;
@@ -844,7 +845,7 @@ uint8_t IIS2DULPXTask_vtblAccGetId(ISourceObservable *_this)
 uint8_t IIS2DULPXTask_vtblMlcGetId(ISourceObservable *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, mlc_sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   uint8_t res = p_if_owner->mlc_id;
 
   return res;
@@ -853,22 +854,22 @@ uint8_t IIS2DULPXTask_vtblMlcGetId(ISourceObservable *_this)
 IEventSrc *IIS2DULPXTask_vtblGetEventSourceIF(ISourceObservable *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   return p_if_owner->p_event_src;
 }
 
 IEventSrc *IIS2DULPXTask_vtblMlcGetEventSourceIF(ISourceObservable *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, mlc_sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   return p_if_owner->p_mlc_event_src;
 }
 
-sys_error_code_t IIS2DULPXTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t IIS2DULPXTask_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* parameter validation */
@@ -886,20 +887,20 @@ sys_error_code_t IIS2DULPXTask_vtblAccGetODR(ISensorMems_t *_this, float *p_meas
   return res;
 }
 
-float IIS2DULPXTask_vtblAccGetFS(ISensorMems_t *_this)
+float_t IIS2DULPXTask_vtblAccGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.fs;
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
+  float_t res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float IIS2DULPXTask_vtblAccGetSensitivity(ISensorMems_t *_this)
+float_t IIS2DULPXTask_vtblAccGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.sensitivity;
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
+  float_t res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -907,17 +908,17 @@ float IIS2DULPXTask_vtblAccGetSensitivity(ISensorMems_t *_this)
 EMData_t IIS2DULPXTask_vtblAccGetDataInfo(ISourceObservable *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   EMData_t res = p_if_owner->data;
 
   return res;
 }
 
-sys_error_code_t IIS2DULPXTask_vtblMlcGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t IIS2DULPXTask_vtblMlcGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, mlc_sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   /* parameter validation */
@@ -935,7 +936,7 @@ sys_error_code_t IIS2DULPXTask_vtblMlcGetODR(ISensorMems_t *_this, float *p_meas
   return res;
 }
 
-float IIS2DULPXTask_vtblMlcGetFS(ISensorMems_t *_this)
+float_t IIS2DULPXTask_vtblMlcGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
 
@@ -947,7 +948,7 @@ float IIS2DULPXTask_vtblMlcGetFS(ISensorMems_t *_this)
   return -1.0f;
 }
 
-float IIS2DULPXTask_vtblMlcGetSensitivity(ISensorMems_t *_this)
+float_t IIS2DULPXTask_vtblMlcGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
 
@@ -962,17 +963,17 @@ float IIS2DULPXTask_vtblMlcGetSensitivity(ISensorMems_t *_this)
 EMData_t IIS2DULPXTask_vtblMlcGetDataInfo(ISourceObservable *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, mlc_sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   EMData_t res = p_if_owner->data_mlc;
 
   return res;
 }
 
-sys_error_code_t IIS2DULPXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t IIS2DULPXTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
@@ -996,7 +997,7 @@ sys_error_code_t IIS2DULPXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = IIS2DULPXTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1004,11 +1005,11 @@ sys_error_code_t IIS2DULPXTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t IIS2DULPXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t IIS2DULPXTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
@@ -1026,7 +1027,7 @@ sys_error_code_t IIS2DULPXTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) fs
+      .sensorMessage.fParam = (float_t) fs
     };
     res = IIS2DULPXTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1041,7 +1042,7 @@ sys_error_code_t IIS2DULPXTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
 #if IIS2DULPX_FIFO_ENABLED
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
@@ -1070,7 +1071,7 @@ sys_error_code_t IIS2DULPXTask_vtblSensorEnable(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
@@ -1109,7 +1110,7 @@ sys_error_code_t IIS2DULPXTask_vtblSensorDisable(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   EPowerMode log_status = AMTGetTaskPowerMode((AManagedTask *) p_if_owner);
   uint8_t sensor_id = ISourceGetId((ISourceObservable *) _this);
 
@@ -1148,7 +1149,7 @@ boolean_t IIS2DULPXTask_vtblSensorIsEnabled(ISensor_t *_this)
 {
   assert_param(_this != NULL);
   boolean_t res = FALSE;
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
 
   if (ISourceGetId((ISourceObservable *) _this) == p_if_owner->acc_id)
   {
@@ -1165,21 +1166,21 @@ boolean_t IIS2DULPXTask_vtblSensorIsEnabled(ISensor_t *_this)
 SensorDescriptor_t IIS2DULPXTask_vtblSensorGetDescription(ISensor_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   return *p_if_owner->sensor_descriptor;
 }
 
 SensorDescriptor_t IIS2DULPXTask_vtblMlcGetDescription(ISensor_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF(_this);
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   return *p_if_owner->mlc_sensor_descriptor;
 }
 
 SensorStatus_t IIS2DULPXTask_vtblSensorGetStatus(ISensor_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
 
   return p_if_owner->sensor_status;
 }
@@ -1187,22 +1188,21 @@ SensorStatus_t IIS2DULPXTask_vtblSensorGetStatus(ISensor_t *_this)
 SensorStatus_t IIS2DULPXTask_vtblMlcGetStatus(ISensor_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF(_this);
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   return p_if_owner->mlc_sensor_status;
 }
 
 SensorStatus_t *IIS2DULPXTask_vtblSensorGetStatusPointer(ISensor_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
-
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   return &p_if_owner->sensor_status;
 }
 
 SensorStatus_t *IIS2DULPXTask_vtblMlcGetStatusPointer(ISensor_t *_this)
 {
   assert_param(_this != NULL);
-  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF(_this);
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorIF((ISensor_t *)_this);
   return &p_if_owner->mlc_sensor_status;
 }
 
@@ -1213,7 +1213,7 @@ sys_error_code_t IIS2DULPXTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t re
   assert_param(data != NULL);
   assert_param(len != 0U);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorLLIF(_this);
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &p_if_owner->p_sensor_bus_if->m_xConnector;
   uint8_t reg8 = (uint8_t)(reg & 0x00FF);
 
@@ -1233,7 +1233,7 @@ sys_error_code_t IIS2DULPXTask_vtblSensorWriteReg(ISensorLL_t *_this, uint16_t r
   assert_param(len != 0U);
 
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorLLIF(_this);
   uint8_t reg8 = (uint8_t)(reg & 0x00FF);
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &p_if_owner->p_sensor_bus_if->m_xConnector;
@@ -1253,7 +1253,7 @@ sys_error_code_t IIS2DULPXTask_vtblSensorSyncModel(ISensorLL_t *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  IIS2DULPXTask *p_if_owner = (IIS2DULPXTask *)((uint32_t) _this - offsetof(IIS2DULPXTask, sensor_if));
+  IIS2DULPXTask *p_if_owner = IIS2DULPXTaskGetOwnerFromISensorLLIF(_this);
 
   if (IIS2DULPX_ODR_Sync(p_if_owner) != SYS_NO_ERROR_CODE)
   {
@@ -1370,20 +1370,33 @@ static sys_error_code_t IIS2DULPXTaskExecuteStepDatalog(AManagedTask *_this)
         res = IIS2DULPXTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
-          if (p_obj->first_data_ready == 1)
+          if (p_obj->first_data_ready == 3)
           {
 #if IIS2DULPX_FIFO_ENABLED
             if (p_obj->fifo_level != 0)
             {
 #endif
               // notify the listeners...
-              double timestamp = report.sensorDataReadyMessage.fTimestamp;
-              double delta_timestamp = timestamp - p_obj->prev_timestamp;
+              double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+              double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
               p_obj->prev_timestamp = timestamp;
 
               /* update measuredODR */
-              p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
-
+              // Update the sums
+              p_obj->delta_timestamp_sum += delta_timestamp;
+              p_obj->samples_sum += p_obj->samples_per_it;
+              if (p_obj->odr_count < MEAS_ODR_AVG)
+              {
+                p_obj->odr_count++;
+              }
+              // Calculate the average
+              if (p_obj->odr_count == MEAS_ODR_AVG)
+              {
+                p_obj->sensor_status.type.mems.measured_odr = (float_t) p_obj->samples_sum / p_obj->delta_timestamp_sum;
+                p_obj->delta_timestamp_sum = 0.0f;
+                p_obj->samples_sum = 0;
+                p_obj->odr_count = 0;
+              }
               /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
                * [X0, Y0, Z0]
                * [X1, Y1, Z1]
@@ -1396,14 +1409,14 @@ static sys_error_code_t IIS2DULPXTaskExecuteStepDatalog(AManagedTask *_this)
 
               DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
               IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
-              SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2DULPX: ts = %f\r\n", (float)timestamp));
+              SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("IIS2DULPX: ts = %f\r\n", (float_t)timestamp));
 #if IIS2DULPX_FIFO_ENABLED
             }
 #endif
           }
           else
           {
-            p_obj->first_data_ready = 1;
+            p_obj->first_data_ready++;
           }
         }
         break;
@@ -1415,7 +1428,7 @@ static sys_error_code_t IIS2DULPXTaskExecuteStepDatalog(AManagedTask *_this)
         if (!SYS_IS_ERROR_CODE(res))
         {
           // notify the listeners...
-          double timestamp = report.sensorDataReadyMessage.fTimestamp;
+          double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
 
           if (p_obj->mlc_enable)
           {
@@ -1588,7 +1601,6 @@ static sys_error_code_t IIS2DULPXTaskSensorInit(IIS2DULPXTask *_this)
   uint8_t reg0;
   iis2dulpx_md_t mode;
   iis2dulpx_status_t status;
-
   /* FIFO INT setup */
   iis2dulpx_pin_int_route_t int1_route = {0};
   iis2dulpx_pin_int_route_t int2_route = {0};
@@ -1608,9 +1620,6 @@ static sys_error_code_t IIS2DULPXTaskSensorInit(IIS2DULPXTask *_this)
   {
     iis2dulpx_status_get(p_sensor_drv, &status);
   } while (status.sw_reset);
-
-  /* Set bdu and if_inc recommended for driver usage */
-  iis2dulpx_init_set(p_sensor_drv, IIS2DULPX_SENSOR_ONLY_ON);
 
 #if IIS2DULPX_FIFO_ENABLED
 
@@ -1637,8 +1646,8 @@ static sys_error_code_t IIS2DULPXTaskSensorInit(IIS2DULPXTask *_this)
   fifo_mode.batch.bdr_xl = IIS2DULPX_BDR_XL_ODR;
   iis2dulpx_fifo_mode_set(p_sensor_drv, fifo_mode);
 
-  /* FIFO_WTM_IA routing on pin INT2 */
-  iis2dulpx_pin_int2_route_get(p_sensor_drv, &int1_route);
+  /* FIFO_WTM_IA routing on pin INT1 */
+  iis2dulpx_pin_int1_route_get(p_sensor_drv, &int1_route);
   *(uint8_t *) &(int1_route) = 0;
 
   if (_this->pIRQConfig != NULL)
@@ -1661,7 +1670,7 @@ static sys_error_code_t IIS2DULPXTaskSensorInit(IIS2DULPXTask *_this)
     int1_route.drdy = PROPERTY_DISABLE;
   }
 #endif /* IIS2DULPX_FIFO_ENABLED */
-  iis2dulpx_pin_int2_route_set(p_sensor_drv, &int1_route);
+  iis2dulpx_pin_int1_route_set(p_sensor_drv, &int1_route);
 
   /* Setup mlc */
   if (_this->mlc_enable)
@@ -1698,12 +1707,13 @@ static sys_error_code_t IIS2DULPXTaskSensorInit(IIS2DULPXTask *_this)
   if (_this->sensor_status.is_active)
   {
 #if IIS2DULPX_FIFO_ENABLED
-    _this->iis2dulpx_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
+    _this->iis2dulpx_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float_t)(_this->samples_per_it)) / 2.0f));
 #else
     _this->iis2dulpx_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 #endif
   }
 
+  iis2dulpx_mode_get(p_sensor_drv, &mode);
   /* Full scale selection. */
   if (_this->sensor_status.type.mems.fs < 3.0f)
   {
@@ -1765,6 +1775,9 @@ static sys_error_code_t IIS2DULPXTaskSensorInit(IIS2DULPXTask *_this)
     iis2dulpx_mode_set(p_sensor_drv, &mode);
     _this->sensor_status.is_active = false;
   }
+  _this->odr_count = 0;
+  _this->delta_timestamp_sum = 0.0f;
+  _this->samples_sum = 0;
   return res;
 }
 
@@ -1781,7 +1794,7 @@ static sys_error_code_t IIS2DULPXTaskSensorReadData(IIS2DULPXTask *_this)
   if (_this->fifo_level >= samples_per_it)
   {
     res = iis2dulpx_read_reg(p_sensor_drv, IIS2DULPX_FIFO_DATA_OUT_TAG, (uint8_t *) _this->p_sensor_data_buff,
-                       ((uint16_t) samples_per_it * 7u));
+                             ((uint16_t) samples_per_it * 7u));
 
     if (!SYS_IS_ERROR_CODE(res))
     {
@@ -1831,13 +1844,15 @@ static sys_error_code_t IIS2DULPXTaskSensorReadMLC(IIS2DULPXTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
+  iis2dulpx_mlc_status_mainpage_t mlc_status;
 
   if (_this->mlc_enable)
   {
     /* Read MLC status */
-    iis2dulpx_read_reg(p_sensor_drv, IIS2DULPX_MLC_STATUS_MAINPAGE, &_this->p_mlc_sensor_data_buff[0], 1);
+    iis2dulpx_mlc_status_get(p_sensor_drv, &mlc_status);
+    _this->p_mlc_sensor_data_buff[4] = (mlc_status.is_mlc1) | (mlc_status.is_mlc2 << 1) | (mlc_status.is_mlc3 << 2) | (mlc_status.is_mlc4 << 3);
     /* Read MLC values */
-    iis2dulpx_mlc_out_get(p_sensor_drv, &_this->p_mlc_sensor_data_buff[1]);
+    iis2dulpx_mlc_out_get(p_sensor_drv, (uint8_t *)(&_this->p_mlc_sensor_data_buff[0]));
   }
 
   return res;
@@ -1893,7 +1908,7 @@ static sys_error_code_t IIS2DULPXTaskSensorSetODR(IIS2DULPXTask *_this, SMMessag
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -1974,7 +1989,7 @@ static sys_error_code_t IIS2DULPXTaskSensorSetFS(IIS2DULPXTask *_this, SMMessage
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float fs = (float) report.sensorMessage.fParam;
+  float_t fs = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   /* Changing fs must disable MLC sensor: MLC can work properly only when setup from UCF */
@@ -2036,8 +2051,7 @@ static sys_error_code_t IIS2DULPXTaskSensorSetFifoWM(IIS2DULPXTask *_this, SMMes
     _this->samples_per_it = iis2dulpx_wtm_level;
 
     iis2dulpx_fifo_mode_t fifo_mode;
-    /* Set fifo in continuous / stream mode*/
-    fifo_mode.operation = IIS2DULPX_STREAM_MODE;
+    iis2dulpx_fifo_mode_get(p_sensor_drv, &fifo_mode);
     /* Set FIFO watermark */
     fifo_mode.watermark = _this->samples_per_it;
     iis2dulpx_fifo_mode_set(p_sensor_drv, fifo_mode);
@@ -2209,6 +2223,15 @@ static inline IIS2DULPXTask *IIS2DULPXTaskGetOwnerFromISensorIF(ISensor_t *p_if)
   return p_if_owner;
 }
 
+static inline IIS2DULPXTask *IIS2DULPXTaskGetOwnerFromISensorLLIF(ISensorLL_t *p_if)
+{
+  assert_param(p_if != NULL);
+  IIS2DULPXTask *p_if_owner = NULL;
+  p_if_owner = (IIS2DULPXTask *)((uint32_t) p_if - offsetof(IIS2DULPXTask, sensor_ll_if));
+
+  return p_if_owner;
+}
+
 static void IIS2DULPXTaskTimerCallbackFunction(ULONG param)
 {
   IIS2DULPXTask *p_obj = (IIS2DULPXTask *) param;
@@ -2289,7 +2312,7 @@ static sys_error_code_t IIS2DULPX_ODR_Sync(IIS2DULPXTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  float odr = 0.0f;
+  float_t odr = 0.0f;
   iis2dulpx_md_t iis2dulpx_odr_xl;
   if (iis2dulpx_mode_get(p_sensor_drv, &iis2dulpx_odr_xl) == 0)
   {
@@ -2303,27 +2326,35 @@ static sys_error_code_t IIS2DULPX_ODR_Sync(IIS2DULPXTask *_this)
         /* Do not update the model in case of odr = 0 */
         odr = _this->sensor_status.type.mems.odr;
         break;
+      case IIS2DULPX_6Hz_LP:
       case IIS2DULPX_6Hz_HP:
         odr = 6.0f;
         break;
+      case IIS2DULPX_12Hz5_LP:
       case IIS2DULPX_12Hz5_HP:
         odr = 12.5f;
         break;
+      case IIS2DULPX_25Hz_LP:
       case IIS2DULPX_25Hz_HP:
         odr = 25.0f;
         break;
+      case IIS2DULPX_50Hz_LP:
       case IIS2DULPX_50Hz_HP:
         odr = 50.0f;
         break;
+      case IIS2DULPX_100Hz_LP:
       case IIS2DULPX_100Hz_HP:
         odr = 100.0f;
         break;
+      case IIS2DULPX_200Hz_LP:
       case IIS2DULPX_200Hz_HP:
         odr = 200.0f;
         break;
+      case IIS2DULPX_400Hz_LP:
       case IIS2DULPX_400Hz_HP:
         odr = 400.0f;
         break;
+      case IIS2DULPX_800Hz_LP:
       case IIS2DULPX_800Hz_HP:
         odr = 800.0f;
         break;
@@ -2348,7 +2379,7 @@ static sys_error_code_t IIS2DULPX_FS_Sync(IIS2DULPXTask *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  float fs = 2.0;
+  float_t fs = 2.0;
   iis2dulpx_md_t fs_xl;
   if (iis2dulpx_mode_get(p_sensor_drv, &fs_xl) == 0)
   {

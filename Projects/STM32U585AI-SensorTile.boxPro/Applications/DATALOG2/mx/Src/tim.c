@@ -21,7 +21,7 @@
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
-#define STBC02_SW_TIM_PERIOD                (float)5e-6 // s
+#define STBC02_SW_TIM_PERIOD                (float_t)5e-6 // s
 
 #define Error_Handler sys_error_handler
 void sys_error_handler(void);
@@ -91,7 +91,7 @@ void MX_TIM4_Init(void)
   uint32_t uwTimclock, uwAPB1Prescaler;
   uint32_t uwPrescalerValue;
   uint32_t pFLatency;
-  float period;
+  float_t period;
 
   /* Enable TIM clock */
   __HAL_RCC_TIM4_CLK_ENABLE();

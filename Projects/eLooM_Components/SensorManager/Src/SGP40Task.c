@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -615,7 +615,7 @@ IEventSrc *SGP40Task_vtblTempGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_temp_event_src;
 }
 
-sys_error_code_t SGP40Task_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t SGP40Task_vtblTempGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -637,20 +637,20 @@ sys_error_code_t SGP40Task_vtblTempGetODR(ISensorMems_t *_this, float *p_measure
   return res;
 }
 
-float SGP40Task_vtblTempGetFS(ISensorMems_t *_this)
+float_t SGP40Task_vtblTempGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   SGP40Task *p_if_owner = (SGP40Task *)((uint32_t) _this - offsetof(SGP40Task, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.fs;
+  float_t res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float SGP40Task_vtblTempGetSensitivity(ISensorMems_t *_this)
+float_t SGP40Task_vtblTempGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   SGP40Task *p_if_owner = (SGP40Task *)((uint32_t) _this - offsetof(SGP40Task, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -664,7 +664,7 @@ EMData_t SGP40Task_vtblTempGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t SGP40Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t SGP40Task_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -690,7 +690,7 @@ sys_error_code_t SGP40Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = SGP40TaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -698,7 +698,7 @@ sys_error_code_t SGP40Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t SGP40Task_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t SGP40Task_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   /* Does not support this virtual function.*/
@@ -911,12 +911,12 @@ static sys_error_code_t SGP40TaskExecuteStepDatalog(AManagedTask *_this)
         if (!SYS_IS_ERROR_CODE(res))
         {
           // notify the listeners...
-          double timestamp = report.sensorDataReadyMessage.fTimestamp;
-          double delta_timestamp = timestamp - p_obj->prev_timestamp;
+          double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+          double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
           p_obj->prev_timestamp = timestamp;
 
           /* update measuredODR */
-          p_obj->sensor_status.type.mems.measured_odr = 1.0f / (float) delta_timestamp;
+          p_obj->sensor_status.type.mems.measured_odr = 1.0f / (float_t) delta_timestamp;
 
           EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->sraw_voc, E_EM_UINT16, 1);
 
@@ -925,7 +925,7 @@ static sys_error_code_t SGP40TaskExecuteStepDatalog(AManagedTask *_this)
           DataEventInit((IEvent *) &evt, p_obj->p_temp_event_src, &p_obj->data, timestamp, p_obj->temp_id);
           IEventSrcSendEvent(p_obj->p_temp_event_src, (IEvent *) &evt, NULL);
 
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("SGP40: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("SGP40: ts = %f\r\n", (float_t)timestamp));
         }
         break;
       }
@@ -1106,7 +1106,7 @@ static sys_error_code_t SGP40TaskSensorSetODR(SGP40Task *_this, SMMessage report
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->temp_id)

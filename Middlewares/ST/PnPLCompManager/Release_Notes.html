@@ -32,10 +32,21 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section10" checked aria-hidden="true"> <label for="collapse-section10" aria-hidden="true"><strong>v2.2.2 / 20-Nov-24</strong></label>
+<input type="checkbox" id="collapse-section11" checked aria-hidden="true"> <label for="collapse-section10" aria-hidden="true"><strong>v2.2.3 / 7-May-25</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
 <h3 id="patch-release">Patch release</h3>
+<ul>
+<li>Added missing nullity check for PNPL_CMD_SET and PNPL_CMD_COMMAND</li>
+<li>Use ANSI standard data types: float_t, double_t and int32_t instead of float, double or int</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section10" checked aria-hidden="true"> <label for="collapse-section10" aria-hidden="true"><strong>v2.2.2 / 20-Nov-24</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<h3 id="patch-release-1">Patch release</h3>
 <ul>
 <li>Inexistent Component error management reshaped for all kind of messages</li>
 </ul>
@@ -44,8 +55,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section9" checked aria-hidden="true"> <label for="collapse-section9" aria-hidden="true"><strong>v2.2.1 / 20-Sep-24</strong></label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
-<h3 id="patch-release-1">Patch release</h3>
+<h2 id="main-changes-2">Main Changes</h2>
+<h3 id="patch-release-2">Patch release</h3>
 <ul>
 <li>Fixed null pointer exception check</li>
 <li>Added missing “wrong command” management</li>
@@ -55,7 +66,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section8" checked aria-hidden="true"> <label for="collapse-section8" aria-hidden="true"><strong>v2.2.0 / 19-Jul-24</strong></label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
+<h2 id="main-changes-3">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
 <ul>
 <li>Added PnPLCreateLogMessage function to manage log messages (PnPL_Error, PnPL_Warning, PnPL_Info)</li>
@@ -73,8 +84,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true"><strong>v2.1.2 / 12-Jun-24</strong></label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
-<h3 id="patch-release-2">Patch release</h3>
+<h2 id="main-changes-4">Main Changes</h2>
+<h3 id="patch-release-3">Patch release</h3>
 <ul>
 <li>Add multi-threading guard method for PnPL</li>
 <li>Add usage of pnpl_malloc</li>
@@ -85,8 +96,8 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true"><strong>v2.1.1 / 12-Apr-24</strong></label>
 <div>
-<h2 id="main-changes-4">Main Changes</h2>
-<h3 id="patch-release-3">Patch release</h3>
+<h2 id="main-changes-5">Main Changes</h2>
+<h3 id="patch-release-4">Patch release</h3>
 <ul>
 <li>Fixed comp_name array: must be longer (see PnPLParseCommand)</li>
 <li>Renamed PnPL errors defines</li>
@@ -97,7 +108,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true"><strong>v2.1.0 / 16-Feb-24</strong></label>
 <div>
-<h2 id="main-changes-5">Main Changes</h2>
+<h2 id="main-changes-6">Main Changes</h2>
 <h3 id="maintenance-release">Maintenance release</h3>
 <ul>
 <li>Bug fixed: return PnPL_Error json in case the component is not found</li>
@@ -110,7 +121,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true"><strong>v2.0.0 / 29-Sep-23</strong></label>
 <div>
-<h2 id="main-changes-6">Main Changes</h2>
+<h2 id="main-changes-7">Main Changes</h2>
 <h3 id="product-update">Product update</h3>
 <ul>
 <li><strong>First release of PnPLCompManager as ST Middlewares</strong></li>
@@ -124,7 +135,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true"><strong>v1.2.0 / 7-Jul-23</strong></label>
 <div>
-<h2 id="main-changes-7">Main Changes</h2>
+<h2 id="main-changes-8">Main Changes</h2>
 <h3 id="maintenance-release-1">Maintenance release</h3>
 <ul>
 <li>New PnPLSerializeTelemetry to manage both primitive value and Objects Properties</li>
@@ -135,7 +146,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>v1.1.0 / 24-Mar-23</strong></label>
 <div>
-<h2 id="main-changes-8">Main Changes</h2>
+<h2 id="main-changes-9">Main Changes</h2>
 <h3 id="maintenance-release-2">Maintenance release</h3>
 <ul>
 <li>Updated get_presentation PnPL Base command: from “system_info” to “get_presentation”.</li>
@@ -145,7 +156,7 @@
 <div class="collapse">
 <input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>v1.0.0 / 2-Dec-22</strong></label>
 <div>
-<h2 id="main-changes-9">Main Changes</h2>
+<h2 id="main-changes-10">Main Changes</h2>
 <h3 id="first-official-release">First official release</h3>
 <ul>
 <li>First official release</li>

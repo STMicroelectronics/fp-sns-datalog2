@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -81,7 +81,7 @@ EXTI_DECLARE_PIN2F_MAP()
 void ExtiDefISR(uint16_t exti_pin)
 {
   EXTIPin2CallbckMap xMap = EXTI_GET_P2F_MAP();
-  for (int i = 0; xMap[i].pfCallback != NULL; i++)
+  for (int32_t i = 0; xMap[i].pfCallback != NULL; i++)
   {
     if (__HAL_GPIO_EXTI_GET_IT(xMap[i].nPin) && exti_pin == xMap[i].nPin)
     {

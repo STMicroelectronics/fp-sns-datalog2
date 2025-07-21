@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -41,10 +41,10 @@ typedef struct _ISensorLight_t ISensorLight_t;
 static inline sys_error_code_t ISensorGetIntermeasurementTime(ISensorLight_t *_this, uint32_t *p_measured,
                                                               uint32_t *p_nominal);
 static inline uint32_t ISensorGetExposureTime(ISensorLight_t *_this);
-static inline sys_error_code_t ISensorGetLightGain(ISensorLight_t *_this, float *LightGain);
+static inline sys_error_code_t ISensorGetLightGain(ISensorLight_t *_this, float_t *LightGain);
 static inline sys_error_code_t ISensorSetIntermeasurementTime(ISensorLight_t *_this, uint32_t intermeasurement_time);
 static inline sys_error_code_t ISensorSetExposureTime(ISensorLight_t *_this, uint32_t exposure_time);
-static inline sys_error_code_t ISensorSetLightGain(ISensorLight_t *_this, float LightGain, uint8_t channel);
+static inline sys_error_code_t ISensorSetLightGain(ISensorLight_t *_this, float_t LightGain, uint8_t channel);
 
 #ifdef __cplusplus
 }

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -157,7 +157,7 @@ sys_error_code_t UCFP_LoadUcf(SUcfProtocol_t *_this, const char *p_ucf, uint32_t
   * \endcode
   *
   * @param _this [IN] specifies an ::SUcfProtocol_t object.
-  * @param p_ucf [IN] specifies the UCF buffer int ::ucf_line_ext_t format
+  * @param p_ucf [IN] specifies the UCF buffer int32_t ::ucf_line_ext_t format
   * @param size [IN] specifies the size [Bytes] of the UCF buffer
   *
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.

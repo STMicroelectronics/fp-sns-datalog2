@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -118,7 +118,7 @@ uint8_t Ilps22qs_Press_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_number(JSON_Status, "ilps22qs_press.samples_per_ts", temp_i);
   ilps22qs_press_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "ilps22qs_press.dim", temp_i);
-  float temp_f = 0;
+  float_t temp_f = 0;
   ilps22qs_press_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "ilps22qs_press.ioffset", temp_f);
   ilps22qs_press_get_measodr(&temp_f);

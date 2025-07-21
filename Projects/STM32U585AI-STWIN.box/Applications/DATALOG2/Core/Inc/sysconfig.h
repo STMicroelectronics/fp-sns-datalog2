@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -31,19 +31,12 @@
 // *********************
 
 #define BOARD_ID_BOXA           0x0E
-#define BLE_FW_ID_DATALOG2_BOXA 0x2A
-#define USB_FW_ID_DATALOG2_BOXA 0x19
+#define BLE_FW_ID_DATALOG2_BOXA 0x2F
+#define USB_FW_ID_DATALOG2_BOXA 0x2E
 
 #define BOARD_ID_BOXB           0x12
 #define BLE_FW_ID_DATALOG2_BOXB 0x06
 #define USB_FW_ID_DATALOG2_BOXB 0x07
-
-// Drivers configuration
-// *********************
-
-// file NucleoDriver.c
-// uncomment the following line to change the drive common parameters
-//#define NUCLEO_DRV_CFG_IRQ_PRIORITY             13
 
 // Other hardware configuration
 // ****************************
@@ -143,10 +136,6 @@
 #define USB_EP4_BULKIN_CFG_TAG                (CON34_PIN_26)
 #define USB_EP5_BULKIN_CFG_TAG                (CON34_PIN_12)
 #endif
-
-
-#define DATALOG2_USE_WIFI         1
-
 
 // file SysTimestamp.c
 #define SYS_TS_CFG_ENABLE_SERVICE 1

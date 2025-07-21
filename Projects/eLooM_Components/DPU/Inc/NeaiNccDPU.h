@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -35,8 +35,8 @@ extern "C" {
   */
 typedef struct
 {
-  enum neai_state(*classificationInit)(const float *);
-  enum neai_state(*classification)(float *, float *, uint16_t *);
+  enum neai_state(*classificationInit)(const float_t *);
+  enum neai_state(*classification)(float_t *, float_t *, uint16_t *);
 
 } NEAI_Ncc_vtbl_t;
 

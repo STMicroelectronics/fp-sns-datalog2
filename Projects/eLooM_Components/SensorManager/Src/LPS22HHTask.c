@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -781,7 +781,7 @@ IEventSrc *LPS22HHTask_vtblPressGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_press_event_src;
 }
 
-sys_error_code_t LPS22HHTask_vtblPressGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t LPS22HHTask_vtblPressGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -803,20 +803,20 @@ sys_error_code_t LPS22HHTask_vtblPressGetODR(ISensorMems_t *_this, float *p_meas
   return res;
 }
 
-float LPS22HHTask_vtblPressGetFS(ISensorMems_t *_this)
+float_t LPS22HHTask_vtblPressGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LPS22HHTask *p_if_owner = (LPS22HHTask *)((uint32_t) _this - offsetof(LPS22HHTask, press_sensor_if));
-  float res = p_if_owner->press_sensor_status.type.mems.fs;
+  float_t res = p_if_owner->press_sensor_status.type.mems.fs;
 
   return res;
 }
 
-float LPS22HHTask_vtblPressGetSensitivity(ISensorMems_t *_this)
+float_t LPS22HHTask_vtblPressGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LPS22HHTask *p_if_owner = (LPS22HHTask *)((uint32_t) _this - offsetof(LPS22HHTask, press_sensor_if));
-  float res = p_if_owner->press_sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->press_sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -830,7 +830,7 @@ EMData_t LPS22HHTask_vtblPressGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t LPS22HHTask_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t LPS22HHTask_vtblTempGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -852,20 +852,20 @@ sys_error_code_t LPS22HHTask_vtblTempGetODR(ISensorMems_t *_this, float *p_measu
   return res;
 }
 
-float LPS22HHTask_vtblTempGetFS(ISensorMems_t *_this)
+float_t LPS22HHTask_vtblTempGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LPS22HHTask *p_if_owner = (LPS22HHTask *)((uint32_t) _this - offsetof(LPS22HHTask, temp_sensor_if));
-  float res = p_if_owner->temp_sensor_status.type.mems.fs;
+  float_t res = p_if_owner->temp_sensor_status.type.mems.fs;
 
   return res;
 }
 
-float LPS22HHTask_vtblTempGetSensitivity(ISensorMems_t *_this)
+float_t LPS22HHTask_vtblTempGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LPS22HHTask *p_if_owner = (LPS22HHTask *)((uint32_t) _this - offsetof(LPS22HHTask, temp_sensor_if));
-  float res = p_if_owner->temp_sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->temp_sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -879,7 +879,7 @@ EMData_t LPS22HHTask_vtblTempGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t LPS22HHTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t LPS22HHTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -905,7 +905,7 @@ sys_error_code_t LPS22HHTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = LPS22HHTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -913,7 +913,7 @@ sys_error_code_t LPS22HHTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t LPS22HHTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t LPS22HHTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -937,7 +937,7 @@ sys_error_code_t LPS22HHTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) fs
+      .sensorMessage.fParam = (float_t) fs
     };
     res = LPS22HHTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1210,14 +1210,6 @@ static sys_error_code_t LPS22HHTaskExecuteStepDatalog(AManagedTask *_this)
       case SM_MESSAGE_ID_DATA_READY:
       {
         SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("LPS22HH: new data.\r\n"));
-//          if(p_obj->pIRQConfig == NULL)
-//          {
-//            if(TX_SUCCESS != tx_timer_change(&p_obj->read_fifo_timer, AMT_MS_TO_TICKS(p_obj->task_delay), AMT_MS_TO_TICKS(p_obj->task_delay)))
-//            {
-//              return SYS_UNDEFINED_ERROR_CODE;
-//            }
-//          }
-
         res = LPS22HHTaskSensorReadData(p_obj);
 
         if (!SYS_IS_ERROR_CODE(res))
@@ -1227,8 +1219,8 @@ static sys_error_code_t LPS22HHTaskExecuteStepDatalog(AManagedTask *_this)
           {
 #endif
             // notify the listeners...
-            double timestamp = report.sensorDataReadyMessage.fTimestamp;
-            double delta_timestamp = timestamp - p_obj->prev_timestamp;
+            double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+            double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
             p_obj->prev_timestamp = timestamp;
 
             DataEvent_t evt;
@@ -1236,7 +1228,7 @@ static sys_error_code_t LPS22HHTaskExecuteStepDatalog(AManagedTask *_this)
             if (p_obj->press_sensor_status.is_active)
             {
               /* update measuredODR */
-              p_obj->press_sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
+              p_obj->press_sensor_status.type.mems.measured_odr = (float_t) p_obj->samples_per_it / (float_t) delta_timestamp;
 
               EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_press_data_buff[0], E_EM_FLOAT, p_obj->samples_per_it);
               DataEventInit((IEvent *) &evt, p_obj->p_press_event_src, &p_obj->data, timestamp, p_obj->press_id);
@@ -1245,7 +1237,7 @@ static sys_error_code_t LPS22HHTaskExecuteStepDatalog(AManagedTask *_this)
             if (p_obj->temp_sensor_status.is_active)
             {
               /* update measuredODR */
-              p_obj->temp_sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
+              p_obj->temp_sensor_status.type.mems.measured_odr = (float_t) p_obj->samples_per_it / (float_t) delta_timestamp;
 
               EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->p_temp_data_buff[0], E_EM_FLOAT, p_obj->samples_per_it);
               DataEventInit((IEvent *) &evt, p_obj->p_temp_event_src, &p_obj->data, timestamp, p_obj->temp_id);
@@ -1256,13 +1248,6 @@ static sys_error_code_t LPS22HHTaskExecuteStepDatalog(AManagedTask *_this)
 #endif
 
         }
-//            if(p_obj->pIRQConfig == NULL)
-//            {
-//              if(TX_SUCCESS != tx_timer_activate(&p_obj->read_fifo_timer))
-//              {
-//                res = SYS_UNDEFINED_ERROR_CODE;
-//              }
-//            }
         break;
       }
       case SM_MESSAGE_ID_SENSOR_CMD:
@@ -1394,7 +1379,7 @@ static sys_error_code_t LPS22HHTaskSensorInit(LPS22HHTask *_this)
 
   uint8_t reg0 = 0;
   int32_t ret_val = 0;
-  float lps22hh_odr = 0.0f;
+  float_t lps22hh_odr = 0.0f;
   uint8_t rst;
 
   /* Check device ID */
@@ -1565,7 +1550,7 @@ static sys_error_code_t LPS22HHTaskSensorInit(LPS22HHTask *_this)
   }
 
 #if LPS22HH_FIFO_ENABLED
-  _this->task_delay = (uint16_t)((1000.0f / _this->task_delay) * (((float)(_this->samples_per_it)) / 2.0f));
+  _this->task_delay = (uint16_t)((1000.0f / _this->task_delay) * (((float_t)(_this->samples_per_it)) / 2.0f));
 #else
   _this->task_delay = (uint16_t)(1000.0f / _this->task_delay);
 #endif
@@ -1586,7 +1571,7 @@ static sys_error_code_t LPS22HHTaskSensorReadData(LPS22HHTask *_this)
   if (_this->fifo_level >= samples_per_it)
   {
     res = lps22hh_read_reg(p_sensor_drv, LPS22HH_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_sensor_data_buff,
-                     5 * _this->fifo_level);
+                           5 * _this->fifo_level);
 
     if (!SYS_IS_ERROR_CODE(res))
     {
@@ -1595,7 +1580,7 @@ static sys_error_code_t LPS22HHTaskSensorReadData(LPS22HHTask *_this)
       for (i = 0; i < samples_per_it; i++)
       {
         uint32_t press = (((uint32_t) _this->p_sensor_data_buff[5 * i + 0])) | (((uint32_t) _this->p_sensor_data_buff[5 * i + 1]) << (8 * 1))
-                           | (((uint32_t) _this->p_sensor_data_buff[5 * i + 2]) << (8 * 2));
+                         | (((uint32_t) _this->p_sensor_data_buff[5 * i + 2]) << (8 * 2));
 
         /* convert the 2's complement 24 bit to 2's complement 32 bit */
         if (press & 0x00800000)
@@ -1607,16 +1592,16 @@ static sys_error_code_t LPS22HHTaskSensorReadData(LPS22HHTask *_this)
 
         if (_this->press_sensor_status.is_active && !_this->temp_sensor_status.is_active) /* Only Pressure */
         {
-          _this->p_press_data_buff[i] = (float) press / 4096.0f; /* Pressure */
+          _this->p_press_data_buff[i] = (float_t) press / 4096.0f; /* Pressure */
         }
         else if (!_this->press_sensor_status.is_active && _this->temp_sensor_status.is_active) /* Only Temperature */
         {
-          _this->p_temp_data_buff[i] = (float) temp / 100.0f; /* Temperature */
+          _this->p_temp_data_buff[i] = (float_t) temp / 100.0f; /* Temperature */
         }
         else if (_this->press_sensor_status.is_active && _this->temp_sensor_status.is_active) /* Both Sub Sensors */
         {
-          _this->p_press_data_buff[i] = (float) press / 4096.0f; /* Pressure */
-          _this->p_temp_data_buff[i] = (float) temp / 100.0f; /* Temperature */
+          _this->p_press_data_buff[i] = (float_t) press / 4096.0f; /* Pressure */
+          _this->p_temp_data_buff[i] = (float_t) temp / 100.0f; /* Temperature */
         }
       }
     }
@@ -1655,8 +1640,8 @@ static sys_error_code_t LPS22HHTaskSensorReadData(LPS22HHTask *_this)
     uint16_t i = 0;
     for (i = 0; i < _this->samples_per_it ; i++)
     {
-      _this->p_press_data_buff[i]  = (float)(dummyDataCounter_press++);
-      _this->p_temp_data_buff[i]  = (float)(dummyDataCounter_temp++);
+      _this->p_press_data_buff[i]  = (float_t)(dummyDataCounter_press++);
+      _this->p_temp_data_buff[i]  = (float_t)(dummyDataCounter_temp++);
     }
 #endif
   }
@@ -1712,7 +1697,7 @@ static sys_error_code_t LPS22HHTaskSensorSetODR(LPS22HHTask *_this, SMMessage re
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->temp_id || id == _this->press_id)

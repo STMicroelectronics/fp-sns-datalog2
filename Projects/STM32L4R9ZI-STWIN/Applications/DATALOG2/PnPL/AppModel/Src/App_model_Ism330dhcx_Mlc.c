@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -113,7 +113,7 @@ uint8_t ism330dhcx_mlc_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330dhcx_mlc_get_ioffset(float *value)
+uint8_t ism330dhcx_mlc_get_ioffset(float_t *value)
 {
   *value = ism330dhcx_mlc_model.stream_params.ioffset;
   /* USER Code */
@@ -246,6 +246,14 @@ uint8_t ism330dhcx_mlc_set_enable(bool value, char **response_message)
       /* USER Code */
       __stream_control(true);
       __sc_set_ble_stream_params(ism330dhcx_mlc_model.id);
+    }
+  }
+  else
+  {
+    ret = PNPL_BASE_ERROR_CODE;
+    if (response_message != NULL)
+    {
+      *response_message = "UCF not loaded";
     }
   }
   return ret;

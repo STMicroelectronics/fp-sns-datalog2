@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -110,7 +110,7 @@ uint8_t acquisition_info_get_tags(JSON_Value *value)
   json_object_set_value(JSON_Tags, "tags", json_value_init_array());
   JSON_TagsArray = json_object_dotget_array(JSON_Tags, "tags");
 
-  int i;
+  int32_t i;
 
   HSD_Tag_t *tag_list = TMGetTagList();
   uint8_t tag_list_size = TMGetTagListSize();

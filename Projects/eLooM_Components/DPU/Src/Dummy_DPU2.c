@@ -11,7 +11,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -92,9 +92,9 @@ sys_error_code_t Dummy_DPU2_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   /*Dummy_DPU2_t *p_obj = (Dummy_DPU2_t*) _this;*/
 
-  float p_data_acc_x = 0.0f;
-  float p_data_acc_y = 0.0f;
-  float p_data_acc_z = 0.0f;
+  float_t p_data_acc_x = 0.0f;
+  float_t p_data_acc_y = 0.0f;
+  float_t p_data_acc_z = 0.0f;
 #if defined (SYS_DEBUG)
   uint32_t elements = EMD_GetElementsCount(&in_data);
 #endif

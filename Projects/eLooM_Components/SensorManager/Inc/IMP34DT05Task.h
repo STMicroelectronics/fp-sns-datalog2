@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -111,13 +111,13 @@ struct _IMP34DT05Task
   /*
     * Calibration values, used for adjusting audio gain
     */
-  int old_in;
-  int old_out;
+  int32_t old_in;
+  int32_t old_out;
 
   /**
     * Used to update the instantaneous ODR.
     */
-  double prev_timestamp;
+  double_t prev_timestamp;
 
   uint8_t half;
 

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -42,13 +42,13 @@ sys_error_code_t LIS2DU12Task_vtblOnEnterPowerMode(AManagedTaskEx *_this, const 
 
 uint8_t LIS2DU12Task_vtblAccGetId(ISourceObservable *_this);
 IEventSrc *LIS2DU12Task_vtblGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t LIS2DU12Task_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float LIS2DU12Task_vtblAccGetFS(ISensorMems_t *_this);
-float LIS2DU12Task_vtblAccGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t LIS2DU12Task_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t LIS2DU12Task_vtblAccGetFS(ISensorMems_t *_this);
+float_t LIS2DU12Task_vtblAccGetSensitivity(ISensorMems_t *_this);
 EMData_t LIS2DU12Task_vtblAccGetDataInfo(ISourceObservable *_this);
 
-sys_error_code_t LIS2DU12Task_vtblSensorSetODR(ISensorMems_t *_this, float odr);
-sys_error_code_t LIS2DU12Task_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t LIS2DU12Task_vtblSensorSetODR(ISensorMems_t *_this, float_t odr);
+sys_error_code_t LIS2DU12Task_vtblSensorSetFS(ISensorMems_t *_this, float_t fs);
 sys_error_code_t LIS2DU12Task_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 sys_error_code_t LIS2DU12Task_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t LIS2DU12Task_vtblSensorDisable(ISensor_t *_this);

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -102,7 +102,7 @@ struct _STTS22HTask
   /**
     * Buffer to store the data read from the sensor FIFO.
     */
-  float temperature;
+  float_t temperature;
 
   /**
     * ::IEventSrc interface implementation for this class.
@@ -112,7 +112,12 @@ struct _STTS22HTask
   /**
     * Used to update the instantaneous odr.
     */
-  double prev_timestamp;
+  double_t prev_timestamp;
+
+  /*
+    * First data ready flag: fist data must be discarded, see sensor AN
+    * */
+  uint8_t first_data_ready;
 
   /**
     * Software timer used to generate the read command
@@ -224,7 +229,7 @@ IEventSrc *STTS22HTaskGetTempEventSrcIF(STTS22HTask *_this);
 /**
   * IRQ callback
   */
-void STT22HTask_EXTI_Callback(uint16_t nPin);
+void STTS22HTask_EXTI_Callback(uint16_t nPin);
 
 // Inline functions definition
 // ***************************

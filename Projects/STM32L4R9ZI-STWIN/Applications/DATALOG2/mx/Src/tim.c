@@ -21,7 +21,7 @@
 #include "tim.h"
 
 /* USER CODE BEGIN 0 */
-#define STBC02_USED_TIM_PERIOD                (float)5e-6 // s
+#define STBC02_USED_TIM_PERIOD                (float_t)5e-6 // s
 #define STBC02_USED_TIM_CLKFreq               (HAL_RCC_GetPCLK1Freq() * (((READ_BIT(RCC->CFGR, RCC_CFGR_PPRE1) >> RCC_CFGR_PPRE1_Pos) < 4U) ? 1U : 2U))
 
 #define Error_Handler sys_error_handler
@@ -148,7 +148,7 @@ void MX_TIM4_Init(void)
   uint32_t uwTimclock, uwAPB1Prescaler;
   uint32_t uwPrescalerValue;
   uint32_t pFLatency;
-  float period;
+  float_t period;
 
   /* Enable TIM clock */
   __HAL_RCC_TIM4_CLK_ENABLE();
@@ -285,13 +285,13 @@ void MX_TIM16_Init(void)
   /* we need to modify the initialization parameter passed in CubeMX UI
    * because there is no way to put an expression there */
   uint32_t freq = STBC02_USED_TIM_CLKFreq;
-  float prescaler = 0.0f;
-  float period;
+  float_t prescaler = 0.0f;
+  float_t period;
 
   do
   {
     prescaler++;
-    period = (((float)freq) / (prescaler) * STBC02_USED_TIM_PERIOD);
+    period = (((float_t)freq) / (prescaler) * STBC02_USED_TIM_PERIOD);
   } while (period > 65535.0f);
   /* USER CODE END TIM16_Init 0 */
 

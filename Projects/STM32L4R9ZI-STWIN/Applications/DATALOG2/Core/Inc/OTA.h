@@ -1,19 +1,18 @@
 /**
   ******************************************************************************
-  * @file    BLEDualProgram\Inc\OTA.h
-  * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.5.0
-  * @date    27-Mar-2023
+  * @file    OTA.h
+  * @author  SRA
   * @brief   Over-the-Air Update API
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   *
   ******************************************************************************
   */
@@ -26,7 +25,7 @@
 extern "C" {
 #endif
 
-/* Exported defines ---------------------------------------------------------*/
+/* Exported defines ----------------------------------------------------------*/
 
 /* Max Program Size (we keep the last sector for FW status id */
 #define OTA_MAX_PROG_SIZE (0x100000-0x1000)
@@ -34,7 +33,7 @@ extern "C" {
 /* when we don't have a valid Fw ID... */
 #define OTA_OTA_FW_ID_NOT_VALID 0xFFFF
 
-/* Exported functions ---------------------------------------------------------*/
+/* Exported functions --------------------------------------------------------*/
 
 /* API for preparing the Flash for receiving the Update. It defines also the Size of the Update and the CRC value expected */
 extern void StartUpdateFWBlueMS(uint32_t SizeOfUpdate, uint32_t uwCRCValue);
@@ -56,4 +55,5 @@ extern void ReadFlashBanksFwId(uint16_t *FwId1, uint16_t *FwId2);
 #endif
 
 #endif /* _OTA_H_ */
+
 

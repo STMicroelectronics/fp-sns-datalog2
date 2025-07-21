@@ -136,12 +136,12 @@ sys_error_code_t SysTsStop(SysTimestamp_t *_this)
   return xRes;
 }
 
-double SysTsGetTimestampF(SysTimestamp_t *_this)
+double_t SysTsGetTimestampF(SysTimestamp_t *_this)
 {
   assert_param(_this != NULL);
 
   uint64_t nTimeStampTick = ITSDrvGetTimeStamp(_this->m_pxDriver);
-  double fTimestamp = (double)nTimeStampTick / (double)(SYS_TS_CFG_TSDRIVER_FREQ_HZ);
+  double_t fTimestamp = (double_t)nTimeStampTick / (double_t)(SYS_TS_CFG_TSDRIVER_FREQ_HZ);
 
   return fTimestamp;
 }

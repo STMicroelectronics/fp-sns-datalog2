@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -19,16 +19,16 @@
   */
 #include "ble_types.h"
 #include "bluenrg1_gatt_aci.h"
-tBleStatus aci_gatt_init(void)
+ble_status_t aci_gatt_init(void)
 {
-  struct hci_request rq;
-  tBleStatus status = 0;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x101;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  struct hci_request rq_t;
+  ble_status_t status = 0;
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x101;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -38,25 +38,26 @@ tBleStatus aci_gatt_init(void)
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_add_service(uint8_t Service_UUID_Type,
-                                Service_UUID_t *Service_UUID,
-                                uint8_t Service_Type,
-                                uint8_t Max_Attribute_Records,
-                                uint16_t *Service_Handle)
+ble_status_t aci_gatt_add_service(uint8_t service_uuid_type,
+                                  service_uuid_t *service_uuid,
+                                  uint8_t service_type,
+                                  uint8_t max_attribute_records,
+                                  uint16_t *service_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_add_service_cp0 *cp0 = (aci_gatt_add_service_cp0 *)(cmd_buffer);
-  aci_gatt_add_service_cp1 *cp1 = (aci_gatt_add_service_cp1 *)(cmd_buffer + 1 + (Service_UUID_Type == 1 ? 2 : (Service_UUID_Type == 2 ? 16 : 0)));
+  aci_gatt_add_service_cp1 *cp1 =
+    (aci_gatt_add_service_cp1 *)(cmd_buffer + 1 + (service_uuid_type == 1 ? 2 : (service_uuid_type == 2 ? 16 : 0)));
   aci_gatt_add_service_rp0 resp;
-  BLUENRG_memset(&resp, 0, sizeof(resp));
+  BLUENRG_MEMSET(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
-  cp0->Service_UUID_Type = htob(Service_UUID_Type, 1);
+  cp0->service_uuid_type = HTOB(service_uuid_type, 1);
   index_input += 1;
   /* var_len_data input */
   {
     uint8_t size;
-    switch (Service_UUID_Type)
+    switch (service_uuid_type)
     {
       case 1:
         size = 2;
@@ -67,60 +68,60 @@ tBleStatus aci_gatt_add_service(uint8_t Service_UUID_Type,
       default:
         return BLE_STATUS_ERROR;
     }
-    BLUENRG_memcpy((void *) &cp0->Service_UUID, (const void *) Service_UUID, size);
+    BLUENRG_MEMCPY((void *) &cp0->service_uuid, (const void *) service_uuid, size);
     index_input += size;
     {
-      cp1->Service_Type = htob(Service_Type, 1);
+      cp1->service_type = HTOB(service_type, 1);
     }
     index_input += 1;
     {
-      cp1->Max_Attribute_Records = htob(Max_Attribute_Records, 1);
+      cp1->max_attribute_records = HTOB(max_attribute_records, 1);
     }
     index_input += 1;
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x102;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &resp;
-  rq.rlen = sizeof(resp);
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x102;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &resp;
+  rq_t.rlen = sizeof(resp);
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
-  if (resp.Status)
+  if (resp.status)
   {
-    return resp.Status;
+    return resp.status;
   }
-  *Service_Handle = btoh(resp.Service_Handle, 2);
+  *service_handle = BTOH(resp.service_handle, 2);
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_include_service(uint16_t Service_Handle,
-                                    uint16_t Include_Start_Handle,
-                                    uint16_t Include_End_Handle,
-                                    uint8_t Include_UUID_Type,
-                                    Include_UUID_t *Include_UUID,
-                                    uint16_t *Include_Handle)
+ble_status_t aci_gatt_include_service(uint16_t service_handle,
+                                      uint16_t include_start_handle,
+                                      uint16_t include_end_handle,
+                                      uint8_t include_uuid_type,
+                                      include_uuid_t *include_uuid,
+                                      uint16_t *include_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_include_service_cp0 *cp0 = (aci_gatt_include_service_cp0 *)(cmd_buffer);
   aci_gatt_include_service_rp0 resp;
-  BLUENRG_memset(&resp, 0, sizeof(resp));
+  BLUENRG_MEMSET(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
-  cp0->Service_Handle = htob(Service_Handle, 2);
+  cp0->service_handle = HTOB(service_handle, 2);
   index_input += 2;
-  cp0->Include_Start_Handle = htob(Include_Start_Handle, 2);
+  cp0->include_start_handle = HTOB(include_start_handle, 2);
   index_input += 2;
-  cp0->Include_End_Handle = htob(Include_End_Handle, 2);
+  cp0->include_end_handle = HTOB(include_end_handle, 2);
   index_input += 2;
-  cp0->Include_UUID_Type = htob(Include_UUID_Type, 1);
+  cp0->include_uuid_type = HTOB(include_uuid_type, 1);
   index_input += 1;
   /* var_len_data input */
   {
     uint8_t size;
-    switch (Include_UUID_Type)
+    switch (include_uuid_type)
     {
       case 1:
         size = 2;
@@ -131,53 +132,54 @@ tBleStatus aci_gatt_include_service(uint16_t Service_Handle,
       default:
         return BLE_STATUS_ERROR;
     }
-    BLUENRG_memcpy((void *) &cp0->Include_UUID, (const void *) Include_UUID, size);
+    BLUENRG_MEMCPY((void *) &cp0->include_uuid, (const void *) include_uuid, size);
     index_input += size;
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x103;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &resp;
-  rq.rlen = sizeof(resp);
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x103;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &resp;
+  rq_t.rlen = sizeof(resp);
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
-  if (resp.Status)
+  if (resp.status)
   {
-    return resp.Status;
+    return resp.status;
   }
-  *Include_Handle = btoh(resp.Include_Handle, 2);
+  *include_handle = BTOH(resp.include_handle, 2);
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_add_char(uint16_t Service_Handle,
-                             uint8_t Char_UUID_Type,
-                             Char_UUID_t *Char_UUID,
-                             uint16_t Char_Value_Length,
-                             uint8_t Char_Properties,
-                             uint8_t Security_Permissions,
-                             uint8_t GATT_Evt_Mask,
-                             uint8_t Enc_Key_Size,
-                             uint8_t Is_Variable,
-                             uint16_t *Char_Handle)
+ble_status_t aci_gatt_add_char(uint16_t service_handle,
+                               uint8_t char_uuid_type,
+                               char_uuid_t *char_uuid,
+                               uint16_t char_value_length,
+                               uint8_t char_properties,
+                               uint8_t security_permissions,
+                               uint8_t gatt_evt_mask,
+                               uint8_t enc_key_size,
+                               uint8_t is_variable,
+                               uint16_t *char_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_add_char_cp0 *cp0 = (aci_gatt_add_char_cp0 *)(cmd_buffer);
-  aci_gatt_add_char_cp1 *cp1 = (aci_gatt_add_char_cp1 *)(cmd_buffer + 2 + 1 + (Char_UUID_Type == 1 ? 2 : (Char_UUID_Type == 2 ? 16 : 0)));
+  aci_gatt_add_char_cp1 *cp1 =
+    (aci_gatt_add_char_cp1 *)(cmd_buffer + 2 + 1 + (char_uuid_type == 1 ? 2 : (char_uuid_type == 2 ? 16 : 0)));
   aci_gatt_add_char_rp0 resp;
-  BLUENRG_memset(&resp, 0, sizeof(resp));
+  BLUENRG_MEMSET(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
-  cp0->Service_Handle = htob(Service_Handle, 2);
+  cp0->service_handle = HTOB(service_handle, 2);
   index_input += 2;
-  cp0->Char_UUID_Type = htob(Char_UUID_Type, 1);
+  cp0->char_uuid_type = HTOB(char_uuid_type, 1);
   index_input += 1;
   /* var_len_data input */
   {
     uint8_t size;
-    switch (Char_UUID_Type)
+    switch (char_uuid_type)
     {
       case 1:
         size = 2;
@@ -188,83 +190,88 @@ tBleStatus aci_gatt_add_char(uint16_t Service_Handle,
       default:
         return BLE_STATUS_ERROR;
     }
-    BLUENRG_memcpy((void *) &cp0->Char_UUID, (const void *) Char_UUID, size);
+    BLUENRG_MEMCPY((void *) &cp0->char_uuid, (const void *) char_uuid, size);
     index_input += size;
     {
-      cp1->Char_Value_Length = htob(Char_Value_Length, 2);
+      cp1->char_value_length = HTOB(char_value_length, 2);
     }
     index_input += 2;
     {
-      cp1->Char_Properties = htob(Char_Properties, 1);
+      cp1->char_properties = HTOB(char_properties, 1);
     }
     index_input += 1;
     {
-      cp1->Security_Permissions = htob(Security_Permissions, 1);
+      cp1->security_permissions = HTOB(security_permissions, 1);
     }
     index_input += 1;
     {
-      cp1->GATT_Evt_Mask = htob(GATT_Evt_Mask, 1);
+      cp1->gatt_evt_mask = HTOB(gatt_evt_mask, 1);
     }
     index_input += 1;
     {
-      cp1->Enc_Key_Size = htob(Enc_Key_Size, 1);
+      cp1->enc_key_size = HTOB(enc_key_size, 1);
     }
     index_input += 1;
     {
-      cp1->Is_Variable = htob(Is_Variable, 1);
+      cp1->is_variable = HTOB(is_variable, 1);
     }
     index_input += 1;
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x104;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &resp;
-  rq.rlen = sizeof(resp);
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x104;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &resp;
+  rq_t.rlen = sizeof(resp);
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
-  if (resp.Status)
+  if (resp.status)
   {
-    return resp.Status;
+    return resp.status;
   }
-  *Char_Handle = btoh(resp.Char_Handle, 2);
+  *char_handle = BTOH(resp.char_handle, 2);
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_add_char_desc(uint16_t Service_Handle,
-                                  uint16_t Char_Handle,
-                                  uint8_t Char_Desc_Uuid_Type,
-                                  Char_Desc_Uuid_t *Char_Desc_Uuid,
-                                  uint8_t Char_Desc_Value_Max_Len,
-                                  uint8_t Char_Desc_Value_Length,
-                                  uint8_t Char_Desc_Value[],
-                                  uint8_t Security_Permissions,
-                                  uint8_t Access_Permissions,
-                                  uint8_t GATT_Evt_Mask,
-                                  uint8_t Enc_Key_Size,
-                                  uint8_t Is_Variable,
-                                  uint16_t *Char_Desc_Handle)
+ble_status_t aci_gatt_add_char_desc(uint16_t service_handle,
+                                    uint16_t char_handle,
+                                    uint8_t char_desc_uuid_type,
+                                    char_desc_uuid_t *char_desc_uuid,
+                                    uint8_t char_desc_value_max_len,
+                                    uint8_t char_desc_value_length,
+                                    uint8_t char_desc_value[],
+                                    uint8_t security_permissions,
+                                    uint8_t access_permissions,
+                                    uint8_t gatt_evt_mask,
+                                    uint8_t enc_key_size,
+                                    uint8_t is_variable,
+                                    uint16_t *char_desc_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[300];
   aci_gatt_add_char_desc_cp0 *cp0 = (aci_gatt_add_char_desc_cp0 *)(cmd_buffer);
-  aci_gatt_add_char_desc_cp1 *cp1 = (aci_gatt_add_char_desc_cp1 *)(cmd_buffer + 2 + 2 + 1 + (Char_Desc_Uuid_Type == 1 ? 2 : (Char_Desc_Uuid_Type == 2 ? 16 : 0)));
-  aci_gatt_add_char_desc_cp2 *cp2 = (aci_gatt_add_char_desc_cp2 *)(cmd_buffer + 2 + 2 + 1 + (Char_Desc_Uuid_Type == 1 ? 2 : (Char_Desc_Uuid_Type == 2 ? 16 : 0)) + 1 + 1 + Char_Desc_Value_Length * (sizeof(uint8_t)));
+  aci_gatt_add_char_desc_cp1 *cp1 =
+    (aci_gatt_add_char_desc_cp1 *)(cmd_buffer + 2 + 2 + 1 +
+                                   (char_desc_uuid_type == 1 ? 2 : (char_desc_uuid_type == 2 ? 16 : 0)));
+  aci_gatt_add_char_desc_cp2 *cp2 =
+    (aci_gatt_add_char_desc_cp2 *)(cmd_buffer + 2 + 2 + 1 +
+                                   (char_desc_uuid_type == 1 ? 2 : (char_desc_uuid_type == 2 ? 16 : 0)) +
+                                   1 + 1 + char_desc_value_length * (sizeof(uint8_t)));
   aci_gatt_add_char_desc_rp0 resp;
-  BLUENRG_memset(&resp, 0, sizeof(resp));
+  BLUENRG_MEMSET(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
-  cp0->Service_Handle = htob(Service_Handle, 2);
+  cp0->service_handle = HTOB(service_handle, 2);
   index_input += 2;
-  cp0->Char_Handle = htob(Char_Handle, 2);
+  cp0->char_handle = HTOB(char_handle, 2);
   index_input += 2;
-  cp0->Char_Desc_Uuid_Type = htob(Char_Desc_Uuid_Type, 1);
+  cp0->char_desc_uuid_type = HTOB(char_desc_uuid_type, 1);
   index_input += 1;
   /* var_len_data input */
   {
     uint8_t size;
-    switch (Char_Desc_Uuid_Type)
+    switch (char_desc_uuid_type)
     {
       case 1:
         size = 2;
@@ -275,90 +282,90 @@ tBleStatus aci_gatt_add_char_desc(uint16_t Service_Handle,
       default:
         return BLE_STATUS_ERROR;
     }
-    BLUENRG_memcpy((void *) &cp0->Char_Desc_Uuid, (const void *) Char_Desc_Uuid, size);
+    BLUENRG_MEMCPY((void *) &cp0->char_desc_uuid, (const void *) char_desc_uuid, size);
     index_input += size;
     {
-      cp1->Char_Desc_Value_Max_Len = htob(Char_Desc_Value_Max_Len, 1);
+      cp1->char_desc_value_max_len = HTOB(char_desc_value_max_len, 1);
     }
     index_input += 1;
     {
-      cp1->Char_Desc_Value_Length = htob(Char_Desc_Value_Length, 1);
+      cp1->char_desc_value_length = HTOB(char_desc_value_length, 1);
     }
     index_input += 1;
-    BLUENRG_memcpy((void *) &cp1->Char_Desc_Value, (const void *) Char_Desc_Value,
-                   Char_Desc_Value_Length * sizeof(uint8_t));
-    index_input += Char_Desc_Value_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp1->char_desc_value, (const void *) char_desc_value,
+                   char_desc_value_length * sizeof(uint8_t));
+    index_input += char_desc_value_length * sizeof(uint8_t);
     {
-      cp2->Security_Permissions = htob(Security_Permissions, 1);
-    }
-    index_input += 1;
-    {
-      cp2->Access_Permissions = htob(Access_Permissions, 1);
+      cp2->security_permissions = HTOB(security_permissions, 1);
     }
     index_input += 1;
     {
-      cp2->GATT_Evt_Mask = htob(GATT_Evt_Mask, 1);
+      cp2->access_permissions = HTOB(access_permissions, 1);
     }
     index_input += 1;
     {
-      cp2->Enc_Key_Size = htob(Enc_Key_Size, 1);
+      cp2->gatt_evt_mask = HTOB(gatt_evt_mask, 1);
     }
     index_input += 1;
     {
-      cp2->Is_Variable = htob(Is_Variable, 1);
+      cp2->enc_key_size = HTOB(enc_key_size, 1);
+    }
+    index_input += 1;
+    {
+      cp2->is_variable = HTOB(is_variable, 1);
     }
     index_input += 1;
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x105;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &resp;
-  rq.rlen = sizeof(resp);
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x105;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &resp;
+  rq_t.rlen = sizeof(resp);
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
-  if (resp.Status)
+  if (resp.status)
   {
-    return resp.Status;
+    return resp.status;
   }
-  *Char_Desc_Handle = btoh(resp.Char_Desc_Handle, 2);
+  *char_desc_handle = BTOH(resp.char_desc_handle, 2);
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_update_char_value(uint16_t Service_Handle,
-                                      uint16_t Char_Handle,
-                                      uint8_t Val_Offset,
-                                      uint8_t Char_Value_Length,
-                                      uint8_t Char_Value[])
+ble_status_t aci_gatt_update_char_value(uint16_t service_handle,
+                                        uint16_t char_handle,
+                                        uint8_t val_offset,
+                                        uint8_t char_value_length,
+                                        uint8_t char_value[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_update_char_value_cp0 *cp0 = (aci_gatt_update_char_value_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Service_Handle = htob(Service_Handle, 2);
+  cp0->service_handle = HTOB(service_handle, 2);
   index_input += 2;
-  cp0->Char_Handle = htob(Char_Handle, 2);
+  cp0->char_handle = HTOB(char_handle, 2);
   index_input += 2;
-  cp0->Val_Offset = htob(Val_Offset, 1);
+  cp0->val_offset = HTOB(val_offset, 1);
   index_input += 1;
-  cp0->Char_Value_Length = htob(Char_Value_Length, 1);
+  cp0->char_value_length = HTOB(char_value_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Char_Value, (const void *) Char_Value, Char_Value_Length * sizeof(uint8_t));
-    index_input += Char_Value_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->char_value, (const void *) char_value, char_value_length * sizeof(uint8_t));
+    index_input += char_value_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x106;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x106;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -368,26 +375,26 @@ tBleStatus aci_gatt_update_char_value(uint16_t Service_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_del_char(uint16_t Serv_Handle,
-                             uint16_t Char_Handle)
+ble_status_t aci_gatt_del_char(uint16_t serv_handle,
+                               uint16_t char_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_del_char_cp0 *cp0 = (aci_gatt_del_char_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Serv_Handle = htob(Serv_Handle, 2);
+  cp0->serv_handle = HTOB(serv_handle, 2);
   index_input += 2;
-  cp0->Char_Handle = htob(Char_Handle, 2);
+  cp0->char_handle = HTOB(char_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x107;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x107;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -397,23 +404,23 @@ tBleStatus aci_gatt_del_char(uint16_t Serv_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_del_service(uint16_t Serv_Handle)
+ble_status_t aci_gatt_del_service(uint16_t serv_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_del_service_cp0 *cp0 = (aci_gatt_del_service_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Serv_Handle = htob(Serv_Handle, 2);
+  cp0->serv_handle = HTOB(serv_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x108;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x108;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -423,26 +430,26 @@ tBleStatus aci_gatt_del_service(uint16_t Serv_Handle)
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_del_include_service(uint16_t Serv_Handle,
-                                        uint16_t Include_Handle)
+ble_status_t aci_gatt_del_include_service(uint16_t serv_handle,
+                                          uint16_t include_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_del_include_service_cp0 *cp0 = (aci_gatt_del_include_service_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Serv_Handle = htob(Serv_Handle, 2);
+  cp0->serv_handle = HTOB(serv_handle, 2);
   index_input += 2;
-  cp0->Include_Handle = htob(Include_Handle, 2);
+  cp0->include_handle = HTOB(include_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x109;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x109;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -452,23 +459,23 @@ tBleStatus aci_gatt_del_include_service(uint16_t Serv_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_set_event_mask(uint32_t GATT_Evt_Mask)
+ble_status_t aci_gatt_set_event_mask(uint32_t gatt_evt_mask)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_set_event_mask_cp0 *cp0 = (aci_gatt_set_event_mask_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->GATT_Evt_Mask = htob(GATT_Evt_Mask, 4);
+  cp0->gatt_evt_mask = HTOB(gatt_evt_mask, 4);
   index_input += 4;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x10a;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x10a;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -478,24 +485,24 @@ tBleStatus aci_gatt_set_event_mask(uint32_t GATT_Evt_Mask)
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_exchange_config(uint16_t Connection_Handle)
+ble_status_t aci_gatt_exchange_config(uint16_t connection_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_exchange_config_cp0 *cp0 = (aci_gatt_exchange_config_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x10b;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x10b;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -505,30 +512,30 @@ tBleStatus aci_gatt_exchange_config(uint16_t Connection_Handle)
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_att_find_info_req(uint16_t Connection_Handle,
-                                 uint16_t Start_Handle,
-                                 uint16_t End_Handle)
+ble_status_t aci_att_find_info_req(uint16_t connection_handle,
+                                   uint16_t start_handle,
+                                   uint16_t end_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_att_find_info_req_cp0 *cp0 = (aci_att_find_info_req_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Start_Handle = htob(Start_Handle, 2);
+  cp0->start_handle = HTOB(start_handle, 2);
   index_input += 2;
-  cp0->End_Handle = htob(End_Handle, 2);
+  cp0->end_handle = HTOB(end_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x10c;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x10c;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -538,42 +545,42 @@ tBleStatus aci_att_find_info_req(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_att_find_by_type_value_req(uint16_t Connection_Handle,
-                                          uint16_t Start_Handle,
-                                          uint16_t End_Handle,
-                                          uint16_t UUID,
-                                          uint8_t Attribute_Val_Length,
-                                          uint8_t Attribute_Val[])
+ble_status_t aci_att_find_by_type_value_req(uint16_t connection_handle,
+                                            uint16_t start_handle,
+                                            uint16_t end_handle,
+                                            uint16_t uuid,
+                                            uint8_t attribute_val_length,
+                                            uint8_t attribute_val[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_att_find_by_type_value_req_cp0 *cp0 = (aci_att_find_by_type_value_req_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Start_Handle = htob(Start_Handle, 2);
+  cp0->start_handle = HTOB(start_handle, 2);
   index_input += 2;
-  cp0->End_Handle = htob(End_Handle, 2);
+  cp0->end_handle = HTOB(end_handle, 2);
   index_input += 2;
-  cp0->UUID = htob(UUID, 2);
+  cp0->uuid = HTOB(uuid, 2);
   index_input += 2;
-  cp0->Attribute_Val_Length = htob(Attribute_Val_Length, 1);
+  cp0->attribute_val_length = HTOB(attribute_val_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Attribute_Val, (const void *) Attribute_Val, Attribute_Val_Length * sizeof(uint8_t));
-    index_input += Attribute_Val_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->attribute_val, (const void *) attribute_val, attribute_val_length * sizeof(uint8_t));
+    index_input += attribute_val_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x10d;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x10d;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -583,29 +590,29 @@ tBleStatus aci_att_find_by_type_value_req(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_att_read_by_type_req(uint16_t Connection_Handle,
-                                    uint16_t Start_Handle,
-                                    uint16_t End_Handle,
-                                    uint8_t UUID_Type,
-                                    UUID_t *UUID)
+ble_status_t aci_att_read_by_type_req(uint16_t connection_handle,
+                                      uint16_t start_handle,
+                                      uint16_t end_handle,
+                                      uint8_t uuid_type,
+                                      uuid_t *uuid)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_att_read_by_type_req_cp0 *cp0 = (aci_att_read_by_type_req_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Start_Handle = htob(Start_Handle, 2);
+  cp0->start_handle = HTOB(start_handle, 2);
   index_input += 2;
-  cp0->End_Handle = htob(End_Handle, 2);
+  cp0->end_handle = HTOB(end_handle, 2);
   index_input += 2;
-  cp0->UUID_Type = htob(UUID_Type, 1);
+  cp0->uuid_type = HTOB(uuid_type, 1);
   index_input += 1;
   /* var_len_data input */
   {
     uint8_t size;
-    switch (UUID_Type)
+    switch (uuid_type)
     {
       case 1:
         size = 2;
@@ -616,18 +623,18 @@ tBleStatus aci_att_read_by_type_req(uint16_t Connection_Handle,
       default:
         return BLE_STATUS_ERROR;
     }
-    BLUENRG_memcpy((void *) &cp0->UUID, (const void *) UUID, size);
+    BLUENRG_MEMCPY((void *) &cp0->uuid, (const void *) uuid, size);
     index_input += size;
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x10e;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x10e;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -637,29 +644,29 @@ tBleStatus aci_att_read_by_type_req(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_att_read_by_group_type_req(uint16_t Connection_Handle,
-                                          uint16_t Start_Handle,
-                                          uint16_t End_Handle,
-                                          uint8_t UUID_Type,
-                                          UUID_t *UUID)
+ble_status_t aci_att_read_by_group_type_req(uint16_t connection_handle,
+                                            uint16_t start_handle,
+                                            uint16_t end_handle,
+                                            uint8_t uuid_type,
+                                            uuid_t *uuid)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_att_read_by_group_type_req_cp0 *cp0 = (aci_att_read_by_group_type_req_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Start_Handle = htob(Start_Handle, 2);
+  cp0->start_handle = HTOB(start_handle, 2);
   index_input += 2;
-  cp0->End_Handle = htob(End_Handle, 2);
+  cp0->end_handle = HTOB(end_handle, 2);
   index_input += 2;
-  cp0->UUID_Type = htob(UUID_Type, 1);
+  cp0->uuid_type = HTOB(uuid_type, 1);
   index_input += 1;
   /* var_len_data input */
   {
     uint8_t size;
-    switch (UUID_Type)
+    switch (uuid_type)
     {
       case 1:
         size = 2;
@@ -670,18 +677,18 @@ tBleStatus aci_att_read_by_group_type_req(uint16_t Connection_Handle,
       default:
         return BLE_STATUS_ERROR;
     }
-    BLUENRG_memcpy((void *) &cp0->UUID, (const void *) UUID, size);
+    BLUENRG_MEMCPY((void *) &cp0->uuid, (const void *) uuid, size);
     index_input += size;
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x10f;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x10f;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -691,39 +698,39 @@ tBleStatus aci_att_read_by_group_type_req(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_att_prepare_write_req(uint16_t Connection_Handle,
-                                     uint16_t Attr_Handle,
-                                     uint16_t Val_Offset,
-                                     uint8_t Attribute_Val_Length,
-                                     uint8_t Attribute_Val[])
+ble_status_t aci_att_prepare_write_req(uint16_t connection_handle,
+                                       uint16_t attr_handle,
+                                       uint16_t val_offset,
+                                       uint8_t attribute_val_length,
+                                       uint8_t attribute_val[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_att_prepare_write_req_cp0 *cp0 = (aci_att_prepare_write_req_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Val_Offset = htob(Val_Offset, 2);
+  cp0->val_offset = HTOB(val_offset, 2);
   index_input += 2;
-  cp0->Attribute_Val_Length = htob(Attribute_Val_Length, 1);
+  cp0->attribute_val_length = HTOB(attribute_val_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Attribute_Val, (const void *) Attribute_Val, Attribute_Val_Length * sizeof(uint8_t));
-    index_input += Attribute_Val_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->attribute_val, (const void *) attribute_val, attribute_val_length * sizeof(uint8_t));
+    index_input += attribute_val_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x110;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x110;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -733,27 +740,27 @@ tBleStatus aci_att_prepare_write_req(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_att_execute_write_req(uint16_t Connection_Handle,
-                                     uint8_t Execute)
+ble_status_t aci_att_execute_write_req(uint16_t connection_handle,
+                                       uint8_t execute)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_att_execute_write_req_cp0 *cp0 = (aci_att_execute_write_req_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Execute = htob(Execute, 1);
+  cp0->execute = HTOB(execute, 1);
   index_input += 1;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x111;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x111;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -763,24 +770,24 @@ tBleStatus aci_att_execute_write_req(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_disc_all_primary_services(uint16_t Connection_Handle)
+ble_status_t aci_gatt_disc_all_primary_services(uint16_t connection_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_disc_all_primary_services_cp0 *cp0 = (aci_gatt_disc_all_primary_services_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x112;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x112;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -790,23 +797,23 @@ tBleStatus aci_gatt_disc_all_primary_services(uint16_t Connection_Handle)
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_disc_primary_service_by_uuid(uint16_t Connection_Handle,
-                                                 uint8_t UUID_Type,
-                                                 UUID_t *UUID)
+ble_status_t aci_gatt_disc_primary_service_by_uuid(uint16_t connection_handle,
+                                                   uint8_t uuid_type,
+                                                   uuid_t *uuid)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_disc_primary_service_by_uuid_cp0 *cp0 = (aci_gatt_disc_primary_service_by_uuid_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->UUID_Type = htob(UUID_Type, 1);
+  cp0->uuid_type = HTOB(uuid_type, 1);
   index_input += 1;
   /* var_len_data input */
   {
     uint8_t size;
-    switch (UUID_Type)
+    switch (uuid_type)
     {
       case 1:
         size = 2;
@@ -817,18 +824,18 @@ tBleStatus aci_gatt_disc_primary_service_by_uuid(uint16_t Connection_Handle,
       default:
         return BLE_STATUS_ERROR;
     }
-    BLUENRG_memcpy((void *) &cp0->UUID, (const void *) UUID, size);
+    BLUENRG_MEMCPY((void *) &cp0->uuid, (const void *) uuid, size);
     index_input += size;
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x113;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x113;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -838,30 +845,30 @@ tBleStatus aci_gatt_disc_primary_service_by_uuid(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_find_included_services(uint16_t Connection_Handle,
-                                           uint16_t Start_Handle,
-                                           uint16_t End_Handle)
+ble_status_t aci_gatt_find_included_services(uint16_t connection_handle,
+                                             uint16_t start_handle,
+                                             uint16_t end_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_find_included_services_cp0 *cp0 = (aci_gatt_find_included_services_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Start_Handle = htob(Start_Handle, 2);
+  cp0->start_handle = HTOB(start_handle, 2);
   index_input += 2;
-  cp0->End_Handle = htob(End_Handle, 2);
+  cp0->end_handle = HTOB(end_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x114;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x114;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -871,30 +878,30 @@ tBleStatus aci_gatt_find_included_services(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_disc_all_char_of_service(uint16_t Connection_Handle,
-                                             uint16_t Start_Handle,
-                                             uint16_t End_Handle)
+ble_status_t aci_gatt_disc_all_char_of_service(uint16_t connection_handle,
+                                               uint16_t start_handle,
+                                               uint16_t end_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_disc_all_char_of_service_cp0 *cp0 = (aci_gatt_disc_all_char_of_service_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Start_Handle = htob(Start_Handle, 2);
+  cp0->start_handle = HTOB(start_handle, 2);
   index_input += 2;
-  cp0->End_Handle = htob(End_Handle, 2);
+  cp0->end_handle = HTOB(end_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x115;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x115;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -904,29 +911,29 @@ tBleStatus aci_gatt_disc_all_char_of_service(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_disc_char_by_uuid(uint16_t Connection_Handle,
-                                      uint16_t Start_Handle,
-                                      uint16_t End_Handle,
-                                      uint8_t UUID_Type,
-                                      UUID_t *UUID)
+ble_status_t aci_gatt_disc_char_by_uuid(uint16_t connection_handle,
+                                        uint16_t start_handle,
+                                        uint16_t end_handle,
+                                        uint8_t uuid_type,
+                                        uuid_t *uuid)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_disc_char_by_uuid_cp0 *cp0 = (aci_gatt_disc_char_by_uuid_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Start_Handle = htob(Start_Handle, 2);
+  cp0->start_handle = HTOB(start_handle, 2);
   index_input += 2;
-  cp0->End_Handle = htob(End_Handle, 2);
+  cp0->end_handle = HTOB(end_handle, 2);
   index_input += 2;
-  cp0->UUID_Type = htob(UUID_Type, 1);
+  cp0->uuid_type = HTOB(uuid_type, 1);
   index_input += 1;
   /* var_len_data input */
   {
     uint8_t size;
-    switch (UUID_Type)
+    switch (uuid_type)
     {
       case 1:
         size = 2;
@@ -937,18 +944,18 @@ tBleStatus aci_gatt_disc_char_by_uuid(uint16_t Connection_Handle,
       default:
         return BLE_STATUS_ERROR;
     }
-    BLUENRG_memcpy((void *) &cp0->UUID, (const void *) UUID, size);
+    BLUENRG_MEMCPY((void *) &cp0->uuid, (const void *) uuid, size);
     index_input += size;
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x116;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x116;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -958,30 +965,30 @@ tBleStatus aci_gatt_disc_char_by_uuid(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_disc_all_char_desc(uint16_t Connection_Handle,
-                                       uint16_t Char_Handle,
-                                       uint16_t End_Handle)
+ble_status_t aci_gatt_disc_all_char_desc(uint16_t connection_handle,
+                                         uint16_t char_handle,
+                                         uint16_t end_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_disc_all_char_desc_cp0 *cp0 = (aci_gatt_disc_all_char_desc_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Char_Handle = htob(Char_Handle, 2);
+  cp0->char_handle = HTOB(char_handle, 2);
   index_input += 2;
-  cp0->End_Handle = htob(End_Handle, 2);
+  cp0->end_handle = HTOB(end_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x117;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x117;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -991,27 +998,27 @@ tBleStatus aci_gatt_disc_all_char_desc(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_read_char_value(uint16_t Connection_Handle,
-                                    uint16_t Attr_Handle)
+ble_status_t aci_gatt_read_char_value(uint16_t connection_handle,
+                                      uint16_t attr_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_read_char_value_cp0 *cp0 = (aci_gatt_read_char_value_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x118;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x118;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1021,29 +1028,29 @@ tBleStatus aci_gatt_read_char_value(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_read_using_char_uuid(uint16_t Connection_Handle,
-                                         uint16_t Start_Handle,
-                                         uint16_t End_Handle,
-                                         uint8_t UUID_Type,
-                                         UUID_t *UUID)
+ble_status_t aci_gatt_read_using_char_uuid(uint16_t connection_handle,
+                                           uint16_t start_handle,
+                                           uint16_t end_handle,
+                                           uint8_t uuid_type,
+                                           uuid_t *uuid)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_read_using_char_uuid_cp0 *cp0 = (aci_gatt_read_using_char_uuid_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Start_Handle = htob(Start_Handle, 2);
+  cp0->start_handle = HTOB(start_handle, 2);
   index_input += 2;
-  cp0->End_Handle = htob(End_Handle, 2);
+  cp0->end_handle = HTOB(end_handle, 2);
   index_input += 2;
-  cp0->UUID_Type = htob(UUID_Type, 1);
+  cp0->uuid_type = HTOB(uuid_type, 1);
   index_input += 1;
   /* var_len_data input */
   {
     uint8_t size;
-    switch (UUID_Type)
+    switch (uuid_type)
     {
       case 1:
         size = 2;
@@ -1054,18 +1061,18 @@ tBleStatus aci_gatt_read_using_char_uuid(uint16_t Connection_Handle,
       default:
         return BLE_STATUS_ERROR;
     }
-    BLUENRG_memcpy((void *) &cp0->UUID, (const void *) UUID, size);
+    BLUENRG_MEMCPY((void *) &cp0->uuid, (const void *) uuid, size);
     index_input += size;
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x119;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x119;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1075,30 +1082,30 @@ tBleStatus aci_gatt_read_using_char_uuid(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_read_long_char_value(uint16_t Connection_Handle,
-                                         uint16_t Attr_Handle,
-                                         uint16_t Val_Offset)
+ble_status_t aci_gatt_read_long_char_value(uint16_t connection_handle,
+                                           uint16_t attr_handle,
+                                           uint16_t val_offset)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_read_long_char_value_cp0 *cp0 = (aci_gatt_read_long_char_value_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Val_Offset = htob(Val_Offset, 2);
+  cp0->val_offset = HTOB(val_offset, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x11a;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x11a;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1108,36 +1115,36 @@ tBleStatus aci_gatt_read_long_char_value(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_read_multiple_char_value(uint16_t Connection_Handle,
-                                             uint8_t Number_of_Handles,
-                                             Handle_Entry_t Handle_Entry[])
+ble_status_t aci_gatt_read_multiple_char_value(uint16_t connection_handle,
+                                               uint8_t number_of_handles,
+                                               handle_entry_t handle_entry[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_read_multiple_char_value_cp0 *cp0 = (aci_gatt_read_multiple_char_value_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Number_of_Handles = htob(Number_of_Handles, 1);
+  cp0->number_of_handles = HTOB(number_of_handles, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    for (int i = 0; i < Number_of_Handles; i++)
+    for (uint8_t i = 0; i < number_of_handles; i++)
     {
-      cp0->Handle_Entry[i].Handle = Handle_Entry[i].Handle;
+      cp0->handle_entry[i].handle = handle_entry[i].handle;
     }
-    index_input += Number_of_Handles * 2;
+    index_input += number_of_handles * 2;
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x11b;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x11b;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1147,36 +1154,36 @@ tBleStatus aci_gatt_read_multiple_char_value(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_write_char_value(uint16_t Connection_Handle,
-                                     uint16_t Attr_Handle,
-                                     uint8_t Attribute_Val_Length,
-                                     uint8_t Attribute_Val[])
+ble_status_t aci_gatt_write_char_value(uint16_t connection_handle,
+                                       uint16_t attr_handle,
+                                       uint8_t attribute_val_length,
+                                       uint8_t attribute_val[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_write_char_value_cp0 *cp0 = (aci_gatt_write_char_value_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Attribute_Val_Length = htob(Attribute_Val_Length, 1);
+  cp0->attribute_val_length = HTOB(attribute_val_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Attribute_Val, (const void *) Attribute_Val, Attribute_Val_Length * sizeof(uint8_t));
-    index_input += Attribute_Val_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->attribute_val, (const void *) attribute_val, attribute_val_length * sizeof(uint8_t));
+    index_input += attribute_val_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x11c;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x11c;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1186,39 +1193,39 @@ tBleStatus aci_gatt_write_char_value(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_write_long_char_value(uint16_t Connection_Handle,
-                                          uint16_t Attr_Handle,
-                                          uint16_t Val_Offset,
-                                          uint8_t Attribute_Val_Length,
-                                          uint8_t Attribute_Val[])
+ble_status_t aci_gatt_write_long_char_value(uint16_t connection_handle,
+                                            uint16_t attr_handle,
+                                            uint16_t val_offset,
+                                            uint8_t attribute_val_length,
+                                            uint8_t attribute_val[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_write_long_char_value_cp0 *cp0 = (aci_gatt_write_long_char_value_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Val_Offset = htob(Val_Offset, 2);
+  cp0->val_offset = HTOB(val_offset, 2);
   index_input += 2;
-  cp0->Attribute_Val_Length = htob(Attribute_Val_Length, 1);
+  cp0->attribute_val_length = HTOB(attribute_val_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Attribute_Val, (const void *) Attribute_Val, Attribute_Val_Length * sizeof(uint8_t));
-    index_input += Attribute_Val_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->attribute_val, (const void *) attribute_val, attribute_val_length * sizeof(uint8_t));
+    index_input += attribute_val_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x11d;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x11d;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1228,39 +1235,39 @@ tBleStatus aci_gatt_write_long_char_value(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_write_char_reliable(uint16_t Connection_Handle,
-                                        uint16_t Attr_Handle,
-                                        uint16_t Val_Offset,
-                                        uint8_t Attribute_Val_Length,
-                                        uint8_t Attribute_Val[])
+ble_status_t aci_gatt_write_char_reliable(uint16_t connection_handle,
+                                          uint16_t attr_handle,
+                                          uint16_t val_offset,
+                                          uint8_t attribute_val_length,
+                                          uint8_t attribute_val[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_write_char_reliable_cp0 *cp0 = (aci_gatt_write_char_reliable_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Val_Offset = htob(Val_Offset, 2);
+  cp0->val_offset = HTOB(val_offset, 2);
   index_input += 2;
-  cp0->Attribute_Val_Length = htob(Attribute_Val_Length, 1);
+  cp0->attribute_val_length = HTOB(attribute_val_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Attribute_Val, (const void *) Attribute_Val, Attribute_Val_Length * sizeof(uint8_t));
-    index_input += Attribute_Val_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->attribute_val, (const void *) attribute_val, attribute_val_length * sizeof(uint8_t));
+    index_input += attribute_val_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x11e;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x11e;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1270,39 +1277,39 @@ tBleStatus aci_gatt_write_char_reliable(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_write_long_char_desc(uint16_t Connection_Handle,
-                                         uint16_t Attr_Handle,
-                                         uint16_t Val_Offset,
-                                         uint8_t Attribute_Val_Length,
-                                         uint8_t Attribute_Val[])
+ble_status_t aci_gatt_write_long_char_desc(uint16_t connection_handle,
+                                           uint16_t attr_handle,
+                                           uint16_t val_offset,
+                                           uint8_t attribute_val_length,
+                                           uint8_t attribute_val[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_write_long_char_desc_cp0 *cp0 = (aci_gatt_write_long_char_desc_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Val_Offset = htob(Val_Offset, 2);
+  cp0->val_offset = HTOB(val_offset, 2);
   index_input += 2;
-  cp0->Attribute_Val_Length = htob(Attribute_Val_Length, 1);
+  cp0->attribute_val_length = HTOB(attribute_val_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Attribute_Val, (const void *) Attribute_Val, Attribute_Val_Length * sizeof(uint8_t));
-    index_input += Attribute_Val_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->attribute_val, (const void *) attribute_val, attribute_val_length * sizeof(uint8_t));
+    index_input += attribute_val_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x11f;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x11f;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1312,30 +1319,30 @@ tBleStatus aci_gatt_write_long_char_desc(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_read_long_char_desc(uint16_t Connection_Handle,
-                                        uint16_t Attr_Handle,
-                                        uint16_t Val_Offset)
+ble_status_t aci_gatt_read_long_char_desc(uint16_t connection_handle,
+                                          uint16_t attr_handle,
+                                          uint16_t val_offset)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_read_long_char_desc_cp0 *cp0 = (aci_gatt_read_long_char_desc_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Val_Offset = htob(Val_Offset, 2);
+  cp0->val_offset = HTOB(val_offset, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x120;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x120;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1345,36 +1352,36 @@ tBleStatus aci_gatt_read_long_char_desc(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_write_char_desc(uint16_t Connection_Handle,
-                                    uint16_t Attr_Handle,
-                                    uint8_t Attribute_Val_Length,
-                                    uint8_t Attribute_Val[])
+ble_status_t aci_gatt_write_char_desc(uint16_t connection_handle,
+                                      uint16_t attr_handle,
+                                      uint8_t attribute_val_length,
+                                      uint8_t attribute_val[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_write_char_desc_cp0 *cp0 = (aci_gatt_write_char_desc_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Attribute_Val_Length = htob(Attribute_Val_Length, 1);
+  cp0->attribute_val_length = HTOB(attribute_val_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Attribute_Val, (const void *) Attribute_Val, Attribute_Val_Length * sizeof(uint8_t));
-    index_input += Attribute_Val_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->attribute_val, (const void *) attribute_val, attribute_val_length * sizeof(uint8_t));
+    index_input += attribute_val_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x121;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x121;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1384,27 +1391,27 @@ tBleStatus aci_gatt_write_char_desc(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_read_char_desc(uint16_t Connection_Handle,
-                                   uint16_t Attr_Handle)
+ble_status_t aci_gatt_read_char_desc(uint16_t connection_handle,
+                                     uint16_t attr_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_read_char_desc_cp0 *cp0 = (aci_gatt_read_char_desc_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x122;
-  rq.event = 0x0F;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x122;
+  rq_t.event = 0x0F;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1414,35 +1421,35 @@ tBleStatus aci_gatt_read_char_desc(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_write_without_resp(uint16_t Connection_Handle,
-                                       uint16_t Attr_Handle,
-                                       uint8_t Attribute_Val_Length,
-                                       uint8_t Attribute_Val[])
+ble_status_t aci_gatt_write_without_resp(uint16_t connection_handle,
+                                         uint16_t attr_handle,
+                                         uint8_t attribute_val_length,
+                                         uint8_t attribute_val[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_write_without_resp_cp0 *cp0 = (aci_gatt_write_without_resp_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Attribute_Val_Length = htob(Attribute_Val_Length, 1);
+  cp0->attribute_val_length = HTOB(attribute_val_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Attribute_Val, (const void *) Attribute_Val, Attribute_Val_Length * sizeof(uint8_t));
-    index_input += Attribute_Val_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->attribute_val, (const void *) attribute_val, attribute_val_length * sizeof(uint8_t));
+    index_input += attribute_val_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x123;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x123;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1452,35 +1459,35 @@ tBleStatus aci_gatt_write_without_resp(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_signed_write_without_resp(uint16_t Connection_Handle,
-                                              uint16_t Attr_Handle,
-                                              uint8_t Attribute_Val_Length,
-                                              uint8_t Attribute_Val[])
+ble_status_t aci_gatt_signed_write_without_resp(uint16_t connection_handle,
+                                                uint16_t attr_handle,
+                                                uint8_t attribute_val_length,
+                                                uint8_t attribute_val[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_signed_write_without_resp_cp0 *cp0 = (aci_gatt_signed_write_without_resp_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Attribute_Val_Length = htob(Attribute_Val_Length, 1);
+  cp0->attribute_val_length = HTOB(attribute_val_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Attribute_Val, (const void *) Attribute_Val, Attribute_Val_Length * sizeof(uint8_t));
-    index_input += Attribute_Val_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->attribute_val, (const void *) attribute_val, attribute_val_length * sizeof(uint8_t));
+    index_input += attribute_val_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x124;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x124;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1490,23 +1497,23 @@ tBleStatus aci_gatt_signed_write_without_resp(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_confirm_indication(uint16_t Connection_Handle)
+ble_status_t aci_gatt_confirm_indication(uint16_t connection_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_confirm_indication_cp0 *cp0 = (aci_gatt_confirm_indication_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x125;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x125;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1516,41 +1523,41 @@ tBleStatus aci_gatt_confirm_indication(uint16_t Connection_Handle)
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_write_resp(uint16_t Connection_Handle,
-                               uint16_t Attr_Handle,
-                               uint8_t Write_status,
-                               uint8_t Error_Code,
-                               uint8_t Attribute_Val_Length,
-                               uint8_t Attribute_Val[])
+ble_status_t aci_gatt_write_resp(uint16_t connection_handle,
+                                 uint16_t attr_handle,
+                                 uint8_t write_status,
+                                 uint8_t error_code,
+                                 uint8_t attribute_val_length,
+                                 uint8_t attribute_val[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_write_resp_cp0 *cp0 = (aci_gatt_write_resp_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Write_status = htob(Write_status, 1);
+  cp0->write_status = HTOB(write_status, 1);
   index_input += 1;
-  cp0->Error_Code = htob(Error_Code, 1);
+  cp0->error_code = HTOB(error_code, 1);
   index_input += 1;
-  cp0->Attribute_Val_Length = htob(Attribute_Val_Length, 1);
+  cp0->attribute_val_length = HTOB(attribute_val_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Attribute_Val, (const void *) Attribute_Val, Attribute_Val_Length * sizeof(uint8_t));
-    index_input += Attribute_Val_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->attribute_val, (const void *) attribute_val, attribute_val_length * sizeof(uint8_t));
+    index_input += attribute_val_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x126;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x126;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1560,23 +1567,23 @@ tBleStatus aci_gatt_write_resp(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_allow_read(uint16_t Connection_Handle)
+ble_status_t aci_gatt_allow_read(uint16_t connection_handle)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_allow_read_cp0 *cp0 = (aci_gatt_allow_read_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x127;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x127;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1586,29 +1593,29 @@ tBleStatus aci_gatt_allow_read(uint16_t Connection_Handle)
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_set_security_permission(uint16_t Serv_Handle,
-                                            uint16_t Attr_Handle,
-                                            uint8_t Security_Permissions)
+ble_status_t aci_gatt_set_security_permission(uint16_t serv_handle,
+                                              uint16_t attr_handle,
+                                              uint8_t security_permissions)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_set_security_permission_cp0 *cp0 = (aci_gatt_set_security_permission_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Serv_Handle = htob(Serv_Handle, 2);
+  cp0->serv_handle = HTOB(serv_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Security_Permissions = htob(Security_Permissions, 1);
+  cp0->security_permissions = HTOB(security_permissions, 1);
   index_input += 1;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x128;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x128;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1618,41 +1625,43 @@ tBleStatus aci_gatt_set_security_permission(uint16_t Serv_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_set_desc_value(uint16_t Serv_Handle,
-                                   uint16_t Char_Handle,
-                                   uint16_t Char_Desc_Handle,
-                                   uint16_t Val_Offset,
-                                   uint8_t Char_Desc_Value_Length,
-                                   uint8_t Char_Desc_Value[])
+ble_status_t aci_gatt_set_desc_value(uint16_t serv_handle,
+                                     uint16_t char_handle,
+                                     uint16_t char_desc_handle,
+                                     uint16_t val_offset,
+                                     uint8_t char_desc_value_length,
+                                     uint8_t char_desc_value[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_set_desc_value_cp0 *cp0 = (aci_gatt_set_desc_value_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Serv_Handle = htob(Serv_Handle, 2);
+  cp0->serv_handle = HTOB(serv_handle, 2);
   index_input += 2;
-  cp0->Char_Handle = htob(Char_Handle, 2);
+  cp0->char_handle = HTOB(char_handle, 2);
   index_input += 2;
-  cp0->Char_Desc_Handle = htob(Char_Desc_Handle, 2);
+  cp0->char_desc_handle = HTOB(char_desc_handle, 2);
   index_input += 2;
-  cp0->Val_Offset = htob(Val_Offset, 2);
+  cp0->val_offset = HTOB(val_offset, 2);
   index_input += 2;
-  cp0->Char_Desc_Value_Length = htob(Char_Desc_Value_Length, 1);
+  cp0->char_desc_value_length = HTOB(char_desc_value_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Char_Desc_Value, (const void *) Char_Desc_Value, Char_Desc_Value_Length * sizeof(uint8_t));
-    index_input += Char_Desc_Value_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->char_desc_value,
+                   (const void *) char_desc_value,
+                   char_desc_value_length * sizeof(uint8_t));
+    index_input += char_desc_value_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x129;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x129;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1662,86 +1671,86 @@ tBleStatus aci_gatt_set_desc_value(uint16_t Serv_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_read_handle_value(uint16_t Attr_Handle,
-                                      uint16_t Offset,
-                                      uint16_t Value_Length_Requested,
-                                      uint16_t *Length,
-                                      uint16_t *Value_Length,
-                                      uint8_t Value[])
+ble_status_t aci_gatt_read_handle_value(uint16_t attr_handle,
+                                        uint16_t offset,
+                                        uint16_t value_length_requested,
+                                        uint16_t *length,
+                                        uint16_t *value_length,
+                                        uint8_t value[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_read_handle_value_cp0 *cp0 = (aci_gatt_read_handle_value_cp0 *)(cmd_buffer);
   aci_gatt_read_handle_value_rp0 resp;
-  BLUENRG_memset(&resp, 0, sizeof(resp));
+  BLUENRG_MEMSET(&resp, 0, sizeof(resp));
   uint8_t index_input = 0;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Offset = htob(Offset, 2);
+  cp0->offset = HTOB(offset, 2);
   index_input += 2;
-  cp0->Value_Length_Requested = htob(Value_Length_Requested, 2);
+  cp0->value_length_requested = HTOB(value_length_requested, 2);
   index_input += 2;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x12a;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &resp;
-  rq.rlen = sizeof(resp);
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x12a;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &resp;
+  rq_t.rlen = sizeof(resp);
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
-  if (resp.Status)
+  if (resp.status)
   {
-    return resp.Status;
+    return resp.status;
   }
-  *Length = btoh(resp.Length, 2);
-  *Value_Length = btoh(resp.Value_Length, 2);
-  BLUENRG_memcpy((void *) Value, (const void *) resp.Value, *Value_Length * sizeof(uint8_t));
+  *length = BTOH(resp.length, 2);
+  *value_length = BTOH(resp.value_length, 2);
+  BLUENRG_MEMCPY((void *) value, (const void *) resp.value, *value_length * sizeof(uint8_t));
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_update_char_value_ext(uint16_t Conn_Handle_To_Notify,
-                                          uint16_t Service_Handle,
-                                          uint16_t Char_Handle,
-                                          uint8_t Update_Type,
-                                          uint16_t Char_Length,
-                                          uint16_t Value_Offset,
-                                          uint8_t Value_Length,
-                                          uint8_t Value[])
+ble_status_t aci_gatt_update_char_value_ext(uint16_t conn_handle_to_notify,
+                                            uint16_t service_handle,
+                                            uint16_t char_handle,
+                                            uint8_t update_type,
+                                            uint16_t char_length,
+                                            uint16_t value_offset,
+                                            uint8_t value_length,
+                                            uint8_t value[])
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_update_char_value_ext_cp0 *cp0 = (aci_gatt_update_char_value_ext_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Conn_Handle_To_Notify = htob(Conn_Handle_To_Notify, 2);
+  cp0->conn_handle_to_notify = HTOB(conn_handle_to_notify, 2);
   index_input += 2;
-  cp0->Service_Handle = htob(Service_Handle, 2);
+  cp0->service_handle = HTOB(service_handle, 2);
   index_input += 2;
-  cp0->Char_Handle = htob(Char_Handle, 2);
+  cp0->char_handle = HTOB(char_handle, 2);
   index_input += 2;
-  cp0->Update_Type = htob(Update_Type, 1);
+  cp0->update_type = HTOB(update_type, 1);
   index_input += 1;
-  cp0->Char_Length = htob(Char_Length, 2);
+  cp0->char_length = HTOB(char_length, 2);
   index_input += 2;
-  cp0->Value_Offset = htob(Value_Offset, 2);
+  cp0->value_offset = HTOB(value_offset, 2);
   index_input += 2;
-  cp0->Value_Length = htob(Value_Length, 1);
+  cp0->value_length = HTOB(value_length, 1);
   index_input += 1;
   /* var_len_data input */
   {
-    BLUENRG_memcpy((void *) &cp0->Value, (const void *) Value, Value_Length * sizeof(uint8_t));
-    index_input += Value_Length * sizeof(uint8_t);
+    BLUENRG_MEMCPY((void *) &cp0->value, (const void *) value, value_length * sizeof(uint8_t));
+    index_input += value_length * sizeof(uint8_t);
   }
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x12c;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x12c;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1751,26 +1760,26 @@ tBleStatus aci_gatt_update_char_value_ext(uint16_t Conn_Handle_To_Notify,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_deny_read(uint16_t Connection_Handle,
-                              uint8_t Error_Code)
+ble_status_t aci_gatt_deny_read(uint16_t connection_handle,
+                                uint8_t error_code)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_deny_read_cp0 *cp0 = (aci_gatt_deny_read_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Connection_Handle = htob(Connection_Handle, 2);
+  cp0->connection_handle = HTOB(connection_handle, 2);
   index_input += 2;
-  cp0->Error_Code = htob(Error_Code, 1);
+  cp0->error_code = HTOB(error_code, 1);
   index_input += 1;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x12d;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x12d;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }
@@ -1780,29 +1789,29 @@ tBleStatus aci_gatt_deny_read(uint16_t Connection_Handle,
   }
   return BLE_STATUS_SUCCESS;
 }
-tBleStatus aci_gatt_set_access_permission(uint16_t Serv_Handle,
-                                          uint16_t Attr_Handle,
-                                          uint8_t Access_Permissions)
+ble_status_t aci_gatt_set_access_permission(uint16_t serv_handle,
+                                            uint16_t attr_handle,
+                                            uint8_t access_permissions)
 {
-  struct hci_request rq;
+  struct hci_request rq_t;
   uint8_t cmd_buffer[258];
   aci_gatt_set_access_permission_cp0 *cp0 = (aci_gatt_set_access_permission_cp0 *)(cmd_buffer);
-  tBleStatus status = 0;
+  ble_status_t status = 0;
   uint8_t index_input = 0;
-  cp0->Serv_Handle = htob(Serv_Handle, 2);
+  cp0->serv_handle = HTOB(serv_handle, 2);
   index_input += 2;
-  cp0->Attr_Handle = htob(Attr_Handle, 2);
+  cp0->attr_handle = HTOB(attr_handle, 2);
   index_input += 2;
-  cp0->Access_Permissions = htob(Access_Permissions, 1);
+  cp0->access_permissions = HTOB(access_permissions, 1);
   index_input += 1;
-  BLUENRG_memset(&rq, 0, sizeof(rq));
-  rq.ogf = 0x3f;
-  rq.ocf = 0x12e;
-  rq.cparam = cmd_buffer;
-  rq.clen = index_input;
-  rq.rparam = &status;
-  rq.rlen = 1;
-  if (hci_send_req(&rq, FALSE) < 0)
+  BLUENRG_MEMSET(&rq_t, 0, sizeof(rq_t));
+  rq_t.ogf = 0x3f;
+  rq_t.ocf = 0x12e;
+  rq_t.cparam = cmd_buffer;
+  rq_t.command_len = index_input;
+  rq_t.rparam = &status;
+  rq_t.rlen = 1;
+  if (hci_send_req(&rq_t, FALSE) < 0)
   {
     return BLE_STATUS_TIMEOUT;
   }

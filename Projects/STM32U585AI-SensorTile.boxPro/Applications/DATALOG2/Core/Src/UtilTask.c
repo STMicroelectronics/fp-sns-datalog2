@@ -1,4 +1,3 @@
-
 /**
   ******************************************************************************
   * @file    UtilTask.c
@@ -7,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -26,7 +25,6 @@
 #include "App_model.h"
 #include "mx.h"
 
-#include "parson.h"
 
 #ifndef UTIL_TASK_CFG_STACK_DEPTH
 #define UTIL_TASK_CFG_STACK_DEPTH              TX_MINIMUM_STACK*4
@@ -54,7 +52,6 @@
 #define sTaskObj                               sUtilTaskObj
 #endif
 
-
 /**
   * Class object declaration. The class object encapsulates members that are shared between
   * all instance of the class.
@@ -74,7 +71,6 @@ typedef struct _UtilTaskClass_t
     */
   pExecuteStepFunc_t p_pm_state2func_map[];
 } UtilTaskClass_t;
-
 
 /* Private member function declaration */
 /***************************************/
@@ -152,6 +148,7 @@ AManagedTaskEx *UtilTaskAlloc(const void *p_mx_sw1_drv_cfg, const void *p_mx_led
   /* In this application there is only one Keyboard task,
    * so this allocator implement the singleton design pattern.
    */
+
   /* Initialize the super class */
   AMTInitEx(&sTaskObj.super);
 
@@ -182,6 +179,7 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
     {
       ((MX_GPIOParams_t *)p_obj->p_mx_sw1_drv_cfg)->p_mx_init_f();
     }
+
     // configure Led 1
     if (p_obj->p_mx_led1_drv_cfg != NULL)
     {
@@ -189,6 +187,7 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
       p_ld1_params->p_mx_init_f();
       HAL_GPIO_WritePin(p_ld1_params->port, p_ld1_params->pin, GPIO_PIN_RESET);
     }
+
     // configure Led 2
     if (p_obj->p_mx_led2_drv_cfg != NULL)
     {
@@ -196,6 +195,7 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
       p_ld2_params->p_mx_init_f();
       HAL_GPIO_WritePin(p_ld2_params->port, p_ld2_params->pin, GPIO_PIN_RESET);
     }
+
     // configure Led 3
     if (p_obj->p_mx_led3_drv_cfg != NULL)
     {
@@ -203,6 +203,7 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
       p_ld3_params->p_mx_init_f();
       HAL_GPIO_WritePin(p_ld3_params->port, p_ld3_params->pin, GPIO_PIN_RESET);
     }
+
   }
 
 
@@ -320,8 +321,10 @@ sys_error_code_t UtilTask_vtblHandleError(AManagedTask *_this, SysEvent error)
 sys_error_code_t UtilTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 {
   assert_param(_this);
-  sys_error_code_t xRes = SYS_NO_ERROR_CODE;
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
   UtilTask_t *p_obj = (UtilTask_t *)_this;
+
+  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("UTIL: start.\r\n"));
 
   /* Enable User button SW1 interrupt */
   if (p_obj->p_mx_sw1_drv_cfg != NULL)
@@ -330,11 +333,9 @@ sys_error_code_t UtilTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
     HAL_NVIC_EnableIRQ(p_sw1_params->irq_n);
   }
 
-  SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("UTIL: start.\r\n"));
 
-  return xRes;
+  return res;
 }
-
 
 /* AManagedTaskEx virtual functions definition */
 /***********************************************/
@@ -345,14 +346,10 @@ sys_error_code_t UtilTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowerMode
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   UtilTask_t *p_obj = (UtilTask_t *)_this;
 
-  struct utilMessage_t msg =
-  {
-    .msgId = APP_REPORT_ID_FORCE_STEP
-  };
+  struct utilMessage_t msg = { .msgId = APP_REPORT_ID_FORCE_STEP };
 
   if (active_power_mode == E_POWER_MODE_STATE1)
   {
-    /* the task is waiting for a message */
     if (TX_SUCCESS != tx_queue_front_send(&p_obj->in_queue, &msg, AMT_MS_TO_TICKS(100)))
     {
       res = SYS_TASK_QUEUE_FULL_ERROR_CODE;
@@ -360,7 +357,6 @@ sys_error_code_t UtilTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowerMode
   }
   else if (active_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
   {
-    /* the task is ready again */
     tx_thread_wait_abort(&_this->m_xTaskHandle);
   }
   else
@@ -381,7 +377,6 @@ sys_error_code_t UtilTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPow
   return res;
 }
 
-
 /* Private function definition */
 /*******************************/
 
@@ -392,12 +387,17 @@ static sys_error_code_t UtilTaskExecuteStepState1(AManagedTask *_this)
   UtilTask_t *p_obj = (UtilTask_t *)_this;
   static uint8_t led_count_state1 = 0;
 
-  struct utilMessage_t msg = {0};
+  struct utilMessage_t msg =
+  {
+    0
+  };
 
   AMTExSetInactiveState((AManagedTaskEx *) _this, TRUE);
+
   if (TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &msg, TX_WAIT_FOREVER))
   {
     AMTExSetInactiveState((AManagedTaskEx *) _this, FALSE);
+
     if (msg.msgId == APP_REPORT_ID_FORCE_STEP)
     {
       __NOP();
@@ -422,6 +422,7 @@ static sys_error_code_t UtilTaskExecuteStepState1(AManagedTask *_this)
 
   return res;
 }
+
 
 static sys_error_code_t UtilTaskExecuteStepSensorsActive(AManagedTask *_this)
 {
@@ -454,6 +455,7 @@ static sys_error_code_t UtilTaskExecuteStepSensorsActive(AManagedTask *_this)
 
   return res;
 }
+
 
 static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer)
 {

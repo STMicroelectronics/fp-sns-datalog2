@@ -1,65 +1,46 @@
-/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    stm32u5xx_it.c
+  * @author  SRA
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
+
 
 /* Includes ------------------------------------------------------------------*/
-#include "mx.h"
 #include "stm32u5xx_it.h"
-//#include "usbpd.h"
+#include "drivers/EXTIPinMap.h"
+#include "main.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "drivers/EXTIPinMap.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN TD */
-
-/* USER CODE END TD */
-
 /* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
 /* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
-
-/* USER CODE END PM */
-
 /* Private variables ---------------------------------------------------------*/
-/* USER CODE BEGIN PV */
-
-/* USER CODE END PV */
-
 /* Private function prototypes -----------------------------------------------*/
-/* USER CODE BEGIN PFP */
+/* Private user code ---------------------------------------------------------*/
+/* External variables --------------------------------------------------------*/
+
 /**
   * Map one EXTI to n callback based on the GPIO PIN.
   */
 static inline void ExtiDefISR(uint16_t exti_pin);
-/* USER CODE END PFP */
 
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
-
-/* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef handle_GPDMA1_Channel1;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel0;
 extern I2C_HandleTypeDef hi2c1;
@@ -67,9 +48,29 @@ extern TIM_HandleTypeDef htim7;
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern TIM_HandleTypeDef htim6;
 
-/* USER CODE BEGIN EV */
 EXTI_DECLARE_PIN2F_MAP()
-/* USER CODE END EV */
+
+// Forward function declarations
+// ****************************
+
+extern void xPortSysTickHandler(void);
+
+// Private function definition
+// ***************************
+
+void ExtiDefISR(uint16_t exti_pin)
+{
+  EXTIPin2CallbckMap xMap = EXTI_GET_P2F_MAP();
+  for (int i = 0; xMap[i].pfCallback != NULL; i++)
+  {
+    if (__HAL_GPIO_EXTI_GET_IT(xMap[i].nPin) && exti_pin == xMap[i].nPin)
+    {
+      /* EXTI line interrupt detected */
+      __HAL_GPIO_EXTI_CLEAR_IT(xMap[i].nPin);
+      xMap[i].pfCallback(xMap[i].nPin);
+    }
+  }
+}
 
 /******************************************************************************/
 /*           Cortex Processor Interruption and Exception Handlers          */
@@ -246,34 +247,6 @@ void GPDMA1_Channel1_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles GPDMA1 Channel 3 global interrupt.
-  */
-void GPDMA1_Channel3_IRQHandler(void)
-{
-  /* USER CODE BEGIN GPDMA1_Channel3_IRQn 0 */
-
-  /* USER CODE END GPDMA1_Channel3_IRQn 0 */
-
-  /* USER CODE BEGIN GPDMA1_Channel3_IRQn 1 */
-
-  /* USER CODE END GPDMA1_Channel3_IRQn 1 */
-}
-
-/**
-  * @brief This function handles GPDMA1 Channel 5 global interrupt.
-  */
-void GPDMA1_Channel5_IRQHandler(void)
-{
-  /* USER CODE BEGIN GPDMA1_Channel5_IRQn 0 */
-
-  /* USER CODE END GPDMA1_Channel5_IRQn 0 */
-
-  /* USER CODE BEGIN GPDMA1_Channel5_IRQn 1 */
-
-  /* USER CODE END GPDMA1_Channel5_IRQn 1 */
-}
-
-/**
   * @brief This function handles TIM6 global interrupt.
   */
 void TIM6_IRQHandler(void)
@@ -360,20 +333,3 @@ void UCPD1_IRQHandler(void)
 
 /* USER CODE BEGIN 1 */
 
-/* Private function definition */
-/*******************************/
-void ExtiDefISR(uint16_t exti_pin)
-{
-  EXTIPin2CallbckMap xMap = EXTI_GET_P2F_MAP();
-  for (int i = 0; xMap[i].pfCallback != NULL; i++)
-  {
-    if (__HAL_GPIO_EXTI_GET_IT(xMap[i].nPin) && (xMap[i].nPin == exti_pin))
-    {
-      /* EXTI line interrupt detected */
-      __HAL_GPIO_EXTI_CLEAR_IT(xMap[i].nPin);
-      xMap[i].pfCallback(xMap[i].nPin);
-    }
-  }
-}
-
-/* USER CODE END 1 */

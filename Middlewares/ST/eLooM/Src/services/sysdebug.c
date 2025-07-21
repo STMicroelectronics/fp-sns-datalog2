@@ -72,7 +72,7 @@ xDebugLockUnlockFnType xSysDebugUnlockFn = null_lockfn;
 
 DebugPrintfFn xSysDebugPrintfFn = printf;
 
-int SysDebugInit()
+int32_t SysDebugInit()
 {
   // hardware initialization
   SysDebugHardwareInit();
@@ -118,7 +118,7 @@ __weak
 #else
 __attribute__((weak))
 #endif
-int SysDebugHardwareInit()
+int32_t SysDebugHardwareInit()
 {
 
   SYS_DBG_UART_INIT();
@@ -126,7 +126,7 @@ int SysDebugHardwareInit()
   return 0;
 }
 
-int SysDebugLowLevelPutchar(int x)
+int32_t SysDebugLowLevelPutchar(int32_t x)
 {
   if (HAL_UART_Transmit(&SYS_DBG_UART, (uint8_t *)&x, 1, SYS_DBG_UART_TIMEOUT_MS) != HAL_OK)
   {

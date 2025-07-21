@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    ble_list.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.3.0
-  * @date    20-July-2023
+  * @version 2.0.0
+  * @date    25-September-2024
   * @brief   Header file for linked list library.
   ******************************************************************************
   * @attention
@@ -21,35 +21,44 @@
 #ifndef __BLE_LIST_H_
 #define __BLE_LIST_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 
-typedef struct _tListNode {
-  struct _tListNode * next;
-  struct _tListNode * prev;
-} tListNode, *pListNode;
+typedef struct _list_node_t
+{
+  struct _list_node_t *next;
+  struct _list_node_t *prev;
+} list_node_t, *p_list_node_t;
 
-void list_init_head (tListNode * listHead);
+void list_init_head(list_node_t *list_head);
 
-uint8_t list_is_empty (tListNode * listHead);
+uint8_t list_is_empty(list_node_t *list_head);
 
-void list_insert_head (tListNode * listHead, tListNode * node);
+void list_insert_head(list_node_t *list_head, list_node_t *node);
 
-void list_insert_tail (tListNode * listHead, tListNode * node);
+void list_insert_tail(list_node_t *list_head, list_node_t *node);
 
-void list_remove_node (tListNode * node);
+void list_remove_node(list_node_t *node);
 
-void list_remove_head (tListNode * listHead, tListNode ** node );
+void list_remove_head(list_node_t *list_head, list_node_t **node);
 
-void list_remove_tail (tListNode * listHead, tListNode ** node );
+void list_remove_tail(list_node_t *list_head, list_node_t **node);
 
-void list_insert_node_after (tListNode * node, tListNode * ref_node);
+void list_insert_node_after(list_node_t *node, list_node_t *ref_node);
 
-void list_insert_node_before (tListNode * node, tListNode * ref_node);
+void list_insert_node_before(list_node_t *node, list_node_t *ref_node);
 
-int list_get_size (tListNode * listHead);
+int32_t list_get_size(list_node_t *list_head);
 
-void list_get_next_node (tListNode * ref_node, tListNode ** node);
+void list_get_next_node(list_node_t *ref_node, list_node_t **node);
 
-void list_get_prev_node (tListNode * ref_node, tListNode ** node);
+void list_get_prev_node(list_node_t *ref_node, list_node_t **node);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __BLE_LIST_H_ */

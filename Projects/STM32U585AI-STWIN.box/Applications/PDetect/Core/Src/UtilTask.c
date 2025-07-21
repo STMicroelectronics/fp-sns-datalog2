@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -25,14 +25,13 @@
 #include "App_model.h"
 #include "spi.h"
 
-/* TODO: change XXX with a short id for the task */
 
 #ifndef UTIL_TASK_CFG_STACK_DEPTH
-#define UTIL_TASK_CFG_STACK_DEPTH              (120)
+#define UTIL_TASK_CFG_STACK_DEPTH              TX_MINIMUM_STACK*4
 #endif
 
 #ifndef UTIL_TASK_CFG_PRIORITY
-#define UTIL_TASK_CFG_PRIORITY                 (tskIDLE_PRIORITY)
+#define UTIL_TASK_CFG_PRIORITY                 (7)
 #endif
 
 #ifndef UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE
@@ -51,7 +50,6 @@
 #define RCG_BAT_MIN_VOLTAGE                   3000 //! Rechargeable battery minimum voltage in mV
 #define RCG_BAT_MAX_VOLTAGE                   4200 //! Rechargeable battery maximum voltage in mV
 
-/* TODO: define the symbol SYS_DBG_UTIL in the file sysdebug_config.h */
 #define SYS_DEBUGF(level, message)             SYS_DEBUGF3(SYS_DBG_UTIL, level, message)
 
 #if defined(DEBUG) || defined (SYS_DEBUG)
@@ -518,27 +516,20 @@ sys_error_code_t UtilTask_vtblForceExecuteStep(AManagedTaskEx *_this, EPowerMode
 
   struct utilMessage_t msg = { .msgId = APP_REPORT_ID_FORCE_STEP };
 
-  if ((active_power_mode == E_POWER_MODE_STATE1) || (active_power_mode == E_POWER_MODE_SENSORS_ACTIVE))
+  if (active_power_mode == E_POWER_MODE_STATE1)
   {
-    if (AMTExIsTaskInactive(_this))
+    if (TX_SUCCESS != tx_queue_front_send(&p_obj->in_queue, &msg, AMT_MS_TO_TICKS(100)))
     {
-      if (tx_queue_front_send(&p_obj->in_queue, &msg, AMT_MS_TO_TICKS(100)) != TX_SUCCESS)
-      {
-        res = SYS_TASK_QUEUE_FULL_ERROR_CODE;
-      }
+      res = SYS_TASK_QUEUE_FULL_ERROR_CODE;
     }
+  }
+  else if (active_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
+  {
+    tx_thread_wait_abort(&_this->m_xTaskHandle);
   }
   else
   {
-    UINT state;
-    if (TX_SUCCESS == tx_thread_info_get(&_this->m_xTaskHandle, TX_NULL, &state, TX_NULL, TX_NULL, TX_NULL, TX_NULL,
-                                         TX_NULL, TX_NULL))
-    {
-      if (state == TX_SUSPENDED)
-      {
-        tx_thread_resume(&_this->m_xTaskHandle);
-      }
-    }
+    tx_thread_resume(&_this->m_xTaskHandle);
   }
 
   return res;
@@ -556,7 +547,7 @@ sys_error_code_t UtilTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPow
 
 /* Private function definition */
 /*******************************/
-uint32_t ledcounter = 0;
+
 static sys_error_code_t UtilTaskExecuteStepState1(AManagedTask *_this)
 {
   assert_param(_this != NULL);
@@ -588,7 +579,6 @@ static sys_error_code_t UtilTaskExecuteStepState1(AManagedTask *_this)
       }
       else if (msg.nCmdID == UTIL_CMD_ID_DATALOG_LED)
       {
-        ledcounter--;
         led_count_state1++;
         if (led_count_state1 == 4)
         {
@@ -623,16 +613,10 @@ static sys_error_code_t UtilTaskExecuteStepSensorsActive(AManagedTask *_this)
   if (TX_SUCCESS == tx_queue_receive(&p_obj->in_queue, &msg, TX_WAIT_FOREVER))
   {
     AMTExSetInactiveState((AManagedTaskEx *) _this, FALSE);
-
-    if (msg.msgId == APP_REPORT_ID_FORCE_STEP)
-    {
-      __NOP();
-    }
-    else if (msg.msgId == APP_MESSAGE_ID_UTIL)
+    if (msg.msgId == APP_MESSAGE_ID_UTIL)
     {
       if (msg.nCmdID == UTIL_CMD_ID_DATALOG_LED)
       {
-        ledcounter--;
         if (p_obj->p_mx_led1_drv_cfg != NULL)
         {
           MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t *)p_obj->p_mx_led1_drv_cfg;
@@ -661,7 +645,6 @@ static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer)
     // unable to send the report. Signal the error
     sys_error_handler();
   }
-  ledcounter++;
 
   bool sd_detected;
   log_controller_get_sd_mounted(&sd_detected);

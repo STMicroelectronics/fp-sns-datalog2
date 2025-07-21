@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -19,7 +19,7 @@
 
 #include "ble_stream_class.h"
 #include "ble_stream_class_vtbl.h"
-#include "BLE_Manager.h"
+#include "ble_manager.h"
 
 #include "services/sysdebug.h"
 
@@ -33,6 +33,11 @@
 #ifndef MIN
 #define MIN(a,b)            ((a) < (b) )? (a) : (b)
 #endif
+
+
+/* Data buffers sent via BLE */
+CircularBufferDL2 *ble_cbdl2[BLE_DATA_BUFFER_COUNT];
+uint8_t *ble_write_buffer[BLE_DATA_BUFFER_COUNT];
 
 /* Private define ------------------------------------------------------------*/
 
@@ -57,7 +62,6 @@ const static IStream_vtbl ble_stream_vtbl =
 
 /* Private member function declaration */
 
-static void AciGattTxPoolAvailableEvent(void);
 static void ble_send_thread_entry(ULONG thread_input);
 static void ble_receive_thread_entry(ULONG thread_input);
 static sys_error_code_t ble_sendMSG_resume(void);
@@ -186,12 +190,12 @@ sys_error_code_t ble_stream_vtblStream_enable(IStream_t *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   ble_stream_class_t *obj = (ble_stream_class_t *) _this;
 
-  HCI_TL_SPI_Reset();
+  hci_tl_spi_reset();
 
   /* Initialize the BlueNRG stack and services */
-  BLE_BluetoothInit();
-
-  setConnectable();
+  bluetooth_init();
+  enable_extended_configuration_command();
+  set_connectable_ble();
 
   obj->adv_id = MAX_CUSTOM_DATA_STREAM_ID + 1;
 
@@ -199,9 +203,6 @@ sys_error_code_t ble_stream_vtblStream_enable(IStream_t *_this)
   {
     ble_stream_SetCustomStreamIDCallback();
   }
-
-  /* Pool available callback */
-  CustomAciGattTxPoolAvailableEvent = &AciGattTxPoolAvailableEvent;
 
   obj->status = true;
 
@@ -248,7 +249,17 @@ sys_error_code_t ble_stream_vtblStream_deinit(IStream_t *_this)
 sys_error_code_t ble_stream_vtblStream_start(IStream_t *_this, void *param)
 {
   assert_param(_this != NULL);
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  sys_error_code_t res;
+  ble_stream_class_t *obj = (ble_stream_class_t *) _this;
+
+  if (obj->connected)
+  {
+    res = SYS_NO_ERROR_CODE;
+  }
+  else
+  {
+    res = SYS_BASE_ERROR_CODE;
+  }
 
   return res;
 }
@@ -273,6 +284,8 @@ sys_error_code_t ble_stream_vtblStream_post_data(IStream_t *_this, uint8_t id_st
     obj->adv_buf[0] = buf[0];
     obj->adv_buf[1] = buf[1];
     obj->adv_buf[2] = buf[2];
+
+    return SYS_NO_ERROR_CODE;
   }
   else
   {
@@ -298,6 +311,29 @@ sys_error_code_t ble_stream_vtblStream_alloc_resource(IStream_t *_this, uint8_t 
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  /* Allocate a DL2 Circular Buffer with SD_BUFFER_ITEMS elements*/
+  CircularBufferDL2 *cbdl2 = CBDL2_Alloc(BLE_DATA_BUFFER_ITEMS);
+  if (cbdl2 == NULL)
+  {
+    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    return res;
+  }
+  /* Allocate the buffer to be used assigned to the CBDL2 object */
+  /* Size +4 byte to consider also the header not needed for the BLE */
+  ble_write_buffer[id_stream] = (uint8_t *) SysAlloc((size + 4) * BLE_DATA_BUFFER_ITEMS);
+  if (ble_write_buffer[id_stream] == NULL)
+  {
+    CBDL2_Free(cbdl2);
+    res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
+    return res;
+  }
+  /* Initialize the Circular Buffer with the specified parameters */
+  /* Size +4 byte to consider also the header not needed for the BLE */
+  CBDL2_Init(cbdl2, ble_write_buffer[id_stream], size + 4, false);
+  ble_cbdl2[id_stream] = cbdl2;
 
   return res;
 }
@@ -325,6 +361,18 @@ sys_error_code_t ble_stream_vtblStream_dealloc(IStream_t *_this, uint8_t id_stre
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  if (ble_cbdl2[id_stream] != NULL)
+  {
+    CBDL2_Free(ble_cbdl2[id_stream]);
+    ble_cbdl2[id_stream] = NULL;
+  }
+
+  if (ble_write_buffer[id_stream] != NULL)
+  {
+    SysFree(ble_write_buffer[id_stream]);
+    ble_write_buffer[id_stream] = NULL;
+  }
 
   return res;
 }
@@ -357,10 +405,10 @@ sys_error_code_t ble_stream_vtblStream_send_async(IStream_t *_this, uint8_t *buf
   return res;
 }
 
-void hci_tl_lowlevel_isr(uint16_t nPin)
+void hci_tl_lowlevel_isr(void)
 {
   /* Call hci_notify_asynch_evt() */
-  while (IsDataAvailable())
+  while (is_data_available())
   {
     hci_notify_asynch_evt(NULL);
   }
@@ -387,7 +435,7 @@ sys_error_code_t ble_stream_msg(streamMsg_t *msg)
   return res;
 }
 
-void BLE_SetCustomAdvertiseData(uint8_t *manuf_data)
+void ble_set_custom_advertise_data(uint8_t *manuf_data)
 {
   manuf_data[BLE_MANAGER_CUSTOM_FIELD1] = BLE_GetFWID();
   manuf_data[BLE_MANAGER_CUSTOM_FIELD2] = sObj.adv_buf[0];
@@ -417,7 +465,7 @@ sys_error_code_t ble_sendMSG_wait(void)
   * @param  None
   * @retval None
   */
-void WriteRequestCommandLikeFunction(uint8_t *received_msg, uint8_t msg_length)
+void write_request_pn_p_like_function(uint8_t *received_msg, uint32_t msg_length)
 {
   if (sObj.status)
   {
@@ -426,7 +474,7 @@ void WriteRequestCommandLikeFunction(uint8_t *received_msg, uint8_t msg_length)
 }
 
 
-static void AciGattTxPoolAvailableEvent(void)
+void aci_gatt_tx_pool_available_event_function(void)
 {
   if (sObj.status)
   {
@@ -519,7 +567,7 @@ static void ble_send_thread_entry(ULONG thread_input)
             break;
 
           case BLE_ISTREAM_MSG_UPDATE_ADV:
-            updateAdvData();
+            update_adv_data();
             break;
 
           default:

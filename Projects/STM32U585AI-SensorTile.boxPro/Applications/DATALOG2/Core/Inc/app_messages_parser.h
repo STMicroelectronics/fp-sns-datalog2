@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -79,7 +79,7 @@ typedef union _APPReport
 //      union
 //      {
 //        uint32_t n_param;                             /* command parameter */
-//        float f_param;
+//        float_t f_param;
 //      }param;
 //    } neaiMessage;
 //

@@ -1,37 +1,47 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
   * @file    bluenrg_conf.h
-  * @author  SRA Application Team
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
   * @brief   BLE configuration file
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
-  * This software is licensed under terms that can be found in the LICENSE file in
-  * the root directory of this software component.
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   *
   ******************************************************************************
   */
 
+/* USER CODE END Header */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef BLUENRG_CONF_TEMPLATE_H
-#define BLUENRG_CONF_TEMPLATE_H
+#ifndef BLUENRG_CONF_H
+#define BLUENRG_CONF_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+
+#include "stm32u5xx_hal.h"
+#include <string.h>
+
+/* Includes ------------------------------------------------------------------*/
 #include <string.h>
 
 /*---------- Print messages from BLE2 files at user level -----------*/
-#define BLUENRGLP_DEBUG                       0
+#define BLE2_DEBUG                       0
 /*---------- Print the data travelling over the SPI in the .csv format compatible with the ST BlueNRG GUI -----------*/
 #define PRINT_CSV_FORMAT                 0
+/*---------- Print messages from BLE2 files at middleware level -----------*/
+#define BLUENRGLP_DEBUG                   0
 /*---------- Number of Bytes reserved for HCI Read Packet -----------*/
 #define HCI_READ_PACKET_SIZE           260
 /*---------- Number of Bytes reserved for HCI Max Payload -----------*/
@@ -67,11 +77,11 @@ extern "C" {
 /*---------- HCI Default Timeout -----------*/
 #define HCI_DEFAULT_TIMEOUT_MS        500
 
-#define BLUENRG_memcpy              memcpy
-#define BLUENRG_memset              memset
-#define BLUENRG_memcmp              memcmp
+#define BLUENRG_MEMCPY                memcpy
+#define BLUENRG_MEMSET                memset
+#define BLUENRG_MEMCMP                memcmp
 
-#if (BLUENRGLP_DEBUG == 1)
+#if (BLE2_DEBUG == 1)
 #include <stdio.h>
 #define PRINT_DBG(...)        printf(__VA_ARGS__)
 #else
@@ -101,4 +111,4 @@ void print_csv_time(void);
 #ifdef __cplusplus
 }
 #endif
-#endif /* BLUENRG_CONF_TEMPLATE_H */
+#endif /* BLUENRG_CONF_H */

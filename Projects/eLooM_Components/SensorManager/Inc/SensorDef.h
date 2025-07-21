@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -46,7 +46,8 @@ extern "C" {
 #define COM_TYPE_CAM    11
 #define COM_TYPE_TMOS   12
 #define COM_TYPE_ALS    13
-#define COM_TYPE_POW 14
+#define COM_TYPE_POW    14
+#define COM_TYPE_HG_ACC 15
 
 #define DATA_TYPE_UINT8  (uint8_t)(0x00)
 #define DATA_TYPE_INT8   (uint8_t)(0x01)
@@ -77,6 +78,10 @@ extern "C" {
 #ifndef SM_DIM_LABELS_LENGTH
 #define SM_DIM_LABELS_LENGTH 4U
 #endif
+#ifndef MEAS_ODR_AVG
+#define MEAS_ODR_AVG 5U
+#endif
+
 
 #define ISENSOR_CLASS_MEMS         0U
 #define ISENSOR_CLASS_AUDIO        1U
@@ -151,22 +156,22 @@ typedef struct SensorStatusMems_t
   /**
     * Specifies the full scale.
     */
-  float fs;
+  float_t fs;
 
   /**
     * Specifies the sensitivity.
     */
-  float sensitivity;
+  float_t sensitivity;
 
   /**
     * Specifies the nominal data rate.
     */
-  float odr;
+  float_t odr;
 
   /**
     * Specifies the effective data rate.
     */
-  float measured_odr;
+  float_t measured_odr;
 } SensorStatusMems;
 
 typedef struct SensorStatusAudio_t
@@ -239,17 +244,17 @@ typedef struct SensorStatusPresence_t
   /**
     * Specifies the nominal data rate.
     */
-  float data_frequency;
+  float_t data_frequency;
 
   /**
     * Specifies the effective data rate.
     */
-  float measured_data_frequency;
+  float_t measured_data_frequency;
 
   /**
     * Specifies the transmittance of the lens.
     */
-  float Transmittance;
+  float_t Transmittance;
 
   /**
     * Specifies the average T object.
@@ -339,12 +344,12 @@ typedef struct SensorStatusLight_t
   /**
     * Specifies the gain.
     */
-  float gain[ ALS_NUM_CHANNELS ];
+  float_t gain[ ALS_NUM_CHANNELS ];
 
   /**
     * Specifies the effective data rate [s].
     */
-  float measured_intermeasurement_time;
+  float_t measured_intermeasurement_time;
 } SensorStatusLight;
 
 typedef struct SensorStatusPowerMeter_t

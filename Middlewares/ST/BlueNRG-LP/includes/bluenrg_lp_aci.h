@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    bluenrg_lp_aci.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.3.0
-  * @date    20-July-2023
+  * @version 2.0.0
+  * @date    25-September-2024
   * @brief   Header file that includes commands and events for BlueNRG
   *          FW6.3.
   ******************************************************************************
@@ -22,9 +22,17 @@
 #ifndef __BLUENRG_LP_ACI_H__
 #define __BLUENRG_LP_ACI_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "bluenrg_lp_gap_aci.h"
 #include "bluenrg_lp_gatt_aci.h"
 #include "bluenrg_lp_l2cap_aci.h"
 #include "bluenrg_lp_hal_aci.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __BLUENRG_LP_ACI_H__ */

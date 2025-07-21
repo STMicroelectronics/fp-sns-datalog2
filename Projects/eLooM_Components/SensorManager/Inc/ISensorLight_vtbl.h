@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -37,10 +37,10 @@ struct _ISensorLight_vtbl
   ISensor_vtbl vtbl;
   sys_error_code_t (*SensorGetIntermeasurementTime)(ISensorLight_t *_this, uint32_t *p_measured, uint32_t *p_nominal);
   uint32_t (*SensorGetExposureTime)(ISensorLight_t *_this);
-  sys_error_code_t (*SensorGetLightGain)(ISensorLight_t *_this, float *LightGain);
+  sys_error_code_t (*SensorGetLightGain)(ISensorLight_t *_this, float_t *LightGain);
   sys_error_code_t (*SensorSetIntermeasurementTime)(ISensorLight_t *_this, uint32_t intermeasurement_time);
   sys_error_code_t (*SensorSetExposureTime)(ISensorLight_t *_this, uint32_t exposure_time);
-  sys_error_code_t (*SensorSetLightGain)(ISensorLight_t *_this, float LightGain, uint8_t channel);
+  sys_error_code_t (*SensorSetLightGain)(ISensorLight_t *_this, float_t LightGain, uint8_t channel);
 };
 
 struct _ISensorLight_t
@@ -65,7 +65,7 @@ static inline uint32_t ISensorGetExposureTime(ISensorLight_t *_this)
   return _this->vptr->SensorGetExposureTime(_this);
 }
 
-static inline sys_error_code_t ISensorGetLightGain(ISensorLight_t *_this, float *LightGain)
+static inline sys_error_code_t ISensorGetLightGain(ISensorLight_t *_this, float_t *LightGain)
 {
   return _this->vptr->SensorGetLightGain(_this, LightGain);
 }
@@ -80,7 +80,7 @@ static inline sys_error_code_t ISensorSetExposureTime(ISensorLight_t *_this, uin
   return _this->vptr->SensorSetExposureTime(_this, exposure_time);
 }
 
-static inline sys_error_code_t ISensorSetLightGain(ISensorLight_t *_this, float LightGain, uint8_t channel)
+static inline sys_error_code_t ISensorSetLightGain(ISensorLight_t *_this, float_t LightGain, uint8_t channel)
 {
   return _this->vptr->SensorSetLightGain(_this, LightGain, channel);
 }

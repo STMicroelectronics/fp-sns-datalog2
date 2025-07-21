@@ -11,7 +11,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -89,7 +89,6 @@ struct _UtilTask_t
 
 };
 
-
 /* Public API declaration */
 /**************************/
 
@@ -115,7 +114,6 @@ void SwitchBank(void);
 
 /* Inline functions definition */
 /*******************************/
-
 
 #ifdef __cplusplus
 }

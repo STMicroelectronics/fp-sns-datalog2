@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -119,7 +119,7 @@ uint8_t Vl53l8cx_Tof_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serializ
   json_object_dotset_number(JSON_Status, "vl53l8cx_tof.integration_time", temp_i);
   vl53l8cx_tof_get_samples_per_ts(&temp_i);
   json_object_dotset_number(JSON_Status, "vl53l8cx_tof.samples_per_ts", temp_i);
-  float temp_f = 0;
+  float_t temp_f = 0;
   vl53l8cx_tof_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "vl53l8cx_tof.ioffset", temp_f);
   vl53l8cx_tof_get_usb_dps(&temp_i);

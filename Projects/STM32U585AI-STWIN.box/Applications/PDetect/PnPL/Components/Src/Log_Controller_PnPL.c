@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -130,6 +130,8 @@ uint8_t Log_Controller_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_boolean(JSON_Status, "log_controller.log_status", temp_b);
   log_controller_get_sd_mounted(&temp_b);
   json_object_dotset_boolean(JSON_Status, "log_controller.sd_mounted", temp_b);
+  log_controller_get_sd_failed(&temp_b);
+  json_object_dotset_boolean(JSON_Status, "log_controller.sd_failed", temp_b);
   int32_t temp_i = 0;
   log_controller_get_controller_type(&temp_i);
   json_object_dotset_number(JSON_Status, "log_controller.controller_type", temp_i);
@@ -172,8 +174,8 @@ uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *s
   bool valid_function = false;
   if (json_object_dothas_value(tempJSONObject, "log_controller*save_config"))
   {
-    ret = log_controller_save_config();
     valid_function = true;
+    ret = log_controller_save_config();
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*start_log.interface"))
   {
@@ -183,8 +185,8 @@ uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *s
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*stop_log"))
   {
-    ret = log_controller_stop_log();
     valid_function = true;
+    ret = log_controller_stop_log();
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*set_time.datetime"))
   {
@@ -194,13 +196,13 @@ uint8_t Log_Controller_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *s
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*switch_bank"))
   {
-    ret = log_controller_switch_bank();
     valid_function = true;
+    ret = log_controller_switch_bank();
   }
   if (json_object_dothas_value(tempJSONObject, "log_controller*set_dfu_mode"))
   {
-    ret = log_controller_set_dfu_mode();
     valid_function = true;
+    ret = log_controller_set_dfu_mode();
   }
   /* Check if received a valid function to modify an existing property */
   if (valid_function == false)

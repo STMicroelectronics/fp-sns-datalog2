@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -19,10 +19,10 @@
 
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
-//#include "SensorTileBoxPro.h"
 #include "OTA.h"
 #include "bluenrg_conf.h"
 #include "services/sysdebug.h"
@@ -42,14 +42,14 @@ typedef struct
 /* Board FW OTA Position */
 /* The 2 addresses are equal due to swap address in dual boot mode */
 #define OTA_ADDRESS_START_BANK 0x08100000
-#define FW_ID_BOARD_NAME_BANK1 0x080FE000
-#define FW_ID_BOARD_NAME_BANK2 0x081FE000
+#define OTA_FW_ID_BANK1 0x080FE000
+#define OTA_FW_ID_BANK2 0x081FE000
 
 /* Magic number for a valid Fw Id saved on flash */
-#define FW_ID_BOARD_NAME_MAGIC_NUM    0xDEADBEEF
+#define OTA_FW_ID_MAGIC_NUM    0xDEADBEEF
 
-/* Uncomment the following define for enabling the PRINTF capability */
-#define OTA_ENABLE_PRINTF
+/* Uncomment the following define for enabling the PRINTF capability if it's supported */
+//#define OTA_ENABLE_PRINTF
 
 #ifdef OTA_ENABLE_PRINTF
 #define OTA_PRINTF(msg)  SYS_DEBUGF2(SYS_DBG_LEVEL_VERBOSE, msg)
@@ -75,7 +75,7 @@ static FwId_BoardName_t CurrentFwInfo, OtherBankFwInfo;
 static void DeleteOtherFlashBankFwId(void);
 
 /* Exported functions --------------------------------------------------------*/
-extern int32_t CurrentActiveBank;
+extern uint8_t CurrentActiveBank;
 /**
   * @brief Function for Updating the Firmware
   * @param uint32_t *SizeOfUpdate Remaining size of the firmware image [bytes]
@@ -89,11 +89,11 @@ int8_t UpdateFWBlueMS(uint32_t *SizeOfUpdate, uint8_t *att_data, int32_t data_le
   int8_t ReturnValue = 0;
   /* Save the Packed received */
 
-  OTA_PRINTF(("dimension: %d", data_length));
   if (data_length > (*SizeOfUpdate))
   {
     /* Too many bytes...Something wrong... necessity to send it again... */
-    OTA_PRINTF(("OTA something wrong"));
+    OTA_PRINTF("OTA something wrong data_length=%ld RemSizeOfUpdate=%ld....\r\nPlease Try again\r\n", data_length,
+               (*SizeOfUpdate));
     ReturnValue = -1;
     /* Reset for Restarting again */
     *SizeOfUpdate = 0;
@@ -191,7 +191,7 @@ int8_t UpdateFWBlueMS(uint32_t *SizeOfUpdate, uint8_t *att_data, int32_t data_le
       }
 
       /* We had received the whole firmware and we have saved it in Flash */
-      OTA_PRINTF(("OTA Update saved\r\n"));
+      OTA_PRINTF("OTA Update saved\r\n");
 
       if (WriteMagicNum)
       {
@@ -234,7 +234,7 @@ int8_t UpdateFWBlueMS(uint32_t *SizeOfUpdate, uint8_t *att_data, int32_t data_le
           }
           else
           {
-            OTA_PRINTF(("CRC  Initialized\n\r"));
+            OTA_PRINTF("CRC  Initialized\n\r");
           }
           /* Compute the CRC */
           uwCRCValue = HAL_CRC_Calculate(&CrcHandle, (uint32_t *)OTA_ADDRESS_START_BANK, SizeOfUpdateBlueFW >> 2);
@@ -242,11 +242,11 @@ int8_t UpdateFWBlueMS(uint32_t *SizeOfUpdate, uint8_t *att_data, int32_t data_le
           if (uwCRCValue == AspecteduwCRCValue)
           {
             ReturnValue = 1;
-            OTA_PRINTF(("OTA CRC-checked\r\n"));
+            OTA_PRINTF("OTA CRC-checked\r\n");
           }
           else
           {
-            OTA_PRINTF(("OTA Error CRC-checking\r\n"));
+            OTA_PRINTF("OTA Error CRC-checking\r\n");
           }
         }
         else
@@ -259,7 +259,7 @@ int8_t UpdateFWBlueMS(uint32_t *SizeOfUpdate, uint8_t *att_data, int32_t data_le
           ReturnValue = -1;
           if (AspecteduwCRCValue)
           {
-            OTA_PRINTF(("Wrong CRC!"));
+            OTA_PRINTF("Wrong CRC! Computed=%lx  expected=%lx ... Try again\r\n", uwCRCValue, AspecteduwCRCValue);
           }
         }
       }
@@ -288,12 +288,10 @@ void StartUpdateFWBlueMS(uint32_t SizeOfUpdate, uint32_t uwCRCValue)
 {
   FLASH_EraseInitTypeDef EraseInitStruct;
   uint32_t SectorError = 0;
-  OTA_PRINTF(("Start FLASH Erase\r\n"));
+  OTA_PRINTF("Start FLASH Erase\r\n");
 
   SizeOfUpdateBlueFW = SizeOfUpdate;
   AspecteduwCRCValue = uwCRCValue;
-  ValuesSavedOnBuffer = 0;
-  PointerToBuffer = (uint8_t *) BufferValueToWrite;
 
   WritingAddress = OTA_ADDRESS_START_BANK;
 
@@ -330,7 +328,7 @@ void StartUpdateFWBlueMS(uint32_t SizeOfUpdate, uint32_t uwCRCValue)
   }
   else
   {
-    OTA_PRINTF(("End FLASH Erase\r\n"));
+    OTA_PRINTF("End FLASH Erase %ld Pages of 4KB\r\n", EraseInitStruct.NbPages);
   }
 
   /* Lock the Flash to disable the flash control register access (recommended
@@ -356,8 +354,8 @@ void StartUpdateFWBlueMS(uint32_t SizeOfUpdate, uint32_t uwCRCValue)
 void ReadFlashBanksFwId(uint16_t *FwId1, uint16_t *FwId2)
 {
   /* Current Bank */
-  memcpy((void *)&CurrentFwInfo, (void *)FW_ID_BOARD_NAME_BANK1, sizeof(FwId_BoardName_t));
-  if (CurrentFwInfo.FwIdMagicNum == FW_ID_BOARD_NAME_MAGIC_NUM)
+  memcpy((void *)&CurrentFwInfo, (void *)OTA_FW_ID_BANK1, sizeof(FwId_BoardName_t));
+  if (CurrentFwInfo.FwIdMagicNum == OTA_FW_ID_MAGIC_NUM)
   {
     *FwId1 = CurrentFwInfo.FwId;
   }
@@ -367,8 +365,8 @@ void ReadFlashBanksFwId(uint16_t *FwId1, uint16_t *FwId2)
   }
 
   /* Other Bank */
-  memcpy((void *)&OtherBankFwInfo, (void *)FW_ID_BOARD_NAME_BANK2, sizeof(FwId_BoardName_t));
-  if (OtherBankFwInfo.FwIdMagicNum == FW_ID_BOARD_NAME_MAGIC_NUM)
+  memcpy((void *)&OtherBankFwInfo, (void *)OTA_FW_ID_BANK2, sizeof(FwId_BoardName_t));
+  if (OtherBankFwInfo.FwIdMagicNum == OTA_FW_ID_MAGIC_NUM)
   {
     *FwId2 = OtherBankFwInfo.FwId;
   }
@@ -399,8 +397,8 @@ static void DeleteOtherFlashBankFwId(void)
     EraseInitStruct.Banks  = FLASH_BANK_1;
   }
 
-  memcpy((void *)&OtherBankFwInfo, (void *)FW_ID_BOARD_NAME_BANK2, sizeof(FwId_BoardName_t));
-  LocalWritingAddress = FW_ID_BOARD_NAME_BANK2;
+  memcpy((void *)&OtherBankFwInfo, (void *)OTA_FW_ID_BANK2, sizeof(FwId_BoardName_t));
+  LocalWritingAddress = OTA_FW_ID_BANK2;
 
   EraseInitStruct.Page        = FLASH_PAGE_NB - 1;
   EraseInitStruct.TypeErase   = FLASH_TYPEERASE_PAGES;
@@ -426,7 +424,7 @@ static void DeleteOtherFlashBankFwId(void)
   }
   else
   {
-    OTA_PRINTF(("End FLASH Erase"));
+    OTA_PRINTF("End FLASH Erase %ld Pages of 4KB\r\n", EraseInitStruct.NbPages);
   }
 
   /* Save the updated Bank's info */
@@ -473,7 +471,7 @@ static void DeleteOtherFlashBankFwId(void)
 void UpdateCurrFlashBankFwIdBoardName(uint16_t FwId, uint8_t *NewName)
 {
   /* Read the Actual Banks' Info */
-  memcpy((void *)&CurrentFwInfo, (void *)FW_ID_BOARD_NAME_BANK1, sizeof(FwId_BoardName_t));
+  memcpy((void *)&CurrentFwInfo, (void *)OTA_FW_ID_BANK1, sizeof(FwId_BoardName_t));
 
   if (NewName != NULL)
   {
@@ -484,17 +482,17 @@ void UpdateCurrFlashBankFwIdBoardName(uint16_t FwId, uint8_t *NewName)
     uint32_t BankInfoAddress;
 
     /* Read the Other Banks' Info */
-    memcpy((void *)&OtherBankFwInfo, (void *)FW_ID_BOARD_NAME_BANK2, sizeof(FwId_BoardName_t));
+    memcpy((void *)&OtherBankFwInfo, (void *)OTA_FW_ID_BANK2, sizeof(FwId_BoardName_t));
 
     /* Updated the Board Name and the Fw Id for the current Bank */
-    CurrentFwInfo.BoardNameMagicNum = FW_ID_BOARD_NAME_MAGIC_NUM;
+    CurrentFwInfo.BoardNameMagicNum = OTA_FW_ID_MAGIC_NUM;
     memcpy(CurrentFwInfo.BoardName, NewName, 7);
     CurrentFwInfo.BoardName[7] = '\0';
     CurrentFwInfo.FwId = FwId;
-    CurrentFwInfo.FwIdMagicNum = FW_ID_BOARD_NAME_MAGIC_NUM;
+    CurrentFwInfo.FwIdMagicNum = OTA_FW_ID_MAGIC_NUM;
 
     /* Update the Board Name also for Other Bank */
-    OtherBankFwInfo.BoardNameMagicNum = FW_ID_BOARD_NAME_MAGIC_NUM;
+    OtherBankFwInfo.BoardNameMagicNum = OTA_FW_ID_MAGIC_NUM;
     memcpy(OtherBankFwInfo.BoardName, NewName, 7);
     OtherBankFwInfo.BoardName[7] = '\0';
     /* We don't change any Eventual FwId Present on the Other Banks */
@@ -512,7 +510,7 @@ void UpdateCurrFlashBankFwIdBoardName(uint16_t FwId, uint8_t *NewName)
     EraseInitStruct.TypeErase   = FLASH_TYPEERASE_PAGES;
     EraseInitStruct.NbPages     = 1;
 
-    OTA_PRINTF(("Start FLASH Erase Current Bank\r\n"));
+    OTA_PRINTF("Start FLASH Erase Current Bank\r\n");
 
     if (CurrentActiveBank == 1)
     {
@@ -534,12 +532,12 @@ void UpdateCurrFlashBankFwIdBoardName(uint16_t FwId, uint8_t *NewName)
     }
     else
     {
-      OTA_PRINTF(("End FLASH Erase"));
+      OTA_PRINTF("End FLASH Erase");
     }
 
-    OTA_PRINTF(("Update Current Bank Info\r\n"));
+    OTA_PRINTF("Update Current Bank Info\r\n");
 
-    LocalWritingAddress = FW_ID_BOARD_NAME_BANK1;
+    LocalWritingAddress = OTA_FW_ID_BANK1;
     BankInfoAddress = (uint32_t)&CurrentFwInfo;
     if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_QUADWORD, LocalWritingAddress, BankInfoAddress) == HAL_OK)
     {
@@ -556,7 +554,7 @@ void UpdateCurrFlashBankFwIdBoardName(uint16_t FwId, uint8_t *NewName)
       OTA_ERROR_FUNCTION();
     }
 
-    OTA_PRINTF(("Start FLASH Erase Other Bank\r\n"));
+    OTA_PRINTF("Start FLASH Erase Other Bank\r\n");
 
     if (CurrentActiveBank == 1)
     {
@@ -578,12 +576,12 @@ void UpdateCurrFlashBankFwIdBoardName(uint16_t FwId, uint8_t *NewName)
     }
     else
     {
-      OTA_PRINTF(("End FLASH Erase"));
+      OTA_PRINTF("End FLASH Erase %ld Pages of 4KB\r\n", EraseInitStruct.NbPages);
     }
 
-    OTA_PRINTF(("Update Other Bank Info\r\n"));
+    OTA_PRINTF("Update Other Bank Info\r\n");
 
-    LocalWritingAddress = FW_ID_BOARD_NAME_BANK2;
+    LocalWritingAddress = OTA_FW_ID_BANK2;
     BankInfoAddress = (uint32_t)&OtherBankFwInfo;
     if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_QUADWORD, LocalWritingAddress, BankInfoAddress) == HAL_OK)
     {
@@ -620,7 +618,7 @@ void UpdateCurrFlashBankFwIdBoardName(uint16_t FwId, uint8_t *NewName)
     uint32_t BankInfoAddress;
 
     CurrentFwInfo.FwId = FwId;
-    CurrentFwInfo.FwIdMagicNum = FW_ID_BOARD_NAME_MAGIC_NUM;
+    CurrentFwInfo.FwIdMagicNum = OTA_FW_ID_MAGIC_NUM;
     /* We keep Any present Board's Name saved on Flash */
 
     /* Disable instruction cache prior to internal cacheable memory update */
@@ -636,7 +634,7 @@ void UpdateCurrFlashBankFwIdBoardName(uint16_t FwId, uint8_t *NewName)
     EraseInitStruct.TypeErase   = FLASH_TYPEERASE_PAGES;
     EraseInitStruct.NbPages     = 1;
 
-    OTA_PRINTF(("Start FLASH Erase Current Bank\r\n"));
+    OTA_PRINTF("Start FLASH Erase Current Bank\r\n");
 
     if (CurrentActiveBank == 1)
     {
@@ -658,12 +656,12 @@ void UpdateCurrFlashBankFwIdBoardName(uint16_t FwId, uint8_t *NewName)
     }
     else
     {
-      OTA_PRINTF(("End FLASH Erase"));
+      OTA_PRINTF("End FLASH Erase");
     }
 
-    OTA_PRINTF(("Update Current Bank Info\r\n"));
+    OTA_PRINTF("Update Current Bank Info\r\n");
 
-    LocalWritingAddress = FW_ID_BOARD_NAME_BANK1;
+    LocalWritingAddress = OTA_FW_ID_BANK1;
     BankInfoAddress = (uint32_t)&CurrentFwInfo;
     if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_QUADWORD, LocalWritingAddress, BankInfoAddress) == HAL_OK)
     {
@@ -701,12 +699,11 @@ uint8_t *ReadFlashBoardName(void)
 {
   uint8_t *RetValue = NULL;
 
-  memcpy((void *)&CurrentFwInfo, (void *)FW_ID_BOARD_NAME_BANK1, sizeof(FwId_BoardName_t));
-  if (CurrentFwInfo.BoardNameMagicNum == FW_ID_BOARD_NAME_MAGIC_NUM)
+  memcpy((void *)&CurrentFwInfo, (void *)OTA_FW_ID_BANK1, sizeof(FwId_BoardName_t));
+  if (CurrentFwInfo.BoardNameMagicNum == OTA_FW_ID_MAGIC_NUM)
   {
     RetValue = CurrentFwInfo.BoardName;
   }
   return RetValue;
 }
-
 

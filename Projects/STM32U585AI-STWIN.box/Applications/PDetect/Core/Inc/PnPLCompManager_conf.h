@@ -1,12 +1,12 @@
 /**
   ******************************************************************************
-  * @file    PnPLCompManager_conf.h
+  * @file    PnPLCompManager_Conf.h
   * @author  SRA
   * @brief   PnPL Components Manager configuration template file.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -37,6 +37,8 @@ extern "C" {
 #endif
 
 #include "stm32u5xx_hal.h"
+#include <stdlib.h>
+
 /****************** PnPL Responses ***********************/
 #define PNPL_RESPONSES
 #define PNPL_BLE_RESPONSES

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -482,6 +482,7 @@ sys_error_code_t STTS22HTask_vtblOnCreateTask(
   p_obj->temp_id = 0;
   p_obj->prev_timestamp = 0.0f;
   p_obj->temperature = 0.0f;
+  p_obj->first_data_ready = 0;
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
 
   *pTaskCode = AMTExRun;
@@ -538,6 +539,7 @@ sys_error_code_t STTS22HTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPo
 
       // reset the variables for the actual odr computation.
       p_obj->prev_timestamp = 0.0f;
+      p_obj->first_data_ready = 0;
     }
 
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("STTS22H: -> SENSORS_ACTIVE\r\n"));
@@ -689,7 +691,7 @@ IEventSrc *STTS22HTask_vtblTempGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_temp_event_src;
 }
 
-sys_error_code_t STTS22HTask_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t STTS22HTask_vtblTempGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -711,20 +713,20 @@ sys_error_code_t STTS22HTask_vtblTempGetODR(ISensorMems_t *_this, float *p_measu
   return res;
 }
 
-float STTS22HTask_vtblTempGetFS(ISensorMems_t *_this)
+float_t STTS22HTask_vtblTempGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   STTS22HTask *p_if_owner = (STTS22HTask *)((uint32_t) _this - offsetof(STTS22HTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.fs;
+  float_t res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float STTS22HTask_vtblTempGetSensitivity(ISensorMems_t *_this)
+float_t STTS22HTask_vtblTempGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   STTS22HTask *p_if_owner = (STTS22HTask *)((uint32_t) _this - offsetof(STTS22HTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -738,7 +740,7 @@ EMData_t STTS22HTask_vtblTempGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -764,7 +766,7 @@ sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = STTS22HTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -772,7 +774,7 @@ sys_error_code_t STTS22HTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -797,7 +799,7 @@ sys_error_code_t STTS22HTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) fs
+      .sensorMessage.fParam = (float_t) fs
     };
     res = STTS22HTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1007,42 +1009,33 @@ static sys_error_code_t STTS22HTaskExecuteStepDatalog(AManagedTask *_this)
       case SM_MESSAGE_ID_DATA_READY:
       {
         SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("STTS22H: new data.\r\n"));
-//        if (p_obj->pIRQConfig == NULL)
-//        {
-//          if (TX_SUCCESS != tx_timer_change(&p_obj->read_fifo_timer, AMT_MS_TO_TICKS(p_obj->task_delay),
-//                                            AMT_MS_TO_TICKS(p_obj->task_delay)))
-//          {
-//            return SYS_UNDEFINED_ERROR_CODE;
-//          }
-//        }
-
         res = STTS22HTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
-          // notify the listeners...
-          double timestamp = report.sensorDataReadyMessage.fTimestamp;
-          double delta_timestamp = timestamp - p_obj->prev_timestamp;
-          p_obj->prev_timestamp = timestamp;
+          if (p_obj->first_data_ready == 2)
+          {
+            // notify the listeners...
+            double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+            double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
+            p_obj->prev_timestamp = timestamp;
 
-          /* update measuredODR */
-          p_obj->sensor_status.type.mems.measured_odr = 1.0f / (float) delta_timestamp;
+            /* update measuredODR */
+            p_obj->sensor_status.type.mems.measured_odr = 1.0f / (float_t) delta_timestamp;
 
-          EMD_1dInit(&p_obj->data, (uint8_t *)&p_obj->temperature, E_EM_FLOAT, 1);
+            EMD_1dInit(&p_obj->data, (uint8_t *) &p_obj->temperature, E_EM_FLOAT, 1);
 
-          DataEvent_t evt;
+            DataEvent_t evt;
 
-          DataEventInit((IEvent *)&evt, p_obj->p_temp_event_src, &p_obj->data, timestamp, p_obj->temp_id);
-          IEventSrcSendEvent(p_obj->p_temp_event_src, (IEvent *) &evt, NULL);
+            DataEventInit((IEvent *) &evt, p_obj->p_temp_event_src, &p_obj->data, timestamp, p_obj->temp_id);
+            IEventSrcSendEvent(p_obj->p_temp_event_src, (IEvent *) &evt, NULL);
 
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("STTS22H: ts = %f\r\n", (float)timestamp));
+            SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("STTS22H: ts = %f\r\n", (float_t)timestamp));
+          }
+          else
+          {
+            p_obj->first_data_ready++;
+          }
         }
-//          if (p_obj->pIRQConfig == NULL)
-//          {
-//            if (TX_SUCCESS != tx_timer_activate(&p_obj->read_fifo_timer))
-//            {
-//              res = SYS_UNDEFINED_ERROR_CODE;
-//            }
-//          }
         break;
       }
 
@@ -1259,10 +1252,10 @@ static sys_error_code_t STTS22HTaskSensorReadData(STTS22HTask *_this)
 
   if (!SYS_IS_ERROR_CODE(res))
   {
-    _this->temperature = (float) temperature_celsius / 100.0f;
+    _this->temperature = (float_t) temperature_celsius / 100.0f;
 
 #if (HSD_USE_DUMMY_DATA == 1)
-    _this->temperature = (float) dummyDataCounter++;
+    _this->temperature = (float_t) dummyDataCounter++;
 #endif
   }
 
@@ -1303,7 +1296,7 @@ static sys_error_code_t STTS22HTaskSensorSetODR(STTS22HTask *_this, SMMessage re
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->temp_id)
@@ -1354,7 +1347,7 @@ static sys_error_code_t STTS22HTaskSensorSetFS(STTS22HTask *_this, SMMessage rep
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float fs = (float) report.sensorMessage.fParam;
+  float_t fs = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->temp_id)

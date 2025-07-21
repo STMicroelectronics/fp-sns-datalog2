@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -49,11 +49,11 @@ boolean_t STTS751Task_vtblSensorIsEnabled(ISensor_t *_this);
 SensorDescriptor_t STTS751Task_vtblSensorGetDescription(ISensor_t *_this);
 SensorStatus_t STTS751Task_vtblSensorGetStatus(ISensor_t *_this);
 SensorStatus_t *STTS751Task_vtblSensorGetStatusPointer(ISensor_t *_this);
-sys_error_code_t STTS751Task_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float STTS751Task_vtblTempGetFS(ISensorMems_t *_this);
-float STTS751Task_vtblTempGetSensitivity(ISensorMems_t *_this);
-sys_error_code_t STTS751Task_vtblSensorSetODR(ISensorMems_t *_this, float odr);
-sys_error_code_t STTS751Task_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t STTS751Task_vtblTempGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t STTS751Task_vtblTempGetFS(ISensorMems_t *_this);
+float_t STTS751Task_vtblTempGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t STTS751Task_vtblSensorSetODR(ISensorMems_t *_this, float_t odr);
+sys_error_code_t STTS751Task_vtblSensorSetFS(ISensorMems_t *_this, float_t fs);
 sys_error_code_t STTS751Task_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 
 #ifdef __cplusplus

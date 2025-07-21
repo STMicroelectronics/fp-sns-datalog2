@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -111,15 +111,15 @@ uint8_t log_controller_start_log(int32_t interface)
 
 // WHY THIS -1 (in months) ???
 //  struct tm {
-//     int tm_sec;         /* seconds,  range 0 to 59          */
-//     int tm_min;         /* minutes, range 0 to 59           */
-//     int tm_hour;        /* hours, range 0 to 23             */
-//     int tm_mday;        /* day of the month, range 1 to 31  */
-//     int tm_mon;         /* month, range 0 to 11             */ <------ (-1) months here (0..11), months from RTC (1..12)
-//     int tm_year;        /* The number of years since 1900   */
-//     int tm_wday;        /* day of the week, range 0 to 6    */
-//     int tm_yday;        /* day in the year, range 0 to 365  */
-//     int tm_isdst;       /* daylight saving time             */
+//     int32_t tm_sec;         /* seconds,  range 0 to 59          */
+//     int32_t tm_min;         /* minutes, range 0 to 59           */
+//     int32_t tm_hour;        /* hours, range 0 to 23             */
+//     int32_t tm_mday;        /* day of the month, range 1 to 31  */
+//     int32_t tm_mon;         /* month, range 0 to 11             */ <------ (-1) months here (0..11), months from RTC (1..12)
+//     int32_t tm_year;        /* The number of years since 1900   */
+//     int32_t tm_wday;        /* day of the week, range 0 to 6    */
+//     int32_t tm_yday;        /* day in the year, range 0 to 365  */
+//     int32_t tm_isdst;       /* daylight saving time             */
 //  };
 
   TMSetStartTime(t);

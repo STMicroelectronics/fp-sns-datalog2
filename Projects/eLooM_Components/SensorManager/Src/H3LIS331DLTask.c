@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -485,6 +485,7 @@ sys_error_code_t H3LIS331DLTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
   p_obj->acc_id = 0;
   p_obj->prev_timestamp = 0.0f;
   p_obj->samples_per_it = 0;
+  p_obj->first_data_ready = 0;
   _this->m_pfPMState2FuncMap = sTheClass.p_pm_state2func_map;
 
   *pTaskCode = AMTExRun;
@@ -542,6 +543,7 @@ sys_error_code_t H3LIS331DLTask_vtblDoEnterPowerMode(AManagedTask *_this, const 
 
       // reset the variables for the actual odr computation.
       p_obj->prev_timestamp = 0.0f;
+      p_obj->first_data_ready = 0;
     }
 
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("H3LIS331DL: -> SENSORS_ACTIVE\r\n"));
@@ -691,7 +693,7 @@ IEventSrc *H3LIS331DLTask_vtblGetEventSourceIF(ISourceObservable *_this)
 
 }
 
-sys_error_code_t H3LIS331DLTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t H3LIS331DLTask_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -713,20 +715,20 @@ sys_error_code_t H3LIS331DLTask_vtblAccGetODR(ISensorMems_t *_this, float *p_mea
   return res;
 }
 
-float H3LIS331DLTask_vtblAccGetFS(ISensorMems_t *_this)
+float_t H3LIS331DLTask_vtblAccGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   H3LIS331DLTask *p_if_owner = (H3LIS331DLTask *)((uint32_t) _this - offsetof(H3LIS331DLTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.fs;
+  float_t res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float H3LIS331DLTask_vtblAccGetSensitivity(ISensorMems_t *_this)
+float_t H3LIS331DLTask_vtblAccGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   H3LIS331DLTask *p_if_owner = (H3LIS331DLTask *)((uint32_t) _this - offsetof(H3LIS331DLTask, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -740,7 +742,7 @@ EMData_t H3LIS331DLTask_vtblAccGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t H3LIS331DLTask_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t H3LIS331DLTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -768,7 +770,7 @@ sys_error_code_t H3LIS331DLTask_vtblSensorSetODR(ISensorMems_t *_this, float odr
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) odr // EG: todo - what about float values?
+      .sensorMessage.nParam = (uint32_t) odr // EG: todo - what about float_t values?
     };
     res = H3LIS331DLTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -776,7 +778,7 @@ sys_error_code_t H3LIS331DLTask_vtblSensorSetODR(ISensorMems_t *_this, float odr
   return res;
 }
 
-sys_error_code_t H3LIS331DLTask_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t H3LIS331DLTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1025,26 +1027,47 @@ static sys_error_code_t H3LIS331DLTaskExecuteStepDatalog(AManagedTask *_this)
 
         if (!SYS_IS_ERROR_CODE(res))
         {
-          // notify the listeners...
-          double timestamp = report.sensorDataReadyMessage.fTimestamp;
-          double delta_timestamp = timestamp - p_obj->prev_timestamp;
-          p_obj->prev_timestamp = timestamp;
+          if (p_obj->first_data_ready == 2)
+          {
+            // notify the listeners...
+            double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+            double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
+            p_obj->prev_timestamp = timestamp;
 
-          /* update measuredODR */
-          p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
+            /* update measuredODR */
+            // Update the sums
+            p_obj->delta_timestamp_sum += delta_timestamp;
+            p_obj->samples_sum += p_obj->samples_per_it;
+            if (p_obj->odr_count < MEAS_ODR_AVG)
+            {
+              p_obj->odr_count++;
+            }
+            // Calculate the average
+            if (p_obj->odr_count == MEAS_ODR_AVG)
+            {
+              p_obj->sensor_status.type.mems.measured_odr = (float_t) p_obj->samples_sum / p_obj->delta_timestamp_sum;
+              p_obj->delta_timestamp_sum = 0.0f;
+              p_obj->samples_sum = 0;
+              p_obj->odr_count = 0;
+            }
 
-          /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
-           * [X0, Y0, Z0]
-           * [X1, Y1, Z1]
-           * ...
-           * [Xm-1, Ym-1, Zm-1]
-           */
-          EMD_Init(&p_obj->data, p_obj->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->samples_per_it, 3);
+            /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
+             * [X0, Y0, Z0]
+             * [X1, Y1, Z1]
+             * ...
+             * [Xm-1, Ym-1, Zm-1]
+             */
+            EMD_Init(&p_obj->data, p_obj->p_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, p_obj->samples_per_it, 3);
 
-          DataEvent_t evt;
+            DataEvent_t evt;
 
-          DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
-          IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
+            DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
+            IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
+          }
+          else
+          {
+            p_obj->first_data_ready++;
+          }
         }
         while (0x00 != Status)
         {
@@ -1313,6 +1336,10 @@ static sys_error_code_t H3LIS331DLTaskSensorInit(H3LIS331DLTask *_this)
 
   _this->h3lis331dl_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 
+  _this->odr_count = 0;
+  _this->delta_timestamp_sum = 0.0f;
+  _this->samples_sum = 0;
+
   return res;
 }
 
@@ -1401,7 +1428,7 @@ static sys_error_code_t H3LIS331DLTaskSensorSetODR(H3LIS331DLTask *_this, SMMess
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.nParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -1469,7 +1496,7 @@ static sys_error_code_t H3LIS331DLTaskSensorSetFS(H3LIS331DLTask *_this, SMMessa
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float fs = (float) report.sensorMessage.nParam;
+  float_t fs = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)

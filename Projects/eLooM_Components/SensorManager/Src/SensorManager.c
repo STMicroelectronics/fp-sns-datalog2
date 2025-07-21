@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -190,11 +190,11 @@ uint32_t SMGetnBytesPerSample(uint8_t id)
   }
 }
 
-float SMSensorGetSamplesPerSecond(uint8_t id)
+float_t SMSensorGetSamplesPerSecond(uint8_t id)
 {
   SensorStatus_t sensor_status = SMSensorGetStatus(id);
   uint8_t sensor_class = sensor_status.isensor_class;
-  float samples_per_second = 0.0f;
+  float_t samples_per_second = 0.0f;
 
   if (sensor_class == ISENSOR_CLASS_MEMS)
   {
@@ -208,11 +208,11 @@ float SMSensorGetSamplesPerSecond(uint8_t id)
   {
     if (sensor_status.type.light.intermeasurement_time > sensor_status.type.light.exposure_time / 1000 + 6)
     {
-      samples_per_second = (1000.0f / ((float)sensor_status.type.light.intermeasurement_time));
+      samples_per_second = (1000.0f / ((float_t)sensor_status.type.light.intermeasurement_time));
     }
     else
     {
-      samples_per_second = (1000.0f / ((float)sensor_status.type.light.exposure_time / 1000.0f + 6.0f));
+      samples_per_second = (1000.0f / ((float_t)sensor_status.type.light.exposure_time / 1000.0f + 6.0f));
     }
   }
   else if (sensor_class == ISENSOR_CLASS_PRESENCE)
@@ -226,12 +226,12 @@ float SMSensorGetSamplesPerSecond(uint8_t id)
   return samples_per_second;
 }
 
-float SMSensorGetBandwidth(uint8_t id)
+float_t SMSensorGetBandwidth(uint8_t id)
 {
   uint32_t bytes_per_sample = SMGetnBytesPerSample(id);
   SensorStatus_t sensor_status = SMSensorGetStatus(id);
   uint8_t sensor_class = sensor_status.isensor_class;
-  float bandwidth = 0;
+  float_t bandwidth = 0;
 
   if (sensor_class == ISENSOR_CLASS_MEMS)
   {
@@ -245,11 +245,11 @@ float SMSensorGetBandwidth(uint8_t id)
   {
     if (sensor_status.type.light.intermeasurement_time > sensor_status.type.light.exposure_time / 1000 + 6)
     {
-      bandwidth = bytes_per_sample * (1000.0f / ((float)sensor_status.type.light.intermeasurement_time));
+      bandwidth = bytes_per_sample * (1000.0f / ((float_t)sensor_status.type.light.intermeasurement_time));
     }
     else
     {
-      bandwidth = bytes_per_sample * (1000.0f / ((float)sensor_status.type.light.exposure_time / 1000.0f + 6.0f));
+      bandwidth = bytes_per_sample * (1000.0f / ((float_t)sensor_status.type.light.exposure_time / 1000.0f + 6.0f));
     }
   }
   else if (sensor_class == ISENSOR_CLASS_PRESENCE)
@@ -264,7 +264,7 @@ float SMSensorGetBandwidth(uint8_t id)
 }
 
 /* Specialized for ISensorMems class */
-sys_error_code_t SMSensorSetODR(uint8_t id, float odr)
+sys_error_code_t SMSensorSetODR(uint8_t id, float_t odr)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
@@ -290,7 +290,7 @@ sys_error_code_t SMSensorSetODR(uint8_t id, float odr)
   return res;
 }
 
-sys_error_code_t SMSensorSetFS(uint8_t id, float fs)
+sys_error_code_t SMSensorSetFS(uint8_t id, float_t fs)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
@@ -565,7 +565,7 @@ sys_error_code_t SMSensorSetPowerMode(uint8_t id, uint32_t power_mode)
 }
 
 /* Specialized for ISensorPresence class */
-sys_error_code_t SMSensorSetDataFrequency(uint8_t id, float data_frequency)
+sys_error_code_t SMSensorSetDataFrequency(uint8_t id, float_t data_frequency)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
@@ -590,7 +590,7 @@ sys_error_code_t SMSensorSetDataFrequency(uint8_t id, float data_frequency)
 
   return res;
 }
-sys_error_code_t SMSensorSetTransmittance(uint8_t id, float Transmittance)
+sys_error_code_t SMSensorSetTransmittance(uint8_t id, float_t Transmittance)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
@@ -1027,7 +1027,7 @@ sys_error_code_t SMSensorSetExposureTime(uint8_t id, uint32_t exposure_time)
   return res;
 }
 
-sys_error_code_t SMSensorSetLightGain(uint8_t id, float LightGain, uint8_t channel)
+sys_error_code_t SMSensorSetLightGain(uint8_t id, float_t LightGain, uint8_t channel)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 

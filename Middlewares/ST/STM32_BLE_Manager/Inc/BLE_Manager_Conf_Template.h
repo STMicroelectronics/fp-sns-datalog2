@@ -1,15 +1,15 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    BLE_Manager_Conf_Template.h
+  * @file    ble_manager_conf_template.h
   * @author  System Research & Applications Team - Catania Lab.
   * @brief   BLE Manager configuration template file.
   *          This file should be copied to the application folder and renamed
-  *          to BLE_Manager_Conf.h.
+  *          to ble_manager_conf.h.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -36,51 +36,61 @@ extern "C" {
  * BLUENRG_MS      0x01
  * BLUENRG_LP      0x02
  * BLUE_WB         0x03
+ * STM32WB07_06    0x04
+ * STM32WB05N      0x05
 */
+
+#define BLUE_CORE BLUENRG_LP
 
 /* Comment this define if do not use parson */
 #define BLE_MANAGER_USE_PARSON
-
-#define BLUE_CORE BLUENRG_1_2
 
 #ifndef BLE_MANAGER_USE_PARSON
 #define BLE_MANAGER_NO_PARSON
 #endif /* BLE_MANAGER_USE_PARSON */
 
-/* Out-Of-Band data */
-#define OUT_OF_BAND_ENABLEDATA      0x00
+/* Configuration values */
+#define CONFIG_VALUE_OFFSETS      CONFIG_DATA_PUBADDR_OFFSET
+/* Defines the Max dimension of the Bluetooth characteristics for each packet */
+#define DEFAULT_MAX_CHAR_LEN      255
 /* Defines the Max dimension of the Bluetooth config characteristic */
 #define DEFAULT_MAX_CONFIG_CHAR_LEN      20
+/* Defines the Max dimension of the Bluetooth std error characteristic */
+#define DEFAULT_MAX_STDERR_CHAR_LEN      20
+/* Maximum number of allocable bluetooth characteristics */
+#define BLE_MANAGER_MAX_ALLOCABLE_CHARS      32
+/* Length for configuration values. */
+#define CONFIG_VALUE_LENGTH      CONFIG_DATA_PUBADDR_LEN
+/* GAP Roles */
+#define GAP_ROLES      GAP_PERIPHERAL_ROLE
+/* IO capabilities */
+#define IO_CAPABILITIES      IO_CAP_DISPLAY_ONLY
+/* Authentication requirements */
+#define AUTHENTICATION_REQUIREMENTS      BONDING
+/* MITM protection requirements */
+#define MITM_PROTECTION_REQUIREMENTS      MITM_PROTECTION_REQUIRED
+/* Secure connection support option code */
+#define SECURE_CONNECTION_SUPPORT_OPTION_CODE      SC_IS_SUPPORTED
+/* Secure connection key press notification option code */
+#define SECURE_CONNECTION_KEYPRESS_NOTIFICATION      KEYPRESS_IS_NOT_SUPPORTED
+/* Out-Of-Band data */
+#define OUT_OF_BAND_ENABLEDATA      OOB_AUTH_DATA_ABSENT
 /* Bluetooth address types */
-#define ADDRESS_TYPE      1
+#define ADDRESS_TYPE      RANDOM_ADDR
 /* Enable High Power mode. High power mode should be enabled only to reach the maximum output power. */
 #define ENABLE_HIGH_POWER_MODE      0x01
 /* Power amplifier output level - The allowed PA levels depends on the device (see user manual for detailsl) */
-#define POWER_AMPLIFIER_OUTPUT_LEVEL      0x04
-/* Length for configuration values. */
-#define CONFIG_VALUE_LENGTH      6
-/* GAP Roles */
-#define GAP_ROLES      0x01
-/* Maximum number of allocable bluetooth characteristics */
-#define BLE_MANAGER_MAX_ALLOCABLE_CHARS      32
-/* Configuration values */
-#define CONFIG_VALUE_OFFSETS      0x00
-/* Defines the Max dimension of the Bluetooth std error characteristic */
-#define DEFAULT_MAX_STDERR_CHAR_LEN      20
-/* Defines the Max dimension of the Bluetooth characteristics for each packet */
-#define DEFAULT_MAX_CHAR_LEN      255
-/* MITM protection requirements */
-#define MITM_PROTECTION_REQUIREMENTS      0x01
-/* IO capabilities */
-#define IO_CAPABILITIES      0x00
-/* Authentication requirements */
-#define AUTHENTICATION_REQUIREMENTS      0x01
-/* Secure connection support option code */
-#define SECURE_CONNECTION_SUPPORT_OPTION_CODE      0x01
-/* Secure connection key press notification option code */
-#define SECURE_CONNECTION_KEYPRESS_NOTIFICATION      0x00
+#define POWER_AMPLIFIER_OUTPUT_LEVEL      4
 /* Advertising policy for filtering (white list related) */
-#define ADVERTISING_FILTER      0x00
+#define ADVERTISING_FILTER      NO_WHITE_LIST_USE
+
+/* Enable/Disable Secure Connection */
+#define ENABLE_SECURE_CONNECTION     0
+/* Enable/Disable Random Secure PIN */
+#define ENABLE_RANDOM_SECURE_PIN     0
+/* Secure PIN */
+#define SECURE_PIN      123456
+
 /* USER CODE BEGIN 1 */
 
 #define BLE_MANAGER_SDKV2
@@ -97,6 +107,12 @@ extern "C" {
 #define BLE_MANAGER_DELAY HAL_Delay
 /* Function InitBleManager_BLE_Stack use this define as delay if defined */
 /* #define BLE_INITIAL_DELAY HAL_Delay */
+
+#if (BLUE_CORE == BLUE_WB)
+#define HCI_LE_CONNECTION_COMPLETE_EVENT_BLE hci_le_connection_complete_event
+#define ACI_GATT_ATTRIBUTE_MODIFIED_EVENT_BLE aci_gatt_attribute_modified_event
+#define ACI_GATT_INDICATION_EVENT_BLE         aci_gatt_indication_event
+#endif /* (BLUE_CORE == BLUE_WB) */
 
 /****************** Memory management functions **************************/
 #define BLE_MALLOC_FUNCTION      malloc
@@ -134,4 +150,3 @@ extern "C" {
 #endif
 
 #endif /* __BLE_MANAGER_CONF_H__*/
-

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -23,9 +23,16 @@
 #include "services/sysmem.h"
 #include "services/SysTimestamp.h"
 
+#include "filex_dctrl_class.h"
+#include "usbx_dctrl_class.h"
+#include "ble_stream_class.h"
 #include "PnPLCompManager.h"
+#include "App_model.h"
+
 #include "UtilTask.h"
 #include "ISM330DHCXTask.h"
+#include "services/SQuery.h"
+#include "services/SUcfProtocol.h"
 
 #include "automode.h"
 #include "rtc.h"
@@ -64,6 +71,51 @@
 #define sTaskObj                                  sDatalogAppTaskObj
 #endif
 
+/**
+  *  DatalogAppTask internal structure.
+  */
+struct _DatalogAppTask
+{
+  /**
+    * Base class object.
+    */
+  AManagedTaskEx super;
+
+  TX_QUEUE in_queue;
+
+  /** Software timer used to send periodical ble advertise messages **/
+  TX_TIMER ble_advertise_timer;
+
+  /** Data Event Listener **/
+  IDataEventListener_t sensorListener;
+  void *owner;
+
+  /** USBX ctrl class **/
+  usbx_dctrl_class_t *usbx_device;
+
+  /** FILEX ctrl class **/
+  filex_dctrl_class_t *filex_device;
+
+  /** FILEX ctrl class **/
+  ble_stream_class_t *ble_device;
+
+  ICommandParse_t parser;
+
+//TODO could be more useful to have a CommandParse Class? (ICommandParse + PnPLCommand_t)
+  PnPLCommand_t outPnPLCommand;
+
+  /** SensorLL interface for MLC **/
+  ISensorLL_t *mlc_sensor_ll;
+
+  AppModel_t *datalog_model;
+
+  SensorContext_t sensorContext[SM_MAX_SENSORS];
+
+  uint32_t mode;  /* logging interface */
+
+  filex_threshold_config_t filex_threshold_config;
+
+};
 
 /**
   * Class object declaration
@@ -347,6 +399,7 @@ sys_error_code_t DatalogAppTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
   p_obj->ble_device = (ble_stream_class_t *) ble_stream_class_alloc();
   IStream_init((IStream_t *) p_obj->ble_device, COMM_ID_BLE, 0);
   IStream_set_parse_IF((IStream_t *) p_obj->ble_device, DatalogAppTask_GetICommandParseIF(p_obj));
+  p_obj->ble_device->adv_id = SM_MAX_SENSORS + 1;
 
   /* Configures filex threshold for suspending message queueing */
   p_obj->filex_threshold_config.queue_available_storage_thr = 2;
@@ -379,7 +432,6 @@ sys_error_code_t DatalogAppTask_vtblDoEnterPowerMode(AManagedTask *_this, const 
       /* Stop the SD interface */
       IStream_stop((IStream_t *) p_obj->filex_device);
       DatalogAppTask_UpdateStreamingStatus(p_obj, (IStream_t *) p_obj->filex_device, FALSE, interface);
-
       p_obj->datalog_model->log_controller_model.interface = -1;
 
       /* Stop the BLE data streaming interface */
@@ -534,7 +586,7 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
 
     if (p_obj->sensorContext[sId].old_time_stamp == -1.0f)
     {
-      float ODR;
+      float_t ODR;
       SensorStatus_t sensor_status = SMSensorGetStatus(sId);
       if (sensor_status.isensor_class == ISENSOR_CLASS_MEMS)
       {
@@ -549,7 +601,7 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
         return res;
       }
-      p_obj->datalog_model->s_models[sId]->stream_params.ioffset = p_evt->timestamp - ((1.0 / (double) ODR) * (samplesToSend - 1));
+      p_obj->datalog_model->s_models[sId]->stream_params.ioffset = p_evt->timestamp - ((1.0 / (double_t) ODR) * (samplesToSend - 1));
       p_obj->sensorContext[sId].old_time_stamp = p_evt->timestamp;
       p_obj->sensorContext[sId].n_samples_to_timestamp = p_obj->datalog_model->s_models[sId]->stream_params.spts;
     }
@@ -608,8 +660,8 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
         data_buf += p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample;
         samplesToSend -= p_obj->sensorContext[sId].n_samples_to_timestamp;
 
-        float measuredODR;
-        double newTS;
+        float_t measuredODR;
+        double_t newTS;
 
         SensorStatus_t sensor_status = SMSensorGetStatus(sId);
         if (sensor_status.isensor_class == ISENSOR_CLASS_MEMS)
@@ -628,7 +680,7 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
 
         if (measuredODR != 0.0f)
         {
-          newTS = p_evt->timestamp - ((1.0 / (double) measuredODR) * samplesToSend);
+          newTS = p_evt->timestamp - ((1.0 / (double_t) measuredODR) * samplesToSend);
         }
         else
         {
@@ -659,7 +711,7 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_
 
   DatalogAppTask *p_obj = (DatalogAppTask *)((uint32_t) _this - offsetof(DatalogAppTask, parser));
 
-  int pnp_res = PnPLParseCommand(commandString, &p_obj->outPnPLCommand);
+  int32_t pnp_res = PnPLParseCommand(commandString, &p_obj->outPnPLCommand);
   p_obj->outPnPLCommand.comm_interface_id = comm_interface_id;
 
   if (pnp_res == SYS_NO_ERROR_CODE)
@@ -891,7 +943,6 @@ uint8_t DatalogAppTask_stop_vtbl(void)
     };
     SysPostPowerModeEvent(evt);
   }
-
   else
   {
     message = "Error: Acquisition stop failure. Already stopped.";
@@ -1035,8 +1086,13 @@ uint8_t DatalogAppTask_set_time_vtbl(const char *datetime)
 
 uint8_t DatalogAppTask_switch_bank_vtbl(void)
 {
-  SwitchBank();
-  HAL_NVIC_SystemReset();
+  char *responseJSON;
+  uint32_t size;
+  char *message = "switch bank";
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, true);
+  DatalogApp_Task_command_response_cb(responseJSON, size);
+  tx_thread_sleep(AMT_MS_TO_TICKS(1000));
+  DatalogAppTask_msg((ULONG) DT_SWITCH_BANK);
   return 0;
 }
 
@@ -1044,35 +1100,16 @@ uint8_t DatalogAppTask_set_dfu_mode(void)
 {
   char *responseJSON;
   uint32_t size;
-  PnPLSerializeCommandResponse(&responseJSON, &size, 0, "", true);
+  char *message = "dfu mode";
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, true);
   DatalogApp_Task_command_response_cb(responseJSON, size);
-
-  /*  Disable interrupts for timers */
-  HAL_NVIC_DisableIRQ(TIM6_DAC_IRQn);
-  HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
-
-  __enable_irq();
-  HAL_RCC_DeInit();
-  HAL_DeInit();
-  SysTick->CTRL = SysTick->LOAD = SysTick->VAL = 0;
-  __HAL_SYSCFG_REMAPMEMORY_SYSTEMFLASH();
-
-  /* Jump to user application */
-  typedef  void (*pFunction)(void);
-  pFunction JumpToApplication;
-  uint32_t JumpAddress;
-  JumpAddress = *(__IO uint32_t *)(BOOTLOADER_ADDRESS + 4);
-  JumpToApplication = (pFunction) JumpAddress;
-
-  /* Initialize user application's Stack Pointer */
-  __set_MSP(*(__IO uint32_t *) BOOTLOADER_ADDRESS);
-  JumpToApplication();
+  tx_thread_sleep(AMT_MS_TO_TICKS(1000));
+  DatalogAppTask_msg((ULONG) DT_DFU_MODE);
   return 0;
 }
 
 uint8_t DatalogAppTask_enable_all(bool status)
 {
-  //TODO: To be implemented
   uint16_t i;
   uint16_t sensors = SMGetNsensor();
   for (i = 0; i < sensors; i++)
@@ -1176,8 +1213,40 @@ static sys_error_code_t DatalogAppTaskExecuteStepState1(AManagedTask *_this)
     if (message == DT_USER_BUTTON)
     {
       res = SYS_NO_ERROR_CODE;
-
       log_controller_start_log(LOG_CTRL_MODE_SD);
+    }
+    else if (message == DT_SWITCH_BANK)
+    {
+      tx_thread_sleep(AMT_MS_TO_TICKS(1000));
+      SwitchBank();
+      HAL_NVIC_SystemReset();
+      res = SYS_NO_ERROR_CODE;
+    }
+    else if (message == DT_DFU_MODE)
+    {
+      tx_thread_sleep(AMT_MS_TO_TICKS(1000));
+
+      /*  Disable interrupts for timers */
+      HAL_NVIC_DisableIRQ(TIM6_DAC_IRQn);
+      HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
+
+      __enable_irq();
+      HAL_RCC_DeInit();
+      HAL_DeInit();
+      SysTick->CTRL = SysTick->LOAD = SysTick->VAL = 0;
+      __HAL_SYSCFG_REMAPMEMORY_SYSTEMFLASH();
+
+      /* Jump to user application */
+      typedef void (*pFunction)(void);
+      pFunction JumpToApplication;
+      uint32_t JumpAddress;
+      JumpAddress = *(__IO uint32_t *)(BOOTLOADER_ADDRESS + 4);
+      JumpToApplication = (pFunction) JumpAddress;
+
+      /* Initialize user application's Stack Pointer */
+      __set_MSP(*(__IO uint32_t *) BOOTLOADER_ADDRESS);
+      JumpToApplication();
+      res = SYS_NO_ERROR_CODE;
     }
     else if (message == DT_FORCE_STEP)
     {
@@ -1225,7 +1294,6 @@ static sys_error_code_t DatalogAppTaskExecuteStepDatalog(AManagedTask *_this)
 
 static VOID DatalogAppTaskAdvOBTimerCallbackFunction(ULONG timer)
 {
-
   /* update BLE advertise option bytes */
   uint8_t adv_option_bytes[3];
   uint8_t battery_level = 0, status = 0;
@@ -1314,8 +1382,8 @@ static VOID DatalogAppTaskAdvOBTimerCallbackFunction(ULONG timer)
     ble_stream_msg(&msg);
   }
 
-
 }
+
 
 static sys_error_code_t DatalogAppTask_UpdateStreamingStatus(DatalogAppTask *p_obj, IStream_t *p_istream,
                                                              bool streaming_status, int8_t interface)
@@ -1404,7 +1472,6 @@ static sys_error_code_t DatalogAppTask_UpdateStreamingStatus(DatalogAppTask *p_o
   return res;
 }
 
-
 static void DatalogAppTask_filex_queue_full_cb(void)
 {
   /* Stop Log to avoid losing data */
@@ -1428,9 +1495,8 @@ static void DatalogAppTask_filex_queue_full_cb(void)
 // ***************************
 void Util_USR_EXTI_Callback(uint16_t pin)
 {
-  /* anti debounch */
+  /* anti bounce */
   static uint32_t t_start = 0;
-
   if (HAL_GetTick() - t_start > 1000)
   {
     if (pin == USER_BUTTON_Pin)
@@ -1452,4 +1518,3 @@ void Util_USR_EXTI_Callback(uint16_t pin)
   }
   t_start = HAL_GetTick();
 }
-

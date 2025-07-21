@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
-    <fileVersion>3</fileVersion>
+    <fileVersion>4</fileVersion>
     <configuration>
         <name>Datalog2 - Release</name>
         <toolchain>
@@ -11,7 +11,7 @@
             <name>General</name>
             <archiveVersion>3</archiveVersion>
             <data>
-                <version>34</version>
+                <version>37</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>0</debug>
                 <option>
@@ -62,7 +62,7 @@
                 </option>
                 <option>
                     <name>RTDescription</name>
-                    <state>Use the full configuration of the C/C++ runtime library. Full locale interface, C locale, file descriptor support, multibytes in printf and scanf, and hex floats in strtod.</state>
+                    <state>A complete configuration of the C/C++14 runtime library. Full locale interface, C locale, file descriptor support, multibytes in printf and scanf, and hex floats in strtod.</state>
                 </option>
                 <option>
                     <name>OGProductVersion</name>
@@ -70,7 +70,7 @@
                 </option>
                 <option>
                     <name>OGLastSavedByProductVersion</name>
-                    <state>9.20.1.43525</state>
+                    <state>9.60.3.7274</state>
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
@@ -98,8 +98,8 @@
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
-                    <version>31</version>
-                    <state>59</state>
+                    <version>34</version>
+                    <state>61</state>
                 </option>
                 <option>
                     <name>OGUseCmsis</name>
@@ -115,8 +115,8 @@
                 </option>
                 <option>
                     <name>CoreVariant</name>
-                    <version>31</version>
-                    <state>59</state>
+                    <version>34</version>
+                    <state>61</state>
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
@@ -138,8 +138,8 @@
                 </option>
                 <option>
                     <name>GFPUCoreSlave2</name>
-                    <version>31</version>
-                    <state>59</state>
+                    <version>34</version>
+                    <state>61</state>
                 </option>
                 <option>
                     <name>OGCMSISPackSelectDevice</name>
@@ -189,7 +189,7 @@
                 <option>
                     <name>TrustZoneModes</name>
                     <version>0</version>
-                    <state>1</state>
+                    <state>0</state>
                 </option>
                 <option>
                     <name>OGAarch64Abi</name>
@@ -203,13 +203,30 @@
                     <name>BuildFilesPath</name>
                     <state>Datalog2 - Release\</state>
                 </option>
+                <option>
+                    <name>PointerAuthentication</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>FPU64</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>OG_32_64DeviceCoreSlave</name>
+                    <version>34</version>
+                    <state>61</state>
+                </option>
+                <option>
+                    <name>GOutputSo</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
             <name>ICCARM</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>37</version>
+                <version>39</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>0</debug>
                 <option>
@@ -374,6 +391,7 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis2mdc</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis3dwb</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ilps22qs</state>
+                    <state>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ilps28qsw</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330bx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330dhcx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
@@ -515,13 +533,29 @@
                     <name>CCStackProtection</name>
                     <state>0</state>
                 </option>
+                <option>
+                    <name>CCPointerAutentiction</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCBranchTargetIdentification</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCPosRadRwpi</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCPosSharedSlave</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
             <name>AARM</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>11</version>
+                <version>12</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>0</debug>
                 <option>
@@ -682,6 +716,10 @@
                     <name>PreInclude</name>
                     <state></state>
                 </option>
+                <option>
+                    <name>A_32_64Device</name>
+                    <state>1</state>
+                </option>
             </data>
         </settings>
         <settings>
@@ -716,27 +754,18 @@
         </settings>
         <settings>
             <name>CUSTOM</name>
-            <archiveVersion>3</archiveVersion>
+            <archiveVersion>4</archiveVersion>
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>1</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
-            </data>
-        </settings>
-        <settings>
-            <name>BUILDACTION</name>
-            <archiveVersion>1</archiveVersion>
-            <data>
-                <prebuild></prebuild>
-                <postbuild></postbuild>
             </data>
         </settings>
         <settings>
             <name>ILINK</name>
             <archiveVersion>0</archiveVersion>
             <data>
-                <version>26</version>
+                <version>28</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>0</debug>
                 <option>
@@ -1096,6 +1125,18 @@
                     <name>IlinkWrapperFile</name>
                     <state></state>
                 </option>
+                <option>
+                    <name>IlinkProcessor</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>IlinkFpuProcessor</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>IlinkSharedSlave</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
@@ -1120,6 +1161,11 @@
             </data>
         </settings>
         <settings>
+            <name>BUILDACTION</name>
+            <archiveVersion>2</archiveVersion>
+            <data />
+        </settings>
+        <settings>
             <name>Coder</name>
             <archiveVersion>0</archiveVersion>
             <data />
@@ -1135,7 +1181,7 @@
             <name>General</name>
             <archiveVersion>3</archiveVersion>
             <data>
-                <version>34</version>
+                <version>37</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -1194,7 +1240,7 @@
                 </option>
                 <option>
                     <name>OGLastSavedByProductVersion</name>
-                    <state>9.20.1.43525</state>
+                    <state>9.60.3.7274</state>
                 </option>
                 <option>
                     <name>OGChipSelectEditMenu</name>
@@ -1222,8 +1268,8 @@
                 </option>
                 <option>
                     <name>GBECoreSlave</name>
-                    <version>31</version>
-                    <state>59</state>
+                    <version>34</version>
+                    <state>61</state>
                 </option>
                 <option>
                     <name>OGUseCmsis</name>
@@ -1239,8 +1285,8 @@
                 </option>
                 <option>
                     <name>CoreVariant</name>
-                    <version>31</version>
-                    <state>59</state>
+                    <version>34</version>
+                    <state>61</state>
                 </option>
                 <option>
                     <name>GFPUDeviceSlave</name>
@@ -1262,8 +1308,8 @@
                 </option>
                 <option>
                     <name>GFPUCoreSlave2</name>
-                    <version>31</version>
-                    <state>59</state>
+                    <version>34</version>
+                    <state>61</state>
                 </option>
                 <option>
                     <name>OGCMSISPackSelectDevice</name>
@@ -1327,13 +1373,30 @@
                     <name>BuildFilesPath</name>
                     <state>Datalog2 - Debug\</state>
                 </option>
+                <option>
+                    <name>PointerAuthentication</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>FPU64</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>OG_32_64DeviceCoreSlave</name>
+                    <version>34</version>
+                    <state>61</state>
+                </option>
+                <option>
+                    <name>GOutputSo</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
             <name>ICCARM</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>37</version>
+                <version>39</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -1501,6 +1564,7 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis2mdc</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis3dwb</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ilps22qs</state>
+                    <state>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ilps28qsw</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330bx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330dhcx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
@@ -1643,13 +1707,29 @@
                     <name>CCStackProtection</name>
                     <state>0</state>
                 </option>
+                <option>
+                    <name>CCPointerAutentiction</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCBranchTargetIdentification</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCPosRadRwpi</name>
+                    <state>0</state>
+                </option>
+                <option>
+                    <name>CCPosSharedSlave</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
             <name>AARM</name>
             <archiveVersion>2</archiveVersion>
             <data>
-                <version>11</version>
+                <version>12</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -1813,6 +1893,10 @@
                     <name>PreInclude</name>
                     <state></state>
                 </option>
+                <option>
+                    <name>A_32_64Device</name>
+                    <state>1</state>
+                </option>
             </data>
         </settings>
         <settings>
@@ -1847,27 +1931,18 @@
         </settings>
         <settings>
             <name>CUSTOM</name>
-            <archiveVersion>3</archiveVersion>
+            <archiveVersion>4</archiveVersion>
             <data>
                 <extensions></extensions>
                 <cmdline></cmdline>
-                <hasPrio>1</hasPrio>
                 <buildSequence>inputOutputBased</buildSequence>
-            </data>
-        </settings>
-        <settings>
-            <name>BUILDACTION</name>
-            <archiveVersion>1</archiveVersion>
-            <data>
-                <prebuild></prebuild>
-                <postbuild></postbuild>
             </data>
         </settings>
         <settings>
             <name>ILINK</name>
             <archiveVersion>0</archiveVersion>
             <data>
-                <version>26</version>
+                <version>28</version>
                 <wantNonLocal>1</wantNonLocal>
                 <debug>1</debug>
                 <option>
@@ -2227,6 +2302,18 @@
                     <name>IlinkWrapperFile</name>
                     <state></state>
                 </option>
+                <option>
+                    <name>IlinkProcessor</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>IlinkFpuProcessor</name>
+                    <state>1</state>
+                </option>
+                <option>
+                    <name>IlinkSharedSlave</name>
+                    <state>0</state>
+                </option>
             </data>
         </settings>
         <settings>
@@ -2249,6 +2336,11 @@
                     <state>###Unitialized###</state>
                 </option>
             </data>
+        </settings>
+        <settings>
+            <name>BUILDACTION</name>
+            <archiveVersion>2</archiveVersion>
+            <data />
         </settings>
         <settings>
             <name>Coder</name>
@@ -2421,6 +2513,12 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\ILPS22QSTask_vtbl.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\ILPS28QSWTask.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\ILPS28QSWTask_vtbl.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\IMP23ABSUTask.h</name>
                     </file>
                     <file>
@@ -2556,6 +2654,9 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\ILPS22QSTask.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\ILPS28QSWTask.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\IMP23ABSUTask.c</name>
                     </file>
                     <file>
@@ -2670,13 +2771,13 @@
                         <name>$PROJ_DIR$\..\Core\Inc\automode.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\BLE_Implementation.h</name>
+                        <name>$PROJ_DIR$\..\Core\Inc\ble_implementation.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Inc\ble_list_utils.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Inc\BLE_Manager_Conf.h</name>
+                        <name>$PROJ_DIR$\..\Core\Inc\ble_manager_conf.h</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Inc\ble_stream_class.h</name>
@@ -2781,7 +2882,7 @@
                         <name>$PROJ_DIR$\..\Core\Src\automode.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\Core\Src\BLE_Implementation.c</name>
+                        <name>$PROJ_DIR$\..\Core\Src\ble_implementation.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\ble_stream_class.c</name>
@@ -2815,9 +2916,6 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\stm32u5xx_it.c</name>
-                    </file>
-                    <file>
-                        <name>$PROJ_DIR$\..\Core\Src\syscalls.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\sysinit_mx.c</name>
@@ -3062,6 +3160,9 @@
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ilps22qs_Press.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ilps28qsw_Press.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Imp23absu_Mic.h</name>
                         </file>
                         <file>
@@ -3156,6 +3257,9 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ilps22qs_Press.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ilps28qsw_Press.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Imp23absu_Mic.c</name>
@@ -3254,6 +3358,9 @@
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ilps22qs_Press_PnPL.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ilps28qsw_Press_PnPL.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Imp23absu_Mic_PnPL.h</name>
                         </file>
                         <file>
@@ -3345,6 +3452,9 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Ilps22qs_Press_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ilps28qsw_Press_PnPL.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Imp23absu_Mic_PnPL.c</name>
@@ -3509,6 +3619,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ilps22qs\ilps22qs_reg.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ilps28qsw\ilps28qsw_reg.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ism330bx\ism330bx_reg.c</name>
@@ -3702,7 +3815,7 @@
                         </group>
                     </group>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\BlueNRG-2\hci\bluenrg1_devConfig.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\BlueNRG-2\hci\bluenrg1_dev_config.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\BlueNRG-2\hci\bluenrg1_events.c</name>
@@ -5881,40 +5994,40 @@
                 <group>
                     <name>Inc</name>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\BLE_MachineLearningCore.h</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\ble_machine_learning_core.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\BLE_Manager.h</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\ble_manager.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\BLE_ManagerCommon.h</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\ble_manager_common.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\BLE_ManagerControl.h</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\ble_manager_control.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\BLE_PnPLike.h</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\ble_pn_p_like.h</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\BLE_RawPnPLControlled.h</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Inc\ble_raw_pn_pl_controlled.h</name>
                     </file>
                 </group>
                 <group>
                     <name>Src</name>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_HighSpeedDataLog.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_high_speed_data_log.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_MachineLearningCore.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_machine_learning_core.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_Manager.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_manager.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_PnPLike.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_pn_p_like.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_RawPnPLControlled.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_raw_pn_pl_controlled.c</name>
                     </file>
                 </group>
             </group>

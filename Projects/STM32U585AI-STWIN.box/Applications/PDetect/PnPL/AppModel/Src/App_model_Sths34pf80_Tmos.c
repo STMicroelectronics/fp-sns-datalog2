@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -100,7 +100,7 @@ uint8_t sths34pf80_tmos_get_enable(bool *value)
 
 uint8_t sths34pf80_tmos_get_odr(pnpl_sths34pf80_tmos_odr_t *enum_id)
 {
-  float odr = sths34pf80_tmos_model.sensor_status->type.presence.data_frequency;
+  float_t odr = sths34pf80_tmos_model.sensor_status->type.presence.data_frequency;
   if (odr < 2.0f)
   {
     *enum_id = pnpl_sths34pf80_tmos_odr_hz1;
@@ -128,7 +128,7 @@ uint8_t sths34pf80_tmos_get_odr(pnpl_sths34pf80_tmos_odr_t *enum_id)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t sths34pf80_tmos_get_transmittance(float *value)
+uint8_t sths34pf80_tmos_get_transmittance(float_t *value)
 {
   *value = sths34pf80_tmos_model.sensor_status->type.presence.Transmittance;
   return PNPL_NO_ERROR_CODE;
@@ -394,7 +394,7 @@ uint8_t sths34pf80_tmos_get_samples_per_ts(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t sths34pf80_tmos_get_ioffset(float *value)
+uint8_t sths34pf80_tmos_get_ioffset(float_t *value)
 {
   *value = sths34pf80_tmos_model.stream_params.ioffset;
   /* USER Code */
@@ -571,7 +571,7 @@ uint8_t sths34pf80_tmos_set_odr(pnpl_sths34pf80_tmos_odr_t enum_id, char **respo
   return ret;
 }
 
-uint8_t sths34pf80_tmos_set_transmittance(float value, char **response_message)
+uint8_t sths34pf80_tmos_set_transmittance(float_t value, char **response_message)
 {
   if (response_message != NULL)
   {

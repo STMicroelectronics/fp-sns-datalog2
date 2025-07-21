@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -58,7 +58,7 @@ sys_error_code_t MDFDrvSetDataBuffer(MDFDriver_t *_this, int16_t *p_buffer, uint
   return SYS_NO_ERROR_CODE;
 }
 
-sys_error_code_t MDFSetMDFConfig(IDriver *_this, float ODR)
+sys_error_code_t MDFSetMDFConfig(IDriver *_this, float_t ODR)
 {
   MDFDriver_t *p_obj = (MDFDriver_t *) _this;
 

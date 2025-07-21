@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    BLE_QVAR.h
+  * @file    ble_qvar.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.11.0
-  * @date    15-February-2024
+  * @version 2.1.0
+  * @date    11-March-2025
   * @brief   QVAR info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -26,31 +26,29 @@
 extern "C" {
 #endif
 
-/* Exported typedef --------------------------------------------------------- */
-typedef void (*CustomNotifyEventQVAR_t)(BLE_NotifyEvent_t Event);
-
-/* Exported Variables ------------------------------------------------------- */
-extern CustomNotifyEventQVAR_t CustomNotifyEventQVAR;
-
 /* Exported functions ------------------------------------------------------- */
-
 /**
   * @brief  Init QVAR info service
   * @param  None
-  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for QVAR info service
+  * @retval ble_char_object_t* ble_char_pointer: Data structure pointer for QVAR info service
   */
-extern BleCharTypeDef *BLE_InitQVARService(void);
+extern ble_char_object_t *ble_init_qvar_service(void);
 
 /**
   * @brief  Update The QVAR Char
-  * @param  int32_t QVAR Value [LSB]
-  * @param  uint8_t Flag (to be defined)
-  * @param  int32_t DQVAR Value [LSB]
+  * @param  int32_t qvar Value [LSB]
+  * @param  uint8_t flag (to be defined)
+  * @param  int32_t dqvar Value [LSB]
   * @param  uint32_t Parameter (to be defined)
-  * @param  int32_t NumberElement Number of elements to send
-  * @retval tBleStatus      Status
+  * @param  int32_t number_element Number of elements to send
+  * @retval ble_status_t      Status
   */
-extern tBleStatus BLE_QVARUpdate(int32_t QVAR, uint8_t Flag, int32_t DQVAR, uint32_t Param, int32_t NumberElement);
+extern ble_status_t ble_qvar_update(int32_t qvar, uint8_t flag, int32_t dqvar, uint32_t param, int32_t number_element);
+
+/************************************************************
+  * Callback function prototype to manage the notify events *
+  ***********************************************************/
+extern void notify_event_qvar(ble_notify_event_t event);
 
 #ifdef __cplusplus
 }

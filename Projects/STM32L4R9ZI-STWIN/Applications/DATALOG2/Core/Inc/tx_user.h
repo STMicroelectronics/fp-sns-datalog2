@@ -110,7 +110,7 @@
 
 #ifdef ENABLE_THREADX_DBG_PIN
 #include <stdlib.h>
-#define TX_THREAD_USER_EXTENSION          int pxTaskTag;
+#define TX_THREAD_USER_EXTENSION          int32_t pxTaskTag;
 #endif
 
 

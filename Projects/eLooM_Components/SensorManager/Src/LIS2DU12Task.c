@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -683,7 +683,7 @@ IEventSrc *LIS2DU12Task_vtblGetEventSourceIF(ISourceObservable *_this)
   return p_if_owner->p_event_src;
 }
 
-sys_error_code_t LIS2DU12Task_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal)
+sys_error_code_t LIS2DU12Task_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal)
 {
   assert_param(_this != NULL);
   /*get the object implementing the ISourceObservable IF */
@@ -705,20 +705,20 @@ sys_error_code_t LIS2DU12Task_vtblAccGetODR(ISensorMems_t *_this, float *p_measu
   return res;
 }
 
-float LIS2DU12Task_vtblAccGetFS(ISensorMems_t *_this)
+float_t LIS2DU12Task_vtblAccGetFS(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LIS2DU12Task *p_if_owner = (LIS2DU12Task *)((uint32_t) _this - offsetof(LIS2DU12Task, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.fs;
+  float_t res = p_if_owner->sensor_status.type.mems.fs;
 
   return res;
 }
 
-float LIS2DU12Task_vtblAccGetSensitivity(ISensorMems_t *_this)
+float_t LIS2DU12Task_vtblAccGetSensitivity(ISensorMems_t *_this)
 {
   assert_param(_this != NULL);
   LIS2DU12Task *p_if_owner = (LIS2DU12Task *)((uint32_t) _this - offsetof(LIS2DU12Task, sensor_if));
-  float res = p_if_owner->sensor_status.type.mems.sensitivity;
+  float_t res = p_if_owner->sensor_status.type.mems.sensitivity;
 
   return res;
 }
@@ -732,7 +732,7 @@ EMData_t LIS2DU12Task_vtblAccGetDataInfo(ISourceObservable *_this)
   return res;
 }
 
-sys_error_code_t LIS2DU12Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
+sys_error_code_t LIS2DU12Task_vtblSensorSetODR(ISensorMems_t *_this, float_t odr)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -760,7 +760,7 @@ sys_error_code_t LIS2DU12Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_ODR,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) odr
+      .sensorMessage.fParam = (float_t) odr
     };
     res = LIS2DU12TaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -768,7 +768,7 @@ sys_error_code_t LIS2DU12Task_vtblSensorSetODR(ISensorMems_t *_this, float odr)
   return res;
 }
 
-sys_error_code_t LIS2DU12Task_vtblSensorSetFS(ISensorMems_t *_this, float fs)
+sys_error_code_t LIS2DU12Task_vtblSensorSetFS(ISensorMems_t *_this, float_t fs)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -790,7 +790,7 @@ sys_error_code_t LIS2DU12Task_vtblSensorSetFS(ISensorMems_t *_this, float fs)
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.fParam = (float) fs
+      .sensorMessage.fParam = (float_t) fs
     };
     res = LIS2DU12TaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -1026,19 +1026,33 @@ static sys_error_code_t LIS2DU12TaskExecuteStepDatalog(AManagedTask *_this)
         res = LIS2DU12TaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
-          if (p_obj->first_data_ready == 1)
+          if (p_obj->first_data_ready == 11)
           {
 #if LIS2DU12_FIFO_ENABLED
             if (p_obj->fifo_level != 0)
             {
 #endif
               // notify the listeners...
-              double timestamp = report.sensorDataReadyMessage.fTimestamp;
-              double delta_timestamp = timestamp - p_obj->prev_timestamp;
+              double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
+              double_t delta_timestamp = timestamp - p_obj->prev_timestamp;
               p_obj->prev_timestamp = timestamp;
 
               /* update measuredODR */
-              p_obj->sensor_status.type.mems.measured_odr = (float) p_obj->samples_per_it / (float) delta_timestamp;
+              // Update the sums
+              p_obj->delta_timestamp_sum += delta_timestamp;
+              p_obj->samples_sum += p_obj->samples_per_it;
+              if (p_obj->odr_count < MEAS_ODR_AVG)
+              {
+                p_obj->odr_count++;
+              }
+              // Calculate the average
+              if (p_obj->odr_count == MEAS_ODR_AVG)
+              {
+                p_obj->sensor_status.type.mems.measured_odr = (float_t) p_obj->samples_sum / p_obj->delta_timestamp_sum;
+                p_obj->delta_timestamp_sum = 0.0f;
+                p_obj->samples_sum = 0;
+                p_obj->odr_count = 0;
+              }
 
               /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
                * [X0, Y0, Z0]
@@ -1052,14 +1066,14 @@ static sys_error_code_t LIS2DU12TaskExecuteStepDatalog(AManagedTask *_this)
 
               DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->acc_id);
               IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
-              SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("LIS2DU12: ts = %f\r\n", (float)timestamp));
+              SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("LIS2DU12: ts = %f\r\n", (float_t)timestamp));
 #if LIS2DU12_FIFO_ENABLED
             }
 #endif
           }
           else
           {
-            p_obj->first_data_ready = 1;
+            p_obj->first_data_ready++;
           }
         }
         break;
@@ -1192,28 +1206,32 @@ static sys_error_code_t LIS2DU12TaskSensorInit(LIS2DU12Task *_this)
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
   int32_t ret_val = 0;
-//  uint8_t reg0;
 
   /* FIFO INT setup */
-  lis2du12_pin_int_route_t int2_route =
-  {
-    0
-  };
-
-  /* Select bus interface */
-  lis2du12_bus_mode_set(p_sensor_drv, LIS2DU12_I3C_DISABLE);
-
-  /* Set bdu and if_inc recommended for driver usage */
-  lis2du12_init_set(p_sensor_drv, LIS2DU12_DRV_RDY);
-
+  lis2du12_pin_int_route_t int2_route = {0};
+  /* sensor status */
+  lis2du12_status_t status;
   /* Check device ID */
   lis2du12_id_t regId;
+
   ret_val = lis2du12_id_get(p_sensor_drv, &regId);
   if (ret_val == 0)
   {
     ABusIFSetWhoAmI(_this->p_sensor_bus_if, regId.whoami);
   }
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("LIS2DU12: sensor - I am 0x%x.\r\n", regId));
+
+  /* Restore default configuration */
+  lis2du12_init_set(p_sensor_drv, LIS2DU12_RESET);
+  do
+  {
+    lis2du12_status_get(p_sensor_drv, &status);
+  } while (status.sw_reset);
+
+  /* Set bdu and if_inc recommended for driver usage */
+  lis2du12_init_set(p_sensor_drv, LIS2DU12_DRV_RDY);
+  /* Select bus interface */
+  lis2du12_bus_mode_set(p_sensor_drv, LIS2DU12_I3C_DISABLE);
 
 #if LIS2DU12_FIFO_ENABLED
 
@@ -1232,7 +1250,7 @@ static sys_error_code_t LIS2DU12TaskSensorInit(LIS2DU12Task *_this)
   }
 
   /* Calculation of watermark and samples per int*/
-  lis2du12_fifo_md_t fifo_md = { LIS2DU12_BYPASS, LIS2DU12_8_BIT };
+  lis2du12_fifo_md_t fifo_md;
   fifo_md.operation = LIS2DU12_STREAM;
   fifo_md.store = LIS2DU12_8_BIT;
   fifo_md.watermark = _this->samples_per_it;
@@ -1303,14 +1321,17 @@ static sys_error_code_t LIS2DU12TaskSensorInit(LIS2DU12Task *_this)
   else if (_this->sensor_status.type.mems.odr < 7.0f)
   {
     mode.odr = LIS2DU12_6Hz;
+    mode.bw = LIS2DU12_ODR_div_16;
   }
   else if (_this->sensor_status.type.mems.odr < 13.0f)
   {
     mode.odr = LIS2DU12_12Hz5;
+    mode.bw = LIS2DU12_ODR_div_8;
   }
   else if (_this->sensor_status.type.mems.odr < 26.0f)
   {
     mode.odr = LIS2DU12_25Hz;
+    mode.bw = LIS2DU12_ODR_div_4;
   }
   else if (_this->sensor_status.type.mems.odr < 51.0f)
   {
@@ -1346,12 +1367,15 @@ static sys_error_code_t LIS2DU12TaskSensorInit(LIS2DU12Task *_this)
   if (_this->sensor_status.is_active)
   {
 #if LIS2DU12_FIFO_ENABLED
-    _this->lis2du12_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float)(_this->samples_per_it)) / 2.0f));
+    _this->lis2du12_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->sensor_status.type.mems.odr) * (((float_t)(_this->samples_per_it)) / 2.0f));
 #else
     _this->lis2du12_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->sensor_status.type.mems.odr);
 #endif
   }
 
+  _this->odr_count = 0;
+  _this->delta_timestamp_sum = 0.0f;
+  _this->samples_sum = 0;
   return res;
 }
 
@@ -1363,7 +1387,7 @@ static sys_error_code_t LIS2DU12TaskSensorReadData(LIS2DU12Task *_this)
   uint16_t samples_per_it = _this->samples_per_it;
 
 #if LIS2DU12_FIFO_ENABLED
-  lis2du12_fifo_md_t fifo_md = { LIS2DU12_BYPASS, LIS2DU12_8_BIT };
+  lis2du12_fifo_md_t fifo_md;
   lis2du12_fifo_level_get(p_sensor_drv, &fifo_md, (uint8_t *) &_this->fifo_level);
   if (_this->fifo_level >= samples_per_it)
   {
@@ -1433,7 +1457,7 @@ static sys_error_code_t LIS2DU12TaskSensorSetODR(LIS2DU12Task *_this, SMMessage 
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-  float odr = (float) report.sensorMessage.fParam;
+  float_t odr = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -1509,7 +1533,7 @@ static sys_error_code_t LIS2DU12TaskSensorSetFS(LIS2DU12Task *_this, SMMessage r
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  float fs = (float) report.sensorMessage.fParam;
+  float_t fs = (float_t) report.sensorMessage.fParam;
   uint8_t id = report.sensorMessage.nSensorId;
 
   if (id == _this->acc_id)
@@ -1560,7 +1584,7 @@ static sys_error_code_t LIS2DU12TaskSensorSetFifoWM(LIS2DU12Task *_this, SMMessa
     }
     _this->samples_per_it = lis2du12_wtm_level;
 
-    lis2du12_fifo_md_t fifo_md = { LIS2DU12_BYPASS, LIS2DU12_8_BIT };
+    lis2du12_fifo_md_t fifo_md;
     fifo_md.operation = LIS2DU12_STREAM;
     fifo_md.store = LIS2DU12_8_BIT;
     fifo_md.watermark = lis2du12_wtm_level;

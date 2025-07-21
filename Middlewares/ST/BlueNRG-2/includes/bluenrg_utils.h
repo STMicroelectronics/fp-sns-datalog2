@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -32,18 +32,18 @@ extern "C" {
 /**
   * Structure inside IFR for configuration options.
   */
-typedef PACKED(struct) devConfigS
+typedef PACKED(struct) dev_config_s
 {
-  uint8_t  HS_crystal;
-  uint8_t  LS_source;
-  uint8_t  SMPS_management;
-  uint8_t  Reserved;
-  uint16_t HS_startup_time;
-  uint16_t SlaveSCA;
-  uint8_t  MasterSCA;
+  uint8_t  hs_crystal;
+  uint8_t  ls_source;
+  uint8_t  smps_management;
+  uint8_t  reserved;
+  uint16_t hs_startup_time;
+  uint16_t slave_sca;
+  uint8_t  master_sca;
   uint32_t max_conn_event_length;
-  uint8_t  Test_mode;
-} devConfig_t;
+  uint8_t  test_mode;
+} dev_config_t;
 
 /* Exported constants --------------------------------------------------------*/
 /* Exported macros -----------------------------------------------------------*/
@@ -78,7 +78,7 @@ typedef PACKED(struct) devConfigS
   *                  case of error (ACI_ERROR, UNSUPPORTED_VERSION,
   *                  WRONG_IMAGE_SIZE, CRC_ERROR)
   */
-int program_device(const uint8_t *fw_image, uint32_t fw_size);
+int32_t program_device(const uint8_t *fw_image, uint32_t fw_size);
 
 /**
   * @brief  Verify raw data from Device Configuration block.
@@ -86,14 +86,14 @@ int program_device(const uint8_t *fw_image, uint32_t fw_size);
   * @retval int      It returns 0 if successful, or a number not equal to 0 in
                      case of error (ACI_ERROR, BLE_UTIL_WRONG_VERIFY)
   */
-uint8_t verify_DEV_CONFIG(const devConfig_t *ifr_data);
+uint8_t verify_DEV_CONFIG(const dev_config_t *ifr_data);
 
 /**
   * @brief  Program raw data to Device Configuration block
   * @param  ifr_image Pointer to the buffer that will contain the data to program.
   * @retval int       It returns 0 if successful
   */
-int program_DEV_CONFIG(const devConfig_t *ifr_image);
+int program_DEV_CONFIG(const dev_config_t *ifr_image);
 
 /**
   * @brief  Get BlueNRG hardware and firmware version

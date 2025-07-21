@@ -3,149 +3,91 @@
   * @file    app_messages_parser.h
   * @author  SRA
   * @brief
-  *
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   *
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef APP_REPORT_PARSER_H_
 #define APP_REPORT_PARSER_H_
-
-
-#include "services/syserror.h"
-#include "services/ISourceObservable.h"
-#include "services/ISourceObservable_vtbl.h"
-#include "IDPU2.h"
-#include "IDPU2_vtbl.h"
-#include "IDataBuilder.h"
-#include "IDataBuilder_vtbl.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define APP_MESSAGE_ID_GENERIC                          0x0A  /**< Message ID used for the generic message with two parameters:
-                                                                * - sparam specifies an 8-bit parameter (s stands for small).
-                                                                * - param specifies a 32-bit parameters.
-                                                                */
-#define APP_MESSAGE_ID_NEAI                             0x10  ///< Message ID used for the messages class of NanoEdgeAI task.
-#define DPU_MESSAGE_ID_ATTACH_TO_DPU                    0x12  ///< Message ID used for the messages class DPU attach to DPU.
-#define DPU_MESSAGE_ID_ATTACH_TO_DATA_SRC               0x13  ///< Message ID used for the messages class DPU attach to data source.
-#define DPU_MESSAGE_ID_DETACH_FROM_DPU                  0x14  ///< Message ID used for the messages class DPU detach from to DPU.
-#define DPU_MESSAGE_ID_DETACH_FROM_DATA_SRC             0x15  ///< Message ID used for the messages class DPU detach from data source.
-#define DPU_MESSAGE_ID_ADD_LISTENER                     0x16  ///< Message ID used for the messages class DPU add listener.
-#define DPU_MESSAGE_ID_REMOVE_LISTENER                  0x17  ///< Message ID used for the messages class DPU remove listener.
-#define DPU_MESSAGE_ID_SET_IN_BUFFER                    0x18  ///< Message ID used for the messages class DPU set input data buffer.
-#define DPU_MESSAGE_ID_SET_OUT_BUFFER                   0x19  ///< Message ID used for the messages class DPU set output data buffer.
-#define DPU_MESSAGE_ID_CMD                              0xA0  ///< Message ID used for the messages class DPU command.
+#include "services/syserror.h"
+
+/* TODO: menage here all the msg ID ? */
+
+#define APP_REPORT_ID_BLE_CMD                           0x04
+#define APP_MESSAGE_ID_UTIL                             0x0B  ///< Message ID used for the messages class of Utility task.
 #define APP_REPORT_ID_FORCE_STEP                        0xFE  ///< Special ID used by the INIT task to force the execution of ManagedTaskEx step.
 
-
-/**
-  * This type allows managed tasks to communicate with each other by posting messages in a task input queue.
-  */
-typedef union _AppMsg
+typedef union _APPReport
 {
-  uint8_t msg_id;
+  uint8_t msgId;
 
   //--------------------------------------------------------------------------------
-  //  internalReport 0A (MCU) - generic message
+  //  internalReport 11 (MCU) - Util task command
   //--------------------------------------------------------------------------------
 
-  struct genericMsg_t
+  struct utilMessage_t
   {
-    uint8_t   msg_id;                               /* Message ID = 0x0A (10) */
-    uint8_t   sparam;                               /* optional small parameter */
-    uint16_t  cmd_id;                               /* command ID */
-    uint32_t  param;                                /* optional parameter. */
-  } generic_msg;
+    uint8_t msgId; /* Meport ID = 0x0B (11) */
+    uint8_t nPadding; /* padding byte */
+    uint16_t nCmdID; /* UitilityTask command ID */
+    uint32_t nParam; /* optional command parameter. */
+  } utilMessage;
 
-  //--------------------------------------------------------------------------------
-  //  NeaiMessage 0x10
-  //--------------------------------------------------------------------------------
-
-  struct NeaiMessage_t
-  {
-    uint8_t  msg_id;                                /* Message ID = 0x10 (16) */
-    uint8_t  sparam;                                /* small parameter */
-    uint16_t cmd_id;                                /* neai task command ID */
-    union
-    {
-      uint32_t n_param;                             /* command parameter */
-      float f_param;
-    } param;
-  } neai_msg;
-
-  //--------------------------------------------------------------------------------
-  //  DPU_MESSAGE_ID_ATTACH_TO_DPU 0x12 | DPU_MESSAGE_ID_ATTACH_TO_DATA_SRC 0x13
-  //--------------------------------------------------------------------------------
-
-  struct DPU_MSG_Attach_t
-  {
-    uint8_t  msg_id;                                /* Message ID = 0x12, 0x13 */
-    uint8_t padding[3];                             /* reserved */
-    IDataBuilder_t *p_data_builder;                 /* data builder object */
-    IDB_BuildStrategy_e build_strategy;             /* build strategy */
-    union
-    {
-      ISourceObservable *p_data_source;             /* data source */
-      IDPU2_t *p_next_dpu;                          /* next DPU in the DPU chain */
-    } p_data_obj;
-  } dpu_msg_attach;
-
-  //--------------------------------------------------------------------------------
-  //  DPU_MESSAGE_ID_DETACH_FROM_DPU 0x14 | DPU_MESSAGE_ID_DETACH_FROM_DATA_SRC 0x15
-  //--------------------------------------------------------------------------------
-
-  struct DPU_MSG_Detach_t
-  {
-    uint8_t  msg_id;                                /* Message ID = 0x14, 0x15 */
-    bool release_data_builder;                      /* if true the memory of related data source object is released (SysFree). */
-    uint8_t padding[2];                             /* reserved */
-    ISourceObservable *p_data_source;               /* data source. Not used if msg_id == DPU_MESSAGE_ID_DETACH_FROM_DPU */
-  } dpu_msg_detach;
-
-  //--------------------------------------------------------------------------------
-  //  DPU_MESSAGE_ID_ADD_LISTENER 0x16 | DPU_MESSAGE_ID_REMOVE_LISTENER 0x17
-  //--------------------------------------------------------------------------------
-
-  struct DPU_MSG_AddRemoveListener_t
-  {
-    uint8_t  msg_id;                                /* Message ID = 0x16, 0x17 */
-    uint8_t padding[3];                             /* reserved */
-    IDataEventListener_t *p_listener;               /* data event listener object */
-  } dpu_msg_add_remove_listener;
-
-  //--------------------------------------------------------------------------------
-  //  DPU_MESSAGE_ID_SET_IN_BUFFER 0x18 | DPU_MESSAGE_ID_SET_OUT_BUFFER 0x19
-  //--------------------------------------------------------------------------------
-  struct DPU_MSG_SetBuffer_t
-  {
-    uint8_t msg_id;                                /* Message ID = 0x18, 0x19 */
-    uint8_t reserved[3];                           /* reserved. */
-    uint8_t *p_buffer;                             /* data buffer. */
-    uint32_t buffer_size;                          /* size in byte of the buffer. */
-  } dpu_msg_set_buff;
-
-  //--------------------------------------------------------------------------------
-  //  DPU_MESSAGE_ID_CMD 0xA0
-  //--------------------------------------------------------------------------------
-  struct DPU_MSG_Cmd_t
-  {
-    uint8_t msg_id;                                /* Message ID = 0xA0 */
-    uint8_t cmd_id;                                /* command ID. */
-    uint8_t reserved[2];                           /* reserved. */
-  } dpu_msg_cmd;
+//    //--------------------------------------------------------------------------------
+//    //  DomainReport 01
+//    //--------------------------------------------------------------------------------
+//
+//    struct inertialDomainReport_t
+//    {
+//      uint8_t  msgId;                                 // Report ID = 0x01 (1)
+//      uint16_t  nCmdID;
+//    } inertialDomainReport;
+//
+//    struct CloudReport_t
+//    {
+//      uint8_t  msgId;                                 // Report ID = 0x01 (1)
+//      uint16_t  nCmdID;
+//      Msg_type_t msg;
+//    } CloudReport;
+//
+//    struct acousticDomainReport_t
+//    {
+//      uint8_t  msgId;                                 // Report ID = 0x01 (1)
+//      uint16_t  nCmdID;
+//    } acousticDomainReport;
+//
+//    struct NeaiMessage_t
+//    {
+//      uint8_t  msgId;                                 /* Message ID = 0x10 (16) */
+//      uint8_t  sparam;                                /* small parameter */
+//      uint16_t cmd_id;                                /* neai task command ID */
+//      union
+//      {
+//        uint32_t n_param;                             /* command parameter */
+//        float_t f_param;
+//      }param;
+//    } neaiMessage;
+//
+//     struct bleDomainReport_t
+//     {
+//       uint8_t  msgId;                                 // Report ID = 0x04 (4)
+//       uint16_t  nCmdID;
+//     } bleDomainReport;
 
   //--------------------------------------------------------------------------------
   //  internalReport (MCU)
@@ -153,25 +95,22 @@ typedef union _AppMsg
 
   struct internalReportFE_t
   {
-    uint8_t  msg_id;                                 /* Message ID = 0xFE */
-    uint8_t  data;                                   /* reserved. It can be ignored */
+    uint8_t msgId;                                 // Report ID = 0xFE
+    uint8_t nData;                                    // reserved. It can be ignored
   } internalReportFE;
 
-} AppMsg_t;
-
+} APPReport;
 
 /**
   * Get the size of the report with a specified ID
   *
-  * @param message_id [IN] specifies a the id of the message
-  * @return the size of the message with the specified ID or 0 if the message ID is not valid.
+  * @param nReportID [IN] specifies a report ID
+  * @return the size of the report with the specified ID or SYS_INVALID_PARAMETER_ERROR_CODE
   */
-uint16_t AppMsgGetSize(uint8_t message_id);
-
+uint16_t HidReportGetSize(uint8_t nReportID);
 
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif /* APP_REPORT_PARSER_H_ */

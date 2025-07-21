@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2015 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,6 +17,10 @@
   */
 #ifndef __COMPILER_H__
 #define __COMPILER_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
@@ -116,7 +120,7 @@ extern void __iar_program_start(void);
 /**
   * @brief  This is the section dedicated to Atollic toolchain
   */
-#else
+#else /* defined(__ICCARM__) || defined(__IAR_SYSTEMS_ASM__) */
 #ifdef __GNUC__
 
 /**
@@ -194,7 +198,7 @@ extern void __iar_program_start(void);
 /**
   * @brief  This is the section dedicated to Keil toolchain
   */
-#else
+#else /* __GNUC__ */
 #ifdef __CC_ARM
 
 /**
@@ -275,13 +279,18 @@ extern unsigned int Image$$ARM_LIB_STACKHEAP$$ZI$$Limit;
 
 #error Neither ICCARM, CC ARM nor GNUC C detected. Define your macros.
 
-#endif
-#endif
-#endif
+#endif /* __CC_ARM */
+#endif /* __GNUC__ */
+#endif /* defined(__ICCARM__) || defined(__IAR_SYSTEMS_ASM__) */
 
 /**
   * @}
   */
 
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* __COMPILER_H__ */

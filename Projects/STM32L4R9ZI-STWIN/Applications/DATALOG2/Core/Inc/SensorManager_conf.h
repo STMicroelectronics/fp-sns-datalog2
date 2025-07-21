@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -25,7 +25,6 @@
 
 #ifndef SENSORMANAGERCONF_H_
 #define SENSORMANAGERCONF_H_
-
 
 #define I2CDRV_CFG_HARDWARE_PERIPHERALS_COUNT   1
 
@@ -90,5 +89,6 @@
 // file SPIBusTask.c
 #define SPIBUS_TASK_CFG_STACK_DEPTH               (TX_MINIMUM_STACK*6)
 #define SPIBUS_TASK_CFG_PRIORITY                  (4)
+
 
 #endif /* SENSORMANAGERCONF_H_ */

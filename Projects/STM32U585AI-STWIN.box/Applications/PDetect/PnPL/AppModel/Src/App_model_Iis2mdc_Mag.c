@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -76,7 +76,7 @@ char *iis2mdc_mag_get_key(void)
 
 uint8_t iis2mdc_mag_get_odr(pnpl_iis2mdc_mag_odr_t *enum_id)
 {
-  float odr = iis2mdc_mag_model.sensor_status->type.mems.odr;
+  float_t odr = iis2mdc_mag_model.sensor_status->type.mems.odr;
   if (odr < 11.0f)
   {
     *enum_id = pnpl_iis2mdc_mag_odr_hz10;
@@ -102,7 +102,7 @@ uint8_t iis2mdc_mag_get_odr(pnpl_iis2mdc_mag_odr_t *enum_id)
 
 uint8_t iis2mdc_mag_get_fs(pnpl_iis2mdc_mag_fs_t *enum_id)
 {
-  float fs = iis2mdc_mag_model.sensor_status->type.mems.fs;
+  float_t fs = iis2mdc_mag_model.sensor_status->type.mems.fs;
   if (fs > 49.0f && fs < 51.0f)
   {
     *enum_id = pnpl_iis2mdc_mag_fs_g50;
@@ -134,14 +134,14 @@ uint8_t iis2mdc_mag_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_get_ioffset(float *value)
+uint8_t iis2mdc_mag_get_ioffset(float_t *value)
 {
   *value = iis2mdc_mag_model.stream_params.ioffset;
   /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_get_measodr(float *value)
+uint8_t iis2mdc_mag_get_measodr(float_t *value)
 {
   *value = iis2mdc_mag_model.sensor_status->type.mems.measured_odr;
   /* USER Code */
@@ -162,7 +162,7 @@ uint8_t iis2mdc_mag_get_sd_dps(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t iis2mdc_mag_get_sensitivity(float *value)
+uint8_t iis2mdc_mag_get_sensitivity(float_t *value)
 {
   *value = iis2mdc_mag_model.sensor_status->type.mems.sensitivity;
   /* USER Code */
@@ -210,7 +210,7 @@ uint8_t iis2mdc_mag_set_odr(pnpl_iis2mdc_mag_odr_t enum_id, char **response_mess
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_iis2mdc_mag_odr_hz10:

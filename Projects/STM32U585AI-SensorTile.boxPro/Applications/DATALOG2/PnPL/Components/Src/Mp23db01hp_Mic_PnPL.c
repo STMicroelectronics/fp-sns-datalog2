@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -123,7 +123,7 @@ uint8_t Mp23db01hp_Mic_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_number(JSON_Status, "mp23db01hp_mic.samples_per_ts", temp_i);
   mp23db01hp_mic_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "mp23db01hp_mic.dim", temp_i);
-  float temp_f = 0;
+  float_t temp_f = 0;
   mp23db01hp_mic_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "mp23db01hp_mic.ioffset", temp_f);
   mp23db01hp_mic_get_usb_dps(&temp_i);

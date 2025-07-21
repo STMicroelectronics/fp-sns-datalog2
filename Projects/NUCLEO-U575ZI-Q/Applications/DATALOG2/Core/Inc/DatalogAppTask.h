@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -35,18 +35,6 @@ extern "C" {
 #include "ICommandParse_vtbl.h"
 #include "PnPLCompManager.h"
 
-#include "ILog_Controller.h"
-#include "ILog_Controller_vtbl.h"
-#include "IIsm330dhcx_Mlc.h"
-#include "IIsm330dhcx_Mlc_vtbl.h"
-
-#include "App_model.h"
-
-#include "ISM330DHCXTask.h"
-#include "services/SQuery.h"
-#include "services/SUcfProtocol.h"
-
-
 /* Datalog messages ID */
 #define DT_USER_BUTTON                            (0x0010)
 #define DT_FORCE_STEP                             (0x00F0)
@@ -63,56 +51,6 @@ typedef struct
   */
 typedef struct _DatalogAppTask DatalogAppTask;
 
-/**
-  *  DatalogAppTask internal structure.
-  */
-struct _DatalogAppTask
-{
-  /**
-    * Base class object.
-    */
-  AManagedTaskEx super;
-
-  TX_QUEUE in_queue;
-
-  /**
-    * Data Event Listener
-    */
-  IDataEventListener_t sensorListener;
-  void *owner;
-
-  /**
-    * USBX ctrl class
-    */
-  usbx_dctrl_class_t *usbx_device;
-
-  ICommandParse_t parser;
-
-//TODO could be more useful to have a CommandParse Class? (ICommandParse + PnPLCommand_t)
-  PnPLCommand_t outPnPLCommand;
-
-  /**
-    * PnPL interface for Log Control
-    */
-  ILog_Controller_t pnplLogCtrl;
-
-  /**
-    * PnPL interface for MLC
-    */
-  IIsm330dhcx_Mlc_t pnplMLCCtrl;
-
-  /** SensorLL interface for MLC
-   */
-  ISensorLL_t *mlc_sensor_ll;
-
-  AppModel_t *datalog_model;
-
-  SensorContext_t sensorContext[SM_MAX_SENSORS];
-
-  uint32_t mode;  /* logging interface */
-
-};
-
 
 // Public API declaration
 //***********************
@@ -125,15 +63,24 @@ struct _DatalogAppTask
   */
 AManagedTaskEx *DatalogAppTaskAlloc(void);
 
+DatalogAppTask *getDatalogAppTask(void);
+
 IEventListener *DatalogAppTask_GetEventListenerIF(DatalogAppTask *_this);
 
 ICommandParse_t *DatalogAppTask_GetICommandParseIF(DatalogAppTask *_this);
 
-ILog_Controller_t *DatalogAppTask_GetILogControllerIF(DatalogAppTask *_this);
+uint8_t DatalogAppTask_start_vtbl(int32_t interface);
+uint8_t DatalogAppTask_stop_vtbl(void);
+uint8_t DatalogAppTask_save_config_vtbl(void);
+uint8_t DatalogAppTask_set_time_vtbl(const char *datetime);
 
-IIsm330dhcx_Mlc_t *DatalogAppTask_GetIMLCControllerIF(DatalogAppTask *_this, AManagedTask *task_obj);
+void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
 
+uint8_t DatalogAppTask_SetMLCIF(AManagedTask *task_obj);
+uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 sys_error_code_t DatalogAppTask_msg(ULONG msg);
+
+uint8_t DatalogAppTask_load_ucf(const char *ucf_data, uint32_t ucf_size, const char *output_data, int32_t output_size);
 
 // Inline functions definition
 // ***************************

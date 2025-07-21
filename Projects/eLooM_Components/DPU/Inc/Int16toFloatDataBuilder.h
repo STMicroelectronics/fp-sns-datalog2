@@ -5,14 +5,14 @@
   * @version M.m.b
   * @date    May 21, 2022
   *
-  * @brief   Data builder that convert int16_t value into float.
+  * @brief   Data builder that convert int16_t value into float_t.
   *
   *
   *
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in

@@ -9,7 +9,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -229,12 +229,8 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
 
         /* Enter Stop Mode*/
 
-        /*TODO: STF.Debug*/
-//      GPIOD->BRR = GPIO_PIN_0;
         /* Disable all used wakeup sources: WKUP pin*/
         HAL_PWR_DisableWakeUpPin(PWR_WAKEUP_PIN2);
-
-//      __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
 
         SystemClock_Backup();
         HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);
@@ -248,45 +244,25 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
         HAL_ResumeTick();
       }
 
-      /*TODO: STF.Debug*/
-//    GPIOD->BSRR = GPIO_PIN_0;
-//    for (int i=0; i< 2000000; i++) __NOP();
-//    GPIOD->BRR = GPIO_PIN_0;
-//    for (int i=0; i< 2000000; i++) __NOP();
-//    GPIOD->BSRR = GPIO_PIN_0;
-//    for (int i=0; i< 2000000; i++) __NOP();
-//    GPIOD->BRR = GPIO_PIN_0;
       /* enable the IRQ*/
       __asm volatile("cpsie i");
       break;
 
     case E_POWER_MODE_STATE1:
 
-      /*TODO: STF.Debug*/
-//    GPIOD->BSRR = GPIO_PIN_0;
       SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("PMH: STATE1\r\n"));
 
-#if defined(DEBUG) || defined(SYS_DEBUG)
-      //TODO: STF.Port - do define the get free heap size
-//    {
-//      size_t nFreeHeapSize = xPortGetFreeHeapSize();
-//      SYS_DEBUGF(SYS_DBG_LEVEL_SL, ("PMH: free heap = %i.\r\n", nFreeHeapSize));
-//    }
+#if defined(SYS_DEBUG)
+      SysDebugLogFreeHeapSize();
 #endif
       break;
 
     case E_POWER_MODE_SENSORS_ACTIVE:
 
-      /*TODO: STF.Debug*/
-//    GPIOD->BSRR = GPIO_PIN_0;
       SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("PMH: DATALOG\r\n"));
 
-#if defined(DEBUG) || defined(SYS_DEBUG)
-      //TODO: STF.Port - do define the get free heap size
-//    {
-//      size_t nFreeHeapSize = xPortGetFreeHeapSize();
-//      SYS_DEBUGF(SYS_DBG_LEVEL_SL, ("PMH: free heap = %i.\r\n", nFreeHeapSize));
-//    }
+#if defined(SYS_DEBUG)
+      SysDebugLogFreeHeapSize();
 #endif
       break;
 

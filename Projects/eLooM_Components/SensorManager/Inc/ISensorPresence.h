@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -38,8 +38,9 @@ typedef struct _ISensorPresence_t ISensorPresence_t;
 // Public API declaration
 //***********************
 /** Public interface **/
-static inline sys_error_code_t ISensorGetDataFrequency(ISensorPresence_t *_this, float *p_measured, float *p_nominal);
-static inline float ISensorGetTransmittance(ISensorPresence_t *_this);
+static inline sys_error_code_t ISensorGetDataFrequency(ISensorPresence_t *_this, float_t *p_measured,
+                                                       float_t *p_nominal);
+static inline float_t ISensorGetTransmittance(ISensorPresence_t *_this);
 static inline uint16_t ISensorGetAverageTObject(ISensorPresence_t *_this);
 static inline uint16_t ISensorGetAverageTAmbient(ISensorPresence_t *_this);
 static inline uint16_t ISensorGetPresenceThreshold(ISensorPresence_t *_this);
@@ -55,8 +56,8 @@ static inline uint8_t ISensorGetEmbeddedCompensation(ISensorPresence_t *_this);
 static inline uint8_t ISensorGetSoftwareCompensation(ISensorPresence_t *_this);
 static inline sys_error_code_t ISensorGetSoftwareCompensationAlgorithmConfig(ISensorPresence_t *_this,
                                                                              CompensationAlgorithmConfig_t *pAlgorithmConfig);
-static inline sys_error_code_t ISensorSetDataFrequency(ISensorPresence_t *_this, float DataFrequency);
-static inline sys_error_code_t ISensorSetTransmittance(ISensorPresence_t *_this, float Transmittance);
+static inline sys_error_code_t ISensorSetDataFrequency(ISensorPresence_t *_this, float_t DataFrequency);
+static inline sys_error_code_t ISensorSetTransmittance(ISensorPresence_t *_this, float_t Transmittance);
 static inline sys_error_code_t ISensorSetAverageTObject(ISensorPresence_t *_this, uint16_t avgTobject);
 static inline sys_error_code_t ISensorSetAverageTAmbient(ISensorPresence_t *_this, uint16_t avgTambient);
 static inline sys_error_code_t ISensorSetPresenceThreshold(ISensorPresence_t *_this, uint16_t PresenceThreshold);

@@ -33,7 +33,7 @@ extern "C" {
 
 /* includes for DIL24 supported sensors */
 
-#define  N_SUPPORTED_ADAPTERS  6 // updated for LSM6DSV32X 
+#define  N_SUPPORTED_ADAPTERS  9 // updated for LSM6DSV80x
 
 #define ONBOARD_ENV_SENSORS     2
 #define ONBOARD_MOTION_SENSORS  3
@@ -73,7 +73,27 @@ extern "C" {
 #include "lsm6dsv32x.h"
 #define LSM6DSV32X_0 (USE_DIL_SENSOR_LSM6DSO32_0 + USE_DIL_SENSOR_LSM6DSV16BX_0 + USE_DIL_SENSOR_LSM6DSO16IS_0)
 #endif
+   
+  // ST1VAFE6AX
+#if (USE_DIL_SENSOR_ST1VAFE6AX_0 == 1)
+  #include "st1vafe6ax.h"
+  #define ST1VAFE6AX_0 (USE_DIL_SENSOR_LSM6DSO32_0 + USE_DIL_SENSOR_LSM6DSV16BX_0 + USE_DIL_SENSOR_LSM6DSO16IS_0 + USE_DIL_SENSOR_LSM6DSV32X_0)
+#endif
+   
+// ST1VAFE3BX
+#if (USE_DIL_SENSOR_ST1VAFE3BX_0 == 1)
+  #include "st1vafe3bx.h"
+  #define ST1VAFE3BX_0 (USE_DIL_SENSOR_LSM6DSO32_0 + USE_DIL_SENSOR_LSM6DSV16BX_0 + USE_DIL_SENSOR_LSM6DSO16IS_0 + USE_DIL_SENSOR_LSM6DSV32X_0 + USE_DIL_SENSOR_ST1VAFE6AX_0)
+#endif
+  
+// LSM6DSV80X
+#if (USE_DIL_SENSOR_LSM6DSV80X_0 == 1)
+  #include "lsm6dsv80x.h"
+  #define LSM6DSV80X_0 (USE_DIL_SENSOR_LSM6DSO32_0 + USE_DIL_SENSOR_LSM6DSV16BX_0 + USE_DIL_SENSOR_LSM6DSO16IS_0 + USE_DIL_SENSOR_LSM6DSV32X_0 + USE_DIL_SENSOR_ST1VAFE6AX_0 + USE_DIL_SENSOR_ST1VAFE3BX_0)
+#endif  
+  
 
+   
 /// example on how to implement new sensors
 //#if (USE_DIL_SENSOR_ENVIRONMENTAL_XXX_0 == 1)
 //  #include "ENVIRONMENTAL_XXX.h"
@@ -131,6 +151,8 @@ typedef struct
 //  float_t env;
 //  BSP_MOTION_SENSOR_Axes_t motion;
   BSP_TMOS_Data_t tmos;
+  BSP_MOTION_SENSOR_Axes_t accHG;
+
 } BSP_DIL24_Data_t;
 
 #ifndef DIL24_TEMPERATURE
@@ -157,6 +179,9 @@ typedef struct
 #define DIL24_TMOS             64U
 #endif
 
+#ifndef DIL24_ACCELERO_HG
+#define DIL24_ACCELERO_HG      128U
+#endif
 
 #define DIL_ENV_HANDLE  2U
 #define DIL_MOTION_HANDLE 3U
@@ -167,8 +192,7 @@ typedef struct
 #define BSP_DIL_ENV_INSTANCES_NBR    (USE_DIL_SENSOR_SHT40AD1B_0 + USE_DIL_SENSOR_STHS34PF80_0)
 #define BSP_DIL_MOTION_FUNCTIONS_NBR    3U
 
-#define BSP_DIL_MOTION_INSTANCES_NBR    (USE_DIL_SENSOR_LSM6DSO32_0\
-                                         + USE_DIL_SENSOR_LSM6DSV16BX_0 + USE_DIL_SENSOR_LSM6DSO16IS_0 + USE_DIL_SENSOR_LSM6DSV32X_0)// with LSM6DSV32X
+#define BSP_DIL_MOTION_INSTANCES_NBR  (USE_DIL_SENSOR_LSM6DSO32_0 + USE_DIL_SENSOR_LSM6DSV16BX_0 + USE_DIL_SENSOR_LSM6DSO16IS_0 + USE_DIL_SENSOR_LSM6DSV32X_0 + USE_DIL_SENSOR_ST1VAFE6AX_0 + USE_DIL_SENSOR_ST1VAFE3BX_0 + USE_DIL_SENSOR_LSM6DSV80X_0)// with LSM6DSV80X
 
 
 /* comm functions */
@@ -191,6 +215,7 @@ int32_t BSP_DIL_SENSOR_Init(uint32_t Instance, uint32_t Functions);
 int32_t BSP_DIL_SENSOR_Enable(uint32_t Instance, uint32_t Functions);
 int32_t BSP_DIL_SENSOR_Disable(uint32_t Instance, uint32_t Functions);
 int32_t BSP_DIL_SENSOR_SetOutputDataRate(uint32_t Instance, uint32_t Functions, float_t Odr);
+int32_t BSP_DIL_SENSOR_SetFullScale(uint32_t Instance, uint32_t Functions, float full_scale);
 int32_t BSP_DIL_SENSOR_GetOutputDataRate(uint32_t Instance, uint32_t Functions, float_t *Odr);
 int32_t BSP_DIL_SENSOR_GetData(uint32_t Instance, uint32_t Functions, BSP_DIL24_Data_t *Data);
 int32_t BSP_DIL_ENV_SENSOR_GetValue(uint32_t Instance, uint32_t Function, float *Value);
@@ -210,11 +235,18 @@ static int32_t STHS34PF80_0_Probe(uint32_t Functions);
 static int32_t LSM6DSV16BX_0_Probe(uint32_t Functions);
 static int32_t LSM6DSO16IS_0_Probe(uint32_t Functions); // LSM6DSO16IS
 static int32_t LSM6DSV32X_0_Probe(uint32_t Functions); // LSM6DSV32X
+static int32_t ST1VAFE6AX_0_Probe(uint32_t Functions); // ST1VAFE6AX
+static int32_t ST1VAFE3BX_0_Probe(uint32_t Functions); // ST1VAFE3BX
+static int32_t LSM6DSV80X_0_Probe(uint32_t Functions); // LSM6DSV80X
 
 
 int32_t BSP_DIL_TMOS_SENSOR_GetData(uint32_t Instance, BSP_TMOS_Data_t *OutData);
 int32_t BSP_DIL_TMOS_SENSOR_CompensationInit(uint32_t Instance);
 int32_t BSP_DIL_TMOS_SENSOR_CompensationDeInit(uint32_t Instance);
+
+int32_t BSP_MOTION_SENSOR_ACC_HG_SetFullScale(uint32_t Instance, int32_t FullScale);
+int32_t BSP_MOTION_SENSOR_ACC_HG_SetOutputDataRate(uint32_t Instance, float_t odr);
+int32_t BSP_MOTION_SENSOR_ACC_HG_GetAxes(uint32_t Instance, BSP_DIL24_Data_t *Data);
 
 
 //typedef int32_t (*DIL24_Init_Func) (void);

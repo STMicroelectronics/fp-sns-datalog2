@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    BLE_Ota.h
+  * @file    ble_ota.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.11.0
-  * @date    15-February-2024
+  * @version 2.1.0
+  * @date    11-March-2025
   * @brief   Ota characteristic APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -28,20 +28,18 @@ extern "C" {
 
 #ifdef BLUE_WB
 
-/* Exported typedef --------------------------------------------------------- */
-typedef void(*CustomWriteRequestOta_t)(uint8_t *att_data, uint8_t data_length);
-
-/* Exported Variables ------------------------------------------------------- */
-extern CustomWriteRequestOta_t CustomWriteRequestOta;
-
 /* Exported functions ------------------------------------------------------- */
-
 /**
   * @brief  Init OTA characteristic
   * @param  None
-  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for ota characteristic
+  * @retval ble_char_object_t* ble_char_pointer: Data structure pointer for ota characteristic
   */
-extern BleCharTypeDef *BLE_InitOtaService(void);
+extern ble_char_object_t *ble_init_ota_service(void);
+
+/******************************************************************
+  * Callback function prototype to manage the write request events *
+  *****************************************************************/
+extern void write_request_ota_function(uint8_t *att_data, uint8_t data_length);
 
 #else /* BLUE_WB */
 #error "This Feature is only for WB BLE Chip"
@@ -53,4 +51,3 @@ extern BleCharTypeDef *BLE_InitOtaService(void);
 
 #endif /* _BLE_GNSS_H_ */
 
-/******************* (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

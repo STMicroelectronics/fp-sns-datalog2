@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -69,7 +69,7 @@ uint8_t sths34pf80_tmos_comp_init(void);
 char *sths34pf80_tmos_get_key(void);
 uint8_t sths34pf80_tmos_get_enable(bool *value);
 uint8_t sths34pf80_tmos_get_odr(pnpl_sths34pf80_tmos_odr_t *enum_id);
-uint8_t sths34pf80_tmos_get_transmittance(float *value);
+uint8_t sths34pf80_tmos_get_transmittance(float_t *value);
 uint8_t sths34pf80_tmos_get_avg_tobject_num(pnpl_sths34pf80_tmos_avg_tobject_num_t *enum_id);
 uint8_t sths34pf80_tmos_get_avg_tambient_num(pnpl_sths34pf80_tmos_avg_tambient_num_t *enum_id);
 uint8_t sths34pf80_tmos_get_lpf_p_m_bandwidth(pnpl_sths34pf80_tmos_lpf_p_m_bandwidth_t *enum_id);
@@ -89,7 +89,7 @@ uint8_t sths34pf80_tmos_get_sw_motion_threshold(int32_t *value);
 uint8_t sths34pf80_tmos_get_compensation_filter_flag(bool *value);
 uint8_t sths34pf80_tmos_get_absence_static_flag(bool *value);
 uint8_t sths34pf80_tmos_get_samples_per_ts(int32_t *value);
-uint8_t sths34pf80_tmos_get_ioffset(float *value);
+uint8_t sths34pf80_tmos_get_ioffset(float_t *value);
 uint8_t sths34pf80_tmos_get_usb_dps(int32_t *value);
 uint8_t sths34pf80_tmos_get_sd_dps(int32_t *value);
 uint8_t sths34pf80_tmos_get_data_type(char **value);
@@ -101,7 +101,7 @@ uint8_t sths34pf80_tmos_get_stream_id(int8_t *value);
 uint8_t sths34pf80_tmos_get_ep_id(int8_t *value);
 uint8_t sths34pf80_tmos_set_enable(bool value, char **response_message);
 uint8_t sths34pf80_tmos_set_odr(pnpl_sths34pf80_tmos_odr_t enum_id, char **response_message);
-uint8_t sths34pf80_tmos_set_transmittance(float value, char **response_message);
+uint8_t sths34pf80_tmos_set_transmittance(float_t value, char **response_message);
 uint8_t sths34pf80_tmos_set_avg_tobject_num(pnpl_sths34pf80_tmos_avg_tobject_num_t enum_id, char **response_message);
 uint8_t sths34pf80_tmos_set_avg_tambient_num(pnpl_sths34pf80_tmos_avg_tambient_num_t enum_id, char **response_message);
 uint8_t sths34pf80_tmos_set_lpf_p_m_bandwidth(pnpl_sths34pf80_tmos_lpf_p_m_bandwidth_t enum_id,

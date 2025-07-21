@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -55,7 +55,7 @@ struct _AiUSC_DPU_t
   /**
     * Specifies AI processing function to use in order to process the signals.
     */
-  int (*ai_processing_f)(const char *, float *, float[2]);
+  int32_t (*ai_processing_f)(const char *, float_t *, float_t[2]);
 
 };
 

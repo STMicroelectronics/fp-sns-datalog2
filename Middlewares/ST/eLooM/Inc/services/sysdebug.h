@@ -134,14 +134,14 @@ extern xDebugLockUnlockFnType xSysDebugUnlockFn;
   *
   * @return 0 if success, an error code otherwise.
   */
-int SysDebugHardwareInit(void);
+int32_t SysDebugHardwareInit(void);
 
 /**
   * Initialize the debug support.
   *
   * @return 0 if success, an error code otherwise.
   */
-int SysDebugInit(void);
+int32_t SysDebugInit(void);
 
 /**
   * Enable the IRQ for the timer used as timebase in order to compute
@@ -155,7 +155,7 @@ void SysDebugStartRunTimeStatsTimer(void);
 void SysDebugLogFreeHeapSize(void);
 
 /*forward function declaration*/
-int putChar(int ch);
+int32_t putChar(int32_t ch);
 
 
 

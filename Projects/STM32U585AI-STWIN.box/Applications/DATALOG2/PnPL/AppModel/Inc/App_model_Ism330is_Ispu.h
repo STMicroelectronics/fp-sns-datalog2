@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -68,10 +68,10 @@ char *ism330is_ispu_get_key(void);
 uint8_t ism330is_ispu_get_enable(bool *value);
 uint8_t ism330is_ispu_get_samples_per_ts(int32_t *value);
 uint8_t ism330is_ispu_get_dim(int32_t *value);
-uint8_t ism330is_ispu_get_ioffset(float *value);
+uint8_t ism330is_ispu_get_ioffset(float_t *value);
 uint8_t ism330is_ispu_get_ucf_status(bool *value);
-uint8_t ism330is_ispu_get_usb_dps(float *value);
-uint8_t ism330is_ispu_get_sd_dps(float *value);
+uint8_t ism330is_ispu_get_usb_dps(float_t *value);
+uint8_t ism330is_ispu_get_sd_dps(float_t *value);
 uint8_t ism330is_ispu_get_data_type(char **value);
 uint8_t ism330is_ispu_get_sensor_annotation(char **value);
 uint8_t ism330is_ispu_get_sensor_category(int32_t *value);

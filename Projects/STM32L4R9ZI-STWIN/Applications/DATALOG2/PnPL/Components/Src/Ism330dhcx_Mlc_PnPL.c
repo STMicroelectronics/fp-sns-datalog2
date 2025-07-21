@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -120,7 +120,7 @@ uint8_t Ism330dhcx_Mlc_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serial
   json_object_dotset_boolean(JSON_Status, "ism330dhcx_mlc.ucf_status", temp_b);
   ism330dhcx_mlc_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "ism330dhcx_mlc.dim", temp_i);
-  float temp_f = 0;
+  float_t temp_f = 0;
   ism330dhcx_mlc_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "ism330dhcx_mlc.ioffset", temp_f);
   char *temp_s = "";

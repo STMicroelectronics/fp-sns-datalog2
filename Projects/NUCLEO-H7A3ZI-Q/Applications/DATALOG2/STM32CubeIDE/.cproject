@@ -62,7 +62,8 @@
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths.1608324631" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../Core/Inc"/>
-									<listOptionValue builtIn="false" value="../../PnPL/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/AppModel/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/Components/Inc"/>
 									<listOptionValue builtIn="false" value="../../mx/Inc"/>
 									<listOptionValue builtIn="false" value="../../USBX/App"/>
 									<listOptionValue builtIn="false" value="../../USBX/Target"/>
@@ -182,7 +183,8 @@
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths.1308567000" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="../../Core/Inc"/>
-									<listOptionValue builtIn="false" value="../../PnPL/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/AppModel/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/Components/Inc"/>
 									<listOptionValue builtIn="false" value="../../mx/Inc"/>
 									<listOptionValue builtIn="false" value="../../USBX/App"/>
 									<listOptionValue builtIn="false" value="../../USBX/Target"/>
@@ -203,8 +205,8 @@
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/CircularBufferDL2"/>
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/Third_Party/parson"/>
 									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/EMData/Inc"/>
-									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/TagManager/Inc"/>
 									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/SensorManager/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/TagManager/Inc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/PnPLCompManager/Inc"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles.159898601" name="Include files (-include)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles" useByScannerDiscovery="false" valueType="includeFiles">

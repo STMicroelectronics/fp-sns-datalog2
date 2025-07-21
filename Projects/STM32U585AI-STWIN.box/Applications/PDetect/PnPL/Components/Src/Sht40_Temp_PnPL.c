@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -117,7 +117,7 @@ uint8_t Sht40_Temp_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **serialized
   json_object_dotset_number(JSON_Status, "sht40_temp.samples_per_ts", temp_i);
   sht40_temp_get_dim(&temp_i);
   json_object_dotset_number(JSON_Status, "sht40_temp.dim", temp_i);
-  float temp_f = 0;
+  float_t temp_f = 0;
   sht40_temp_get_ioffset(&temp_f);
   json_object_dotset_number(JSON_Status, "sht40_temp.ioffset", temp_f);
   sht40_temp_get_measodr(&temp_f);

@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    BLE_Json.h
+  * @file    ble_json.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version 1.11.0
-  * @date    15-February-2024
+  * @version 2.1.0
+  * @date    11-March-2025
   * @brief   BLE_Json info services APIs.
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -35,35 +35,37 @@ typedef enum
   BLE_JSON_GENERIC_TEXT   = 3,
   BLE_JSON_NFC_URL        = 4,
   BLE_JSON_TOTAL_NUMBER   = 5 /* This should be the last One */
-} BLE_JSON_MODE_t;
-
-typedef void (*CustomWriteRequestJson_t)(uint8_t *received_msg, uint8_t msg_length);
-typedef void (*CustomNotifyEventJson_t)(BLE_NotifyEvent_t Event);
+} ble_json_mode_t;
 
 /* Exported Variables ------------------------------------------------------- */
-extern CustomWriteRequestJson_t CustomWriteRequestJson;
-extern CustomNotifyEventJson_t CustomNotifyEventJson;
-
-extern char *JsonCommandName[BLE_JSON_TOTAL_NUMBER];
-extern char *JsonAnswer;
-
+extern char *json_command_name[BLE_JSON_TOTAL_NUMBER];
+extern char *json_answer;
 
 /* Exported functions ------------------------------------------------------- */
-
 /**
   * @brief  Init Json info service
   * @param  None
-  * @retval BleCharTypeDef* BleCharPointer: Data structure pointer for Json info service
+  * @retval ble_char_object_t* ble_char_pointer: Data structure pointer for Json info service
   */
-extern BleCharTypeDef *BLE_InitJsonService(void);
+extern ble_char_object_t *ble_init_json_service(void);
 
 /**
   * @brief  Json send buffer
   * @param  uint8_t* buffer
   * @param  uint32_t len
-  * @retval tBleStatus Status
+  * @retval ble_status_t Status
   */
-extern tBleStatus BLE_JsonUpdate(uint8_t *buffer, uint32_t len);
+extern ble_status_t ble_json_update(uint8_t *buffer, uint32_t len);
+
+/************************************************************
+  * Callback function prototype to manage the notify events *
+  ***********************************************************/
+extern void notify_event_json(ble_notify_event_t event);
+
+/******************************************************************
+  * Callback function prototype to manage the write request events *
+  *****************************************************************/
+extern void write_request_json_function(uint8_t *received_msg, uint32_t msg_length);
 
 #ifdef __cplusplus
 }

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -264,7 +264,13 @@ struct _LSM6DSV32XTask
   /**
     * Used to update the instantaneous odr.
     */
-  double prev_timestamp;
+  double_t prev_timestamp;
+
+  /*
+    * First data ready flag: fist data must be discarded, see sensor AN
+    * */
+  uint8_t first_data_ready;
+  uint8_t first_data_ready_threshold;
 
   /**
     * Internal model (FW) is in sync with the component (HW registers)

@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -27,16 +27,16 @@
 #define SYSCONFIG_H_
 
 
-// Board and FW ID
+// Board ID and FW_ID
 // *********************
 
 #define BOARD_ID_PROA           0x0D
-#define BLE_FW_ID_DATALOG2_PROA 0x1A
-#define USB_FW_ID_DATALOG2_PROA 0x0D
+#define BLE_FW_ID_DATALOG2_PROA 0x1D
+#define USB_FW_ID_DATALOG2_PROA 0x11
 
 #define BOARD_ID_PROB           0x11
-#define BLE_FW_ID_DATALOG2_PROB 0x15
-#define USB_FW_ID_DATALOG2_PROB 0x07
+#define BLE_FW_ID_DATALOG2_PROB 0x18
+#define USB_FW_ID_DATALOG2_PROB 0x08
 
 // Other hardware configuration
 // ****************************
@@ -55,7 +55,7 @@
 // *******************
 
 // file IManagedTask.h
-#define MT_ALLOWED_ERROR_COUNT                    0x2
+#define MT_ALLOWED_ERROR_COUNT                    0x2U
 
 // file sysinit.c
 #define INIT_TASK_CFG_ENABLE_BOOT_IF              0
@@ -71,7 +71,7 @@
 
 
 /* SensorManager configuration */
-#define SM_MAX_SENSORS                            11U
+#define SM_MAX_SENSORS                            14U
 
 
 // file UtilTask.c
@@ -80,6 +80,7 @@
 #ifdef ENABLE_THREADX_DBG_PIN
 #define UTIL_TASK_CFG_TAG                         (CON34_PIN_24)
 #endif
+#define UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT         20
 
 // App configuration
 
@@ -101,7 +102,7 @@
 #define FILEX_TASK_CFG_TAG                        (CON34_PIN_5)
 #endif
 
-// file ble_dctrl_class.c
+// file ble_stream_class.c
 /* BLE Send Thread parameters */
 #define BLE_SEND_CFG_STACK_DEPTH                  (TX_MINIMUM_STACK*15)
 #define BLE_SEND_CFG_PRIORITY                     (15)
@@ -135,7 +136,6 @@
 #define USB_EP4_BULKIN_CFG_TAG                (CON34_PIN_26)
 #define USB_EP5_BULKIN_CFG_TAG                (CON34_PIN_12)
 #endif
-
 
 // file SysTimestamp.c
 #define SYS_TS_CFG_ENABLE_SERVICE 1

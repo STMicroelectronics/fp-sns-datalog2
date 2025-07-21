@@ -1,10 +1,10 @@
 /**
   ******************************************************************************
-  * @file    hci_parser.h 
+  * @file    hci_parser.h
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.3.0
-  * @date    20-July-2023
-  * @brief   
+  * @version 2.0.0
+  * @date    25-September-2024
+  * @brief
   ******************************************************************************
   * @attention
   *
@@ -22,9 +22,13 @@
 #ifndef HCI_PARSER_H_
 #define HCI_PARSER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
-//#include "SDK_EVAL_Config.h"
+/* #include "SDK_EVAL_Config.h" */
 /* Exported macro ------------------------------------------------------------*/
 
 /* DTM mode codes */
@@ -37,19 +41,20 @@
 #define FW_VERSION_MINOR    6
 
 #define PACK_2_BYTE_PARAMETER(ptr, param)  do{\
-                *((uint8_t *)ptr) = (uint8_t)(param);   \
-                *((uint8_t *)ptr+1) = (uint8_t)(param)>>8; \
-                }while(0)
+                                               *((uint8_t *)ptr) = (uint8_t)(param);   \
+                                               *((uint8_t *)ptr+1) = (uint8_t)(param)>>8; \
+                                             }while(0)
 
 /* Exported constants --------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
 
-typedef enum {
+typedef enum
+{
   WAITING_TYPE,
   WAITING_HEADER,
   WAITING_PAYLOAD
-}hci_state;
+} hci_state;
 
 /* Exported functions ------------------------------------------------------- */
 
@@ -62,5 +67,9 @@ void packet_received(uint8_t *packet, uint16_t pckt_len);
 
 extern uint8_t buffer_out[];
 extern uint16_t buffer_out_len;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* HCI_PARSER_H_ */

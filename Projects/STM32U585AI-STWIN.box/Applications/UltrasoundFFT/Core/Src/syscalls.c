@@ -10,7 +10,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -30,7 +30,7 @@
 /* integration with eLooM framework: */
 /* 1. we map the low level put_char to the framework function used for the log. */
 //#if defined(DEBUG) || defined(SYS_DEBUG)
-//extern int SysDebugLowLevelPutchar(int x);
+//extern int32_t SysDebugLowLevelPutchar(int32_t x);
 //#define __io_putchar SysDebugLowLevelPutchar
 //#endif
 
@@ -42,8 +42,8 @@
 
 
 /* Variables */
-extern int __io_putchar(int ch) __attribute__((weak));
-extern int __io_getchar(void) __attribute__((weak));
+extern int32_t __io_putchar(int32_t ch) __attribute__((weak));
+extern int32_t __io_getchar(void) __attribute__((weak));
 
 
 char *__env[1] = { 0 };
@@ -55,26 +55,26 @@ void initialise_monitor_handles()
 {
 }
 
-int _getpid(void)
+int32_t _getpid(void)
 {
   return 1;
 }
 
-int _kill(int pid, int sig)
+int32_t _kill(int32_t pid, int32_t sig)
 {
   errno = EINVAL;
   return -1;
 }
 
-void _exit(int status)
+void _exit(int32_t status)
 {
   _kill(status, -1);
   while (1) {}    /* Make sure we hang here */
 }
 
-__attribute__((weak)) int _read(int file, char *ptr, int len)
+__attribute__((weak)) int32_t _read(int32_t file, char *ptr, int32_t len)
 {
-  int DataIdx;
+  int32_t DataIdx;
 
   for (DataIdx = 0; DataIdx < len; DataIdx++)
   {
@@ -84,9 +84,9 @@ __attribute__((weak)) int _read(int file, char *ptr, int len)
   return len;
 }
 
-__attribute__((weak)) int _write(int file, char *ptr, int len)
+__attribute__((weak)) int32_t _write(int32_t file, char *ptr, int32_t len)
 {
-  int DataIdx;
+  int32_t DataIdx;
 
   for (DataIdx = 0; DataIdx < len; DataIdx++)
   {
@@ -95,70 +95,70 @@ __attribute__((weak)) int _write(int file, char *ptr, int len)
   return len;
 }
 
-int _close(int file)
+int32_t _close(int32_t file)
 {
   return -1;
 }
 
 
-int _fstat(int file, struct stat *st)
+int32_t _fstat(int32_t file, struct stat *st)
 {
   st->st_mode = S_IFCHR;
   return 0;
 }
 
-int _isatty(int file)
+int32_t _isatty(int32_t file)
 {
   return 1;
 }
 
-int _lseek(int file, int ptr, int dir)
+int32_t _lseek(int32_t file, int32_t ptr, int32_t dir)
 {
   return 0;
 }
 
-int _open(char *path, int flags, ...)
+int32_t _open(char *path, int32_t flags, ...)
 {
   /* Pretend like we always fail */
   return -1;
 }
 
-int _wait(int *status)
+int32_t _wait(int32_t *status)
 {
   errno = ECHILD;
   return -1;
 }
 
-int _unlink(char *name)
+int32_t _unlink(char *name)
 {
   errno = ENOENT;
   return -1;
 }
 
-int _times(struct tms *buf)
+int32_t _times(struct tms *buf)
 {
   return -1;
 }
 
-int _stat(char *file, struct stat *st)
+int32_t _stat(char *file, struct stat *st)
 {
   st->st_mode = S_IFCHR;
   return 0;
 }
 
-int _link(char *old, char *new)
+int32_t _link(char *old, char *new)
 {
   errno = EMLINK;
   return -1;
 }
 
-int _fork(void)
+int32_t _fork(void)
 {
   errno = EAGAIN;
   return -1;
 }
 
-int _execve(char *name, char **argv, char **env)
+int32_t _execve(char *name, char **argv, char **env)
 {
   errno = ENOMEM;
   return -1;
@@ -184,11 +184,11 @@ int stdout_putchar(int ch)
 #elif defined (__IAR_SYSTEMS_ICC__)
 
 /* Forward function declaration. */
-__weak int __io_putchar(int ch);
-__weak int __io_getchar(void);
+__weak int32_t __io_putchar(int32_t ch);
+__weak int32_t __io_getchar(void);
 
-size_t __write(int Handle, const unsigned char *Buf, size_t Bufsize);
-size_t __read(int Handle, unsigned char *Buf, size_t Bufsize);
+size_t __write(int32_t Handle, const unsigned char *Buf, size_t Bufsize);
+size_t __read(int32_t Handle, unsigned char *Buf, size_t Bufsize);
 
 /** @brief IAR specific low level standard input
   * @param Handle IAR internal handle
@@ -196,7 +196,7 @@ size_t __read(int Handle, unsigned char *Buf, size_t Bufsize);
   * @param Bufsize Number of characters to read
   * @retval Number of characters read
   */
-size_t __read(int Handle, unsigned char *Buf, size_t Bufsize)
+size_t __read(int32_t Handle, unsigned char *Buf, size_t Bufsize)
 {
   if (Handle != 0)
   {
@@ -211,7 +211,7 @@ size_t __read(int Handle, unsigned char *Buf, size_t Bufsize)
   * @param Bufsize Number of characters to write
   * @retval Number of characters write
   */
-size_t __write(int Handle, const unsigned char *Buf, size_t Bufsize)
+size_t __write(int32_t Handle, const unsigned char *Buf, size_t Bufsize)
 {
   /* Check for the command to flush all handles */
   if (Handle == -1)
@@ -225,7 +225,7 @@ size_t __write(int Handle, const unsigned char *Buf, size_t Bufsize)
     return -1;
   }
 
-  int DataIdx;
+  int32_t DataIdx;
   for (DataIdx = 0; DataIdx < Bufsize; DataIdx++)
   {
     __io_putchar(*Buf++);

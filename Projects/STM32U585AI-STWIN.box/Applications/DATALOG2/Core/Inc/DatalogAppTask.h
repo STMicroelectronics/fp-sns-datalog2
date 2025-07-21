@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -39,12 +39,13 @@ extern "C" {
 /* Datalog messages ID */
 #define DT_USER_BUTTON                            (0x0010)
 #define DT_SWITCH_BANK                            (0x0020)
+#define DT_DFU_MODE                               (0x0040)
 #define DT_FORCE_STEP                             (0x00F0)
 
 
 typedef struct
 {
-  double old_time_stamp;
+  double_t old_time_stamp;
   uint16_t n_samples_to_timestamp;
 } SensorContext_t;
 

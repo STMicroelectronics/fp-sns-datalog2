@@ -10,7 +10,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -70,7 +70,7 @@ typedef struct _HSD_Tag_t
 {
   char label[HSD_TAGS_LABEL_LENGTH]; //l
   bool status; //e
-  double timestamp; //tr
+  double_t timestamp; //tr
   char abs_timestamp[HSD_TAGS_TIMESTAMP_LENGTH]; //"ta": "YYYY-MM-DDTHH:MM:SS.mmmZ"
 } HSD_Tag_t;
 

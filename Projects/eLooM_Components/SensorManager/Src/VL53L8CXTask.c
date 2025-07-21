@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -1310,7 +1310,7 @@ static sys_error_code_t VL53L8CXTaskExecuteStepDatalog(AManagedTask *_this)
         if (!SYS_IS_ERROR_CODE(res))
         {
           // notify the listeners...
-          double timestamp = report.sensorDataReadyMessage.fTimestamp;
+          double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
 #ifdef TOF_EXTENDED
           EMD_Init(&p_obj->data, (uint8_t *) &p_obj->p_sensor_data_buff[0], E_EM_UINT32, E_EM_MODE_INTERLEAVED, 3, 1, resolution,
                    8);
@@ -1321,7 +1321,7 @@ static sys_error_code_t VL53L8CXTaskExecuteStepDatalog(AManagedTask *_this)
           DataEvent_t evt;
           DataEventInit((IEvent *) &evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->id);
           IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("VL53L8CX: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("VL53L8CX: ts = %f\r\n", (float_t)timestamp));
         }
         break;
       }

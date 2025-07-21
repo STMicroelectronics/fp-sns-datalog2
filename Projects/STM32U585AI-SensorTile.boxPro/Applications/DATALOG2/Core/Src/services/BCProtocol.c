@@ -64,7 +64,7 @@ typedef struct
 {
   uint8_t id;
   char *name;
-  float freq;
+  float_t freq;
 } _STBC02_ChgStateInfo_t;
 
 /**
@@ -119,7 +119,7 @@ static void BCPComputeFrequency(TIM_HandleTypeDef *htim);
   *
   * @param freq [IN] CHG pin toggling frequency.
   */
-static void BCPFreq2Status(float freq);
+static void BCPFreq2Status(float_t freq);
 
 /* Public API definition */
 /*************************/
@@ -387,7 +387,7 @@ static void BCPComputeFrequency(TIM_HandleTypeDef *htim)
   assert_param(htim != NULL);
 
   BCProtocol_t *p_owner = sTimCallbackMap[0].p_owner;
-  float uwFrequency = 0; /* Frequency Value [Hz] */
+  float_t uwFrequency = 0; /* Frequency Value [Hz] */
 
   p_owner->chg_irq_counter++;
   if (p_owner->ic_flag == 0)
@@ -420,7 +420,7 @@ static void BCPComputeFrequency(TIM_HandleTypeDef *htim)
     }
 
     /* Frequency computation */
-    uwFrequency = (float) BC_CHG_TIM_COUNTING_FREQ / (float) uwDiffCapture;
+    uwFrequency = (float_t) BC_CHG_TIM_COUNTING_FREQ / (float_t) uwDiffCapture;
     p_owner->ic_flag = 0;
 
     BCPFreq2Status(uwFrequency);
@@ -432,24 +432,24 @@ static void BCPComputeFrequency(TIM_HandleTypeDef *htim)
   * @brief Get the status of the STBC02 checking the toggling frequency of the charging pin of the STBC02
   * @retval None
   */
-static void BCPFreq2Status(float freq)
+static void BCPFreq2Status(float_t freq)
 {
   BCProtocol_t *p_owner = sTimCallbackMap[0].p_owner;
   ESTBC02_CHG_STATE_t ChgState;
-  float half_step;
+  float_t half_step;
 
-  if (freq > (float) 0)
+  if (freq > (float_t) 0)
   {
     for (ChgState = END_OF_CHARGE; ChgState < BATTERY_TEMPERATURE_FAULT; ChgState++)
     {
-      half_step = (sSTBC02_ChgStateInfo[ChgState].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState + 1U].freq) / (float) 2;
+      half_step = (sSTBC02_ChgStateInfo[ChgState].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState + 1U].freq) / (float_t) 2;
       if (freq < half_step)
       {
         p_owner->chg_state = ChgState;
         break;
       }
     }
-    half_step = (sSTBC02_ChgStateInfo[ChgState - 1U].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState].freq) / (float) 2;
+    half_step = (sSTBC02_ChgStateInfo[ChgState - 1U].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState].freq) / (float_t) 2;
     if (freq > half_step)
     {
       p_owner->chg_state = ChgState;

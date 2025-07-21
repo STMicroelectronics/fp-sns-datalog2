@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -54,19 +54,19 @@ sys_error_code_t LSM6DSV32XTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, cons
 
 uint8_t LSM6DSV32XTask_vtblAccGetId(ISourceObservable *_this);
 IEventSrc *LSM6DSV32XTask_vtblAccGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t LSM6DSV32XTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float LSM6DSV32XTask_vtblAccGetFS(ISensorMems_t *_this);
-float LSM6DSV32XTask_vtblAccGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t LSM6DSV32XTask_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t LSM6DSV32XTask_vtblAccGetFS(ISensorMems_t *_this);
+float_t LSM6DSV32XTask_vtblAccGetSensitivity(ISensorMems_t *_this);
 EMData_t LSM6DSV32XTask_vtblAccGetDataInfo(ISourceObservable *_this);
 uint8_t LSM6DSV32XTask_vtblGyroGetId(ISourceObservable *_this);
 IEventSrc *LSM6DSV32XTask_vtblGyroGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t LSM6DSV32XTask_vtblGyroGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float LSM6DSV32XTask_vtblGyroGetFS(ISensorMems_t *_this);
-float LSM6DSV32XTask_vtblGyroGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t LSM6DSV32XTask_vtblGyroGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t LSM6DSV32XTask_vtblGyroGetFS(ISensorMems_t *_this);
+float_t LSM6DSV32XTask_vtblGyroGetSensitivity(ISensorMems_t *_this);
 EMData_t LSM6DSV32XTask_vtblGyroGetDataInfo(ISourceObservable *_this);
 
-sys_error_code_t LSM6DSV32XTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
-sys_error_code_t LSM6DSV32XTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t LSM6DSV32XTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr);
+sys_error_code_t LSM6DSV32XTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs);
 sys_error_code_t LSM6DSV32XTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 sys_error_code_t LSM6DSV32XTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t LSM6DSV32XTask_vtblSensorDisable(ISensor_t *_this);
@@ -84,9 +84,9 @@ sys_error_code_t LSM6DSV32XTask_vtblSensorSyncModel(ISensorLL_t *_this);
 
 uint8_t LSM6DSV32XTask_vtblMlcGetId(ISourceObservable *_this);
 IEventSrc *LSM6DSV32XTask_vtblMlcGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t LSM6DSV32XTask_vtblMlcGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float LSM6DSV32XTask_vtblMlcGetFS(ISensorMems_t *_this);
-float LSM6DSV32XTask_vtblMlcGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t LSM6DSV32XTask_vtblMlcGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t LSM6DSV32XTask_vtblMlcGetFS(ISensorMems_t *_this);
+float_t LSM6DSV32XTask_vtblMlcGetSensitivity(ISensorMems_t *_this);
 EMData_t LSM6DSV32XTask_vtblMlcGetDataInfo(ISourceObservable *_this);
 SensorDescriptor_t LSM6DSV32XTask_vtblMlcGetDescription(ISensor_t *_this);
 SensorStatus_t LSM6DSV32XTask_vtblMlcGetStatus(ISensor_t *_this);

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -110,7 +110,7 @@ uint8_t Sths34pf80_3_Tmos_PnPL_vtblGetStatus(IPnPLComponent_t *_this, char **ser
   pnpl_sths34pf80_3_tmos_odr_t temp_odr_e = (pnpl_sths34pf80_3_tmos_odr_t)0;
   sths34pf80_3_tmos_get_odr(&temp_odr_e);
   json_object_dotset_number(JSON_Status, "sths34pf80_3_tmos.odr", temp_odr_e);
-  float temp_f = 0;
+  float_t temp_f = 0;
   sths34pf80_3_tmos_get_transmittance(&temp_f);
   json_object_dotset_number(JSON_Status, "sths34pf80_3_tmos.transmittance", temp_f);
   pnpl_sths34pf80_3_tmos_avg_tobject_num_t temp_avg_tobject_num_e = (pnpl_sths34pf80_3_tmos_avg_tobject_num_t)0;
@@ -252,7 +252,7 @@ uint8_t Sths34pf80_3_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *se
   }
   if (json_object_dothas_value(tempJSONObject, "sths34pf80_3_tmos.transmittance"))
   {
-    float transmittance = (float)json_object_dotget_number(tempJSONObject, "sths34pf80_3_tmos.transmittance");
+    float_t transmittance = (float_t)json_object_dotget_number(tempJSONObject, "sths34pf80_3_tmos.transmittance");
     valid_property = true;
     ret = sths34pf80_3_tmos_set_transmittance(transmittance, &resp_msg);
     json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -263,7 +263,7 @@ uint8_t Sths34pf80_3_Tmos_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *se
     }
     else
     {
-      float old_transmittance;
+      float_t old_transmittance;
       sths34pf80_3_tmos_get_transmittance(&old_transmittance);
       json_object_dotset_number(respJSONObject, "PnPL_Response.value", old_transmittance);
       json_object_dotset_boolean(respJSONObject, "PnPL_Response.status", false);

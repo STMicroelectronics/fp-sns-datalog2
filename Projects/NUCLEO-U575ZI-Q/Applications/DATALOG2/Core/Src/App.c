@@ -2,10 +2,8 @@
   ******************************************************************************
   * @file    App.c
   * @author  SRA
-  *
   * @brief   Define the Application main entry points
   *
-  * ## Introduction
   *
   * This file is the main entry point for the user code.
   *
@@ -26,165 +24,138 @@
   * resources, if any - MyTask_vtblHardwareInit() - and its software
   * resources - MyTask_vtblOnCreateTask().
   *
-  * ## About this demo
-  *
-  * This demo demonstrates how to use the Sensor Manager eLooM component to operate the sensors
-  * available in the X-NUCLEO-IKSO2A1 expansion board. The HelloWorld task select one sensor
-  * and enable and configure it.
-  *
-  * ## How to use the demo
-  *
-  * connect the board through the ST-Link. Open a terminal
-  * like [Tera Term](http://www.teraterm.org) to display the debug log using these parameters:
-  * - Speed       : 115200
-  * - Data        : 8 bit
-  * - Parity      : none
-  * - Stop bits   : 1
-  * - Flow control: none
-  *
-  * Build the project and program the board.
-  * At the beginning the application is in power mode E_PM_MODE_STATE1 and a
-  * greetings message is displayed in the log.
-  * To change state to E_POWER_MODE_SENSOR_ACTIVE press the user button. Now the
-  * selected sensor start to produce data.
-  *
-  *********************************************************************************
+  ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
   *
-  *********************************************************************************
+  *
+  ******************************************************************************
   */
 
 #include "services/sysdebug.h"
 #include "services/ApplicationContext.h"
 #include "AppPowerModeHelper.h"
-#include "HelloWorldTask.h"
-#include "DatalogAppTask.h"
+
 #include "mx.h"
 
-/* SensorManager include*/
+#include "UtilTask.h"
+
 #include "I2CBusTask.h"
 #include "ISM330DHCXTask.h"
 #include "IIS2DLPCTask.h"
 #include "IIS2MDCTask.h"
+#include "DatalogAppTask.h"
+#include "App_model.h"
 
-
-/* PnPL include */
 #include "PnPLCompManager.h"
+
+#include "Iis2dlpc_Acc_PnPL.h"
+#include "Iis2mdc_Mag_PnPL.h"
+#include "Ism330dhcx_Acc_PnPL.h"
+#include "Ism330dhcx_Gyro_PnPL.h"
+#include "Ism330dhcx_Mlc_PnPL.h"
 #include "Automode_PnPL.h"
 #include "Log_Controller_PnPL.h"
 #include "Tags_Info_PnPL.h"
 #include "Acquisition_Info_PnPL.h"
 #include "Firmware_Info_PnPL.h"
 #include "Deviceinformation_PnPL.h"
-#include "Iis2dlpc_Acc_PnPL.h"
-#include "Iis2mdc_Mag_PnPL.h"
-#include "Ism330dhcx_Acc_PnPL.h"
-#include "Ism330dhcx_Gyro_PnPL.h"
-#include "Ism330dhcx_Mlc_PnPL.h"
 
-#include "ILog_Controller.h"
-#include "ILog_Controller_vtbl.h"
-#include "IIsm330dhcx_Mlc.h"
-#include "IIsm330dhcx_Mlc_vtbl.h"
-
-#include "parson.h"
-
-
-/**
-  * Application managed task.
-  */
-static AManagedTask *spHelloWorldObj = NULL;
-
-/**
-  * I2C bus task object.
-  */
-static AManagedTaskEx *spI2C2BusObj = NULL;
-
-/**
-  * Sensor task object: 3-axis accelerometer and 3-axis gyroscope
-  */
-static AManagedTaskEx *spISM330DHCXObj = NULL;
-
-/**
-  * Sensor task object: 3-axis accelerometer.
-  */
-static AManagedTaskEx *spIIS2DLPCObj = NULL;
-
-/**
-  * Sensor task object: 3-axis magnetometer
-  */
-static AManagedTaskEx *spIIS2MDCObj = NULL;
-
-/**
-  * DatalogApp object.
-  */
-static AManagedTaskEx *spDatalogAppObj = NULL;
-
-
-/* PnPL objects */
-
+static IPnPLComponent_t *pIis2dlpc_Acc_PnPLObj = NULL;
+static IPnPLComponent_t *pIis2mdc_Mag_PnPLObj = NULL;
+static IPnPLComponent_t *pIsm330dhcx_Acc_PnPLObj = NULL;
+static IPnPLComponent_t *pIsm330dhcx_Gyro_PnPLObj = NULL;
+static IPnPLComponent_t *pIsm330dhcx_Mlc_PnPLObj = NULL;
 static IPnPLComponent_t *pAutomode_PnPLObj = NULL;
 static IPnPLComponent_t *pLog_Controller_PnPLObj = NULL;
 static IPnPLComponent_t *pTags_Info_PnPLObj = NULL;
 static IPnPLComponent_t *pAcquisition_Info_PnPLObj = NULL;
 static IPnPLComponent_t *pFirmware_Info_PnPLObj = NULL;
 static IPnPLComponent_t *pDeviceinformation_PnPLObj = NULL;
-static IPnPLComponent_t *pIis2dlpc_Acc_PnPLObj = NULL;
-static IPnPLComponent_t *pIis2mdc_Mag_PnPLObj = NULL;
-static IPnPLComponent_t *pIsm330dhcx_Acc_PnPLObj = NULL;
-static IPnPLComponent_t *pIsm330dhcx_Gyro_PnPLObj = NULL;
-static IPnPLComponent_t *pIsm330dhcx_Mlc_PnPLObj = NULL;
 
-//static ILog_Controller_t iLog_Controller;
-static IIsm330dhcx_Mlc_t iIsm330dhcx_Mlc;
+/**
+  * Utility task object.
+  */
+static AManagedTaskEx *sUtilObj = NULL;
 
+/**
+  * Bus task object.
+  */
+static AManagedTaskEx *sI2CBusObj = NULL;
+
+/**
+  * Sensor task object.
+  */
+static AManagedTaskEx *sISM330DHCXObj = NULL;
+static AManagedTaskEx *sIIS2DLPCObj = NULL;
+static AManagedTaskEx *sIIS2MDCObj = NULL;
+
+/**
+  * DatalogApp
+  */
+static AManagedTaskEx *sDatalogAppObj = NULL;
+
+/**
+  * Pnpl mutex definition for thread safe purpose
+  */
+static TX_MUTEX pnpl_mutex;
+
+/**
+  * Private function declaration
+  */
+static void PnPL_lock_fp(void);
+static void PnPL_unlock_fp(void);
 
 /* eLooM framework entry points definition */
 /*******************************************/
 
 sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 {
-  assert_param(pAppContext != NULL);
+  assert_param(pAppContext);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  /* PnPL thread safe mutex creation */
+  tx_mutex_create(&pnpl_mutex, "PnPL Mutex", TX_INHERIT);
+
+  /* PnPL thread safe function registration */
+  PnPL_SetLockUnlockCallbacks(PnPL_lock_fp, PnPL_unlock_fp);
 
   PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
-  /* Allocate the task objects */
-  spHelloWorldObj = HelloWorldTaskAlloc(&MX_GPIO_LEDBlueInitParams, &MX_GPIO_UBInitParams);
-  spDatalogAppObj = DatalogAppTaskAlloc();
-  spI2C2BusObj     = I2CBusTaskAlloc(&MX_I2C1InitParams);
-  spISM330DHCXObj  = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, NULL, NULL);
-  spIIS2DLPCObj    = IIS2DLPCTaskAlloc(&MX_GPIO_INT2_DLPCInitParams, NULL);
-  spIIS2MDCObj     = IIS2MDCTaskAlloc(&MX_GPIO_DRDY_MDCInitParams, NULL);
+  /************ Allocate task objects ************/
+  sUtilObj = UtilTaskAlloc(&MX_GPIO_LEDBlueInitParams, &MX_GPIO_UBInitParams);
+  sDatalogAppObj = DatalogAppTaskAlloc();
+  sI2CBusObj     = I2CBusTaskAlloc(&MX_I2C1InitParams);
+  sISM330DHCXObj  = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, NULL, NULL);
+  sIIS2DLPCObj    = IIS2DLPCTaskAlloc(&MX_GPIO_INT2_DLPCInitParams, NULL);
+  sIIS2MDCObj     = IIS2MDCTaskAlloc(&MX_GPIO_DRDY_MDCInitParams, NULL);
 
 
-  /* Add the task object to the context. */
-  res = ACAddTask(pAppContext, spHelloWorldObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) spDatalogAppObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) spI2C2BusObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) spISM330DHCXObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) spIIS2DLPCObj);
-  res = ACAddTask(pAppContext, (AManagedTask *) spIIS2MDCObj);
+  /************ Add the task object to the context ************/
+  res = ACAddTask(pAppContext, (AManagedTask *) sUtilObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sDatalogAppObj);
+  res = ACAddTask(pAppContext, (AManagedTask *)sI2CBusObj);
+  res = ACAddTask(pAppContext, (AManagedTask *)sISM330DHCXObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sIIS2DLPCObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sIIS2MDCObj);
 
-  /* PnPL Components Allocation */
-  pAutomode_PnPLObj = Automode_PnPLAlloc();
-  pLog_Controller_PnPLObj = Log_Controller_PnPLAlloc();
-  pTags_Info_PnPLObj = Tags_Info_PnPLAlloc();
-  pAcquisition_Info_PnPLObj = Acquisition_Info_PnPLAlloc();
-  pFirmware_Info_PnPLObj = Firmware_Info_PnPLAlloc();
-  pDeviceinformation_PnPLObj = Deviceinformation_PnPLAlloc();
   pIis2dlpc_Acc_PnPLObj = Iis2dlpc_Acc_PnPLAlloc();
   pIis2mdc_Mag_PnPLObj = Iis2mdc_Mag_PnPLAlloc();
   pIsm330dhcx_Acc_PnPLObj = Ism330dhcx_Acc_PnPLAlloc();
   pIsm330dhcx_Gyro_PnPLObj = Ism330dhcx_Gyro_PnPLAlloc();
   pIsm330dhcx_Mlc_PnPLObj = Ism330dhcx_Mlc_PnPLAlloc();
+  pLog_Controller_PnPLObj = Log_Controller_PnPLAlloc();
+  pTags_Info_PnPLObj = Tags_Info_PnPLAlloc();
+  pAcquisition_Info_PnPLObj = Acquisition_Info_PnPLAlloc();
+  pFirmware_Info_PnPLObj = Firmware_Info_PnPLAlloc();
+  pDeviceinformation_PnPLObj = Deviceinformation_PnPLAlloc();
+  pAutomode_PnPLObj = Automode_PnPLAlloc();
 
   return res;
 }
@@ -193,52 +164,44 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
 {
   UNUSED(pAppContext);
 
-  /* connect the sensor tasks to the bus. */
-  (void) I2CBusTaskConnectDevice((I2CBusTask *) spI2C2BusObj,
-                                 (I2CBusIF *)ISM330DHCXTaskGetSensorIF((ISM330DHCXTask *) spISM330DHCXObj));
-  (void) I2CBusTaskConnectDevice((I2CBusTask *) spI2C2BusObj,
-                                 (I2CBusIF *)IIS2DLPCTaskGetSensorIF((IIS2DLPCTask *) spIIS2DLPCObj));
-  (void) I2CBusTaskConnectDevice((I2CBusTask *) spI2C2BusObj,
-                                 (I2CBusIF *)IIS2MDCTaskGetSensorIF((IIS2MDCTask *) spIIS2MDCObj));
+  /************ Connect the sensor task to the bus ************/
+  I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj,
+                          (I2CBusIF *)ISM330DHCXTaskGetSensorIF((ISM330DHCXTask *) sISM330DHCXObj));
+  I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj, (I2CBusIF *)IIS2MDCTaskGetSensorIF((IIS2MDCTask *) sIIS2MDCObj));
+  I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj,
+                          (I2CBusIF *)IIS2DLPCTaskGetSensorIF((IIS2DLPCTask *) sIIS2DLPCObj));
 
-  /* Connect the Sensor events */
-  IEventListener *DatalogAppListener = DatalogAppTask_GetEventListenerIF((DatalogAppTask *) spDatalogAppObj);
-  IEventSrcAddEventListener(IIS2DLPCTaskGetEventSrcIF((IIS2DLPCTask *) spIIS2DLPCObj), DatalogAppListener);
-  IEventSrcAddEventListener(IIS2MDCTaskGetMagEventSrcIF((IIS2MDCTask *) spIIS2MDCObj), DatalogAppListener);
-  IEventSrcAddEventListener(ISM330DHCXTaskGetAccEventSrcIF((ISM330DHCXTask *) spISM330DHCXObj), DatalogAppListener);
-  IEventSrcAddEventListener(ISM330DHCXTaskGetGyroEventSrcIF((ISM330DHCXTask *) spISM330DHCXObj), DatalogAppListener);
-//  IEventSrcAddEventListener(IMP34DT05TaskGetEventSrcIF((IMP34DT05Task *) sIMP34DT05Obj), DatalogAppListener);
+  /************ Connect the Sensor events to the DatalogAppTask ************/
+  IEventListener *DatalogAppListener = DatalogAppTask_GetEventListenerIF((DatalogAppTask *) sDatalogAppObj);
+  IEventSrcAddEventListener(IIS2DLPCTaskGetEventSrcIF((IIS2DLPCTask *) sIIS2DLPCObj), DatalogAppListener);
+  IEventSrcAddEventListener(IIS2MDCTaskGetMagEventSrcIF((IIS2MDCTask *) sIIS2MDCObj), DatalogAppListener);
+  IEventSrcAddEventListener(ISM330DHCXTaskGetAccEventSrcIF((ISM330DHCXTask *) sISM330DHCXObj), DatalogAppListener);
+  IEventSrcAddEventListener(ISM330DHCXTaskGetGyroEventSrcIF((ISM330DHCXTask *) sISM330DHCXObj), DatalogAppListener);
+  IEventSrcAddEventListener(ISM330DHCXTaskGetMlcEventSrcIF((ISM330DHCXTask *) sISM330DHCXObj), DatalogAppListener);
 
-  /* Init&Add PnPL Components */
-  Automode_PnPLInit(pAutomode_PnPLObj);
-  Log_Controller_PnPLInit(pLog_Controller_PnPLObj,
-                          DatalogAppTask_GetILogControllerIF((DatalogAppTask *) spDatalogAppObj));
+  /************ Connect Sensor LL to be used for ucf management to the DatalogAppTask ************/
+  if (sISM330DHCXObj)
+  {
+    DatalogAppTask_SetMLCIF((AManagedTask *) sISM330DHCXObj);
+  }
+
+  /************ Other PnPL Components ************/
+  Log_Controller_PnPLInit(pLog_Controller_PnPLObj);
   Tags_Info_PnPLInit(pTags_Info_PnPLObj);
   Acquisition_Info_PnPLInit(pAcquisition_Info_PnPLObj);
   Firmware_Info_PnPLInit(pFirmware_Info_PnPLObj);
   Deviceinformation_PnPLInit(pDeviceinformation_PnPLObj);
+  Automode_PnPLInit(pAutomode_PnPLObj);
+
+  /************ Sensor PnPL Components ************/
   Iis2dlpc_Acc_PnPLInit(pIis2dlpc_Acc_PnPLObj);
   Iis2mdc_Mag_PnPLInit(pIis2mdc_Mag_PnPLObj);
-  Ism330dhcx_Acc_PnPLInit(pIsm330dhcx_Acc_PnPLObj);
   Ism330dhcx_Gyro_PnPLInit(pIsm330dhcx_Gyro_PnPLObj);
-  Ism330dhcx_Mlc_PnPLInit(pIsm330dhcx_Mlc_PnPLObj, &iIsm330dhcx_Mlc);
+  Ism330dhcx_Acc_PnPLInit(pIsm330dhcx_Acc_PnPLObj);
+  Ism330dhcx_Mlc_PnPLInit(pIsm330dhcx_Mlc_PnPLObj);
 
   return SYS_NO_ERROR_CODE;
 }
-
-/*
-IApplicationErrorDelegate *SysGetErrorDelegate(void)
-{
-  // Install the application error manager delegate.
-  static IApplicationErrorDelegate *s_pxErrDelegate = NULL;
-  if (s_pxErrDelegate == NULL)
-  {
-    s_pxErrDelegate = AEMAlloc();
-  }
-
-  return s_pxErrDelegate;
-}
-*/
 
 IAppPowerModeHelper *SysGetPowerModeHelper(void)
 {
@@ -253,4 +216,12 @@ IAppPowerModeHelper *SysGetPowerModeHelper(void)
 }
 
 
+static void PnPL_lock_fp(void)
+{
+  tx_mutex_get(&pnpl_mutex, TX_NO_WAIT);
+}
 
+static void PnPL_unlock_fp(void)
+{
+  tx_mutex_put(&pnpl_mutex);
+}

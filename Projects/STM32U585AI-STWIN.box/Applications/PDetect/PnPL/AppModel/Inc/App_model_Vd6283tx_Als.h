@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -77,7 +77,7 @@ uint8_t vd6283tx_als_get_channel4_gain(pnpl_vd6283tx_als_channel4_gain_t *enum_i
 uint8_t vd6283tx_als_get_channel5_gain(pnpl_vd6283tx_als_channel5_gain_t *enum_id);
 uint8_t vd6283tx_als_get_channel6_gain(pnpl_vd6283tx_als_channel6_gain_t *enum_id);
 uint8_t vd6283tx_als_get_samples_per_ts(int32_t *value);
-uint8_t vd6283tx_als_get_ioffset(float *value);
+uint8_t vd6283tx_als_get_ioffset(float_t *value);
 uint8_t vd6283tx_als_get_usb_dps(int32_t *value);
 uint8_t vd6283tx_als_get_sd_dps(int32_t *value);
 uint8_t vd6283tx_als_get_data_type(char **value);

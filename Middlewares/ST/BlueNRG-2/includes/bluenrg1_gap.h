@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2015 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,6 +17,10 @@
   */
 #ifndef __GAP_H__
 #define __GAP_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include <link_layer.h>
 
@@ -244,5 +248,9 @@
 /**
   * @}
   */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __GAP_H__ */

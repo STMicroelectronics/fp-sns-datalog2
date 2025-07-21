@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -31,19 +31,12 @@
 // *********************
 
 #define BOARD_ID_BOXA           0x0E
-#define BLE_FW_ID_DATALOG2_BOXA 0x2B
-#define USB_FW_ID_DATALOG2_BOXA 0x1C
+#define BLE_FW_ID_DATALOG2_BOXA 0x2E
+#define USB_FW_ID_DATALOG2_BOXA 0x2D
 
 #define BOARD_ID_BOXB           0x12
 #define BLE_FW_ID_DATALOG2_BOXB 0x07
 #define USB_FW_ID_DATALOG2_BOXB 0x08
-
-// Drivers configuration
-// *********************
-
-// file NucleoDriver.c
-// uncomment the following line to change the drive common parameters
-//#define NUCLEO_DRV_CFG_IRQ_PRIORITY             13
 
 // Other hardware configuration
 // ****************************
@@ -78,17 +71,17 @@
 
 
 /* SensorManager configuration */
-#define SM_MAX_SENSORS                            21U
+#define SM_MAX_SENSORS                            20U
 /* Enable support for multiple VD6283 components */
 #define VD6283_CONFIG_DEVICES_MAX                 3
 
 // file UtilTask.c
 #define UTIL_TASK_CFG_STACK_DEPTH                 (TX_MINIMUM_STACK*7)
 #define UTIL_TASK_CFG_PRIORITY                    (14)
-#define UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT          20
 #ifdef ENABLE_THREADX_DBG_PIN
 #define UTIL_TASK_CFG_TAG                         (CON34_PIN_24)
 #endif
+#define UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT         20
 
 // App configuration
 
@@ -144,10 +137,6 @@
 #define USB_EP4_BULKIN_CFG_TAG                (CON34_PIN_26)
 #define USB_EP5_BULKIN_CFG_TAG                (CON34_PIN_12)
 #endif
-
-
-//#define DATALOG2_USE_WIFI         1
-
 
 // file SysTimestamp.c
 #define SYS_TS_CFG_ENABLE_SERVICE 1

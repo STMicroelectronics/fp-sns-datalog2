@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2021 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -185,7 +185,7 @@ in voltage and temperature.*/
   *        HAL drivers code
   */
 
-//#define USE_FULL_ASSERT    1U
+/* #define USE_FULL_ASSERT    1U */
 
 /* ################## Register callback feature configuration ############### */
 /**

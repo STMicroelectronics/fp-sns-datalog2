@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -974,7 +974,7 @@ static sys_error_code_t TSC1641TaskExecuteStepDatalog(AManagedTask *_this)
         if (!SYS_IS_ERROR_CODE(res))
         {
           // notify the listeners...
-          double timestamp = report.sensorDataReadyMessage.fTimestamp;
+          double_t timestamp = report.sensorDataReadyMessage.fTimestamp;
           p_obj->prev_timestamp = timestamp;
 
           /* Create a bidimensional data interleaved [m x 3], m is the number of samples in the sensor queue (samples_per_it):
@@ -990,7 +990,7 @@ static sys_error_code_t TSC1641TaskExecuteStepDatalog(AManagedTask *_this)
           DataEventInit((IEvent *)&evt, p_obj->p_event_src, &p_obj->data, timestamp, p_obj->id);
           IEventSrcSendEvent(p_obj->p_event_src, (IEvent *) &evt, NULL);
 
-          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("TSC1641: ts = %f\r\n", (float)timestamp));
+          SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("TSC1641: ts = %f\r\n", (float_t)timestamp));
         }
         break;
       }
@@ -1230,14 +1230,14 @@ static sys_error_code_t TSC1641TaskSensorReadData(TSC1641Task *_this)
     /* Power read */
     power_lsb = (Buffer[4] << 8) + Buffer[5];
 
-    _this->p_sensor_data_buff[0] = (float)vload_lsb * VLOAD_LSB_TO_MV; /* Voltage */
-    _this->p_sensor_data_buff[1] = (float)vshunt_lsb * VSHUNT_LSB_TO_MV; /* Voltage(VShunt) */
+    _this->p_sensor_data_buff[0] = (float_t)vload_lsb * VLOAD_LSB_TO_MV; /* Voltage */
+    _this->p_sensor_data_buff[1] = (float_t)vshunt_lsb * VSHUNT_LSB_TO_MV; /* Voltage(VShunt) */
     _this->p_sensor_data_buff[2] = _this->p_sensor_data_buff[1] / _this->sensor_status.type.power_meter.r_shunt * 1000.0f; /* Current */
-    _this->p_sensor_data_buff[3] = (float)power_lsb * DCPOWER_LSB_TO_MW; /* Power */
+    _this->p_sensor_data_buff[3] = (float_t)power_lsb * DCPOWER_LSB_TO_MW; /* Power */
 
 #if (HSD_USE_DUMMY_DATA == 1)
     uint16_t i = 0;
-    float *pfloat = (float *)_this->p_sensor_data_buff;
+    float_t *pfloat = (float_t *)_this->p_sensor_data_buff;
 
     for (i = 0; i < 4 ; i++)
     {

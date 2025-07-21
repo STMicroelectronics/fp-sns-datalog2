@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -25,7 +25,6 @@ extern "C" {
 #endif
 
 #define HSD_SW_TAG_CLASS_NUM 16U //automatically counted from "sw_tag" key in Comment Property field
-#define HSD_HW_TAG_CLASS_NUM 16U //automatically counted from "hw_tag" key in Comment Property field
 
 #ifdef __cplusplus
 }

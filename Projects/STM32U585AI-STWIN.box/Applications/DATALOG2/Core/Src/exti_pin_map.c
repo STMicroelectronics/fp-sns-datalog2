@@ -8,7 +8,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -21,7 +21,8 @@
 
 #include "drivers/EXTIPinMap.h"
 
-// Forward function declaration.
+/* Forward function declaration. */
+/*********************************/
 void Def_EXTI_Callback(uint16_t nPin) {};
 void Util_USR_EXTI_Callback(uint16_t nPin);
 void EXT_INT2_EXTI_Callback(uint16_t nPin);
@@ -35,6 +36,12 @@ void IIS3DWBTask_EXTI_Callback(uint16_t nPin);
 void hci_tl_lowlevel_isr(uint16_t nPin);
 void EXT_INT1_EXTI_Callback(uint16_t nPin);
 void WIFI_NOTIFY_EXTI_Callback(uint16_t nPin);
+
+/* External variables */
+/**********************/
+
+/* Map definition */
+/******************/
 
 EXTI_BEGIN_P2F_MAP()
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_0, Util_USR_EXTI_Callback)

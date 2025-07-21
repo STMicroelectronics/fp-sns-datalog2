@@ -10,7 +10,7 @@
       <TargetName>Datalog2_Debug</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6180000::V6.18::ARMCLANG</pCCUsed>
+      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -410,9 +410,9 @@
               <FilePath>..\Core\Src\automode.c</FilePath>
             </File>
             <File>
-              <FileName>BLE_Implementation.c</FileName>
+              <FileName>ble_implementation.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\BLE_Implementation.c</FilePath>
+              <FilePath>..\Core\Src\ble_implementation.c</FilePath>
             </File>
             <File>
               <FileName>ble_stream_class.c</FileName>
@@ -460,19 +460,9 @@
               <FilePath>..\Core\Src\OTA.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_timebase_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\mx\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\stm32u5xx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>syscalls.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\syscalls.c</FilePath>
             </File>
             <File>
               <FileName>sysinit_mx.c</FileName>
@@ -513,6 +503,11 @@
               <FileName>tx_initialize_low_level.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\Core\Src\tx_initialize_low_level.s</FilePath>
+            </File>
+            <File>
+              <FileName>syscalls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\syscalls.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -618,6 +613,11 @@
               <FileName>lptim.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\mx\Src\lptim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32u5xx_hal_timebase_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\mx\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1237,7 +1237,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Drivers/BSP/STINW.box</GroupName>
+          <GroupName>Drivers/BSP/STWIN.box</GroupName>
           <Files>
             <File>
               <FileName>STWIN.box_debug_pins.c</FileName>
@@ -1495,9 +1495,9 @@
           <GroupName>Middlewares/ST/BlueNRG-2</GroupName>
           <Files>
             <File>
-              <FileName>bluenrg1_devConfig.c</FileName>
+              <FileName>bluenrg1_dev_config.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\BlueNRG-2\hci\bluenrg1_devConfig.c</FilePath>
+              <FilePath>..\..\..\..\..\Middlewares\ST\BlueNRG-2\hci\bluenrg1_dev_config.c</FilePath>
             </File>
             <File>
               <FileName>bluenrg1_events.c</FileName>
@@ -2600,24 +2600,24 @@
           <GroupName>Middlewares/ST/STM32_BLE_Manager</GroupName>
           <Files>
             <File>
-              <FileName>BLE_MachineLearningCore.c</FileName>
+              <FileName>ble_machine_learning_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_MachineLearningCore.c</FilePath>
+              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_machine_learning_core.c</FilePath>
             </File>
             <File>
-              <FileName>BLE_Manager.c</FileName>
+              <FileName>ble_manager.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_Manager.c</FilePath>
+              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_manager.c</FilePath>
             </File>
             <File>
-              <FileName>BLE_PnPLike.c</FileName>
+              <FileName>ble_pn_p_like.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_PnPLike.c</FilePath>
+              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_pn_p_like.c</FilePath>
             </File>
             <File>
-              <FileName>BLE_HighSpeedDataLog.c</FileName>
+              <FileName>ble_high_speed_data_log.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_HighSpeedDataLog.c</FilePath>
+              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_high_speed_data_log.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4583,9 +4583,9 @@
               <FilePath>..\Core\Src\automode.c</FilePath>
             </File>
             <File>
-              <FileName>BLE_Implementation.c</FileName>
+              <FileName>ble_implementation.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Core\Src\BLE_Implementation.c</FilePath>
+              <FilePath>..\Core\Src\ble_implementation.c</FilePath>
             </File>
             <File>
               <FileName>ble_stream_class.c</FileName>
@@ -4633,19 +4633,9 @@
               <FilePath>..\Core\Src\OTA.c</FilePath>
             </File>
             <File>
-              <FileName>stm32u5xx_hal_timebase_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\mx\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
-            </File>
-            <File>
               <FileName>stm32u5xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\stm32u5xx_it.c</FilePath>
-            </File>
-            <File>
-              <FileName>syscalls.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\syscalls.c</FilePath>
             </File>
             <File>
               <FileName>sysinit_mx.c</FileName>
@@ -4686,6 +4676,11 @@
               <FileName>tx_initialize_low_level.s</FileName>
               <FileType>2</FileType>
               <FilePath>..\Core\Src\tx_initialize_low_level.s</FilePath>
+            </File>
+            <File>
+              <FileName>syscalls.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\syscalls.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4791,6 +4786,11 @@
               <FileName>lptim.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\mx\Src\lptim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32u5xx_hal_timebase_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\mx\Src\stm32u5xx_hal_timebase_tim.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -5410,7 +5410,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Drivers/BSP/STINW.box</GroupName>
+          <GroupName>Drivers/BSP/STWIN.box</GroupName>
           <Files>
             <File>
               <FileName>STWIN.box_debug_pins.c</FileName>
@@ -5668,9 +5668,9 @@
           <GroupName>Middlewares/ST/BlueNRG-2</GroupName>
           <Files>
             <File>
-              <FileName>bluenrg1_devConfig.c</FileName>
+              <FileName>bluenrg1_dev_config.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\BlueNRG-2\hci\bluenrg1_devConfig.c</FilePath>
+              <FilePath>..\..\..\..\..\Middlewares\ST\BlueNRG-2\hci\bluenrg1_dev_config.c</FilePath>
             </File>
             <File>
               <FileName>bluenrg1_events.c</FileName>
@@ -6773,24 +6773,24 @@
           <GroupName>Middlewares/ST/STM32_BLE_Manager</GroupName>
           <Files>
             <File>
-              <FileName>BLE_MachineLearningCore.c</FileName>
+              <FileName>ble_machine_learning_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_MachineLearningCore.c</FilePath>
+              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_machine_learning_core.c</FilePath>
             </File>
             <File>
-              <FileName>BLE_Manager.c</FileName>
+              <FileName>ble_manager.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_Manager.c</FilePath>
+              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_manager.c</FilePath>
             </File>
             <File>
-              <FileName>BLE_PnPLike.c</FileName>
+              <FileName>ble_pn_p_like.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_PnPLike.c</FilePath>
+              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_pn_p_like.c</FilePath>
             </File>
             <File>
-              <FileName>BLE_HighSpeedDataLog.c</FileName>
+              <FileName>ble_high_speed_data_log.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\BLE_HighSpeedDataLog.c</FilePath>
+              <FilePath>..\..\..\..\..\Middlewares\ST\STM32_BLE_Manager\Src\ble_high_speed_data_log.c</FilePath>
             </File>
           </Files>
         </Group>

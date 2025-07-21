@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -56,17 +56,17 @@ uint8_t LPS22HHTask_vtblTempGetId(ISourceObservable *_this);
 uint8_t LPS22HHTask_vtblPressGetId(ISourceObservable *_this);
 IEventSrc *LPS22HHTask_vtblTempGetEventSourceIF(ISourceObservable *_this);
 IEventSrc *LPS22HHTask_vtblPressGetEventSourceIF(ISourceObservable *_this);
-sys_error_code_t LPS22HHTask_vtblPressGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float LPS22HHTask_vtblPressGetFS(ISensorMems_t *_this);
-float LPS22HHTask_vtblPressGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t LPS22HHTask_vtblPressGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t LPS22HHTask_vtblPressGetFS(ISensorMems_t *_this);
+float_t LPS22HHTask_vtblPressGetSensitivity(ISensorMems_t *_this);
 EMData_t LPS22HHTask_vtblPressGetDataInfo(ISourceObservable *_this);
-sys_error_code_t LPS22HHTask_vtblTempGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float LPS22HHTask_vtblTempGetFS(ISensorMems_t *_this);
-float LPS22HHTask_vtblTempGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t LPS22HHTask_vtblTempGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t LPS22HHTask_vtblTempGetFS(ISensorMems_t *_this);
+float_t LPS22HHTask_vtblTempGetSensitivity(ISensorMems_t *_this);
 EMData_t LPS22HHTask_vtblTempGetDataInfo(ISourceObservable *_this);
 
-sys_error_code_t LPS22HHTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
-sys_error_code_t LPS22HHTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t LPS22HHTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr);
+sys_error_code_t LPS22HHTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs);
 sys_error_code_t LPS22HHTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 sys_error_code_t LPS22HHTask_vtblSensorEnable(ISensor_t *_this);
 sys_error_code_t LPS22HHTask_vtblSensorDisable(ISensor_t *_this);

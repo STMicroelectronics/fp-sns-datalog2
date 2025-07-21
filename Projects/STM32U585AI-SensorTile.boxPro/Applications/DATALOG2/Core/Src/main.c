@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -46,7 +46,7 @@
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-
+void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -57,13 +57,22 @@
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
+  * The main() function is provided by the eLooM framework. It is not recommended to modify
+  * this function. The entry points for the application are defined, instead, in the file App.c:
+  * - SysLoadApplicationContext()
+  * - SysOnStartApplication()
+  * - SysGetPowerModeHelper()
+  *
+  * For more information look at the section **eLooM framework > System initialization** of the development documentation.
+  *
+  * @retval the application never returns.
   */
 int main(void)
 {
-  // System initialization
-
+  /* System initialization. It is responsible of:
+   * - the early MCU initialization (the minimum set of HW resources)
+   * - create the INIT task, that is the first task running, and the one with the highest priority.
+   */
   SysInit(FALSE);
 
   tx_kernel_enter();
@@ -125,7 +134,7 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE BEGIN 6 */
   /* User can add his own implementation to report the file name and line number,
    ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  printf("Wrong parameters value: file %s on line %u\r\n", file, (unsigned int)line);
+  printf("Wrong parameters value: file %s on line %d\r\n", file, (int16_t)line);
   sys_error_handler();
   /* USER CODE END 6 */
 }

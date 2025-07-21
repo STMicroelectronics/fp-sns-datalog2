@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -100,14 +100,14 @@ uint8_t sgp40_voc_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t sgp40_voc_get_ioffset(float *value)
+uint8_t sgp40_voc_get_ioffset(float_t *value)
 {
   *value = sgp40_voc_model.stream_params.ioffset;
   /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t sgp40_voc_get_measodr(float *value)
+uint8_t sgp40_voc_get_measodr(float_t *value)
 {
   *value = sgp40_voc_model.sensor_status->type.mems.measured_odr;
   /* USER Code */
@@ -128,7 +128,7 @@ uint8_t sgp40_voc_get_sd_dps(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t sgp40_voc_get_sensitivity(float *value)
+uint8_t sgp40_voc_get_sensitivity(float_t *value)
 {
   *value = sgp40_voc_model.sensor_status->type.mems.sensitivity;
   /* USER Code */

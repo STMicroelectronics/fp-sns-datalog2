@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -94,14 +94,14 @@ uint8_t ism330is_ispu_get_ucf_status(bool *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330is_ispu_get_usb_dps(float *value)
+uint8_t ism330is_ispu_get_usb_dps(float_t *value)
 {
   *value = ism330is_ispu_model.stream_params.usb_dps;
   /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330is_ispu_get_sd_dps(float *value)
+uint8_t ism330is_ispu_get_sd_dps(float_t *value)
 {
   *value = ism330is_ispu_model.stream_params.sd_dps;
   /* USER Code */
@@ -120,7 +120,7 @@ uint8_t ism330is_ispu_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t ism330is_ispu_get_ioffset(float *value)
+uint8_t ism330is_ispu_get_ioffset(float_t *value)
 {
   *value = ism330is_ispu_model.stream_params.ioffset;
   /* USER Code */

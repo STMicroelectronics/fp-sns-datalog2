@@ -2,14 +2,14 @@
   ******************************************************************************
   * @file    hci_tl_interface_template.c
   * @author  System Research & Applications Team - Agrate/Catania Lab.
-  * @version V1.3.0
-  * @date    20-July-2023
-  * @brief   This file provides the implementation for all functions prototypes 
+  * @version 2.0.0
+  * @date    25-September-2024
+  * @brief   This file provides the implementation for all functions prototypes
   *          for the STM32 BlueNRG HCI Transport Layer interface
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -21,37 +21,27 @@
 
 #ifdef HCI_TL
 #include "hci_tl.h"
-#endif
+#endif /* HCI_TL */
+
 #include "hci_tl_interface.h"
- 
+
 void hci_tl_lowlevel_init(void)
 {
 #ifdef HCI_TL
-  tHciIO fops;  
-  
-  /* USER CODE BEGIN hci_tl_lowlevel_init 1 */
-  /* Register IO bus services */
-  
-  /* USER CODE END hci_tl_lowlevel_init 1 */
-  
-  hci_register_io_bus(&fops);
-  
-  /* USER CODE BEGIN hci_tl_lowlevel_init 2 */
-  /* Register event irq handler */
-  
-  /* USER CODE END hci_tl_lowlevel_init 2 */
+  /* USER CODE BEGIN hci_tl_lowlevel_init  */
 
-#endif
-  /* USER CODE BEGIN hci_tl_lowlevel_init 3 */
-  
-  /* USER CODE END hci_tl_lowlevel_init 3 */
+  /* Register event irq handler */
+
+  /* USER CODE END hci_tl_lowlevel_init  */
+
+#endif /* HCI_TL */
 }
 
 void hci_tl_lowlevel_isr(void)
 {
   /* USER CODE BEGIN hci_tl_lowlevel_isr */
   /* Call hci_notify_asynch_evt() */
-  
+
   /* USER CODE END hci_tl_lowlevel_isr */
 }
 

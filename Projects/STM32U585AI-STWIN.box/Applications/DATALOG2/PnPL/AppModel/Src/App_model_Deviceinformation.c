@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -87,7 +87,7 @@ uint8_t DeviceInformation_get_processorManufacturer(char **value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t DeviceInformation_get_totalStorage(float *value)
+uint8_t DeviceInformation_get_totalStorage(float_t *value)
 {
   *value = 0;
   if (SD_IsDetected())
@@ -95,12 +95,12 @@ uint8_t DeviceInformation_get_totalStorage(float *value)
 //    BSP_SD_CardInfo CardInfo;
     HAL_SD_CardInfoTypeDef CardInfo;
     SD_GetCardInfo(&CardInfo);
-    *value = round(((float)CardInfo.BlockNbr * (float)CardInfo.BlockSize) / 1000000000.0f);
+    *value = roundf(((float_t)CardInfo.BlockNbr * (float_t)CardInfo.BlockSize) / 1000000000.0f);
   }
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t DeviceInformation_get_totalMemory(float *value)
+uint8_t DeviceInformation_get_totalMemory(float_t *value)
 {
   *value = (SRAM1_SIZE + SRAM2_SIZE + SRAM3_SIZE + SRAM4_SIZE) / 1024;
   return PNPL_NO_ERROR_CODE;

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -58,14 +58,6 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_serialize_response(ICommandP
                                                                        uint8_t pretty);
 sys_error_code_t DatalogAppTask_vtblICommandParse_t_send_ctrl_msg(ICommandParse_t *_this,  uint32_t *msg,
                                                                   uint32_t length);
-
-// ILogController_t virtual functions
-uint8_t DatalogAppTask_start_vtbl(ILog_Controller_t *_this, uint32_t interface);
-uint8_t DatalogAppTask_stop_vtbl(ILog_Controller_t *_this);
-uint8_t DatalogAppTask_save_config_vtbl(ILog_Controller_t *_this);
-
-// IMLCController_t virtual functions
-uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(IIsm330dhcx_Mlc_t *_this, const char *ucf_data, uint32_t ucf_size);
 
 #ifdef __cplusplus
 }

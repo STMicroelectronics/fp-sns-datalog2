@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -74,17 +74,17 @@ SensorStatus_t *ISM330ISTask_vtblGyroGetStatusPointer(ISensor_t *_this);
 SensorDescriptor_t ISM330ISTask_vtblIspuGetDescription(ISensor_t *_this);
 SensorStatus_t ISM330ISTask_vtblIspuGetStatus(ISensor_t *_this);
 SensorStatus_t *ISM330ISTask_vtblIspuGetStatusPointer(ISensor_t *_this);
-sys_error_code_t ISM330ISTask_vtblAccGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float ISM330ISTask_vtblAccGetFS(ISensorMems_t *_this);
-float ISM330ISTask_vtblAccGetSensitivity(ISensorMems_t *_this);
-sys_error_code_t ISM330ISTask_vtblGyroGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float ISM330ISTask_vtblGyroGetFS(ISensorMems_t *_this);
-float ISM330ISTask_vtblGyroGetSensitivity(ISensorMems_t *_this);
-sys_error_code_t ISM330ISTask_vtblIspuGetODR(ISensorMems_t *_this, float *p_measured, float *p_nominal);
-float ISM330ISTask_vtblIspuGetFS(ISensorMems_t *_this);
-float ISM330ISTask_vtblIspuGetSensitivity(ISensorMems_t *_this);
-sys_error_code_t ISM330ISTask_vtblSensorSetODR(ISensorMems_t *_this, float odr);
-sys_error_code_t ISM330ISTask_vtblSensorSetFS(ISensorMems_t *_this, float fs);
+sys_error_code_t ISM330ISTask_vtblAccGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t ISM330ISTask_vtblAccGetFS(ISensorMems_t *_this);
+float_t ISM330ISTask_vtblAccGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t ISM330ISTask_vtblGyroGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t ISM330ISTask_vtblGyroGetFS(ISensorMems_t *_this);
+float_t ISM330ISTask_vtblGyroGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t ISM330ISTask_vtblIspuGetODR(ISensorMems_t *_this, float_t *p_measured, float_t *p_nominal);
+float_t ISM330ISTask_vtblIspuGetFS(ISensorMems_t *_this);
+float_t ISM330ISTask_vtblIspuGetSensitivity(ISensorMems_t *_this);
+sys_error_code_t ISM330ISTask_vtblSensorSetODR(ISensorMems_t *_this, float_t odr);
+sys_error_code_t ISM330ISTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs);
 sys_error_code_t ISM330ISTask_vtblSensorSetFifoWM(ISensorMems_t *_this, uint16_t fifoWM);
 
 sys_error_code_t ISM330ISTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len);

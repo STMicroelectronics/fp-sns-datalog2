@@ -1,13 +1,14 @@
+/* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    hci_tl_interface.c
-  * @author  SRA
+  * @file    hci_tl_interface_template.c
+  * @author  System Research & Applications Team - Agrate/Catania Lab.
   * @brief   This file provides the implementation for all functions prototypes
   *          for the STM32 BlueNRG HCI Transport Layer interface
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -17,23 +18,16 @@
   ******************************************************************************
   */
 
+/* USER CODE END Header */
+
 /* Includes ------------------------------------------------------------------*/
-#define HCI_TL
-#define HCI_TL_INTERFACE
+#include "RTE_Components.h"
 
-#ifdef HCI_TL
 #include "hci_tl.h"
-#include "hci.h"
-#else
-#include "hci_tl_interface.h"
-#endif /* HCI_TL */
-
-
 #include "stm32l4xx_hal_exti.h"
 #include "spi.h"
 
 /* Defines -------------------------------------------------------------------*/
-
 #define HEADER_SIZE       5U
 #define MAX_BUFFER_SIZE   255U
 #define TIMEOUT_DURATION  15U
@@ -43,17 +37,16 @@
 EXTI_HandleTypeDef hexti1;
 
 /* Private function prototypes -----------------------------------------------*/
-static void HCI_TL_SPI_Enable_IRQ(void);
-static void HCI_TL_SPI_Disable_IRQ(void);
+static void hci_tl_spi_enable_irq(void);
+static void hci_tl_spi_disable_irq(void);
 
 /******************** IO Operation and BUS services ***************************/
-
 /**
   * @brief  Enable SPI IRQ.
   * @param  None
   * @retval None
   */
-static void HCI_TL_SPI_Enable_IRQ(void)
+static void hci_tl_spi_enable_irq(void)
 {
   HAL_NVIC_EnableIRQ(HCI_TL_SPI_EXTI_IRQn);
 }
@@ -63,61 +56,9 @@ static void HCI_TL_SPI_Enable_IRQ(void)
   * @param  None
   * @retval None
   */
-static void HCI_TL_SPI_Disable_IRQ(void)
+static void hci_tl_spi_disable_irq(void)
 {
   HAL_NVIC_DisableIRQ(HCI_TL_SPI_EXTI_IRQn);
-}
-
-/**
-  * @brief  Initializes the peripherals communication with the BlueNRG
-  *         Expansion Board (via SPI, I2C, USART, ...)
-  *
-  * @param  void* Pointer to configuration struct
-  * @retval int32_t Status
-  */
-int32_t HCI_TL_SPI_Init(void *pConf)
-{
-  GPIO_InitTypeDef GPIO_InitStruct;
-
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOG_CLK_ENABLE();
-
-  /* Configure EXTI Line */
-  GPIO_InitStruct.Pin = BLE_INT_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(BLE_INT_GPIO_Port, &GPIO_InitStruct);
-  HAL_NVIC_SetPriority(EXTI1_IRQn, 3, 0);
-  HAL_NVIC_EnableIRQ(EXTI1_IRQn);
-
-  HAL_GPIO_WritePin(BLE_SPI_CS_GPIO_Port, BLE_SPI_CS_Pin, GPIO_PIN_SET);
-
-  GPIO_InitStruct.Pin = BLE_SPI_CS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(BLE_SPI_CS_GPIO_Port, &GPIO_InitStruct);
-
-  GPIO_InitStruct.Pin = BLE_RST_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(BLE_RST_GPIO_Port, &GPIO_InitStruct);
-
-  MX_SPI2_Init();
-  return 0;
-}
-
-/**
-  * @brief  DeInitializes the peripherals communication with the BlueNRG
-  *         Expansion Board (via SPI, I2C, USART, ...)
-  *
-  * @param  None
-  * @retval int32_t 0
-  */
-int32_t HCI_TL_SPI_DeInit(void)
-{
-  return 0;
 }
 
 /**
@@ -126,7 +67,7 @@ int32_t HCI_TL_SPI_DeInit(void)
   * @param  None
   * @retval int32_t 0
   */
-int32_t HCI_TL_SPI_Reset(void)
+int32_t hci_tl_spi_reset(void)
 {
   /* Deselect CS PIN for BlueNRG to avoid spurious commands */
   HAL_GPIO_WritePin(BLE_SPI_CS_GPIO_Port, BLE_SPI_CS_Pin, GPIO_PIN_SET);
@@ -137,10 +78,6 @@ int32_t HCI_TL_SPI_Reset(void)
   return 0;
 }
 
-int32_t HCI_TL_GetTick(void)
-{
-  return (int32_t)HAL_GetTick();
-}
 /**
   * @brief  Reads from BlueNRG SPI buffer and store data into local buffer.
   *
@@ -148,17 +85,17 @@ int32_t HCI_TL_GetTick(void)
   * @param  size   : Buffer size
   * @retval int32_t: Number of read bytes
   */
-int32_t HCI_TL_SPI_Receive(uint8_t *buffer, uint16_t size)
+int32_t hci_tl_spi_receive(uint8_t *buffer, uint16_t size)
 {
   uint16_t byte_count;
-  uint8_t len = 0;
+  uint16_t len = 0;
   uint8_t char_ff = 0xff;
   volatile uint8_t read_char;
 
   uint8_t header_master[HEADER_SIZE] = {0x0b, 0x00, 0x00, 0x00, 0x00};
   uint8_t header_slave[HEADER_SIZE];
 
-  HCI_TL_SPI_Disable_IRQ();
+  hci_tl_spi_disable_irq();
 
   /* CS reset */
   HAL_GPIO_WritePin(BLE_SPI_CS_GPIO_Port, BLE_SPI_CS_Pin, GPIO_PIN_RESET);
@@ -171,7 +108,7 @@ int32_t HCI_TL_SPI_Receive(uint8_t *buffer, uint16_t size)
 
   if (byte_count > 0)
   {
-    /* avoid to read more data that size of the buffer */
+    /* avoid to read more data than the size of the buffer */
     if (byte_count > size)
     {
       byte_count = size;
@@ -201,7 +138,7 @@ int32_t HCI_TL_SPI_Receive(uint8_t *buffer, uint16_t size)
     }
   }
 
-  HCI_TL_SPI_Enable_IRQ();
+  hci_tl_spi_enable_irq();
 
 
   return len;
@@ -214,7 +151,7 @@ int32_t HCI_TL_SPI_Receive(uint8_t *buffer, uint16_t size)
   * @param  size   : size of first data buffer to be written
   * @retval int32_t: Number of read bytes
   */
-int32_t HCI_TL_SPI_Send(uint8_t *buffer, uint16_t size)
+int32_t hci_tl_spi_send(uint8_t *buffer, uint16_t size)
 {
   int32_t result;
   uint16_t rx_bytes;
@@ -225,7 +162,7 @@ int32_t HCI_TL_SPI_Send(uint8_t *buffer, uint16_t size)
   static uint8_t read_char_buf[MAX_BUFFER_SIZE];
   uint32_t tickstart = HAL_GetTick();
 
-  HCI_TL_SPI_Disable_IRQ();
+  hci_tl_spi_disable_irq();
 
   do
   {
@@ -240,7 +177,7 @@ int32_t HCI_TL_SPI_Send(uint8_t *buffer, uint16_t size)
     * Wait until BlueNRG-2 is ready.
     * When ready it will raise the IRQ pin.
     */
-    while (!IsDataAvailable())
+    while (!is_data_available())
     {
       if ((HAL_GetTick() - tickstart_data_available) > TIMEOUT_DURATION)
       {
@@ -254,7 +191,6 @@ int32_t HCI_TL_SPI_Send(uint8_t *buffer, uint16_t size)
       HAL_GPIO_WritePin(BLE_SPI_CS_GPIO_Port, BLE_SPI_CS_Pin, GPIO_PIN_SET);
       break;
     }
-
 
     /* Read header */
     HAL_SPI_TransmitReceive(&hspi2, header_master, header_slave, HEADER_SIZE, 1000);
@@ -280,7 +216,6 @@ int32_t HCI_TL_SPI_Send(uint8_t *buffer, uint16_t size)
       result = -3;
       break;
     }
-
   } while (result < 0);
 
   /**
@@ -297,23 +232,21 @@ int32_t HCI_TL_SPI_Send(uint8_t *buffer, uint16_t size)
     }
   }
 
-  HCI_TL_SPI_Enable_IRQ();
+  hci_tl_spi_enable_irq();
 
   return result;
 }
 
-#ifdef HCI_TL
 /**
   * @brief  Reports if the BlueNRG has data for the host micro.
   *
   * @param  None
   * @retval int32_t: 1 if data are present, 0 otherwise
   */
-int32_t IsDataAvailable(void)
+int32_t is_data_available(void)
 {
   return (HAL_GPIO_ReadPin(BLE_INT_GPIO_Port, BLE_INT_Pin) == GPIO_PIN_SET);
 }
-#endif /* HCI_TL */
 
 /***************************** hci_tl_interface main functions *****************************/
 /**
@@ -324,21 +257,40 @@ int32_t IsDataAvailable(void)
   */
 void hci_tl_lowlevel_init(void)
 {
+  /* USER CODE BEGIN hci_tl_lowlevel_init 1 */
+  GPIO_InitTypeDef GPIO_InitStruct;
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOG_CLK_ENABLE();
 
-#ifdef HCI_TL
-  tHciIO fops;
+  /* Configure EXTI Line */
+  GPIO_InitStruct.Pin = BLE_INT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BLE_INT_GPIO_Port, &GPIO_InitStruct);
 
-  /* Register IO bus services */
-  fops.Init    = HCI_TL_SPI_Init;
-  fops.DeInit  = HCI_TL_SPI_DeInit;
-  fops.Send    = HCI_TL_SPI_Send;
-  fops.Receive = HCI_TL_SPI_Receive;
-  fops.Reset   = HCI_TL_SPI_Reset;
-  fops.GetTick = HCI_TL_GetTick;
+  HAL_GPIO_WritePin(BLE_SPI_CS_GPIO_Port, BLE_SPI_CS_Pin, GPIO_PIN_SET);
 
-  hci_register_io_bus(&fops);
+  GPIO_InitStruct.Pin = BLE_SPI_CS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(BLE_SPI_CS_GPIO_Port, &GPIO_InitStruct);
 
-#endif /* HCI_TL */
+  GPIO_InitStruct.Pin = BLE_RST_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(BLE_RST_GPIO_Port, &GPIO_InitStruct);
 
+  MX_SPI2_Init();
+  /* USER CODE END hci_tl_lowlevel_init 1 */
+
+  /* USER CODE BEGIN hci_tl_lowlevel_init 2 */
+
+  /* USER CODE END hci_tl_lowlevel_init 2 */
+
+  /* USER CODE BEGIN hci_tl_lowlevel_init 3 */
+
+  /* USER CODE END hci_tl_lowlevel_init 3 */
 }
 

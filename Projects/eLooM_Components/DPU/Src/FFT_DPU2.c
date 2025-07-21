@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -23,7 +23,7 @@
 
 /* Private definition */
 /**********************/
-#define FFT_COMPUTE_AVG_SCALE_FACTOR(avg_cnt, fft_len) (( 2.0f ) / (((float)avg_cnt) * ((float)fft_len)))
+#define FFT_COMPUTE_AVG_SCALE_FACTOR(avg_cnt, fft_len) (( 2.0f ) / (((float_t)avg_cnt) * ((float_t)fft_len)))
 
 /**
   * Class object declaration.
@@ -74,11 +74,11 @@ struct _FFT_DPU2_t
 
   uint8_t avg_counter;
 
-  float *fft_temp_avg_out;
+  float_t *fft_temp_avg_out;
 
-  float *fft_avg_out;
+  float_t *fft_avg_out;
 
-  float overlap;
+  float_t overlap;
 };
 
 
@@ -140,8 +140,8 @@ sys_error_code_t FFT_DPU2Init(FFT_DPU2_t *const _this, FFT_DPU2_Input_param_t *c
     {
       _this->n_average        = FFT_DPU2_Input_param->n_average;
       _this->avg_counter      = 0u;
-      _this->fft_avg_out      = (float *)  SysAlloc(sizeof(float) * FFT_DPU2_Input_param->input_signal_n_axis * fft_output_dim);
-      _this->fft_temp_avg_out = (float *)  SysAlloc(sizeof(float) * FFT_DPU2_Input_param->input_signal_n_axis * fft_output_dim);
+      _this->fft_avg_out      = (float_t *)  SysAlloc(sizeof(float_t) * FFT_DPU2_Input_param->input_signal_n_axis * fft_output_dim);
+      _this->fft_temp_avg_out = (float_t *)  SysAlloc(sizeof(float_t) * FFT_DPU2_Input_param->input_signal_n_axis * fft_output_dim);
     }
   }
 
@@ -185,8 +185,8 @@ sys_error_code_t FFT_DPU2_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t
 
   if (DIRECT_PROCESS_ENABLED == pObj->fft_instance.init_params.use_direct_process)
   {
-    FFT_Direct_Process(&pObj->fft_instance, (float *)pObj->super.in_data.p_payload,
-                       (float *)pObj->super.out_data.p_payload);
+    FFT_Direct_Process(&pObj->fft_instance, (float_t *)pObj->super.in_data.p_payload,
+                       (float_t *)pObj->super.out_data.p_payload);
   }
   else
   {
@@ -201,7 +201,7 @@ sys_error_code_t FFT_DPU2_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t
       if (pObj->n_average == 0)
       {
         /** Compute directly FFT and store the result in EMData out_data payload */
-        (void)FFT_Process(&pObj->fft_instance, (float *)pObj->super.out_data.p_payload);
+        (void)FFT_Process(&pObj->fft_instance, (float_t *)pObj->super.out_data.p_payload);
       }
       else
       {
@@ -242,16 +242,16 @@ static FFT_error_t FFT_compute_avg_output(FFT_DPU2_t *const pObj)
   if (pObj->avg_counter >= pObj->n_average)
   {
     /** Compute FFT scale factor */
-    float fft_avg_scale_factor = pObj->n_average;//FFT_COMPUTE_AVG_SCALE_FACTOR(pObj->avg_counter, fft_out_data_len);
+    float_t fft_avg_scale_factor = pObj->n_average;//FFT_COMPUTE_AVG_SCALE_FACTOR(pObj->avg_counter, fft_out_data_len);
 
     /** Compute average and store the result in EMData out_data payload*/
-    arm_scale_f32(pObj->fft_avg_out, fft_avg_scale_factor, (float *)pObj->super.out_data.p_payload, fft_out_data_len);
+    arm_scale_f32(pObj->fft_avg_out, fft_avg_scale_factor, (float_t *)pObj->super.out_data.p_payload, fft_out_data_len);
 
     /** Reset average counter */
     pObj->avg_counter = 0u;
 
     /** Clear fft out buffer */
-    memset(pObj->fft_avg_out, 0, sizeof(float) * fft_out_data_len);
+    memset(pObj->fft_avg_out, 0, sizeof(float_t) * fft_out_data_len);
   }
 
   return fft_retVal;

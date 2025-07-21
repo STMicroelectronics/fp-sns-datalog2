@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -76,7 +76,7 @@ char *lps22df_press_get_key(void)
 
 uint8_t lps22df_press_get_odr(pnpl_lps22df_press_odr_t *enum_id)
 {
-  float odr = lps22df_press_model.sensor_status->type.mems.odr;
+  float_t odr = lps22df_press_model.sensor_status->type.mems.odr;
   if (odr < 2.0f)
   {
     *enum_id = pnpl_lps22df_press_odr_hz1;
@@ -138,14 +138,14 @@ uint8_t lps22df_press_get_dim(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lps22df_press_get_ioffset(float *value)
+uint8_t lps22df_press_get_ioffset(float_t *value)
 {
   *value = lps22df_press_model.stream_params.ioffset;
   /* USER Code */
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lps22df_press_get_measodr(float *value)
+uint8_t lps22df_press_get_measodr(float_t *value)
 {
   *value = lps22df_press_model.sensor_status->type.mems.measured_odr;
   /* USER Code */
@@ -166,7 +166,7 @@ uint8_t lps22df_press_get_sd_dps(int32_t *value)
   return PNPL_NO_ERROR_CODE;
 }
 
-uint8_t lps22df_press_get_sensitivity(float *value)
+uint8_t lps22df_press_get_sensitivity(float_t *value)
 {
   *value = lps22df_press_model.sensor_status->type.mems.sensitivity;
   /* USER Code */
@@ -175,7 +175,7 @@ uint8_t lps22df_press_get_sensitivity(float *value)
 
 uint8_t lps22df_press_get_data_type(char **value)
 {
-  *value = "float";
+  *value = "float_t";
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -221,7 +221,7 @@ uint8_t lps22df_press_set_odr(pnpl_lps22df_press_odr_t enum_id, char **response_
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  float value;
+  float_t value;
   switch (enum_id)
   {
     case pnpl_lps22df_press_odr_hz1:

@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -28,7 +28,6 @@
 
 #define IIS2DLPC_FIFO_ENABLED                     1
 #define ISM330DHCX_FIFO_ENABLED                   1
-#define LPS22HH_FIFO_ENABLED                      1
 
 //#define HSD_USE_DUMMY_DATA                      1
 

@@ -1,9 +1,7 @@
 /**
   ******************************************************************************
   * @file    sysdebug_config.h
-  * @author  SRA - GPM
-  *
-  *
+  * @author  SRA
   * @brief   Configure the debug log functionality
   *
   * Each logic module of the application should define a DEBUG control byte
@@ -12,12 +10,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   *
   ******************************************************************************
   */
@@ -40,7 +39,6 @@ extern "C" {
 #define SYS_DBG_DRIVERS                    SYS_DBG_OFF                ///< Drivers debug control byte
 #define SYS_DBG_APP                        SYS_DBG_ON                ///< Generic Application debug control byte
 #define SYS_DBG_APMH                       SYS_DBG_ON                 ///< Application Power Mode Helper debug control byte
-#define SYS_DBG_HW                         SYS_DBG_ON                 ///< Hello World task debug control byte
 #define SYS_DBG_SPIBUS                     SYS_DBG_ON                 ///< SPIBus task debug control byte
 #define SYS_DBG_I2CBUS                     SYS_DBG_ON                 ///< I2CBus task debug control byte
 #define SYS_DBG_ISM330DHCX                 SYS_DBG_ON                 ///< ISM330DHCX sensor task debug control byte
@@ -72,18 +70,10 @@ void MX_USART2_UART_Init(void);
 #define SYS_DBG_UART_INIT                  MX_USART2_UART_Init
 #define SYS_DBG_UART_TIMEOUT_MS            5000
 
-/* ODeV runtime statistic timer configuration for FreeRTOS */
-extern TIM_HandleTypeDef htim6;
-void MX_TIM6_Init(void);
-
-#define SYS_DBG_TIM                        htim6
-#define SYS_DBG_TIM_INIT                   MX_TIM6_Init
-#define SYS_DBG_TIM_IRQ_N                  TIM6_DAC_IRQn
-#define SYS_DBG_TIM_IRQ_HANDLER            TIM6_DACUNDER_IRQHandler
-#endif /* SYS_DEBUG */
-
 
 #ifdef __cplusplus
 }
 #endif
 
+
+#endif /* SYS_DEBUG */

@@ -105,12 +105,12 @@ typedef union _sys_error_t
     /**
       * Specifies the error code for the System Low Level layer.
       */
-    unsigned int low_level_e:       16;
+    uint32_t low_level_e:       16;
 
     /**
       * Specifies the error code for the System Service Level layer.
       */
-    unsigned int service_level_e:   16;
+    uint32_t service_level_e:   16;
   } type;
 } sys_error_t;
 

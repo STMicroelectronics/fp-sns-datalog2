@@ -2132,7 +2132,7 @@ typedef struct
 #define SRAM3_SIZE            (0x00060000UL) /*!< SRAM3 size (384 KBytes) */
 #endif
 
-#define FLASH_SIZE_DATA_REGISTER ((uint32_t)0x1FFF75E0)
+#define FLASH_SIZE_DATA_REGISTER (0x1FFF75E0UL)
 
 #if defined (STM32L4R5xx) || defined (STM32L4R7xx) || defined (STM32L4R9xx) || defined (STM32L4S5xx) || defined (STM32L4S7xx) || defined (STM32L4S9xx)
 #define FLASH_SIZE               (((((*((uint32_t *)FLASH_SIZE_DATA_REGISTER)) & (0x0000FFFFU)) == 0x0000FFFFU)) ? (0x800U << 10U) : \

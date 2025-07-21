@@ -9,7 +9,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2020 STMicroelectronics.
+  * Copyright (c) 2024 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -20,6 +20,10 @@
   */
 #ifndef _BLUENRG1_GATT_ACI_H_
 #define _BLUENRG1_GATT_ACI_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #include "bluenrg1_types.h"
 
@@ -47,65 +51,65 @@
   *@{
   */
 
-/** Documentation for C union Service_UUID_t */
-typedef union Service_UUID_t_s
+/** Documentation for C union service_uuid_t */
+typedef union service_uuid_t_s
 {
   /** 16-bit UUID
    */
-  uint16_t Service_UUID_16;
+  uint16_t service_uuid_16;
   /** 128-bit UUID
    */
-  uint8_t Service_UUID_128[16];
-} Service_UUID_t;
-/** Documentation for C union Include_UUID_t */
-typedef union Include_UUID_t_s
+  uint8_t service_uuid_128[16];
+} service_uuid_t;
+/** Documentation for C union include_uuid_t */
+typedef union include_uuid_t_s
 {
   /** 16-bit UUID
    */
-  uint16_t Include_UUID_16;
+  uint16_t include_uuid_16;
   /** 128-bit UUID
    */
-  uint8_t Include_UUID_128[16];
-} Include_UUID_t;
-/** Documentation for C union Char_UUID_t */
-typedef union Char_UUID_t_s
+  uint8_t include_uuid_128[16];
+} include_uuid_t;
+/** Documentation for C union char_uuid_t */
+typedef union char_uuid_t_s
 {
   /** 16-bit UUID
    */
-  uint16_t Char_UUID_16;
+  uint16_t char_uuid_16;
   /** 128-bit UUID
    */
-  uint8_t Char_UUID_128[16];
-} Char_UUID_t;
-/** Documentation for C union Char_Desc_Uuid_t */
-typedef union Char_Desc_Uuid_t_s
+  uint8_t char_uuid_128[16];
+} char_uuid_t;
+/** Documentation for C union char_desc_uuid_t */
+typedef union char_desc_uuid_t_s
 {
   /** 16-bit UUID
    */
-  uint16_t Char_UUID_16;
+  uint16_t char_uuid_16;
   /** 128-bit UUID
    */
-  uint8_t Char_UUID_128[16];
-} Char_Desc_Uuid_t;
-/** Documentation for C union UUID_t */
-typedef union UUID_t_s
+  uint8_t char_uuid_128[16];
+} char_desc_uuid_t;
+/** Documentation for C union uuid_t */
+typedef union uuid_t_s
 {
   /** 16-bit UUID
    */
-  uint16_t UUID_16;
+  uint16_t uuid_16;
   /** 128-bit UUID
    */
-  uint8_t UUID_128[16];
-} UUID_t;
-/** Documentation for C struct Handle_Entry_t */
-typedef struct Handle_Entry_t_s
+  uint8_t uuid_128[16];
+} uuid_t;
+/** Documentation for C struct handle_entry_t */
+typedef struct handle_entry_t_s
 {
   /** The handles for which the attribute value has to be read
     *  Values:
     *  - 0x0001 ... 0xFFFF
     */
-  uint16_t Handle;
-} Handle_Entry_t;
+  uint16_t handle;
+} handle_entry_t;
 /**
   * @brief Initialize the GATT layer for server and client roles.  It adds also
   *        the GATT service with Service Changed Characteristic.  Until this
@@ -114,11 +118,11 @@ typedef struct Handle_Entry_t_s
   *        using any of the GAP features.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_init(void);
+ble_status_t aci_gatt_init(void);
 /**
   * @brief Add a service to GATT Server. When a service is created in the server,
   *        the host needs to reserve the handle ranges for this service using
-  *        Max_Attribute_Records parameter. This parameter specifies the maximum
+  *        max_attribute_records parameter. This parameter specifies the maximum
   *        number of attribute records that can be added to this service
   *        (including the service attribute, include attribute, characteristic
   *        attribute, characteristic value attribute and characteristic
@@ -126,74 +130,74 @@ tBleStatus aci_gatt_init(void);
   *        command complete event. Service declaration is taken from the service
   *        pool.  The attributes for characteristics and descriptors are
   *        allocated from the attribute pool.
-  * @param Service_UUID_Type UUID type.
+  * @param service_uuid_type UUID type.
   *        Values:
   *        - 0x01: 16-bit UUID
   *        - 0x02: 128-bit UUID
-  * @param Service_UUID See @ref Service_UUID_t
-  * @param Service_Type Service type.
+  * @param service_uuid See @ref service_uuid_t
+  * @param service_type Service type.
   *        Values:
   *        - 0x01: Primary Service
   *        - 0x02: Secondary Service
-  * @param Max_Attribute_Records Maximum number of attribute records that can be
+  * @param max_attribute_records Maximum number of attribute records that can be
   *        added to this service
-  * @param[out] Service_Handle Handle of the Service. When this service is added,
+  * @param[out] service_handle Handle of the Service. When this service is added,
   *             a handle is allocated by the server for this service.  Server
   *             also allocates a range of handles for this service from
   *             serviceHandle to <serviceHandle + max_attr_records - 1>
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_add_service(uint8_t Service_UUID_Type,
-                                Service_UUID_t *Service_UUID,
-                                uint8_t Service_Type,
-                                uint8_t Max_Attribute_Records,
-                                uint16_t *Service_Handle);
+ble_status_t aci_gatt_add_service(uint8_t service_uuid_type,
+                                  service_uuid_t *service_uuid,
+                                  uint8_t service_type,
+                                  uint8_t max_attribute_records,
+                                  uint16_t *service_handle);
 /**
-  * @brief Include a service given by Include_Start_Handle and Include_End_Handle
-  *        to another  service given by Service_Handle. Attribute server creates
+  * @brief Include a service given by include_start_handle and include_end_handle
+  *        to another  service given by service_handle. Attribute server creates
   *        an INCLUDE definition  attribute and return the handle of this
   *        attribute in Included_handle.
-  * @param Service_Handle Handle of the Service to which another service has to
+  * @param service_handle Handle of the Service to which another service has to
   *        be included.
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Include_Start_Handle Attribute Handle of the Service which has to be
+  * @param include_start_handle Attribute Handle of the Service which has to be
   *        included in service
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Include_End_Handle End Handle of the Service which has to be included
+  * @param include_end_handle End Handle of the Service which has to be included
   *        in service
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Include_UUID_Type UUID type.
+  * @param include_uuid_type UUID type.
   *        Values:
   *        - 0x01: 16-bit UUID
   *        - 0x02: 128-bit UUID
-  * @param Include_UUID See @ref Include_UUID_t
-  * @param[out] Include_Handle Handle of the include declaration
+  * @param include_uuid See @ref include_uuid_t
+  * @param[out] include_handle Handle of the include declaration
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_include_service(uint16_t Service_Handle,
-                                    uint16_t Include_Start_Handle,
-                                    uint16_t Include_End_Handle,
-                                    uint8_t Include_UUID_Type,
-                                    Include_UUID_t *Include_UUID,
-                                    uint16_t *Include_Handle);
+ble_status_t aci_gatt_include_service(uint16_t service_handle,
+                                      uint16_t include_start_handle,
+                                      uint16_t include_end_handle,
+                                      uint8_t include_uuid_type,
+                                      include_uuid_t *include_uuid,
+                                      uint16_t *include_handle);
 /**
   * @brief Add a characteristic to a service.
-  * @param Service_Handle Handle of the Service to which the characteristic will
+  * @param service_handle Handle of the Service to which the characteristic will
   *        be added
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Char_UUID_Type UUID type.
+  * @param char_uuid_type UUID type.
   *        Values:
   *        - 0x01: 16-bit UUID
   *        - 0x02: 128-bit UUID
-  * @param Char_UUID See @ref Char_UUID_t
-  * @param Char_Value_Length Maximum length of the characteristic value.
+  * @param char_uuid See @ref char_uuid_t
+  * @param char_value_length Maximum length of the characteristic value.
   *        Values:
   *        - 0 ... 512
-  * @param Char_Properties Characteristic Properties (Volume 3, Part G, section
+  * @param char_properties Characteristic Properties (Volume 3, Part G, section
   *        3.3.1.1 of Bluetooth Specification 4.1)
   *        Flags:
   *        - 0x00: CHAR_PROP_NONE
@@ -205,7 +209,7 @@ tBleStatus aci_gatt_include_service(uint16_t Service_Handle,
   *        - 0x20: CHAR_PROP_INDICATE (Indicate)
   *        - 0x40: CHAR_PROP_SIGNED_WRITE (Authenticated Signed Writes)
   *        - 0x80: CHAR_PROP_EXT (Extended Properties)
-  * @param Security_Permissions Security permission flags.
+  * @param security_permissions Security permission flags.
   *        Flags:
   *        - 0x00: None
   *        - 0x01: AUTHEN_READ (Need authentication to read)
@@ -214,22 +218,22 @@ tBleStatus aci_gatt_include_service(uint16_t Service_Handle,
   *        - 0x08: AUTHEN_WRITE (need authentication to write)
   *        - 0x10: AUTHOR_WRITE (need authorization to write)
   *        - 0x20: ENCRY_WRITE (need encryption to write)
-  * @param GATT_Evt_Mask GATT event mask.
+  * @param gatt_evt_mask GATT event mask.
   *        Flags:
   *        - 0x00: GATT_DONT_NOTIFY_EVENTS
   *        - 0x01: GATT_NOTIFY_ATTRIBUTE_WRITE
   *        - 0x02: GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP
   *        - 0x04: GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP
-  * @param Enc_Key_Size Minimum encryption key size required to read the
+  * @param enc_key_size Minimum encryption key size required to read the
   *        characteristic.
   *        Values:
   *        - 0x07 ... 0x10
-  * @param Is_Variable Specify if the characteristic value has a fixed length or
+  * @param is_variable Specify if the characteristic value has a fixed length or
   *        a variable length.
   *        Values:
   *        - 0x00: Fixed length
   *        - 0x01: Variable length
-  * @param[out] Char_Handle Handle of the Characteristic that has been added.  It
+  * @param[out] char_handle Handle of the Characteristic that has been added.  It
   *             is the handle of the characteristic declaration.  The attribute
   *             that holds the characteristic value is allocated at the next
   *             handle,  followed by the Client Characteristic Configuration
@@ -237,39 +241,39 @@ tBleStatus aci_gatt_include_service(uint16_t Service_Handle,
   *             CHAR_PROP_INDICATE properties.
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_add_char(uint16_t Service_Handle,
-                             uint8_t Char_UUID_Type,
-                             Char_UUID_t *Char_UUID,
-                             uint16_t Char_Value_Length,
-                             uint8_t Char_Properties,
-                             uint8_t Security_Permissions,
-                             uint8_t GATT_Evt_Mask,
-                             uint8_t Enc_Key_Size,
-                             uint8_t Is_Variable,
-                             uint16_t *Char_Handle);
+ble_status_t aci_gatt_add_char(uint16_t service_handle,
+                               uint8_t char_uuid_type,
+                               char_uuid_t *char_uuid,
+                               uint16_t char_value_length,
+                               uint8_t char_properties,
+                               uint8_t security_permissions,
+                               uint8_t gatt_evt_mask,
+                               uint8_t enc_key_size,
+                               uint8_t is_variable,
+                               uint16_t *char_handle);
 /**
   * @brief Add a characteristic descriptor to a service.
-  * @param Service_Handle Handle of service to which the characteristic belongs
+  * @param service_handle Handle of service to which the characteristic belongs
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Char_Handle Handle of the characteristic to which description has to
+  * @param char_handle Handle of the characteristic to which description has to
   *        be added
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Char_Desc_Uuid_Type UUID type.
+  * @param char_desc_uuid_type UUID type.
   *        Values:
   *        - 0x01: 16-bit UUID
   *        - 0x02: 128-bit UUID
-  * @param Char_Desc_Uuid See @ref Char_Desc_Uuid_t
-  * @param Char_Desc_Value_Max_Len The maximum length of the descriptor value
+  * @param char_desc_uuid See @ref char_desc_uuid_t
+  * @param char_desc_value_max_len The maximum length of the descriptor value
   *        Values:
   *        - 0 ... 512
-  * @param Char_Desc_Value_Length Current Length of the characteristic descriptor
+  * @param char_desc_value_length Current Length of the characteristic descriptor
   *        value
   *        Values:
   *        - 0 ... 512
-  * @param Char_Desc_Value Value of the characteristic description
-  * @param Security_Permissions Security permission flags.
+  * @param char_desc_value Value of the characteristic description
+  * @param security_permissions Security permission flags.
   *        Flags:
   *        - 0x00: None
   *        - 0x01: AUTHEN_READ (Need authentication to read)
@@ -278,46 +282,46 @@ tBleStatus aci_gatt_add_char(uint16_t Service_Handle,
   *        - 0x08: AUTHEN_WRITE (need authentication to write)
   *        - 0x10: AUTHOR_WRITE (need authorization to write)
   *        - 0x20: ENCRY_WRITE (need encryption to write)
-  * @param Access_Permissions Access permission
+  * @param access_permissions Access permission
   *        Flags:
   *        - 0x00: None
   *        - 0x01: READ
   *        - 0x02: WRITE
   *        - 0x04: WRITE_WO_RESP
   *        - 0x08: SIGNED_WRITE
-  * @param GATT_Evt_Mask GATT event mask.
+  * @param gatt_evt_mask GATT event mask.
   *        Flags:
   *        - 0x00: GATT_DONT_NOTIFY_EVENTS
   *        - 0x01: GATT_NOTIFY_ATTRIBUTE_WRITE
   *        - 0x02: GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP
   *        - 0x04: GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP
-  * @param Enc_Key_Size Minimum encryption key size required to read the
+  * @param enc_key_size Minimum encryption key size required to read the
   *        characteristic.
   *        Values:
   *        - 0x07 ... 0x10
-  * @param Is_Variable Specify if the characteristic value has a fixed length or
+  * @param is_variable Specify if the characteristic value has a fixed length or
   *        a variable length.
   *        Values:
   *        - 0x00: Fixed length
   *        - 0x01: Variable length
-  * @param[out] Char_Desc_Handle Handle of the characteristic descriptor
+  * @param[out] char_desc_handle Handle of the characteristic descriptor
   *             Values:
   *             - 0x0001 ... 0xFFFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_add_char_desc(uint16_t Service_Handle,
-                                  uint16_t Char_Handle,
-                                  uint8_t Char_Desc_Uuid_Type,
-                                  Char_Desc_Uuid_t *Char_Desc_Uuid,
-                                  uint8_t Char_Desc_Value_Max_Len,
-                                  uint8_t Char_Desc_Value_Length,
-                                  uint8_t Char_Desc_Value[],
-                                  uint8_t Security_Permissions,
-                                  uint8_t Access_Permissions,
-                                  uint8_t GATT_Evt_Mask,
-                                  uint8_t Enc_Key_Size,
-                                  uint8_t Is_Variable,
-                                  uint16_t *Char_Desc_Handle);
+ble_status_t aci_gatt_add_char_desc(uint16_t service_handle,
+                                    uint16_t char_handle,
+                                    uint8_t char_desc_uuid_type,
+                                    char_desc_uuid_t *char_desc_uuid,
+                                    uint8_t char_desc_value_max_len,
+                                    uint8_t char_desc_value_length,
+                                    uint8_t char_desc_value[],
+                                    uint8_t security_permissions,
+                                    uint8_t access_permissions,
+                                    uint8_t gatt_evt_mask,
+                                    uint8_t enc_key_size,
+                                    uint8_t is_variable,
+                                    uint16_t *char_desc_handle);
 /**
   * @brief Update a characteristic value in a service.  If notifications (or
   *        indications) are enabled on that characteristic,  a notification (or
@@ -335,65 +339,65 @@ tBleStatus aci_gatt_add_char_desc(uint16_t Service_Handle,
   *        BlueNRG buffer becomes full,  it has to retry again till the function
   *        returns BLE_STATUS_SUCCESS or any other error code. DEPRECATED API
   *        (still supported but not recommended)
-  * @param Service_Handle Handle of service to which the characteristic belongs
+  * @param service_handle Handle of service to which the characteristic belongs
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Char_Handle Handle of the characteristic
+  * @param char_handle Handle of the characteristic
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Val_Offset The offset from which the attribute value has to be
+  * @param val_offset The offset from which the attribute value has to be
   *        updated.  If this is set to 0 and the attribute value is of variable
   *        length, then the length of the attribute will be set to the
-  *        Char_Value_Length.  If the Val_Offset is set to a value greater than
+  *        char_value_length.  If the val_offset is set to a value greater than
   *        0, then the length of the attribute will be set to the maximum length
   *        as  specified for the attribute while adding the characteristic.
   *        Values:
   *        - 0 ... 511
-  * @param Char_Value_Length Length of the characteristic value in octets
-  * @param Char_Value Characteristic value
+  * @param char_value_length Length of the characteristic value in octets
+  * @param char_value Characteristic value
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_update_char_value(uint16_t Service_Handle,
-                                      uint16_t Char_Handle,
-                                      uint8_t Val_Offset,
-                                      uint8_t Char_Value_Length,
-                                      uint8_t Char_Value[]);
+ble_status_t aci_gatt_update_char_value(uint16_t service_handle,
+                                        uint16_t char_handle,
+                                        uint8_t val_offset,
+                                        uint8_t char_value_length,
+                                        uint8_t char_value[]);
 /**
   * @brief Delete the specified characteristic from the service.
-  * @param Serv_Handle Handle of service to which the characteristic belongs
+  * @param serv_handle Handle of service to which the characteristic belongs
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Char_Handle Handle of the characteristic which has to be deleted
+  * @param char_handle Handle of the characteristic which has to be deleted
   *        Values:
   *        - 0x0001 ... 0xFFFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_del_char(uint16_t Serv_Handle,
-                             uint16_t Char_Handle);
+ble_status_t aci_gatt_del_char(uint16_t serv_handle,
+                               uint16_t char_handle);
 /**
   * @brief Delete the specified service from the GATT server database.
-  * @param Serv_Handle Handle of the service to be deleted
+  * @param serv_handle Handle of the service to be deleted
   *        Values:
   *        - 0x0001 ... 0xFFFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_del_service(uint16_t Serv_Handle);
+ble_status_t aci_gatt_del_service(uint16_t serv_handle);
 /**
   * @brief Delete the Include definition from the service.
-  * @param Serv_Handle Handle of the service to which the include service belongs
+  * @param serv_handle Handle of the service to which the include service belongs
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Include_Handle Handle of the included service which has to be deleted
+  * @param include_handle Handle of the included service which has to be deleted
   *        Values:
   *        - 0x0001 ... 0xFFFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_del_include_service(uint16_t Serv_Handle,
-                                        uint16_t Include_Handle);
+ble_status_t aci_gatt_del_include_service(uint16_t serv_handle,
+                                          uint16_t include_handle);
 /**
   * @brief Mask events from the GATT. The default configuration is all the events
   *        masked.
-  * @param GATT_Evt_Mask GATT/ATT event mask.
+  * @param gatt_evt_mask GATT/ATT event mask.
   *        Values:
   *        - 0x00000001: ACI_GATT_ATTRIBUTE_MODIFIED_EVENT
   *        - 0x00000002: ACI_GATT_PROC_TIMEOUT_EVENT
@@ -415,38 +419,38 @@ tBleStatus aci_gatt_del_include_service(uint16_t Serv_Handle,
   *        - 0x00040000: ACI_GATT_TX_POOL_AVAILABLE_EVENT
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_set_event_mask(uint32_t GATT_Evt_Mask);
+ble_status_t aci_gatt_set_event_mask(uint32_t gatt_evt_mask);
 /**
   * @brief Perform an ATT MTU exchange procedure. When the ATT MTU exchange
   *        procedure is completed, a @ref aci_att_exchange_mtu_resp_event event
   *        is generated. A @ref aci_gatt_proc_complete_event event is also
   *        generated to indicate the end of the procedure.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_exchange_config(uint16_t Connection_Handle);
+ble_status_t aci_gatt_exchange_config(uint16_t connection_handle);
 /**
   * @brief Send a Find Information Request. This command is used to obtain the
   *        mapping of attribute handles with their associated types. The
   *        responses of the procedure are given through the  @ref
   *        aci_att_find_info_resp_event event. The end of the procedure is
   *        indicated by a @ref aci_gatt_proc_complete_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Start_Handle First requested handle number
+  * @param start_handle First requested handle number
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param End_Handle Last requested handle number
+  * @param end_handle Last requested handle number
   *        Values:
   *        - 0x0001 ... 0xFFFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_att_find_info_req(uint16_t Connection_Handle,
-                                 uint16_t Start_Handle,
-                                 uint16_t End_Handle);
+ble_status_t aci_att_find_info_req(uint16_t connection_handle,
+                                   uint16_t start_handle,
+                                   uint16_t end_handle);
 /**
   * @brief Send a Find By Type Value Request The Find By Type Value Request is
   *        used to obtain the handles of attributes that have a given 16-bit UUID
@@ -454,54 +458,54 @@ tBleStatus aci_att_find_info_req(uint16_t Connection_Handle,
   *        procedure are given through the @ref
   *        aci_att_find_by_type_value_resp_event event. The end of the procedure
   *        is indicated by a @ref aci_gatt_proc_complete_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Start_Handle First requested handle number
+  * @param start_handle First requested handle number
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param End_Handle Last requested handle number
+  * @param end_handle Last requested handle number
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param UUID 2 octet UUID to find (little-endian)
-  * @param Attribute_Val_Length Length of attribute value (maximum value is
+  * @param uuid 2 octet UUID to find (little-endian)
+  * @param attribute_val_length Length of attribute value (maximum value is
   *        ATT_MTU - 7).
-  * @param Attribute_Val Attribute value to find
+  * @param attribute_val Attribute value to find
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_att_find_by_type_value_req(uint16_t Connection_Handle,
-                                          uint16_t Start_Handle,
-                                          uint16_t End_Handle,
-                                          uint16_t UUID,
-                                          uint8_t Attribute_Val_Length,
-                                          uint8_t Attribute_Val[]);
+ble_status_t aci_att_find_by_type_value_req(uint16_t connection_handle,
+                                            uint16_t start_handle,
+                                            uint16_t end_handle,
+                                            uint16_t uuid,
+                                            uint8_t attribute_val_length,
+                                            uint8_t attribute_val[]);
 /**
   * @brief Send a Read By Type Request. The Read By Type Request is used to
   *        obtain the values of attributes where the attribute type is known but
   *        the handle is not known. The responses of the procedure are given
   *        through the @ref aci_att_read_by_type_resp_event event. The end of the
   *        procedure is indicated by a @ref aci_gatt_proc_complete_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Start_Handle First requested handle number
+  * @param start_handle First requested handle number
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param End_Handle Last requested handle number
+  * @param end_handle Last requested handle number
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param UUID_Type UUID type.
+  * @param uuid_type UUID type.
   *        Values:
   *        - 0x01: 16-bit UUID
   *        - 0x02: 128-bit UUID
-  * @param UUID See @ref UUID_t
+  * @param uuid See @ref uuid_t
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_att_read_by_type_req(uint16_t Connection_Handle,
-                                    uint16_t Start_Handle,
-                                    uint16_t End_Handle,
-                                    uint8_t UUID_Type,
-                                    UUID_t *UUID);
+ble_status_t aci_att_read_by_type_req(uint16_t connection_handle,
+                                      uint16_t start_handle,
+                                      uint16_t end_handle,
+                                      uint8_t uuid_type,
+                                      uuid_t *uuid);
 /**
   * @brief Send a Read By Group Type Request.  The Read By Group Type Request is
   *        used to obtain the values of grouping attributes where the attribute
@@ -511,52 +515,52 @@ tBleStatus aci_att_read_by_type_req(uint16_t Connection_Handle,
   *        the procedure are given through the @ref
   *        aci_att_read_by_group_type_resp_event event.  The end of the procedure
   *        is indicated by a @ref aci_gatt_proc_complete_event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Start_Handle First requested handle number
+  * @param start_handle First requested handle number
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param End_Handle Last requested handle number
+  * @param end_handle Last requested handle number
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param UUID_Type UUID type.
+  * @param uuid_type UUID type.
   *        Values:
   *        - 0x01: 16-bit UUID
   *        - 0x02: 128-bit UUID
-  * @param UUID See @ref UUID_t
+  * @param uuid See @ref uuid_t
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_att_read_by_group_type_req(uint16_t Connection_Handle,
-                                          uint16_t Start_Handle,
-                                          uint16_t End_Handle,
-                                          uint8_t UUID_Type,
-                                          UUID_t *UUID);
+ble_status_t aci_att_read_by_group_type_req(uint16_t connection_handle,
+                                            uint16_t start_handle,
+                                            uint16_t end_handle,
+                                            uint8_t uuid_type,
+                                            uuid_t *uuid);
 /**
   * @brief Send a Prepare Write Request. The Prepare Write Request is used to
   *        request the server to prepare to write the value of an attribute.  The
   *        responses of the procedure are given through the @ref
   *        aci_att_prepare_write_resp_event event.  The end of the procedure is
   *        indicated by a @ref aci_gatt_proc_complete_event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute to be written
+  * @param attr_handle Handle of the attribute to be written
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Val_Offset The offset of the first octet to be written
+  * @param val_offset The offset of the first octet to be written
   *        Values:
   *        - 0 ... 511
-  * @param Attribute_Val_Length Length of attribute value (maximum value is
+  * @param attribute_val_length Length of attribute value (maximum value is
   *        ATT_MTU - 5).
-  * @param Attribute_Val The value of the attribute to be written
+  * @param attribute_val The value of the attribute to be written
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_att_prepare_write_req(uint16_t Connection_Handle,
-                                     uint16_t Attr_Handle,
-                                     uint16_t Val_Offset,
-                                     uint8_t Attribute_Val_Length,
-                                     uint8_t Attribute_Val[]);
+ble_status_t aci_att_prepare_write_req(uint16_t connection_handle,
+                                       uint16_t attr_handle,
+                                       uint16_t val_offset,
+                                       uint8_t attribute_val_length,
+                                       uint8_t attribute_val[]);
 /**
   * @brief Send an Execute Write Request. The Execute Write Request is used to
   *        request the server to write or cancel the write  of all the prepared
@@ -564,192 +568,192 @@ tBleStatus aci_att_prepare_write_req(uint16_t Connection_Handle,
   *        result of the procedure is given through the @ref
   *        aci_att_exec_write_resp_event event.  The end of the procedure is
   *        indicated by a @ref aci_gatt_proc_complete_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Execute Execute or cancel writes.
+  * @param execute Execute or cancel writes.
   *        Values:
   *        - 0x00: Cancel all prepared writes
   *        - 0x01: Immediately write all pending prepared values
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_att_execute_write_req(uint16_t Connection_Handle,
-                                     uint8_t Execute);
+ble_status_t aci_att_execute_write_req(uint16_t connection_handle,
+                                       uint8_t execute);
 /**
   * @brief Start the GATT client procedure to discover all primary services on
   *        the server. The responses of the procedure are given through the @ref
   *        aci_att_read_by_group_type_resp_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_disc_all_primary_services(uint16_t Connection_Handle);
+ble_status_t aci_gatt_disc_all_primary_services(uint16_t connection_handle);
 /**
   * @brief Start the procedure to discover the primary services of the specified
   *        UUID on the server. The responses of the procedure are given through
   *        the @ref aci_att_find_by_type_value_resp_event event. The end of the
   *        procedure is indicated by a @ref aci_gatt_proc_complete_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param UUID_Type UUID type.
+  * @param uuid_type UUID type.
   *        Values:
   *        - 0x01: 16-bit UUID
   *        - 0x02: 128-bit UUID
-  * @param UUID See @ref UUID_t
+  * @param uuid See @ref uuid_t
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_disc_primary_service_by_uuid(uint16_t Connection_Handle,
-                                                 uint8_t UUID_Type,
-                                                 UUID_t *UUID);
+ble_status_t aci_gatt_disc_primary_service_by_uuid(uint16_t connection_handle,
+                                                   uint8_t uuid_type,
+                                                   uuid_t *uuid);
 /**
   * @brief Start the procedure to find all included services. The responses of
   *        the procedure are given through the @ref
   *        aci_att_read_by_type_resp_event event. The end of the procedure is
   *        indicated by a @ref aci_gatt_proc_complete_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Start_Handle Start attribute handle of the service
+  * @param start_handle Start attribute handle of the service
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param End_Handle End attribute handle of the service
+  * @param end_handle End attribute handle of the service
   *        Values:
   *        - 0x0001 ... 0xFFFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_find_included_services(uint16_t Connection_Handle,
-                                           uint16_t Start_Handle,
-                                           uint16_t End_Handle);
+ble_status_t aci_gatt_find_included_services(uint16_t connection_handle,
+                                             uint16_t start_handle,
+                                             uint16_t end_handle);
 /**
   * @brief Start the procedure to discover all the characteristics of a given
   *        service. When the procedure is completed, a @ref
   *        aci_gatt_proc_complete_event event is generated. Before procedure
   *        completion the response packets are given through @ref
   *        aci_att_read_by_type_resp_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Start_Handle Start attribute handle of the service
+  * @param start_handle Start attribute handle of the service
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param End_Handle End attribute handle of the service
+  * @param end_handle End attribute handle of the service
   *        Values:
   *        - 0x0001 ... 0xFFFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_disc_all_char_of_service(uint16_t Connection_Handle,
-                                             uint16_t Start_Handle,
-                                             uint16_t End_Handle);
+ble_status_t aci_gatt_disc_all_char_of_service(uint16_t connection_handle,
+                                               uint16_t start_handle,
+                                               uint16_t end_handle);
 /**
   * @brief Start the procedure to discover all the characteristics specified by a
   *        UUID. When the procedure is completed, a @ref
   *        aci_gatt_proc_complete_event event is generated. Before procedure
   *        completion the response packets are given through @ref
   *        aci_gatt_disc_read_char_by_uuid_resp_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Start_Handle Start attribute handle of the service
+  * @param start_handle Start attribute handle of the service
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param End_Handle End attribute handle of the service
+  * @param end_handle End attribute handle of the service
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param UUID_Type UUID type.
+  * @param uuid_type UUID type.
   *        Values:
   *        - 0x01: 16-bit UUID
   *        - 0x02: 128-bit UUID
-  * @param UUID See @ref UUID_t
+  * @param uuid See @ref uuid_t
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_disc_char_by_uuid(uint16_t Connection_Handle,
-                                      uint16_t Start_Handle,
-                                      uint16_t End_Handle,
-                                      uint8_t UUID_Type,
-                                      UUID_t *UUID);
+ble_status_t aci_gatt_disc_char_by_uuid(uint16_t connection_handle,
+                                        uint16_t start_handle,
+                                        uint16_t end_handle,
+                                        uint8_t uuid_type,
+                                        uuid_t *uuid);
 /**
   * @brief Start the procedure to discover all characteristic descriptors on the
   *        server. When the procedure is completed, a @ref
   *        aci_gatt_proc_complete_event event is generated. Before procedure
   *        completion the response packets are given through @ref
   *        aci_att_find_info_resp_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Char_Handle Handle of the characteristic value
+  * @param char_handle Handle of the characteristic value
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param End_Handle End handle of the characteristic
+  * @param end_handle End handle of the characteristic
   *        Values:
   *        - 0x0001 ... 0xFFFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_disc_all_char_desc(uint16_t Connection_Handle,
-                                       uint16_t Char_Handle,
-                                       uint16_t End_Handle);
+ble_status_t aci_gatt_disc_all_char_desc(uint16_t connection_handle,
+                                         uint16_t char_handle,
+                                         uint16_t end_handle);
 /**
   * @brief Start the procedure to read the attribute value. When the procedure is
   *        completed, a @ref aci_gatt_proc_complete_event event is generated.
   *        Before procedure completion the response packet is given through @ref
   *        aci_att_read_resp_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute to be read
+  * @param attr_handle Handle of the attribute to be read
   *        Values:
   *        - 0x0001 ... 0xFFFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_read_char_value(uint16_t Connection_Handle,
-                                    uint16_t Attr_Handle);
+ble_status_t aci_gatt_read_char_value(uint16_t connection_handle,
+                                      uint16_t attr_handle);
 /**
   * @brief Start the procedure to read all the characteristics specified by the
   *        UUID. When the procedure is completed, a @ref
   *        aci_gatt_proc_complete_event event is generated. Before procedure
   *        completion the response packets are given through @ref
   *        aci_gatt_disc_read_char_by_uuid_resp_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Start_Handle Starting handle of the range to be searched
+  * @param start_handle Starting handle of the range to be searched
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param End_Handle End handle of the range to be searched
+  * @param end_handle End handle of the range to be searched
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param UUID_Type UUID type.
+  * @param uuid_type UUID type.
   *        Values:
   *        - 0x01: 16-bit UUID
   *        - 0x02: 128-bit UUID
-  * @param UUID See @ref UUID_t
+  * @param uuid See @ref uuid_t
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_read_using_char_uuid(uint16_t Connection_Handle,
-                                         uint16_t Start_Handle,
-                                         uint16_t End_Handle,
-                                         uint8_t UUID_Type,
-                                         UUID_t *UUID);
+ble_status_t aci_gatt_read_using_char_uuid(uint16_t connection_handle,
+                                           uint16_t start_handle,
+                                           uint16_t end_handle,
+                                           uint8_t uuid_type,
+                                           uuid_t *uuid);
 /**
   * @brief Start the procedure to read a long characteristic value. the procedure
   *        is completed, a @ref aci_gatt_proc_complete_event event is generated.
   *        Before procedure completion the response packets are given through
   *        @ref aci_att_read_blob_resp_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute to be read
+  * @param attr_handle Handle of the attribute to be read
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Val_Offset Offset from which the value needs to be read
+  * @param val_offset Offset from which the value needs to be read
   *        Values:
   *        - 0 ... 511
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_read_long_char_value(uint16_t Connection_Handle,
-                                         uint16_t Attr_Handle,
-                                         uint16_t Val_Offset);
+ble_status_t aci_gatt_read_long_char_value(uint16_t connection_handle,
+                                           uint16_t attr_handle,
+                                           uint16_t val_offset);
 /**
   * @brief Start a procedure to read multiple characteristic values from a
   *        server. This sub-procedure is used to read multiple Characteristic
@@ -758,209 +762,209 @@ tBleStatus aci_gatt_read_long_char_value(uint16_t Connection_Handle,
   *        aci_gatt_proc_complete_event event is generated. Before procedure
   *        completion the response packets are given through @ref
   *        aci_att_read_multiple_resp_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Number_of_Handles The number of handles for which the value has to be
+  * @param number_of_handles The number of handles for which the value has to be
   *        read. From 2 to (ATT_MTU-1)/2
   *        Values:
   *        - 0x02 ... 0xFF
-  * @param Handle_Entry See @ref Handle_Entry_t
+  * @param handle_entry See @ref handle_entry_t
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_read_multiple_char_value(uint16_t Connection_Handle,
-                                             uint8_t Number_of_Handles,
-                                             Handle_Entry_t Handle_Entry[]);
+ble_status_t aci_gatt_read_multiple_char_value(uint16_t connection_handle,
+                                               uint8_t number_of_handles,
+                                               handle_entry_t handle_entry[]);
 /**
   * @brief Start the procedure to write a long characteristic value. When the
   *        procedure is completed, a @ref aci_gatt_proc_complete_event event is
   *        generated. During the procedure, @ref aci_att_prepare_write_resp_event
   *        and @ref aci_att_exec_write_resp_event events are raised.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute to be written
+  * @param attr_handle Handle of the attribute to be written
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Attribute_Val_Length Length of the value to be written
-  * @param Attribute_Val Value to be written
+  * @param attribute_val_length Length of the value to be written
+  * @param attribute_val Value to be written
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_write_char_value(uint16_t Connection_Handle,
-                                     uint16_t Attr_Handle,
-                                     uint8_t Attribute_Val_Length,
-                                     uint8_t Attribute_Val[]);
+ble_status_t aci_gatt_write_char_value(uint16_t connection_handle,
+                                       uint16_t attr_handle,
+                                       uint8_t attribute_val_length,
+                                       uint8_t attribute_val[]);
 /**
   * @brief Start the procedure to write a long characteristic value. When the
   *        procedure is completed, a @ref aci_gatt_proc_complete_event event is
   *        generated. During the procedure, @ref aci_att_prepare_write_resp_event
   *        and @ref aci_att_exec_write_resp_event events are raised.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute to be written
+  * @param attr_handle Handle of the attribute to be written
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Val_Offset Offset at which the attribute has to be written
+  * @param val_offset Offset at which the attribute has to be written
   *        Values:
   *        - 0 ... 511
-  * @param Attribute_Val_Length Length of the value to be written
-  * @param Attribute_Val Value to be written
+  * @param attribute_val_length Length of the value to be written
+  * @param attribute_val Value to be written
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_write_long_char_value(uint16_t Connection_Handle,
-                                          uint16_t Attr_Handle,
-                                          uint16_t Val_Offset,
-                                          uint8_t Attribute_Val_Length,
-                                          uint8_t Attribute_Val[]);
+ble_status_t aci_gatt_write_long_char_value(uint16_t connection_handle,
+                                            uint16_t attr_handle,
+                                            uint16_t val_offset,
+                                            uint8_t attribute_val_length,
+                                            uint8_t attribute_val[]);
 /**
   * @brief Start the procedure to write a characteristic reliably. When the
   *        procedure is completed, a  @ref aci_gatt_proc_complete_event event is
   *        generated. During the procedure, @ref aci_att_prepare_write_resp_event
   *        and @ref aci_att_exec_write_resp_event events are raised.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute to be written
+  * @param attr_handle Handle of the attribute to be written
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Val_Offset Offset at which the attribute has to be written
+  * @param val_offset Offset at which the attribute has to be written
   *        Values:
   *        - 0 ... 511
-  * @param Attribute_Val_Length Length of the value to be written
-  * @param Attribute_Val Value to be written
+  * @param attribute_val_length Length of the value to be written
+  * @param attribute_val Value to be written
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_write_char_reliable(uint16_t Connection_Handle,
-                                        uint16_t Attr_Handle,
-                                        uint16_t Val_Offset,
-                                        uint8_t Attribute_Val_Length,
-                                        uint8_t Attribute_Val[]);
+ble_status_t aci_gatt_write_char_reliable(uint16_t connection_handle,
+                                          uint16_t attr_handle,
+                                          uint16_t val_offset,
+                                          uint8_t attribute_val_length,
+                                          uint8_t attribute_val[]);
 /**
   * @brief Start the procedure to write a long characteristic descriptor. When
   *        the procedure is completed, a @ref aci_gatt_proc_complete_event event
   *        is generated. During the procedure, @ref
   *        aci_att_prepare_write_resp_event and @ref
   *        aci_att_exec_write_resp_event events are raised.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute to be written
+  * @param attr_handle Handle of the attribute to be written
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Val_Offset Offset at which the attribute has to be written
+  * @param val_offset Offset at which the attribute has to be written
   *        Values:
   *        - 0 ... 511
-  * @param Attribute_Val_Length Length of the value to be written
-  * @param Attribute_Val Value to be written
+  * @param attribute_val_length Length of the value to be written
+  * @param attribute_val Value to be written
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_write_long_char_desc(uint16_t Connection_Handle,
-                                         uint16_t Attr_Handle,
-                                         uint16_t Val_Offset,
-                                         uint8_t Attribute_Val_Length,
-                                         uint8_t Attribute_Val[]);
+ble_status_t aci_gatt_write_long_char_desc(uint16_t connection_handle,
+                                           uint16_t attr_handle,
+                                           uint16_t val_offset,
+                                           uint8_t attribute_val_length,
+                                           uint8_t attribute_val[]);
 /**
   * @brief Start the procedure to read a long characteristic value. When the
   *        procedure is completed, a @ref aci_gatt_proc_complete_event event is
   *        generated. Before procedure completion the response packets are given
   *        through @ref aci_att_read_blob_resp_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the characteristic descriptor
+  * @param attr_handle Handle of the characteristic descriptor
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Val_Offset Offset from which the value needs to be read
+  * @param val_offset Offset from which the value needs to be read
   *        Values:
   *        - 0 ... 511
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_read_long_char_desc(uint16_t Connection_Handle,
-                                        uint16_t Attr_Handle,
-                                        uint16_t Val_Offset);
+ble_status_t aci_gatt_read_long_char_desc(uint16_t connection_handle,
+                                          uint16_t attr_handle,
+                                          uint16_t val_offset);
 /**
   * @brief Start the procedure to write a characteristic descriptor. When the
   *        procedure is completed, a @ref aci_gatt_proc_complete_event event is
   *        generated.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute to be written
+  * @param attr_handle Handle of the attribute to be written
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Attribute_Val_Length Length of the value to be written
-  * @param Attribute_Val Value to be written
+  * @param attribute_val_length Length of the value to be written
+  * @param attribute_val Value to be written
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_write_char_desc(uint16_t Connection_Handle,
-                                    uint16_t Attr_Handle,
-                                    uint8_t Attribute_Val_Length,
-                                    uint8_t Attribute_Val[]);
+ble_status_t aci_gatt_write_char_desc(uint16_t connection_handle,
+                                      uint16_t attr_handle,
+                                      uint8_t attribute_val_length,
+                                      uint8_t attribute_val[]);
 /**
   * @brief Start the procedure to read the descriptor specified. When the
   *        procedure is completed, a @ref aci_gatt_proc_complete_event event is
   *        generated. Before procedure completion the response packet is given
   *        through @ref aci_att_read_resp_event event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the descriptor to be read
+  * @param attr_handle Handle of the descriptor to be read
   *        Values:
   *        - 0x0001 ... 0xFFFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_read_char_desc(uint16_t Connection_Handle,
-                                   uint16_t Attr_Handle);
+ble_status_t aci_gatt_read_char_desc(uint16_t connection_handle,
+                                     uint16_t attr_handle);
 /**
   * @brief Start the procedure to write a characteristic value without waiting
   *        for any response from the server. No events are generated after this
   *        command is executed.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute to be written
+  * @param attr_handle Handle of the attribute to be written
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Attribute_Val_Length Length of the value to be written (maximum value
+  * @param attribute_val_length Length of the value to be written (maximum value
   *        is ATT_MTU - 3)
-  * @param Attribute_Val Value to be written
+  * @param attribute_val Value to be written
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_write_without_resp(uint16_t Connection_Handle,
-                                       uint16_t Attr_Handle,
-                                       uint8_t Attribute_Val_Length,
-                                       uint8_t Attribute_Val[]);
+ble_status_t aci_gatt_write_without_resp(uint16_t connection_handle,
+                                         uint16_t attr_handle,
+                                         uint8_t attribute_val_length,
+                                         uint8_t attribute_val[]);
 /**
   * @brief Start a signed write without response from the server. The procedure
   *        is used to write a characteristic value with an authentication
   *        signature without waiting for any response from the server. It cannot
   *        be used when the link is encrypted.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute to be written
+  * @param attr_handle Handle of the attribute to be written
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Attribute_Val_Length Length of the value to be written (up to ATT_MTU
+  * @param attribute_val_length Length of the value to be written (up to ATT_MTU
   *        - 13)
-  * @param Attribute_Val Value to be written
+  * @param attribute_val Value to be written
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_signed_write_without_resp(uint16_t Connection_Handle,
-                                              uint16_t Attr_Handle,
-                                              uint8_t Attribute_Val_Length,
-                                              uint8_t Attribute_Val[]);
+ble_status_t aci_gatt_signed_write_without_resp(uint16_t connection_handle,
+                                                uint16_t attr_handle,
+                                                uint8_t attribute_val_length,
+                                                uint8_t attribute_val[]);
 /**
   * @brief Allow application to confirm indication. This command has to be sent
   *        when the application receives the event @ref
   *        aci_gatt_indication_event.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_confirm_indication(uint16_t Connection_Handle);
+ble_status_t aci_gatt_confirm_indication(uint16_t connection_handle);
 /**
   * @brief Allow or reject a write request from a client. This command has to be
   *        sent by the application when it receives the @ref
@@ -968,34 +972,34 @@ tBleStatus aci_gatt_confirm_indication(uint16_t Connection_Handle);
   *        status and error code has to be set to 0. If the write cannot be
   *        allowed, then the status has to be set to 1 and the error code has to
   *        be set to the error code that has to be passed to the client.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Attr_Handle Handle of the attribute that was passed in the event
+  * @param attr_handle Handle of the attribute that was passed in the event
   *        EVT_BLUE_GATT_WRITE_PERMIT_REQ
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Write_status If the value can be written or not.
+  * @param write_status If the value can be written or not.
   *        Values:
   *        - 0x00: The value can be written to the attribute specified by attr_handle
   *        - 0x01: The value cannot be written to the attribute specified by the attr_handle
-  * @param Error_Code The error code that has to be passed to the client in case
+  * @param error_code The error code that has to be passed to the client in case
   *        the write has to be rejected
   *        Values:
   *        - 0x80 ... 0x9F: Application Error
   *        - 0xE0 ... 0xFF: Profile Error
-  * @param Attribute_Val_Length Length of the value to be written as passed in
+  * @param attribute_val_length Length of the value to be written as passed in
   *        the event EVT_BLUE_GATT_WRITE_PERMIT_REQ
-  * @param Attribute_Val Value as passed in the event
+  * @param attribute_val Value as passed in the event
   *        EVT_BLUE_GATT_WRITE_PERMIT_REQ
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_write_resp(uint16_t Connection_Handle,
-                               uint16_t Attr_Handle,
-                               uint8_t Write_status,
-                               uint8_t Error_Code,
-                               uint8_t Attribute_Val_Length,
-                               uint8_t Attribute_Val[]);
+ble_status_t aci_gatt_write_resp(uint16_t connection_handle,
+                                 uint16_t attr_handle,
+                                 uint8_t write_status,
+                                 uint8_t error_code,
+                                 uint8_t attribute_val_length,
+                                 uint8_t attribute_val[]);
 /**
   * @brief Allow the GATT server to send a response to a read request from a
   *        client. The application has to send this command when it receives the
@@ -1007,25 +1011,25 @@ tBleStatus aci_gatt_write_resp(uint16_t Connection_Handle,
   *        the @ref aci_gatt_update_char_value and then give this command. The
   *        application should perform the required operations within 30 seconds.
   *        Otherwise the GATT procedure will be timeout.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_allow_read(uint16_t Connection_Handle);
+ble_status_t aci_gatt_allow_read(uint16_t connection_handle);
 /**
   * @brief This command sets the security permission for the attribute handle
   *        specified. Currently the setting of security permission is allowed
   *        only for client configuration descriptor.
-  * @param Serv_Handle Handle of the service which contains the attribute whose
+  * @param serv_handle Handle of the service which contains the attribute whose
   *        security permission has to be modified
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Attr_Handle Handle of the attribute whose security permission has to
+  * @param attr_handle Handle of the attribute whose security permission has to
   *        be modified
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Security_Permissions Security permission flags.
+  * @param security_permissions Security permission flags.
   *        Flags:
   *        - 0x00: None
   *        - 0x01: AUTHEN_READ (Need authentication to read)
@@ -1036,74 +1040,74 @@ tBleStatus aci_gatt_allow_read(uint16_t Connection_Handle);
   *        - 0x20: ENCRY_WRITE (need encryption to write)
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_set_security_permission(uint16_t Serv_Handle,
-                                            uint16_t Attr_Handle,
-                                            uint8_t Security_Permissions);
+ble_status_t aci_gatt_set_security_permission(uint16_t serv_handle,
+                                              uint16_t attr_handle,
+                                              uint8_t security_permissions);
 /**
   * @brief This command sets the value of the descriptor specified by
   *        charDescHandle.
-  * @param Serv_Handle Handle of the service which contains the characteristic
+  * @param serv_handle Handle of the service which contains the characteristic
   *        descriptor
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Char_Handle Handle of the characteristic which contains the descriptor
+  * @param char_handle Handle of the characteristic which contains the descriptor
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Char_Desc_Handle Handle of the descriptor whose value has to be set
+  * @param char_desc_handle Handle of the descriptor whose value has to be set
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Val_Offset Offset from which the descriptor value has to be updated
+  * @param val_offset Offset from which the descriptor value has to be updated
   *        Values:
   *        - 0 ... 511
-  * @param Char_Desc_Value_Length Length of the descriptor value.
-  * @param Char_Desc_Value Descriptor value
+  * @param char_desc_value_length Length of the descriptor value.
+  * @param char_desc_value Descriptor value
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_set_desc_value(uint16_t Serv_Handle,
-                                   uint16_t Char_Handle,
-                                   uint16_t Char_Desc_Handle,
-                                   uint16_t Val_Offset,
-                                   uint8_t Char_Desc_Value_Length,
-                                   uint8_t Char_Desc_Value[]);
+ble_status_t aci_gatt_set_desc_value(uint16_t serv_handle,
+                                     uint16_t char_handle,
+                                     uint16_t char_desc_handle,
+                                     uint16_t val_offset,
+                                     uint8_t char_desc_value_length,
+                                     uint8_t char_desc_value[]);
 /**
   * @brief Reads the value of the attribute handle specified from the local GATT
   *        database.
-  * @param Attr_Handle Handle of the attribute to read
+  * @param attr_handle Handle of the attribute to read
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Offset Offset from which the value needs to be read
+  * @param offset Offset from which the value needs to be read
   *        Values:
   *        - 0 ... 511
-  * @param Value_Length_Requested Maximum number of octets to be returned as
+  * @param value_length_requested Maximum number of octets to be returned as
   *        attribute value
   *        Values:
   *        - 0 ... 512
-  * @param[out] Length Length of the attribute value
-  * @param[out] Value_Length Length in octets of the Value parameter
-  * @param[out] Value Attribute value
+  * @param[out] length Length of the attribute value
+  * @param[out] value_length Length in octets of the Value parameter
+  * @param[out] value Attribute value
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_read_handle_value(uint16_t Attr_Handle,
-                                      uint16_t Offset,
-                                      uint16_t Value_Length_Requested,
-                                      uint16_t *Length,
-                                      uint16_t *Value_Length,
-                                      uint8_t Value[]);
+ble_status_t aci_gatt_read_handle_value(uint16_t attr_handle,
+                                        uint16_t offset,
+                                        uint16_t value_length_requested,
+                                        uint16_t *length,
+                                        uint16_t *value_length,
+                                        uint8_t value[]);
 /**
   * @brief This command is a more flexible version of @ref
   *        aci_gatt_update_char_value                       to support update of
   *        long attribute up to 512 bytes and indicate selectively the generation
   *        of Indication/Notification.
-  * @param Conn_Handle_To_Notify Connection handle to notify. Notify all
+  * @param conn_handle_to_notify Connection handle to notify. Notify all
   *        subscribed clients if equal to 0x0000: DEPRECATED feature (still
   *        supported but not recommended).
-  * @param Service_Handle Handle of service to which the characteristic belongs
+  * @param service_handle Handle of service to which the characteristic belongs
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Char_Handle Handle of the characteristic
+  * @param char_handle Handle of the characteristic
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Update_Type Allow Notification or Indication generation, if enabled in
+  * @param update_type Allow Notification or Indication generation, if enabled in
   *        the client characteristic configuration descriptor. If bit 3 is set,
   *        standard BLE Link Layer retransmission mechanism for notifications
   *        PDUs si disabled: PDUs will be transmitted only once, even if they
@@ -1113,28 +1117,28 @@ tBleStatus aci_gatt_read_handle_value(uint16_t Attr_Handle,
   *        - 0x01: GATT_NOTIFICATION
   *        - 0x02: GATT_INDICATION
   *        - 0x04: GATT_DISABLE_RETRANSMISSIONS
-  * @param Char_Length Total length of the characteristic value. In case of a
+  * @param char_length Total length of the characteristic value. In case of a
   *        variable size characteristic, this field specifies the new length of
   *        the characteristic value after the update; in case of fixed length
   *        characteristic this field is ignored.
   *        Values:
   *        - 0 ... 512
-  * @param Value_Offset The offset from which the attribute value has to be
+  * @param value_offset The offset from which the attribute value has to be
   *        updated.
   *        Values:
   *        - 0 ... 511
-  * @param Value_Length Length of the Value parameter in octets
-  * @param Value Updated characteristic value
+  * @param value_length Length of the Value parameter in octets
+  * @param value Updated characteristic value
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_update_char_value_ext(uint16_t Conn_Handle_To_Notify,
-                                          uint16_t Service_Handle,
-                                          uint16_t Char_Handle,
-                                          uint8_t Update_Type,
-                                          uint16_t Char_Length,
-                                          uint16_t Value_Offset,
-                                          uint8_t Value_Length,
-                                          uint8_t Value[]);
+ble_status_t aci_gatt_update_char_value_ext(uint16_t conn_handle_to_notify,
+                                            uint16_t service_handle,
+                                            uint16_t char_handle,
+                                            uint8_t update_type,
+                                            uint16_t char_length,
+                                            uint16_t value_offset,
+                                            uint8_t value_length,
+                                            uint8_t value[]);
 /**
   * @brief Deny the GATT server to send a response to a read request from a
   *        client. The application may send this command when it receives the
@@ -1148,29 +1152,29 @@ tBleStatus aci_gatt_update_char_value_ext(uint16_t Conn_Handle_To_Notify,
   *        seconds from the reception of the @ref aci_gatt_read_permit_req_event
   *        or  @ref aci_gatt_read_multi_permit_req_event events otherwise the
   *        GATT procedure will issue a timeout.
-  * @param Connection_Handle Connection handle that identifies the connection.
+  * @param connection_handle Connection handle that identifies the connection.
   *        Values:
   *        - 0x0000 ... 0x0EFF
-  * @param Error_Code Error code for the command
+  * @param error_code Error code for the command
   *        Values:
   *        - 0x08: Insufficient Authorization
   *        - 0x80 ... 0x9F: Application Error
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_deny_read(uint16_t Connection_Handle,
-                              uint8_t Error_Code);
+ble_status_t aci_gatt_deny_read(uint16_t connection_handle,
+                                uint8_t error_code);
 /**
   * @brief This command sets the access permission for the attribute handle
   *        specified.
-  * @param Serv_Handle Handle of the service which contains the attribute whose
+  * @param serv_handle Handle of the service which contains the attribute whose
   *        access permission has to be modified
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Attr_Handle Handle of the attribute whose security permission has to
+  * @param attr_handle Handle of the attribute whose security permission has to
   *        be modified
   *        Values:
   *        - 0x0001 ... 0xFFFF
-  * @param Access_Permissions Access permission
+  * @param access_permissions Access permission
   *        Values:
   *        - 0x00: None
   *        - 0x01: READ
@@ -1179,9 +1183,9 @@ tBleStatus aci_gatt_deny_read(uint16_t Connection_Handle,
   *        - 0x08: SIGNED_WRITE
   * @retval Value indicating success or error code.
   */
-tBleStatus aci_gatt_set_access_permission(uint16_t Serv_Handle,
-                                          uint16_t Attr_Handle,
-                                          uint8_t Access_Permissions);
+ble_status_t aci_gatt_set_access_permission(uint16_t serv_handle,
+                                            uint16_t attr_handle,
+                                            uint8_t access_permissions);
 /**
   * @}
   */
@@ -1201,4 +1205,9 @@ tBleStatus aci_gatt_set_access_permission(uint16_t Serv_Handle,
 /**
   * @}
   */
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* _BLUENRG1_GATT_ACI_H_ */

@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -102,11 +102,11 @@ uint8_t __stream_control(bool status)
             if (app_model.s_models[i]->sensor_status->type.light.intermeasurement_time >
                 app_model.s_models[i]->sensor_status->type.light.exposure_time / 1000 + 6)
             {
-              app_model.s_models[i]->stream_params.bandwidth = (1000.0f / (float)(app_model.s_models[i]->sensor_status->type.light.intermeasurement_time)) * SMGetnBytesPerSample(i);
+              app_model.s_models[i]->stream_params.bandwidth = (1000.0f / (float_t)(app_model.s_models[i]->sensor_status->type.light.intermeasurement_time)) * SMGetnBytesPerSample(i);
             }
             else
             {
-              app_model.s_models[i]->stream_params.bandwidth = (1000.0f / (float)(app_model.s_models[i]->sensor_status->type.light.exposure_time / 1000 + 6)) * SMGetnBytesPerSample(i);
+              app_model.s_models[i]->stream_params.bandwidth = (1000.0f / (float_t)(app_model.s_models[i]->sensor_status->type.light.exposure_time / 1000 + 6)) * SMGetnBytesPerSample(i);
             }
           }
           else if (app_model.s_models[i]->sensor_status->isensor_class == ISENSOR_CLASS_PRESENCE)
@@ -200,7 +200,7 @@ static sys_error_code_t __sc_set_usb_stream_params(uint32_t id)
   SensorModel_t **p_s_models = app_model.s_models;
 
   /* in case of slow sensor send 1 sample for each usb packet */
-  float low_odr = 0;
+  float_t low_odr = 0;
 
   low_odr = SMSensorGetSamplesPerSecond(id);
 
@@ -244,7 +244,7 @@ static sys_error_code_t __sc_set_fifo_wtm(uint32_t id)
   else if (app_model.log_controller_model.interface == LOG_CTRL_MODE_USB)
   {
     /* in case of slow sensor send 1 sample for each usb packet */
-    float low_odr = 0;
+    float_t low_odr = 0;
     low_odr = SMSensorGetSamplesPerSecond(id);
     if (low_odr <= SC_USB_SLOW_ODR_LIMIT_HZ)
     {
@@ -263,7 +263,7 @@ static sys_error_code_t __sc_set_fifo_wtm(uint32_t id)
 
 #ifdef SYS_DEBUG
   SensorDescriptor_t descriptor = SMSensorGetDescription(id);
-  float ms = p_s_models[id]->stream_params.usb_dps / p_s_models[id]->stream_params.bandwidth;
+  float_t ms = p_s_models[id]->stream_params.usb_dps / p_s_models[id]->stream_params.bandwidth;
   if (p_s_models[id]->sensor_status->isensor_class == ISENSOR_CLASS_MEMS)
   {
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("**** %s, odr: %f, DPS: %d, ms: %f, FIFO WM: %d \r\n",
@@ -279,8 +279,8 @@ static sys_error_code_t __sc_set_fifo_wtm(uint32_t id)
   else if (p_s_models[id]->sensor_status->isensor_class == ISENSOR_CLASS_LIGHT)
   {
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("**** %s, odr: %d, DPS: %d, ms: %f \r\n",
-                                       descriptor.p_name, (1000.0f / (float)(p_s_models[id]->sensor_status->type.light.exposure_time / 1000 +
-                                                                             p_s_models[id]->sensor_status->type.light.intermeasurement_time + 6)),
+                                       descriptor.p_name, (float_t)(1000.0f / (float_t)(p_s_models[id]->sensor_status->type.light.exposure_time / 1000 +
+                                                                    p_s_models[id]->sensor_status->type.light.intermeasurement_time + 6)),
                                        p_s_models[id]->stream_params.usb_dps, ms));
   }
   else if (p_s_models[id]->sensor_status->isensor_class == ISENSOR_CLASS_PRESENCE)

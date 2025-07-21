@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -203,7 +203,7 @@ static void genLUT(void)
   float32_t dct[NUM_MEL * NUM_MFCC];
   MelFilterTypeDef           S_MelFilter;
   DCT_InstanceTypeDef        S_DCT;
-  int i;
+  int32_t i;
 
   /* Init window function */
   if (Window_Init(Win, FFT_LEN, WINDOW_HANN) != 0)
@@ -282,8 +282,8 @@ sys_error_code_t MfccDPU_vtblProcess(IDPU2_t *_this, EMData_t in_data, EMData_t 
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   MfccDPU_t *p_obj = (MfccDPU_t *)_this;
 
-  float *p_in = (float *)EMD_Data(&in_data);
-  float *p_out = (float *)EMD_2dDataAt(&out_data, p_obj->mfccRawIdx++, 0U);
+  float_t *p_in = (float_t *)EMD_Data(&in_data);
+  float_t *p_out = (float_t *)EMD_2dDataAt(&out_data, p_obj->mfccRawIdx++, 0U);
   MfccColumn(&p_obj->S_Mfcc, p_in, p_out);        /* call Mfcc library. */
 
   if (p_obj->mfccRawIdx >= MFCCDPU_NUM_MFCC_RAW)

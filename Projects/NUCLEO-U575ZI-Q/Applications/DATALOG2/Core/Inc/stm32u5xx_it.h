@@ -6,12 +6,13 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
   *
   ******************************************************************************
   */
@@ -60,8 +61,6 @@ void EXTI11_IRQHandler(void);
 void EXTI13_IRQHandler(void);
 void GPDMA1_Channel0_IRQHandler(void);
 void GPDMA1_Channel1_IRQHandler(void);
-void GPDMA1_Channel3_IRQHandler(void);
-void GPDMA1_Channel5_IRQHandler(void);
 void TIM6_IRQHandler(void);
 void TIM7_IRQHandler(void);
 void I2C1_EV_IRQHandler(void);
@@ -77,3 +76,5 @@ void UCPD1_IRQHandler(void);
 #endif
 
 #endif /* __STM32U5xx_IT_H */
+
+

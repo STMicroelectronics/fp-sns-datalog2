@@ -10,7 +10,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
+  * Copyright (c) 2025 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -31,12 +31,12 @@ extern "C" {
 #define SYS_DBG_LEVEL                      SYS_DBG_LEVEL_LLA /*!< set the level of the system log: all log messages with minor level are discharged. */
 
 /* Example */
-/*#define SYS_DBG_MODULE1     SYS_DBG_ON|GTS_DBG_HALT  */
-/*#define SYS_DBG_MODULE2     SYS_DBG_ON               */
+/*#define SYS_DBG_MODULE1     SYS_DBG_ON|GTS_DBG_HALT  ///< Module 1 debug control byte */
+/*#define SYS_DBG_MODULE2     SYS_DBG_ON               ///< Module 2 debug control byte */
 
 
 #define SYS_DBG_INIT                       SYS_DBG_ON                 ///< Init task debug control byte
-#define SYS_DBG_DRIVERS                    SYS_DBG_ON                 ///< Drivers debug control byte
+#define SYS_DBG_DRIVERS                    SYS_DBG_OFF                ///< Drivers debug control byte
 #define SYS_DBG_APP                        SYS_DBG_ON                 ///< Generic Application debug control byte
 #define SYS_DBG_APMH                       SYS_DBG_ON                 ///< Application Power Mode Helper debug control byte
 #define SYS_DBG_SPIBUS                     SYS_DBG_ON                 ///< SPIBus task debug control byte
@@ -65,20 +65,12 @@ extern "C" {
 #define SYS_DBG_SYSTS                      SYS_DBG_ON                 ///< SysTimestamp debug control byte
 #define SYS_DBG_BCP                        SYS_DBG_ON                 ///< Battery Charger Protocol debug control byte
 
-
-#include "mx.h"
 /* ODeV - hardware configuration for the debug services provided by the framework */
 /**********************************************************************************/
 
-/* ODeV test point PINs */
-//#define SYS_DBG_TP1_PORT                   SYS_DBG_TP1_GPIO_Port
-//#define SYS_DBG_TP1_PIN                    SYS_DBG_TP1_Pin
-//#define SYS_DBG_TP1_CLK_ENABLE             __HAL_RCC_GPIOG_CLK_ENABLE
-//#define SYS_DBG_TP2_PORT                   SYS_DBG_TP2_GPIO_Port
-//#define SYS_DBG_TP2_PIN                    SYS_DBG_TP2_Pin
-//#define SYS_DBG_TP2_CLK_ENABLE             __HAL_RCC_GPIOG_CLK_ENABLE
+#include "mx.h"
 
-/* ODeV DBG UART used for the system log */
+/* eLooM DBG UART used for the system log */
 extern UART_HandleTypeDef huart2;
 void MX_USART2_UART_Init(void);
 
