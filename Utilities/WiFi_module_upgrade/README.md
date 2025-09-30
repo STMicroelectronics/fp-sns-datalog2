@@ -7,6 +7,10 @@
 ![TeraTerm Output](Pictures/TeraTerm_Settings.jpg)
 
 - Drag and drop the hex file to the STLINK (or flash it with STM32CubeProgrammer)
+
+<img src="Pictures/DragAndDrop.png" alt="DragAndDrop" width="800"/>
+<img src="Pictures/STM32CubeProgrammer.png" alt="STM32CubeProgrammer" width="800"/>
+
 - Push the user button to Flash the WiFi module (or write the command "flash" on the terminal)
 
 ![TeraTerm Output](Pictures/TeraTerm_Output.jpg)
