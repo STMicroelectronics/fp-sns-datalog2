@@ -272,8 +272,6 @@ void hci_tl_lowlevel_init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(BLE_INT_GPIO_Port, &GPIO_InitStruct);
-  HAL_NVIC_SetPriority(EXTI14_IRQn, 3, 0);
-  HAL_NVIC_EnableIRQ(EXTI14_IRQn);
 
   HAL_GPIO_WritePin(BLE_SPI_CS_GPIO_Port, BLE_SPI_CS_Pin, GPIO_PIN_SET);
 
