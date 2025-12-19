@@ -41,7 +41,6 @@ extern "C" {
 #define LSM6DSV32X_MAX_WTM_LEVEL             (145)    /* samples */
 #endif
 
-#define LSM6DSV32X_MIN_WTM_LEVEL             (16)     /* samples */
 #define LSM6DSV32X_MAX_SAMPLES_PER_IT        (LSM6DSV32X_MAX_WTM_LEVEL)
 
 

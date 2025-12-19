@@ -69,7 +69,8 @@ static inline sys_error_code_t IAEDOnStartApplication(IApplicationErrorDelegate 
   * @param xEvent [IN] specifies an error event
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
   */
-static inline sys_error_code_t IAEDProcessEvent(IApplicationErrorDelegate *_this, ApplicationContext *pxContext, SysEvent xEvent);
+static inline sys_error_code_t IAEDProcessEvent(IApplicationErrorDelegate *_this, ApplicationContext *pxContext,
+                                                SysEvent xEvent);
 
 /**
   * The INIT task call this method as soon as a new error event is posted by the application. This
@@ -100,7 +101,8 @@ static inline boolean_t IAEDIsLastErrorPending(IApplicationErrorDelegate *_this)
   * @param nPriority [IN] specifies the priority of the error first responder. Zero is the highest priority.
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
   */
-static inline sys_error_code_t IAEDAddFirstResponder(IApplicationErrorDelegate *_this, IErrFirstResponder *pFirstResponder, uint8_t nPriority);
+static inline sys_error_code_t IAEDAddFirstResponder(IApplicationErrorDelegate *_this,
+                                                     IErrFirstResponder *pFirstResponder, uint8_t nPriority);
 
 /**
   * Remove a first responder object rom the application error delegate.
@@ -109,7 +111,8 @@ static inline sys_error_code_t IAEDAddFirstResponder(IApplicationErrorDelegate *
   * @param pFirstResponder [IN] specifies a pointer to the a first responder object to be removed.
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
   */
-static inline sys_error_code_t IAEDRemoveFirstResponder(IApplicationErrorDelegate *_this, IErrFirstResponder *pFirstResponder);
+static inline sys_error_code_t IAEDRemoveFirstResponder(IApplicationErrorDelegate *_this,
+                                                        IErrFirstResponder *pFirstResponder);
 
 /**
   * Get the highest priority allowed for a first responder object.

@@ -48,7 +48,6 @@ struct _IListener
 //***********************
 
 
-
 // Inline functions definition
 // ***************************
 

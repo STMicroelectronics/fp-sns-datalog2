@@ -25,9 +25,11 @@
 #include "services/systypes.h"
 #include "HardwareDetection.h"
 #include "iis3dwb_reg.h"
+#include "iis3dwb10is_reg.h"
 #include "ilps28qsw_reg.h"
 #include "ism330bx_reg.h"
 #include "ism330is_reg.h"
+#include "ism6hg256x_reg.h"
 #include "stts22h_reg.h"
 #include "TSC1641.h"
 #include "iis2dulpx_reg.h"
@@ -122,6 +124,35 @@ boolean_t HardwareDetection_Check_Ext_IIS3DWB(void)
 }
 
 /**
+  * Detect an external IIS3DWB10IS sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_IIS3DWB10IS(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+
+  HardwareDetection_SPI2_CS_Init();
+  MX_SPI2_20MHz_Init();
+
+  iis3dwb10is_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi2);
+  HardwareDetection_SPI2_CS_DeInit();
+
+  if (whoami_val == IIS3DWB10IS_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
+
+/**
   * Detect an external ILPS28QSW sensor
   *
   * @return TRUE if the sensor was found, FALSE otherwise
@@ -203,6 +234,35 @@ boolean_t HardwareDetection_Check_Ext_ISM330IS(void)
   return found;
 }
 
+/**
+  * Detect an external ISM6HG256X sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_ISM6HG256X(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+
+  HardwareDetection_SPI2_CS_Init();
+  MX_SPI2_Init();
+
+  ism6hg256x_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi2);
+  HardwareDetection_SPI2_CS_DeInit();
+
+  if (whoami_val == ISM6HG256X_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
+
 
 /**
   * Detect an external STTS22H sensor
@@ -269,47 +329,6 @@ boolean_t HardwareDetection_Check_Ext_TSC1641(void)
   }
   HAL_I2C_DeInit(&hi2c3);
   return found;
-}
-
-/**
-  * Detect the version of ST25DV chip
-  *
-  * @return hwd_st25dv_version
-  */
-hwd_st25dv_version HardwareDetection_Check_ST25DV(void)
-{
-  hwd_st25dv_version ret;
-  uint8_t icref;
-
-  MX_I2C2_Init();
-
-  HAL_I2C_Mem_Read(&hi2c2, ST25_ADDR_DATA_I2C, ST25_ICREF_REG, I2C_MEMADD_SIZE_16BIT, &icref, 1,
-                   HW_DETECTION_I2C_TIMEOUT);
-
-  if (icref == ICREF_ST25DV04)
-  {
-    ret = ST25DV04;
-  }
-  else if (icref == ICREF_ST25DV64)
-  {
-    ret = ST25DV64;
-  }
-  else if (icref == ICREF_ST25DV04KC)
-  {
-    ret = ST25DV04KC;
-  }
-  else if (icref == ICREF_ST25DV64KC)
-  {
-    ret = ST25DV64KC;
-  }
-  else
-  {
-    ret = ST25DV_ERROR;
-  }
-
-  HAL_I2C_DeInit(&hi2c2);
-
-  return ret;
 }
 
 /* Private function definition */

@@ -881,6 +881,15 @@ sys_error_code_t VL53L8CXTask_vtblSensorSetResolution(ISensorRanging_t *_this, u
     {
       /**/
     }
+#ifdef TOF_EXTENDED
+    EMD_Init(&p_if_owner->data, (uint8_t *) &p_if_owner->p_sensor_data_buff[0], E_EM_UINT32, E_EM_MODE_INTERLEAVED, 3, 1,
+             resolution,
+             8);
+#else
+    EMD_Init(&p_if_owner->data, (uint8_t *) &p_if_owner->p_sensor_data_buff[0], E_EM_UINT32, E_EM_MODE_INTERLEAVED, 3, 1,
+             resolution,
+             2);
+#endif
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1791,13 +1800,6 @@ static sys_error_code_t VL53L8CXTaskSensorSetResolution(VL53L8CXTask *_this, SMM
     {
       res = SYS_INVALID_PARAMETER_ERROR_CODE;
     }
-#ifdef TOF_EXTENDED
-    EMD_Init(&_this->data, (uint8_t *) &_this->p_sensor_data_buff[0], E_EM_UINT32, E_EM_MODE_INTERLEAVED, 3, 1, resolution,
-             8);
-#else
-    EMD_Init(&_this->data, (uint8_t *) &_this->p_sensor_data_buff[0], E_EM_UINT32, E_EM_MODE_INTERLEAVED, 3, 1, resolution,
-             2);
-#endif
   }
   else
   {
@@ -1818,26 +1820,28 @@ static sys_error_code_t VL53L8CXTaskSensorSetRangingMode(VL53L8CXTask *_this, SM
   {
     _this->sensor_status.type.ranging.profile_config.mode = mode;
 
-    if (mode == VL53L8CX_MODE_BLOCKING_ONESHOT || mode == VL53L8CX_MODE_ASYNC_ONESHOT)
+    if (mode == VL53L8CX_MODE_BLOCKING_CONTINUOUS || mode == VL53L8CX_MODE_ASYNC_CONTINUOUS)
     {
-      if (_this->sensor_status.type.ranging.profile_config.ranging_profile == VL53L8CX_PROFILE_4x4_CONTINUOUS)
-      {
-        _this->sensor_status.type.ranging.profile_config.ranging_profile = VL53L8CX_PROFILE_4x4_AUTONOMOUS;
-      }
-      else if (_this->sensor_status.type.ranging.profile_config.ranging_profile == VL53L8CX_PROFILE_8x8_CONTINUOUS)
-      {
-        _this->sensor_status.type.ranging.profile_config.ranging_profile = VL53L8CX_PROFILE_8x8_AUTONOMOUS;
-      }
-    }
-    else if (mode == VL53L8CX_MODE_BLOCKING_CONTINUOUS || mode == VL53L8CX_MODE_ASYNC_CONTINUOUS)
-    {
-      if (_this->sensor_status.type.ranging.profile_config.ranging_profile == VL53L8CX_PROFILE_4x4_AUTONOMOUS)
+      if (_this->sensor_status.type.ranging.profile_config.ranging_profile == VL53L8CX_PROFILE_4x4_CONTINUOUS
+          || _this->sensor_status.type.ranging.profile_config.ranging_profile == VL53L8CX_PROFILE_4x4_AUTONOMOUS)
       {
         _this->sensor_status.type.ranging.profile_config.ranging_profile = VL53L8CX_PROFILE_4x4_CONTINUOUS;
       }
-      else if (_this->sensor_status.type.ranging.profile_config.ranging_profile == VL53L8CX_PROFILE_8x8_AUTONOMOUS)
+      else
       {
         _this->sensor_status.type.ranging.profile_config.ranging_profile = VL53L8CX_PROFILE_8x8_CONTINUOUS;
+      }
+    }
+    else if (mode == VL53L8CX_MODE_BLOCKING_ONESHOT || mode == VL53L8CX_MODE_ASYNC_ONESHOT)
+    {
+      if (_this->sensor_status.type.ranging.profile_config.ranging_profile == VL53L8CX_PROFILE_4x4_CONTINUOUS
+          || _this->sensor_status.type.ranging.profile_config.ranging_profile == VL53L8CX_PROFILE_4x4_AUTONOMOUS)
+      {
+        _this->sensor_status.type.ranging.profile_config.ranging_profile = VL53L8CX_PROFILE_4x4_AUTONOMOUS;
+      }
+      else
+      {
+        _this->sensor_status.type.ranging.profile_config.ranging_profile = VL53L8CX_PROFILE_8x8_AUTONOMOUS;
       }
     }
     else

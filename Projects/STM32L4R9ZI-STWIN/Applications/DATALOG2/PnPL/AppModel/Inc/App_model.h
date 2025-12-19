@@ -105,7 +105,7 @@ extern "C" {
 #define FORMAT_LEN 10U
 
 #define FW_VERSION_MAJOR    "3"
-#define FW_VERSION_MINOR    "1"
+#define FW_VERSION_MINOR    "2"
 #define FW_VERSION_PATCH    "0"
 
 /* Max BLE bandwidth for each sensor (in Byte) */
@@ -174,7 +174,7 @@ typedef struct _AppModel_t
   FirmwareInfoModel_t firmware_info_model;
   /* Insert here your custom App Model code */
   bool mlc_ucf_valid;
-  bool ispu_ucf_valid;
+  uint32_t total_bandwidth;
 } AppModel_t;
 
 AppModel_t *getAppModel(void);

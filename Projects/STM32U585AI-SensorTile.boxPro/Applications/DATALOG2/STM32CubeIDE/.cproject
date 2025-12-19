@@ -82,6 +82,7 @@
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/h3lis331dl"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis3dwb10is"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ilps28qsw"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lis2du12"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lis2mdl"/>
@@ -225,6 +226,7 @@
 									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/h3lis331dl"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis3dwb10is"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ilps28qsw"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lis2du12"/>
 									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/lis2mdl"/>

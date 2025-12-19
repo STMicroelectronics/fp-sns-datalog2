@@ -83,12 +83,12 @@ sys_error_code_t AEventSrv_vtblAddEventListener(IEventSrc *_this, IEventListener
   /* check if the listener is already in the set */
   if (!found && (i < AEVENT_SRC_CFG_MAX_LISTENERS))
   {
-    for (uint8_t j = i+1; j < AEVENT_SRC_CFG_MAX_LISTENERS; ++j)
+    for (uint8_t j = i + 1; j < AEVENT_SRC_CFG_MAX_LISTENERS; ++j)
     {
       if (pObj->m_pxListeners[j] == pListener)
       {
         /* the listener was already in the set, so we free the previous position.*/
-    	pObj->m_pxListeners[i] = NULL;
+        pObj->m_pxListeners[i] = NULL;
         break;
       }
     }

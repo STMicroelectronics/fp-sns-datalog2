@@ -52,6 +52,8 @@
 #define SC_USB_SLOW_ODR_LIMIT_HZ      20.0f
 /* Maximum time between two consecutive stream packets */
 #define SC_USB_MAX_PACKETS_PERIOD     0.05f
+/* Maximum data bandwidth supported (byte) */
+#define SC_SAFE_BANDWIDTH             786432 /* maximum baudrate = 6 Mbps = (6*1024*1024)/8 */
 
 /* USER private function prototypes ------------------------------------------*/
 static sys_error_code_t __sc_set_sd_stream_params(uint32_t id);
@@ -79,10 +81,12 @@ uint8_t addSensorToAppModel(uint16_t id, SensorModel_t *model)
 
 uint8_t __stream_control(bool status)
 {
+  uint8_t ret = PNPL_NO_ERROR_CODE;
   int8_t i;
   if (status) /* Set stream ids */
   {
     int8_t j, stream_id = 0;
+    app_model.total_bandwidth = 0;
     for (i = 0; i < SENSOR_NUMBER; i++)
     {
       if (app_model.s_models[i] != NULL)
@@ -143,6 +147,12 @@ uint8_t __stream_control(bool status)
           app_model.s_models[i]->stream_params.bandwidth = 0;
           app_model.s_models[i]->stream_params.stream_id = -1;
         }
+        app_model.total_bandwidth += app_model.s_models[i]->stream_params.bandwidth;
+        if (app_model.total_bandwidth > SC_SAFE_BANDWIDTH)
+        {
+          /* Safe bandwidth limit exceeded - return error */
+          ret = PNPL_BASE_ERROR_CODE;
+        }
       }
     }
     __sc_set_usb_enpoints();
@@ -151,7 +161,7 @@ uint8_t __stream_control(bool status)
   {
     __sc_reset_stream_params();
   }
-  return 0;
+  return ret;
 }
 
 static sys_error_code_t __sc_set_sd_stream_params(uint32_t id)
@@ -172,38 +182,6 @@ static sys_error_code_t __sc_set_sd_stream_params(uint32_t id)
                                            + SC_DL2_PROTOCOL_TIMESTAMP_SIZE + SC_DL2_PROTOCOL_COUNTER_SIZE;
   }
 
-  return res;
-}
-
-static sys_error_code_t __sc_set_usb_stream_params(uint32_t id)
-{
-  sys_error_code_t res = SYS_NO_ERROR_CODE;
-  SensorModel_t **p_s_models = app_model.s_models;
-
-  /* in case of slow sensor send 1 sample for each usb packet */
-  float_t low_odr = 0;
-
-  low_odr = SMSensorGetSamplesPerSecond(id);
-
-  if (low_odr <= SC_USB_SLOW_ODR_LIMIT_HZ)
-  {
-    /* When there's a timestamp, more then one packet will be sent */
-    p_s_models[id]->stream_params.usb_dps = SMGetnBytesPerSample(id) + 8; /* 8 = timestamp dimension in bytes */
-  }
-  else
-  {
-    /* 50ms of sensor data; when there's a timestamp packets will be sent fastly */
-    p_s_models[id]->stream_params.usb_dps = (uint32_t)(p_s_models[id]->stream_params.bandwidth * SC_USB_MAX_PACKETS_PERIOD);
-    if (p_s_models[id]->stream_params.usb_dps > SC_USB_DPS_MAX)
-    {
-      p_s_models[id]->stream_params.usb_dps = SC_USB_DPS_MAX; // set a limit to avoid buffer to big
-    }
-    else if (p_s_models[id]->stream_params.usb_dps < SMGetnBytesPerSample(id) + 8)
-    {
-      /* In case usb_dps is a very low value, verify the setup to send at least 1 sensor data + timestamp */
-      p_s_models[id]->stream_params.usb_dps = SMGetnBytesPerSample(id) + 8;
-    }
-  }
   return res;
 }
 
@@ -271,6 +249,38 @@ sys_error_code_t __sc_set_ble_stream_params(uint32_t id)
     p_s_models[id]->st_ble_stream.st_ble_stream_objects.elements = (uint32_t)(floor(p_s_models[id]->stream_params.ble_dps / SMGetnBytesPerSample(id)));
   }
 
+  return res;
+}
+
+static sys_error_code_t __sc_set_usb_stream_params(uint32_t id)
+{
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+  SensorModel_t **p_s_models = app_model.s_models;
+
+  /* in case of slow sensor send 1 sample for each usb packet */
+  float_t low_odr = 0;
+
+  low_odr = SMSensorGetSamplesPerSecond(id);
+
+  if (low_odr <= SC_USB_SLOW_ODR_LIMIT_HZ)
+  {
+    /* When there's a timestamp, more then one packet will be sent */
+    p_s_models[id]->stream_params.usb_dps = SMGetnBytesPerSample(id) + 8; /* 8 = timestamp dimension in bytes */
+  }
+  else
+  {
+    /* 50ms of sensor data; when there's a timestamp packets will be sent fastly */
+    p_s_models[id]->stream_params.usb_dps = (uint32_t)(p_s_models[id]->stream_params.bandwidth * SC_USB_MAX_PACKETS_PERIOD);
+    if (p_s_models[id]->stream_params.usb_dps > SC_USB_DPS_MAX)
+    {
+      p_s_models[id]->stream_params.usb_dps = SC_USB_DPS_MAX; // set a limit to avoid buffer to big
+    }
+    else if (p_s_models[id]->stream_params.usb_dps < SMGetnBytesPerSample(id) + 8)
+    {
+      /* In case usb_dps is a very low value, verify the setup to send at least 1 sensor data + timestamp */
+      p_s_models[id]->stream_params.usb_dps = SMGetnBytesPerSample(id) + 8;
+    }
+  }
   return res;
 }
 

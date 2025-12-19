@@ -341,6 +341,18 @@ const MX_SPIParams_t MX_SPI2InitParams =
 };
 
 /**
+  * SPI2 initialization parameters.
+  */
+const MX_SPIParams_t MX_SPI2_20MHzInitParams =
+{
+  .p_mx_init_f = MX_SPI2_20MHz_Init,
+  .p_spi_handle = &hspi2,
+  .p_mx_dma_init_f = MX_GPDMA1_InitCustom,
+  .spi_dma_rx_irq_n = GPDMA1_Channel0_IRQn,
+  .spi_dma_tx_irq_n = GPDMA1_Channel1_IRQn
+};
+
+/**
   * I2C2 initialization parameters.
   */
 const MX_I2CParams_t MX_I2C2InitParams =

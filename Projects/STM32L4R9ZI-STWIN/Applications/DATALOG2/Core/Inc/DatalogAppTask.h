@@ -79,6 +79,7 @@ uint8_t DatalogAppTask_set_time_vtbl(const char *datetime);
 uint8_t DatalogAppTask_switch_bank_vtbl(void);
 uint8_t DatalogAppTask_set_dfu_mode(void);
 uint8_t DatalogAppTask_enable_all(bool);
+uint8_t DatalogAppTask_no_sensors_enabled(int32_t interface);
 
 void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
 

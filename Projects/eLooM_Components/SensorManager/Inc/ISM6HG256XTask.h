@@ -38,10 +38,9 @@ extern "C" {
 #define ISM6HG256X_MAX_DRDY_PERIOD           (1.0)    /* seconds */
 
 #ifndef ISM6HG256X_MAX_WTM_LEVEL
-#define ISM6HG256X_MAX_WTM_LEVEL             (145)    /* samples */
+#define ISM6HG256X_MAX_WTM_LEVEL             (128)    /* samples */
 #endif
 
-#define ISM6HG256X_MIN_WTM_LEVEL             (16)     /* samples */
 #define ISM6HG256X_MAX_SAMPLES_PER_IT        (ISM6HG256X_MAX_WTM_LEVEL)
 
 
@@ -483,7 +482,7 @@ IEventSrc *ISM6HG256XTaskGetMlcEventSrcIF(ISM6HG256XTask *_this);
   * IRQ callback
   */
 void ISM6HG256XTask_EXTI_Callback(uint16_t Pin);
-void INT2_DSV256X_EXTI_Callback(uint16_t Pin);
+void INT2_HG256X_EXTI_Callback(uint16_t Pin);
 
 // Inline functions definition
 // ***************************

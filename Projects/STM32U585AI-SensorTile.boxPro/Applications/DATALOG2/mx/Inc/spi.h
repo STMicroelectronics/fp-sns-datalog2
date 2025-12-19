@@ -47,7 +47,7 @@ void MX_SPI2_Init(void);
 void MX_SPI3_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void MX_SPI3_20MHz_Init(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

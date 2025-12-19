@@ -325,8 +325,7 @@ uint8_t iis2dh_acc_set_odr(pnpl_iis2dh_acc_odr_t enum_id, char **response_messag
       value = 400.0f;
       break;
     case pnpl_iis2dh_acc_odr_hz1344:
-      value = 800.0f;
-      break;
+      value = 1344.0f;
       break;
     default:
       return 1;

@@ -31,7 +31,7 @@
 // *********************
 
 #define BOARD_ID                                  0x10
-#define FW_ID                                     0x06
+#define FW_ID                                     0x0A
 
 // Other hardware configuration
 // ****************************
@@ -79,7 +79,7 @@
 
 // USBX Tasks
 #define USB_EP_BULKIN_CFG_STACK_DEPTH             (1 * 1024)
-#define USB_EP_BULKIN_CFG_PRIORITY                (3)
+#define USB_EP_BULKIN_CFG_PRIORITY                (10)
 #define USB_EP_BULKIN_CFG_PREEMPTION_THRESHOLD    USB_EP_BULKIN_CFG_PRIORITY
 
 

@@ -21,8 +21,9 @@ Via the host PC and Bluetooth® Low Energy app, users can configure **ISM330IS**
 **LSM6DSO16IS** intelligent sensor processing unit (ISPU) and machine learning core 
 unit (MLC) for:
 
-- **IIS2ICLX**
 - **IIS2DULPX**
+- **IIS2ICLX**
+- **ISM6HG256X**
 - **ISM330BX**
 - **ISM330DHCX**
 - **LSM6DSV16BX**
@@ -40,8 +41,10 @@ The FP-SNS-DATALOG2 firmware can run on:
 - **B-U585I-IOT02A**
 - X-NUCLEO-IKS02A1 with **NUCLEO-U575ZI-Q** 
 - X-NUCLEO-IKS4A1 with **NUCLEO-U575ZI-Q** 
+- X-NUCLEO-IKS5A1 with **NUCLEO-U575ZI-Q** 
 - X-NUCLEO-IKS02A1 with **NUCLEO-H7A3ZI-Q**
 - X-NUCLEO-IKS4A1 with **NUCLEO-H7A3ZI-Q**
+- X-NUCLEO-IKS5A1 with **NUCLEO-H7A3ZI-Q**
 
 ST High Speed Datalog also natively supports add-ons for STEVAL-STWINBX1:
 
@@ -54,6 +57,7 @@ ST High Speed Datalog also natively supports add-ons for STEVAL-STWINBX1:
 - **STEVAL-MKI230KA**
 - **STEVAL-MKI245KA**
 - **STEVAL-MKI246KA**
+- **STEVAL-MKI248KA**
 
 It also supports add-ons for STEVAL-MKBOXPRO:
 
@@ -83,7 +87,6 @@ Here is the list of references to user documents:
 
 - [DB4865](https://www.st.com/resource/en/data_brief/fp-sns-datalog2.pdf) : STM32Cube function pack for high speed datalogging and ultrasound processing
 - [UM3106](https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf) : Getting started with the STM32Cube function pack for high speed datalogging and ultrasound processing
-- [Doxygen](https://htmlpreview.github.io/?https://github.com/STMicroelectronics/fp-sns-datalog2/tree/main/Documentation/html/index.html): Doxygen documentation
 - [STM32Cube](https://www.st.com/stm32cube): STM32Cube
 
 ## Known Limitations
@@ -101,7 +104,7 @@ Here is the list of references to user documents:
 
 -   IAR Embedded Workbench for ARM (EWARM) toolchain V9.60.3
 -   RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38
--   STM32CubeIDE v1.18.1
+-   STM32CubeIDE v1.19
 
 ## Supported Devices and Boards
 
@@ -116,8 +119,10 @@ Here is the list of references to user documents:
 - [B-U585I-IOT02A](https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html)
 - [X-NUCLEO-IKS02A1](https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html) with [NUCLEO-U575ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html)
 - [X-NUCLEO-IKS4A1](https://www.st.com/en/ecosystems/x-nucleo-iks4a1.html) with [NUCLEO-U575ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html)
+- [X-NUCLEO-IKS5A1](https://www.st.com/en/ecosystems/x-nucleo-iks5a1.html) with [NUCLEO-U575ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html)
 - [X-NUCLEO-IKS02A1](https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html) with [NUCLEO-H7A3ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html)
 - [X-NUCLEO-IKS4A1](https://www.st.com/en/ecosystems/x-nucleo-iks4a1.html) with [NUCLEO-H7A3ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html)
+- [X-NUCLEO-IKS5A1](https://www.st.com/en/ecosystems/x-nucleo-iks5a1.html) with [NUCLEO-H7A3ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html)
 
 ## Backward Compatibility
 

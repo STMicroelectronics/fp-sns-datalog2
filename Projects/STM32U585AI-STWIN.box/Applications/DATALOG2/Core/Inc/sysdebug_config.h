@@ -44,6 +44,8 @@ extern "C" {
 #define SYS_DBG_ISM330BX                   SYS_DBG_ON                 ///< ISM330BX sensor task debug control byte
 #define SYS_DBG_ISM330DHCX                 SYS_DBG_ON                 ///< ISM330DHCX sensor task debug control byte
 #define SYS_DBG_ISM330IS                   SYS_DBG_ON                 ///< ISM330IS sensor task debug control byte
+#define SYS_DBG_ISM6HG256X                 SYS_DBG_ON                 ///< ISM6HG256X sensor task debug control byte
+#define SYS_DBG_IIS3DWB10IS                SYS_DBG_ON                 ///< IIS3DWB10IS sensor task debug control byte
 #define SYS_DBG_IIS3DWB                    SYS_DBG_ON                 ///< IIS3DWB sensor task debug control byte
 #define SYS_DBG_IMP23ABSU                  SYS_DBG_ON                 ///< IMP23ABSU task debug control byte
 #define SYS_DBG_IMP34DT05                  SYS_DBG_ON                 ///< IMP34DT05 task debug control byte

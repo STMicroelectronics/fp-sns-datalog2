@@ -28,7 +28,6 @@
 #include "events/IDataEventListener_vtbl.h"
 #include "services/SysTimestamp.h"
 #include "services/ManagedTaskMap.h"
-#include "ilps22qs_reg.h"
 #include <string.h>
 #include "services/sysdebug.h"
 
@@ -1218,6 +1217,7 @@ static sys_error_code_t ILPS22QSTaskSensorInit(ILPS22QSTask *_this)
   md.avg = ILPS22QS_4_AVG;
   md.lpf = ILPS22QS_LPF_ODR_DIV_4;
   md.fs = ILPS22QS_1260hPa;
+  md.interleaved_mode = 0;
   ilps22qs_mode_set(p_sensor_drv, &md);
 
   /* Read sensor id */
@@ -1349,68 +1349,76 @@ static sys_error_code_t ILPS22QSTaskSensorReadData(ILPS22QSTask *_this)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
+
+  /* Read output only if new values are available */
+  ilps22qs_all_sources_t all_sources;
+  ilps22qs_all_sources_get(p_sensor_drv, &all_sources);
+
+#if ILPS22QS_FIFO_ENABLED
   uint16_t samples_per_it = _this->samples_per_it;
   uint8_t i = 0;
 
-#if ILPS22QS_FIFO_ENABLED
-  /* Check FIFO_WTM_IA and fifo level */
-  ilps22qs_fifo_level_get(p_sensor_drv, &_this->fifo_level);
-
-  if (_this->fifo_level >= samples_per_it)
+  if (all_sources.fifo_th)
   {
-    res = ilps22qs_read_reg(p_sensor_drv, ILPS22QS_FIFO_DATA_OUT_PRESS_XL, (uint8_t *) _this->p_fifo_data_buff,
-                            samples_per_it * 3);
+    /* Check FIFO_WTM_IA and fifo level */
+    ilps22qs_fifo_level_get(p_sensor_drv, &_this->fifo_level);
+
+    if (_this->fifo_level >= samples_per_it)
+    {
+      ilps22qs_md_t md;
+
+      ilps22qs_mode_get(p_sensor_drv, &md);
+      res = ilps22qs_fifo_data_get(p_sensor_drv, _this->fifo_level, &md, _this->p_fifo_data_buff);
+      if (!SYS_IS_ERROR_CODE(res))
+      {
+        for (i = 0; i < samples_per_it ; i++)
+        {
+          if (_this->p_fifo_data_buff[i].lsb == 0)
+          {
+#if (HSD_USE_DUMMY_DATA == 1)
+            _this->p_press_data_buff[i]  = (float_t)(dummyDataCounter_press++);
+#else
+            _this->p_press_data_buff[i] = _this->p_fifo_data_buff[i].hpa;
+#endif /* HSD_USE_DUMMY_DATA */
+          }
+        }
+      }
+    }
+    else
+    {
+      _this->fifo_level = 0;
+    }
+#else
+  if (all_sources.drdy_pres)
+  {
+    ilps22qs_md_t md;
+    ilps22qs_data_t data;
+
+    ilps22qs_mode_get(p_sensor_drv, &md);
+    res = ilps22qs_data_get(p_sensor_drv, &md, &data);
+    if (!SYS_IS_ERROR_CODE(res))
+    {
+      if (data.ah_qvar.lsb == 0)
+      {
+#if (HSD_USE_DUMMY_DATA == 1)
+        _this->p_press_data_buff[0]  = (float_t)(dummyDataCounter_press++);
+#else
+        _this->p_press_data_buff[0] = data.pressure.hpa;
+#endif /* HSD_USE_DUMMY_DATA */
+        _this->fifo_level = 1;
+      }
+    }
+#endif /* ILPS22QS_FIFO_ENABLED */
   }
   else
   {
-    _this->fifo_level = 0;
-  }
-#else
-  res = ilps22qs_read_reg(p_sensor_drv, ILPS22QS_PRESS_OUT_XL, (uint8_t *) _this->p_fifo_data_buff, samples_per_it * 3);
-  _this->fifo_level = 1;
-#endif /* ILPS22QS_FIFO_ENABLED */
-
-  if (!SYS_IS_ERROR_CODE(res))
-  {
-    if (_this->fifo_level >= samples_per_it)
-    {
-#if (HSD_USE_DUMMY_DATA == 1)
-      for (i = 0; i < samples_per_it ; i++)
-      {
-        _this->p_press_data_buff[i]  = (float_t)(dummyDataCounter_press++);
-      }
-#else
-      /* Arrange Data */
-      int32_t data;
-      uint8_t *p8_src = _this->p_fifo_data_buff;
-      float_t fs = _this->sensor_status.type.mems.fs;
-
-      for (i = 0; i < samples_per_it; i++)
-      {
-        /* Pressure data conversion to Int32 */
-        data = (int32_t) p8_src[2];
-        data = (data * 256) + (int32_t) p8_src[1];
-        data = (data * 256) + (int32_t) p8_src[0];
-        data = (data * 256);
-        p8_src = p8_src + 3;
-
-        if (fs <= 1261.0f)
-        {
-          _this->p_press_data_buff[i] = ilps22qs_from_fs1260_to_hPa(data);
-        }
-        else
-        {
-          _this->p_press_data_buff[i] = ilps22qs_from_fs4000_to_hPa(data);
-        }
-      }
-#endif
-    }
+    res = SYS_NOT_IMPLEMENTED_ERROR_CODE;
   }
 
   return res;
 }
 
-static sys_error_code_t ILPS22QSTaskSensorRegister(ILPS22QSTask *_this)
+static sys_error_code_t ILPS22QSTaskSensorRegister(ILPS22QSTask * _this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1422,7 +1430,7 @@ static sys_error_code_t ILPS22QSTaskSensorRegister(ILPS22QSTask *_this)
   return res;
 }
 
-static sys_error_code_t ILPS22QSTaskSensorInitTaskParams(ILPS22QSTask *_this)
+static sys_error_code_t ILPS22QSTaskSensorInitTaskParams(ILPS22QSTask * _this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1439,7 +1447,7 @@ static sys_error_code_t ILPS22QSTaskSensorInitTaskParams(ILPS22QSTask *_this)
   return res;
 }
 
-static sys_error_code_t ILPS22QSTaskSensorSetODR(ILPS22QSTask *_this, SMMessage report)
+static sys_error_code_t ILPS22QSTaskSensorSetODR(ILPS22QSTask * _this, SMMessage report)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1508,7 +1516,7 @@ static sys_error_code_t ILPS22QSTaskSensorSetODR(ILPS22QSTask *_this, SMMessage 
   return res;
 }
 
-static sys_error_code_t ILPS22QSTaskSensorSetFS(ILPS22QSTask *_this, SMMessage report)
+static sys_error_code_t ILPS22QSTaskSensorSetFS(ILPS22QSTask * _this, SMMessage report)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1537,7 +1545,7 @@ static sys_error_code_t ILPS22QSTaskSensorSetFS(ILPS22QSTask *_this, SMMessage r
   return res;
 }
 
-static sys_error_code_t ILPS22QSTaskSensorSetFifoWM(ILPS22QSTask *_this, SMMessage report)
+static sys_error_code_t ILPS22QSTaskSensorSetFifoWM(ILPS22QSTask * _this, SMMessage report)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1561,7 +1569,7 @@ static sys_error_code_t ILPS22QSTaskSensorSetFifoWM(ILPS22QSTask *_this, SMMessa
   return res;
 }
 
-static sys_error_code_t ILPS22QSTaskSensorEnable(ILPS22QSTask *_this, SMMessage report)
+static sys_error_code_t ILPS22QSTaskSensorEnable(ILPS22QSTask * _this, SMMessage report)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1580,7 +1588,7 @@ static sys_error_code_t ILPS22QSTaskSensorEnable(ILPS22QSTask *_this, SMMessage 
   return res;
 }
 
-static sys_error_code_t ILPS22QSTaskSensorDisable(ILPS22QSTask *_this, SMMessage report)
+static sys_error_code_t ILPS22QSTaskSensorDisable(ILPS22QSTask * _this, SMMessage report)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1591,6 +1599,7 @@ static sys_error_code_t ILPS22QSTaskSensorDisable(ILPS22QSTask *_this, SMMessage
 
   if (id == _this->press_id)
   {
+    ilps22qs_mode_get(p_sensor_drv, &md);
     _this->sensor_status.is_active = FALSE;
     md.odr = ILPS22QS_ONE_SHOT;
     ilps22qs_mode_set(p_sensor_drv, &md);
@@ -1603,13 +1612,13 @@ static sys_error_code_t ILPS22QSTaskSensorDisable(ILPS22QSTask *_this, SMMessage
   return res;
 }
 
-static boolean_t ILPS22QSTaskSensorIsActive(const ILPS22QSTask *_this)
+static boolean_t ILPS22QSTaskSensorIsActive(const ILPS22QSTask * _this)
 {
   assert_param(_this != NULL);
   return _this->sensor_status.is_active;
 }
 
-static sys_error_code_t ILPS22QSTaskEnterLowPowerMode(const ILPS22QSTask *_this)
+static sys_error_code_t ILPS22QSTaskEnterLowPowerMode(const ILPS22QSTask * _this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -1628,7 +1637,7 @@ static sys_error_code_t ILPS22QSTaskEnterLowPowerMode(const ILPS22QSTask *_this)
   return res;
 }
 
-static sys_error_code_t ILPS22QSTaskConfigureIrqPin(const ILPS22QSTask *_this, boolean_t LowPower)
+static sys_error_code_t ILPS22QSTaskConfigureIrqPin(const ILPS22QSTask * _this, boolean_t LowPower)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;

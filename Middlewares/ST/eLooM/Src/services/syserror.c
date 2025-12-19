@@ -40,7 +40,7 @@ void sys_error_handler(void)
   __asm volatile("bkpt 0");
 #else
   __disable_irq();
-  for ( ; ; )
+  for (; ;)
   {
     __asm volatile("NOP");
   }

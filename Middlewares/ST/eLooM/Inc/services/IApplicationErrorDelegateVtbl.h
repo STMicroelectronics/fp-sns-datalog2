@@ -40,13 +40,18 @@ typedef struct _IApplicationErrorDelegate_vtbl IApplicationErrorDelegate_vtbl;
 struct _IApplicationErrorDelegate_vtbl
 {
   sys_error_code_t (*Init)(IApplicationErrorDelegate *_this, void *pParams);  ///< @sa IAEDInit
-  sys_error_code_t (*OnStartApplication)(IApplicationErrorDelegate *_this, ApplicationContext *pxContext);  ///< @sa IAEDOnStartApplication
-  sys_error_code_t (*ProcessEvent)(IApplicationErrorDelegate *_this, ApplicationContext *pxContext, SysEvent xEvent);  ///< @sa IAEDProcessEvent
+  sys_error_code_t (*OnStartApplication)(IApplicationErrorDelegate *_this,
+                                         ApplicationContext *pxContext);  ///< @sa IAEDOnStartApplication
+  sys_error_code_t (*ProcessEvent)(IApplicationErrorDelegate *_this, ApplicationContext *pxContext,
+                                   SysEvent xEvent);  ///< @sa IAEDProcessEvent
   sys_error_code_t (*OnNewErrEvent)(IApplicationErrorDelegate *_this, SysEvent xEvent);  ///< @sa IAEDOnNewErrEvent
   boolean_t (*IsLastErrorPending)(IApplicationErrorDelegate *_this); ///< @sa IAEDIsLastErrorPending
-  sys_error_code_t (*AddFirstResponder)(IApplicationErrorDelegate *_this, IErrFirstResponder *pFirstResponder, uint8_t nPriority);  ///< @sa IAEDAddFirstResponder
-  sys_error_code_t (*RemoveFirstResponder)(IApplicationErrorDelegate *_this, IErrFirstResponder *pFirstResponder);  ///< @sa IAEDRemoveFirstResponder
-  uint8_t (*GetMaxFirstResponderPriority)(const IApplicationErrorDelegate *_this);  ///< @sa IAEDGetMaxFirstResponderPriority
+  sys_error_code_t (*AddFirstResponder)(IApplicationErrorDelegate *_this, IErrFirstResponder *pFirstResponder,
+                                        uint8_t nPriority);  ///< @sa IAEDAddFirstResponder
+  sys_error_code_t (*RemoveFirstResponder)(IApplicationErrorDelegate *_this,
+                                           IErrFirstResponder *pFirstResponder);  ///< @sa IAEDRemoveFirstResponder
+  uint8_t (*GetMaxFirstResponderPriority)(const IApplicationErrorDelegate
+                                          *_this);  ///< @sa IAEDGetMaxFirstResponderPriority
   void (*ResetCounter)(IApplicationErrorDelegate *_this); ///< @sa IAEDResetAEDCounter
 };
 

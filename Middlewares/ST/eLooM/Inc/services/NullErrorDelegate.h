@@ -47,7 +47,6 @@ struct _NuLLErrorDelegate
 };
 
 
-
 // Public API declaration
 //***********************
 

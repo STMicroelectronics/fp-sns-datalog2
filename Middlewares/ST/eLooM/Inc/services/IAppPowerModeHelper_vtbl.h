@@ -43,7 +43,8 @@ struct _IAppPowerModeHelper_vtbl
 {
   sys_error_code_t (*Init)(IAppPowerModeHelper *_this);
   EPowerMode(*ComputeNewPowerMode)(IAppPowerModeHelper *_this, const SysEvent xEvent);
-  boolean_t (*CheckPowerModeTransaction)(IAppPowerModeHelper *_this, const EPowerMode eActivePowerMode, const EPowerMode eNewPowerMode);
+  boolean_t (*CheckPowerModeTransaction)(IAppPowerModeHelper *_this, const EPowerMode eActivePowerMode,
+                                         const EPowerMode eNewPowerMode);
   sys_error_code_t (*DidEnterPowerMode)(IAppPowerModeHelper *_this, EPowerMode ePowerMode);
   EPowerMode(*GetActivePowerMode)(IAppPowerModeHelper *_this);
   SysPowerStatus(*GetPowerStatus)(IAppPowerModeHelper *_this);

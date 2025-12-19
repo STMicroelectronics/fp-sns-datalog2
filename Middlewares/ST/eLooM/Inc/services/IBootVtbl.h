@@ -40,9 +40,9 @@ typedef struct _IBoot_vtbl IBoot_vtbl;
 struct _IBoot_vtbl
 {
   sys_error_code_t (*Init)(IBoot *_this);
-  boolean_t (*CheckDFUTrigger)(IBoot *_this);
-  uint32_t (*GetAppAdderss)(IBoot *_this);
-  sys_error_code_t (*OnJampToApp)(IBoot *_this, uint32_t nAppDress);
+  boolean_t (*CheckJumpTrigger)(IBoot *_this);
+  uint32_t (*GetJumpAddress)(IBoot *_this);
+  sys_error_code_t (*OnJump)(IBoot *_this, uint32_t nAddress);
 };
 
 /**
@@ -68,21 +68,21 @@ sys_error_code_t IBootInit(IBoot *_this)
 }
 
 SYS_DEFINE_STATIC_INLINE
-boolean_t IBootCheckDFUTrigger(IBoot *_this)
+boolean_t IBootCheckJumpTrigger(IBoot *_this)
 {
-  return _this->vptr->CheckDFUTrigger(_this);
+  return _this->vptr->CheckJumpTrigger(_this);
 }
 
 SYS_DEFINE_STATIC_INLINE
-uint32_t IBootGetAppAdderss(IBoot *_this)
+uint32_t IBootGetJumpAddress(IBoot *_this)
 {
-  return _this->vptr->GetAppAdderss(_this);
+  return _this->vptr->GetJumpAddress(_this);
 }
 
 SYS_DEFINE_STATIC_INLINE
-sys_error_code_t IBootOnJampToApp(IBoot *_this, uint32_t nAppDress)
+sys_error_code_t IBootOnJump(IBoot *_this, uint32_t nAddress)
 {
-  return _this->vptr->OnJampToApp(_this, nAppDress);
+  return _this->vptr->OnJump(_this, nAddress);
 }
 
 

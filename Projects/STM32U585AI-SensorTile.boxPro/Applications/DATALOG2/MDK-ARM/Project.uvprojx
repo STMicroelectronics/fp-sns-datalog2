@@ -190,7 +190,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -340,7 +340,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>DEBUG, SYS_DEBUG, SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro;..\..\..\..\..\Drivers\BSP\Components\ism330is;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16bx;..\..\..\..\..\Drivers\BSP\Components\h3lis331dl;..\..\..\..\..\Drivers\BSP\Components\ilps28qsw;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv32x;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv80x;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv320x</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro;..\..\..\..\..\Drivers\BSP\Components\ism330is;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16bx;..\..\..\..\..\Drivers\BSP\Components\h3lis331dl;..\..\..\..\..\Drivers\BSP\Components\ilps28qsw;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv32x;..\..\..\..\..\Drivers\BSP\Components\iis3dwb10is;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv80x;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv320x</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -488,6 +488,11 @@
               <FileName>syscalls.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\syscalls.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfu_boot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\dfu_boot.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -735,6 +740,16 @@
               <FilePath>..\PnPL\AppModel\Src\App_model_Lsm6dsv32x_Mlc.c</FilePath>
             </File>
             <File>
+              <FileName>App_model_Iis3dwb10is_Ext_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb10is_Ext_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis3dwb10is_Ext_Ispu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb10is_Ext_Ispu.c</FilePath>
+            </File>
+            <File>
               <FileName>App_model_Lsm6dsv80x_Gyro.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\AppModel\Src\App_model_Lsm6dsv80x_Gyro.c</FilePath>
@@ -903,6 +918,16 @@
               <FileName>Lsm6dsv32x_Mlc_PnPL.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\Components\Src\Lsm6dsv32x_Mlc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis3dwb10is_Ext_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb10is_Ext_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis3dwb10is_Ext_Ispu_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb10is_Ext_Ispu_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Lsm6dsv80x_Gyro_PnPL.c</FileName>
@@ -1125,6 +1150,11 @@
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\LSM6DSV32XTask.c</FilePath>
             </File>
             <File>
+              <FileName>IIS3DWB10ISTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\IIS3DWB10ISTask.c</FilePath>
+            </File>
+            <File>
               <FileName>LSM6DSV80XTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\LSM6DSV80XTask.c</FilePath>
@@ -1198,6 +1228,11 @@
               <FileName>lsm6dsv32x_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\lsm6dsv32x\lsm6dsv32x_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>iis3dwb10is_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\iis3dwb10is\iis3dwb10is_reg.c</FilePath>
             </File>
             <File>
               <FileName>lsm6dsv80x_reg.c</FileName>
@@ -4334,7 +4369,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -4458,7 +4493,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>3</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -4484,7 +4519,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro;..\..\..\..\..\Drivers\BSP\Components\ism330is;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16bx;..\..\..\..\..\Drivers\BSP\Components\h3lis331dl;..\..\..\..\..\Drivers\BSP\Components\ilps28qsw;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv32x;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv80x;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv320x</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../USBX/Target;../USBX/App;../mx/Inc;..\..\..\..\eLooM_Components\EMData\Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\includes;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\hci\hci_tl_patterns\Basic;..\..\..\..\..\Middlewares\ST\BlueNRG-LP\utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;..\..\..\..\..\Drivers\BSP\Components\lis2du12;..\..\..\..\..\Drivers\BSP\Components\lis2mdl;..\..\..\..\..\Drivers\BSP\Components\lps22df;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16x;../../../../../Drivers/BSP/Components/stts22h;..\..\..\..\..\Drivers\BSP\SensorTileBoxPro;..\..\..\..\..\Drivers\BSP\Components\ism330is;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv16bx;..\..\..\..\..\Drivers\BSP\Components\h3lis331dl;..\..\..\..\..\Drivers\BSP\Components\ilps28qsw;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv32x;..\..\..\..\..\Drivers\BSP\Components\iis3dwb10is;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv80x;..\..\..\..\..\Drivers\BSP\Components\lsm6dsv320x</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -4632,6 +4667,11 @@
               <FileName>syscalls.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\syscalls.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfu_boot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\dfu_boot.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -4879,6 +4919,16 @@
               <FilePath>..\PnPL\AppModel\Src\App_model_Lsm6dsv32x_Mlc.c</FilePath>
             </File>
             <File>
+              <FileName>App_model_Iis3dwb10is_Ext_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb10is_Ext_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis3dwb10is_Ext_Ispu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb10is_Ext_Ispu.c</FilePath>
+            </File>
+            <File>
               <FileName>App_model_Lsm6dsv80x_Gyro.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\AppModel\Src\App_model_Lsm6dsv80x_Gyro.c</FilePath>
@@ -5047,6 +5097,16 @@
               <FileName>Lsm6dsv32x_Mlc_PnPL.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\Components\Src\Lsm6dsv32x_Mlc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis3dwb10is_Ext_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb10is_Ext_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis3dwb10is_Ext_Ispu_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb10is_Ext_Ispu_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Lsm6dsv80x_Gyro_PnPL.c</FileName>
@@ -5269,6 +5329,11 @@
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\LSM6DSV32XTask.c</FilePath>
             </File>
             <File>
+              <FileName>IIS3DWB10ISTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\IIS3DWB10ISTask.c</FilePath>
+            </File>
+            <File>
               <FileName>LSM6DSV80XTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\LSM6DSV80XTask.c</FilePath>
@@ -5342,6 +5407,11 @@
               <FileName>lsm6dsv32x_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\lsm6dsv32x\lsm6dsv32x_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>iis3dwb10is_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\iis3dwb10is\iis3dwb10is_reg.c</FilePath>
             </File>
             <File>
               <FileName>lsm6dsv80x_reg.c</FileName>

@@ -42,7 +42,7 @@
  here by commenting or un-commenting the conditional compilation defined OR supply the defines
  though the compiler's equivalent of the -D option.  */
 
-#define SS_CLASS_THREAD_PRIO             1
+#define SS_CLASS_THREAD_PRIO             9
 #define SS_CLASS_THREAD_STACK_SIZE       (3 * 1024)
 
 #define SS_BULKIN_THREAD_PRIO            USB_EP_BULKIN_CFG_PRIORITY

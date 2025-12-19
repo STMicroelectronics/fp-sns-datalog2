@@ -65,7 +65,8 @@ static inline void *IErrFirstResponderGetOwner(IErrFirstResponder *_this);
   * @param bIsCalledFromISR [IN] it is \a TRUE if the method is called from an ISR call stack, \a FALSE otherwise.
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
   */
-static inline sys_error_code_t IErrorFirstResponderNewError(IErrFirstResponder *_this, SysEvent xError, boolean_t bIsCalledFromISR);
+static inline sys_error_code_t IErrorFirstResponderNewError(IErrFirstResponder *_this, SysEvent xError,
+                                                            boolean_t bIsCalledFromISR);
 
 
 // Inline functions definition

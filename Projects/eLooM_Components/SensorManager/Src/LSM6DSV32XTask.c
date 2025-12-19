@@ -1294,7 +1294,7 @@ sys_error_code_t LSM6DSV32XTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs
       .sensorMessage.messageId = SM_MESSAGE_ID_SENSOR_CMD,
       .sensorMessage.nCmdID = SENSOR_CMD_ID_SET_FS,
       .sensorMessage.nSensorId = sensor_id,
-      .sensorMessage.nParam = (uint32_t) fs
+      .sensorMessage.fParam = (float_t) fs
     };
     res = LSM6DSV32XTaskPostReportToBack(p_if_owner, (SMMessage *) &report);
   }
@@ -2251,10 +2251,6 @@ static sys_error_code_t LSM6DSV32XTaskSensorInit(LSM6DSV32XTask *_this)
     if (lsm6dsv32x_wtm_level > LSM6DSV32X_MAX_WTM_LEVEL)
     {
       lsm6dsv32x_wtm_level = LSM6DSV32X_MAX_WTM_LEVEL;
-    }
-    else if (lsm6dsv32x_wtm_level < LSM6DSV32X_MIN_WTM_LEVEL)
-    {
-      lsm6dsv32x_wtm_level = LSM6DSV32X_MIN_WTM_LEVEL;
     }
     _this->samples_per_it = lsm6dsv32x_wtm_level;
   }

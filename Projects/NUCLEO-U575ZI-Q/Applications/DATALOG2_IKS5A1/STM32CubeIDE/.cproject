@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.392444129">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.392444129" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.392444129" name="Debug" parent="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug">
+					<folderInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.392444129." name="/" resourcePath="">
+						<toolChain id="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug.1184940789" name="MCU ARM GCC" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.debug">
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.829382245" name="MCU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu" useByScannerDiscovery="true" value="STM32U575ZITxQ" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid.1851049757" name="CPU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid" useByScannerDiscovery="false" value="0" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid.680891987" name="Core" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid" useByScannerDiscovery="false" value="0" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu.1779571275" name="Floating-point unit" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu" useByScannerDiscovery="true" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu.value.fpv5-sp-d16" valueType="enumerated"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi.976604184" name="Floating-point ABI" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi" useByScannerDiscovery="true" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi.value.hard" valueType="enumerated"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board.1203215785" name="Board" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board" useByScannerDiscovery="false" value="NUCLEO-U575ZI-Q" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.defaults.116227353" name="Defaults" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.defaults" useByScannerDiscovery="false" value="com.st.stm32cube.ide.common.services.build.inputs.revA.1.0.5 || Debug || true || Executable || com.st.stm32cube.ide.mcu.gnu.managedbuild.option.toolchain.value.workspace || NUCLEO-U575ZI-Q || 0 || 0 || arm-none-eabi- || ${gnu_tools_for_stm32_compiler_path} || ../../Core/Inc | ../../AZURE_RTOS/App | ../../Drivers/STM32U5xx_HAL_Driver/Inc | ../../Drivers/STM32U5xx_HAL_Driver/Inc/Legacy | ../../Middlewares/ST/threadx/common/inc | ../../Drivers/CMSIS/Device/ST/STM32U5xx/Include | ../../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc | ../../Drivers/CMSIS/Include ||  ||  || USE_FULL_LL_DRIVER | TX_INCLUDE_USER_DEFINE_FILE | TX_SINGLE_MODE_NON_SECURE=1 | USE_HAL_DRIVER | STM32U575xx || TX_SINGLE_MODE_NON_SECURE=1 ||  ||  ||  || ${workspace_loc:/${ProjName}/STM32U575ZITXQ_FLASH.ld} || true || NonSecure ||  || secure_nsclib.o ||  || None || " valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.nanoprintffloat.2138191147" name="Use float with printf from newlib-nano (-u _printf_float)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.nanoprintffloat" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.converthex.813485025" name="Convert to Intel Hex file (-O ihex)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.converthex" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.convertbinary.834150018" name="Convert to binary file (-O binary)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.convertbinary" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetplatform.132316838" isAbstract="false" osList="all" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetplatform"/>
+							<builder buildPath="${workspace_loc:/NUCLEO-U575ZI-Q_DATALOG2_prj}/Debug" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder.1400954542" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.1187132481" name="MCU GCC Assembler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.749178297" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.value.g3" valueType="enumerated"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols.1998286140" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="DEBUG"/>
+									<listOptionValue builtIn="false" value="TX_SINGLE_MODE_NON_SECURE=1"/>
+									<listOptionValue builtIn="false" value="USE_DYNAMIC_MEMORY_ALLOCATION"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.includepaths.1369737321" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../Core/Inc"/>
+								</option>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input.2096499863" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.716628046" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.2022114216" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.value.g3" valueType="enumerated"/>
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level.996114049" name="Optimization level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level" useByScannerDiscovery="false"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols.1009093864" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="DEBUG"/>
+									<listOptionValue builtIn="false" value="SYS_DEBUG"/>
+									<listOptionValue builtIn="false" value="SYS_TP_MCU_STM32U5"/>
+									<listOptionValue builtIn="false" value="SYS_TRACE=0"/>
+									<listOptionValue builtIn="false" value="SYS_DBG_ENABLE_TA4=0"/>
+									<listOptionValue builtIn="false" value="USE_FULL_ASSERT"/>
+									<listOptionValue builtIn="false" value="USE_FULL_LL_DRIVER"/>
+									<listOptionValue builtIn="false" value="USE_DYNAMIC_MEMORY_ALLOCATION"/>
+									<listOptionValue builtIn="false" value="TX_INCLUDE_USER_DEFINE_FILE"/>
+									<listOptionValue builtIn="false" value="TX_SINGLE_MODE_NON_SECURE=1"/>
+									<listOptionValue builtIn="false" value="UX_INCLUDE_USER_DEFINE_FILE"/>
+									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+									<listOptionValue builtIn="false" value="STM32U575xx"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths.1266999480" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../Core/Inc"/>
+									<listOptionValue builtIn="false" value="../../USBX/App"/>
+									<listOptionValue builtIn="false" value="../../USBX/Target"/>
+									<listOptionValue builtIn="false" value="../../mx/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/AppModel/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/Components/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis2dulpx"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis2mdc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ilps22qs"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism330is"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism6hg256x"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis3dwb10is"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/STM32U5xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/STM32U5xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/eLooM/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/threadx/common/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/usbx/common/core/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/usbx/common/usbx_device_classes/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/usbx/ports/generic/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/SensorStreaming_USBX"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/CircularBufferDL2"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/Third_Party/parson"/>
+									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/DPU/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/EMData/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/SensorManager/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/PnPLCompManager/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/TagManager/Inc"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles.1990264029" name="Include files (-include)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles" useByScannerDiscovery="false" valueType="includeFiles">
+									<listOptionValue builtIn="false" value="../../Core/Inc/sysconfig.h"/>
+								</option>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1588692563" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.1050862351" name="MCU G++ Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel.202623959" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel.value.g3" valueType="enumerated"/>
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.level.361186433" name="Optimization level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.level" useByScannerDiscovery="false"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.999096728" name="MCU GCC Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script.1737894186" name="Linker Script (-T)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script" value="${workspace_loc:/${ProjName}/STM32U575ZITXQ_FLASH.ld}" valueType="string"/>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input.1693990033" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.linker.157457557" name="MCU G++ Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.linker"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.archiver.1372948176" name="MCU GCC Archiver" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.archiver"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size.685034956" name="MCU Size" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objdump.listfile.1287558199" name="MCU Output Converter list file" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objdump.listfile"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.hex.594851694" name="MCU Output Converter Hex" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.hex"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.binary.339173081" name="MCU Output Converter Binary" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.binary"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.verilog.937504331" name="MCU Output Converter Verilog" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.verilog"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.srec.138141822" name="MCU Output Converter Motorola S-rec" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.srec"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.1878227875" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="Drivers|Middlewares|User|eLooM_Components" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
+						<entry excluding="ST/usbx/core/src/ux_utility_pci_write.c|ST/usbx/core/src/ux_utility_pci_read.c|ST/usbx/core/src/ux_utility_pci_class_scan.c|ST/usbx/core/src/ux_trace_object_unregister.c|ST/usbx/core/src/ux_trace_object_register.c|ST/usbx/core/src/ux_trace_event_update.c|ST/usbx/core/src/ux_trace_event_insert.c|ST/usbx/core/src/ux_hcd_sim_host_uninitialize.c|ST/usbx/core/src/ux_hcd_sim_host_transfer_run.c|ST/usbx/core/src/ux_hcd_sim_host_transfer_abort.c|ST/usbx/core/src/ux_hcd_sim_host_transaction_schedule.c|ST/usbx/core/src/ux_hcd_sim_host_timer_function.c|ST/usbx/core/src/ux_hcd_sim_host_request_transfer.c|ST/usbx/core/src/ux_hcd_sim_host_request_isochronous_transfer.c|ST/usbx/core/src/ux_hcd_sim_host_request_interupt_transfer.c|ST/usbx/core/src/ux_hcd_sim_host_request_control_transfer.c|ST/usbx/core/src/ux_hcd_sim_host_request_bulk_transfer.c|ST/usbx/core/src/ux_hcd_sim_host_regular_td_obtain.c|ST/usbx/core/src/ux_hcd_sim_host_port_status_get.c|ST/usbx/core/src/ux_hcd_sim_host_port_reset.c|ST/usbx/core/src/ux_hcd_sim_host_periodic_tree_create.c|ST/usbx/core/src/ux_hcd_sim_host_periodic_schedule.c|ST/usbx/core/src/ux_hcd_sim_host_periodic_endpoint_destroy.c|ST/usbx/core/src/ux_hcd_sim_host_least_traffic_list_get.c|ST/usbx/core/src/ux_hcd_sim_host_isochronous_td_obtain.c|ST/usbx/core/src/ux_hcd_sim_host_isochronous_endpoint_create.c|ST/usbx/core/src/ux_hcd_sim_host_iso_schedule.c|ST/usbx/core/src/ux_hcd_sim_host_iso_queue_process.c|ST/usbx/core/src/ux_hcd_sim_host_interrupt_endpoint_create.c|ST/usbx/core/src/ux_hcd_sim_host_initialize.c|ST/usbx/core/src/ux_hcd_sim_host_frame_number_set.c|ST/usbx/core/src/ux_hcd_sim_host_frame_number_get.c|ST/usbx/core/src/ux_hcd_sim_host_entry.c|ST/usbx/core/src/ux_hcd_sim_host_endpoint_reset.c|ST/usbx/core/src/ux_hcd_sim_host_ed_td_clean.c|ST/usbx/core/src/ux_hcd_sim_host_ed_obtain.c|ST/usbx/core/src/ux_hcd_sim_host_controller_disable.c|ST/usbx/core/src/ux_hcd_sim_host_asynchronous_endpoint_destroy.c|ST/usbx/core/src/ux_hcd_sim_host_asynchronous_endpoint_create.c|ST/usbx/core/src/ux_hcd_sim_host_asynch_schedule.c|ST/usbx/core/src/ux_hcd_sim_host_asynch_queue_process.c|ST/usbx/core/src/ux_dcd_sim_slave_transfer_run.c|ST/usbx/core/src/ux_dcd_sim_slave_transfer_request.c|ST/usbx/core/src/ux_dcd_sim_slave_transfer_abort.c|ST/usbx/core/src/ux_dcd_sim_slave_state_change.c|ST/usbx/core/src/ux_dcd_sim_slave_initialize.c|ST/usbx/core/src/ux_dcd_sim_slave_initialize_complete.c|ST/usbx/core/src/ux_dcd_sim_slave_function.c|ST/usbx/core/src/ux_dcd_sim_slave_frame_number_get.c|ST/usbx/core/src/ux_dcd_sim_slave_endpoint_status.c|ST/usbx/core/src/ux_dcd_sim_slave_endpoint_stall.c|ST/usbx/core/src/ux_dcd_sim_slave_endpoint_reset.c|ST/usbx/core/src/ux_dcd_sim_slave_endpoint_destroy.c|ST/usbx/core/src/ux_dcd_sim_slave_endpoint_create.c|ST/usbx/core/src/ux_dcd_sim_slave_address_set.c|ST/threadx/common/src/tx_trace_user_event_insert.c|ST/threadx/common/src/tx_trace_object_unregister.c|ST/threadx/common/src/tx_trace_object_register.c|ST/threadx/common/src/tx_trace_isr_exit_insert.c|ST/threadx/common/src/tx_trace_isr_enter_insert.c|ST/threadx/common/src/tx_trace_interrupt_control.c|ST/threadx/common/src/tx_trace_initialize.c|ST/threadx/common/src/tx_trace_event_unfilter.c|ST/threadx/common/src/tx_trace_event_filter.c|ST/threadx/common/src/tx_trace_enable.c|ST/threadx/common/src/tx_trace_disable.c|ST/threadx/common/src/tx_trace_buffer_full_notify.c|ST/SensorStreaming_USBX/ux_dcd_stm32_callback_sof.c|ST/usbx/core/src/ux_host_stack_uninitialize.c|ST/usbx/core/src/ux_host_stack_transfer_run.c|ST/usbx/core/src/ux_host_stack_transfer_request.c|ST/usbx/core/src/ux_host_stack_transfer_request_abort.c|ST/usbx/core/src/ux_host_stack_tasks_run.c|ST/usbx/core/src/ux_host_stack_role_swap.c|ST/usbx/core/src/ux_host_stack_rh_device_insertion.c|ST/usbx/core/src/ux_host_stack_rh_device_extraction.c|ST/usbx/core/src/ux_host_stack_rh_change_process.c|ST/usbx/core/src/ux_host_stack_new_interface_create.c|ST/usbx/core/src/ux_host_stack_new_endpoint_create.c|ST/usbx/core/src/ux_host_stack_new_device_get.c|ST/usbx/core/src/ux_host_stack_new_device_create.c|ST/usbx/core/src/ux_host_stack_new_configuration_create.c|ST/usbx/core/src/ux_host_stack_interfaces_scan.c|ST/usbx/core/src/ux_host_stack_interface_setting_select.c|ST/usbx/core/src/ux_host_stack_interface_set.c|ST/usbx/core/src/ux_host_stack_interface_instance_delete.c|ST/usbx/core/src/ux_host_stack_interface_instance_create.c|ST/usbx/core/src/ux_host_stack_interface_endpoint_get.c|ST/usbx/core/src/ux_host_stack_initialize.c|ST/usbx/core/src/ux_host_stack_hnp_polling_thread_entry.c|ST/usbx/core/src/ux_host_stack_hcd_unregister.c|ST/usbx/core/src/ux_host_stack_hcd_transfer_request.c|ST/usbx/core/src/ux_host_stack_hcd_thread_entry.c|ST/usbx/core/src/ux_host_stack_hcd_register.c|ST/usbx/core/src/ux_host_stack_enum_thread_entry.c|ST/usbx/core/src/ux_host_stack_endpoint_transfer_abort.c|ST/usbx/core/src/ux_host_stack_endpoint_reset.c|ST/usbx/core/src/ux_host_stack_endpoint_instance_delete.c|ST/usbx/core/src/ux_host_stack_endpoint_instance_create.c|ST/usbx/core/src/ux_host_stack_device_string_get.c|ST/usbx/core/src/ux_host_stack_device_resources_free.c|ST/usbx/core/src/ux_host_stack_device_remove.c|ST/usbx/core/src/ux_host_stack_device_get.c|ST/usbx/core/src/ux_host_stack_device_descriptor_read.c|ST/usbx/core/src/ux_host_stack_device_configuration_select.c|ST/usbx/core/src/ux_host_stack_device_configuration_reset.c|ST/usbx/core/src/ux_host_stack_device_configuration_get.c|ST/usbx/core/src/ux_host_stack_device_configuration_deactivate.c|ST/usbx/core/src/ux_host_stack_device_configuration_activate.c|ST/usbx/core/src/ux_host_stack_device_address_set.c|ST/usbx/core/src/ux_host_stack_delay_ms.c|ST/usbx/core/src/ux_host_stack_configuration_set.c|ST/usbx/core/src/ux_host_stack_configuration_interface_scan.c|ST/usbx/core/src/ux_host_stack_configuration_interface_get.c|ST/usbx/core/src/ux_host_stack_configuration_instance_delete.c|ST/usbx/core/src/ux_host_stack_configuration_instance_create.c|ST/usbx/core/src/ux_host_stack_configuration_enumerate.c|ST/usbx/core/src/ux_host_stack_configuration_descriptor_parse.c|ST/usbx/core/src/ux_host_stack_class_unregister.c|ST/usbx/core/src/ux_host_stack_class_register.c|ST/usbx/core/src/ux_host_stack_class_interface_scan.c|ST/usbx/core/src/ux_host_stack_class_instance_verify.c|ST/usbx/core/src/ux_host_stack_class_instance_get.c|ST/usbx/core/src/ux_host_stack_class_instance_destroy.c|ST/usbx/core/src/ux_host_stack_class_instance_create.c|ST/usbx/core/src/ux_host_stack_class_get.c|ST/usbx/core/src/ux_host_stack_class_device_scan.c|ST/usbx/core/src/ux_host_stack_class_call.c|ST/usbx/core/src/ux_host_stack_bandwidth_release.c|ST/usbx/core/src/ux_host_stack_bandwidth_claim.c|ST/usbx/core/src/ux_host_stack_bandwidth_check.c|ST/usbx/core/src/ux_host_class_dpump_write.c|ST/usbx/core/src/ux_host_class_dpump_read.c|ST/usbx/core/src/ux_host_class_dpump_ioctl.c|ST/usbx/core/src/ux_host_class_dpump_entry.c|ST/usbx/core/src/ux_host_class_dpump_endpoints_get.c|ST/usbx/core/src/ux_host_class_dpump_deactivate.c|ST/usbx/core/src/ux_host_class_dpump_configure.c|ST/usbx/core/src/ux_host_class_dpump_activate.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
+						<entry excluding="Core/Src/App_dpu_demo.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="User"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="eLooM_Components"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.2036389194">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.2036389194" moduleId="org.eclipse.cdt.core.settings" name="Release">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactExtension="elf" artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="rm -rf" description="" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.2036389194" name="Release" parent="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release">
+					<folderInfo id="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.2036389194." name="/" resourcePath="">
+						<toolChain id="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.release.1580261108" name="MCU ARM GCC" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.toolchain.exe.release">
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu.504386022" name="MCU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_mcu" useByScannerDiscovery="true" value="STM32U575ZITxQ" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid.89939139" name="CPU" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_cpuid" useByScannerDiscovery="false" value="0" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid.1104321507" name="Core" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_coreid" useByScannerDiscovery="false" value="0" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu.201118945" name="Floating-point unit" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu" useByScannerDiscovery="true" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.fpu.value.fpv5-sp-d16" valueType="enumerated"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi.2074003370" name="Floating-point ABI" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi" useByScannerDiscovery="true" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.floatabi.value.hard" valueType="enumerated"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board.1388684843" name="Board" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.target_board" useByScannerDiscovery="false" value="NUCLEO-U575ZI-Q" valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.defaults.65666648" name="Defaults" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.defaults" useByScannerDiscovery="false" value="com.st.stm32cube.ide.common.services.build.inputs.revA.1.0.5 || Release || false || Executable || com.st.stm32cube.ide.mcu.gnu.managedbuild.option.toolchain.value.workspace || NUCLEO-U575ZI-Q || 0 || 0 || arm-none-eabi- || ${gnu_tools_for_stm32_compiler_path} || ../../Core/Inc | ../../AZURE_RTOS/App | ../../Drivers/STM32U5xx_HAL_Driver/Inc | ../../Drivers/STM32U5xx_HAL_Driver/Inc/Legacy | ../../Middlewares/ST/threadx/common/inc | ../../Drivers/CMSIS/Device/ST/STM32U5xx/Include | ../../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc | ../../Drivers/CMSIS/Include ||  ||  || USE_FULL_LL_DRIVER | TX_INCLUDE_USER_DEFINE_FILE | TX_SINGLE_MODE_NON_SECURE=1 | USE_HAL_DRIVER | STM32U575xx || TX_SINGLE_MODE_NON_SECURE=1 ||  ||  ||  || ${workspace_loc:/${ProjName}/STM32U575ZITXQ_FLASH.ld} || true || NonSecure ||  || secure_nsclib.o ||  || None || " valueType="string"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.nanoprintffloat.1196435426" name="Use float with printf from newlib-nano (-u _printf_float)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.nanoprintffloat" useByScannerDiscovery="false" value="true" valueType="boolean"/>
+							<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.convertbinary.2087280529" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.option.convertbinary" value="true" valueType="boolean"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetplatform.1642289439" isAbstract="false" osList="all" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.targetplatform"/>
+							<builder buildPath="${workspace_loc:/NUCLEO-U575ZI-Q_DATALOG2_prj}/Release" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder.1633922994" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.builder"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.587223855" name="MCU GCC Assembler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.1521712514" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.debuglevel.value.g0" valueType="enumerated"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols.814221779" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.definedsymbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="TX_SINGLE_MODE_NON_SECURE=1"/>
+									<listOptionValue builtIn="false" value="USE_DYNAMIC_MEMORY_ALLOCATION"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.includepaths.1158277194" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../Core/Inc"/>
+								</option>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input.236848515" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.assembler.input"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1258726591" name="MCU GCC Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.229300797" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.debuglevel.value.g0" valueType="enumerated"/>
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level.1011319280" name="Optimization level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.optimization.level.value.o2" valueType="enumerated"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols.796807170" name="Define symbols (-D)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.definedsymbols" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="SYS_TP_MCU_STM32U5"/>
+									<listOptionValue builtIn="false" value="SYS_TRACE=0"/>
+									<listOptionValue builtIn="false" value="SYS_DBG_ENABLE_TA4=0"/>
+									<listOptionValue builtIn="false" value="USE_FULL_LL_DRIVER"/>
+									<listOptionValue builtIn="false" value="USE_DYNAMIC_MEMORY_ALLOCATION"/>
+									<listOptionValue builtIn="false" value="TX_INCLUDE_USER_DEFINE_FILE"/>
+									<listOptionValue builtIn="false" value="TX_SINGLE_MODE_NON_SECURE=1"/>
+									<listOptionValue builtIn="false" value="UX_INCLUDE_USER_DEFINE_FILE"/>
+									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+									<listOptionValue builtIn="false" value="STM32U575xx"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths.576208980" name="Include paths (-I)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includepaths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../Core/Inc"/>
+									<listOptionValue builtIn="false" value="../../USBX/App"/>
+									<listOptionValue builtIn="false" value="../../USBX/Target"/>
+									<listOptionValue builtIn="false" value="../../mx/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/AppModel/Inc"/>
+									<listOptionValue builtIn="false" value="../../PnPL/Components/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis2dulpx"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis2mdc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ilps22qs"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism330is"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/ism6hg256x"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/BSP/Components/iis3dwb10is"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/STM32U5xx_HAL_Driver/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Drivers/STM32U5xx_HAL_Driver/Inc/Legacy"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/eLooM/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/threadx/common/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/threadx/ports/cortex_m33/gnu/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/usbx/common/core/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/usbx/common/usbx_device_classes/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/usbx/ports/generic/inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/SensorStreaming_USBX"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/CircularBufferDL2"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/Third_Party/parson"/>
+									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/DPU/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/EMData/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/SensorManager/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../../Middlewares/ST/PnPLCompManager/Inc"/>
+									<listOptionValue builtIn="false" value="../../../../../eLooM_Components/TagManager/Inc"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles.528065670" name="Include files (-include)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.option.includefiles" useByScannerDiscovery="false" valueType="includeFiles">
+									<listOptionValue builtIn="false" value="../../Core/Inc/sysconfig.h"/>
+								</option>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.2068997654" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.1047716279" name="MCU G++ Compiler" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel.1202005796" name="Debug level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.debuglevel.value.g0" valueType="enumerated"/>
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.level.1899226919" name="Optimization level" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.level" useByScannerDiscovery="false" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.compiler.option.optimization.level.value.os" valueType="enumerated"/>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.1825431713" name="MCU GCC Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker">
+								<option id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script.923985151" name="Linker Script (-T)" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.option.script" value="${workspace_loc:/${ProjName}/STM32U575ZITXQ_FLASH.ld}" valueType="string"/>
+								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input.1287040152" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.linker.input">
+									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
+								</inputType>
+							</tool>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.linker.1033173525" name="MCU G++ Linker" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.cpp.linker"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.archiver.1793641953" name="MCU GCC Archiver" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.archiver"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size.1835998664" name="MCU Size" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.size"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objdump.listfile.2123349653" name="MCU Output Converter list file" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objdump.listfile"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.hex.1353472028" name="MCU Output Converter Hex" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.hex"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.binary.1807163025" name="MCU Output Converter Binary" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.binary"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.verilog.937742162" name="MCU Output Converter Verilog" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.verilog"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.srec.1275612354" name="MCU Output Converter Motorola S-rec" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.srec"/>
+							<tool id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec.901681007" name="MCU Output Converter Motorola S-rec with symbols" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.objcopy.symbolsrec"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="Drivers|Middlewares|User|eLooM_Components" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Drivers"/>
+						<entry excluding="ST/usbx/core/src/ux_utility_pci_write.c|ST/usbx/core/src/ux_utility_pci_read.c|ST/usbx/core/src/ux_utility_pci_class_scan.c|ST/usbx/core/src/ux_trace_object_unregister.c|ST/usbx/core/src/ux_trace_object_register.c|ST/usbx/core/src/ux_trace_event_update.c|ST/usbx/core/src/ux_trace_event_insert.c|ST/usbx/core/src/ux_hcd_sim_host_uninitialize.c|ST/usbx/core/src/ux_hcd_sim_host_transfer_run.c|ST/usbx/core/src/ux_hcd_sim_host_transfer_abort.c|ST/usbx/core/src/ux_hcd_sim_host_transaction_schedule.c|ST/usbx/core/src/ux_hcd_sim_host_timer_function.c|ST/usbx/core/src/ux_hcd_sim_host_request_transfer.c|ST/usbx/core/src/ux_hcd_sim_host_request_isochronous_transfer.c|ST/usbx/core/src/ux_hcd_sim_host_request_interupt_transfer.c|ST/usbx/core/src/ux_hcd_sim_host_request_control_transfer.c|ST/usbx/core/src/ux_hcd_sim_host_request_bulk_transfer.c|ST/usbx/core/src/ux_hcd_sim_host_regular_td_obtain.c|ST/usbx/core/src/ux_hcd_sim_host_port_status_get.c|ST/usbx/core/src/ux_hcd_sim_host_port_reset.c|ST/usbx/core/src/ux_hcd_sim_host_periodic_tree_create.c|ST/usbx/core/src/ux_hcd_sim_host_periodic_schedule.c|ST/usbx/core/src/ux_hcd_sim_host_periodic_endpoint_destroy.c|ST/usbx/core/src/ux_hcd_sim_host_least_traffic_list_get.c|ST/usbx/core/src/ux_hcd_sim_host_isochronous_td_obtain.c|ST/usbx/core/src/ux_hcd_sim_host_isochronous_endpoint_create.c|ST/usbx/core/src/ux_hcd_sim_host_iso_schedule.c|ST/usbx/core/src/ux_hcd_sim_host_iso_queue_process.c|ST/usbx/core/src/ux_hcd_sim_host_interrupt_endpoint_create.c|ST/usbx/core/src/ux_hcd_sim_host_initialize.c|ST/usbx/core/src/ux_hcd_sim_host_frame_number_set.c|ST/usbx/core/src/ux_hcd_sim_host_frame_number_get.c|ST/usbx/core/src/ux_hcd_sim_host_entry.c|ST/usbx/core/src/ux_hcd_sim_host_endpoint_reset.c|ST/usbx/core/src/ux_hcd_sim_host_ed_td_clean.c|ST/usbx/core/src/ux_hcd_sim_host_ed_obtain.c|ST/usbx/core/src/ux_hcd_sim_host_controller_disable.c|ST/usbx/core/src/ux_hcd_sim_host_asynchronous_endpoint_destroy.c|ST/usbx/core/src/ux_hcd_sim_host_asynchronous_endpoint_create.c|ST/usbx/core/src/ux_hcd_sim_host_asynch_schedule.c|ST/usbx/core/src/ux_hcd_sim_host_asynch_queue_process.c|ST/usbx/core/src/ux_dcd_sim_slave_transfer_run.c|ST/usbx/core/src/ux_dcd_sim_slave_transfer_request.c|ST/usbx/core/src/ux_dcd_sim_slave_transfer_abort.c|ST/usbx/core/src/ux_dcd_sim_slave_state_change.c|ST/usbx/core/src/ux_dcd_sim_slave_initialize.c|ST/usbx/core/src/ux_dcd_sim_slave_initialize_complete.c|ST/usbx/core/src/ux_dcd_sim_slave_function.c|ST/usbx/core/src/ux_dcd_sim_slave_frame_number_get.c|ST/usbx/core/src/ux_dcd_sim_slave_endpoint_status.c|ST/usbx/core/src/ux_dcd_sim_slave_endpoint_stall.c|ST/usbx/core/src/ux_dcd_sim_slave_endpoint_reset.c|ST/usbx/core/src/ux_dcd_sim_slave_endpoint_destroy.c|ST/usbx/core/src/ux_dcd_sim_slave_endpoint_create.c|ST/usbx/core/src/ux_dcd_sim_slave_address_set.c|ST/threadx/common/src/tx_trace_user_event_insert.c|ST/threadx/common/src/tx_trace_object_unregister.c|ST/threadx/common/src/tx_trace_object_register.c|ST/threadx/common/src/tx_trace_isr_exit_insert.c|ST/threadx/common/src/tx_trace_isr_enter_insert.c|ST/threadx/common/src/tx_trace_interrupt_control.c|ST/threadx/common/src/tx_trace_initialize.c|ST/threadx/common/src/tx_trace_event_unfilter.c|ST/threadx/common/src/tx_trace_event_filter.c|ST/threadx/common/src/tx_trace_enable.c|ST/threadx/common/src/tx_trace_disable.c|ST/threadx/common/src/tx_trace_buffer_full_notify.c|ST/SensorStreaming_USBX/ux_dcd_stm32_callback_sof.c|ST/usbx/core/src/ux_host_stack_uninitialize.c|ST/usbx/core/src/ux_host_stack_transfer_run.c|ST/usbx/core/src/ux_host_stack_transfer_request.c|ST/usbx/core/src/ux_host_stack_transfer_request_abort.c|ST/usbx/core/src/ux_host_stack_tasks_run.c|ST/usbx/core/src/ux_host_stack_role_swap.c|ST/usbx/core/src/ux_host_stack_rh_device_insertion.c|ST/usbx/core/src/ux_host_stack_rh_device_extraction.c|ST/usbx/core/src/ux_host_stack_rh_change_process.c|ST/usbx/core/src/ux_host_stack_new_interface_create.c|ST/usbx/core/src/ux_host_stack_new_endpoint_create.c|ST/usbx/core/src/ux_host_stack_new_device_get.c|ST/usbx/core/src/ux_host_stack_new_device_create.c|ST/usbx/core/src/ux_host_stack_new_configuration_create.c|ST/usbx/core/src/ux_host_stack_interfaces_scan.c|ST/usbx/core/src/ux_host_stack_interface_setting_select.c|ST/usbx/core/src/ux_host_stack_interface_set.c|ST/usbx/core/src/ux_host_stack_interface_instance_delete.c|ST/usbx/core/src/ux_host_stack_interface_instance_create.c|ST/usbx/core/src/ux_host_stack_interface_endpoint_get.c|ST/usbx/core/src/ux_host_stack_initialize.c|ST/usbx/core/src/ux_host_stack_hnp_polling_thread_entry.c|ST/usbx/core/src/ux_host_stack_hcd_unregister.c|ST/usbx/core/src/ux_host_stack_hcd_transfer_request.c|ST/usbx/core/src/ux_host_stack_hcd_thread_entry.c|ST/usbx/core/src/ux_host_stack_hcd_register.c|ST/usbx/core/src/ux_host_stack_enum_thread_entry.c|ST/usbx/core/src/ux_host_stack_endpoint_transfer_abort.c|ST/usbx/core/src/ux_host_stack_endpoint_reset.c|ST/usbx/core/src/ux_host_stack_endpoint_instance_delete.c|ST/usbx/core/src/ux_host_stack_endpoint_instance_create.c|ST/usbx/core/src/ux_host_stack_device_string_get.c|ST/usbx/core/src/ux_host_stack_device_resources_free.c|ST/usbx/core/src/ux_host_stack_device_remove.c|ST/usbx/core/src/ux_host_stack_device_get.c|ST/usbx/core/src/ux_host_stack_device_descriptor_read.c|ST/usbx/core/src/ux_host_stack_device_configuration_select.c|ST/usbx/core/src/ux_host_stack_device_configuration_reset.c|ST/usbx/core/src/ux_host_stack_device_configuration_get.c|ST/usbx/core/src/ux_host_stack_device_configuration_deactivate.c|ST/usbx/core/src/ux_host_stack_device_configuration_activate.c|ST/usbx/core/src/ux_host_stack_device_address_set.c|ST/usbx/core/src/ux_host_stack_delay_ms.c|ST/usbx/core/src/ux_host_stack_configuration_set.c|ST/usbx/core/src/ux_host_stack_configuration_interface_scan.c|ST/usbx/core/src/ux_host_stack_configuration_interface_get.c|ST/usbx/core/src/ux_host_stack_configuration_instance_delete.c|ST/usbx/core/src/ux_host_stack_configuration_instance_create.c|ST/usbx/core/src/ux_host_stack_configuration_enumerate.c|ST/usbx/core/src/ux_host_stack_configuration_descriptor_parse.c|ST/usbx/core/src/ux_host_stack_class_unregister.c|ST/usbx/core/src/ux_host_stack_class_register.c|ST/usbx/core/src/ux_host_stack_class_interface_scan.c|ST/usbx/core/src/ux_host_stack_class_instance_verify.c|ST/usbx/core/src/ux_host_stack_class_instance_get.c|ST/usbx/core/src/ux_host_stack_class_instance_destroy.c|ST/usbx/core/src/ux_host_stack_class_instance_create.c|ST/usbx/core/src/ux_host_stack_class_get.c|ST/usbx/core/src/ux_host_stack_class_device_scan.c|ST/usbx/core/src/ux_host_stack_class_call.c|ST/usbx/core/src/ux_host_stack_bandwidth_release.c|ST/usbx/core/src/ux_host_stack_bandwidth_claim.c|ST/usbx/core/src/ux_host_stack_bandwidth_check.c|ST/usbx/core/src/ux_host_class_dpump_write.c|ST/usbx/core/src/ux_host_class_dpump_read.c|ST/usbx/core/src/ux_host_class_dpump_ioctl.c|ST/usbx/core/src/ux_host_class_dpump_entry.c|ST/usbx/core/src/ux_host_class_dpump_endpoints_get.c|ST/usbx/core/src/ux_host_class_dpump_deactivate.c|ST/usbx/core/src/ux_host_class_dpump_configure.c|ST/usbx/core/src/ux_host_class_dpump_activate.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Middlewares"/>
+						<entry excluding="Core/Src/App_dpu_demo.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="User"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="eLooM_Components"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.pathentry"/>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="NUCLEO-U575ZI-Q_DATALOG2_prj.null.1468945285" name="NUCLEO-U575ZI-Q_DATALOG2_prj"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="DPU Demo Debug"/>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/NUCLEO-U575ZI-Q_DATALOG2_prj"/>
+		</configuration>
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/NUCLEO-U575ZI-Q_DATALOG2_prj"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings">
+		<doc-comment-owner id="org.eclipse.cdt.ui.doxygen">
+			<path value=""/>
+		</doc-comment-owner>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration"/>
+</cproject>

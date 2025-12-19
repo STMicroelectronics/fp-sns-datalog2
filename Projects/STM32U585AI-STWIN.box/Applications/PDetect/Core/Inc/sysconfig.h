@@ -31,12 +31,8 @@
 // *********************
 
 #define BOARD_ID_BOXA           0x0E
-#define BLE_FW_ID_DATALOG2_BOXA 0x2E
-#define USB_FW_ID_DATALOG2_BOXA 0x2D
-
-#define BOARD_ID_BOXB           0x12
-#define BLE_FW_ID_DATALOG2_BOXB 0x07
-#define USB_FW_ID_DATALOG2_BOXB 0x08
+#define BLE_FW_ID_DATALOG2_BOXA 0x39
+#define USB_FW_ID_DATALOG2_BOXA 0x39
 
 // Other hardware configuration
 // ****************************
@@ -58,7 +54,7 @@
 #define MT_ALLOWED_ERROR_COUNT                    0x2U
 
 // file sysinit.c
-#define INIT_TASK_CFG_ENABLE_BOOT_IF              0
+#define INIT_TASK_CFG_ENABLE_BOOT_IF              1
 #define INIT_TASK_CFG_STACK_SIZE                  (TX_MINIMUM_STACK*10)
 
 //memory used by eloom to build up the system using azure rtos
@@ -121,7 +117,7 @@
 
 // USBX Tasks
 #define USB_EP_BULKIN_CFG_STACK_DEPTH             (1 * 1024)
-#define USB_EP_BULKIN_CFG_PRIORITY                (3)
+#define USB_EP_BULKIN_CFG_PRIORITY                (10)
 #define USB_EP_BULKIN_CFG_PREEMPTION_THRESHOLD    USB_EP_BULKIN_CFG_PRIORITY
 #ifdef ENABLE_THREADX_DBG_PIN
 #define USB_EP_BULKIN_TASK_CFG_TAG                (CON34_PIN_30)

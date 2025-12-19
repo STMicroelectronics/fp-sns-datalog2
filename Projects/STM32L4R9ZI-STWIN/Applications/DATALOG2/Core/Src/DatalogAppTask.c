@@ -37,6 +37,8 @@
 #include "automode.h"
 #include "rtc.h"
 
+#include "dfu_boot.h"
+
 
 #ifndef DT_TASK_CFG_STACK_DEPTH
 #define DT_TASK_CFG_STACK_DEPTH                   (TX_MINIMUM_STACK*2)
@@ -1133,6 +1135,29 @@ uint8_t DatalogAppTask_enable_all(bool status)
   return 0;
 }
 
+uint8_t DatalogAppTask_no_sensors_enabled(int32_t interface)
+{
+  char *p_serialized = NULL;
+  uint32_t size = 0;
+
+  if (interface == LOG_CTRL_MODE_USB) /* Manage start log error via USB */
+  {
+    char *message = "Enable at least one sensor to start acquisition";
+    PnPLSerializeCommandResponse(&p_serialized, &size, 0, message, false);
+    DatalogApp_Task_command_response_cb(p_serialized, size);
+  }
+  else /* Manage start log error via BLE as spontaneous message */
+  {
+    PnPLCommand_t pnpl_cmd;
+    sprintf(pnpl_cmd.comp_name, "%s", "Enable at least one sensor to start acquisition");
+    pnpl_cmd.comm_type = PNPL_CMD_ERROR;
+    pnpl_cmd.response = NULL;
+    PnPLSerializeResponse(&pnpl_cmd, &p_serialized, &size, 0);
+    IStream_send_async((IStream_t *) sTaskObj.ble_device, (uint8_t *) p_serialized, size);
+  }
+  return 0;
+}
+
 // IMLCController_t virtual functions
 uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(const char *ucf_data, int32_t ucf_size)
 {
@@ -1228,24 +1253,10 @@ static sys_error_code_t DatalogAppTaskExecuteStepState1(AManagedTask *_this)
 
       /*  Disable interrupts for timers */
       HAL_NVIC_DisableIRQ(TIM6_DAC_IRQn);
-      HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
 
-      __enable_irq();
-      HAL_RCC_DeInit();
-      HAL_DeInit();
-      SysTick->CTRL = SysTick->LOAD = SysTick->VAL = 0;
-      __HAL_SYSCFG_REMAPMEMORY_SYSTEMFLASH();
+      /* Reset the system to boot in DFU mode */
+      DfuBoot_set_flag_and_reset();
 
-      /* Jump to user application */
-      typedef void (*pFunction)(void);
-      pFunction JumpToApplication;
-      uint32_t JumpAddress;
-      JumpAddress = *(__IO uint32_t *)(BOOTLOADER_ADDRESS + 4);
-      JumpToApplication = (pFunction) JumpAddress;
-
-      /* Initialize user application's Stack Pointer */
-      __set_MSP(*(__IO uint32_t *) BOOTLOADER_ADDRESS);
-      JumpToApplication();
       res = SYS_NO_ERROR_CODE;
     }
     else if (message == DT_FORCE_STEP)

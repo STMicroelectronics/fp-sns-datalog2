@@ -47,10 +47,8 @@ extern "C" {
 /**************************/
 
 
-
 /* Inline functions definition */
 /*******************************/
-
 
 
 #ifdef __cplusplus

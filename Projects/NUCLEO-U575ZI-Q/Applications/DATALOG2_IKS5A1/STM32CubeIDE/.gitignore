@@ -1,0 +1,10 @@
+/.settings/
+/Debug/
+/NUCLEO-U575ZI-Q_SensorManager_prj Debug.launch
+/DPU Demo Debug/
+/NUCLEO-U575ZI-Q_SensorManager_prj DPU Demo Debug.launch
+/Release/
+/NUCLEO-U575ZI-Q_UxDevice_CDC_ACM_prj DPU Demo Debug.launch
+/NUCLEO-U575ZI-Q_UxDevice_CDC_ACM_prj Debug.launch
+/NUCLEO-U575ZI-Q_UxDevice_CDC_ACM_prj Release.launch
+/NUCLEO-U575ZI-Q_DATALOG2_prj Debug.launch

@@ -175,12 +175,12 @@ extern "C" {
 /* USER CODE BEGIN 1 */
 
 /* Package Version firmware */
-#define BLE_VERSION_FW_MAJOR  '4'
-#define BLE_VERSION_FW_MINOR  '0'
+#define BLE_VERSION_FW_MAJOR  '3'
+#define BLE_VERSION_FW_MINOR  '2'
 #define BLE_VERSION_FW_PATCH  '0'
 
 /* Firmware Package Name */
-#define BLE_FW_PACKAGENAME          "HSD2v31"
+#define BLE_FW_PACKAGENAME          "HSD2v32"
 
 /* Max Stream ID dedicated to custom data, utility stream (like advertise option byte) could be added after this */
 #define MAX_CUSTOM_DATA_STREAM_ID          (SM_MAX_SENSORS)

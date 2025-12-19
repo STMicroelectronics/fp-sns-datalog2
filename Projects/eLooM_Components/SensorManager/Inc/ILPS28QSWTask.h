@@ -32,6 +32,7 @@ extern "C" {
 #include "ISensorMems.h"
 #include "ISensorMems_vtbl.h"
 #include "mx.h"
+#include "ilps28qsw_reg.h"
 
 #define ILPS28QSW_MAX_DRDY_PERIOD           (1.0)  /* seconds */
 
@@ -39,7 +40,6 @@ extern "C" {
 #define ILPS28QSW_MAX_WTM_LEVEL             (128)  /* samples */
 #endif
 
-#define ILPS28QSW_MIN_WTM_LEVEL             (16)
 #define ILPS28QSW_MAX_SAMPLES_PER_IT        (ILPS28QSW_MAX_WTM_LEVEL)
 
 
@@ -114,7 +114,7 @@ struct _ILPS28QSWTask
   /**
     * Sensor data from FIFO
     */
-  uint8_t p_fifo_data_buff[ILPS28QSW_MAX_WTM_LEVEL * 3];
+  ilps28qsw_fifo_data_t p_fifo_data_buff[ILPS28QSW_MAX_WTM_LEVEL];
 
   /**
     * ::IEventSrc interface implementation for this class.

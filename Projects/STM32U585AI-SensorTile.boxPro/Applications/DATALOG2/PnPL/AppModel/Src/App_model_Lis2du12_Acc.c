@@ -329,7 +329,14 @@ uint8_t lis2du12_acc_set_odr(pnpl_lis2du12_acc_odr_t enum_id, char **response_me
 #if (HSD_USE_DUMMY_DATA != 1)
     lis2du12_acc_set_samples_per_ts((int32_t)value, NULL);
 #endif
-    __stream_control(true);
+    if (__stream_control(true) != PNPL_NO_ERROR_CODE)
+    {
+      if (response_message != NULL)
+      {
+        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+      }
+      ret = PNPL_BASE_ERROR_CODE;
+    }
     __sc_set_ble_stream_params(lis2du12_acc_model.id);
   }
   return ret;
@@ -390,8 +397,14 @@ uint8_t lis2du12_acc_set_enable(bool value, char **response_message)
   }
   if (ret == SYS_NO_ERROR_CODE)
   {
-    /* USER Code */
-    __stream_control(true);
+    if (__stream_control(true) != PNPL_NO_ERROR_CODE)
+    {
+      if (response_message != NULL)
+      {
+        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+      }
+      ret = PNPL_BASE_ERROR_CODE;
+    }
     __sc_set_ble_stream_params(lis2du12_acc_model.id);
   }
   return ret;

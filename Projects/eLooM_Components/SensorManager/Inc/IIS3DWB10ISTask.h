@@ -179,7 +179,7 @@ struct _IIS3DWB10ISTask
   /**
     * Buffer to store the data from ispu
     */
-  uint16_t p_ispu_output_buff[32];
+  uint16_t p_ispu_output_buff[16];
 
   /**
     * Specifies the FIFO level

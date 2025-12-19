@@ -234,6 +234,7 @@ uint8_t Wifi_Config_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *seri
   if (json_object_dothas_value(tempJSONObject, "wifi_config*wifi_disconnect"))
   {
     valid_function = true;
+    ret = wifi_config_wifi_disconnect();
   }
   if (json_object_dothas_value(tempJSONObject, "wifi_config*set_ftp_credentials.password"))
   {

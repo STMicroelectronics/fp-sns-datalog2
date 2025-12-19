@@ -20,9 +20,9 @@
 /**
   ******************************************************************************
   * This file has been auto generated from the following Device Template Model:
-  * dtmi:vespucci:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2;8
+  * dtmi:appconfig:steval_stwinbx1:FP_SNS_DATALOG2_Datalog2;9
   *
-  * Created by: DTDL2PnPL_cGen version 2.1.0
+  * Created by: DTDL2PnPL_cGen version 2.3.0
   *
   * WARNING! All changes made to this file will be lost if this is regenerated
   ******************************************************************************
@@ -71,7 +71,6 @@ extern "C" {
 #include "App_model_Iis2mdc_Mag.h"
 #include "App_model_Iis3dwb_Acc.h"
 #include "App_model_Ilps22qs_Press.h"
-#include "App_model_Ilps28qsw_Press.h"
 #include "App_model_Imp23absu_Mic.h"
 #include "App_model_Imp34dt05_Mic.h"
 #include "App_model_Ism330dhcx_Acc.h"
@@ -81,12 +80,19 @@ extern "C" {
 #include "App_model_Iis2dulpx_Acc.h"
 #include "App_model_Iis2dulpx_Mlc.h"
 #include "App_model_Iis3dwb_Ext_Acc.h"
+#include "App_model_Iis3dwb10is_Ext_Acc.h"
+#include "App_model_Iis3dwb10is_Ext_Ispu.h"
+#include "App_model_Ilps28qsw_Press.h"
 #include "App_model_Ism330bx_Acc.h"
 #include "App_model_Ism330bx_Gyro.h"
 #include "App_model_Ism330bx_Mlc.h"
 #include "App_model_Ism330is_Acc.h"
 #include "App_model_Ism330is_Gyro.h"
 #include "App_model_Ism330is_Ispu.h"
+#include "App_model_Ism6hg256x_L_Acc.h"
+#include "App_model_Ism6hg256x_H_Acc.h"
+#include "App_model_Ism6hg256x_Gyro.h"
+#include "App_model_Ism6hg256x_Mlc.h"
 #include "App_model_Stts22h_Ext_Temp.h"
 #include "App_model_Tsc1641_Pow.h"
 #include "App_model_Automode.h"
@@ -118,7 +124,7 @@ extern "C" {
 #define FORMAT_LEN 10U
 
 #define FW_VERSION_MAJOR    "3"
-#define FW_VERSION_MINOR    "1"
+#define FW_VERSION_MINOR    "2"
 #define FW_VERSION_PATCH    "0"
 
 /* Max BLE bandwidth for each sensor (in Byte) */
@@ -190,6 +196,7 @@ typedef struct _AppModel_t
   bool iis2iclx_mlc_ucf_valid;
   bool ism330bx_mlc_ucf_valid;
   bool ism330dhcx_mlc_ucf_valid;
+  bool ism6hg256x_mlc_ucf_valid;
   bool ispu_ucf_valid;
   uint32_t total_bandwidth;
 } AppModel_t;

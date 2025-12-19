@@ -38,10 +38,14 @@ typedef struct _IEventSrc_vtbl IEventSrc_vtbl;
 struct _IEventSrc_vtbl
 {
   sys_error_code_t (*Init)(IEventSrc *_this);                                                      ///< @sa IEventSrcInit
-  sys_error_code_t (*AddEventListener)(IEventSrc *_this, IEventListener *pListener);               ///< @sa IEventSrcAddEventListener
-  sys_error_code_t (*RemoveEventListener)(IEventSrc *_this, IEventListener *pListener);            ///< @sa IEventSrcRemoveEventListener
-  uint32_t (*GetMaxListenerCount)(const IEventSrc *_this);                                         ///< @sa IEventSrcGetMaxListenerCount
-  sys_error_code_t (*SendEvent)(const IEventSrc *_this, const IEvent *pxEvent, void *pvParams);    ///< @sa IEventSrcSendEvent
+  sys_error_code_t (*AddEventListener)(IEventSrc *_this,
+                                       IEventListener *pListener);               ///< @sa IEventSrcAddEventListener
+  sys_error_code_t (*RemoveEventListener)(IEventSrc *_this,
+                                          IEventListener *pListener);            ///< @sa IEventSrcRemoveEventListener
+  uint32_t (*GetMaxListenerCount)(const IEventSrc
+                                  *_this);                                         ///< @sa IEventSrcGetMaxListenerCount
+  sys_error_code_t (*SendEvent)(const IEventSrc *_this, const IEvent *pxEvent,
+                                void *pvParams);    ///< @sa IEventSrcSendEvent
 };
 
 /**

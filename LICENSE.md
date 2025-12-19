@@ -13,6 +13,7 @@
 | Components/iis3dwb       			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ilps22qs				| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ilps28qsw				| STMicroelectronics				| BSD-3-Clause	        |
+| Components/ism6hg256x    			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ism330bx      			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ism330dhcx    			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ism330is      			| STMicroelectronics				| BSD-3-Clause	        |
@@ -64,8 +65,10 @@
 | B-U585I-IOT02A/DATALOG2	  		| STMicroelectronics				| SLA0094	            |
 | NUCLEO-H7A3ZI-Q/DATALOG2	  		| STMicroelectronics				| SLA0094	            |
 | NUCLEO-H7A3ZI-Q/DATALOG2_IKS4A1  	| STMicroelectronics				| SLA0094	            |
+| NUCLEO-H7A3ZI-Q/DATALOG2_IKS5A1  	| STMicroelectronics				| SLA0094	            |
 | NUCLEO-U575ZI-Q/DATALOG2	  		| STMicroelectronics				| SLA0094	            |
 | NUCLEO-U575ZI-Q/DATALOG2_IKS4A1	| STMicroelectronics				| SLA0094	            |
+| NUCLEO-U575ZI-Q/DATALOG2_IKS5A1	| STMicroelectronics				| SLA0094	            |
 | SensorTile.box PRO/DATALOG2  		| STMicroelectronics				| SLA0094	            |
 | STWIN/DATALOG2			  		| STMicroelectronics				| SLA0094	            |
 | STWIN.box/DATALOG2		  		| STMicroelectronics				| SLA0094	            |

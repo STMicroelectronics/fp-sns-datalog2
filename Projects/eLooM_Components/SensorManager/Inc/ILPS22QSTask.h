@@ -32,6 +32,7 @@ extern "C" {
 #include "ISensorMems.h"
 #include "ISensorMems_vtbl.h"
 #include "mx.h"
+#include "ilps22qs_reg.h"
 
 #define ILPS22QS_MAX_DRDY_PERIOD           (1.0)  /* seconds */
 
@@ -113,7 +114,7 @@ struct _ILPS22QSTask
   /**
     * Sensor data from FIFO
     */
-  uint8_t p_fifo_data_buff[ILPS22QS_MAX_WTM_LEVEL * 3];
+  ilps22qs_fifo_data_t p_fifo_data_buff[ILPS22QS_MAX_WTM_LEVEL];
 
   /**
     * ::IEventSrc interface implementation for this class.

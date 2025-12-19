@@ -157,6 +157,7 @@ extern const MX_GPIOParams_t MX_GPIO_HWTAG1InitParams;
   * SPI2 configuration parameters.
   */
 extern const MX_SPIParams_t MX_SPI2InitParams;
+extern const MX_SPIParams_t MX_SPI2_20MHzInitParams;
 
 /**
   * SPI3 configuration parameters.

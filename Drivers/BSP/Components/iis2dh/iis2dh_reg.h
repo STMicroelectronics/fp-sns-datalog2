@@ -7,13 +7,12 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
+  * Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -109,7 +108,7 @@ typedef struct
   *
   */
 
-typedef int32_t (*stmdev_write_ptr)(void *, uint8_t, uint8_t *, uint16_t);
+typedef int32_t (*stmdev_write_ptr)(void *, uint8_t, const uint8_t *, uint16_t);
 typedef int32_t (*stmdev_read_ptr)(void *, uint8_t, uint8_t *, uint16_t);
 typedef void (*stmdev_mdelay_ptr)(uint32_t millisec);
 
@@ -122,6 +121,9 @@ typedef struct
   stmdev_mdelay_ptr   mdelay;
   /** Customizable optional pointer **/
   void *handle;
+
+  /** private data **/
+  void *priv_data;
 } stmdev_ctx_t;
 
 /**
@@ -705,9 +707,9 @@ typedef union
  * them with a custom implementation.
  */
 
-int32_t iis2dh_read_reg(stmdev_ctx_t *ctx, uint8_t reg, uint8_t *data,
+int32_t iis2dh_read_reg(const stmdev_ctx_t *ctx, uint8_t reg, uint8_t *data,
                         uint16_t len);
-int32_t iis2dh_write_reg(stmdev_ctx_t *ctx, uint8_t reg,
+int32_t iis2dh_write_reg(const stmdev_ctx_t *ctx, uint8_t reg,
                          uint8_t *data,
                          uint16_t len);
 
@@ -729,21 +731,21 @@ float_t iis2dh_from_fs8_lp_to_mg(int16_t lsb);
 float_t iis2dh_from_fs16_lp_to_mg(int16_t lsb);
 float_t iis2dh_from_lsb_lp_to_celsius(int16_t lsb);
 
-int32_t iis2dh_temp_status_reg_get(stmdev_ctx_t *ctx, uint8_t *buff);
-int32_t iis2dh_temp_data_ready_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_temp_status_reg_get(const stmdev_ctx_t *ctx, uint8_t *buff);
+int32_t iis2dh_temp_data_ready_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_temp_data_ovr_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_temp_data_ovr_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_temperature_raw_get(stmdev_ctx_t *ctx, int16_t *val);
+int32_t iis2dh_temperature_raw_get(const stmdev_ctx_t *ctx, int16_t *val);
 
 typedef enum
 {
   IIS2DH_TEMP_DISABLE  = 0,
   IIS2DH_TEMP_ENABLE   = 3,
 } iis2dh_temp_en_t;
-int32_t iis2dh_temperature_meas_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_temperature_meas_set(const stmdev_ctx_t *ctx,
                                     iis2dh_temp_en_t val);
-int32_t iis2dh_temperature_meas_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_temperature_meas_get(const stmdev_ctx_t *ctx,
                                     iis2dh_temp_en_t *val);
 
 typedef enum
@@ -752,9 +754,9 @@ typedef enum
   IIS2DH_NM_10bit   = 1,
   IIS2DH_LP_8bit    = 2,
 } iis2dh_op_md_t;
-int32_t iis2dh_operating_mode_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_operating_mode_set(const stmdev_ctx_t *ctx,
                                   iis2dh_op_md_t val);
-int32_t iis2dh_operating_mode_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_operating_mode_get(const stmdev_ctx_t *ctx,
                                   iis2dh_op_md_t *val);
 
 typedef enum
@@ -770,12 +772,12 @@ typedef enum
   IIS2DH_ODR_1kHz620_LP                  = 0x08,
   IIS2DH_ODR_5kHz376_LP_1kHz344_NM_HP    = 0x09,
 } iis2dh_odr_t;
-int32_t iis2dh_data_rate_set(stmdev_ctx_t *ctx, iis2dh_odr_t val);
-int32_t iis2dh_data_rate_get(stmdev_ctx_t *ctx, iis2dh_odr_t *val);
+int32_t iis2dh_data_rate_set(const stmdev_ctx_t *ctx, iis2dh_odr_t val);
+int32_t iis2dh_data_rate_get(const stmdev_ctx_t *ctx, iis2dh_odr_t *val);
 
-int32_t iis2dh_high_pass_on_outputs_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_high_pass_on_outputs_set(const stmdev_ctx_t *ctx,
                                         uint8_t val);
-int32_t iis2dh_high_pass_on_outputs_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_high_pass_on_outputs_get(const stmdev_ctx_t *ctx,
                                         uint8_t *val);
 
 typedef enum
@@ -785,9 +787,9 @@ typedef enum
   IIS2DH_MEDIUM      = 2,
   IIS2DH_LIGHT       = 3,
 } iis2dh_hpcf_t;
-int32_t iis2dh_high_pass_bandwidth_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_high_pass_bandwidth_set(const stmdev_ctx_t *ctx,
                                        iis2dh_hpcf_t val);
-int32_t iis2dh_high_pass_bandwidth_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_high_pass_bandwidth_get(const stmdev_ctx_t *ctx,
                                        iis2dh_hpcf_t *val);
 
 typedef enum
@@ -797,9 +799,9 @@ typedef enum
   IIS2DH_NORMAL           = 2,
   IIS2DH_AUTORST_ON_INT   = 3,
 } iis2dh_hpm_t;
-int32_t iis2dh_high_pass_mode_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_high_pass_mode_set(const stmdev_ctx_t *ctx,
                                   iis2dh_hpm_t val);
-int32_t iis2dh_high_pass_mode_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_high_pass_mode_get(const stmdev_ctx_t *ctx,
                                   iis2dh_hpm_t *val);
 
 typedef enum
@@ -809,22 +811,22 @@ typedef enum
   IIS2DH_8g   = 2,
   IIS2DH_16g  = 3,
 } iis2dh_fs_t;
-int32_t iis2dh_full_scale_set(stmdev_ctx_t *ctx, iis2dh_fs_t val);
-int32_t iis2dh_full_scale_get(stmdev_ctx_t *ctx, iis2dh_fs_t *val);
+int32_t iis2dh_full_scale_set(const stmdev_ctx_t *ctx, iis2dh_fs_t val);
+int32_t iis2dh_full_scale_get(const stmdev_ctx_t *ctx, iis2dh_fs_t *val);
 
-int32_t iis2dh_block_data_update_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_block_data_update_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_block_data_update_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_block_data_update_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_filter_reference_set(stmdev_ctx_t *ctx, uint8_t *buff);
-int32_t iis2dh_filter_reference_get(stmdev_ctx_t *ctx, uint8_t *buff);
+int32_t iis2dh_filter_reference_set(const stmdev_ctx_t *ctx, uint8_t *buff);
+int32_t iis2dh_filter_reference_get(const stmdev_ctx_t *ctx, uint8_t *buff);
 
-int32_t iis2dh_xl_data_ready_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_xl_data_ready_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_xl_data_ovr_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_xl_data_ovr_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_acceleration_raw_get(stmdev_ctx_t *ctx, int16_t *val);
+int32_t iis2dh_acceleration_raw_get(const stmdev_ctx_t *ctx, int16_t *val);
 
-int32_t iis2dh_device_id_get(stmdev_ctx_t *ctx, uint8_t *buff);
+int32_t iis2dh_device_id_get(const stmdev_ctx_t *ctx, uint8_t *buff);
 
 typedef enum
 {
@@ -832,53 +834,53 @@ typedef enum
   IIS2DH_ST_POSITIVE  = 1,
   IIS2DH_ST_NEGATIVE  = 2,
 } iis2dh_st_t;
-int32_t iis2dh_self_test_set(stmdev_ctx_t *ctx, iis2dh_st_t val);
-int32_t iis2dh_self_test_get(stmdev_ctx_t *ctx, iis2dh_st_t *val);
+int32_t iis2dh_self_test_set(const stmdev_ctx_t *ctx, iis2dh_st_t val);
+int32_t iis2dh_self_test_get(const stmdev_ctx_t *ctx, iis2dh_st_t *val);
 
 typedef enum
 {
   IIS2DH_LSB_AT_LOW_ADD = 0,
   IIS2DH_MSB_AT_LOW_ADD = 1,
 } iis2dh_ble_t;
-int32_t iis2dh_data_format_set(stmdev_ctx_t *ctx, iis2dh_ble_t val);
-int32_t iis2dh_data_format_get(stmdev_ctx_t *ctx, iis2dh_ble_t *val);
+int32_t iis2dh_data_format_set(const stmdev_ctx_t *ctx, iis2dh_ble_t val);
+int32_t iis2dh_data_format_get(const stmdev_ctx_t *ctx, iis2dh_ble_t *val);
 
-int32_t iis2dh_boot_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_boot_get(stmdev_ctx_t *ctx, uint8_t *val);
-int32_t iis2dh_int_occurrencies_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_boot_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_boot_get(const stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_int_occurrencies_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_status_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_status_get(const stmdev_ctx_t *ctx,
                           iis2dh_status_reg_t *val);
 
-int32_t iis2dh_int1_gen_conf_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_int1_gen_conf_set(const stmdev_ctx_t *ctx,
                                  iis2dh_int1_cfg_t *val);
-int32_t iis2dh_int1_gen_conf_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_int1_gen_conf_get(const stmdev_ctx_t *ctx,
                                  iis2dh_int1_cfg_t *val);
 
-int32_t iis2dh_int1_gen_source_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_int1_gen_source_get(const stmdev_ctx_t *ctx,
                                    iis2dh_int1_src_t *val);
 
-int32_t iis2dh_int1_gen_threshold_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_int1_gen_threshold_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_int1_gen_threshold_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_int1_gen_threshold_get(const stmdev_ctx_t *ctx,
                                       uint8_t *val);
 
-int32_t iis2dh_int1_gen_duration_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_int1_gen_duration_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_int1_gen_duration_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_int1_gen_duration_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_int2_gen_conf_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_int2_gen_conf_set(const stmdev_ctx_t *ctx,
                                  iis2dh_int2_cfg_t *val);
-int32_t iis2dh_int2_gen_conf_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_int2_gen_conf_get(const stmdev_ctx_t *ctx,
                                  iis2dh_int2_cfg_t *val);
 
-int32_t iis2dh_int2_gen_source_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_int2_gen_source_get(const stmdev_ctx_t *ctx,
                                    iis2dh_int2_src_t *val);
 
-int32_t iis2dh_int2_gen_threshold_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_int2_gen_threshold_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_int2_gen_threshold_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_int2_gen_threshold_get(const stmdev_ctx_t *ctx,
                                       uint8_t *val);
 
-int32_t iis2dh_int2_gen_duration_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_int2_gen_duration_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_int2_gen_duration_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_int2_gen_duration_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
 typedef enum
 {
@@ -891,18 +893,18 @@ typedef enum
   IIS2DH_ON_INT2_TAP_GEN          = 6,
   IIS2DH_ON_INT1_INT2_TAP_GEN     = 7,
 } iis2dh_hp_t;
-int32_t iis2dh_high_pass_int_conf_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_high_pass_int_conf_set(const stmdev_ctx_t *ctx,
                                       iis2dh_hp_t val);
-int32_t iis2dh_high_pass_int_conf_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_high_pass_int_conf_get(const stmdev_ctx_t *ctx,
                                       iis2dh_hp_t *val);
 
-int32_t iis2dh_pin_int1_config_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_pin_int1_config_set(const stmdev_ctx_t *ctx,
                                    iis2dh_ctrl_reg3_t *val);
-int32_t iis2dh_pin_int1_config_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_pin_int1_config_get(const stmdev_ctx_t *ctx,
                                    iis2dh_ctrl_reg3_t *val);
 
-int32_t iis2dh_int2_pin_detect_4d_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_int2_pin_detect_4d_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_int2_pin_detect_4d_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_int2_pin_detect_4d_get(const stmdev_ctx_t *ctx,
                                       uint8_t *val);
 
 typedef enum
@@ -910,13 +912,13 @@ typedef enum
   IIS2DH_INT2_PULSED   = 0,
   IIS2DH_INT2_LATCHED  = 1,
 } iis2dh_lir_int2_t;
-int32_t iis2dh_int2_pin_notification_mode_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_int2_pin_notification_mode_set(const stmdev_ctx_t *ctx,
                                               iis2dh_lir_int2_t val);
-int32_t iis2dh_int2_pin_notification_mode_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_int2_pin_notification_mode_get(const stmdev_ctx_t *ctx,
                                               iis2dh_lir_int2_t *val);
 
-int32_t iis2dh_int1_pin_detect_4d_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_int1_pin_detect_4d_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_int1_pin_detect_4d_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_int1_pin_detect_4d_get(const stmdev_ctx_t *ctx,
                                       uint8_t *val);
 
 typedef enum
@@ -924,30 +926,30 @@ typedef enum
   IIS2DH_INT1_PULSED   = 0,
   IIS2DH_INT1_LATCHED  = 1,
 } iis2dh_lir_int1_t;
-int32_t iis2dh_int1_pin_notification_mode_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_int1_pin_notification_mode_set(const stmdev_ctx_t *ctx,
                                               iis2dh_lir_int1_t val);
-int32_t iis2dh_int1_pin_notification_mode_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_int1_pin_notification_mode_get(const stmdev_ctx_t *ctx,
                                               iis2dh_lir_int1_t *val);
 
-int32_t iis2dh_pin_int2_config_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_pin_int2_config_set(const stmdev_ctx_t *ctx,
                                    iis2dh_ctrl_reg6_t *val);
-int32_t iis2dh_pin_int2_config_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_pin_int2_config_get(const stmdev_ctx_t *ctx,
                                    iis2dh_ctrl_reg6_t *val);
 
-int32_t iis2dh_fifo_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_fifo_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_fifo_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_fifo_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_fifo_watermark_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_fifo_watermark_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_fifo_watermark_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_fifo_watermark_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
 typedef enum
 {
   IIS2DH_INT1_GEN = 0,
   IIS2DH_INT2_GEN = 1,
 } iis2dh_tr_t;
-int32_t iis2dh_fifo_trigger_event_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_fifo_trigger_event_set(const stmdev_ctx_t *ctx,
                                       iis2dh_tr_t val);
-int32_t iis2dh_fifo_trigger_event_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_fifo_trigger_event_get(const stmdev_ctx_t *ctx,
                                       iis2dh_tr_t *val);
 
 typedef enum
@@ -957,74 +959,64 @@ typedef enum
   IIS2DH_DYNAMIC_STREAM_MODE   = 2,
   IIS2DH_STREAM_TO_FIFO_MODE   = 3,
 } iis2dh_fm_t;
-int32_t iis2dh_fifo_mode_set(stmdev_ctx_t *ctx, iis2dh_fm_t val);
-int32_t iis2dh_fifo_mode_get(stmdev_ctx_t *ctx, iis2dh_fm_t *val);
+int32_t iis2dh_fifo_mode_set(const stmdev_ctx_t *ctx, iis2dh_fm_t val);
+int32_t iis2dh_fifo_mode_get(const stmdev_ctx_t *ctx, iis2dh_fm_t *val);
 
-int32_t iis2dh_fifo_status_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_fifo_status_get(const stmdev_ctx_t *ctx,
                                iis2dh_fifo_src_reg_t *val);
 
-int32_t iis2dh_fifo_data_level_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_fifo_data_level_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_fifo_empty_flag_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_fifo_empty_flag_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_fifo_ovr_flag_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_fifo_ovr_flag_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_fifo_fth_flag_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_fifo_fth_flag_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_tap_conf_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_tap_conf_set(const stmdev_ctx_t *ctx,
                             iis2dh_click_cfg_t *val);
-int32_t iis2dh_tap_conf_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_tap_conf_get(const stmdev_ctx_t *ctx,
                             iis2dh_click_cfg_t *val);
 
-int32_t iis2dh_tap_source_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_tap_source_get(const stmdev_ctx_t *ctx,
                               iis2dh_click_src_t *val);
 
-int32_t iis2dh_tap_threshold_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_tap_threshold_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_tap_threshold_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_tap_threshold_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
 typedef enum
 {
   IIS2DH_TAP_PULSED   = 0,
   IIS2DH_TAP_LATCHED  = 1,
 } iis2dh_lir_click_t;
-int32_t iis2dh_tap_notification_mode_set(stmdev_ctx_t *ctx,
+int32_t iis2dh_tap_notification_mode_set(const stmdev_ctx_t *ctx,
                                          iis2dh_lir_click_t val);
-int32_t iis2dh_tap_notification_mode_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_tap_notification_mode_get(const stmdev_ctx_t *ctx,
                                          iis2dh_lir_click_t *val);
 
-int32_t iis2dh_shock_dur_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_shock_dur_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_shock_dur_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_shock_dur_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_quiet_dur_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_quiet_dur_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_quiet_dur_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_quiet_dur_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_double_tap_timeout_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_double_tap_timeout_get(stmdev_ctx_t *ctx,
+int32_t iis2dh_double_tap_timeout_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_double_tap_timeout_get(const stmdev_ctx_t *ctx,
                                       uint8_t *val);
 
-int32_t iis2dh_act_threshold_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_act_threshold_get(stmdev_ctx_t *ctx, uint8_t *val);
+int32_t iis2dh_act_threshold_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_act_threshold_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
-int32_t iis2dh_act_timeout_set(stmdev_ctx_t *ctx, uint8_t val);
-int32_t iis2dh_act_timeout_get(stmdev_ctx_t *ctx, uint8_t *val);
-
-typedef enum
-{
-  IIS2DH_PULL_UP_DISCONNECT  = 0,
-  IIS2DH_PULL_UP_CONNECT     = 1,
-} iis2dh_sdo_pu_disc_t;
-int32_t iis2dh_pin_sdo_sa0_mode_set(stmdev_ctx_t *ctx,
-                                    iis2dh_sdo_pu_disc_t val);
-int32_t iis2dh_pin_sdo_sa0_mode_get(stmdev_ctx_t *ctx,
-                                    iis2dh_sdo_pu_disc_t *val);
+int32_t iis2dh_act_timeout_set(const stmdev_ctx_t *ctx, uint8_t val);
+int32_t iis2dh_act_timeout_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
 typedef enum
 {
   IIS2DH_SPI_4_WIRE = 0,
   IIS2DH_SPI_3_WIRE = 1,
 } iis2dh_sim_t;
-int32_t iis2dh_spi_mode_set(stmdev_ctx_t *ctx, iis2dh_sim_t val);
-int32_t iis2dh_spi_mode_get(stmdev_ctx_t *ctx, iis2dh_sim_t *val);
+int32_t iis2dh_spi_mode_set(const stmdev_ctx_t *ctx, iis2dh_sim_t val);
+int32_t iis2dh_spi_mode_get(const stmdev_ctx_t *ctx, iis2dh_sim_t *val);
 
 /**
   * @}
@@ -1036,5 +1028,3 @@ int32_t iis2dh_spi_mode_get(stmdev_ctx_t *ctx, iis2dh_sim_t *val);
 #endif
 
 #endif /* IIS2DH_REGS_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

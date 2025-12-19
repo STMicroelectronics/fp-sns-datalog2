@@ -158,7 +158,6 @@ void SysDebugLogFreeHeapSize(void);
 int32_t putChar(int32_t ch);
 
 
-
 #ifdef __cplusplus
 }
 #endif

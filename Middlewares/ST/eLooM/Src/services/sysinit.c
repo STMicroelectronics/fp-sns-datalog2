@@ -126,7 +126,6 @@ struct _System
 static System s_xTheSystem;
 
 
-
 /* Private function declaration */
 /********************************/
 
@@ -201,6 +200,36 @@ sys_error_code_t SysInit(boolean_t bEnableBootIF)
 
   sys_error_code_t xRes = SYS_NO_ERROR_CODE;
 
+#if INIT_TASK_CFG_ENABLE_BOOT_IF == 1
+  if (bEnableBootIF)
+  {
+    s_xTheSystem.m_pxAppBootIF = SysGetBootIF();
+    if (s_xTheSystem.m_pxAppBootIF != NULL)
+    {
+      /* initialize the BootIF*/
+      xRes = IBootInit(s_xTheSystem.m_pxAppBootIF);
+      /* check the trigger condition */
+      if (IBootCheckJumpTrigger(s_xTheSystem.m_pxAppBootIF))
+      {
+        /* prepare to jump to the main application*/
+        uint32_t nAppAddress = IBootGetJumpAddress(s_xTheSystem.m_pxAppBootIF);
+        xRes = IBootOnJump(s_xTheSystem.m_pxAppBootIF, nAppAddress);
+        if (!SYS_IS_ERROR_CODE(xRes) &&
+            (((*(__IO uint32_t *)nAppAddress) & 0x2FFE0000) == 0x20000000))
+        {
+          typedef void (*pFunction)(void);
+          uint32_t JumpAddress = *(__IO uint32_t *)(nAppAddress + 4);
+          register pFunction JumpToApplication = (pFunction) JumpAddress;
+          /* initialize user application's Stack Pointer */
+          __set_MSP(*(__IO uint32_t *) nAppAddress);
+          /* jump to the user application*/
+          JumpToApplication();
+        }
+      }
+    }
+  }
+#endif  /* INIT_TASK_CFG_ENABLE_BOOT_IF */
+
   /* Reset of all peripherals, Initializes the Flash interface and the Systick.*/
   if (HAL_OK != HAL_Init())
   {
@@ -215,38 +244,6 @@ sys_error_code_t SysInit(boolean_t bEnableBootIF)
   // initialize the FreeRTOS heap.
   memset(ucHeap, 0, configTOTAL_HEAP_SIZE);
 #endif
-
-#if INIT_TASK_CFG_ENABLE_BOOT_IF == 1
-
-  if (bEnableBootIF)
-  {
-    s_xTheSystem.m_pxAppBootIF = SysGetBootIF();
-    if (s_xTheSystem.m_pxAppBootIF != NULL)
-    {
-      /* initialize the BootIF*/
-      xRes = IBootInit(s_xTheSystem.m_pxAppBootIF);
-      // check the trigger condition
-      if (!IBootCheckDFUTrigger(s_xTheSystem.m_pxAppBootIF))
-      {
-        /* prepare to jump to the main application*/
-        uint32_t nAppAddress = IBootGetAppAdderss(s_xTheSystem.m_pxAppBootIF);
-        xRes = IBootOnJampToApp(s_xTheSystem.m_pxAppBootIF, nAppAddress);
-        if (!SYS_IS_ERROR_CODE(xRes) &&
-            (((*(__IO uint32_t *)nAppAddress) & 0x2FFE0000) == 0x20000000))
-        {
-          typedef void (*pFunction)(void);
-          volatile uint32_t JumpAddress = *(__IO uint32_t *)(nAppAddress + 4);
-          volatile pFunction JumpToApplication = (pFunction) JumpAddress;
-          /* initialize user application's Stack Pointer */
-          __set_MSP(*(__IO uint32_t *) nAppAddress);
-          /* jump to the user application*/
-          JumpToApplication();
-        }
-      }
-    }
-  }
-
-#endif  /* INIT_TASK_CFG_ENABLE_BOOT_IF */
 
 #ifdef SYS_DEBUG
   if (SysDebugInit() != 0)
@@ -440,7 +437,7 @@ static void InitTaskRun(ULONG thread_input)
      At the end of the system initialization all tasks with auto_start set to 1 are resumed. */
 
   // allocate the system memory pool
-  CHAR* pool_name = "SYS_MEM_POOL";
+  CHAR *pool_name = "SYS_MEM_POOL";
   if (TX_SUCCESS != tx_byte_pool_create(&s_xTheSystem.m_xSysMemPool, pool_name, s_xTheSystem.m_pnHeap,
                                         INIT_TASK_CFG_HEAP_SIZE))
   {
@@ -455,9 +452,9 @@ static void InitTaskRun(ULONG thread_input)
   {
     sys_error_handler();
   }
-  CHAR* queue_name = "SYS_Q";
+  CHAR *queue_name = "SYS_Q";
   (void)tx_queue_create(&s_xTheSystem.m_xSysQueue, queue_name, INIT_TASK_CFG_QUEUE_ITEM_SIZE / sizeof(uint32_t), pcMemory,
-                  INIT_TASK_CFG_QUEUE_ITEM_SIZE * INIT_TASK_CFG_QUEUE_LENGTH);
+                        INIT_TASK_CFG_QUEUE_ITEM_SIZE * INIT_TASK_CFG_QUEUE_LENGTH);
 
   /* Check if the system has resumed from WWDG reset*/
   if (__HAL_RCC_GET_FLAG(SYS_RCC_FLAG_WWDGRST) != RESET)
@@ -795,7 +792,7 @@ void tx_application_define(void *first_unused_memory)
 {
   UINT nRes;
   // create the INIT task.
-  CHAR* thread_name = "INIT";
+  CHAR *thread_name = "INIT";
   s_xTheSystem.pvFirstUnusedMemory = first_unused_memory;
   nRes = tx_thread_create(&s_xTheSystem.m_xInitTask, thread_name, InitTaskRun, ELOOM_MAGIC_NUMBER, s_xTheSystem.pvFirstUnusedMemory, INIT_TASK_CFG_STACK_SIZE, INIT_TASK_CFG_PRIORITY, INIT_TASK_CFG_PRIORITY, TX_NO_TIME_SLICE, TX_AUTO_START);
   if (nRes != TX_SUCCESS)

@@ -1217,13 +1217,13 @@ static sys_error_code_t IIS2DLPCTaskSensorInit(IIS2DLPCTask *_this)
   int16_t data[3];
   iis2dlpc_acceleration_raw_get(p_sensor_drv, data);
 
-  ret_val = iis2dlpc_reset_set(p_sensor_drv, 1);
+  ret_val = iis2dlpc_reset_set(p_sensor_drv);
   do
   {
     iis2dlpc_reset_get(p_sensor_drv, &reg0);
   } while (reg0);
 
-  iis2dlpc_boot_set(p_sensor_drv, PROPERTY_ENABLE);
+  iis2dlpc_boot_set(p_sensor_drv);
 
   iis2dlpc_spi_mode_set(p_sensor_drv, IIS2DLPC_SPI_4_WIRE);
 

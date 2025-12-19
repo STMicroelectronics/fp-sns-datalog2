@@ -42,6 +42,7 @@ extern "C" {
 #define SYS_DBG_SPIBUS                     SYS_DBG_ON                 ///< SPIBus task debug control byte
 #define SYS_DBG_I2CBUS                     SYS_DBG_ON                 ///< I2CBus task debug control byte
 #define SYS_DBG_H3LIS331DL                 SYS_DBG_ON                 ///< H3LIS331DL sensor task debug control byte
+#define SYS_DBG_IIS3DWB10IS                SYS_DBG_ON                 ///< IIS3DWB10IS sensor task debug control byte
 #define SYS_DBG_ILPS28QSW                  SYS_DBG_ON                 ///< ILPS28QSW sensor task debug control byte
 #define SYS_DBG_LSM6DSV16BX                SYS_DBG_ON                 ///< LSM6DSV16BX sensor task debug control byte
 #define SYS_DBG_LSM6DSV16X                 SYS_DBG_ON                 ///< LSM6DSV16X sensor task debug control byte

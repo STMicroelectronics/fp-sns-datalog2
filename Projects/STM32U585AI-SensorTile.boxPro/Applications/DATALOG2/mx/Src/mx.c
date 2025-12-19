@@ -188,6 +188,15 @@ const MX_SPIParams_t MX_SPI3InitParams =
   .spi_dma_tx_irq_n = GPDMA1_Channel7_IRQn
 };
 
+const MX_SPIParams_t MX_SPI3_20MHzInitParams =
+{
+  .p_mx_init_f = MX_SPI3_20MHz_Init,
+  .p_spi_handle = &hspi3,
+  .p_mx_dma_init_f = MX_GPDMA1_InitCustom,
+  .spi_dma_rx_irq_n = GPDMA1_Channel6_IRQn,
+  .spi_dma_tx_irq_n = GPDMA1_Channel7_IRQn
+};
+
 /**
   * I2C1 initialization parameters.
   */

@@ -232,7 +232,14 @@ uint8_t mp23db01hp_mic_set_odr(pnpl_mp23db01hp_mic_odr_t enum_id, char **respons
 #if (HSD_USE_DUMMY_DATA != 1)
     mp23db01hp_mic_set_samples_per_ts(value, NULL);
 #endif
-    __stream_control(true);
+    if (__stream_control(true) != PNPL_NO_ERROR_CODE)
+    {
+      if (response_message != NULL)
+      {
+        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+      }
+      ret = PNPL_BASE_ERROR_CODE;
+    }
   }
   return ret;
 }
@@ -254,8 +261,14 @@ uint8_t mp23db01hp_mic_set_enable(bool value, char **response_message)
   }
   if (ret == SYS_NO_ERROR_CODE)
   {
-    /* USER Code */
-    __stream_control(true);
+    if (__stream_control(true) != PNPL_NO_ERROR_CODE)
+    {
+      if (response_message != NULL)
+      {
+        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+      }
+      ret = PNPL_BASE_ERROR_CODE;
+    }
   }
   return ret;
 }

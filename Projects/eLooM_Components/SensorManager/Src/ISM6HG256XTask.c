@@ -67,6 +67,10 @@
 
 #define SYS_DEBUGF(level, message)                   SYS_DEBUGF3(SYS_DBG_ISM6HG256X, level, message)
 
+#ifndef ISM6HG256X_TASK_CFG_I2C_ADDRESS
+#define ISM6HG256X_TASK_CFG_I2C_ADDRESS              ISM6HG256X_I2C_ADD_H
+#endif
+
 #ifndef HSD_USE_DUMMY_DATA
 #define HSD_USE_DUMMY_DATA 0
 #endif
@@ -340,7 +344,8 @@ static ISM6HG256XTaskClass_t sTheClass =
       ISM6HG256XTask_vtblSensorDisable,
       ISM6HG256XTask_vtblSensorIsEnabled,
       ISM6HG256XTask_vtblAccGetDescription,
-      ISM6HG256XTask_vtblAccGetStatus
+      ISM6HG256XTask_vtblAccGetStatus,
+      ISM6HG256XTask_vtblAccGetStatusPointer
     },
     ISM6HG256XTask_vtblAccGetODR,
     ISM6HG256XTask_vtblAccGetFS,
@@ -362,7 +367,8 @@ static ISM6HG256XTaskClass_t sTheClass =
       ISM6HG256XTask_vtblSensorDisable,
       ISM6HG256XTask_vtblSensorIsEnabled,
       ISM6HG256XTask_vtblHgAccGetDescription,
-      ISM6HG256XTask_vtblHgAccGetStatus
+      ISM6HG256XTask_vtblHgAccGetStatus,
+      ISM6HG256XTask_vtblHgAccGetStatusPointer
     },
     ISM6HG256XTask_vtblHgAccGetODR,
     ISM6HG256XTask_vtblHgAccGetFS,
@@ -384,7 +390,8 @@ static ISM6HG256XTaskClass_t sTheClass =
       ISM6HG256XTask_vtblSensorDisable,
       ISM6HG256XTask_vtblSensorIsEnabled,
       ISM6HG256XTask_vtblGyroGetDescription,
-      ISM6HG256XTask_vtblGyroGetStatus
+      ISM6HG256XTask_vtblGyroGetStatus,
+      ISM6HG256XTask_vtblGyroGetStatusPointer
     },
     ISM6HG256XTask_vtblGyroGetODR,
     ISM6HG256XTask_vtblGyroGetFS,
@@ -406,7 +413,8 @@ static ISM6HG256XTaskClass_t sTheClass =
       ISM6HG256XTask_vtblSensorDisable,
       ISM6HG256XTask_vtblSensorIsEnabled,
       ISM6HG256XTask_vtblMlcGetDescription,
-      ISM6HG256XTask_vtblMlcGetStatus
+      ISM6HG256XTask_vtblMlcGetStatus,
+      ISM6HG256XTask_vtblMlcGetStatusPointer
     },
     ISM6HG256XTask_vtblMlcGetODR,
     ISM6HG256XTask_vtblMlcGetFS,
@@ -787,7 +795,7 @@ sys_error_code_t ISM6HG256XTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
   }
   else
   {
-    p_obj->p_sensor_bus_if = I2CBusIFAlloc(ISM6HG256X_ID, ISM6HG256X_I2C_ADD_H, 0);
+    p_obj->p_sensor_bus_if = I2CBusIFAlloc(ISM6HG256X_ID, ISM6HG256X_TASK_CFG_I2C_ADDRESS, 0);
     if (p_obj->p_sensor_bus_if == NULL)
     {
       res = SYS_TASK_HEAP_OUT_OF_MEMORY_ERROR_CODE;
@@ -1392,6 +1400,36 @@ sys_error_code_t ISM6HG256XTask_vtblSensorSetODR(ISensorMems_t *_this, float_t o
   }
   else
   {
+    if (odr > 1.0f)
+    {
+      /* ODR = 0 sends only message to switch off the sensor.
+       * Do not update the model in case of odr = 0 */
+
+      if (sensor_id == p_if_owner->acc_id)
+      {
+        p_if_owner->acc_sensor_status.type.mems.odr = odr;
+        p_if_owner->acc_sensor_status.type.mems.measured_odr = 0.0f;
+      }
+      else if (sensor_id == p_if_owner->hg_acc_id)
+      {
+        p_if_owner->hg_acc_sensor_status.type.mems.odr = odr;
+        p_if_owner->hg_acc_sensor_status.type.mems.measured_odr = 0.0f;
+      }
+      else if (sensor_id == p_if_owner->gyro_id)
+      {
+        p_if_owner->gyro_sensor_status.type.mems.odr = odr;
+        p_if_owner->gyro_sensor_status.type.mems.measured_odr = 0.0f;
+      }
+      else if (sensor_id == p_if_owner->mlc_id)
+      {
+        p_if_owner->mlc_sensor_status.type.mems.odr = odr;
+        p_if_owner->mlc_sensor_status.type.mems.measured_odr = 0.0f;
+      }
+      else
+      {
+        /**/
+      }
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1421,6 +1459,29 @@ sys_error_code_t ISM6HG256XTask_vtblSensorSetFS(ISensorMems_t *_this, float_t fs
   }
   else
   {
+    if (sensor_id == p_if_owner->acc_id)
+    {
+      p_if_owner->acc_sensor_status.type.mems.fs = fs;
+      p_if_owner->acc_sensor_status.type.mems.sensitivity = 0.0000305f * p_if_owner->acc_sensor_status.type.mems.fs;
+    }
+    else if (sensor_id == p_if_owner->hg_acc_id)
+    {
+      p_if_owner->hg_acc_sensor_status.type.mems.fs = fs;
+      p_if_owner->hg_acc_sensor_status.type.mems.sensitivity = 0.0000305f * p_if_owner->hg_acc_sensor_status.type.mems.fs;
+    }
+    else if (sensor_id == p_if_owner->gyro_id)
+    {
+      p_if_owner->gyro_sensor_status.type.mems.fs = fs;
+      p_if_owner->gyro_sensor_status.type.mems.sensitivity = 0.000035f * p_if_owner->gyro_sensor_status.type.mems.fs;
+    }
+    else if (sensor_id == p_if_owner->mlc_id)
+    {
+      p_if_owner->mlc_sensor_status.type.mems.fs = fs;
+    }
+    else
+    {
+      /**/
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1480,6 +1541,26 @@ sys_error_code_t ISM6HG256XTask_vtblSensorEnable(ISensor_t *_this)
   }
   else
   {
+    if (sensor_id == p_if_owner->acc_id)
+    {
+      p_if_owner->acc_sensor_status.is_active = TRUE;
+    }
+    else if (sensor_id == p_if_owner->hg_acc_id)
+    {
+      p_if_owner->hg_acc_sensor_status.is_active = TRUE;
+    }
+    else if (sensor_id == p_if_owner->gyro_id)
+    {
+      p_if_owner->gyro_sensor_status.is_active = TRUE;
+    }
+    else if (sensor_id == p_if_owner->mlc_id)
+    {
+      p_if_owner->mlc_sensor_status.is_active = TRUE;
+    }
+    else
+    {
+      /**/
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1508,6 +1589,26 @@ sys_error_code_t ISM6HG256XTask_vtblSensorDisable(ISensor_t *_this)
   }
   else
   {
+    if (sensor_id == p_if_owner->acc_id)
+    {
+      p_if_owner->acc_sensor_status.is_active = FALSE;
+    }
+    else if (sensor_id == p_if_owner->hg_acc_id)
+    {
+      p_if_owner->hg_acc_sensor_status.is_active = FALSE;
+    }
+    else if (sensor_id == p_if_owner->gyro_id)
+    {
+      p_if_owner->gyro_sensor_status.is_active = FALSE;
+    }
+    else if (sensor_id == p_if_owner->mlc_id)
+    {
+      p_if_owner->mlc_sensor_status.is_active = FALSE;
+    }
+    else
+    {
+      /**/
+    }
     /* Set a new command message in the queue */
     SMMessage report =
     {
@@ -1601,6 +1702,34 @@ SensorStatus_t ISM6HG256XTask_vtblMlcGetStatus(ISensor_t *_this)
   assert_param(_this != NULL);
   ISM6HG256XTask *p_if_owner = ISM6HG256XTaskGetOwnerFromISensorIF(_this);
   return p_if_owner->mlc_sensor_status;
+}
+
+SensorStatus_t *ISM6HG256XTask_vtblAccGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  ISM6HG256XTask *p_if_owner = ISM6HG256XTaskGetOwnerFromISensorIF(_this);
+  return &p_if_owner->acc_sensor_status;
+}
+
+SensorStatus_t *ISM6HG256XTask_vtblHgAccGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  ISM6HG256XTask *p_if_owner = ISM6HG256XTaskGetOwnerFromISensorIF(_this);
+  return &p_if_owner->hg_acc_sensor_status;
+}
+
+SensorStatus_t *ISM6HG256XTask_vtblGyroGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  ISM6HG256XTask *p_if_owner = ISM6HG256XTaskGetOwnerFromISensorIF(_this);
+  return &p_if_owner->gyro_sensor_status;
+}
+
+SensorStatus_t *ISM6HG256XTask_vtblMlcGetStatusPointer(ISensor_t *_this)
+{
+  assert_param(_this != NULL);
+  ISM6HG256XTask *p_if_owner = ISM6HG256XTaskGetOwnerFromISensorIF(_this);
+  return &p_if_owner->mlc_sensor_status;
 }
 
 sys_error_code_t ISM6HG256XTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len)
@@ -1767,16 +1896,6 @@ static sys_error_code_t ISM6HG256XTaskExecuteStepDatalog(AManagedTask *_this)
       case SM_MESSAGE_ID_DATA_READY:
       {
         SYS_DEBUGF(SYS_DBG_LEVEL_ALL, ("ISM6HG256X: new data.\r\n"));
-//          if(p_obj->pIRQConfig == NULL)
-//          {
-//            if(TX_SUCCESS
-//                != tx_timer_change(&p_obj->read_timer, AMT_MS_TO_TICKS(p_obj->ism6hg256x_task_cfg_timer_period_ms),
-//                                   AMT_MS_TO_TICKS(p_obj->ism6hg256x_task_cfg_timer_period_ms)))
-//            {
-//              return SYS_UNDEFINED_ERROR_CODE;
-//            }
-//          }
-
         res = ISM6HG256XTaskSensorReadData(p_obj);
         if (!SYS_IS_ERROR_CODE(res))
         {
@@ -2554,15 +2673,15 @@ static sys_error_code_t ISM6HG256XTaskSensorInit(ISM6HG256XTask *_this)
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("ISM6HG256X: sensor - I am 0x%x.\r\n", reg0));
 
   /* HG ACC fs */
-  if (_this->hg_acc_sensor_status.type.mems.fs < 48.0f)
+  if (_this->hg_acc_sensor_status.type.mems.fs < 33.0f)
   {
     ism6hg256x_hg_xl_full_scale_set(p_sensor_drv, ISM6HG256X_32g);
   }
-  else if (_this->hg_acc_sensor_status.type.mems.fs < 96.0f)
+  else if (_this->hg_acc_sensor_status.type.mems.fs < 65.0f)
   {
     ism6hg256x_hg_xl_full_scale_set(p_sensor_drv, ISM6HG256X_64g);
   }
-  else if (_this->hg_acc_sensor_status.type.mems.fs < 192.0f)
+  else if (_this->hg_acc_sensor_status.type.mems.fs < 129.0f)
   {
     ism6hg256x_hg_xl_full_scale_set(p_sensor_drv, ISM6HG256X_128g);
   }
@@ -2831,10 +2950,6 @@ static sys_error_code_t ISM6HG256XTaskSensorInit(ISM6HG256XTask *_this)
     if (ism6hg256x_wtm_level > ISM6HG256X_MAX_WTM_LEVEL)
     {
       ism6hg256x_wtm_level = ISM6HG256X_MAX_WTM_LEVEL;
-    }
-    else if (ism6hg256x_wtm_level < ISM6HG256X_MIN_WTM_LEVEL)
-    {
-      ism6hg256x_wtm_level = ISM6HG256X_MIN_WTM_LEVEL;
     }
     _this->samples_per_it = ism6hg256x_wtm_level;
   }
@@ -3237,7 +3352,7 @@ static sys_error_code_t ISM6HG256XTaskSensorInitTaskParams(ISM6HG256XTask *_this
   _this->gyro_sensor_status.is_active = TRUE;
   _this->gyro_sensor_status.type.mems.fs = 4000.0f;
   _this->gyro_sensor_status.type.mems.odr = 7680.0f;
-  _this->gyro_sensor_status.type.mems.sensitivity = 0.035f * _this->gyro_sensor_status.type.mems.fs;
+  _this->gyro_sensor_status.type.mems.sensitivity = 0.000035f * _this->gyro_sensor_status.type.mems.fs;
   _this->gyro_sensor_status.type.mems.measured_odr = 0.0f;
 #if ISM6HG256X_FIFO_ENABLED
   EMD_Init(&_this->data_gyro, _this->p_slow_sensor_data_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 3);
@@ -3477,17 +3592,17 @@ static sys_error_code_t ISM6HG256XTaskSensorSetFS(ISM6HG256XTask *_this, SMMessa
 
   if (id == _this->hg_acc_id)
   {
-    if (fs < 48.0f)
+    if (fs < 33.0f)
     {
       ism6hg256x_hg_xl_full_scale_set(p_sensor_drv, ISM6HG256X_32g);
       fs = 32.0f;
     }
-    else if (fs < 96.0f)
+    else if (fs < 65.0f)
     {
       ism6hg256x_hg_xl_full_scale_set(p_sensor_drv, ISM6HG256X_64g);
       fs = 64.0f;
     }
-    else if (fs < 192.0f)
+    else if (fs < 129.0f)
     {
       ism6hg256x_hg_xl_full_scale_set(p_sensor_drv, ISM6HG256X_128g);
       fs = 128.0f;
@@ -3497,6 +3612,7 @@ static sys_error_code_t ISM6HG256XTaskSensorSetFS(ISM6HG256XTask *_this, SMMessa
       ism6hg256x_hg_xl_full_scale_set(p_sensor_drv, ISM6HG256X_256g);
       fs = 256.0f;
     }
+
 
     if (!SYS_IS_ERROR_CODE(res))
     {
@@ -3564,7 +3680,7 @@ static sys_error_code_t ISM6HG256XTaskSensorSetFS(ISM6HG256XTask *_this, SMMessa
     if (!SYS_IS_ERROR_CODE(res))
     {
       _this->gyro_sensor_status.type.mems.fs = fs;
-      _this->gyro_sensor_status.type.mems.sensitivity = 0.035f * _this->gyro_sensor_status.type.mems.fs;
+      _this->gyro_sensor_status.type.mems.sensitivity = 0.000035f * _this->gyro_sensor_status.type.mems.fs;
     }
   }
   else if (id == _this->mlc_id)
@@ -3898,7 +4014,7 @@ void ISM6HG256XTask_EXTI_Callback(uint16_t nPin)
   }
 }
 
-void INT2_DSV256X_EXTI_Callback(uint16_t nPin)
+void INT2_HG256X_EXTI_Callback(uint16_t nPin)
 {
   MTMapValue_t *p_val;
   TX_QUEUE *p_queue;
@@ -4178,7 +4294,7 @@ static sys_error_code_t ISM6HG256X_FS_Sync(ISM6HG256XTask *_this)
         break;
     }
     _this->gyro_sensor_status.type.mems.fs = fs;
-    _this->gyro_sensor_status.type.mems.sensitivity = 0.035f * _this->gyro_sensor_status.type.mems.fs;
+    _this->gyro_sensor_status.type.mems.sensitivity = 0.000035f * _this->gyro_sensor_status.type.mems.fs;
   }
   else
   {

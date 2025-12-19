@@ -59,6 +59,7 @@
 #include "MP23DB01HPTask.h"
 
 #include "H3LIS331DLTask.h"
+#include "IIS3DWB10ISTask.h"
 #include "ILPS28QSWTask.h"
 #include "LSM6DSV32XTask.h"
 #include "LSM6DSV80XTask.h"
@@ -77,6 +78,8 @@
 #include "Mp23db01hp_Mic_PnPL.h"
 #include "Stts22h_Temp_PnPL.h"
 #include "H3lis331dl_Acc_PnPL.h"
+#include "Iis3dwb10is_Ext_Acc_PnPL.h"
+#include "Iis3dwb10is_Ext_Ispu_PnPL.h"
 #include "Ilps28qsw_Press_PnPL.h"
 #include "Ism330is_Acc_PnPL.h"
 #include "Ism330is_Gyro_PnPL.h"
@@ -128,6 +131,8 @@ static IPnPLComponent_t *pMP23DB01HP_MIC_PnPLObj = NULL;
 static IPnPLComponent_t *pAutomodePnPLObj = NULL;
 
 static IPnPLComponent_t *pH3LIS331DL_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pIIS3DWB10IS_Ext_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pIIS3DWB10IS_Ext_ISPU_PnPLObj = NULL;
 static IPnPLComponent_t *pILPS28QSW_PRESS_PnPLObj = NULL;
 static IPnPLComponent_t *pLSM6DSV32X_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pLSM6DSV32X_GYRO_PnPLObj = NULL;
@@ -167,6 +172,7 @@ static AManagedTaskEx *sMP23DB01HPObj = NULL;
 static AManagedTaskEx *sISM330ISObj = NULL;
 
 static AManagedTaskEx *sH3LIS331DLObj = NULL;
+static AManagedTaskEx *sIIS3DWB10ISExtObj = NULL;
 static AManagedTaskEx *sILPS28QSWObj = NULL;
 static AManagedTaskEx *sLSM6DSV32XObj = NULL;
 static AManagedTaskEx *sLSM6DSV80XObj = NULL;
@@ -199,6 +205,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   assert_param(pAppContext);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   boolean_t ext_h3lis331dl = FALSE;
+  boolean_t ext_iis3dwb10is = FALSE;
   boolean_t ext_ilps28qsw = FALSE;
   boolean_t ext_ism330is = FALSE;
   boolean_t ext_lsm6dsv16bx = FALSE;
@@ -215,6 +222,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
   /* Check availability of external sensors */
+  ext_iis3dwb10is = HardwareDetection_Check_Ext_IIS3DWB10IS();
   ext_h3lis331dl = HardwareDetection_Check_Ext_H3LIS331DL();
   ext_ilps28qsw = HardwareDetection_Check_Ext_ILPS28QSW();
   ext_ism330is = HardwareDetection_Check_Ext_ISM330IS();
@@ -226,8 +234,8 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   st25dv_version = HardwareDetection_Check_ST25DV();
   if (st25dv_version == ST25DV04KC)
   {
-    BOARD_ID = BOARD_ID_PROB;
-    FW_ID = USB_FW_ID_DATALOG2_PROB;
+    BOARD_ID = BOARD_ID_PROC;
+    FW_ID = USB_FW_ID_DATALOG2_PROC;
   }
 
   /************ Allocate task objects ************/
@@ -241,7 +249,14 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   }
   else
   {
-    sSPI3BusObj = SPIBusTaskAlloc(&MX_SPI3InitParams);
+    if (ext_iis3dwb10is)
+    {
+      sSPI3BusObj = SPIBusTaskAlloc(&MX_SPI3_20MHzInitParams);
+    }
+    else
+    {
+      sSPI3BusObj = SPIBusTaskAlloc(&MX_SPI3InitParams);
+    }
   }
 
   sLIS2DU12Obj = LIS2DU12TaskAlloc(&MX_GPIO_ACC_INT2InitParams, &MX_GPIO_SPI_SEN_CS_AInitParams);
@@ -249,28 +264,28 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   sLPS22DFObj = LPS22DFTaskAlloc(NULL, NULL);
   sMP23DB01HPObj = MP23DB01HPTaskAlloc(&MX_ADF1InitParams);
   sSTTS22HObj = STTS22HTaskAlloc(NULL, NULL, 0x71);
+  sLSM6DSV16XObj = LSM6DSV16XTaskAlloc(&MX_GPIO_IMU_INT1InitParams, NULL, &MX_GPIO_SPI_SEN_CS_GInitParams);
 
-  /* Use the external ISM330IS with ISPU or the onboard LSM6DSV16X with MLC */
   if (ext_ism330is)
   {
-    sISM330ISObj = ISM330ISTaskAlloc(&MX_GPIO_INT2_EXTERNALInitParams, &MX_GPIO_INT1_EXTERNALInitParams, &MX_GPIO_CS_EXTERNALInitParams);
+    sISM330ISObj = ISM330ISTaskAlloc(&MX_GPIO_INT2_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
   }
-  else if (ext_lsm6dsv16bx)
+  if (ext_lsm6dsv16bx)
   {
     sLSM6DSV16BXObj = LSM6DSV16BXTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
   }
-  else if (ext_lsm6dsv32x)
+  if (ext_lsm6dsv32x)
   {
     sLSM6DSV32XObj = LSM6DSV32XTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
   }
-  else if (ext_lsm6dsv80x)
+  if (ext_lsm6dsv80x)
   {
     sLSM6DSV80XObj = LSM6DSV80XTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
     sLSM6DSV320XObj = LSM6DSV320XTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
   }
-  else
+  if (ext_iis3dwb10is)
   {
-    sLSM6DSV16XObj = LSM6DSV16XTaskAlloc(&MX_GPIO_IMU_INT1InitParams, NULL, &MX_GPIO_SPI_SEN_CS_GInitParams);
+    sIIS3DWB10ISExtObj = IIS3DWB10ISTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
   }
 
   if (ext_h3lis331dl)
@@ -301,28 +316,28 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   res = ACAddTask(pAppContext, (AManagedTask *) sLPS22DFObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sMP23DB01HPObj);
   res = ACAddTask(pAppContext, (AManagedTask *) sSTTS22HObj);
+  res = ACAddTask(pAppContext, (AManagedTask *) sLSM6DSV16XObj);
 
-  /* Use the external ISM330IS with ISPU or the onboard LSM6DSV16X with MLC */
   if (ext_ism330is)
   {
     res = ACAddTask(pAppContext, (AManagedTask *) sISM330ISObj);
   }
-  else if (ext_lsm6dsv16bx)
+  if (ext_lsm6dsv16bx)
   {
     res = ACAddTask(pAppContext, (AManagedTask *) sLSM6DSV16BXObj);
   }
-  else if (ext_lsm6dsv32x)
+  if (ext_lsm6dsv32x)
   {
     res = ACAddTask(pAppContext, (AManagedTask *) sLSM6DSV32XObj);
   }
-  else if (ext_lsm6dsv80x)
+  if (ext_lsm6dsv80x)
   {
     res = ACAddTask(pAppContext, (AManagedTask *) sLSM6DSV80XObj);
     res = ACAddTask(pAppContext, (AManagedTask *) sLSM6DSV320XObj);
   }
-  else
+  if (ext_iis3dwb10is)
   {
-    res = ACAddTask(pAppContext, (AManagedTask *) sLSM6DSV16XObj);
+    res = ACAddTask(pAppContext, (AManagedTask *) sIIS3DWB10ISExtObj);
   }
 
   if (ext_h3lis331dl)
@@ -340,7 +355,6 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   pMP23DB01HP_MIC_PnPLObj = Mp23db01hp_Mic_PnPLAlloc();
   pSTTS22H_TEMP_PnPLObj = Stts22h_Temp_PnPLAlloc();
 
-  /* Use the external ISM330IS with ISPU or the onboard LSM6DSV16X with MLC */
   if (sISM330ISObj)
   {
     pISM330IS_ACC_PnPLObj = Ism330is_Acc_PnPLAlloc();
@@ -376,10 +390,14 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
     pLSM6DSV16X_GYRO_PnPLObj = Lsm6dsv16x_Gyro_PnPLAlloc();
     pLSM6DSV16X_MLC_PnPLObj = Lsm6dsv16x_Mlc_PnPLAlloc();
   }
-
   if (sH3LIS331DLObj)
   {
     pH3LIS331DL_ACC_PnPLObj = H3lis331dl_Acc_PnPLAlloc();
+  }
+  if (sIIS3DWB10ISExtObj)
+  {
+    pIIS3DWB10IS_Ext_ACC_PnPLObj = Iis3dwb10is_Ext_Acc_PnPLAlloc();
+    pIIS3DWB10IS_Ext_ISPU_PnPLObj = Iis3dwb10is_Ext_Ispu_PnPLAlloc();
   }
   if (sILPS28QSWObj)
   {
@@ -409,7 +427,6 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   I2CBusTaskConnectDevice((I2CBusTask *) sI2C1BusObj, (I2CBusIF *)STTS22HTaskGetSensorIF((STTS22HTask *) sSTTS22HObj));
   SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)LIS2DU12TaskGetSensorIF((LIS2DU12Task *) sLIS2DU12Obj));
 
-  /* Use the external ISM330IS with ISPU or the onboard LSM6DSV16X with MLC */
   if (sISM330ISObj)
   {
     SPIBusTaskConnectDevice((SPIBusTask *) sSPI3BusObj,
@@ -424,6 +441,11 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     SPIBusTaskConnectDevice((SPIBusTask *) sSPI3BusObj,
                             (SPIBusIF *)H3LIS331DLTaskGetSensorIF((H3LIS331DLTask *) sH3LIS331DLObj));
+  }
+  if (sIIS3DWB10ISExtObj)
+  {
+    SPIBusTaskConnectDevice((SPIBusTask *) sSPI3BusObj,
+                            (SPIBusIF *)IIS3DWB10ISTaskGetSensorIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj));
   }
   if (sILPS28QSWObj)
   {
@@ -457,7 +479,6 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   IEventSrcAddEventListener(MP23DB01HPTaskGetEventSrcIF((MP23DB01HPTask *) sMP23DB01HPObj), DatalogAppListener);
   IEventSrcAddEventListener(STTS22HTaskGetTempEventSrcIF((STTS22HTask *) sSTTS22HObj), DatalogAppListener);
 
-  /* Use the external ISM330IS with ISPU or the onboard LSM6DSV16X with MLC */
   if (sISM330ISObj)
   {
     IEventSrcAddEventListener(ISM330ISTaskGetAccEventSrcIF((ISM330ISTask *) sISM330ISObj), DatalogAppListener);
@@ -473,6 +494,11 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   if (sH3LIS331DLObj)
   {
     IEventSrcAddEventListener(H3LIS331DLTaskGetEventSrcIF((H3LIS331DLTask *) sH3LIS331DLObj), DatalogAppListener);
+  }
+  if (sIIS3DWB10ISExtObj)
+  {
+    IEventSrcAddEventListener(IIS3DWB10ISTaskGetAccEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj), DatalogAppListener);
+    IEventSrcAddEventListener(IIS3DWB10ISTaskGetIspuEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj), DatalogAppListener);
   }
   if (sILPS28QSWObj)
   {
@@ -505,22 +531,30 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   /************ Connect Sensor LL to be used for ucf management to the DatalogAppTask ************/
   if (sLSM6DSV16BXObj)
   {
-    DatalogAppTask_SetMLCIF((AManagedTask *) sLSM6DSV16BXObj);
+    DatalogAppTask_SetExtMLCIF((AManagedTask *) sLSM6DSV16BXObj);
   }
   else if (sLSM6DSV32XObj)
   {
-    DatalogAppTask_SetMLCIF((AManagedTask *) sLSM6DSV32XObj);
+    DatalogAppTask_SetExtMLCIF((AManagedTask *) sLSM6DSV32XObj);
   }
   else if (sLSM6DSV80XObj)
   {
-    DatalogAppTask_SetMLCIF((AManagedTask *) sLSM6DSV80XObj);
-    DatalogAppTask_SetMLC320XIF((AManagedTask *) sLSM6DSV320XObj);
+    DatalogAppTask_SetExtMLCIF((AManagedTask *) sLSM6DSV80XObj);
+    DatalogAppTask_SetExtMLC320XIF((AManagedTask *) sLSM6DSV320XObj);
+  }
+  else if (sISM330ISObj)
+  {
+    DatalogAppTask_SetIspuIF((AManagedTask *) sISM330ISObj);
+  }
+  else if (sIIS3DWB10ISExtObj)
+  {
+    DatalogAppTask_SetIspuIF((AManagedTask *) sIIS3DWB10ISExtObj);
   }
   else
   {
-    DatalogAppTask_SetMLCIF((AManagedTask *) sLSM6DSV16XObj);
+    /* No external MLC capable sensor */
   }
-  DatalogAppTask_SetIspuIF((AManagedTask *) sISM330ISObj);
+  DatalogAppTask_SetMLCIF((AManagedTask *) sLSM6DSV16XObj);
 
   /************ Other PnPL Components ************/
   Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
@@ -537,31 +571,38 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   Mp23db01hp_Mic_PnPLInit(pMP23DB01HP_MIC_PnPLObj);
   Stts22h_Temp_PnPLInit(pSTTS22H_TEMP_PnPLObj);
 
-  /* Use the external ISM330IS with ISPU or the onboard LSM6DSV16X with MLC */
   if (sISM330ISObj)
   {
     Ism330is_Acc_PnPLInit(pISM330IS_ACC_PnPLObj);
+    ism330is_acc_set_enable(false, NULL);
     Ism330is_Gyro_PnPLInit(pISM330IS_GYRO_PnPLObj);
+    ism330is_gyro_set_enable(false, NULL);
     Ism330is_Ispu_PnPLInit(pISM330IS_ISPU_PnPLObj);
   }
   if (sLSM6DSV16BXObj)
   {
     Lsm6dsv16bx_Acc_PnPLInit(pLSM6DSV16BX_ACC_PnPLObj);
+    lsm6dsv16bx_acc_set_enable(false, NULL);
     Lsm6dsv16bx_Gyro_PnPLInit(pLSM6DSV16BX_GYRO_PnPLObj);
+    lsm6dsv16bx_gyro_set_enable(false, NULL);
     Lsm6dsv16bx_Mlc_PnPLInit(pLSM6DSV16BX_MLC_PnPLObj);
   }
   if (sH3LIS331DLObj)
   {
     H3lis331dl_Acc_PnPLInit(pH3LIS331DL_ACC_PnPLObj);
+    h3lis331dl_acc_set_enable(false, NULL);
   }
   if (sILPS28QSWObj)
   {
     Ilps28qsw_Press_PnPLInit(pILPS28QSW_PRESS_PnPLObj);
+    ilps28qsw_press_set_enable(false, NULL);
   }
   if (sLSM6DSV32XObj)
   {
     Lsm6dsv32x_Acc_PnPLInit(pLSM6DSV32X_ACC_PnPLObj);
+    lsm6dsv32x_acc_set_enable(false, NULL);
     Lsm6dsv32x_Gyro_PnPLInit(pLSM6DSV32X_GYRO_PnPLObj);
+    lsm6dsv32x_gyro_set_enable(false, NULL);
     Lsm6dsv32x_Mlc_PnPLInit(pLSM6DSV32X_MLC_PnPLObj);
   }
   if (sLSM6DSV80XObj)
@@ -580,6 +621,20 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     Lsm6dsv16x_Acc_PnPLInit(pLSM6DSV16X_ACC_PnPLObj);
     Lsm6dsv16x_Gyro_PnPLInit(pLSM6DSV16X_GYRO_PnPLObj);
     Lsm6dsv16x_Mlc_PnPLInit(pLSM6DSV16X_MLC_PnPLObj);
+  }
+  if (sIIS3DWB10ISExtObj)
+  {
+    Iis3dwb10is_Ext_Acc_PnPLInit(pIIS3DWB10IS_Ext_ACC_PnPLObj);
+    iis3dwb10is_ext_acc_set_enable(true, NULL);
+    Iis3dwb10is_Ext_Ispu_PnPLInit(pIIS3DWB10IS_Ext_ISPU_PnPLObj);
+
+    lis2du12_acc_set_enable(false, NULL);
+    lis2mdl_mag_set_enable(false, NULL);
+    lps22df_press_set_enable(false, NULL);
+    lsm6dsv16x_acc_set_enable(false, NULL);
+    lsm6dsv16x_gyro_set_enable(false, NULL);
+    mp23db01hp_mic_set_enable(false, NULL);
+    stts22h_temp_set_enable(false, NULL);
   }
 
   return SYS_NO_ERROR_CODE;
@@ -608,6 +663,10 @@ void EXT_INT1_EXTI_Callback(uint16_t nPin)
   {
     H3LIS331DLTask_EXTI_Callback(nPin);
   }
+  else if (sIIS3DWB10ISExtObj)
+  {
+    IIS3DWB10ISTask_EXTI_Callback(nPin);
+  }
   else if (sLSM6DSV32XObj)
   {
     LSM6DSV32XTask_EXTI_Callback(nPin);
@@ -635,6 +694,10 @@ void EXT_INT2_EXTI_Callback(uint16_t nPin)
   {
     INT2_ISM330IS_EXTI_Callback(nPin);
   }
+  else if (sIIS3DWB10ISExtObj)
+  {
+    INT2_IIS3DWB10IS_EXTI_Callback(nPin);
+  }
   else
   {
     INT2_DSV16BX_EXTI_Callback(nPin);
@@ -650,3 +713,4 @@ static void PnPL_unlock_fp(void)
 {
   tx_mutex_put(&pnpl_mutex);
 }
+

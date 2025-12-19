@@ -43,7 +43,8 @@ struct _IErrFirstResponder_vtbl
 {
   void (*SetOwner)(IErrFirstResponder *_this, void *pxOwner);  ///< @sa IErrFirstResponderSetOwner
   void *(*GetOwner)(IErrFirstResponder *_this);  ///< @sa IErrFirstResponderGetOwner
-  sys_error_code_t (*NewError)(IErrFirstResponder *_this, SysEvent xError, boolean_t bIsCalledFromISR);  ///< @sa IErrFirstResponderNewError
+  sys_error_code_t (*NewError)(IErrFirstResponder *_this, SysEvent xError,
+                               boolean_t bIsCalledFromISR);  ///< @sa IErrFirstResponderNewError
 };
 
 /**

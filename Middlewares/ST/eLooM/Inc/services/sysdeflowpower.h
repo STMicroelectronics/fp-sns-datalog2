@@ -67,5 +67,4 @@ typedef struct _SysPowerStatus
 #endif
 
 
-
 #endif /* INCLUDE_SERVICES_SYSDEFLOWPOWER_H_ */

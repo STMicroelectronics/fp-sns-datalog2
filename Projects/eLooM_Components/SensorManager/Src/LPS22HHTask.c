@@ -1482,7 +1482,7 @@ static sys_error_code_t LPS22HHTaskSensorInit(LPS22HHTask *_this)
 
     lps22hh_pin_int_route_get(p_sensor_drv, &int_route);
     int_route.drdy_pres = PROPERTY_ENABLE;
-    lps22hh_pin_int_route_set(p_sensor_drv, &int_route);
+    lps22hh_pin_int_route_set(p_sensor_drv, int_route);
   }
 
   _this->samples_per_it = 1;
@@ -1612,20 +1612,20 @@ static sys_error_code_t LPS22HHTaskSensorReadData(LPS22HHTask *_this)
     res = SYS_BASE_ERROR_CODE;
   }
 #else
-  lps22hh_reg_t reg;
+  lps22hh_status_t reg;
   uint32_t data_raw_pressure;
   int16_t data_raw_temperature;
 
   /* Read output only if new value is available */
   lps22hh_read_reg(p_sensor_drv, LPS22HH_STATUS, (uint8_t *) &reg, 1);
 
-  if (reg.status.p_da)
+  if (reg.p_da)
   {
     memset(&data_raw_pressure, 0x00, sizeof(uint32_t));
     lps22hh_pressure_raw_get(p_sensor_drv, &data_raw_pressure);
     _this->p_press_data_buff[0] = lps22hh_from_lsb_to_hpa(data_raw_pressure);
   }
-  if (reg.status.t_da)
+  if (reg.t_da)
   {
     memset(&data_raw_temperature, 0x00, sizeof(int16_t));
     lps22hh_temperature_raw_get(p_sensor_drv, &data_raw_temperature);

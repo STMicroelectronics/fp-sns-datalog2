@@ -2608,10 +2608,6 @@ static sys_error_code_t LSM6DSV80XTaskSensorInit(LSM6DSV80XTask *_this)
     {
       lsm6dsv80x_wtm_level = LSM6DSV80X_MAX_WTM_LEVEL;
     }
-    else if (lsm6dsv80x_wtm_level < LSM6DSV80X_MIN_WTM_LEVEL)
-    {
-      lsm6dsv80x_wtm_level = LSM6DSV80X_MIN_WTM_LEVEL;
-    }
     _this->samples_per_it = lsm6dsv80x_wtm_level;
   }
 

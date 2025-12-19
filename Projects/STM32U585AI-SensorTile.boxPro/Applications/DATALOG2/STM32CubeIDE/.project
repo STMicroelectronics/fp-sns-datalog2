@@ -1093,6 +1093,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/bluenrg_conf.h</locationURI>
 		</link>
 		<link>
+			<name>User/Core/Inc/dfu_boot.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/dfu_boot.h</locationURI>
+		</link>
+		<link>
 			<name>User/Core/Inc/hci_tl_interface.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/hci_tl_interface.h</locationURI>
@@ -1181,6 +1186,11 @@
 			<name>User/Core/Src/ble_stream_class.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/ble_stream_class.c</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Src/dfu_boot.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/dfu_boot.c</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Src/exti_pin_map.c</name>
@@ -1511,6 +1521,16 @@
 			<name>Drivers/BSP/Components/h3lis331dl/h3lis331dl_reg.h</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/h3lis331dl/h3lis331dl_reg.h</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/Components/iis3dwb10is/iis3dwb10is_reg.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/iis3dwb10is/iis3dwb10is_reg.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/Components/iis3dwb10is/iis3dwb10is_reg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/iis3dwb10is/iis3dwb10is_reg.h</locationURI>
 		</link>
 		<link>
 			<name>Drivers/BSP/Components/ilps28qsw/ilps28qsw_reg.c</name>
@@ -1898,6 +1918,16 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_H3lis331dl_Acc.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Iis3dwb10is_Ext_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Iis3dwb10is_Ext_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Iis3dwb10is_Ext_Ispu.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Iis3dwb10is_Ext_Ispu.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Inc/App_model_Ilps28qsw_Press.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Ilps28qsw_Press.h</locationURI>
@@ -2068,6 +2098,16 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_H3lis331dl_Acc.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Iis3dwb10is_Ext_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Iis3dwb10is_Ext_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Iis3dwb10is_Ext_Ispu.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Iis3dwb10is_Ext_Ispu.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Src/App_model_Ilps28qsw_Press.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Ilps28qsw_Press.c</locationURI>
@@ -2233,6 +2273,16 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/H3lis331dl_Acc_PnPL.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Components/Inc/Iis3dwb10is_Ext_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Iis3dwb10is_Ext_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Iis3dwb10is_Ext_Ispu_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Iis3dwb10is_Ext_Ispu_PnPL.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Components/Inc/Ilps28qsw_Press_PnPL.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Ilps28qsw_Press_PnPL.h</locationURI>
@@ -2396,6 +2446,16 @@
 			<name>User/PnPL/Components/Src/H3lis331dl_Acc_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/H3lis331dl_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Iis3dwb10is_Ext_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Iis3dwb10is_Ext_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Iis3dwb10is_Ext_Ispu_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Iis3dwb10is_Ext_Ispu_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Components/Src/Ilps28qsw_Press_PnPL.c</name>
@@ -2576,6 +2636,16 @@
 			<name>User/eLooM_Components/SensorManager/Inc/IBus_vtbl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/IBus_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/IIS3DWB10ISTask.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/IIS3DWB10ISTask.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/IIS3DWB10ISTask_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/IIS3DWB10ISTask_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Inc/ILPS28QSWTask.h</name>
@@ -2796,6 +2866,11 @@
 			<name>User/eLooM_Components/SensorManager/Src/I2CBusTask.c</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/I2CBusTask.c</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Src/IIS3DWB10ISTask.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/IIS3DWB10ISTask.c</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Src/ILPS28QSWTask.c</name>

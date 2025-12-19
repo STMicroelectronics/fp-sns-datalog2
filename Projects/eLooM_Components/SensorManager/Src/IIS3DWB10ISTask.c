@@ -53,7 +53,7 @@
 #define IIS3DWB10IS_TASK_CFG_TIMER_PERIOD_MS          1000
 #endif
 #ifndef IIS3DWB10IS_TASK_CFG_ISPU_TIMER_PERIOD_MS
-#define IIS3DWB10IS_TASK_CFG_ISPU_TIMER_PERIOD_MS      500
+#define IIS3DWB10IS_TASK_CFG_ISPU_TIMER_PERIOD_MS     50
 #endif
 
 #define IIS3DWB10IS_TAG_ACC                           (0x10)
@@ -468,7 +468,7 @@ IEventSrc *IIS3DWB10ISTaskGetAccEventSrcIF(IIS3DWB10ISTask *_this)
   return (IEventSrc *) _this->p_acc_event_src;
 }
 
-IEventSrc *IIS3DWB10ISTaskGetMlcEventSrcIF(IIS3DWB10ISTask *_this)
+IEventSrc *IIS3DWB10ISTaskGetIspuEventSrcIF(IIS3DWB10ISTask *_this)
 {
   assert_param(_this != NULL);
 
@@ -704,8 +704,9 @@ sys_error_code_t IIS3DWB10ISTask_vtblDoEnterPowerMode(AManagedTask *_this, const
       {
         /* Deactivate the sensor */
         iis3dwb10is_data_rate_t iis3dwb10is_xl_data_rate;
+        iis3dwb10is_xl_data_rate_get(p_sensor_drv, &iis3dwb10is_xl_data_rate);
+        iis3dwb10is_xl_data_rate.burst = IIS3DWB10IS_CONTINUOS_MODE;
         iis3dwb10is_xl_data_rate.odr = IIS3DWB10IS_ODR_IDLE;
-
         iis3dwb10is_xl_data_rate_set(p_sensor_drv, iis3dwb10is_xl_data_rate);
         iis3dwb10is_fifo_mode_set(p_sensor_drv, IIS3DWB10IS_BYPASS_MODE);
       }
@@ -1516,7 +1517,7 @@ static sys_error_code_t IIS3DWB10ISTaskExecuteStepDatalog(AManagedTask *_this)
 
           if (p_obj->ispu_enable)
           {
-            EMD_Init(&p_obj->data_ispu, (uint8_t *) p_obj->p_ispu_output_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 32);
+            EMD_Init(&p_obj->data_ispu, (uint8_t *) p_obj->p_ispu_output_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 16);
 
             DataEvent_t evt;
 
@@ -1698,22 +1699,26 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
   }
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS3DWB10IS: sensor - I am 0x%x.\r\n", reg0));
 
-  /* Restore default configuration */
-  rst.boot = 1;
-  rst.sw_rst = 1;
-  ret_val = iis3dwb10is_reset_set(p_sensor_drv, rst);
-  do
+  iis3dwb10is_mem_bank_set(p_sensor_drv, IIS3DWB10IS_MAIN_MEM_BANK);
+
+  if (_this->ispu_enable == false)
   {
-    iis3dwb10is_reset_get(p_sensor_drv, &rst);
-  } while (rst.sw_rst);
+    /* Restore default configuration */
+    rst.boot = 1;
+    rst.sw_rst = 1;
+    ret_val = iis3dwb10is_reset_set(p_sensor_drv, rst);
+    do
+    {
+      iis3dwb10is_reset_get(p_sensor_drv, &rst);
+    } while (rst.sw_rst);
 
-  /* Enable Block Data Update */
-  iis3dwb10is_block_data_update_set(p_sensor_drv, PROPERTY_ENABLE);
+    /* Enable Block Data Update */
+    iis3dwb10is_block_data_update_set(p_sensor_drv, PROPERTY_ENABLE);
 
-  iis3dwb10is_xl_data_config_get(p_sensor_drv, &xl_cfg);
-  xl_cfg.rounding = IIS3DWB10IS_WRAPAROUND_DISABLED;
-  iis3dwb10is_xl_data_config_set(p_sensor_drv, xl_cfg);
-
+    iis3dwb10is_xl_data_config_get(p_sensor_drv, &xl_cfg);
+    xl_cfg.rounding = IIS3DWB10IS_WRAPAROUND_DISABLED;
+    iis3dwb10is_xl_data_config_set(p_sensor_drv, xl_cfg);
+  }
   /* Set full scale */
   if (_this->acc_sensor_status.type.mems.fs < 51.0f)
   {
@@ -1729,8 +1734,8 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
   }
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS3DWB10IS: sensor FS - %.1f \r\n", _this->acc_sensor_status.type.mems.fs));
 
-
   /* Set Output Data Rate */
+  iis3dwb10is_xl_data_rate_get(p_sensor_drv, &iis3dwb10is_xl_data_rate);
   iis3dwb10is_xl_data_rate.burst = IIS3DWB10IS_CONTINUOS_MODE;
   if (_this->acc_sensor_status.type.mems.odr < 2600.0f)
   {
@@ -1756,24 +1761,30 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
   {
     iis3dwb10is_xl_data_rate.odr = IIS3DWB10IS_ODR_80KHz;
   }
-
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("IIS3DWB10IS: sensor ODR - %.1f \r\n", _this->acc_sensor_status.type.mems.odr));
+
+  if (_this->acc_sensor_status.is_active == false)
+  {
+    iis3dwb10is_xl_data_rate.odr = IIS3DWB10IS_ODR_IDLE;
+    _this->acc_sensor_status.is_active = false;
+  }
+  iis3dwb10is_xl_data_rate_set(p_sensor_drv, iis3dwb10is_xl_data_rate);
 
   iis3dwb10is_pin_int_route_t int_route = {0};
 
 #if IIS3DWB10IS_FIFO_ENABLED
-  uint16_t iis3dwb10is_wtm_level = 0;
+  uint32_t iis3dwb10is_wtm_level = 0;
   iis3dwb10is_fifo_sensor_batch_t fifo_batch;
 
   if (_this->samples_per_it == 0)
   {
     /* Calculation of watermark and samples per int*/
-    iis3dwb10is_wtm_level = ((uint16_t) _this->acc_sensor_status.type.mems.odr * (uint16_t) IIS3DWB10IS_MAX_DRDY_PERIOD);
+    iis3dwb10is_wtm_level = ((uint32_t) _this->acc_sensor_status.type.mems.odr * (uint32_t) IIS3DWB10IS_MAX_DRDY_PERIOD);
     if (iis3dwb10is_wtm_level > IIS3DWB10IS_MAX_WTM_LEVEL)
     {
       iis3dwb10is_wtm_level = IIS3DWB10IS_MAX_WTM_LEVEL;
     }
-    _this->samples_per_it = iis3dwb10is_wtm_level;
+    _this->samples_per_it = (uint16_t)iis3dwb10is_wtm_level;
   }
 
   /*
@@ -1782,7 +1793,6 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
    */
   iis3dwb10is_fifo_watermark_set(p_sensor_drv, _this->samples_per_it);
   iis3dwb10is_fifo_stop_on_wtm_set(p_sensor_drv, 0);
-
   iis3dwb10is_fifo_batch_get(p_sensor_drv, &fifo_batch);
   fifo_batch.batch_xl = 1;
   fifo_batch.batch_temp = 0;
@@ -1793,9 +1803,10 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
 
   /* Set FIFO mode to Stream mode (aka Continuous Mode) */
   iis3dwb10is_fifo_mode_set(p_sensor_drv, IIS3DWB10IS_STREAM_MODE);
-
   /* Enable Block Data Update */
   iis3dwb10is_block_data_update_set(p_sensor_drv, PROPERTY_ENABLE);
+  /* Enable FIFO */
+  iis3dwb10is_pin_int_route_get(p_sensor_drv, &int_route);
 
   if (_this->p_irq_config != NULL)
   {
@@ -1806,7 +1817,10 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
     int_route.int1_fifo_th = PROPERTY_DISABLE;
   }
 
-  iis3dwb10is_pin_int_route_set(p_sensor_drv, int_route);
+  if (_this->ispu_enable == false)
+  {
+    iis3dwb10is_pin_int_route_set(p_sensor_drv, int_route);
+  }
 
 #else
 
@@ -1829,13 +1843,6 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
 
 #endif /* IIS3DWB10IS_FIFO_ENABLED */
 
-  if (_this->acc_sensor_status.is_active == false)
-  {
-    iis3dwb10is_xl_data_rate.odr = IIS3DWB10IS_ODR_IDLE;
-    _this->acc_sensor_status.is_active = false;
-  }
-  iis3dwb10is_xl_data_rate_set(p_sensor_drv, iis3dwb10is_xl_data_rate);
-
 #if IIS3DWB10IS_FIFO_ENABLED
   iis3dwb10is_fifo_status_t fifo_status;
 
@@ -1851,10 +1858,11 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
 #endif
 
 #if IIS3DWB10IS_FIFO_ENABLED
-  _this->iis3dwb10is_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->acc_sensor_status.type.mems.odr) * (((float_t)(_this->samples_per_it)) / 2.0f));
+  float_t period = (1000.0f / _this->acc_sensor_status.type.mems.odr) * (((float_t)(_this->samples_per_it)) / 2.0f);
 #else
-  _this->iis3dwb10is_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->acc_sensor_status.type.mems.odr);
+  float_t period = 1000.0f / _this->acc_sensor_status.type.mems.odr;
 #endif
+  _this->iis3dwb10is_task_cfg_timer_period_ms = (uint16_t)(period < 1.0f ? 1.0f : period);
 
   _this->odr_count = 0;
   _this->delta_timestamp_sum = 0.0f;
@@ -1882,10 +1890,8 @@ static sys_error_code_t IIS3DWB10ISTaskSensorReadData(IIS3DWB10ISTask *_this)
   {
     uint8_t *p_acc = _this->p_acc_sensor_data_buff;
     _this->acc_samples_count = 0;
-    iis3dwb10is_fifo_out_raw_t val;
 
     iis3dwb10is_fifo_out_raw_get(p_sensor_drv, _this->p_sensor_data_buff, samples_per_it);
-    iis3dwb10is_fifo_process(_this->p_sensor_data_buff, &val);
 
     for (i = 0; i < samples_per_it; i++)
     {
@@ -1902,6 +1908,8 @@ static sys_error_code_t IIS3DWB10ISTaskSensorReadData(IIS3DWB10ISTask *_this)
           p_acc += 3;
         }
 #else
+        iis3dwb10is_fifo_out_raw_t val;
+        iis3dwb10is_fifo_process(data_ptr, &val);
         // Extract the 20-bit x_raw, y_raw, and z_raw values into temporary variables
         int32_t x_raw = (val.xl.x_raw); // x_raw is a 20-bit signed integer
         int32_t y_raw = (val.xl.y_raw); // y_raw is a 20-bit signed integer
@@ -1971,14 +1979,14 @@ static sys_error_code_t IIS3DWB10ISTaskSensorReadISPU(IIS3DWB10ISTask *_this)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-//  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
-//
-//  if (_this->ispu_enable)
-//  {
-//    iis3dwb10is_mem_bank_set(p_sensor_drv, IIS3DWB10IS_ISPU_MEM_BANK);
-//    iis3dwb10is_read_reg(p_sensor_drv, IIS3DWB10IS_ISPU_DOUT_00_L, (uint8_t *)(&_this->p_ispu_output_buff), 32 * 2);
-//    iis3dwb10is_mem_bank_set(p_sensor_drv, IIS3DWB10IS_MAIN_MEM_BANK);
-//  }
+  stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
+
+  if (_this->ispu_enable)
+  {
+    iis3dwb10is_mem_bank_set(p_sensor_drv, IIS3DWB10IS_ISPU_MEM_BANK);
+    iis3dwb10is_read_reg(p_sensor_drv, 0x10, (uint8_t *)(&_this->p_ispu_output_buff), 16 * 2);
+    iis3dwb10is_mem_bank_set(p_sensor_drv, IIS3DWB10IS_MAIN_MEM_BANK);
+  }
 
   return res;
 }
@@ -2025,7 +2033,7 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInitTaskParams(IIS3DWB10ISTask *_th
   _this->ispu_sensor_status.type.mems.sensitivity = 1.0f;
   _this->ispu_sensor_status.type.mems.odr = 1.0f;
   _this->ispu_sensor_status.type.mems.measured_odr = 0.0f;
-  EMD_Init(&_this->data_ispu, (uint8_t *)_this->p_ispu_output_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 32);
+  EMD_Init(&_this->data_ispu, (uint8_t *)_this->p_ispu_output_buff, E_EM_INT16, E_EM_MODE_INTERLEAVED, 2, 1, 16);
 
   return res;
 }
@@ -2044,8 +2052,9 @@ static sys_error_code_t IIS3DWB10ISTaskSensorSetODR(IIS3DWB10ISTask *_this, SMMe
     if (odr < 1.0f)
     {
       iis3dwb10is_data_rate_t iis3dwb10is_xl_data_rate;
+      iis3dwb10is_xl_data_rate_get(p_sensor_drv, &iis3dwb10is_xl_data_rate);
+      iis3dwb10is_xl_data_rate.burst = IIS3DWB10IS_CONTINUOS_MODE;
       iis3dwb10is_xl_data_rate.odr = IIS3DWB10IS_ODR_IDLE;
-
       iis3dwb10is_xl_data_rate_set(p_sensor_drv, iis3dwb10is_xl_data_rate);
       /* Do not update the model in case of odr = 0 */
       odr = _this->acc_sensor_status.type.mems.odr;
@@ -2222,8 +2231,9 @@ static sys_error_code_t IIS3DWB10ISTaskSensorDisable(IIS3DWB10ISTask *_this, SMM
     _this->acc_sensor_status.is_active = FALSE;
 
     iis3dwb10is_data_rate_t iis3dwb10is_xl_data_rate;
+    iis3dwb10is_xl_data_rate_get(p_sensor_drv, &iis3dwb10is_xl_data_rate);
+    iis3dwb10is_xl_data_rate.burst = IIS3DWB10IS_CONTINUOS_MODE;
     iis3dwb10is_xl_data_rate.odr = IIS3DWB10IS_ODR_IDLE;
-
     iis3dwb10is_xl_data_rate_set(p_sensor_drv, iis3dwb10is_xl_data_rate);
     iis3dwb10is_fifo_mode_set(p_sensor_drv, IIS3DWB10IS_BYPASS_MODE);
 
@@ -2247,7 +2257,7 @@ static sys_error_code_t IIS3DWB10ISTaskSensorDisable(IIS3DWB10ISTask *_this, SMM
 static boolean_t IIS3DWB10ISTaskSensorIsActive(const IIS3DWB10ISTask *_this)
 {
   assert_param(_this != NULL);
-  return (_this->acc_sensor_status.is_active);
+  return (_this->acc_sensor_status.is_active || _this->ispu_sensor_status.is_active);
 }
 
 static sys_error_code_t IIS3DWB10ISTaskEnterLowPowerMode(const IIS3DWB10ISTask *_this)
@@ -2257,8 +2267,9 @@ static sys_error_code_t IIS3DWB10ISTaskEnterLowPowerMode(const IIS3DWB10ISTask *
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
   iis3dwb10is_data_rate_t iis3dwb10is_xl_data_rate;
+  iis3dwb10is_xl_data_rate_get(p_sensor_drv, &iis3dwb10is_xl_data_rate);
+  iis3dwb10is_xl_data_rate.burst = IIS3DWB10IS_CONTINUOS_MODE;
   iis3dwb10is_xl_data_rate.odr = IIS3DWB10IS_ODR_IDLE;
-
   iis3dwb10is_xl_data_rate_set(p_sensor_drv, iis3dwb10is_xl_data_rate);
 
   return res;

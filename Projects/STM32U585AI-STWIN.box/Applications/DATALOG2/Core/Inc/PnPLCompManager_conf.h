@@ -42,7 +42,7 @@ extern "C" {
 /****************** PnPL Responses ***********************/
 #define PNPL_RESPONSES
 #define PNPL_BLE_RESPONSES
-#define COM_MAX_PNPL_COMPONENTS 22
+#define COM_MAX_PNPL_COMPONENTS 23
 
 
 #ifdef __cplusplus

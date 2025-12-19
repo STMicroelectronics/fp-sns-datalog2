@@ -49,7 +49,8 @@ typedef struct _IIODriver IIODriver;
   * @param nChannel [IN] specifies the channel where to write the data.
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
   */
-static inline sys_error_code_t IIODrvWrite(IIODriver *_this, uint8_t *pDataBuffer, uint16_t nDataSize, uint16_t nChannel);
+static inline sys_error_code_t IIODrvWrite(IIODriver *_this, uint8_t *pDataBuffer, uint16_t nDataSize,
+                                           uint16_t nChannel);
 
 /**
   *
@@ -59,7 +60,8 @@ static inline sys_error_code_t IIODrvWrite(IIODriver *_this, uint8_t *pDataBuffe
   * @param nChannel [IN] specifies the channel from where to read the data.
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
   */
-static inline sys_error_code_t IIODrvRead(IIODriver *_this, uint8_t *pDataBuffer, uint16_t nDataSize, uint16_t nChannel);
+static inline sys_error_code_t IIODrvRead(IIODriver *_this, uint8_t *pDataBuffer, uint16_t nDataSize,
+                                          uint16_t nChannel);
 
 
 // Inline functions definition

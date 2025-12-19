@@ -181,47 +181,6 @@ boolean_t HardwareDetection_Check_Ext_SENSIRION(void)
   return found;
 }
 
-/**
-  * Detect the version of ST25DV chip
-  *
-  * @return hwd_st25dv_version
-  */
-hwd_st25dv_version HardwareDetection_Check_ST25DV(void)
-{
-  hwd_st25dv_version ret;
-  uint8_t icref;
-
-  MX_I2C2_Init();
-
-  HAL_I2C_Mem_Read(&hi2c2, ST25_ADDR_DATA_I2C, ST25_ICREF_REG, I2C_MEMADD_SIZE_16BIT, &icref, 1,
-                   HW_DETECTION_I2C_TIMEOUT);
-
-  if (icref == ICREF_ST25DV04)
-  {
-    ret = ST25DV04;
-  }
-  else if (icref == ICREF_ST25DV64)
-  {
-    ret = ST25DV64;
-  }
-  else if (icref == ICREF_ST25DV04KC)
-  {
-    ret = ST25DV04KC;
-  }
-  else if (icref == ICREF_ST25DV64KC)
-  {
-    ret = ST25DV64KC;
-  }
-  else
-  {
-    ret = ST25DV_ERROR;
-  }
-
-  HAL_I2C_DeInit(&hi2c2);
-
-  return ret;
-}
-
 /* Private function definition */
 /*******************************/
 static int32_t ext_sensor_i2c_write(void *handle, uint8_t reg, uint8_t *p_data, uint16_t size)

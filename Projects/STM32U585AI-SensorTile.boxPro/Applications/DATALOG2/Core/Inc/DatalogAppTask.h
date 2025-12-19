@@ -79,11 +79,13 @@ uint8_t DatalogAppTask_set_time_vtbl(const char *datetime);
 uint8_t DatalogAppTask_switch_bank_vtbl(void);
 uint8_t DatalogAppTask_set_dfu_mode(void);
 uint8_t DatalogAppTask_enable_all(bool);
+uint8_t DatalogAppTask_no_sensors_enabled(int32_t interface);
 
 void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
 
 uint8_t DatalogAppTask_SetMLCIF(AManagedTask *task_obj);
-uint8_t DatalogAppTask_SetMLC320XIF(AManagedTask *task_obj);
+uint8_t DatalogAppTask_SetExtMLCIF(AManagedTask *task_obj);
+uint8_t DatalogAppTask_SetExtMLC320XIF(AManagedTask *task_obj);
 uint8_t DatalogAppTask_load_lsm6dsv16x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 uint8_t DatalogAppTask_load_lsm6dsv16bx_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 uint8_t DatalogAppTask_load_lsm6dsv32x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
@@ -93,6 +95,8 @@ uint8_t DatalogAppTask_load_lsm6dsv320x_ucf_vtbl(const char *ucf_data, int32_t u
 uint8_t DatalogAppTask_SetIspuIF(AManagedTask *task_obj);
 uint8_t DatalogAppTask_load_ism330is_ucf_vtbl(const char *ucf_data, int32_t ucf_size,
                                               const char *output_data, int32_t output_size);
+uint8_t DatalogAppTask_load_iis3dwb10is_ucf_vtbl(const char *ucf_data, int32_t ucf_size,
+                                                 const char *output_data, int32_t output_size);
 
 sys_error_code_t DatalogAppTask_msg(ULONG msg);
 

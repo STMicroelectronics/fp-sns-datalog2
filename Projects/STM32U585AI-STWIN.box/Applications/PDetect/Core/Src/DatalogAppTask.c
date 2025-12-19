@@ -40,6 +40,7 @@
 #include "automode.h"
 #include "rtc.h"
 
+#include "dfu_boot.h"
 
 #ifndef DT_TASK_CFG_STACK_DEPTH
 #define DT_TASK_CFG_STACK_DEPTH                   (TX_MINIMUM_STACK*2)
@@ -1092,7 +1093,12 @@ uint8_t DatalogAppTask_set_time_vtbl(const char *datetime)
 
 uint8_t DatalogAppTask_switch_bank_vtbl(void)
 {
-  /*putMessage switch */
+  char *responseJSON;
+  uint32_t size;
+  char *message = "switch bank";
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, true);
+  DatalogApp_Task_command_response_cb(responseJSON, size);
+  tx_thread_sleep(AMT_MS_TO_TICKS(1000));
   DatalogAppTask_msg((ULONG) DT_SWITCH_BANK);
   return 0;
 }
@@ -1101,25 +1107,11 @@ uint8_t DatalogAppTask_set_dfu_mode(void)
 {
   char *responseJSON;
   uint32_t size;
-  PnPLSerializeCommandResponse(&responseJSON, &size, 0, "", true);
+  char *message = "dfu mode";
+  PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, true);
   DatalogApp_Task_command_response_cb(responseJSON, size);
-
-  /*  Disable interrupts for timers */
-  HAL_NVIC_DisableIRQ(TIM6_IRQn);
-
-  /*  Disable ICACHE */
-  HAL_ICACHE_DeInit();
-
-  /* Jump to user application */
-  typedef  void (*pFunction)(void);
-  pFunction JumpToApplication;
-  uint32_t JumpAddress;
-  JumpAddress = *(__IO uint32_t *)(BOOTLOADER_ADDRESS + 4);
-  JumpToApplication = (pFunction) JumpAddress;
-
-  /* Initialize user application's Stack Pointer */
-  __set_MSP(*(__IO uint32_t *) BOOTLOADER_ADDRESS);
-  JumpToApplication();
+  tx_thread_sleep(AMT_MS_TO_TICKS(1000));
+  DatalogAppTask_msg((ULONG) DT_DFU_MODE);
   return 0;
 }
 
@@ -1145,8 +1137,12 @@ uint8_t DatalogAppTask_enable_all(bool status)
   PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, true);
   DatalogApp_Task_command_response_cb(responseJSON, size);
 
+  /*putMessage switch */
+  DatalogAppTask_msg((ULONG) DT_FORCE_STEP);
+
   return 0;
 }
+
 
 // Private function definition
 // ***************************
@@ -1169,15 +1165,23 @@ static sys_error_code_t DatalogAppTaskExecuteStepState1(AManagedTask *_this)
     }
     else if (message == DT_SWITCH_BANK)
     {
-      char *responseJSON;
-      uint32_t size;
-      PnPLSerializeCommandResponse(&responseJSON, &size, 0, "", true);
-      DatalogApp_Task_command_response_cb(responseJSON, size);
-
-      (void)tx_thread_sleep(100);
+      tx_thread_sleep(AMT_MS_TO_TICKS(1000));
       SwitchBank();
-
       HAL_NVIC_SystemReset();
+      res = SYS_NO_ERROR_CODE;
+    }
+    else if (message == DT_DFU_MODE)
+    {
+      tx_thread_sleep(AMT_MS_TO_TICKS(1000));
+      /*  Disable interrupts for timers */
+      HAL_NVIC_DisableIRQ(TIM6_IRQn);
+
+      /*  Disable ICACHE */
+      HAL_ICACHE_DeInit();
+
+      /* Reset the system to boot in DFU mode */
+      DfuBoot_set_flag_and_reset();
+
       res = SYS_NO_ERROR_CODE;
     }
     else if (message == DT_FORCE_STEP)

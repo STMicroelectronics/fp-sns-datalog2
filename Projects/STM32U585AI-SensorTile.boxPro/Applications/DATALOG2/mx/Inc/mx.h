@@ -148,6 +148,7 @@ extern const MX_SPIParams_t MX_SPI2InitParams;
   * SPI3 configuration parameters.
   */
 extern const MX_SPIParams_t MX_SPI3InitParams;
+extern const MX_SPIParams_t MX_SPI3_20MHzInitParams;
 
 /**
   * I2C1 configuration parameters.

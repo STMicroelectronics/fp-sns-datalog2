@@ -38,10 +38,9 @@ extern "C" {
 #define LSM6DSV80X_MAX_DRDY_PERIOD           (1.0)    /* seconds */
 
 #ifndef LSM6DSV80X_MAX_WTM_LEVEL
-#define LSM6DSV80X_MAX_WTM_LEVEL             (145)    /* samples */
+#define LSM6DSV80X_MAX_WTM_LEVEL             (128)    /* samples */
 #endif
 
-#define LSM6DSV80X_MIN_WTM_LEVEL             (16)     /* samples */
 #define LSM6DSV80X_MAX_SAMPLES_PER_IT        (LSM6DSV80X_MAX_WTM_LEVEL)
 
 

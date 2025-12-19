@@ -176,9 +176,6 @@ void Error_Handler(void);
 #define SPI1_MISO_GPIO_Port GPIOG
 #define BLE_SPI_CS_Pin GPIO_PIN_5
 #define BLE_SPI_CS_GPIO_Port GPIOG
-#define INT_HTS_Pin GPIO_PIN_6
-#define INT_HTS_GPIO_Port GPIOG
-#define INT_HTS_EXTI_IRQn EXTI9_5_IRQn
 #define SPI1_MOSI_Pin GPIO_PIN_4
 #define SPI1_MOSI_GPIO_Port GPIOG
 #define SPI1_CLK_Pin GPIO_PIN_2

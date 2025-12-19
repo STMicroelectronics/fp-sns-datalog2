@@ -51,9 +51,11 @@
 #include "SPIBusTask.h"
 #include "I2CBusTask.h"
 #include "IIS3DWBTask.h"
+#include "IIS3DWB10ISTask.h"
 #include "ISM330BXTask.h"
 #include "ISM330DHCXTask.h"
 #include "ISM330ISTask.h"
+#include "ISM6HG256XTask.h"
 #include "IIS2MDCTask.h"
 #include "IMP23ABSUTask.h"
 #include "IIS2DLPCTask.h"
@@ -85,6 +87,8 @@
 #include "Iis2dulpx_Acc_PnPL.h"
 #include "Iis2dulpx_Mlc_PnPL.h"
 #include "Iis3dwb_Ext_Acc_PnPL.h"
+#include "Iis3dwb10is_Ext_Acc_PnPL.h"
+#include "Iis3dwb10is_Ext_Ispu_PnPL.h"
 #include "Ilps28qsw_Press_PnPL.h"
 #include "Ism330bx_Acc_PnPL.h"
 #include "Ism330bx_Gyro_PnPL.h"
@@ -92,6 +96,10 @@
 #include "Ism330is_Acc_PnPL.h"
 #include "Ism330is_Gyro_PnPL.h"
 #include "Ism330is_Ispu_PnPL.h"
+#include "Ism6hg256x_H_Acc_PnPL.h"
+#include "Ism6hg256x_L_Acc_PnPL.h"
+#include "Ism6hg256x_Gyro_PnPL.h"
+#include "Ism6hg256x_Mlc_PnPL.h"
 #include "Stts22h_Ext_Temp_PnPL.h"
 #include "Tsc1641_Pow_PnPL.h"
 #include "Automode_PnPL.h"
@@ -112,6 +120,8 @@ static IPnPLComponent_t *pAcquisitionInfoPnPLObj = NULL;
 static IPnPLComponent_t *pTagsInfoPnPLObj = NULL;
 static IPnPLComponent_t *pIIS3DWB_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS3DWB_Ext_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pIIS3DWB10IS_Ext_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pIIS3DWB10IS_Ext_ISPU_PnPLObj = NULL;
 static IPnPLComponent_t *pISM330BX_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pISM330BX_GYRO_PnPLObj = NULL;
 static IPnPLComponent_t *pISM330BX_MLC_PnPLObj = NULL;
@@ -121,6 +131,10 @@ static IPnPLComponent_t *pISM330DHCX_MLC_PnPLObj = NULL;
 static IPnPLComponent_t *pISM330IS_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pISM330IS_GYRO_PnPLObj = NULL;
 static IPnPLComponent_t *pISM330IS_ISPU_PnPLObj = NULL;
+static IPnPLComponent_t *pISM6HG256X_H_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pISM6HG256X_L_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pISM6HG256X_GYRO_PnPLObj = NULL;
+static IPnPLComponent_t *pISM6HG256X_MLC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2MDC_MAG_PnPLObj = NULL;
 static IPnPLComponent_t *pIMP23ABSU_MIC_PnPLObj = NULL;
 static IPnPLComponent_t *pIIS2DLPC_ACC_PnPLObj = NULL;
@@ -154,8 +168,10 @@ static AManagedTaskEx *sI2C3BusObj = NULL;
   */
 static AManagedTaskEx *sIIS3DWBObj = NULL;
 static AManagedTaskEx *sIIS3DWBExtObj = NULL;
+static AManagedTaskEx *sIIS3DWB10ISExtObj = NULL;
 static AManagedTaskEx *sISM330BXObj = NULL;
 static AManagedTaskEx *sISM330DHCXObj = NULL;
+static AManagedTaskEx *sISM6HG256XObj = NULL;
 static AManagedTaskEx *sIIS2MDCObj = NULL;
 static AManagedTaskEx *sIMP23ABSUObj = NULL;
 static AManagedTaskEx *sIIS2DLPCObj = NULL;
@@ -195,12 +211,13 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   uint8_t stts22h_address;
   boolean_t ext_iis2dulpx = FALSE;
   boolean_t ext_iis3dwb = FALSE;
+  boolean_t ext_iis3dwb10is = FALSE;
   boolean_t ext_ilps28qsw = FALSE;
   boolean_t ext_ism330bx = FALSE;
+  boolean_t ext_ism6hg256x = FALSE;
   boolean_t ext_iis330is = FALSE;
   boolean_t ext_stts22h = FALSE;
   boolean_t ext_tsc1641 = FALSE;
-  hwd_st25dv_version st25dv_version;
 
   /* PnPL thread safe mutex creation */
   tx_mutex_create(&pnpl_mutex, "PnPL Mutex", TX_INHERIT);
@@ -211,50 +228,52 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
   /* Check availability of external sensors */
+  ext_iis3dwb10is = HardwareDetection_Check_Ext_IIS3DWB10IS();
   ext_iis2dulpx = HardwareDetection_Check_Ext_IIS2DULPX();
   ext_iis3dwb = HardwareDetection_Check_Ext_IIS3DWB();
   ext_ilps28qsw = HardwareDetection_Check_Ext_ILPS28QSW();
   ext_ism330bx = HardwareDetection_Check_Ext_ISM330BX();
+  ext_ism6hg256x = HardwareDetection_Check_Ext_ISM6HG256X();
   ext_iis330is = HardwareDetection_Check_Ext_ISM330IS();
   ext_stts22h = HardwareDetection_Check_Ext_STTS22H(&stts22h_address);
   ext_tsc1641 = HardwareDetection_Check_Ext_TSC1641();
 
-  /* Check NFC chip version */
-  st25dv_version = HardwareDetection_Check_ST25DV();
-  if (st25dv_version == ST25DV64KC)
-  {
-    BoardId = BOARD_ID_BOXB;
-    FwId = USB_FW_ID_DATALOG2_BOXB;
-  }
-
   /************ Allocate task objects ************/
   sDatalogAppObj = DatalogAppTaskAlloc();
   sI2C2BusObj = I2CBusTaskAlloc(&MX_I2C2InitParams);
-  sSPI2BusObj = SPIBusTaskAlloc(&MX_SPI2InitParams);
+  if (ext_iis3dwb10is)
+  {
+    sSPI2BusObj = SPIBusTaskAlloc(&MX_SPI2_20MHzInitParams);
+  }
+  else
+  {
+    sSPI2BusObj = SPIBusTaskAlloc(&MX_SPI2InitParams);
+  }
   sIIS2DLPCObj = IIS2DLPCTaskAlloc(&MX_GPIO_INT2_DLPCInitParams, &MX_GPIO_CS_DLPCInitParams);
   sIIS2ICLXObj = IIS2ICLXTaskAlloc(&MX_GPIO_INT1_ICLXInitParams, NULL, &MX_GPIO_CS_ICLXInitParams);
   sIIS2MDCObj = IIS2MDCTaskAlloc(&MX_GPIO_INT_MAGInitParams, NULL);
   sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_DWBInitParams, &MX_GPIO_CS_DWBInitParams);
+  sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams, &MX_GPIO_CS_DHCXInitParams);
 
   if (ext_iis3dwb)
   {
-    /* Use the external IIS3DWB and onboard ISM330DHCX  */
     sIIS3DWBExtObj = IIS3DWBTaskAllocSetName(&MX_GPIO_INT1_EXTERNAL_InitParams, &MX_GPIO_CS_EXTERNALInitParams, "iis3dwb_ext");
-    sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams, &MX_GPIO_CS_DHCXInitParams);
   }
-  else if (ext_ism330bx)
+  if (ext_iis3dwb10is)
+  {
+    sIIS3DWB10ISExtObj = IIS3DWB10ISTaskAlloc(&MX_GPIO_INT1_EXTERNAL_InitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
+  }
+  if (ext_ism330bx)
   {
     sISM330BXObj = ISM330BXTaskAlloc(&MX_GPIO_INT1_EXTERNAL_InitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
   }
-  else if (ext_iis330is)
+  if (ext_ism6hg256x)
   {
-    /* Use the onboard IIS3DWB and the external ISM330IS */
-    sISM330ISObj = ISM330ISTaskAlloc(&MX_GPIO_INT2_EXInitParams, &MX_GPIO_INT1_EXTERNAL_InitParams, &MX_GPIO_CS_EXTERNALInitParams);
+    sISM6HG256XObj = ISM6HG256XTaskAlloc(&MX_GPIO_INT1_EXTERNAL_InitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
   }
-  else
+  if (ext_iis330is)
   {
-    /* Use the onboard IIS3DWB and ISM330DHCX */
-    sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams, &MX_GPIO_CS_DHCXInitParams);
+    sISM330ISObj = ISM330ISTaskAlloc(&MX_GPIO_INT2_EXInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
   }
   if (ext_iis2dulpx)
   {
@@ -318,6 +337,10 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   {
     res = ACAddTask(pAppContext, (AManagedTask *) sIIS3DWBExtObj);
   }
+  if (ext_iis3dwb10is)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) sIIS3DWB10ISExtObj);
+  }
   if (ext_ilps28qsw)
   {
     res = ACAddTask(pAppContext, (AManagedTask *) sILPS28QSWObj);
@@ -325,6 +348,10 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   if (ext_ism330bx)
   {
     res = ACAddTask(pAppContext, (AManagedTask *) sISM330BXObj);
+  }
+  if (ext_ism6hg256x)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) sISM6HG256XObj);
   }
   if (ext_iis330is)
   {
@@ -357,6 +384,11 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   {
     pIIS3DWB_Ext_ACC_PnPLObj = Iis3dwb_Ext_Acc_PnPLAlloc();
   }
+  if (sIIS3DWB10ISExtObj)
+  {
+    pIIS3DWB10IS_Ext_ACC_PnPLObj = Iis3dwb10is_Ext_Acc_PnPLAlloc();
+    pIIS3DWB10IS_Ext_ISPU_PnPLObj = Iis3dwb10is_Ext_Ispu_PnPLAlloc();
+  }
   if (sISM330BXObj)
   {
     pISM330BX_ACC_PnPLObj = Ism330bx_Acc_PnPLAlloc();
@@ -374,6 +406,13 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
     pISM330IS_ACC_PnPLObj = Ism330is_Acc_PnPLAlloc();
     pISM330IS_GYRO_PnPLObj = Ism330is_Gyro_PnPLAlloc();
     pISM330IS_ISPU_PnPLObj = Ism330is_Ispu_PnPLAlloc();
+  }
+  if (sISM6HG256XObj)
+  {
+    pISM6HG256X_H_ACC_PnPLObj = Ism6hg256x_H_Acc_PnPLAlloc();
+    pISM6HG256X_L_ACC_PnPLObj = Ism6hg256x_L_Acc_PnPLAlloc();
+    pISM6HG256X_GYRO_PnPLObj = Ism6hg256x_Gyro_PnPLAlloc();
+    pISM6HG256X_MLC_PnPLObj = Ism6hg256x_Mlc_PnPLAlloc();
   }
   if (sTSC1641Obj)
   {
@@ -427,6 +466,11 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)IIS3DWBTaskGetSensorIF((IIS3DWBTask *) sIIS3DWBExtObj));
   }
+  if (sIIS3DWB10ISExtObj)
+  {
+    SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj,
+                            (SPIBusIF *)IIS3DWB10ISTaskGetSensorIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj));
+  }
   if (sISM330DHCXObj)
   {
     SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj,
@@ -440,6 +484,11 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   if (sISM330ISObj)
   {
     SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)ISM330ISTaskGetSensorIF((ISM330ISTask *) sISM330ISObj));
+  }
+  if (sISM6HG256XObj)
+  {
+    SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj,
+                            (SPIBusIF *)ISM6HG256XTaskGetSensorIF((ISM6HG256XTask *) sISM6HG256XObj));
   }
   if (sTSC1641Obj)
   {
@@ -476,6 +525,11 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     IEventSrcAddEventListener(IIS3DWBTaskGetEventSrcIF((IIS3DWBTask *) sIIS3DWBExtObj), DatalogAppListener);
   }
+  if (sIIS3DWB10ISExtObj)
+  {
+    IEventSrcAddEventListener(IIS3DWB10ISTaskGetAccEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj), DatalogAppListener);
+    IEventSrcAddEventListener(IIS3DWB10ISTaskGetIspuEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj), DatalogAppListener);
+  }
   if (sISM330BXObj)
   {
     IEventSrcAddEventListener(ISM330BXTaskGetAccEventSrcIF((ISM330BXTask *) sISM330BXObj), DatalogAppListener);
@@ -494,6 +548,13 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     IEventSrcAddEventListener(ISM330ISTaskGetGyroEventSrcIF((ISM330ISTask *) sISM330ISObj), DatalogAppListener);
     IEventSrcAddEventListener(ISM330ISTaskGetMlcEventSrcIF((ISM330ISTask *) sISM330ISObj), DatalogAppListener);
   }
+  if (sISM6HG256XObj)
+  {
+    IEventSrcAddEventListener(ISM6HG256XTaskGetAccEventSrcIF((ISM6HG256XTask *) sISM6HG256XObj), DatalogAppListener);
+    IEventSrcAddEventListener(ISM6HG256XTaskGetHgAccEventSrcIF((ISM6HG256XTask *) sISM6HG256XObj), DatalogAppListener);
+    IEventSrcAddEventListener(ISM6HG256XTaskGetGyroEventSrcIF((ISM6HG256XTask *) sISM6HG256XObj), DatalogAppListener);
+    IEventSrcAddEventListener(ISM6HG256XTaskGetMlcEventSrcIF((ISM6HG256XTask *) sISM6HG256XObj), DatalogAppListener);
+  }
   if (sTSC1641Obj)
   {
     IEventSrcAddEventListener(TSC1641TaskGetEventSrcIF((TSC1641Task *) sTSC1641Obj), DatalogAppListener);
@@ -508,16 +569,28 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   }
 
   /************ Connect Sensor LL to be used for ucf management to the DatalogAppTask ************/
-  if (sISM330DHCXObj)
-  {
-    DatalogAppTask_SetMLCIF((AManagedTask *) sISM330DHCXObj);
-  }
   if (sISM330BXObj)
   {
-    DatalogAppTask_SetMLCIF((AManagedTask *) sISM330BXObj);
+    DatalogAppTask_SetExtMLCIF((AManagedTask *) sISM330BXObj);
   }
-  DatalogAppTask_SetIspuIF((AManagedTask *) sISM330ISObj);
+  else if (sISM6HG256XObj)
+  {
+    DatalogAppTask_SetExtMLCIF((AManagedTask *) sISM6HG256XObj);
+  }
+  else if (sISM330ISObj)
+  {
+    DatalogAppTask_SetIspuIF((AManagedTask *) sISM330ISObj);
+  }
+  else if (sIIS3DWB10ISExtObj)
+  {
+    DatalogAppTask_SetIspuIF((AManagedTask *) sIIS3DWB10ISExtObj);
+  }
+  else
+  {
+    /* No external MLC capable sensor */
+  }
   DatalogAppTask_Set_ICLX_MLCIF((AManagedTask *) sIIS2ICLXObj);
+  DatalogAppTask_SetMLCIF((AManagedTask *) sISM330DHCXObj);
 
   /************ Other PnPL Components ************/
   Deviceinformation_PnPLInit(pDeviceInfoPnPLObj);
@@ -543,17 +616,19 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   if (sSTTS22HExtObj)
   {
     Stts22h_Ext_Temp_PnPLInit(pSTTS22H_Ext_TEMP_PnPLObj);
-    stts22h_temp_set_enable(false, NULL);
+    stts22h_ext_temp_set_enable(false, NULL);
   }
   if (sIIS3DWBExtObj)
   {
     Iis3dwb_Ext_Acc_PnPLInit(pIIS3DWB_Ext_ACC_PnPLObj);
-    iis3dwb_acc_set_enable(false, NULL);
+    iis3dwb_ext_acc_set_enable(false, NULL);
   }
   if (sISM330BXObj)
   {
     Ism330bx_Acc_PnPLInit(pISM330BX_ACC_PnPLObj);
+    ism330bx_acc_set_enable(false, NULL);
     Ism330bx_Gyro_PnPLInit(pISM330BX_GYRO_PnPLObj);
+    ism330bx_gyro_set_enable(false, NULL);
     Ism330bx_Mlc_PnPLInit(pISM330BX_MLC_PnPLObj);
   }
   if (sISM330DHCXObj)
@@ -565,8 +640,20 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   if (sISM330ISObj)
   {
     Ism330is_Acc_PnPLInit(pISM330IS_ACC_PnPLObj);
+    ism330is_acc_set_enable(false, NULL);
     Ism330is_Gyro_PnPLInit(pISM330IS_GYRO_PnPLObj);
+    ism330is_gyro_set_enable(false, NULL);
     Ism330is_Ispu_PnPLInit(pISM330IS_ISPU_PnPLObj);
+  }
+  if (sISM6HG256XObj)
+  {
+    Ism6hg256x_H_Acc_PnPLInit(pISM6HG256X_H_ACC_PnPLObj);
+    ism6hg256x_h_acc_set_enable(false, NULL);
+    Ism6hg256x_L_Acc_PnPLInit(pISM6HG256X_L_ACC_PnPLObj);
+    ism6hg256x_l_acc_set_enable(false, NULL);
+    Ism6hg256x_Gyro_PnPLInit(pISM6HG256X_GYRO_PnPLObj);
+    ism6hg256x_gyro_set_enable(false, NULL);
+    Ism6hg256x_Mlc_PnPLInit(pISM6HG256X_MLC_PnPLObj);
   }
   if (sTSC1641Obj)
   {
@@ -582,10 +669,29 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   if (sIIS2DULPXObj)
   {
     Iis2dulpx_Acc_PnPLInit(pIIS2DULPX_ACC_PnPLObj);
+    iis2dulpx_acc_set_enable(false, NULL);
   }
   if (sILPS28QSWObj)
   {
     Ilps28qsw_Press_PnPLInit(pILPS28QSW_PRESS_PnPLObj);
+    ilps28qsw_press_set_enable(false, NULL);
+  }
+  if (sIIS3DWB10ISExtObj)
+  {
+    Iis3dwb10is_Ext_Acc_PnPLInit(pIIS3DWB10IS_Ext_ACC_PnPLObj);
+    iis3dwb10is_ext_acc_set_enable(true, NULL);
+    Iis3dwb10is_Ext_Ispu_PnPLInit(pIIS3DWB10IS_Ext_ISPU_PnPLObj);
+
+    iis2dlpc_acc_set_enable(false, NULL);
+    iis2iclx_acc_set_enable(false, NULL);
+    iis2mdc_mag_set_enable(false, NULL);
+    ilps22qs_press_set_enable(false, NULL);
+    imp23absu_mic_set_enable(false, NULL);
+    imp34dt05_mic_set_enable(false, NULL);
+    ism330dhcx_acc_set_enable(false, NULL);
+    ism330dhcx_gyro_set_enable(false, NULL);
+    stts22h_temp_set_enable(false, NULL);
+    iis3dwb_acc_set_enable(false, NULL);
   }
 
   return SYS_NO_ERROR_CODE;
@@ -610,6 +716,10 @@ void EXT_INT1_EXTI_Callback(uint16_t nPin)
   {
     IIS3DWBTask_EXTI_Callback(nPin);
   }
+  else if (sIIS3DWB10ISExtObj)
+  {
+    IIS3DWB10ISTask_EXTI_Callback(nPin);
+  }
   else if (sISM330BXObj)
   {
     ISM330BXTask_EXTI_Callback(nPin);
@@ -617,6 +727,10 @@ void EXT_INT1_EXTI_Callback(uint16_t nPin)
   else if (sISM330ISObj)
   {
     ISM330ISTask_EXTI_Callback(nPin);
+  }
+  else if (sISM6HG256XObj)
+  {
+    ISM6HG256XTask_EXTI_Callback(nPin);
   }
   else if (sIIS2DULPXObj)
   {
@@ -634,9 +748,17 @@ void EXT_INT2_EXTI_Callback(uint16_t nPin)
   {
     INT2_ISM330IS_EXTI_Callback(nPin);
   }
-  else
+  else if (sISM330BXObj)
   {
     INT2_ISM330BX_EXTI_Callback(nPin);
+  }
+  else if (sIIS3DWB10ISExtObj)
+  {
+    INT2_IIS3DWB10IS_EXTI_Callback(nPin);
+  }
+  else
+  {
+    INT2_HG256X_EXTI_Callback(nPin);
   }
 }
 

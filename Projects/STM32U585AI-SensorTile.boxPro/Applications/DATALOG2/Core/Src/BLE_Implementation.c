@@ -179,7 +179,7 @@ uint8_t BLE_GetFWID(void)
   }
   else
   {
-    return BLE_FW_ID_DATALOG2_PROB;
+    return BLE_FW_ID_DATALOG2_PROC;
   }
 }
 
@@ -222,6 +222,9 @@ __weak void set_board_name(void)
   */
 __weak void enable_extended_configuration_command(void)
 {
+  uint16_t FwId1;
+  uint16_t FwId2;
+
   /* Enable/Disable Board Report Extended configuration commands */
   ble_extended_configuration_value.stm32_uid = ENABLE_STM32_UID_EXT_CONFIG;
   ble_extended_configuration_value.info = ENABLE_INFO_EXT_CONFIG;
@@ -239,7 +242,18 @@ __weak void enable_extended_configuration_command(void)
   ble_extended_configuration_value.reboot_on_dfu_mode_command = ENABLE_REBOOT_ON_DFU_MODE_EXT_CONFIG;
   ble_extended_configuration_value.power_off = ENABLE_POWER_OFF_EXT_CONFIG;
   ble_extended_configuration_value.read_banks = ENABLE_READ_BANKS_FW_ID_EXT_CONFIG;
-  ble_extended_configuration_value.banks_swap = ENABLE_BANKS_SWAP_EXT_CONFIG;
+
+  ReadFlashBanksFwId(&FwId1, &FwId2);
+  if (FwId2 != OTA_OTA_FW_ID_NOT_VALID)
+  {
+    /* Enable the Banks Swap only if there is a valid fw on second bank */
+    ble_extended_configuration_value.banks_swap = 1;
+  }
+  else
+  {
+    /* Disable the Banks Swap */
+    ble_extended_configuration_value.banks_swap = 0;
+  }
 
   /* Enable/Disable Board Settings Extended configuration commands */
   ble_extended_configuration_value.set_name = ENABLE_SET_NAME_EXT_CONFIG;

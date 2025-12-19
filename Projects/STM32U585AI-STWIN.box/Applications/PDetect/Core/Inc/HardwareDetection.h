@@ -27,20 +27,10 @@ extern "C" {
 #include "stdint.h"
 
 
-typedef enum
-{
-  ST25DV04 = 0,
-  ST25DV64,
-  ST25DV04KC,
-  ST25DV64KC,
-  ST25DV_ERROR,
-} hwd_st25dv_version;
-
 boolean_t HardwareDetection_Check_Ext_PDETECT(uint8_t *device_address);
 boolean_t HardwareDetection_Check_Ext_PDETECT2(uint8_t *device_address);
 boolean_t HardwareDetection_Check_Ext_PDETECT3(uint8_t *device_address);
 boolean_t HardwareDetection_Check_Ext_SENSIRION(void);
-hwd_st25dv_version HardwareDetection_Check_ST25DV(void);
 
 #ifdef __cplusplus
 }

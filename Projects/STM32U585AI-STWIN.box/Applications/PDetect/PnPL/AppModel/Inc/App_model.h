@@ -111,7 +111,7 @@ extern "C" {
 #define N_MAX_EP            5
 
 #define FW_VERSION_MAJOR    "3"
-#define FW_VERSION_MINOR    "1"
+#define FW_VERSION_MINOR    "2"
 #define FW_VERSION_PATCH    "0"
 
 

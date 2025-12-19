@@ -4,9 +4,9 @@
     "devices": [
         {
             "board_id": 14,
-            "fw_id": 25,
+            "fw_id": 56,
             "protocol_id": 2,
-            "sn": "002700405752501820353339",
+            "sn": "004500215752501720353339",
             "pnpl_responses": true,
             "pnpl_ble_responses": true,
             "components": [
@@ -14,11 +14,11 @@
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-STWINBX1",
-                        "swVersion": "3.0.0",
+                        "swVersion": "3.2.0",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M33",
                         "processorManufacturer": "STMicroelectronics",
-                        "totalStorage": 16,
+                        "totalStorage": 0,
                         "totalMemory": 784
                     }
                 },
@@ -26,11 +26,11 @@
                     "firmware_info": {
                         "alias": "STWIN_BOX_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "3.0.0",
+                        "fw_version": "3.2.0",
                         "part_number": "FP-SNS-DATALOG2",
                         "device_url": "https://www.st.com/stwinbox",
                         "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
-                        "mac_address": "ff:f1:79:18:fe:6b",
+                        "mac_address": "e5:55:c3:6b:ee:da",
                         "c_type": 2
                     }
                 },
@@ -133,7 +133,7 @@
                 {
                     "log_controller": {
                         "log_status": false,
-                        "sd_mounted": true,
+                        "sd_mounted": false,
                         "sd_failed": false,
                         "controller_type": 0,
                         "c_type": 2
@@ -168,19 +168,19 @@
                         "measodr": 0,
                         "usb_dps": 480,
                         "sd_dps": 3584,
-                        "sensitivity": 0.00048799999058246623,
+                        "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "sensor_annotation": "",
                         "sensor_category": 0,
                         "st_ble_stream": {
-                            "id": 10,
+                            "id": 11,
                             "acc": {
                                 "enable": false,
                                 "unit": "g",
                                 "format": "int16_t",
                                 "elements": 36,
                                 "channels": 3,
-                                "multiply_factor": 0.00048799999058246623,
+                                "multiply_factor": 0.0004879999905824661,
                                 "odr": 666
                             }
                         },
@@ -222,6 +222,23 @@
                     }
                 },
                 {
+                    "iis2iclx_mlc": {
+                        "enable": false,
+                        "samples_per_ts": 1,
+                        "ucf_status": false,
+                        "dim": 9,
+                        "ioffset": 0,
+                        "data_type": "int8",
+                        "usb_dps": 0,
+                        "sd_dps": 0,
+                        "sensor_annotation": "",
+                        "sensor_category": 0,
+                        "c_type": 0,
+                        "stream_id": -1,
+                        "ep_id": -1
+                    }
+                },
+                {
                     "iis2mdc_mag": {
                         "odr": 3,
                         "fs": 0,
@@ -240,7 +257,7 @@
                             "id": 8,
                             "mag": {
                                 "enable": false,
-                                "unit": "gauss",
+                                "unit": "G",
                                 "format": "int16_t",
                                 "elements": 36,
                                 "channels": 3,
@@ -265,7 +282,7 @@
                         "usb_dps": 40,
                         "sd_dps": 512,
                         "sensitivity": 1,
-                        "data_type": "float",
+                        "data_type": "float_t",
                         "sensor_annotation": "",
                         "sensor_category": 0,
                         "st_ble_stream": {
@@ -273,7 +290,7 @@
                             "press": {
                                 "enable": false,
                                 "unit": "hPa",
-                                "format": "float",
+                                "format": "float_t",
                                 "elements": 54,
                                 "channels": 1,
                                 "multiply_factor": 1,
@@ -339,15 +356,15 @@
                         "usb_dps": 40,
                         "sd_dps": 512,
                         "sensitivity": 1,
-                        "data_type": "float",
+                        "data_type": "float_t",
                         "sensor_annotation": "",
                         "sensor_category": 0,
                         "st_ble_stream": {
                             "id": 3,
                             "temp": {
                                 "enable": false,
-                                "unit": "Celsius",
-                                "format": "float",
+                                "unit": "°C",
+                                "format": "float_t",
                                 "elements": 54,
                                 "channels": 1,
                                 "multiply_factor": 1,
@@ -370,7 +387,7 @@
                         "measodr": 0,
                         "usb_dps": 7000,
                         "sd_dps": 53248,
-                        "sensitivity": 0.00048799999058246623,
+                        "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "sensor_annotation": "",
                         "sensor_category": 0,
@@ -382,7 +399,7 @@
                                 "format": "int16_t",
                                 "elements": 36,
                                 "channels": 3,
-                                "multiply_factor": 0.00048799999058246623,
+                                "multiply_factor": 0.0004879999905824661,
                                 "odr": 666
                             }
                         },
@@ -414,7 +431,7 @@
                                 "format": "int16_t",
                                 "elements": 14,
                                 "channels": 3,
-                                "multiply_factor": 0.00048799999058246623,
+                                "multiply_factor": 0.0004879999905824661,
                                 "odr": 26
                             }
                         },

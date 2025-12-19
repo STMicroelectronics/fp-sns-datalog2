@@ -53,7 +53,7 @@
 #define ISM330IS_TASK_CFG_TIMER_PERIOD_MS          1000
 #endif
 #ifndef ISM330IS_TASK_CFG_ISPU_IMER_PERIOD_MS
-#define ISM330IS_TASK_CFG_ISPU_TIMER_PERIOD_MS     500
+#define ISM330IS_TASK_CFG_ISPU_TIMER_PERIOD_MS     50
 #endif
 
 #define ISM330IS_TAG_ACC                           (0x02)
@@ -1978,30 +1978,47 @@ static sys_error_code_t ISM330ISTaskSensorInit(ISM330ISTask *_this)
                                                  _this->acc_sensor_status.type.mems.odr > _this->gyro_sensor_status.type.mems.odr ?
                                                  _this->acc_sensor_status.type.mems.odr :
                                                  _this->gyro_sensor_status.type.mems.odr);
+    _this->first_data_ready_threshold = (uint16_t)((_this->acc_sensor_status.type.mems.odr > _this->gyro_sensor_status.type.mems.odr ? _this->acc_sensor_status.type.mems.odr : _this->gyro_sensor_status.type.mems.odr) * (0.070f));
+    if (_this->acc_sensor_status.type.mems.odr > 833.0f || _this->gyro_sensor_status.type.mems.odr > 833.0f)
+    {
+      _this->first_data_ready_threshold += 540;
+    }
+    else
+    {
+      _this->first_data_ready_threshold += 4;
+    }
   }
   else if (_this->acc_sensor_status.is_active)
   {
     _this->ism330is_task_cfg_timer_period_ms = (uint16_t)(_this->acc_sensor_status.type.mems.odr);
+    _this->first_data_ready_threshold = (uint16_t)((_this->acc_sensor_status.type.mems.odr) * (0.070f));
+    if (_this->acc_sensor_status.type.mems.odr > 833.0f)
+    {
+      _this->first_data_ready_threshold += 540;
+    }
+    else
+    {
+      _this->first_data_ready_threshold += 4;
+    }
   }
   else if (_this->gyro_sensor_status.is_active)
   {
     _this->ism330is_task_cfg_timer_period_ms = (uint16_t)(_this->acc_sensor_status.type.mems.odr);
+    _this->first_data_ready_threshold = (uint16_t)((_this->gyro_sensor_status.type.mems.odr) * (0.070f));
+    if (_this->gyro_sensor_status.type.mems.odr > 833.0f)
+    {
+      _this->first_data_ready_threshold += 540;
+    }
+    else
+    {
+      _this->first_data_ready_threshold += 4;
+    }
   }
   else
   {
   }
   _this->ism330is_task_cfg_timer_period_ms = (uint16_t)(1000.0f / _this->ism330is_task_cfg_timer_period_ms);
   _this->samples_per_it = 1;
-
-  _this->first_data_ready_threshold = (uint16_t)((_this->acc_sensor_status.type.mems.odr > _this->gyro_sensor_status.type.mems.odr ? _this->acc_sensor_status.type.mems.odr : _this->gyro_sensor_status.type.mems.odr) * (0.070f));
-  if (_this->acc_sensor_status.type.mems.odr > 833.0f || _this->gyro_sensor_status.type.mems.odr > 833.0f)
-  {
-    _this->first_data_ready_threshold += 540;
-  }
-  else
-  {
-    _this->first_data_ready_threshold += 4;
-  }
 
   return res;
 }

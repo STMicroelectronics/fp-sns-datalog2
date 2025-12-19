@@ -190,7 +190,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -340,7 +340,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>DEBUG, SYS_DEBUG, SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, NX_INCLUDE_USER_DEFINE_FILE, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;..\..\..\..\..\Drivers\BSP\Components\iis2dulpx;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;..\..\..\..\..\Drivers\BSP\Components\ism330bx;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip;..\..\..\..\..\Drivers\BSP\Components\ilps28qsw</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;..\..\..\..\..\Drivers\BSP\Components\iis2dulpx;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;..\..\..\..\..\Drivers\BSP\Components\ism330bx;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip;..\..\..\..\..\Drivers\BSP\Components\ilps28qsw;..\..\..\..\..\Drivers\BSP\Components\ism6hg256x;..\..\..\..\..\Drivers\BSP\Components\iis3dwb10is</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -518,6 +518,11 @@
               <FileName>TSC1641.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\TSC1641.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfu_boot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\dfu_boot.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -810,9 +815,39 @@
               <FilePath>..\PnPL\AppModel\Src\App_model_Iis2iclx_Mlc.c</FilePath>
             </File>
             <File>
+              <FileName>App_model_Iis3dwb10is_Ext_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb10is_Ext_Acc.c</FilePath>
+            </File>
+            <File>
               <FileName>App_model_Ilps28qsw_Press.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\AppModel\Src\App_model_Ilps28qsw_Press.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism6hg256x_Gyro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism6hg256x_Gyro.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism6hg256x_H_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism6hg256x_H_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism6hg256x_L_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism6hg256x_L_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism6hg256x_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism6hg256x_Mlc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis3dwb10is_Ext_Ispu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb10is_Ext_Ispu.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -970,9 +1005,39 @@
               <FilePath>..\PnPL\Components\Src\Iis2iclx_Mlc_PnPL.c</FilePath>
             </File>
             <File>
+              <FileName>Iis3dwb10is_Ext_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb10is_Ext_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
               <FileName>Ilps28qsw_Press_PnPL.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\Components\Src\Ilps28qsw_Press_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism6hg256x_Gyro_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism6hg256x_Gyro_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism6hg256x_H_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism6hg256x_H_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism6hg256x_L_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism6hg256x_L_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism6hg256x_Mlc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism6hg256x_Mlc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis3dwb10is_Ext_Ispu_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb10is_Ext_Ispu_PnPL.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1145,9 +1210,19 @@
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\IIS2DULPXTask.c</FilePath>
             </File>
             <File>
+              <FileName>IIS3DWB10ISTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\IIS3DWB10ISTask.c</FilePath>
+            </File>
+            <File>
               <FileName>ILPS28QSWTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ILPS28QSWTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>ISM6HG256XTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ISM6HG256XTask.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1265,9 +1340,19 @@
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\iis2dulpx\iis2dulpx_reg.c</FilePath>
             </File>
             <File>
+              <FileName>iis3dwb10is_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\iis3dwb10is\iis3dwb10is_reg.c</FilePath>
+            </File>
+            <File>
               <FileName>ilps28qsw_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\ilps28qsw\ilps28qsw_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>ism6hg256x_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism6hg256x\ism6hg256x_reg.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6373,7 +6458,7 @@
             <hadIRAM2>0</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
-            <useUlib>0</useUlib>
+            <useUlib>1</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
             <nSecure>0</nSecure>
@@ -6497,7 +6582,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>4</Optim>
+            <Optim>3</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -6523,7 +6608,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, NX_INCLUDE_USER_DEFINE_FILE, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;..\..\..\..\..\Drivers\BSP\Components\iis2dulpx;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;..\..\..\..\..\Drivers\BSP\Components\ism330bx;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip;..\..\..\..\..\Drivers\BSP\Components\ilps28qsw</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;..\..\..\..\..\Drivers\BSP\Components\iis2dulpx;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;..\..\..\..\..\Drivers\BSP\Components\ism330bx;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\netxduo\addons\dhcp;..\..\..\..\..\Middlewares\ST\netxduo\addons\dns;..\..\..\..\..\Middlewares\ST\netxduo\addons\ftp;..\..\..\..\..\Middlewares\ST\netxduo\addons\sntp;..\..\..\..\..\Drivers\BSP\Components\mx_wifi;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\core;..\..\..\..\..\Drivers\BSP\Components\mx_wifi\io_pattern;..\NetX\app;..\..\..\..\..\Middlewares\ST\netxduo\ports\cortex_m33\gnu\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\inc;..\..\..\..\..\Middlewares\ST\netxduo\common\drivers\wifi\mxchip;..\..\..\..\..\Drivers\BSP\Components\ilps28qsw;..\..\..\..\..\Drivers\BSP\Components\ism6hg256x;..\..\..\..\..\Drivers\BSP\Components\iis3dwb10is</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -6701,6 +6786,11 @@
               <FileName>TSC1641.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\Src\TSC1641.c</FilePath>
+            </File>
+            <File>
+              <FileName>dfu_boot.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Core\Src\dfu_boot.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -6993,9 +7083,39 @@
               <FilePath>..\PnPL\AppModel\Src\App_model_Iis2iclx_Mlc.c</FilePath>
             </File>
             <File>
+              <FileName>App_model_Iis3dwb10is_Ext_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb10is_Ext_Acc.c</FilePath>
+            </File>
+            <File>
               <FileName>App_model_Ilps28qsw_Press.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\AppModel\Src\App_model_Ilps28qsw_Press.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism6hg256x_Gyro.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism6hg256x_Gyro.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism6hg256x_H_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism6hg256x_H_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism6hg256x_L_Acc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism6hg256x_L_Acc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Ism6hg256x_Mlc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Ism6hg256x_Mlc.c</FilePath>
+            </File>
+            <File>
+              <FileName>App_model_Iis3dwb10is_Ext_Ispu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\AppModel\Src\App_model_Iis3dwb10is_Ext_Ispu.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -7153,9 +7273,39 @@
               <FilePath>..\PnPL\Components\Src\Iis2iclx_Mlc_PnPL.c</FilePath>
             </File>
             <File>
+              <FileName>Iis3dwb10is_Ext_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb10is_Ext_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
               <FileName>Ilps28qsw_Press_PnPL.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\Components\Src\Ilps28qsw_Press_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism6hg256x_Gyro_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism6hg256x_Gyro_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism6hg256x_H_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism6hg256x_H_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism6hg256x_L_Acc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism6hg256x_L_Acc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ism6hg256x_Mlc_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Ism6hg256x_Mlc_PnPL.c</FilePath>
+            </File>
+            <File>
+              <FileName>Iis3dwb10is_Ext_Ispu_PnPL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\PnPL\Components\Src\Iis3dwb10is_Ext_Ispu_PnPL.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -7328,9 +7478,19 @@
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\IIS2DULPXTask.c</FilePath>
             </File>
             <File>
+              <FileName>IIS3DWB10ISTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\IIS3DWB10ISTask.c</FilePath>
+            </File>
+            <File>
               <FileName>ILPS28QSWTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ILPS28QSWTask.c</FilePath>
+            </File>
+            <File>
+              <FileName>ISM6HG256XTask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\ISM6HG256XTask.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -7448,9 +7608,19 @@
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\iis2dulpx\iis2dulpx_reg.c</FilePath>
             </File>
             <File>
+              <FileName>iis3dwb10is_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\iis3dwb10is\iis3dwb10is_reg.c</FilePath>
+            </File>
+            <File>
               <FileName>ilps28qsw_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\ilps28qsw\ilps28qsw_reg.c</FilePath>
+            </File>
+            <File>
+              <FileName>ism6hg256x_reg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism6hg256x\ism6hg256x_reg.c</FilePath>
             </File>
           </Files>
         </Group>

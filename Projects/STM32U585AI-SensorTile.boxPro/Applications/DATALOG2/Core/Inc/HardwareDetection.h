@@ -37,6 +37,7 @@ typedef enum
 } hwd_st25dv_version;
 
 boolean_t HardwareDetection_Check_Ext_H3LIS331DL(void);
+boolean_t HardwareDetection_Check_Ext_IIS3DWB10IS(void);
 boolean_t HardwareDetection_Check_Ext_ILPS28QSW(void);
 boolean_t HardwareDetection_Check_Ext_ISM330IS(void);
 boolean_t HardwareDetection_Check_Ext_LSM6DSV16BX(void);

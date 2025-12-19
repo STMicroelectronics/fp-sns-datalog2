@@ -1158,6 +1158,11 @@
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/bluenrg_conf.h</locationURI>
 		</link>
 		<link>
+			<name>User/Core/Inc/dfu_boot.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/dfu_boot.h</locationURI>
+		</link>
+		<link>
 			<name>User/Core/Inc/hci_tl_interface.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Inc/hci_tl_interface.h</locationURI>
@@ -1241,6 +1246,11 @@
 			<name>User/Core/Src/ble_stream_class.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/ble_stream_class.c</locationURI>
+		</link>
+		<link>
+			<name>User/Core/Src/dfu_boot.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/Core/Src/dfu_boot.c</locationURI>
 		</link>
 		<link>
 			<name>User/Core/Src/exti_pin_map.c</name>

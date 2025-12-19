@@ -83,6 +83,9 @@ SensorDescriptor_t ISM6HG256XTask_vtblGyroGetDescription(ISensor_t *_this);
 SensorStatus_t ISM6HG256XTask_vtblHgAccGetStatus(ISensor_t *_this);
 SensorStatus_t ISM6HG256XTask_vtblAccGetStatus(ISensor_t *_this);
 SensorStatus_t ISM6HG256XTask_vtblGyroGetStatus(ISensor_t *_this);
+SensorStatus_t *ISM6HG256XTask_vtblHgAccGetStatusPointer(ISensor_t *_this);
+SensorStatus_t *ISM6HG256XTask_vtblAccGetStatusPointer(ISensor_t *_this);
+SensorStatus_t *ISM6HG256XTask_vtblGyroGetStatusPointer(ISensor_t *_this);
 
 sys_error_code_t ISM6HG256XTask_vtblSensorReadReg(ISensorLL_t *_this, uint16_t reg, uint8_t *data, uint16_t len);
 sys_error_code_t ISM6HG256XTask_vtblSensorWriteReg(ISensorLL_t *_this, uint16_t reg, const uint8_t *data,
@@ -97,6 +100,7 @@ float_t ISM6HG256XTask_vtblMlcGetSensitivity(ISensorMems_t *_this);
 EMData_t ISM6HG256XTask_vtblMlcGetDataInfo(ISourceObservable *_this);
 SensorDescriptor_t ISM6HG256XTask_vtblMlcGetDescription(ISensor_t *_this);
 SensorStatus_t ISM6HG256XTask_vtblMlcGetStatus(ISensor_t *_this);
+SensorStatus_t *ISM6HG256XTask_vtblMlcGetStatusPointer(ISensor_t *_this);
 
 #ifdef __cplusplus
 }

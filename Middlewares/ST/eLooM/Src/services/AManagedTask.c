@@ -24,7 +24,6 @@
 #include "services/AManagedTask_vtbl.h"
 
 
-
 /* Public API definition */
 /*************************/
 

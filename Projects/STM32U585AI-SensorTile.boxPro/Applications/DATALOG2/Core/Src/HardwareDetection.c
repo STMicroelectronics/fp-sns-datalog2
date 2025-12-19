@@ -25,6 +25,7 @@
 #include "services/systypes.h"
 #include "HardwareDetection.h"
 #include "h3lis331dl_reg.h"
+#include "iis3dwb10is_reg.h"
 #include "ilps28qsw_reg.h"
 #include "ism330is_reg.h"
 #include "lsm6dsv16bx_reg.h"
@@ -74,6 +75,33 @@ boolean_t HardwareDetection_Check_Ext_H3LIS331DL(void)
   HAL_SPI_DeInit(&hspi3);
 
   if (whoami_val == H3LIS331DL_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
+
+/**
+  * Detect an external IIS3DWB10IS sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_IIS3DWB10IS(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+
+  MX_SPI3_20MHz_Init();
+
+  iis3dwb10is_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi3);
+
+  if (whoami_val == IIS3DWB10IS_ID)
   {
     found = TRUE;
   }

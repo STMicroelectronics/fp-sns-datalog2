@@ -127,7 +127,8 @@ static inline sys_error_code_t AMTOnCreateTask(AManagedTask *_this, tx_entry_fun
   * @param eNewPowerMode [IN] specifies the new power mode that is to be activated by the system.
   * @return \a SYS_NO_ERROR_CODE if success, a task specific error code otherwise.
   */
-static inline sys_error_code_t AMTDoEnterPowerMode(AManagedTask *_this, const EPowerMode eActivePowerMode, const EPowerMode eNewPowerMode);
+static inline sys_error_code_t AMTDoEnterPowerMode(AManagedTask *_this, const EPowerMode eActivePowerMode,
+                                                   const EPowerMode eNewPowerMode);
 
 /**
   * Called by the framework to handle a system wide error. This function is executed in the INIT task execution flow.

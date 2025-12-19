@@ -96,18 +96,20 @@ uint8_t log_controller_start_log(int32_t interface)
 
   __stream_control(true);
 
-  //Reset Tag counter
-  TMResetTagListCounter();
+  if (app_model.total_bandwidth != 0)
+  {
+    //Reset Tag counter
+    TMResetTagListCounter();
 
-  RTC_DateTypeDef sdate;
-  RTC_TimeTypeDef stime;
-  /* Get the RTC current Time */
-  HAL_RTC_GetTime(&hrtc, &stime, RTC_FORMAT_BIN);
-  /* Get the RTC current Date */
-  HAL_RTC_GetDate(&hrtc, &sdate, RTC_FORMAT_BIN);
+    RTC_DateTypeDef sdate;
+    RTC_TimeTypeDef stime;
+    /* Get the RTC current Time */
+    HAL_RTC_GetTime(&hrtc, &stime, RTC_FORMAT_BIN);
+    /* Get the RTC current Date */
+    HAL_RTC_GetDate(&hrtc, &sdate, RTC_FORMAT_BIN);
 
-  _tm t =
-  { .tm_year = sdate.Year + 2000, .tm_mon = sdate.Month - 1, .tm_mday = sdate.Date, .tm_hour = stime.Hours, .tm_min = stime.Minutes, .tm_sec = stime.Seconds };
+    _tm t =
+    { .tm_year = sdate.Year + 2000, .tm_mon = sdate.Month - 1, .tm_mday = sdate.Date, .tm_hour = stime.Hours, .tm_min = stime.Minutes, .tm_sec = stime.Seconds };
 
 // WHY THIS -1 (in months) ???
 //  struct tm {
@@ -122,32 +124,37 @@ uint8_t log_controller_start_log(int32_t interface)
 //     int32_t tm_isdst;       /* daylight saving time             */
 //  };
 
-  TMSetStartTime(t);
-  char local_timestamp[86];
-  (void) sprintf(local_timestamp, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1,
-                 t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
-  (void) memcpy(app_model.acquisition_info_model.start_time, local_timestamp,
-                sizeof(app_model.acquisition_info_model.start_time) - 1);
+    TMSetStartTime(t);
+    char local_timestamp[86];
+    (void) sprintf(local_timestamp, "%04d-%02d-%02dT%02d:%02d:%02d", t.tm_year, t.tm_mon + 1,
+                   t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec);
+    (void) memcpy(app_model.acquisition_info_model.start_time, local_timestamp,
+                  sizeof(app_model.acquisition_info_model.start_time) - 1);
 
-  /* last part not done in sprintf to avoid a warning  */
-  app_model.acquisition_info_model.start_time[19] = '.';
-  app_model.acquisition_info_model.start_time[20] = '0';
-  app_model.acquisition_info_model.start_time[21] = '0';
-  app_model.acquisition_info_model.start_time[22] = '0';
-  app_model.acquisition_info_model.start_time[23] = 'Z';
-  app_model.acquisition_info_model.start_time[24] = '\0';
+    /* last part not done in sprintf to avoid a warning  */
+    app_model.acquisition_info_model.start_time[19] = '.';
+    app_model.acquisition_info_model.start_time[20] = '0';
+    app_model.acquisition_info_model.start_time[21] = '0';
+    app_model.acquisition_info_model.start_time[22] = '0';
+    app_model.acquisition_info_model.start_time[23] = 'Z';
+    app_model.acquisition_info_model.start_time[24] = '\0';
 
-  bool auto_enabled, auto_started;
-  automode_get_enabled(&auto_enabled);
-  automode_get_started(&auto_started);
-  if ((auto_enabled == true) && (auto_started == false) && (interface != LOG_CTRL_MODE_USB))
-  {
-    automode_setup_host();
-    automode_start();
+    bool auto_enabled, auto_started;
+    automode_get_enabled(&auto_enabled);
+    automode_get_started(&auto_started);
+    if ((auto_enabled == true) && (auto_started == false) && (interface != LOG_CTRL_MODE_USB))
+    {
+      automode_setup_host();
+      automode_start();
+    }
+    else
+    {
+      DatalogAppTask_start_vtbl(interface);
+    }
   }
   else
   {
-    DatalogAppTask_start_vtbl(interface);
+    DatalogAppTask_no_sensors_enabled(interface);
   }
   return PNPL_NO_ERROR_CODE;
 }

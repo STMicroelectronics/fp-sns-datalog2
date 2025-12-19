@@ -16,25 +16,22 @@
   *
   * \anchor fig16 \image html 16_boot_if_1.png "Fig.16 - Boot IF"
   *
-  * The system reset all peripherals and it initializes the minimum set of
-  * resources (like the clock three). At this point if the SysInit() has been
-  * called with the parameter `TRUE` the system uses the SysGetBootIF() in
-  * order to obtain a pointer to an application object that implement the
-  * ::IBoot interface. Then the system initialize the Boot IF by calling the
-  * IBootInit() function. The the system check if the DFU trigger condition -
-  * IBootCheckDFUTrigger(). If it it is `FALSE` then the system prepare the
+  * If the SysInit() has been called with the parameter `TRUE` the system uses
+  * the SysGetBootIF() in order to obtain a pointer to an application object that
+  * implement the ::IBoot interface. Then the system initialize the Boot IF by
+  * calling the IBootInit() function. The the system check if the DFU trigger
+  * condition - IBootCheckJumpTrigger(). If it is `TRUE` then the system prepare the
   * jump to the application. First it retrieves the jump address by calling the
-  * IBootGetAppAdderss() function. Then it uses the IBootOnJampToApp() in order
+  * IBootGetJumpAddress() function. Then it uses the IBootOnJump() in order
   * to perform some other tasks before the jump. Finally the system check if the
   * application address is valid and make the jump.
   *
-  * In order to optimize the memory footprint of the framework the ::IBoot
+  * In order to optimize the memory footprint of the framework, the ::IBoot
   * interface can be disabled by the linker with the following definition:
   *
   *     #define INIT_TASK_CFG_ENABLE_BOOT_IF  0
   *
   * It can be added in the sysconfig.h file.
-  *
   *
   ******************************************************************************
   * @attention
@@ -66,7 +63,8 @@ typedef struct _IBoot IBoot;
 //***********************
 
 /**
-  * Initialize the interface IBoot. It should be called after the object allocation and before using the object.
+  * Initialize the interface IBoot.
+  * It should be called after the object allocation and before using the object.
   *
   * @param _this [IN] specifies a pointer to the object.
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
@@ -74,12 +72,13 @@ typedef struct _IBoot IBoot;
 static inline sys_error_code_t IBootInit(IBoot *_this);
 
 /**
-  * Check if the DFU condition occurs. If it is TRUE the bootloader enters the DFU mode,
+  * Check if the Jump condition is met.
+  * If TRUE the Jump will be performed,
   *
   * @param _this [IN] specifies a pointer to the object.
-  * @return TRUE if the system must enter the DFU mode, FALSE otherwise.
+  * @return TRUE if the system must jump, FALSE otherwise.
   */
-static inline boolean_t IBootCheckDFUTrigger(IBoot *_this);
+static inline boolean_t IBootCheckJumpTrigger(IBoot *_this);
 
 /**
   * Used by the system to retrieve the address of the application to start.
@@ -87,18 +86,18 @@ static inline boolean_t IBootCheckDFUTrigger(IBoot *_this);
   * @param _this [IN] specifies a pointer to the object.
   * @return the address where is located the application to start.
   */
-static inline uint32_t IBootGetAppAdderss(IBoot *_this);
+static inline uint32_t IBootGetJumpAddress(IBoot *_this);
 
 /**
   * Called by the system before the jump to the other application. It can be used
-  * to perform some operations before the jump and also to stop the system from jump,.
+  * to perform some operations before the jump and also to stop the system from jumping.
   *
   * @param _this [IN] specifies a pointer to the object.
-  * @param nAppDress [IN] specifies the address of the application to start.
+  * @param nAddress [IN] specifies the address of the application to start.
   * @return SYS_NO_ERROR_CODE if the system can continue with the jump, an application
   * specific error code otherwise.
   */
-static inline sys_error_code_t IBootOnJampToApp(IBoot *_this, uint32_t nAppDress);
+static inline sys_error_code_t IBootOnJump(IBoot *_this, uint32_t nAddress);
 
 // Inline functions definition
 // ***************************

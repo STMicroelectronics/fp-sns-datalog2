@@ -198,7 +198,6 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   boolean_t ext_pdetect2 = FALSE;
   boolean_t ext_pdetect3 = FALSE;
   boolean_t ext_sensirion = FALSE;
-  hwd_st25dv_version st25dv_version;
 
   /* PnPL thread safe mutex creation */
   tx_mutex_create(&pnpl_mutex, "PnPL Mutex", TX_INHERIT);
@@ -213,14 +212,6 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   ext_pdetect2 = HardwareDetection_Check_Ext_PDETECT2(&sths34pf80_address);
   ext_pdetect3 = HardwareDetection_Check_Ext_PDETECT3(&sths34pf80_address);
   ext_sensirion = HardwareDetection_Check_Ext_SENSIRION();
-
-  /* Check NFC chip version */
-  st25dv_version = HardwareDetection_Check_ST25DV();
-  if (st25dv_version == ST25DV64KC)
-  {
-    BoardId = BOARD_ID_BOXB;
-    FwId = USB_FW_ID_DATALOG2_BOXB;
-  }
 
   /************ Allocate task objects ************/
   sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams, &MX_GPIO_PA8InitParams, &MX_GPIO_PA0InitParams, &MX_GPIO_PD0InitParams, &MX_TIM5InitParams, &MX_ADC4InitParams,

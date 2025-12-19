@@ -65,7 +65,8 @@ static inline EPowerMode IapmhComputeNewPowerMode(IAppPowerModeHelper *_this, co
   * @param eNewPowerMode [IN] specifies a new power mode.
   * @return `TRUE` if the transaction is valid. If the transaction is not valid the program execution is stopped.
   */
-static inline boolean_t IapmhCheckPowerModeTransaction(IAppPowerModeHelper *_this, const EPowerMode eActivePowerMode, const EPowerMode eNewPowerMode);
+static inline boolean_t IapmhCheckPowerModeTransaction(IAppPowerModeHelper *_this, const EPowerMode eActivePowerMode,
+                                                       const EPowerMode eNewPowerMode);
 
 /**
   * Used by the system to enter the new power mode. It is called after all application task are ready for the new power mode.

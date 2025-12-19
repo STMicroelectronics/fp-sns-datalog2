@@ -373,7 +373,14 @@ uint8_t lsm6dsv320x_gyro_set_odr(pnpl_lsm6dsv320x_gyro_odr_t enum_id, char **res
 #if (HSD_USE_DUMMY_DATA != 1)
       lsm6dsv320x_gyro_set_samples_per_ts((int32_t) value, NULL);
 #endif
-      __stream_control(true);
+      if (__stream_control(true) != PNPL_NO_ERROR_CODE)
+      {
+        if (response_message != NULL)
+        {
+          *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+        }
+        ret = PNPL_BASE_ERROR_CODE;
+      }
       __sc_set_ble_stream_params(lsm6dsv320x_gyro_model.id);
     }
   }
@@ -463,7 +470,14 @@ uint8_t lsm6dsv320x_gyro_set_enable(bool value, char **response_message)
       {
         app_model.lsm6dsv320x_mlc_ucf_valid = false;
       }
-      __stream_control(true);
+      if (__stream_control(true) != PNPL_NO_ERROR_CODE)
+      {
+        if (response_message != NULL)
+        {
+          *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+        }
+        ret = PNPL_BASE_ERROR_CODE;
+      }
       __sc_set_ble_stream_params(lsm6dsv320x_gyro_model.id);
     }
   }

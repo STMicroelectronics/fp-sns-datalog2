@@ -4,9 +4,9 @@
     "devices": [
         {
             "board_id": 13,
-            "fw_id": 13,
+            "fw_id": 22,
             "protocol_id": 2,
-            "sn": "003A00274841500520363230",
+            "sn": "003900495130501620333154",
             "pnpl_responses": true,
             "pnpl_ble_responses": true,
             "components": [
@@ -14,11 +14,11 @@
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-MKBOXPRO",
-                        "swVersion": "3.0.0",
+                        "swVersion": "3.2.0",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M33",
                         "processorManufacturer": "STMicroelectronics",
-                        "totalStorage": 4,
+                        "totalStorage": 0,
                         "totalMemory": 784
                     }
                 },
@@ -26,11 +26,11 @@
                     "firmware_info": {
                         "alias": "STBOX_PRO_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "3.0.0",
+                        "fw_version": "3.2.0",
                         "part_number": "FP-SNS-DATALOG2",
                         "device_url": "https://www.st.com/sensortileboxpro",
                         "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
-                        "mac_address": "df:fd:8b:87:ae:e7",
+                        "mac_address": "ea:4f:79:1d:a0:87",
                         "c_type": 2
                     }
                 },
@@ -123,7 +123,7 @@
                 {
                     "log_controller": {
                         "log_status": false,
-                        "sd_mounted": true,
+                        "sd_mounted": false,
                         "sd_failed": false,
                         "controller_type": 0,
                         "c_type": 2
@@ -150,7 +150,7 @@
                         "measodr": 0,
                         "usb_dps": 240,
                         "sd_dps": 2048,
-                        "sensitivity": 0.00048799999058246623,
+                        "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",
                         "sensor_annotation": "",
                         "sensor_category": 0,
@@ -162,7 +162,7 @@
                                 "format": "int16_t",
                                 "elements": 40,
                                 "channels": 3,
-                                "multiply_factor": 0.00048799999058246623,
+                                "multiply_factor": 0.0004879999905824661,
                                 "odr": 666
                             }
                         },
@@ -190,7 +190,7 @@
                             "id": 6,
                             "mag": {
                                 "enable": false,
-                                "unit": "gauss",
+                                "unit": "G",
                                 "format": "int16_t",
                                 "elements": 40,
                                 "channels": 3,
@@ -215,7 +215,7 @@
                         "usb_dps": 40,
                         "sd_dps": 512,
                         "sensitivity": 1,
-                        "data_type": "float",
+                        "data_type": "float_t",
                         "sensor_annotation": "",
                         "sensor_category": 0,
                         "st_ble_stream": {
@@ -223,7 +223,7 @@
                             "press": {
                                 "enable": false,
                                 "unit": "hPa",
-                                "format": "float",
+                                "format": "float_t",
                                 "elements": 60,
                                 "channels": 1,
                                 "multiply_factor": 1,
@@ -268,15 +268,15 @@
                         "usb_dps": 40,
                         "sd_dps": 512,
                         "sensitivity": 1,
-                        "data_type": "float",
+                        "data_type": "float_t",
                         "sensor_annotation": "",
                         "sensor_category": 0,
                         "st_ble_stream": {
                             "id": 3,
                             "temp": {
                                 "enable": false,
-                                "unit": "Celsius",
-                                "format": "float",
+                                "unit": "°C",
+                                "format": "float_t",
                                 "elements": 60,
                                 "channels": 1,
                                 "multiply_factor": 1,
@@ -311,7 +311,7 @@
                                 "format": "int16_t",
                                 "elements": 31,
                                 "channels": 3,
-                                "multiply_factor": 0.00048799999058246623,
+                                "multiply_factor": 0.0004879999905824661,
                                 "odr": 60
                             }
                         },

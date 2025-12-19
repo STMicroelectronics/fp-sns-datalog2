@@ -62,7 +62,7 @@
                 </option>
                 <option>
                     <name>RTDescription</name>
-                    <state>Use the full configuration of the C/C++ runtime library. Full locale interface, C locale, file descriptor support, multibytes in printf and scanf, and hex floats in strtod.</state>
+                    <state>A complete configuration of the C/C++14 runtime library. Full locale interface, C locale, file descriptor support, multibytes in printf and scanf, and hex floats in strtod.</state>
                 </option>
                 <option>
                     <name>OGProductVersion</name>
@@ -2650,6 +2650,9 @@
                         <name>$PROJ_DIR$\..\Core\Inc\DatalogAppTask_vtbl.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\Core\Inc\dfu_boot.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\ICommandParse.h</name>
                     </file>
                     <file>
@@ -2732,6 +2735,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\DatalogAppTask.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Core\Src\dfu_boot.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\exti_pin_map.c</name>

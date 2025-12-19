@@ -74,6 +74,8 @@ extern "C" {
 #include "App_model_Mp23db01hp_Mic.h"
 #include "App_model_Stts22h_Temp.h"
 #include "App_model_H3lis331dl_Acc.h"
+#include "App_model_Iis3dwb10is_Ext_Acc.h"
+#include "App_model_Iis3dwb10is_Ext_Ispu.h"
 #include "App_model_Ilps28qsw_Press.h"
 #include "App_model_Ism330is_Acc.h"
 #include "App_model_Ism330is_Gyro.h"
@@ -120,7 +122,7 @@ extern "C" {
 #define FORMAT_LEN 10U
 
 #define FW_VERSION_MAJOR    "3"
-#define FW_VERSION_MINOR    "1"
+#define FW_VERSION_MINOR    "2"
 #define FW_VERSION_PATCH    "0"
 
 /* Max BLE bandwidth for each sensor (in Byte) */
@@ -195,6 +197,7 @@ typedef struct _AppModel_t
   bool ispu_ucf_valid;
   bool enabled_80x;
   bool enabled_320x;
+  uint32_t total_bandwidth;
 } AppModel_t;
 
 AppModel_t *getAppModel(void);

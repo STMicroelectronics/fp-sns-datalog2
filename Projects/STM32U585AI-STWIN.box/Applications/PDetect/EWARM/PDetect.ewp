@@ -2792,6 +2792,9 @@
                         <name>$PROJ_DIR$\..\Core\Inc\DatalogAppTask_vtbl.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\Core\Inc\dfu_boot.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\HardwareDetection.h</name>
                     </file>
                     <file>
@@ -2889,6 +2892,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\DatalogAppTask.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Core\Src\dfu_boot.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\exti_pin_map.c</name>

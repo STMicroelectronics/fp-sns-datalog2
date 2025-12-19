@@ -394,6 +394,7 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv32x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/stts22h</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis3dwb10is</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv80x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv320x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/SensorTileBoxPro</state>
@@ -1553,6 +1554,7 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv32x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/stts22h</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/iis3dwb10is</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv80x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lsm6dsv320x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/SensorTileBoxPro</state>
@@ -2470,6 +2472,12 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\IIS2MDCTask_vtbl.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\IIS3DWB10ISTask.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\IIS3DWB10ISTask_vtbl.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\IIS3DWBTask.h</name>
                     </file>
                     <file>
@@ -2662,6 +2670,9 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\I2CBusTask.c</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\IIS3DWB10ISTask.c</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\ILPS28QSWTask.c</name>
                     </file>
                     <file>
@@ -2815,6 +2826,9 @@
                         <name>$PROJ_DIR$\..\Core\Inc\DatalogAppTask_vtbl.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\Core\Inc\dfu_boot.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\Core\Inc\hci_tl_interface.h</name>
                     </file>
                     <file>
@@ -2906,6 +2920,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\DatalogAppTask.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\Core\Src\dfu_boot.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\Core\Src\exti_pin_map.c</name>
@@ -3105,6 +3122,12 @@
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_H3lis331dl_Acc.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Iis3dwb10is_Ext_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Iis3dwb10is_Ext_Ispu.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ilps28qsw_Press.h</name>
                         </file>
                         <file>
@@ -3208,6 +3231,12 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_H3lis331dl_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Iis3dwb10is_Ext_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Iis3dwb10is_Ext_Ispu.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ilps28qsw_Press.c</name>
@@ -3315,6 +3344,12 @@
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\H3lis331dl_Acc_PnPL.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Iis3dwb10is_Ext_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Iis3dwb10is_Ext_Ispu_PnPL.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ilps28qsw_Press_PnPL.h</name>
                         </file>
                         <file>
@@ -3415,6 +3450,12 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\H3lis331dl_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Iis3dwb10is_Ext_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Iis3dwb10is_Ext_Ispu_PnPL.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Ilps28qsw_Press_PnPL.c</name>
@@ -3564,6 +3605,9 @@
                 <name>Components</name>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\h3lis331dl\h3lis331dl_reg.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\iis3dwb10is\iis3dwb10is_reg.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ilps28qsw\ilps28qsw_reg.c</name>

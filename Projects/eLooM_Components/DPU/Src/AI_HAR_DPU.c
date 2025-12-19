@@ -21,7 +21,7 @@
 #include "AI_HAR_DPU_vtbl.h"
 #include "services/sysmem.h"
 #include "services/sysdebug.h"
-#include "filter_gravity.h"
+#include "services/filter_gravity.h"
 
 /* Private define ------------------------------------------------------------*/
 #define SYS_DEBUGF(level, message)  SYS_DEBUGF3(SYS_DBG_AI_HAR, level, message)

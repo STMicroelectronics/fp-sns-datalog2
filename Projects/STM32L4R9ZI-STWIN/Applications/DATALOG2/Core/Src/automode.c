@@ -52,8 +52,8 @@ uint8_t automode_setup(void)
     else
     {
       /* If start_delay_s is not 0, set the timer to start after the specified delay */
-    ret = tx_timer_create(&automode_timer, "automode_T", automode_timer_callback, (ULONG) TX_NULL,
-                          (automode_model.start_delay_s) * 1000, 0, TX_AUTO_ACTIVATE);
+      ret = tx_timer_create(&automode_timer, "automode_T", automode_timer_callback, (ULONG) TX_NULL,
+                            (automode_model.start_delay_s) * 1000, 0, TX_AUTO_ACTIVATE);
     }
     automode_set_started(true, NULL);
   }

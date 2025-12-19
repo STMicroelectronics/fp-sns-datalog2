@@ -73,7 +73,7 @@ int main(void)
    * - the early MCU initialization (the minimum set of HW resources)
    * - create the INIT task, that is the first task running, and the one with the highest priority.
    */
-  SysInit(FALSE);
+  SysInit(TRUE);
 
   tx_kernel_enter();
 

@@ -80,7 +80,8 @@ static inline sys_error_code_t IDrvStop(IDriver *_this);
   * @param eNewPowerMode [IN] specifies the new power mode.
   * @return SYS_NO_ERROR_CODE if success, an error code otherwise.
   */
-static inline sys_error_code_t IDrvDoEnterPowerMode(IDriver *_this, const EPowerMode eActivePowerMode, const EPowerMode eNewPowerMode);
+static inline sys_error_code_t IDrvDoEnterPowerMode(IDriver *_this, const EPowerMode eActivePowerMode,
+                                                    const EPowerMode eNewPowerMode);
 
 /**
   * Reset the peripherals owned by the driver. This method should operate at hardware level, for example
