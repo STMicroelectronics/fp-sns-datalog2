@@ -81,7 +81,7 @@
 #include "Deviceinformation_PnPL.h"
 
 static IPnPLComponent_t *pLis2duxs12_Acc_PnPLObj = NULL;
-//static IPnPLComponent_t *pLis2duxs12_Mlc_PnPLObj = NULL;
+/*static IPnPLComponent_t *pLis2duxs12_Mlc_PnPLObj = NULL;*/
 static IPnPLComponent_t *pLis2mdl_Mag_PnPLObj = NULL;
 static IPnPLComponent_t *pLps22df_Press_PnPLObj = NULL;
 static IPnPLComponent_t *pLsm6dso16is_Acc_PnPLObj = NULL;
@@ -178,7 +178,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   res = ACAddTask(pAppContext, (AManagedTask *) sSTTS22HObj);
 
   pLis2duxs12_Acc_PnPLObj = Lis2duxs12_Acc_PnPLAlloc();
-//  pLis2duxs12_Mlc_PnPLObj = Lis2duxs12_Mlc_PnPLAlloc();
+  /*  pLis2duxs12_Mlc_PnPLObj = Lis2duxs12_Mlc_PnPLAlloc();*/
   pLis2mdl_Mag_PnPLObj = Lis2mdl_Mag_PnPLAlloc();
   pLps22df_Press_PnPLObj = Lps22df_Press_PnPLAlloc();
   pLsm6dso16is_Acc_PnPLObj = Lsm6dso16is_Acc_PnPLAlloc();
@@ -219,7 +219,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   /************ Connect the Sensor events to the DatalogAppTask ************/
   IEventListener *DatalogAppListener = DatalogAppTask_GetEventListenerIF((DatalogAppTask *) sDatalogAppObj);
   IEventSrcAddEventListener(LIS2DUXS12TaskGetEventSrcIF((LIS2DUXS12Task *) sLIS2DUXS12Obj), DatalogAppListener);
-//  IEventSrcAddEventListener(LIS2DUXS12TaskGetMlcEventSrcIF((LIS2DUXS12Task *) sLIS2DUXS12Obj), DatalogAppListener);
+  /*  IEventSrcAddEventListener(LIS2DUXS12TaskGetMlcEventSrcIF((LIS2DUXS12Task *) sLIS2DUXS12Obj), DatalogAppListener);*/
   IEventSrcAddEventListener(LIS2MDLTaskGetMagEventSrcIF((LIS2MDLTask *) sLIS2MDLObj), DatalogAppListener);
   IEventSrcAddEventListener(LPS22DFTaskGetPressEventSrcIF((LPS22DFTask *) sLPS22DFObj), DatalogAppListener);
   IEventSrcAddEventListener(LSM6DSO16ISTaskGetAccEventSrcIF((LSM6DSO16ISTask *) sLSM6DSO16ISObj), DatalogAppListener);
@@ -237,10 +237,10 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     DatalogAppTask_Set_LSMDSV16XMLC_IF((AManagedTask *) sLSM6DSV16XObj);
   }
-//  if (sLIS2DUXS12Obj)
-//  {
-//    DatalogAppTask_Set_LIS2DUXS12MLC_IF((AManagedTask *) sLIS2DUXS12Obj);
-//  }
+  /*  if (sLIS2DUXS12Obj)*/
+  /*  {*/
+  /*    DatalogAppTask_Set_LIS2DUXS12MLC_IF((AManagedTask *) sLIS2DUXS12Obj);*/
+  /*  }*/
   if (sLSM6DSO16ISObj)
   {
     DatalogAppTask_Set_LSM6DSO16ISMLC_IF((AManagedTask *) sLSM6DSO16ISObj);
@@ -256,7 +256,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
 
   /************ Sensor PnPL Components ************/
   Lis2duxs12_Acc_PnPLInit(pLis2duxs12_Acc_PnPLObj);
-//  Lis2duxs12_Mlc_PnPLInit(pLis2duxs12_Mlc_PnPLObj);
+  /*  Lis2duxs12_Mlc_PnPLInit(pLis2duxs12_Mlc_PnPLObj);*/
   Lis2mdl_Mag_PnPLInit(pLis2mdl_Mag_PnPLObj);
   Lps22df_Press_PnPLInit(pLps22df_Press_PnPLObj);
   Lsm6dso16is_Acc_PnPLInit(pLsm6dso16is_Acc_PnPLObj);

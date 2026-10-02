@@ -43,6 +43,7 @@ boolean_t HardwareDetection_Check_Ext_ISM330IS(void);
 boolean_t HardwareDetection_Check_Ext_LSM6DSV16BX(void);
 boolean_t HardwareDetection_Check_Ext_LSM6DSV32X(void);
 boolean_t HardwareDetection_Check_Ext_LSM6DSV80X(void);
+boolean_t HardwareDetection_Check_Ext_LSM6DSK320X(void);
 hwd_st25dv_version HardwareDetection_Check_ST25DV(void);
 
 #ifdef __cplusplus

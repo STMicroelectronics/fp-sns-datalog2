@@ -66,7 +66,7 @@ uint8_t stts22h_ext_temp_comp_init(void)
   stts22h_ext_temp_set_samples_per_ts(0, NULL);
 #else
   stts22h_ext_temp_set_samples_per_ts(200, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
 
   int32_t value = 0;
   stts22h_ext_temp_get_dim(&value);
@@ -312,12 +312,13 @@ uint8_t stts22h_ext_temp_set_odr(pnpl_stts22h_ext_temp_odr_t enum_id, char **res
   {
 #if (HSD_USE_DUMMY_DATA != 1)
     stts22h_ext_temp_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
     if (__stream_control(true) != PNPL_NO_ERROR_CODE)
     {
       if (response_message != NULL)
       {
-        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs "
+                            "to avoid possible data corruption";
       }
       ret = PNPL_BASE_ERROR_CODE;
     }
@@ -347,7 +348,8 @@ uint8_t stts22h_ext_temp_set_enable(bool value, char **response_message)
     {
       if (response_message != NULL)
       {
-        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs "
+                            "to avoid possible data corruption";
       }
       ret = PNPL_BASE_ERROR_CODE;
     }

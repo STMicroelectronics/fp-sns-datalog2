@@ -27,36 +27,32 @@
 #define SYSCONFIG_H_
 
 
-// Board ID and FW_ID
-// *********************
+/* Board ID and FW_ID */
 
 #define BOARD_ID                                  0x32
-#define FW_ID                                     0x01
+#define FW_ID                                     0x04
 
-// Other hardware configuration
-// ****************************
+/* Other hardware configuration */
 
 #define SYS_DBG_AUTO_START_TA4                    0
 
-// Services configuration
-// **********************
+/* Services configuration */
 
-// files syslowpower.h, SysDefPowerModeHelper.c
+/* files syslowpower.h, SysDefPowerModeHelper.c */
 #define SYS_CFG_USE_DEFAULT_PM_HELPER             0
-#define SYS_CFG_DEF_PM_HELPER_STANDBY             0  ///< if defined to 1 then the MCU goes in STANDBY mode when the system enters in SLEEP_1.
+#define SYS_CFG_DEF_PM_HELPER_STANDBY             0  /* if 1, the MCU goes in STANDBY when system enters in SLEEP_1. */
 
 
-// Tasks configuration
-// *******************
+/* Tasks configuration */
 
-// file IManagedTask.h
+/* file IManagedTask.h */
 #define MT_ALLOWED_ERROR_COUNT                    0x2U
 
-// file sysinit.c
+/* file sysinit.c */
 #define INIT_TASK_CFG_ENABLE_BOOT_IF              0
 #define INIT_TASK_CFG_STACK_SIZE                  (TX_MINIMUM_STACK*10)
 
-//memory used by eloom to build up the system using azure rtos
+/* memory used by eloom to build up the system using azure rtos */
 #define INIT_TASK_CFG_HEAP_SIZE                   (350*1024)
 
 
@@ -64,26 +60,25 @@
 #define SM_MAX_SENSORS                            7U
 
 
-// file UtilTask.c
+/* file UtilTask.c */
 #define UTIL_TASK_CFG_STACK_DEPTH                   (TX_MINIMUM_STACK*7)
 #define UTIL_TASK_CFG_PRIORITY                    (14)
 
 #define UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT         20
 
-// App configuration
+/* App configuration */
 
-// file DatalogAppTask.c
-// uncomment the following lines to change the task common parameters
+/* file DatalogAppTask.c */
 #define DT_TASK_CFG_STACK_DEPTH                   (TX_MINIMUM_STACK*12)
 #define DT_TASK_CFG_PRIORITY                      (12)
 
-// USBX Tasks
+/* USBX Tasks */
 #define USB_EP_BULKIN_CFG_STACK_DEPTH             (1 * 1024)
 #define USB_EP_BULKIN_CFG_PRIORITY                (10)
 #define USB_EP_BULKIN_CFG_PREEMPTION_THRESHOLD    USB_EP_BULKIN_CFG_PRIORITY
 
 
-// file SysTimestamp.c
+/* file SysTimestamp.c */
 #define SYS_TS_CFG_ENABLE_SERVICE                 1
 /**
   * Configuration parameter for the timer used for the eLooM timestamp service.
@@ -92,9 +87,10 @@
   * - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
   */
 #define SYS_TS_CFG_TSDRIVER_PARAMS                &MX_TIM7InitParams
-//#define SYS_TS_CFG_TSDRIVER_PARAMS                SYS_TS_USE_SW_TSDRIVER
+/* #define SYS_TS_CFG_TSDRIVER_PARAMS                SYS_TS_USE_SW_TSDRIVER */
 
-#define SYS_TS_CFG_TSDRIVER_FREQ_HZ               SystemCoreClock ///< hardware timer clock frequency in Hz
-//#define SYS_TS_CFG_TSDRIVER_FREQ_HZ             TX_TIMER_TICKS_PER_SECOND ///< ThreadX clock frequency in Hz
+#define SYS_TS_CFG_TSDRIVER_FREQ_HZ               SystemCoreClock /* hardware timer clock frequency in Hz */
+/* ThreadX clock frequency in Hz */
+/* #define SYS_TS_CFG_TSDRIVER_FREQ_HZ             TX_TIMER_TICKS_PER_SECOND */
 
 #endif /* SYSCONFIG_H_ */

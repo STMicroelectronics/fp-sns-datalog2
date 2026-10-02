@@ -232,7 +232,7 @@ void EXTI9_5_IRQHandler(void)
   /* USER CODE BEGIN EXTI9_5_IRQn 0 */
 
   /* USER CODE END EXTI9_5_IRQn 0 */
-  //  ExtiDefISR(USB_FS_OVCR_Pin);
+  /*  ExtiDefISR(USB_FS_OVCR_Pin);*/
   ExtiDefISR(LPS22DF_INT_O_Pin);
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
 
@@ -275,7 +275,7 @@ void EXTI15_10_IRQHandler(void)
   /* USER CODE BEGIN EXTI15_10_IRQn 0 */
 
   /* USER CODE END EXTI15_10_IRQn 0 */
-//  ExtiDefISR(B1_Pin);
+  /*  ExtiDefISR(B1_Pin);*/
   ExtiDefISR(LSM6DSV16X_INT1_Pin);
   /* USER CODE BEGIN EXTI15_10_IRQn 1 */
 

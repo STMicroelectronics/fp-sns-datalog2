@@ -252,7 +252,8 @@ uint8_t Ism330bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "ism330bx_mlc.st_ble_stream.mlc.enable"))
     {
-      bool st_ble_stream__mlc_enable = json_object_dotget_boolean(tempJSONObject, "ism330bx_mlc.st_ble_stream.mlc.enable");
+      bool st_ble_stream__mlc_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                  "ism330bx_mlc.st_ble_stream.mlc.enable");
       valid_property = true;
       ret = ism330bx_mlc_set_st_ble_stream__mlc_enable(st_ble_stream__mlc_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -274,7 +275,8 @@ uint8_t Ism330bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "ism330bx_mlc.st_ble_stream.mlc.unit"))
     {
-      const char *st_ble_stream__mlc_unit = json_object_dotget_string(tempJSONObject, "ism330bx_mlc.st_ble_stream.mlc.unit");
+      const char *st_ble_stream__mlc_unit = json_object_dotget_string(tempJSONObject,
+                                                                      "ism330bx_mlc.st_ble_stream.mlc.unit");
       valid_property = true;
       ret = ism330bx_mlc_set_st_ble_stream__mlc_unit(st_ble_stream__mlc_unit, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

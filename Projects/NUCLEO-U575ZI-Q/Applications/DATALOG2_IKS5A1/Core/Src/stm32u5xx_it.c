@@ -53,13 +53,13 @@ extern TIM_HandleTypeDef htim6;
 
 EXTI_DECLARE_PIN2F_MAP()
 
-// Forward function declarations
-// ****************************
+/* Forward function declarations*/
+/* *****************************/
 
 extern void xPortSysTickHandler(void);
 
-// Private function definition
-// ***************************
+/* Private function definition*/
+/* ****************************/
 
 void ExtiDefISR(uint16_t exti_pin)
 {
@@ -192,6 +192,14 @@ void DebugMon_Handler(void)
 void EXTI0_IRQHandler(void)
 {
   ExtiDefISR(IIS2MDC_DRDY_Pin);
+}
+
+/**
+ * @brief This function handles EXTI Line1 interrupt.
+ */
+void EXTI1_IRQHandler(void)
+{
+  ExtiDefISR(DIL_INT2_Pin);
 }
 
 /**
@@ -390,7 +398,7 @@ void UCPD1_IRQHandler(void)
   /* USER CODE BEGIN UCPD1_IRQn 0 */
 
   /* USER CODE END UCPD1_IRQn 0 */
-//  USBPD_PORT0_IRQHandler();
+  /*  USBPD_PORT0_IRQHandler();*/
 
   /* USER CODE BEGIN UCPD1_IRQn 1 */
 

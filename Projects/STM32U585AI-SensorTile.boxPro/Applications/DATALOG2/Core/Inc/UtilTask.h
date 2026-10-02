@@ -33,7 +33,7 @@ extern "C" {
 #include "services/AManagedTaskEx_vtbl.h"
 
 
-#define UTIL_CMD_ID_DATALOG_LED                       ((uint16_t)0x0006)              ///< Button event. Toggle led
+#define UTIL_CMD_ID_DATALOG_LED                       ((uint16_t)0x0006)              /* Button event. Toggle led*/
 
 
 /**
@@ -96,7 +96,8 @@ struct _UtilTask_t
   * Allocate an instance of UtilTask.
   *
   * @param p_mx_sm_drv_cfg [IN] specifies a ::MX_TIMParams_t instance declared in the mx.h file.
-  * @param p_mx_ld_drv_cfg [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file. a GPIO connected to a LED. It can be NULL.
+  * @param p_mx_ld_drv_cfg [IN] specifies a ::MX_GPIOParams_t instance declared in the mx.h file.
+  * It describes a GPIO connected to a LED and can be NULL.
   * @return a pointer to the generic object ::AManagedTaskEx if success,
   * or NULL if out of memory error occurs.
   */

@@ -30,62 +30,62 @@
 extern "C" {
 #endif
 
-// Low Level API error code
-// ************************
+/* Low Level API error code */
+/* ************************ */
 
 #define SYS_BASE_LL_ERROR_CODE                                APP_BASE_ERROR_CODE
 #define SYS_LL_UNDEFINED_ERROR_CODE                           SYS_BASE_LL_ERROR_CODE + 1
 
-// IP error
-//#define SYS_BASE_XX_ERROR_CODE                               APP_BASE_ERROR_CODE
+/* IP error */
+/*#define SYS_BASE_XX_ERROR_CODE                               APP_BASE_ERROR_CODE */
 
-// SPI Master error code
+/* SPI Master error code */
 #define SYS_BASE_SPI_M_ERROR_CODE                              APP_BASE_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 
-// I2C Master error code
+/* I2C Master error code */
 #define SYS_BASE_I2C_M_ERROR_CODE                              SYS_BASE_SPI_M_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 
-// Service Level error code
-// ************************
+/* Service Level error code */
+/* ************************ */
 
-// CircularBuffer error code
+/* CircularBuffer error code */
 #define SYS_CB_BASE_ERROR_CODE                                SYS_BASE_IEVTSRC_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 
-// Task Level error code
-// *********************
+/* Task Level error code */
+/* ************************ */
 
-// Generic task error code
+/* Generic task error code */
 #define SYS_BASE_APP_TASK_ERROR_CODE                           SYS_CB_BASE_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 #define SYS_APP_TASK_UNKNOWN_MSG_ERROR_CODE                    SYS_BASE_APP_TASK_ERROR_CODE + 1
 #define SYS_APP_TASK_MSG_LOST_ERROR_CODE                       SYS_BASE_APP_TASK_ERROR_CODE + 2
 #define SYS_APP_TASK_INIT_ERROR_CODE                           SYS_BASE_APP_TASK_ERROR_CODE + 3
 #define SYS_APP_TASK_TIMER_ERROR_CODE                          SYS_BASE_APP_TASK_ERROR_CODE + 4
 
-// SPI Bus task error code
+/* SPI Bus task error code */
 #define SYS_BASE_SPIBUS_TASK_ERROR_CODE                        SYS_BASE_APP_TASK_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 
-// I2C Bus task error code
+/* I2C Bus task error code */
 #define SYS_BASE_I2CBUS_TASK_ERROR_CODE                        SYS_BASE_SPIBUS_TASK_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 
-// AI task error code
+/* AI task error code */
 #define SYS_AI_TASK_BASE_ERROR_CODE                           SYS_BASE_I2CBUS_TASK_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 #define SYS_AI_TASK_INIT_ERROR_CODE                           SYS_AI_TASK_BASE_ERROR_CODE + 1
 #define SYS_AI_TASK_INVALID_CMD_ERROR_CODE                    SYS_AI_TASK_BASE_ERROR_CODE + 2
 #define SYS_AI_TASK_CMD_ERROR_CODE                            SYS_AI_TASK_BASE_ERROR_CODE + 3
 #define SYS_AI_TASK_IN_QUEUE_FULL_ERROR_CODE                  SYS_AI_TASK_BASE_ERROR_CODE + 4
 
-// Utility task error code
+/* Utility task error code */
 #define SYS_UTIL_TASK_BASE_ERROR_CODE                         SYS_AI_TASK_BASE_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 #define SYS_UTIL_TASK_INIT_ERROR_CODE                         SYS_UTIL_TASK_BASE_ERROR_CODE + 1
 #define SYS_UTIL_TASK_LP_TIMER_ERROR_CODE                     SYS_UTIL_TASK_BASE_ERROR_CODE + 2
 
-// SDCARD task error code
+/* SDCARD task error code */
 #define SYS_SD_TASK_BASE_ERROR_CODE                           SYS_UTIL_TASK_BASE_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 
-// Sensor task generic error code
+/* Sensor task generic error code */
 #define SYS_SENSOR_TASK_BASE_ERROR_CODE                       SYS_SD_TASK_BASE_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 
-// BCProtocol error code
+/* BCProtocol error code */
 #define SYS_BCP_BASE_ERROR_CODE                               SYS_SENSOR_TASK_BASE_ERROR_CODE + SYS_GROUP_ERROR_COUNT
 #define SYS_BCP_CMD_NOT_SUPPORTED_ERROR_CODE                  SYS_BCP_BASE_ERROR_CODE + 1
 #define SYS_BCP_CMD_EXECUTION_ERROR_CODE                      SYS_BCP_BASE_ERROR_CODE + 2

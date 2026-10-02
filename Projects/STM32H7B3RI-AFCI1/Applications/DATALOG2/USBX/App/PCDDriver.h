@@ -101,15 +101,15 @@ sys_error_code_t PCDDrvSetExtDCD(PCDDriver_t *_this, DeviceControlDriver_t fun);
 /** Inline functions definition */
 /********************************/
 
-//SYS_DEFINE_INLINE
-//sys_error_code_t DFSDMDriverFilterRegisterCallback(DFSDMDriver_t *_this, HAL_DFSDM_Filter_CallbackIDTypeDef CallbackID, pDFSDM_Filter_CallbackTypeDef pCallback)
-//{
-//  assert_param(_this != NULL);
-//
-//  HAL_DFSDM_Filter_RegisterCallback(_this->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter, CallbackID, pCallback);
-//
-//  return SYS_NO_ERROR_CODE;
-//}
+/*SYS_DEFINE_INLINE*/
+/*sys_error_code_t DFSDMDriverFilterRegisterCallback(DFSDMDriver_t *_this, HAL_DFSDM_Filter_CallbackIDTypeDef CallbackID, pDFSDM_Filter_CallbackTypeDef pCallback)*/
+/*{*/
+/*  assert_param(_this != NULL);*/
+/**/
+/*  HAL_DFSDM_Filter_RegisterCallback(_this->mx_handle.p_mx_dfsdm_cfg->p_dfsdm_filter, CallbackID, pCallback);*/
+/**/
+/*  return SYS_NO_ERROR_CODE;*/
+/*}*/
 #ifdef __cplusplus
 }
 #endif

@@ -53,7 +53,7 @@
 
 #define DATALOG_APP_TASK_CFG_TIMER_PERIOD_MS      5000U
 
-// BLE Advertise option byte
+/* BLE Advertise option byte*/
 #define ADV_OB_BATTERY                            0U
 #define ADV_OB_ALARM                              1U
 #define ADV_OB_ICON                               2U
@@ -131,8 +131,8 @@ typedef struct _DatalogAppTaskClass
   pExecuteStepFunc_t p_pm_state2func_map[];
 } DatalogAppTaskClass_t;
 
-// Private member function declaration
-// ***********************************
+/* Private member function declaration*/
+/* ************************************/
 
 /**
   * Execute one step of the task control loop while the system is in RUN mode.
@@ -206,15 +206,15 @@ static const DatalogAppTaskClass_t sTheClass =
   }
 };
 
-// Public API definition
-// *********************
+/* Public API definition*/
+/* **********************/
 
 AManagedTaskEx *DatalogAppTaskAlloc()
 {
-  // In this application there is only one Keyboard task,
-  // so this allocator implement the singleton design pattern.
+  /* In this application there is only one Keyboard task,*/
+  /* so this allocator implement the singleton design pattern.*/
 
-  // Initialize the super class
+  /* Initialize the super class*/
   AMTInitEx(&sTaskObj.super);
 
   sTaskObj.super.vptr = &sTheClass.vtbl;
@@ -284,14 +284,14 @@ sys_error_code_t DatalogAppTask_msg(ULONG msg)
   return res;
 }
 
-// AManagedTask virtual functions definition
-// ***********************************************
+/* AManagedTask virtual functions definition*/
+/* ************************************************/
 
 sys_error_code_t DatalogAppTask_vtblHardwareInit(AManagedTask *_this, void *pParams)
 {
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  // DatalogAppTask *p_obj = (DatalogAppTask*) _this;
+  /* DatalogAppTask *p_obj = (DatalogAppTask*) _this;*/
 
 #ifdef ENABLE_THREADX_DBG_PIN
   /* Configure DEBUG PIN */
@@ -323,14 +323,15 @@ sys_error_code_t DatalogAppTask_vtblHardwareInit(AManagedTask *_this, void *pPar
 
 sys_error_code_t DatalogAppTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName,
                                                  VOID **pvStackStart,
-                                                 ULONG *pStackDepth, UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart,
+                                                 ULONG *pStackDepth, UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice,
+                                                 ULONG *pAutoStart,
                                                  ULONG *pParams)
 {
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   DatalogAppTask *p_obj = (DatalogAppTask *) _this;
 
-  // Create task specific sw resources.
+  /* Create task specific sw resources.*/
 
   uint16_t item_size = DT_TASK_CFG_IN_QUEUE_ITEM_SIZE;
   VOID *p_queue_items_buff = SysAlloc(DT_TASK_CFG_IN_QUEUE_LENGTH * item_size);
@@ -362,7 +363,7 @@ sys_error_code_t DatalogAppTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_f
 
   *pTaskCode = AMTExRun;
   *pName = "DatalogApp";
-  *pvStackStart = NULL; // allocate the task stack in the system memory pool.
+  *pvStackStart = NULL; /* allocate the task stack in the system memory pool.*/
   *pStackDepth = DT_TASK_CFG_STACK_DEPTH;
   *pParams = (ULONG) _this;
   *pPriority = DT_TASK_CFG_PRIORITY;
@@ -412,7 +413,7 @@ sys_error_code_t DatalogAppTask_vtblHandleError(AManagedTask *_this, SysEvent xE
 {
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  //  DatalogAppTask *p_obj = (DatalogAppTask*)_this;
+  /*  DatalogAppTask *p_obj = (DatalogAppTask*)_this;*/
 
   return res;
 }
@@ -431,8 +432,8 @@ sys_error_code_t DatalogAppTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 
   SYS_DEBUGF(SYS_DBG_LEVEL_DEFAULT, ("DatalogApp: start.\r\n"));
 
-  // At this point all system has been initialized.
-  // Execute task specific delayed one time initialization.
+  /* At this point all system has been initialized.*/
+  /* Execute task specific delayed one time initialization.*/
 
   return res;
 }
@@ -477,14 +478,14 @@ sys_error_code_t DatalogAppTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, cons
 {
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  //  DatalogAppTask *p_obj = (DatalogAppTask*)_this;
+  /*  DatalogAppTask *p_obj = (DatalogAppTask*)_this;*/
 
   AMTExSetPMClass(_this, E_PM_CLASS_2);
 
   return res;
 }
 
-//// IIListener virtual functions
+/*// IIListener virtual functions*/
 sys_error_code_t DatalogAppTask_OnStatusChange_vtbl(IListener *_this)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -492,7 +493,7 @@ sys_error_code_t DatalogAppTask_OnStatusChange_vtbl(IListener *_this)
   return res;
 }
 
-// ISensorEventListener virtual functions
+/* ISensorEventListener virtual functions*/
 void *DatalogAppTask_GetOwner_vtbl(IEventListener *_this)
 {
   DatalogAppTask *p_obj = (DatalogAppTask *)((uint32_t) _this - offsetof(DatalogAppTask, sensorListener));
@@ -544,7 +545,8 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
         SYS_SET_SERVICE_LEVEL_ERROR_CODE(res);
         return res;
       }
-      p_obj->datalog_model->s_models[sId]->stream_params.ioffset = p_evt->timestamp - ((1.0 / (double_t) ODR) * (samplesToSend - 1));
+      p_obj->datalog_model->s_models[sId]->stream_params.ioffset =
+        p_evt->timestamp - ((1.0 / (double_t) ODR) * (samplesToSend - 1));
       p_obj->sensorContext[sId].old_time_stamp = p_evt->timestamp;
       p_obj->sensorContext[sId].n_samples_to_timestamp = p_obj->datalog_model->s_models[sId]->stream_params.spts;
     }
@@ -557,7 +559,8 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
       {
         if (IStream_is_enabled((IStream_t *) p_obj->usbx_device))
         {
-          res = IStream_post_data((IStream_t *) p_obj->usbx_device, stream_id, data_buf, samplesToSend * nBytesPerSample);
+          res = IStream_post_data((IStream_t *) p_obj->usbx_device, stream_id, data_buf,
+                                  samplesToSend * nBytesPerSample);
         }
         if (p_obj->sensorContext[sId].n_samples_to_timestamp != 0)
         {
@@ -569,7 +572,8 @@ sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const
       {
         if (IStream_is_enabled((IStream_t *) p_obj->usbx_device))
         {
-          res = IStream_post_data((IStream_t *) p_obj->usbx_device, stream_id, data_buf, p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample);
+          res = IStream_post_data((IStream_t *) p_obj->usbx_device, stream_id, data_buf,
+                                  p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample);
         }
 
         data_buf += p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample;
@@ -686,7 +690,7 @@ sys_error_code_t DatalogAppTask_vtblICommandParse_t_send_ctrl_msg(ICommandParse_
   return res;
 }
 
-// ILogController_t virtual functions
+/* ILogController_t virtual functions*/
 uint8_t DatalogAppTask_start_vtbl(int32_t interface)
 {
   DatalogAppTask *p_obj = getDatalogAppTask();
@@ -775,7 +779,7 @@ uint8_t DatalogAppTask_set_time_vtbl(const char *datetime)
 {
   char datetimeStr[3];
 
-  //internal input format: yyyyMMdd_hh_mm_ss
+  /*internal input format: yyyyMMdd_hh_mm_ss*/
 
   RTC_DateTypeDef sdate;
   RTC_TimeTypeDef stime;
@@ -797,7 +801,7 @@ uint8_t DatalogAppTask_set_time_vtbl(const char *datetime)
   sdate.Date = atoi(datetimeStr);
 
   /** Week day initialization (not used)*/
-  sdate.WeekDay = RTC_WEEKDAY_MONDAY; //Not used
+  sdate.WeekDay = RTC_WEEKDAY_MONDAY; /*Not used*/
 
   /** extract hour string */
   datetimeStr[0] = datetime[9];
@@ -815,7 +819,7 @@ uint8_t DatalogAppTask_set_time_vtbl(const char *datetime)
   stime.Seconds = atoi(datetimeStr);
 
   /** not used */
-  //stime.TimeFormat = RTC_HOURFORMAT12_AM;
+  /*stime.TimeFormat = RTC_HOURFORMAT12_AM;*/
   stime.SecondFraction = 0;
   stime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   stime.StoreOperation = RTC_STOREOPERATION_RESET;
@@ -873,7 +877,7 @@ uint8_t DatalogAppTask_save_config_vtbl(void)
   return 0;
 }
 
-// IMLCController_t virtual functions
+/* IMLCController_t virtual functions*/
 uint8_t DatalogAppTask_load_lsm6dsv16x_ucf_vtbl(const char *ucf_data, int32_t ucf_size)
 {
   DatalogAppTask *p_obj = getDatalogAppTask();
@@ -1118,8 +1122,8 @@ uint8_t DatalogAppTask_load_ucf(const char *p_ucf_data, uint32_t ucf_size, const
   return 0;
 }
 
-// Private function definition
-// ***************************
+/* Private function definition*/
+/* ****************************/
 
 static sys_error_code_t DatalogAppTaskExecuteStepState1(AManagedTask *_this)
 {
@@ -1187,8 +1191,10 @@ static sys_error_code_t DatalogAppTask_UpdateStreamingStatus(DatalogAppTask *p_o
             dps = p_obj->datalog_model->s_models[i]->stream_params.usb_dps;
 
             /* Set USB endpoint for the current stream */
-            usbx_dctrl_class_set_ep(p_obj->usbx_device, stream_id, p_obj->datalog_model->s_models[i]->stream_params.usb_ep);
-            IStream_alloc_resource((IStream_t *) p_obj->usbx_device, stream_id, dps, p_obj->datalog_model->s_models[i]->comp_name);
+            usbx_dctrl_class_set_ep(p_obj->usbx_device, stream_id,
+                                    p_obj->datalog_model->s_models[i]->stream_params.usb_ep);
+            IStream_alloc_resource((IStream_t *) p_obj->usbx_device, stream_id, dps,
+                                   p_obj->datalog_model->s_models[i]->comp_name);
           }
           else
           {

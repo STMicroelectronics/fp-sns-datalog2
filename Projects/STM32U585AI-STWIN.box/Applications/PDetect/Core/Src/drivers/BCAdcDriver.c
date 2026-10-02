@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    BCDriver.c
+  * @file    BCAdcDriver.c
   * @author  STMicroelectronics
   * @version 2.0.0
   * @date    July 25, 2022
@@ -12,12 +12,14 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics
+  * Copyright (c) 2022 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *
   ******************************************************************************
   */
 
@@ -28,15 +30,15 @@
 
 #define SYS_DEBUGF(level, message)      SYS_DEBUGF3(SYS_DBG_DRIVERS, level, message)
 
-#define ADC_VREF                        2750                    // ADC reference voltage
-#define ADC_CONV_TIMEOUT                1000                    // Timeout value in millisecond for injected conversion
+#define ADC_VREF                        2750                    /* ADC reference voltage*/
+#define ADC_CONV_TIMEOUT                1000 /* Timeout in milliseconds for injected conversion */
 
 /** We use a divider to scale the battery voltage according TO ADC reference voltage.
   *  For example, if battery voltage is equal to 4.2V, the ADC see 2.5V
   */
 
-#define ADC_BATMS_RUP                   56000.0                 // divider upper resistor
-#define ADC_BATMS_RDOWN                 100000.0                // divider lower resistor
+#define ADC_BATMS_RUP                   56000.0                 /* divider upper resistor*/
+#define ADC_BATMS_RDOWN                 100000.0                /* divider lower resistor*/
 #define ADC_BATMS_RATIO                 (float_t)((ADC_BATMS_RUP+ADC_BATMS_RDOWN)/ADC_BATMS_RDOWN)
 
 
@@ -147,7 +149,8 @@ sys_error_code_t BCAdcDriver_GetValue(IDriver *_this, uint16_t *p_value)
 
   if (HAL_ADC_PollForConversion(p_adc, 10) == HAL_OK)
   {
-    measured_voltage = __LL_ADC_CALC_DATA_TO_VOLTAGE(p_adc->Instance, ADC_VREF, HAL_ADC_GetValue(p_adc), LL_ADC_RESOLUTION_12B);
+    measured_voltage = __LL_ADC_CALC_DATA_TO_VOLTAGE(p_adc->Instance, ADC_VREF, HAL_ADC_GetValue(p_adc),
+                                                     LL_ADC_RESOLUTION_12B);
     *p_value = (uint16_t)((float_t)(measured_voltage) * ADC_BATMS_RATIO);
   }
   else

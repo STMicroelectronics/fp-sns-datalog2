@@ -47,6 +47,12 @@
 #endif
 
 static usbx_dctrl_class_t sObj;
+volatile uint8_t g_usbx_last_set_ep_stream_id = 0;
+volatile uint8_t g_usbx_last_set_ep_value = 0;
+volatile UINT g_usbx_last_set_ep_status = UX_SUCCESS;
+volatile ULONG g_usbx_set_ep_call_count = 0;
+volatile ULONG g_usbx_set_ep_mask = 0;
+volatile uint8_t g_usbx_stream_ep_map[SS_N_CHANNELS_MAX] = {0};
 
 const static IStream_vtbl usbx_dctrl_vtbl =
 {
@@ -88,7 +94,20 @@ IStream_t *usbx_dctrl_class_alloc(const void *mx_drv_cfg)
 
 int8_t usbx_dctrl_class_set_ep(usbx_dctrl_class_t *_this, uint8_t id_stream, uint8_t ep)
 {
-  if (ux_device_class_sensor_streaming_SetTransmissionEP(_this->sensor_streaming_device, id_stream, ep) != UX_SUCCESS)
+  g_usbx_last_set_ep_stream_id = id_stream;
+  g_usbx_last_set_ep_value = ep;
+  g_usbx_set_ep_call_count++;
+  if (ep < SS_N_IN_ENDPOINTS)
+  {
+    g_usbx_set_ep_mask |= (1UL << ep);
+  }
+  if (id_stream < SS_N_CHANNELS_MAX)
+  {
+    g_usbx_stream_ep_map[id_stream] = ep;
+  }
+  g_usbx_last_set_ep_status = ux_device_class_sensor_streaming_SetTransmissionEP(_this->sensor_streaming_device, id_stream, ep);
+
+  if (g_usbx_last_set_ep_status != UX_SUCCESS)
   {
     return -1;
   }
@@ -394,7 +413,7 @@ sys_error_code_t usbx_dctrl_vtblStream_deinit(IStream_t *_this)
   ux_device_stack_uninitialize();
   ux_system_uninitialize();
 
-  // ToDo: should this be "tx_byte_release()" ??? --> allocation is done with "tx_byte_allocate()"
+  /* ToDo: should this be "tx_byte_release()" ??? --> allocation is done with "tx_byte_allocate()"*/
   _ux_utility_memory_free(obj->memory_pointer);
 
   return res;
@@ -458,7 +477,7 @@ sys_error_code_t usbx_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t 
   {
     ux_device_class_sensor_streaming_SetTxDataBuffer(obj->sensor_streaming_device, id_stream, obj->TxBuffer[id_stream],
                                                      size + SS_HEADER_SIZE, SS_CH_QUEUE_ITEMS);
-    //ux_device_class_sensor_streaming_CleanTxDataBuffer(obj->sensor_streaming_device, id_stream);
+    /*ux_device_class_sensor_streaming_CleanTxDataBuffer(obj->sensor_streaming_device, id_stream);*/
   }
   else
   {

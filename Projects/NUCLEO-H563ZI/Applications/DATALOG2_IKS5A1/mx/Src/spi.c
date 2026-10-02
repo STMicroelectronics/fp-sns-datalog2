@@ -83,7 +83,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle)
     /* USER CODE END SPI1_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_SPI1;
     PeriphClkInitStruct.PLL2.PLL2Source = RCC_PLL2_SOURCE_CSI;
     PeriphClkInitStruct.PLL2.PLL2M = 1;

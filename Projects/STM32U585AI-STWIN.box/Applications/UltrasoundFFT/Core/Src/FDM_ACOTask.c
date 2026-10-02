@@ -32,19 +32,19 @@
 
 #ifndef ACO_TASK_CFG_STACK_DEPTH
 #define ACO_TASK_CFG_STACK_DEPTH        configMINIMAL_STACK_SIZE*12
-#endif
+#endif /* ACO_TASK_CFG_STACK_DEPTH */
 
 #ifndef ACO_TASK_CFG_PRIORITY
 #define ACO_TASK_CFG_PRIORITY           (tskIDLE_PRIORITY)
-#endif
+#endif /* ACO_TASK_CFG_PRIORITY */
 
 #ifndef ACO_TASK_CFG_IN_QUEUE_ITEM_COUNT
 #define ACO_TASK_CFG_IN_QUEUE_ITEM_COUNT 10
-#endif
+#endif /* ACO_TASK_CFG_IN_QUEUE_ITEM_COUNT */
 
 #ifndef ACO_TASK_CFG_IN_QUEUE_ITEM_SIZE
 #define ACO_TASK_CFG_IN_QUEUE_ITEM_SIZE sizeof(APPReport)
-#endif
+#endif /* ACO_TASK_CFG_IN_QUEUE_ITEM_SIZE */
 
 #define FFT_DPU_INPUT_BUFFER_DIM  (512u)
 #define FFT_DPU_INPUT_SIGNAL_AXIS (1u)
@@ -100,7 +100,8 @@ struct _FDM_ACOTask
   void *p_dpu_in_buff;
 
   /**
-    * Data buffer used by the DPU but allocated by the task. It is used by the DPU to store the result of the processing.
+    * Data buffer used by the DPU but allocated by the task. It is used by the DPU
+    * to store the result of the processing.
     * The correct size in byte for one signal is computed by the DPU with the method ADPU2_GetOutDataPayloadSize().
     */
   void *p_dpu_out_buff;
@@ -235,14 +236,16 @@ sys_error_code_t FDM_ACOTask_vtblHardwareInit(AManagedTask *_this, void *pParams
   BSP_DEBUG_PIN_Init(CON34_PIN_28);
   BSP_DEBUG_PIN_Init(CON34_PIN_30);
   BSP_DEBUG_PIN_Init(CON34_PIN_30);
-  //  FDM_ACOTask *p_obj = (FDM_ACOTask*)_this;
+  /*  FDM_ACOTask *p_obj = (FDM_ACOTask*)_this;*/
 
   return xRes;
 }
 
 sys_error_code_t FDM_ACOTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName,
                                               VOID **pvStackStart, ULONG *pStackDepth,
-                                              UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart, ULONG *pParams)
+                                              UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice,
+                                              ULONG *pAutoStart,
+                                              ULONG *pParams)
 {
   assert_param(_this);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -324,7 +327,7 @@ sys_error_code_t FDM_ACOTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_func
 
   *pTaskCode = AMTExRun;
   *pName = "FDM_ACOTask";
-  *pvStackStart = NULL; // allocate the task stack in the system memory pool.
+  *pvStackStart = NULL; /* allocate the task stack in the system memory pool.*/
   *pStackDepth = ACO_TASK_CFG_STACK_DEPTH;
   *pParams = (ULONG) _this;
   *pPriority = ACO_TASK_CFG_PRIORITY;
@@ -385,7 +388,7 @@ sys_error_code_t FDM_ACOTask_vtblHandleError(AManagedTask *_this, SysEvent xErro
 {
   assert_param(_this);
   sys_error_code_t xRes = SYS_NO_ERROR_CODE;
-  //  FDM_ACOTask *p_obj = (FDM_ACOTask*)_this;
+  /*  FDM_ACOTask *p_obj = (FDM_ACOTask*)_this;*/
 
   return xRes;
 }
@@ -399,7 +402,7 @@ sys_error_code_t FDM_ACOTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 
 #ifdef ENABLE_THREADX_DBG_PIN
   p_obj->super.m_xTaskHandle.pxTaskTag = ACO_TASK_CFG_TAG;
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */
 
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("FDM_ACOTask: start.\r\n"));
 
@@ -461,12 +464,12 @@ sys_error_code_t FDM_ACOTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const E
 {
   assert_param(_this);
   sys_error_code_t xRes = SYS_NO_ERROR_CODE;
-  //  FDM_ACOTask *p_obj = (FDM_ACOTask*)_this;
+  /*  FDM_ACOTask *p_obj = (FDM_ACOTask*)_this;*/
 
   return xRes;
 }
 
-// Private function definition
+/* Private function definition*/
 /*************************/
 uint32_t fftacocount = 0;
 
@@ -544,7 +547,7 @@ static inline sys_error_code_t FDM_ACOTaskPostReportToFront(FDM_ACOTask *_this, 
     if (TX_SUCCESS != tx_queue_front_send(&_this->in_queue, pReport, TX_NO_WAIT))
     {
       res = SYS_APP_TASK_REPORT_LOST_ERROR_CODE;
-      // this function is private and the caller will ignore this return code.
+      /* this function is private and the caller will ignore this return code.*/
     }
   }
   else

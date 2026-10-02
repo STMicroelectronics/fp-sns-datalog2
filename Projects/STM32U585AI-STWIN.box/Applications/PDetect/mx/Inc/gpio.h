@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics..
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -66,7 +66,6 @@ void MX_GPIO_PB1_Init(void);
 void MX_GPIO_PF8_Init(void);
 void MX_GPIO_PF10_Init(void);
 void MX_GPIO_PC3_Init(void);
-void MX_GPIO_PG5_Init(void);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

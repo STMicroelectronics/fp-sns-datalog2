@@ -88,11 +88,13 @@ uint8_t __stream_control(bool status)
           /* Get sensor's bandwidth */
           if (app_model.s_models[i]->sensor_status->isensor_class == ISENSOR_CLASS_MEMS)
           {
-            app_model.s_models[i]->stream_params.bandwidth = app_model.s_models[i]->sensor_status->type.mems.odr * SMGetnBytesPerSample(i);
+            app_model.s_models[i]->stream_params.bandwidth =
+              app_model.s_models[i]->sensor_status->type.mems.odr * SMGetnBytesPerSample(i);
           }
           else if (app_model.s_models[i]->sensor_status->isensor_class == ISENSOR_CLASS_AUDIO)
           {
-            app_model.s_models[i]->stream_params.bandwidth = app_model.s_models[i]->sensor_status->type.audio.frequency * SMGetnBytesPerSample(i);
+            app_model.s_models[i]->stream_params.bandwidth =
+              app_model.s_models[i]->sensor_status->type.audio.frequency * SMGetnBytesPerSample(i);
           }
           else
           {
@@ -176,10 +178,11 @@ static sys_error_code_t __sc_set_usb_stream_params(uint32_t id)
   else
   {
     /* 50ms of sensor data; when there's a timestamp packets will be sent fastly */
-    p_s_models[id]->stream_params.usb_dps = (uint32_t)(p_s_models[id]->stream_params.bandwidth * SC_USB_MAX_PACKETS_PERIOD);
+    p_s_models[id]->stream_params.usb_dps =
+      (uint32_t)(p_s_models[id]->stream_params.bandwidth * SC_USB_MAX_PACKETS_PERIOD);
     if (p_s_models[id]->stream_params.usb_dps > SC_USB_DPS_MAX)
     {
-      p_s_models[id]->stream_params.usb_dps = SC_USB_DPS_MAX; // set a limit to avoid buffer to big
+      p_s_models[id]->stream_params.usb_dps = SC_USB_DPS_MAX; /* set a limit to avoid buffer to big*/
     }
     else if (p_s_models[id]->stream_params.usb_dps < SMGetnBytesPerSample(id) + 8)
     {
@@ -247,7 +250,8 @@ static sys_error_code_t __sc_set_fifo_wtm(uint32_t id)
   else if (p_s_models[id]->sensor_status->isensor_class == ISENSOR_CLASS_POWERMONITOR)
   {
     SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("**** %s, odr: %d, DPS: %d, ms: %f \r\n",
-                                       descriptor.p_name, 1000000 / p_s_models[id]->sensor_status->type.power_meter.adc_conversion_time,
+                                       descriptor.p_name,
+                                       1000000 / p_s_models[id]->sensor_status->type.power_meter.adc_conversion_time,
                                        p_s_models[id]->stream_params.usb_dps, ms));
   }
 #endif

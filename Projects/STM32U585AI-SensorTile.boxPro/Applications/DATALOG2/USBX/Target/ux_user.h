@@ -201,8 +201,8 @@
  of memory with the UX_SAFE_ALIGN field.
  */
 
-// #define UX_ENFORCE_SAFE_ALIGNMENT
-//#define UX_ENABLE_MEMORY_STATISTICS 1
+/* #define UX_ENFORCE_SAFE_ALIGNMENT*/
+/*#define UX_ENABLE_MEMORY_STATISTICS 1*/
 /* Defined, this value represents the number of packets in the CDC_ECM device class.
  The default is 16.
  */
@@ -256,16 +256,16 @@
  bwPollTimeout supported.
  */
 
-//#define UX_DEVICE_CLASS_DFU_STATUS_MODE                  1
+/*#define UX_DEVICE_CLASS_DFU_STATUS_MODE                  1*/
 /* Defined, this value represents the default DFU status bwPollTimeout.
  The value is 3 bytes long (max 0xFFFFFFu).
  By default the bwPollTimeout is 1 (means 1ms).
  */
 
-//#define UX_DEVICE_CLASS_DFU_STATUS_POLLTIMEOUT             0
+/*#define UX_DEVICE_CLASS_DFU_STATUS_POLLTIMEOUT             0*/
 /* Defined, this macro will enable custom request process callback.  */
 
-//#define UX_DEVICE_CLASS_DFU_CUSTOM_REQUEST_ENABLE
+/*#define UX_DEVICE_CLASS_DFU_CUSTOM_REQUEST_ENABLE*/
 /* Defined, this value will only enable the host side of usbx.  */
 
 /* #define UX_HOST_SIDE_ONLY */
@@ -280,8 +280,8 @@
 
 /* #define UX_OTG_SUPPORT */
 
-#endif
-#endif
+#endif /* UX_DEVICE_SIDE_ONLY */
+#endif /* UX_HOST_SIDE_ONLY */
 
 /* Defined, this value represents the maximum size of single transfers for the SCSI data phase.
  */
@@ -308,7 +308,8 @@
 
 /* #define UX_THREAD_PRIORITY_HCD             2 */
 
-/* This value actually defines the time slice that will be used for threads. For example, if defined to 0, the ThreadX target port does not use time slices. */
+/* This value actually defines the time slice that will be used for threads. For example, if defined
+ to 0, the ThreadX target port does not use time slices. */
 
 /* #define UX_NO_TIME_SLICE             0 */
 
@@ -331,5 +332,5 @@
 /* Determine if tracing is enabled.  */
 
 /*#define UX_TRACE_INSERT_MACROS*/
-#endif
+#endif /* UX_USER_H */
 

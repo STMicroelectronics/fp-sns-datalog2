@@ -22,7 +22,8 @@
 
 /* USER CODE BEGIN 0 */
 #define STBC02_USED_TIM_PERIOD                (float_t)5e-6 // s
-#define STBC02_USED_TIM_CLKFreq               (HAL_RCC_GetPCLK1Freq() * (((READ_BIT(RCC->CFGR, RCC_CFGR_PPRE1) >> RCC_CFGR_PPRE1_Pos) < 4U) ? 1U : 2U))
+#define STBC02_USED_TIM_CLKFreq               (HAL_RCC_GetPCLK1Freq() * (((READ_BIT(RCC->CFGR, RCC_CFGR_PPRE1) \
+                                                                           >> RCC_CFGR_PPRE1_Pos) < 4U) ? 1U : 2U))
 
 #define Error_Handler sys_error_handler
 void sys_error_handler(void);
@@ -102,7 +103,7 @@ void MX_TIM3_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM3_Init 2 */
-#endif
+#endif /* 0 */
 
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = uwPrescalerValue;

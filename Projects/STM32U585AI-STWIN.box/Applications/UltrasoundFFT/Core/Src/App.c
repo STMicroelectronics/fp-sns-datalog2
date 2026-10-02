@@ -87,7 +87,8 @@ static EPowerMode spAppPMState2SMPMStateMap[] =
 /*********************************/
 
 /**
-  * Re-map the PM State Machine of the Sensor Manager managed tasks used in the application according to the following map:
+  * Re-map the PM State Machine of the Sensor Manager managed tasks used in the application
+  * according to the following map:
   *
   * | App State                      | Sensor Manager State         | BLE task State               |
   * | :----------------------------- | ---------------------------: | ---------------------------: |
@@ -142,7 +143,8 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   SensorManagerStateMachineRemap(spAppPMState2SMPMStateMap);
 
   /** Get microphone observable interface from IMP23ABSUTask
-    *  mic_sensor_obsv_interface (type: ISourceObservable) is a subset of methods exposed by the sensor (type: ISensor_t)
+    *  mic_sensor_obsv_interface (type: ISourceObservable) is a subset of methods
+    *  exposed by the sensor (type: ISensor_t)
     **/
   ISourceObservable *mic_sensor_obsv_interface = IMP23ABSUTaskGetMicSensorIF((IMP23ABSUTask *) sIMP23ABSUObj);
 
@@ -152,7 +154,8 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   /* Get DatalogApp IDataEventListener_t interface:  DatalogAppListener*/
   IDataEventListener_t *DatalogAppListener = DatalogAppTask_GetEventListenerIF((DatalogAppTask *) sDatalogAppObj);
 
-  IEventListener *MicrophoneSensorListener = (IEventListener *) DatalogAppTask_GetSensorEventListenerIF((DatalogAppTask *) sDatalogAppObj);
+  IEventListener *MicrophoneSensorListener =
+    (IEventListener *) DatalogAppTask_GetSensorEventListenerIF((DatalogAppTask *) sDatalogAppObj);
   IEventSrcAddEventListener(IMP23ABSUTaskGetEventSrcIF((IMP23ABSUTask *) sIMP23ABSUObj), MicrophoneSensorListener);
 
   /* Connect DatalogAppListener as DPU listener */

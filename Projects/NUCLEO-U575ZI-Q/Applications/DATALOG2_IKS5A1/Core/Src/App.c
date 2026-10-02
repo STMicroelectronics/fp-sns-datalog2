@@ -171,7 +171,11 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 
   if (ext_iis3dwb10is == IIS3DWB10IS_DIL24)
   {
+#ifdef USE_ISPU_INT
+    sIIS3DWB10ISExtObj = IIS3DWB10ISTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, &MX_GPIO_INT2_EXTERNALInitParams, &MX_GPIO_CS_EXTERNALInitParams);
+#else
     sIIS3DWB10ISExtObj = IIS3DWB10ISTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
+#endif /* USE_ISPU_INT */
   }
   else if (ext_iis3dwb10is == IIS3DWB10IS_FLEX)
   {
@@ -234,7 +238,8 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj,
                           (I2CBusIF *)IIS2DULPXTaskGetSensorIF((IIS2DULPXTask *) sIIS2DULPXObj));
   I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj, (I2CBusIF *)IIS2MDCTaskGetSensorIF((IIS2MDCTask *) sIIS2MDCObj));
-  I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj, (I2CBusIF *)ILPS22QSTaskGetSensorIF((ILPS22QSTask *) sILPS22QSObj));
+  I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj,
+                          (I2CBusIF *)ILPS22QSTaskGetSensorIF((ILPS22QSTask *) sILPS22QSObj));
   I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj,
                           (I2CBusIF *)ISM330ISTaskGetSensorIF((ISM330ISTask *) sISM330ISObj));
   I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj,
@@ -261,8 +266,10 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
 
   if (sIIS3DWB10ISExtObj)
   {
-    IEventSrcAddEventListener(IIS3DWB10ISTaskGetAccEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj), DatalogAppListener);
-    IEventSrcAddEventListener(IIS3DWB10ISTaskGetIspuEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj), DatalogAppListener);
+    IEventSrcAddEventListener(IIS3DWB10ISTaskGetAccEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj),
+                              DatalogAppListener);
+    IEventSrcAddEventListener(IIS3DWB10ISTaskGetIspuEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj),
+                              DatalogAppListener);
   }
   else
   {

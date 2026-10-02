@@ -61,7 +61,7 @@ uint8_t ism330is_ispu_comp_init(void)
   ism330is_ispu_model.stream_params.spts = 0;
 #else
   ism330is_ispu_model.stream_params.spts = 1;
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
   __stream_control(true);
   /* USER Component initialization code */
   app_model.ispu_ucf_valid = false;
@@ -110,7 +110,7 @@ uint8_t ism330is_ispu_get_sd_dps(float_t *value)
 
 uint8_t ism330is_ispu_get_data_type(char **value)
 {
-  *value = "int16";//TODO ?????????? isn't it int8_t????
+  *value = "int16";/*TODO ?????????? isn't it int8_t????*/
   return PNPL_NO_ERROR_CODE;
 }
 

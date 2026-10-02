@@ -68,33 +68,33 @@ extern "C" {
 
 #ifndef USBD_MAX_EP0_SIZE
 #define USBD_MAX_EP0_SIZE                              64U
-#endif
+#endif /* USBD_MAX_EP0_SIZE */
 
 #ifndef USBD_STRING_FRAMEWORK_MAX_LENGTH
 #define USBD_STRING_FRAMEWORK_MAX_LENGTH               512U
-#endif
+#endif /* USBD_STRING_FRAMEWORK_MAX_LENGTH */
 
 /* Vendor ID */
 #ifndef USBD_VID
 #define USBD_VID                                       0x0483U
-#endif
+#endif /* USBD_VID */
 
 /* Product ID */
 #ifndef USBD_PID
 #define USBD_PID                                       0x5744U
-#endif
+#endif /* USBD_PID */
 
 #ifndef USBD_LANGID_STRING
 #define USBD_LANGID_STRING                             1033U
-#endif
+#endif /* USBD_LANGID_STRING */
 
 #ifndef USBD_MANUFACTURER_STRING
 #define USBD_MANUFACTURER_STRING                       "STMicroelectronics"
-#endif
+#endif /* USBD_MANUFACTURER_STRING */
 
 #ifndef USBD_PRODUCT_STRING
 #define USBD_PRODUCT_STRING                            "Multi_Sensor_Streaming"
-#endif
+#endif /* USBD_PRODUCT_STRING */
 
 /* This is the maximum supported configuration descriptor size
  User may redefine this value in order to optimize */

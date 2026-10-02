@@ -34,7 +34,7 @@
 
 typedef enum
 {
-//String Enum --> enum value is translated to be an integer following the definition order in the Device Model.
+  /*String Enum --> enum value is translated to be an integer following the definition order in the Device Model.*/
   pnpl_acquisition_info_interface_sd = 0,
   pnpl_acquisition_info_interface_usb = 1,
 } pnpl_acquisition_info_interface_t;

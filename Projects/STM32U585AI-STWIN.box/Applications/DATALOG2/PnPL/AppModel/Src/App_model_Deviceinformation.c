@@ -92,7 +92,7 @@ uint8_t DeviceInformation_get_totalStorage(float_t *value)
   *value = 0;
   if (SD_IsDetected())
   {
-//    BSP_SD_CardInfo CardInfo;
+    /*    BSP_SD_CardInfo CardInfo;*/
     HAL_SD_CardInfoTypeDef CardInfo;
     SD_GetCardInfo(&CardInfo);
     *value = roundf(((float_t)CardInfo.BlockNbr * (float_t)CardInfo.BlockSize) / 1000000000.0f);
@@ -105,7 +105,4 @@ uint8_t DeviceInformation_get_totalMemory(float_t *value)
   *value = (SRAM1_SIZE + SRAM2_SIZE + SRAM3_SIZE + SRAM4_SIZE) / 1024;
   return PNPL_NO_ERROR_CODE;
 }
-
-
-
 

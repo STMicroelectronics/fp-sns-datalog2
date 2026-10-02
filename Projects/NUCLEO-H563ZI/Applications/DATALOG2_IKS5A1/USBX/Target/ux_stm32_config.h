@@ -31,7 +31,7 @@ extern "C" {
 /* Private defines -----------------------------------------------------------*/
 
 /* Total number of Endpoints = IN + OUT + CTRL */
-#define UX_DCD_STM32_MAX_ED                   (SS_N_IN_ENDPOINTS + SS_N_OUT_ENDPOINTS + 1U)
+#define UX_DCD_STM32_MAX_ED                   8
 
 /* Total USB FIFO SIZE, on U5 is 320 */
 #define PCD_FIFO_SIZE                         320U

@@ -125,7 +125,7 @@ extern "C" {
 /* USER CODE BEGIN 2 */
 
 /* Uncomment/Comment the following define for  disabling/enabling print messages from BLE Manager files */
-//#define BLE_MANAGER_DEBUG
+/*#define BLE_MANAGER_DEBUG*/
 
 #define BLE_DEBUG_LEVEL 1
 

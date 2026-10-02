@@ -63,7 +63,7 @@ uint8_t ilps22qs_press_comp_init(void)
   ilps22qs_press_set_samples_per_ts(0, NULL);
 #else
   ilps22qs_press_set_samples_per_ts(1, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
   __stream_control(true);
   /* USER Component initialization code */
   return PNPL_NO_ERROR_CODE;
@@ -262,7 +262,7 @@ uint8_t ilps22qs_press_set_odr(pnpl_ilps22qs_press_odr_t enum_id, char **respons
   {
 #if (HSD_USE_DUMMY_DATA != 1)
     ilps22qs_press_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
     __stream_control(true);
   }
   return ret;

@@ -34,6 +34,7 @@
 #include "tim.h"
 #include "gpio.h"
 #include "usb_otg.h"
+#include "sai.h"
 
 /**
   * (USER_BUTTON 1) Initialization parameters.
@@ -237,7 +238,7 @@ const MX_MDFParams_t MX_MDF1InitParams =
   .p_mx_init_f = MX_MDF1_Init,
   .p_mx_dma_init_f = MX_GPDMA1_InitCustom
 };
-#endif
+#endif /* 0 */
 /**
   * ADF initialization parameters.
   */
@@ -298,4 +299,13 @@ const MX_TIMParams_t MX_TIM5InitParams =
   .p_mx_init_f = MX_TIM5_Init,
   .p_tim = &htim5,
   .irq_n = TIM5_IRQn
+};
+
+const MX_SAIParams_t MX_SAI1InitParams =
+{
+  .p_sai_handle = &hsai_BlockA1,
+  .sai_irq_n = SAI1_IRQn,
+  .sai_dma_rx_irq_n = GPDMA1_Channel9_IRQn,
+  .p_mx_init_f = MX_SAI1_Init,
+  .p_mx_dma_init_f = MX_GPDMA1_InitCustom
 };

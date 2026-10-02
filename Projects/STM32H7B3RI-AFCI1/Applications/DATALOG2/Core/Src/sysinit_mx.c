@@ -23,8 +23,8 @@
 #include "rtc.h"
 #include "gpio.h"
 
-//Select the SystemClock_Config
-//#define SystemClock_Config_SensorTile SystemClock_Config
+/*Select the SystemClock_Config*/
+/*#define SystemClock_Config_SensorTile SystemClock_Config*/
 #define SystemClock_Config_MX SystemClock_Config
 #define Error_Handler sys_error_handler
 

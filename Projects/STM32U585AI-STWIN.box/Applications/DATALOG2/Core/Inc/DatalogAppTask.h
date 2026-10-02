@@ -55,8 +55,8 @@ typedef struct
 typedef struct _DatalogAppTask DatalogAppTask;
 
 
-// Public API declaration
-//***********************
+/* Public API declaration*/
+/*************************/
 
 /**
   * Allocate an instance of DatalogAppTask.
@@ -89,6 +89,7 @@ uint8_t DatalogAppTask_load_iis2dulpx_ucf_vtbl(const char *ucf_data, int32_t ucf
 uint8_t DatalogAppTask_load_ism330dhcx_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 uint8_t DatalogAppTask_load_ism330bx_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 uint8_t DatalogAppTask_load_ism6hg256x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
+uint8_t DatalogAppTask_load_ism6hgk256x_ucf_vtbl(const char *ucf_data, int32_t ucf_size);
 
 uint8_t DatalogAppTask_SetIspuIF(AManagedTask *task_obj);
 uint8_t DatalogAppTask_load_ism330is_ucf_vtbl(const char *ucf_data, int32_t ucf_size,
@@ -106,8 +107,8 @@ uint8_t DatalogAppTask_load_ucf(const char *ucf_data, uint32_t ucf_size, const c
 uint8_t DatalogAppTask_sd_stream_enable(void);
 uint8_t DatalogAppTask_sd_stream_disable(void);
 
-// Inline functions definition
-// ***************************
+/* Inline functions definition*/
+/* ****************************/
 
 #ifdef __cplusplus
 }

@@ -24,7 +24,7 @@
 /* Forward function declaration. */
 /*********************************/
 void Def_EXTI_Callback(uint16_t nPin) {};
-//void Util_USR_EXTI_Callback(uint16_t pin);
+/*void Util_USR_EXTI_Callback(uint16_t pin);*/
 void LIS2DUXS12Task_EXTI_Callback(uint16_t Pin);
 void LIS2MDLTask_EXTI_Callback(uint16_t nPin);
 void INT2_LSM6DSO16IS_EXTI_Callback(uint16_t Pin);
@@ -43,6 +43,6 @@ EXTI_P2F_MAP_ENTRY(GPIO_PIN_3, LIS2MDLTask_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_11, LSM6DSV16XTask_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_13, INT2_LSM6DSO16IS_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_14, INT2_DSV16X_EXTI_Callback)
-//EXTI_P2F_MAP_ENTRY(GPIO_PIN_15, Util_USR_EXTI_Callback)
+/*EXTI_P2F_MAP_ENTRY(GPIO_PIN_15, Util_USR_EXTI_Callback)*/
 
 EXTI_END_P2F_MAP()

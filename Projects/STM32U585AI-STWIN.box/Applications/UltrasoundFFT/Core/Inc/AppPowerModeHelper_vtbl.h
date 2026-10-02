@@ -24,17 +24,20 @@
 extern "C" {
 #endif
 
-sys_error_code_t AppPowerModeHelper_vtblInit(IAppPowerModeHelper *this); ///< @sa IapmhInit
-EPowerMode AppPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *this,
-                                                      const SysEvent xEvent); ///< @sa IapmhComputeNewPowerMode
-boolean_t AppPowerModeHelper_vtblCheckPowerModeTransaction(IAppPowerModeHelper *this, const EPowerMode eActivePowerMode,
-                                                           const EPowerMode eNewPowerMode); ///< @sa IapmhCheckPowerModeTransaction
-sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *this,
-                                                          EPowerMode ePowerMode); ///< @sa IapmhDidEnterPowerMode
-EPowerMode AppPowerModeHelper_vtblGetActivePowerMode(IAppPowerModeHelper *this); ///< @sa IapmhGetActivePowerMode
-SysPowerStatus AppPowerModeHelper_vtblGetPowerStatus(IAppPowerModeHelper *this); ///< @sa IapmhGetPowerStatus
-boolean_t AppPowerModeHelper_vtblIsLowPowerMode(IAppPowerModeHelper *this,
-                                                const EPowerMode ePowerMode); ///< @sa IapmhIsLowPowerMode
+
+sys_error_code_t AppPowerModeHelper_vtblInit(IAppPowerModeHelper *_this);
+EPowerMode AppPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *_this,
+                                                      const SysEvent event);
+boolean_t AppPowerModeHelper_vtblCheckPowerModeTransaction(IAppPowerModeHelper *_this,
+                                                           const EPowerMode active_power_mode,
+                                                           const EPowerMode new_power_mode);
+sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_this,
+                                                          EPowerMode power_mode);
+EPowerMode AppPowerModeHelper_vtblGetActivePowerMode(IAppPowerModeHelper *_this);
+SysPowerStatus AppPowerModeHelper_vtblGetPowerStatus(IAppPowerModeHelper *_this);
+boolean_t AppPowerModeHelper_vtblIsLowPowerMode(IAppPowerModeHelper *_this,
+                                                const EPowerMode power_mode);
+
 
 #ifdef __cplusplus
 }

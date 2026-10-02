@@ -58,7 +58,6 @@
 
 #define SYS_DEBUGF(level, message)                SYS_DEBUGF3(SYS_DBG_VD6283TX, level, message)
 
-#define VD6283TX_I2C_ADD                          ( 0x40U )
 
 #ifndef HSD_USE_DUMMY_DATA
 #define HSD_USE_DUMMY_DATA 0

@@ -20,9 +20,9 @@
 #include "IStream.h"
 #include "IStream_vtbl.h"
 
-// GCC requires one function forward declaration in only one .c source
-// in order to manage the inline.
-// See also http://stackoverflow.com/questions/26503235/c-inline-function-and-gcc
+/* GCC requires one function forward declaration in only one .c source*/
+/* in order to manage the inline.*/
+/* See also http://stackoverflow.com/questions/26503235/c-inline-function-and-gcc*/
 #if defined (__GNUC__) || defined(__ICCARM__)
 extern sys_error_code_t IStream_init(IStream_t *_this, uint8_t comm_interface_id, void *param);
 extern sys_error_code_t IStream_enable(IStream_t *_this);

@@ -66,7 +66,7 @@ uint8_t lps22hh_temp_comp_init(void)
   lps22hh_temp_set_samples_per_ts(0, NULL);
 #else
   lps22hh_temp_set_samples_per_ts(200, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA == 1 */
 
   int32_t value = 0;
   lps22hh_temp_get_dim(&value);
@@ -320,7 +320,7 @@ uint8_t lps22hh_temp_set_odr(pnpl_lps22hh_temp_odr_t enum_id, char **response_me
 #if (HSD_USE_DUMMY_DATA != 1)
     lps22hh_press_set_samples_per_ts((int32_t)value, NULL);
     lps22hh_temp_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA != 1 */
     __stream_control(true);
     __sc_set_ble_stream_params(lps22hh_temp_model.id);
   }

@@ -61,4 +61,4 @@ void _tx_execution_thread_exit(void)
     DEBUG_PIN_PORT[thread_ptr->pxTaskTag]->BRR = (uint32_t) DEBUG_PIN[thread_ptr->pxTaskTag];
   }
 }
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */

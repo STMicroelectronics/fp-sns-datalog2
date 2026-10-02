@@ -157,7 +157,7 @@ void bluetooth_init(void)
   HAL_FLASH_OB_Lock();
   HAL_FLASH_Lock();
 
-  //Update the Current Fw ID saved in flash if it's neceessary
+  /*Update the Current Fw ID saved in flash if it's neceessary*/
   UpdateCurrFlashBankFwIdBoardName(BLE_GetFWID(), NULL);
 
   char mac_string[18];
@@ -482,7 +482,7 @@ void ext_config_info_command_callback(uint8_t *Answer)
           " (KEIL)\n"
 #elif defined (__GNUC__)
           " (STM32CubeIDE)\n"
-#endif
+#endif /* defined (__IAR_SYSTEMS_ICC__) */
           "\tCurrent Bank =%ld\n",
           BLE_FW_PACKAGENAME,
           FW_VERSION_MAJOR, FW_VERSION_MINOR, FW_VERSION_PATCH,
@@ -642,7 +642,8 @@ static uint32_t debug_console_command_parsing(uint8_t *att_data, uint8_t data_le
     /* Check the Maximum Possible OTA size */
     if (SizeOfUpdateBlueFW > OTA_MAX_PROG_SIZE)
     {
-      BLE_MANAGER_PRINTF("OTA %s SIZE=%ld > %d Max Allowed\r\n", BLE_FW_PACKAGENAME, SizeOfUpdateBlueFW, OTA_MAX_PROG_SIZE);
+      BLE_MANAGER_PRINTF("OTA %s SIZE=%ld > %d Max Allowed\r\n", BLE_FW_PACKAGENAME, SizeOfUpdateBlueFW,
+                         OTA_MAX_PROG_SIZE);
       /* Answer with a wrong CRC value for signaling the problem to BlueMS application */
       buffer_to_write[0] = att_data[13];
       buffer_to_write[1] = (att_data[14] != 0) ? 0 : 1; /* In order to be sure to have a wrong CRC */

@@ -153,7 +153,8 @@ EPowerMode AppPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *_this
 }
 
 boolean_t AppPowerModeHelper_vtblCheckPowerModeTransaction(IAppPowerModeHelper *_this,
-                                                           const EPowerMode active_power_mode, const EPowerMode new_power_mode)
+                                                           const EPowerMode active_power_mode,
+                                                           const EPowerMode new_power_mode)
 {
   UNUSED(_this);
   boolean_t res = FALSE;

@@ -40,6 +40,7 @@ ABusIF *I3CBusIFAlloc(uint16_t who_am_i, uint8_t static_address, uint8_t dynamic
     _this->static_address = static_address;
     _this->dynamic_address = dynamic_address;
     _this->auto_inc = auto_inc;
+    _this->reg_addr_size = I3C_BUS_REG_ADDR_SIZE_8BIT;
     _this->ccc_config_done = 0U;
     _this->last_io_error = SYS_NO_ERROR_CODE;
 
@@ -56,6 +57,21 @@ ABusIF *I3CBusIFAlloc(uint16_t who_am_i, uint8_t static_address, uint8_t dynamic
   }
 
   return (ABusIF *)_this;
+}
+
+sys_error_code_t I3CBusIFSetRegAddrSize(I3CBusIF *_this, uint8_t reg_addr_size)
+{
+  assert_param(_this != NULL);
+
+  if ((reg_addr_size != I3C_BUS_REG_ADDR_SIZE_8BIT) &&
+      (reg_addr_size != I3C_BUS_REG_ADDR_SIZE_16BIT))
+  {
+    return SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
+
+  _this->reg_addr_size = reg_addr_size;
+
+  return SYS_NO_ERROR_CODE;
 }
 
 sys_error_code_t I3CBusIFWaitIOComplete(I3CBusIF *_this)

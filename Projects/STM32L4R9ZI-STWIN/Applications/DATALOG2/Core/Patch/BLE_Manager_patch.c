@@ -122,7 +122,7 @@ uint16_t custom_command_page_level = 0;
 ble_stack_object_t ble_stack_value = {0};
 ble_extended_configuration_object_t ble_extended_configuration_value = {0};
 
-/* Manufacter Advertise data */
+/* Manufacturer Advertise data */
 uint8_t manuf_data[BLE_MANAGER_ADVERTISE_DATA_LENGHT];
 
 /*************************** Bluetooth Communication **************************/
@@ -2369,7 +2369,7 @@ ble_status_t config_update_32(uint32_t feature, uint8_t command, uint32_t data)
   */
 void update_adv_data()
 {
-  /* Filling Manufacter Advertise data */
+  /* Filling Manufacturer Advertise data */
   manuf_data[0 ] = 8U;
   manuf_data[1 ] = 0x09U;
   manuf_data[2 ] = (uint8_t)ble_stack_value.board_name[0];/* Complete Name */
@@ -2381,7 +2381,7 @@ void update_adv_data()
   manuf_data[8 ] = (uint8_t)ble_stack_value.board_name[6];
   manuf_data[9 ] = 15U;
   manuf_data[10] = 0xFFU;
-  manuf_data[11] = 0x30U;/* STM Manufacter AD */
+  manuf_data[11] = 0x30U;/* STM Manufacturer AD */
   manuf_data[12] = 0x00U;
 #ifdef BLE_MANAGER_SDKV2
   manuf_data[13] = 0x02U;
@@ -2529,7 +2529,7 @@ void set_connectable_ble(void)
   manuf_data[12] = 15;
   manuf_data[13] = 0xFF;
   manuf_data[14] = 0x30;
-  manuf_data[15] = 0x00; /* STM Manufacter AD */
+  manuf_data[15] = 0x00; /* STM Manufacturer AD */
   manuf_data[16] = 0x02; /* SDK version */
   manuf_data[17] = ble_stack_value.board_id; /* BoardType*/
   manuf_data[18] = 0x00; /* Fw ID*/
@@ -2981,10 +2981,10 @@ static ble_status_t init_ble_manager_ble_stack(void)
   if (ble_stack_value.enable_secure_connection)
   {
     /* Set the I/O capability  Otherwise the Smartphone will propose a Pin
-    * that will be acepted without any control */
+    * that will be accepted without any control */
     if (aci_gap_set_io_capability(ble_stack_value.io_capabilities) == (ble_status_t)BLE_STATUS_SUCCESS)
     {
-      BLE_MANAGER_PRINTF("I/O Capability Configurated\r\n");
+      BLE_MANAGER_PRINTF("I/O Capability Configured\r\n");
     }
     else
     {
@@ -3219,7 +3219,7 @@ static ble_status_t init_ble_manager_ble_stack(void)
   hci_init(app_user_evt_rx, NULL);
 
   /* Sw reset of the device */
-//  hci_reset();  /* Workaround valid only for DATALOG2 example for STEVAL-STWINKT1B */
+  /*  hci_reset();   Workaround valid only for DATALOG2 example for STEVAL-STWINKT1B */
 
   /* Wait some time for the BlueNRG to be fully operational */
 #ifndef  BLE_INITIAL_DELAY
@@ -3344,10 +3344,10 @@ static ble_status_t init_ble_manager_ble_stack(void)
   if (ble_stack_value.enable_secure_connection)
   {
     /* Set the I/O capability  Otherwise the Smartphone will propose a Pin
-    * that will be acepted without any control */
+    * that will be accepted without any control */
     if (aci_gap_set_io_capability(ble_stack_value.io_capabilities) == BLE_STATUS_SUCCESS)
     {
-      BLE_MANAGER_PRINTF("I/O Capability Configurated\r\n");
+      BLE_MANAGER_PRINTF("I/O Capability Configured\r\n");
     }
     else
     {
@@ -4903,7 +4903,7 @@ __weak void pairing_completed_function(uint8_t pairing_status)
 
 /**
   * @brief  This function is called when the device is put in connectable mode.
-  * @param  uint8_t *manuf_data Filling Manufacter Advertise data
+  * @param  uint8_t *manuf_data Filling Manufacturer Advertise data
   * @retval None
   */
 __weak void set_connectable_function(uint8_t *manuf_data)

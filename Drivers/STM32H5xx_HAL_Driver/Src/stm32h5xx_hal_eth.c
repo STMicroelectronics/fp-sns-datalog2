@@ -196,18 +196,20 @@
   * @{
   */
 #define ETH_MACCR_MASK                0xFFFB7F7CU
-#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx)
+#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) \
+    || defined(STM32H553xx) || defined(STM32H543xx)
 #define ETH_MACECR_MASK               0x7F077FFFU
 #else
 #define ETH_MACECR_MASK               0x3F077FFFU
-#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) */
+#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) ||
+          defined(STM32H553xx) || defined(STM32H543xx) */
 #define ETH_MACPFR_MASK               0x800007FFU
 #if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) \
     || defined(STM32H553xx) || defined(STM32H543xx)
 #define ETH_MACWJBTR_MASK             0x010F010FU
 #else
 #define ETH_MACWTR_MASK               0x0000010FU
-#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) || 
+#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) ||
           defined(STM32H553xx) || defined(STM32H543xx) */
 #define ETH_MACTFCR_MASK              0xFFFF00F2U
 #define ETH_MACRFCR_MASK              0x00000003U
@@ -216,11 +218,13 @@
 
 #define ETH_DMAMR_MASK                0x00007802U
 #define ETH_DMASBMR_MASK              0x0000D001U
-#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx)
+#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) \
+    || defined(STM32H553xx) || defined(STM32H543xx)
 #define ETH_DMACCR_MASK               0x04013FFFU
 #else
 #define ETH_DMACCR_MASK               0x00013FFFU
-#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) */
+#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) ||
+          defined(STM32H553xx) || defined(STM32H543xx) */
 #define ETH_DMACTCR_MASK              0x003F1010U
 #define ETH_DMACRCR_MASK              0x803F0000U
 #define ETH_MACPCSR_MASK              (ETH_MACPCSR_PWRDWN | ETH_MACPCSR_RWKPKTEN | \
@@ -232,11 +236,13 @@
                                                   ETH_DMARXNDESCWBF_OE | ETH_DMARXNDESCWBF_RWT |\
                                                   ETH_DMARXNDESCWBF_GP | ETH_DMARXNDESCWBF_CE))
 
-#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx)
+#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) \
+    || defined(STM32H553xx) || defined(STM32H543xx)
 #define ETH_MACTSCR_MASK              0x3F07FF6FU
 #else
 #define ETH_MACTSCR_MASK              0x0087FF2FU
-#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) */
+#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) ||
+          defined(STM32H553xx) || defined(STM32H543xx) */
 
 #define ETH_MACSTSUR_VALUE            0xFFFFFFFFU
 #define ETH_MACSTNUR_VALUE            0xBB9ACA00U
@@ -1562,12 +1568,14 @@ HAL_StatusTypeDef HAL_ETH_PTP_SetConfig(ETH_HandleTypeDef *heth, ETH_PTP_ConfigT
             ((uint32_t)ptpconfig->TimestampMaster << ETH_MACTSCR_TSMSTRENA_Pos) |
             ((uint32_t)ptpconfig->TimestampSnapshots << ETH_MACTSCR_SNAPTYPSEL_Pos) |
             ((uint32_t)ptpconfig->TimestampFilter << ETH_MACTSCR_TSENMACADDR_Pos) |
-#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx)
+#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) \
+    || defined(STM32H553xx) || defined(STM32H543xx)
             ((uint32_t)ptpconfig->TimestampPCS << ETH_MACTSCR_EPCSL_Pos) |
             ((uint32_t)ptpconfig->TimestampCapturing << ETH_MACTSCR_ECPD_Pos) |
             ((uint32_t)ptpconfig->TimestampLatencyAccuracy << ETH_MACTSCR_LITA_Pos) |
             ((uint32_t)ptpconfig->AV8021ASMEN << ETH_MACTSCR_AV8021ASMEN_Pos) |
-#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) */
+#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) ||
+          defined(STM32H553xx) || defined(STM32H543xx) */
             ((uint32_t)ptpconfig->TimestampStatusMode << ETH_MACTSCR_TXTSSTSM_Pos);
 
   /* Write to MACTSCR */
@@ -1651,14 +1659,15 @@ HAL_StatusTypeDef HAL_ETH_PTP_GetConfig(ETH_HandleTypeDef *heth, ETH_PTP_ConfigT
   ptpconfig->TimestampFilter = ((READ_BIT(heth->Instance->MACTSCR,
                                           ETH_MACTSCR_TSENMACADDR) >> ETH_MACTSCR_TSENMACADDR_Pos) > 0U)
                                ? ENABLE : DISABLE;
-#if !defined(STM32H5E5xx) && !defined(STM32H5E4xx) && !defined(STM32H5F5xx) && !defined(STM32H5F4xx)
+#if defined(STM32H563xx) || defined(STM32H573xx)
   ptpconfig->TimestampChecksumCorrection = ((READ_BIT(heth->Instance->MACTSCR,
                                                       ETH_MACTSCR_CSC) >> ETH_MACTSCR_CSC_Pos) > 0U) ? ENABLE : DISABLE;
-#endif /* !defined(STM32H5E5xx) && !defined(STM32H5E4xx) && !defined(STM32H5F5xx) && !defined(STM32H5F4xx) */
+#endif /* defined(STM32H563xx) || defined(STM32H573xx) */
   ptpconfig->TimestampStatusMode = ((READ_BIT(heth->Instance->MACTSCR,
                                               ETH_MACTSCR_TXTSSTSM) >> ETH_MACTSCR_TXTSSTSM_Pos) > 0U)
                                    ? ENABLE : DISABLE;
-#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx)
+#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) \
+    || defined(STM32H553xx) || defined(STM32H543xx)
   ptpconfig->TimestampPCS = ((READ_BIT(heth->Instance->MACTSCR, ETH_MACTSCR_EPCSL) >>
                               ETH_MACTSCR_EPCSL_Pos) > 0U) ? ENABLE : DISABLE;
   ptpconfig->TimestampCapturing = ((READ_BIT(heth->Instance->MACTSCR, ETH_MACTSCR_ECPD) >>
@@ -1667,7 +1676,8 @@ HAL_StatusTypeDef HAL_ETH_PTP_GetConfig(ETH_HandleTypeDef *heth, ETH_PTP_ConfigT
                                           ETH_MACTSCR_LITA_Pos) > 0U) ? ENABLE : DISABLE;
   ptpconfig->AV8021ASMEN = ((READ_BIT(heth->Instance->MACTSCR, ETH_MACTSCR_AV8021ASMEN) >>
                              ETH_MACTSCR_AV8021ASMEN_Pos) > 0U) ? ENABLE : DISABLE;
-#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) */
+#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) ||
+          defined(STM32H553xx) || defined(STM32H543xx) */
 
   /* Return function status */
   return HAL_OK;
@@ -2385,7 +2395,7 @@ HAL_StatusTypeDef HAL_ETH_GetMACConfig(const ETH_HandleTypeDef *heth, ETH_MACCon
 #else
   macconf->ProgrammableWatchdog = ((READ_BIT(heth->Instance->MACWTR, ETH_MACWTR_PWE) >> 8) > 0U) ? ENABLE : DISABLE;
   macconf->WatchdogTimeout = READ_BIT(heth->Instance->MACWTR, ETH_MACWTR_WTO);
-#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) || 
+#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) ||
           defined(STM32H553xx) || defined(STM32H543xx) */
 
   macconf->TransmitFlowControl = ((READ_BIT(heth->Instance->MACTFCR, ETH_MACTFCR_TFE) >> 1) > 0U) ? ENABLE : DISABLE;
@@ -2933,7 +2943,7 @@ static void ETH_SetMACConfig(ETH_HandleTypeDef *heth, const ETH_MACConfigTypeDef
                macconf->WatchdogTimeout);
   /* Write to MACWTR */
   MODIFY_REG(heth->Instance->MACWTR, ETH_MACWTR_MASK, macregval);
-#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) || 
+#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) ||
           defined(STM32H553xx) || defined(STM32H543xx) */
 
   /*------------------------ MACTFCR Configuration --------------------*/
@@ -3037,9 +3047,11 @@ static void ETH_MACDMAConfig(ETH_HandleTypeDef *heth)
   macDefaultConf.PauseTime = 0x0U;
   macDefaultConf.PreambleLength = ETH_PREAMBLELENGTH_7;
   macDefaultConf.ProgrammableWatchdog = DISABLE;
-#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx)
+#if defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) \
+    || defined(STM32H553xx) || defined(STM32H543xx)
   macDefaultConf.ProgrammableJabber = DISABLE;
-#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) */
+#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) ||
+          defined(STM32H553xx) || defined(STM32H543xx) */
   macDefaultConf.ReceiveFlowControl = DISABLE;
   macDefaultConf.ReceiveOwn = ENABLE;
   macDefaultConf.ReceiveQueueMode = ETH_RECEIVESTOREFORWARD;
@@ -3061,7 +3073,7 @@ static void ETH_MACDMAConfig(ETH_HandleTypeDef *heth)
 #else
   macDefaultConf.Watchdog = ENABLE;
   macDefaultConf.WatchdogTimeout =  ETH_MACWTR_WTO_2KB;
-#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) || 
+#endif /* defined(STM32H5E5xx) || defined(STM32H5E4xx) || defined(STM32H5F5xx) || defined(STM32H5F4xx) ||
           defined(STM32H553xx) || defined(STM32H543xx) */
   macDefaultConf.ZeroQuantaPause = ENABLE;
 

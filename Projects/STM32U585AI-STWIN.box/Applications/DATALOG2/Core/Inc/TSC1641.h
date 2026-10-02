@@ -1,10 +1,19 @@
 /**
   ******************************************************************************
-  * File Name          : TSC1641.h
-  * Description        : This file provides code for the configuration
-  *                     register and headers for the TSC1641.
-  * Version            : Alpha
-  * Revision           : Under development
+  * @file    TSC1641.h
+  * @brief   This file provides code for the configuration register and headers
+  *          for the TSC1641.
+  * @version Alpha
+  * @note    Revision: Under development
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2025 STMicroelectronics
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file in
+  * the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   ******************************************************************************
   */
 #include "stdint.h"
@@ -75,21 +84,21 @@ typedef struct
 #endif /* MEMS_SHARED_TYPES */
 
 
-#define I2C_TSC1641_ADD_R           0x81 //A0 GND - A1 GND
-#define I2C_TSC1641_ADD_W           0x80 //A0 GND - A1 GND
+#define I2C_TSC1641_ADD_R           0x81 /*A0 GND - A1 GND*/
+#define I2C_TSC1641_ADD_W           0x80 /*A0 GND - A1 GND*/
 
 
 #define TSC1641_REG_SIZE            0x08
 
 
-#define TSC1641_RegAdd_Conf         0x00                // 0x0067
+#define TSC1641_RegAdd_Conf         0x00                /* 0x0067*/
 #define TSC1641_RegAdd_ShuntV       0x01
 #define TSC1641_RegAdd_LoadV        0x02
 #define TSC1641_RegAdd_Power        0x03
 #define TSC1641_RegAdd_Current      0x04
-#define TSC1641_RegAdd_Temp         0x05                // 0x8000
+#define TSC1641_RegAdd_Temp         0x05                /* 0x8000*/
 #define TSC1641_RegAdd_MaskAl       0x06
-#define TSC1641_RegAdd_Alert        0x07                // Signal alerts
+#define TSC1641_RegAdd_Alert        0x07                /* Signal alerts*/
 #define TSC1641_RegAdd_RShunt       0x08
 #define TSC1641_RegAdd_VshuntOV     0x09
 #define TSC1641_RegAdd_VshuntUV     0x0A
@@ -133,7 +142,7 @@ typedef struct
 #define TSC1641_Mode_VloadCont      0x06
 #define TSC1641_Mode_VshloadCont    0x07
 
-// Definition of the parameters in configuration register :
+/* Definition of the parameters in configuration register :*/
 typedef struct Configuration Configuration;
 struct Configuration
 {
@@ -146,51 +155,51 @@ struct Configuration
 } ;
 
 
-// Definition of the parameters in alert register :
+/* Definition of the parameters in alert register :*/
 typedef struct Alert Alert;
 struct Alert
 {
-  uint8_t TSC1641_SOL ;   // Shunt Voltage Over voltage
-  uint8_t TSC1641_SUL ;   // Shunt Voltage Under voltage
-  uint8_t TSC1641_LOL ;   // Load Voltage Over voltage
-  uint8_t TSC1641_LUL ;   // Load Voltage Under voltage
-  uint8_t TSC1641_POL ;   // Power Over Limit
-  uint8_t TSC1641_TOL ;   // Temperature Over Limit
-  uint8_t TSC1641_CNVR ;  // Conversion ready alert enable
-  uint8_t TSC1641_APOL ;  // Alert polarity
-  uint8_t TSC1641_ALEN ;  // Alert Latch Enable
+  uint8_t TSC1641_SOL ;   /* Shunt Voltage Over voltage*/
+  uint8_t TSC1641_SUL ;   /* Shunt Voltage Under voltage*/
+  uint8_t TSC1641_LOL ;   /* Load Voltage Over voltage*/
+  uint8_t TSC1641_LUL ;   /* Load Voltage Under voltage*/
+  uint8_t TSC1641_POL ;   /* Power Over Limit*/
+  uint8_t TSC1641_TOL ;   /* Temperature Over Limit*/
+  uint8_t TSC1641_CNVR ;  /* Conversion ready alert enable*/
+  uint8_t TSC1641_APOL ;  /* Alert polarity*/
+  uint8_t TSC1641_ALEN ;  /* Alert Latch Enable*/
 } ;
 
-// Definition of the parameters in alert register :
+/* Definition of the parameters in alert register :*/
 typedef struct Flag Flag;
 struct Flag
 {
-  uint8_t TSC1641_NVMF ;  // NVM state flag
-  uint8_t TSC1641_OVF ;   // Math Overflow Flag
-  uint8_t TSC1641_SATF ;  // Measurement saturation Flag
-  uint8_t TSC1641_SOF ;   // Shunt Voltage Over voltage
-  uint8_t TSC1641_SUF ;   // Shunt Voltage Under voltage
-  uint8_t TSC1641_LOF ;   // Load Voltage Over voltage
-  uint8_t TSC1641_LUF ;   // Load Voltage Under voltage
-  uint8_t TSC1641_POF ;   // Power Over Limit
-  uint8_t TSC1641_TOF ;   // Temperature Over Limit
-  uint8_t TSC1641_CVRF ;  // Conversion ready alert enable
+  uint8_t TSC1641_NVMF ;  /* NVM state flag*/
+  uint8_t TSC1641_OVF ;   /* Math Overflow Flag*/
+  uint8_t TSC1641_SATF ;  /* Measurement saturation Flag*/
+  uint8_t TSC1641_SOF ;   /* Shunt Voltage Over voltage*/
+  uint8_t TSC1641_SUF ;   /* Shunt Voltage Under voltage*/
+  uint8_t TSC1641_LOF ;   /* Load Voltage Over voltage*/
+  uint8_t TSC1641_LUF ;   /* Load Voltage Under voltage*/
+  uint8_t TSC1641_POF ;   /* Power Over Limit*/
+  uint8_t TSC1641_TOF ;   /* Temperature Over Limit*/
+  uint8_t TSC1641_CVRF ;  /* Conversion ready alert enable*/
 } ;
 
 
-// Definition of the parameters in alert register :
+/* Definition of the parameters in alert register :*/
 typedef struct Limit Limit;
 struct Limit
 {
-  uint16_t VSHUNT_OV_LIM ;  // Vsunt Over voltage limit value
-  uint16_t VSHUNT_UV_LIM ;    // Vshunt Under voltage limit value
-  uint16_t VLOAD_OV_LIM ; // Vload Over voltage limit value
-  uint16_t VLOAD_UV_LIM ;   // Vload Under voltage limit value
-  uint16_t POWER_OV_LIM ;   // Power over limit value
-  uint16_t TEMP_OV_LIM ;    // Temperature over limit value
+  uint16_t VSHUNT_OV_LIM ;  /* Vsunt Over voltage limit value*/
+  uint16_t VSHUNT_UV_LIM ;    /* Vshunt Under voltage limit value*/
+  uint16_t VLOAD_OV_LIM ; /* Vload Over voltage limit value*/
+  uint16_t VLOAD_UV_LIM ;   /* Vload Under voltage limit value*/
+  uint16_t POWER_OV_LIM ;   /* Power over limit value*/
+  uint16_t TEMP_OV_LIM ;    /* Temperature over limit value*/
 } ;
 
-// Prototype declaration
+/* Prototype declaration*/
 int32_t TSC1641_read_reg(stmdev_ctx_t *ctx, uint8_t reg, uint8_t *data, uint16_t len);
 int32_t TSC1641_write_reg(stmdev_ctx_t *ctx, uint8_t reg, uint8_t *data, uint16_t len);
 void TSC1641_SetConf(stmdev_ctx_t *ctx, Configuration *CONF1);

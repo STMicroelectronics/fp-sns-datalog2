@@ -290,7 +290,8 @@ uint8_t Lis2mdl_Mag_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   {
     if (json_object_dothas_value(tempJSONObject, "lis2mdl_mag.st_ble_stream.mag.enable"))
     {
-      bool st_ble_stream__mag_enable = json_object_dotget_boolean(tempJSONObject, "lis2mdl_mag.st_ble_stream.mag.enable");
+      bool st_ble_stream__mag_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                  "lis2mdl_mag.st_ble_stream.mag.enable");
       valid_property = true;
       ret = lis2mdl_mag_set_st_ble_stream__mag_enable(st_ble_stream__mag_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -312,7 +313,8 @@ uint8_t Lis2mdl_Mag_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serializ
   {
     if (json_object_dothas_value(tempJSONObject, "lis2mdl_mag.st_ble_stream.mag.unit"))
     {
-      const char *st_ble_stream__mag_unit = json_object_dotget_string(tempJSONObject, "lis2mdl_mag.st_ble_stream.mag.unit");
+      const char *st_ble_stream__mag_unit = json_object_dotget_string(tempJSONObject,
+                                                                      "lis2mdl_mag.st_ble_stream.mag.unit");
       valid_property = true;
       ret = lis2mdl_mag_set_st_ble_stream__mag_unit(st_ble_stream__mag_unit, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

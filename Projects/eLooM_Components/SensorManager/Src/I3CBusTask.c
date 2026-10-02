@@ -437,6 +437,7 @@ static sys_error_code_t I3CBusTaskExecuteStep(AManagedTask *_this)
       case SM_MESSAGE_ID_I3C_BUS_READ:
         if (xMsg.pxSensor->ccc_config_done == 0U)
         {
+          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("CCC not done, calling ConfigureTarget\r\n"));
           res = I3CMasterDriverConfigureTarget((I3CMasterDriver_t *) p_obj->p_driver,
                                                xMsg.pxSensor->static_address,
                                                xMsg.pxSensor->dynamic_address);
@@ -447,11 +448,13 @@ static sys_error_code_t I3CBusTaskExecuteStep(AManagedTask *_this)
         }
         else
         {
+          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("CCC already done, skipping\r\n"));
           I3CMasterDriverSetDeviceAddr((I3CMasterDriver_t *) p_obj->p_driver, I3CBusTaskGetTargetAddr(xMsg.pxSensor));
         }
 
         if (!SYS_IS_ERROR_CODE(res))
         {
+          (void)I3CMasterDriverSetRegAddrSize((I3CMasterDriver_t *)p_obj->p_driver, xMsg.pxSensor->reg_addr_size);
           res = IIODrvRead(p_obj->p_driver, xMsg.pnData, xMsg.nDataSize, xMsg.nRegAddr);
         }
 
@@ -462,6 +465,7 @@ static sys_error_code_t I3CBusTaskExecuteStep(AManagedTask *_this)
       case SM_MESSAGE_ID_I3C_BUS_WRITE:
         if (xMsg.pxSensor->ccc_config_done == 0U)
         {
+          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("CCC not done, calling ConfigureTarget\r\n"));
           res = I3CMasterDriverConfigureTarget((I3CMasterDriver_t *) p_obj->p_driver,
                                                xMsg.pxSensor->static_address,
                                                xMsg.pxSensor->dynamic_address);
@@ -472,11 +476,13 @@ static sys_error_code_t I3CBusTaskExecuteStep(AManagedTask *_this)
         }
         else
         {
+          SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("CCC already done, skipping\r\n"));
           I3CMasterDriverSetDeviceAddr((I3CMasterDriver_t *) p_obj->p_driver, I3CBusTaskGetTargetAddr(xMsg.pxSensor));
         }
 
         if (!SYS_IS_ERROR_CODE(res))
         {
+          (void)I3CMasterDriverSetRegAddrSize((I3CMasterDriver_t *)p_obj->p_driver, xMsg.pxSensor->reg_addr_size);
           res = IIODrvWrite(p_obj->p_driver, xMsg.pnData, xMsg.nDataSize, xMsg.nRegAddr);
         }
 

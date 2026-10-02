@@ -33,9 +33,9 @@ typedef struct
 {
   uint32_t FwIdMagicNum;
   uint32_t BoardNameMagicNum;
-  uint8_t  BoardName[8]; // 7 Char + termination
+  uint8_t  BoardName[8]; /* 7 Char + termination*/
   uint16_t FwId;
-  uint8_t  Padding[14]; //we could write Multiply of 16 bytes at a time...
+  uint8_t  Padding[14]; /*we could write Multiply of 16 bytes at a time...*/
 } FwId_BoardName_t;
 
 /* Local defines -------------------------------------------------------------*/
@@ -49,7 +49,7 @@ typedef struct
 #define OTA_FW_ID_MAGIC_NUM    0xDEADBEEF
 
 /* Uncomment the following define for enabling the PRINTF capability if it's supported */
-//#define OTA_ENABLE_PRINTF
+/*#define OTA_ENABLE_PRINTF*/
 
 #ifdef OTA_ENABLE_PRINTF
 #define OTA_PRINTF(msg)  SYS_DEBUGF2(SYS_DBG_LEVEL_VERBOSE, msg)
@@ -176,7 +176,7 @@ int8_t UpdateFWBlueMS(uint32_t *SizeOfUpdate, uint8_t *att_data, int32_t data_le
 
     if (*SizeOfUpdate == 0)
     {
-      //Check if we need to dump the last bytes
+      /*Check if we need to dump the last bytes*/
       if (ValuesSavedOnBuffer != 0)
       {
         ValuesSavedOnBuffer = 0;

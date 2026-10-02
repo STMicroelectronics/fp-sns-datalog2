@@ -61,7 +61,7 @@ uint8_t iis2dulpx_mlc_comp_init(void)
   iis2dulpx_mlc_model.stream_params.spts = 0;
 #else
   iis2dulpx_mlc_model.stream_params.spts = 1;
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
   __stream_control(true);
   app_model.iis2dulpx_mlc_ucf_valid = false;
   /* USER Component initialization code */

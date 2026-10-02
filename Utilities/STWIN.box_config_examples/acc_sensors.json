@@ -4,9 +4,9 @@
     "devices": [
         {
             "board_id": 14,
-            "fw_id": 56,
+            "fw_id": 62,
             "protocol_id": 2,
-            "sn": "004500215752501720353339",
+            "sn": "004C002E5752501820353339",
             "pnpl_responses": true,
             "pnpl_ble_responses": true,
             "components": [
@@ -14,7 +14,7 @@
                     "DeviceInformation": {
                         "manufacturer": "STMicroelectronics",
                         "model": "STEVAL-STWINBX1",
-                        "swVersion": "3.2.0",
+                        "swVersion": "3.4.0",
                         "osName": "AzureRTOS",
                         "processorArchitecture": "ARM Cortex-M33",
                         "processorManufacturer": "STMicroelectronics",
@@ -26,11 +26,11 @@
                     "firmware_info": {
                         "alias": "STWIN_BOX_001",
                         "fw_name": "FP-SNS-DATALOG2_Datalog2",
-                        "fw_version": "3.2.0",
+                        "fw_version": "3.4.0",
                         "part_number": "FP-SNS-DATALOG2",
                         "device_url": "https://www.st.com/stwinbox",
                         "fw_url": "https://github.com/STMicroelectronics/fp-sns-datalog2",
-                        "mac_address": "e5:55:c3:6b:ee:da",
+                        "mac_address": "f5:d2:fb:1b:fa:c7",
                         "c_type": 2
                     }
                 },
@@ -312,7 +312,7 @@
                         "samples_per_ts": 1000,
                         "dim": 1,
                         "ioffset": 0,
-                        "usb_dps": 7000,
+                        "usb_dps": 16000,
                         "sd_dps": 126976,
                         "sensitivity": 3.0517578125e-05,
                         "data_type": "int16",
@@ -385,7 +385,7 @@
                         "dim": 3,
                         "ioffset": 0,
                         "measodr": 0,
-                        "usb_dps": 7000,
+                        "usb_dps": 8000,
                         "sd_dps": 53248,
                         "sensitivity": 0.0004879999905824661,
                         "data_type": "int16",

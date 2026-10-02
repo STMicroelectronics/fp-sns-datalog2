@@ -68,7 +68,7 @@ uint8_t fft_dpu_comp_init(void)
   fft_dpu_model.stream_params.usb_ep = -1;
   /* USER code */
 
-  //app_model.a_models[id] = &fft_dpu_model;
+  /*app_model.a_models[id] = &fft_dpu_model;*/
   app_model.a_models[fft_dpu_id] = &fft_dpu_model;
 
   /* USER Component initialization code */
@@ -182,7 +182,7 @@ uint8_t imp23absu_mic_get_enable(bool *value)
   /* Status update to check if the value has been updated by the FW */
   uint16_t id = imp23absu_mic_model.id;
   imp23absu_mic_model.sensor_status = SMSensorGetStatus(id);
-  //*value = imp23absu_mic_model.sensor_status.is_active;
+  /**value = imp23absu_mic_model.sensor_status.is_active;*/
   *value = imp23absu_mic_model.gui_plot_graph_enable;
   return 0;
 }
@@ -221,7 +221,7 @@ uint8_t imp23absu_mic_get_sd_dps(int32_t *value)
 }
 uint8_t imp23absu_mic_get_sensitivity(float_t *value) /* TODO: uint8_t imp23absu_mic_get_resolution(uint8_t *value) */
 {
-  *value = 0.000030517578125; //2/(2^imp23absu_mic_model.sensor_status.type.audio.resolution);
+  *value = 0.000030517578125; /*2/(2^imp23absu_mic_model.sensor_status.type.audio.resolution);*/
   return 0;
 }
 uint8_t imp23absu_mic_get_data_type(char **value)
@@ -292,7 +292,7 @@ uint8_t log_controller_get_controller_type(int32_t *value)
 }
 uint8_t log_controller_save_config(ILog_Controller_t *ifn)
 {
-  //ILog_Controller_save_config(ifn);
+  /*ILog_Controller_save_config(ifn);*/
   return 0;
 }
 uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
@@ -323,18 +323,18 @@ uint8_t log_controller_start_log(ILog_Controller_t *ifn, int32_t interface)
     .tm_sec = stime.Seconds
   };
 
-  // WHY THIS -1 (in months) ???
-  //  struct tm {
-  //     int32_t tm_sec;         /* seconds,  range 0 to 59          */
-  //     int32_t tm_min;         /* minutes, range 0 to 59           */
-  //     int32_t tm_hour;        /* hours, range 0 to 23             */
-  //     int32_t tm_mday;        /* day of the month, range 1 to 31  */
-  //     int32_t tm_mon;         /* month, range 0 to 11             */ <------ (-1) months here (0..11), months from RTC (1..12)
-  //     int32_t tm_year;        /* The number of years since 1900   */
-  //     int32_t tm_wday;        /* day of the week, range 0 to 6    */
-  //     int32_t tm_yday;        /* day in the year, range 0 to 365  */
-  //     int32_t tm_isdst;       /* daylight saving time             */
-  //  };
+  /* WHY THIS -1 (in months) ???*/
+  /*  struct tm {*/
+  /*     int32_t tm_sec;          seconds,  range 0 to 59          */
+  /*     int32_t tm_min;          minutes, range 0 to 59           */
+  /*     int32_t tm_hour;         hours, range 0 to 23             */
+  /*     int32_t tm_mday;         day of the month, range 1 to 31  */
+  /* int32_t tm_mon; month, range 0 to 11 <------ (-1) months here (0..11), months from RTC (1..12) */
+  /*     int32_t tm_year;         The number of years since 1900   */
+  /*     int32_t tm_wday;         day of the week, range 0 to 6    */
+  /*     int32_t tm_yday;         day in the year, range 0 to 365  */
+  /*     int32_t tm_isdst;        daylight saving time             */
+  /*  };*/
 
   TMSetStartTime(t);
   char local_timestamp[86];
@@ -364,7 +364,7 @@ uint8_t log_controller_set_time(ILog_Controller_t *ifn, const char *datetime)
 {
   char datetimeStr[3];
 
-  //internal input format: yyyyMMdd_hh_mm_ss
+  /*internal input format: yyyyMMdd_hh_mm_ss*/
 
   RTC_DateTypeDef sdate;
   RTC_TimeTypeDef stime;
@@ -386,7 +386,7 @@ uint8_t log_controller_set_time(ILog_Controller_t *ifn, const char *datetime)
   sdate.Date = atoi(datetimeStr);
 
   /** Week day initialization (not used)*/
-  sdate.WeekDay = RTC_WEEKDAY_MONDAY; //Not used
+  sdate.WeekDay = RTC_WEEKDAY_MONDAY; /*Not used*/
 
   /** extract hour string */
   datetimeStr[0] = datetime[9];
@@ -404,7 +404,7 @@ uint8_t log_controller_set_time(ILog_Controller_t *ifn, const char *datetime)
   stime.Seconds = atoi(datetimeStr);
 
   /** not used */
-  //stime.TimeFormat = RTC_HOURFORMAT12_AM;
+  /*stime.TimeFormat = RTC_HOURFORMAT12_AM;*/
   stime.SecondFraction = 0;
   stime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   stime.StoreOperation = RTC_STOREOPERATION_RESET;
@@ -422,7 +422,7 @@ uint8_t log_controller_set_time(ILog_Controller_t *ifn, const char *datetime)
 }
 uint8_t log_controller_switch_bank(ILog_Controller_t *ifn)
 {
-  //ILog_Controller_switch_bank(ifn);
+  /*ILog_Controller_switch_bank(ifn);*/
   return 0;
 }
 
@@ -611,11 +611,11 @@ uint8_t acquisition_info_set_description(const char *value)
 static uint8_t __stream_control(ILog_Controller_t *ifn, bool status)
 {
   int8_t i;
-  if (status) //set stream ids
+  if (status) /*set stream ids*/
   {
     int8_t j, st_i = 0;
     uint16_t proposed_fifoWM = 1;
-    //sort stream id by bandwidth
+    /*sort stream id by bandwidth*/
     for (i = 0; i < SENSOR_NUMBER; i++)
     {
       if (app_model.s_models[i] != NULL)
@@ -624,11 +624,13 @@ static uint8_t __stream_control(ILog_Controller_t *ifn, bool status)
         {
           if (app_model.s_models[i]->sensor_status.isensor_class == ISENSOR_CLASS_MEMS)
           {
-            app_model.s_models[i]->stream_params.bandwidth = app_model.s_models[i]->sensor_status.type.mems.odr * SMGetnBytesPerSample(i);
+            app_model.s_models[i]->stream_params.bandwidth =
+              app_model.s_models[i]->sensor_status.type.mems.odr * SMGetnBytesPerSample(i);
           }
           else if (app_model.s_models[i]->sensor_status.isensor_class == ISENSOR_CLASS_AUDIO)
           {
-            app_model.s_models[i]->stream_params.bandwidth = app_model.s_models[i]->sensor_status.type.audio.frequency * SMGetnBytesPerSample(i);
+            app_model.s_models[i]->stream_params.bandwidth =
+              app_model.s_models[i]->sensor_status.type.audio.frequency * SMGetnBytesPerSample(i);
           }
           else
           {
@@ -638,13 +640,16 @@ static uint8_t __stream_control(ILog_Controller_t *ifn, bool status)
           if (app_model.log_controller_model.interface == LOG_CTRL_MODE_SD)
           {
             /* 330ms of sensor data. Access to SD is optimized when buffer dimension is multiple of 512 */
-            app_model.s_models[i]->stream_params.sd_dps = (uint32_t)(app_model.s_models[i]->stream_params.bandwidth * 0.33f);
-            app_model.s_models[i]->stream_params.sd_dps = app_model.s_models[i]->stream_params.sd_dps - (app_model.s_models[i]->stream_params.sd_dps % 512) + 512;
+            app_model.s_models[i]->stream_params.sd_dps =
+              (uint32_t)(app_model.s_models[i]->stream_params.bandwidth * 0.33f);
+            app_model.s_models[i]->stream_params.sd_dps =
+              app_model.s_models[i]->stream_params.sd_dps - (app_model.s_models[i]->stream_params.sd_dps % 512) + 512;
 
             /*********** IS IT STILL multiple of 512?  **************/
             if (app_model.s_models[i]->stream_params.sd_dps > app_model.s_models[i]->stream_params.bandwidth)
             {
-              app_model.s_models[i]->stream_params.sd_dps = (uint32_t)app_model.s_models[i]->stream_params.bandwidth + 8;
+              app_model.s_models[i]->stream_params.sd_dps =
+                (uint32_t)app_model.s_models[i]->stream_params.bandwidth + 8;
             }
 
             proposed_fifoWM = app_model.s_models[i]->stream_params.sd_dps / SMGetnBytesPerSample(i) / 2;
@@ -678,7 +683,8 @@ static uint8_t __stream_control(ILog_Controller_t *ifn, bool status)
             if (low_odr <= 20)
             {
               /* When there's a timestamp, more then one packet will be sent */
-              app_model.s_models[i]->stream_params.usb_dps = SMGetnBytesPerSample(i) + 8;  /* 8 = timestamp dimension in bytes */
+              app_model.s_models[i]->stream_params.usb_dps =
+                SMGetnBytesPerSample(i) + 8;  /* 8 = timestamp dimension in bytes */
               proposed_fifoWM = 1;
               sys_error_code_t ret = SMSensorSetFifoWM(i, proposed_fifoWM);
               if (ret != SYS_NO_ERROR_CODE)
@@ -689,10 +695,11 @@ static uint8_t __stream_control(ILog_Controller_t *ifn, bool status)
             else
             {
               /* 50ms of sensor data; when there's a timestamp packets will be sent fastly */
-              app_model.s_models[i]->stream_params.usb_dps = (uint32_t)(app_model.s_models[i]->stream_params.bandwidth * 0.05f);
+              app_model.s_models[i]->stream_params.usb_dps =
+                (uint32_t)(app_model.s_models[i]->stream_params.bandwidth * 0.05f);
               if (app_model.s_models[i]->stream_params.usb_dps > 7000)
               {
-                app_model.s_models[i]->stream_params.usb_dps = 7000; // set a limit to avoid buffer to big
+                app_model.s_models[i]->stream_params.usb_dps = 7000; /* set a limit to avoid buffer to big*/
               }
               else if (app_model.s_models[i]->stream_params.usb_dps < SMGetnBytesPerSample(i) + 8)
               {
@@ -714,9 +721,12 @@ static uint8_t __stream_control(ILog_Controller_t *ifn, bool status)
 #ifdef SYS_DEBUG
             SensorDescriptor_t descriptor = SMSensorGetDescription(i);
             float_t ms = app_model.s_models[i]->stream_params.usb_dps / app_model.s_models[i]->stream_params.bandwidth;
-            SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("**** %s, odr: %f, DPS: %d, ms: %f, proposed FIFO WM: %d \r\n", descriptor.p_name,
-                                               app_model.s_models[i]->sensor_status.type.mems.odr, app_model.s_models[i]->stream_params.usb_dps, ms, proposed_fifoWM));
-#endif
+            SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("**** %s, odr: %f, DPS: %d, ms: %f, proposed FIFO WM: %d \r\n",
+                                               descriptor.p_name,
+                                               app_model.s_models[i]->sensor_status.type.mems.odr,
+                                               app_model.s_models[i]->stream_params.usb_dps, ms,
+                                               proposed_fifoWM));
+#endif /* SYS_DEBUG */
           }
 
           app_model.s_models[i]->stream_params.stream_id = st_i;

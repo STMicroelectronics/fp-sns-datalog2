@@ -33,8 +33,7 @@ extern "C" {
   */
 typedef struct _ICommandParse_t ICommandParse_t;
 
-// Public API declaration
-//***********************
+
 /** Public interface **/
 inline sys_error_code_t IParseCommand(ICommandParse_t *_this, char *commandString, uint8_t mode);
 inline sys_error_code_t ISerializeResponse(ICommandParse_t *_this, char **response_name, char **buff, uint32_t *size,

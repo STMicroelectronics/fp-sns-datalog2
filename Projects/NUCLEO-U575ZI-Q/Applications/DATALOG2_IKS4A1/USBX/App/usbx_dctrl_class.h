@@ -34,7 +34,7 @@ extern "C" {
 
 #ifndef USBX_MEMORY_SIZE
 #define USBX_MEMORY_SIZE            (35U * 1024U)
-#endif
+#endif /* USBX_MEMORY_SIZE */
 
 #define UX_DEVICE_APP_MEM_POOL_SIZE (USBX_MEMORY_SIZE + 1024U)
 

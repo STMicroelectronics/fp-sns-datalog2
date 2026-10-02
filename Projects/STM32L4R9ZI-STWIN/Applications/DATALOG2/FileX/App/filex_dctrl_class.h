@@ -38,7 +38,7 @@ extern "C" {
 #define FILEX_DCTRL_DEFAULT_QUEUE_SIZE          20U
 
 #define FILEX_DCTRL_CMD_INIT                    (0x0010)
-//#define FILEX_DCTRL_CMD_START                   (0x0020)
+/*#define FILEX_DCTRL_CMD_START                   (0x0020)*/
 #define FILEX_DCTRL_CMD_SAVE_STATUS             (0x0030)
 #define FILEX_DCTRL_CMD_SET_DEFAULT_STATUS      (0x0031)
 #define FILEX_DCTRL_CMD_SET_STATUS              (0x0040)
@@ -52,7 +52,7 @@ extern "C" {
 #ifndef FILEX_DCTRL_DAT_FILES_COUNT
 /* one .dat file for each sensor */
 #define FILEX_DCTRL_DAT_FILES_COUNT             SM_MAX_SENSORS
-#endif
+#endif /* FILEX_DCTRL_DAT_FILES_COUNT */
 
 #define FILEX_DCTRL_LOG_DIR_PREFIX              "DL2_"
 #define FILEX_DCTRL_DEVICE_JSON_FILE_NAME       "device_config.json"
@@ -67,10 +67,10 @@ extern "C" {
 /*********************/
 #ifndef SYS_NO_ERROR_CODE
 #define SYS_NO_ERROR_CODE                   0
-#endif
+#endif /* SYS_NO_ERROR_CODE */
 #ifndef SYS_SD_TASK_BASE_ERROR_CODE
 #define SYS_SD_TASK_BASE_ERROR_CODE         1
-#endif
+#endif /* SYS_SD_TASK_BASE_ERROR_CODE */
 #define SYS_SD_TASK_INIT_ERROR_CODE         SYS_SD_TASK_BASE_ERROR_CODE + 1
 #define SYS_SD_TASK_NO_SDCARD_ERROR_CODE    SYS_SD_TASK_BASE_ERROR_CODE + 2
 #define SYS_SD_TASK_FILE_OPEN_ERROR_CODE    SYS_SD_TASK_BASE_ERROR_CODE + 3
@@ -95,7 +95,7 @@ typedef struct _filex_threshold_config_t
 {
   filex_msg_queue_not_send_fp
   filex_msg_queue_not_send_cb;  /**< Callback function pointer to be invoked when the threshold is reached. */
-  UINT queue_available_storage_thr;                         /**< Threshold value for the available storage in the message queue. */
+  UINT queue_available_storage_thr; /**< Threshold value for the available storage in the message queue. */
 } filex_threshold_config_t;
 
 /**
@@ -169,7 +169,7 @@ struct _filex_dctrl_class_t
   const void *mx_drv_cfg;
 };
 
-//typedef void(*save_dtdl_fp)(char *response_msg, uint32_t size);
+/*typedef void(*save_dtdl_fp)(char *response_msg, uint32_t size);*/
 typedef void(*create_cmd_response_fp)(char *response_msg, uint32_t size);
 
 /** Public API declaration */

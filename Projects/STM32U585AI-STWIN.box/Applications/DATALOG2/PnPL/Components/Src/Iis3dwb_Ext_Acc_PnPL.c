@@ -271,7 +271,8 @@ uint8_t Iis3dwb_Ext_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "iis3dwb_ext_acc.st_ble_stream.id"))
     {
-      int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject, "iis3dwb_ext_acc.st_ble_stream.id");
+      int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                     "iis3dwb_ext_acc.st_ble_stream.id");
       valid_property = true;
       ret = iis3dwb_ext_acc_set_st_ble_stream__id(st_ble_stream__id, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -293,7 +294,8 @@ uint8_t Iis3dwb_Ext_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "iis3dwb_ext_acc.st_ble_stream.acc.enable"))
     {
-      bool st_ble_stream__acc_enable = json_object_dotget_boolean(tempJSONObject, "iis3dwb_ext_acc.st_ble_stream.acc.enable");
+      bool st_ble_stream__acc_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                  "iis3dwb_ext_acc.st_ble_stream.acc.enable");
       valid_property = true;
       ret = iis3dwb_ext_acc_set_st_ble_stream__acc_enable(st_ble_stream__acc_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

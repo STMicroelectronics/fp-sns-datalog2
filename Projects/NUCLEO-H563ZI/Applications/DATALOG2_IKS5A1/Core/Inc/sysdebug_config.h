@@ -35,21 +35,21 @@ extern "C" {
 /*#define SYS_DBG_MODULE2     SYS_DBG_ON               ///< Module 2 debug control byte */
 
 
-#define SYS_DBG_INIT                       SYS_DBG_OFF                 ///< Init task debug control byte
-#define SYS_DBG_DRIVERS                    SYS_DBG_ON                ///< Drivers debug control byte
-#define SYS_DBG_APP                        SYS_DBG_OFF                 ///< Generic Application debug control byte
-#define SYS_DBG_APMH                       SYS_DBG_OFF                 ///< Application Power Mode Helper debug control byte
-#define SYS_DBG_SPIBUS                     SYS_DBG_OFF                 ///< SPIBus task debug control byte
-#define SYS_DBG_I3CBUS                     SYS_DBG_ON                 ///< I3CBus task debug control byte
-#define SYS_DBG_IIS2DULPX                  SYS_DBG_OFF                 ///< IIS2DULPX sensor task debug control byte
-#define SYS_DBG_IIS2MDC                    SYS_DBG_OFF                 ///< IIS2MDC sensor task debug control byte
-#define SYS_DBG_ILPS22QS                   SYS_DBG_OFF                 ///< ILPS22QS sensor task debug control byte
-#define SYS_DBG_ISM330IS                   SYS_DBG_OFF                 ///< ISM330IS sensor task debug control byte
-#define SYS_DBG_ISM6HG256X                 SYS_DBG_OFF                 ///< ISM6HG256X sensor task debug control byte
-#define SYS_DBG_IIS3DWB10IS                SYS_DBG_OFF                 ///< IIS3DWB10IS sensor task debug control byte
-#define SYS_DBG_UTIL                       SYS_DBG_OFF                 ///< Util task debug control byte
-#define SYS_DBG_DT                         SYS_DBG_OFF                 ///< Datalog Task with 1 DPU debug control byte
-#define SYS_DBG_SYSTS                      SYS_DBG_OFF                 ///< SysTimestamp debug control byte
+#define SYS_DBG_INIT                       SYS_DBG_OFF                 /* Init task debug control byte*/
+#define SYS_DBG_DRIVERS                    SYS_DBG_ON                /* Drivers debug control byte*/
+#define SYS_DBG_APP                        SYS_DBG_OFF                 /* Generic Application debug control byte*/
+#define SYS_DBG_APMH                       SYS_DBG_OFF                 /* Application Power Mode Helper debug control byte*/
+#define SYS_DBG_SPIBUS                     SYS_DBG_OFF                 /* SPIBus task debug control byte*/
+#define SYS_DBG_I3CBUS                     SYS_DBG_ON                 /* I3CBus task debug control byte*/
+#define SYS_DBG_IIS2DULPX                  SYS_DBG_OFF                 /* IIS2DULPX sensor task debug control byte*/
+#define SYS_DBG_IIS2MDC                    SYS_DBG_OFF                 /* IIS2MDC sensor task debug control byte*/
+#define SYS_DBG_ILPS22QS                   SYS_DBG_OFF                 /* ILPS22QS sensor task debug control byte*/
+#define SYS_DBG_ISM330IS                   SYS_DBG_OFF                 /* ISM330IS sensor task debug control byte*/
+#define SYS_DBG_ISM6HG256X                 SYS_DBG_OFF                 /* ISM6HG256X sensor task debug control byte*/
+#define SYS_DBG_IIS3DWB10IS                SYS_DBG_OFF                 /* IIS3DWB10IS sensor task debug control byte*/
+#define SYS_DBG_UTIL                       SYS_DBG_OFF                 /* Util task debug control byte*/
+#define SYS_DBG_DT                         SYS_DBG_OFF                 /* Datalog Task with 1 DPU debug control byte*/
+#define SYS_DBG_SYSTS                      SYS_DBG_OFF                 /* SysTimestamp debug control byte*/
 
 /* ODeV - hardware configuration for the debug services provided by the framework */
 /**********************************************************************************/

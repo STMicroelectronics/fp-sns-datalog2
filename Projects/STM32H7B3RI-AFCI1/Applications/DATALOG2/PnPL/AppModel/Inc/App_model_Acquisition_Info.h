@@ -75,9 +75,9 @@ typedef struct _AcquisitionInfoModel_t
   char name[HSD_ACQ_NAME_LENGTH];
   char description[HSD_ACQ_DESC_LENGTH];
   int8_t interface;
-  char uuid[37]; // UUID: 8-4-4-4-12 = 36char + \0
-  char start_time[HSD_ACQ_TIMESTAMP_LENGTH];// "YYYY-MM-DDTHH:MM:SS.mmmZ"
-  char end_time[HSD_ACQ_TIMESTAMP_LENGTH];// "YYYY-MM-DDTHH:MM:SS.mmmZ"
+  char uuid[37]; /* UUID: 8-4-4-4-12 = 36char + \0*/
+  char start_time[HSD_ACQ_TIMESTAMP_LENGTH];/* "YYYY-MM-DDTHH:MM:SS.mmmZ"*/
+  char end_time[HSD_ACQ_TIMESTAMP_LENGTH];/* "YYYY-MM-DDTHH:MM:SS.mmmZ"*/
 } AcquisitionInfoModel_t;
 
 /* Acquisition Information PnPL Component ------------------------------------- */

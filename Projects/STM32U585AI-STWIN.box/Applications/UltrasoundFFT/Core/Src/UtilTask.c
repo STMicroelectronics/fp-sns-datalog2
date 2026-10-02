@@ -26,29 +26,29 @@
 
 #ifndef UTIL_TASK_CFG_STACK_DEPTH
 #define UTIL_TASK_CFG_STACK_DEPTH              (120)
-#endif
+#endif /* UTIL_TASK_CFG_STACK_DEPTH */
 
 #ifndef UTIL_TASK_CFG_PRIORITY
 #define UTIL_TASK_CFG_PRIORITY                 (tskIDLE_PRIORITY)
-#endif
+#endif /* UTIL_TASK_CFG_PRIORITY */
 
 #ifndef UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE
 #define UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(struct utilMessage_t)
-#endif
+#endif /* UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE */
 
 #ifndef UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT
 #define UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT      10
-#endif
+#endif /* UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT */
 
 #ifndef UTIL_TASK_CFG_LP_TIMER_PERIOD_MS
 #define UTIL_TASK_CFG_LP_TIMER_PERIOD_MS       300000
-#endif
+#endif /* UTIL_TASK_CFG_LP_TIMER_PERIOD_MS */
 
 #define SYS_DEBUGF(level, message)             SYS_DEBUGF3(SYS_DBG_UTIL, level, message)
 
 #if defined(DEBUG) || defined (SYS_DEBUG)
 #define sTaskObj                               sUtilTaskObj
-#endif
+#endif /* defined(DEBUG) || defined (SYS_DEBUG) */
 
 /**
   * Class object declaration. The class object encapsulates members that are shared between
@@ -124,7 +124,7 @@ static void RND_Init(void);
 
 #if defined (__GNUC__) || defined (__ICCARM__)
 /* Inline function defined inline in the header file UtilTask.h must be declared here as extern function. */
-#endif
+#endif /* defined (__GNUC__) || defined (__ICCARM__) */
 
 /**
   * The only instance of the task object.
@@ -213,7 +213,7 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
   /* configure the BatteryCharger */
   PB_PWR_Init();
 
-  // Configure random number generated
+  /* Configure random number generated*/
   RND_Init();
 
   return res;
@@ -221,7 +221,9 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
 
 sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName,
                                            VOID **pvStackStart,
-                                           ULONG *pStackDepth, UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart, ULONG *pParams)
+                                           ULONG *pStackDepth, UINT *pPriority, UINT *pPreemptThreshold,
+                                           ULONG *pTimeSlice, ULONG *pAutoStart,
+                                           ULONG *pParams)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;

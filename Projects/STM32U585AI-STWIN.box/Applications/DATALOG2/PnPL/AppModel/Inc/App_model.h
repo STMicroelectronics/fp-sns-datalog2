@@ -93,6 +93,10 @@ extern "C" {
 #include "App_model_Ism6hg256x_H_Acc.h"
 #include "App_model_Ism6hg256x_Gyro.h"
 #include "App_model_Ism6hg256x_Mlc.h"
+#include "App_model_Ism6hgk256x_L_Acc.h"
+#include "App_model_Ism6hgk256x_H_Acc.h"
+#include "App_model_Ism6hgk256x_Gyro.h"
+#include "App_model_Ism6hgk256x_Mlc.h"
 #include "App_model_Stts22h_Ext_Temp.h"
 #include "App_model_Tsc1641_Pow.h"
 #include "App_model_Automode.h"
@@ -124,7 +128,7 @@ extern "C" {
 #define FORMAT_LEN 10U
 
 #define FW_VERSION_MAJOR    "3"
-#define FW_VERSION_MINOR    "3"
+#define FW_VERSION_MINOR    "4"
 #define FW_VERSION_PATCH    "0"
 
 /* Max BLE bandwidth for each sensor (in Byte) */
@@ -198,6 +202,7 @@ typedef struct _AppModel_t
   bool ism330bx_mlc_ucf_valid;
   bool ism330dhcx_mlc_ucf_valid;
   bool ism6hg256x_mlc_ucf_valid;
+  bool ism6hgk256x_mlc_ucf_valid;
   bool ispu_ucf_valid;
   uint32_t total_bandwidth;
 } AppModel_t;

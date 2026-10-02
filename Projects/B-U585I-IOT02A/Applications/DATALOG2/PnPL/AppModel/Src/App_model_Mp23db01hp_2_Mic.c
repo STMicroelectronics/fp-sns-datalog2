@@ -152,7 +152,7 @@ uint8_t mp23db01hp_2_mic_get_sd_dps(int32_t *value)
 
 uint8_t mp23db01hp_2_mic_get_sensitivity(float_t *value)
 {
-  *value = 0.000030517578125; // 2/(2^mp23db01hp_2_mic_model.sensor_status->type.audio.resolution);
+  *value = 0.000030517578125; /* 2/(2^mp23db01hp_2_mic_model.sensor_status->type.audio.resolution);*/
   return PNPL_NO_ERROR_CODE;
 }
 

@@ -27,12 +27,12 @@
 
 #ifndef MAX_DATA_STREAM_ID
 #define MAX_DATA_STREAM_ID    (0U)
-#endif
+#endif /* MAX_DATA_STREAM_ID */
 #define ADV_OB_STREAM_ID        (MAX_DATA_STREAM_ID+1)
 
 #ifndef MIN
 #define MIN(a,b)            ((a) < (b) )? (a) : (b)
-#endif
+#endif /* MIN */
 
 
 /* Data buffers sent via BLE */
@@ -123,7 +123,7 @@ sys_error_code_t ble_stream_vtblStream_init(IStream_t *_this, uint8_t comm_inter
 
 #ifdef ENABLE_THREADX_DBG_PIN
   obj->ble_send_thread.pxTaskTag = BLE_SEND_TASK_CFG_TAG;
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */
 
   /* Allocate BLE_SEND_CFG_STACK_DEPTH. */
   obj->receive_thread_memory_pointer = (UCHAR *) SysAlloc(BLE_RECEIVE_CFG_STACK_DEPTH);
@@ -142,16 +142,16 @@ sys_error_code_t ble_stream_vtblStream_init(IStream_t *_this, uint8_t comm_inter
 
 #ifdef ENABLE_THREADX_DBG_PIN
   obj->ble_receive_thread.pxTaskTag = BLE_RECEIVE_TASK_CFG_TAG;
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */
 
-  // initialize send semaphore
+  /* initialize send semaphore*/
   if (TX_SUCCESS != tx_semaphore_create(&obj->send_semaphore, "SEND_SEMAPHORE", 0))
   {
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
     res = SYS_OUT_OF_MEMORY_ERROR_CODE;
   }
 
-  // initialize receive semaphore
+  /* initialize receive semaphore*/
   if (TX_SUCCESS != tx_semaphore_create(&obj->receive_semaphore, "RECEIVE_SEMAPHORE", 0))
   {
     SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
@@ -167,7 +167,7 @@ sys_error_code_t ble_stream_vtblStream_init(IStream_t *_this, uint8_t comm_inter
     return res;
   }
 
-  // initialize receive semaphore
+  /* initialize receive semaphore*/
   if (TX_SUCCESS != tx_queue_create(&obj->ble_app_queue, "BLE App queue", TX_1_ULONG, obj->queue_memory_pointer,
                                     DEFAULT_BLE_QUEUE_SIZE * sizeof(ULONG)))
   {

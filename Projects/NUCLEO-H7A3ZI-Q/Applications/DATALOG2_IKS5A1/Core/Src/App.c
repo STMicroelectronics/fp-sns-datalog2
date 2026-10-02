@@ -75,7 +75,7 @@
 #include "Deviceinformation_PnPL.h"
 
 static IPnPLComponent_t *pIis2dulpx_Acc_PnPLObj = NULL;
-//static IPnPLComponent_t *pIIS2DULPX_Mlc_PnPLObj = NULL;
+/*static IPnPLComponent_t *pIIS2DULPX_Mlc_PnPLObj = NULL;*/
 static IPnPLComponent_t *pIis2mdc_Mag_PnPLObj = NULL;
 static IPnPLComponent_t *pIlps22qs_Press_PnPLObj = NULL;
 static IPnPLComponent_t *pIsm330is_Acc_PnPLObj = NULL;
@@ -165,7 +165,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   res = ACAddTask(pAppContext, (AManagedTask *) sISM6HG256XObj);
 
   pIis2dulpx_Acc_PnPLObj = Iis2dulpx_Acc_PnPLAlloc();
-//  pIIS2DULPX_Mlc_PnPLObj = IIS2DULPX_Mlc_PnPLAlloc();
+  /*  pIIS2DULPX_Mlc_PnPLObj = IIS2DULPX_Mlc_PnPLAlloc();*/
   pIis2mdc_Mag_PnPLObj = Iis2mdc_Mag_PnPLAlloc();
   pIlps22qs_Press_PnPLObj = Ilps22qs_Press_PnPLAlloc();
   pIsm330is_Acc_PnPLObj = Ism330is_Acc_PnPLAlloc();
@@ -194,7 +194,8 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj,
                           (I2CBusIF *)IIS2DULPXTaskGetSensorIF((IIS2DULPXTask *) sIIS2DULPXObj));
   I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj, (I2CBusIF *)IIS2MDCTaskGetSensorIF((IIS2MDCTask *) sIIS2MDCObj));
-  I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj, (I2CBusIF *)ILPS22QSTaskGetSensorIF((ILPS22QSTask *) sILPS22QSObj));
+  I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj,
+                          (I2CBusIF *)ILPS22QSTaskGetSensorIF((ILPS22QSTask *) sILPS22QSObj));
   I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj,
                           (I2CBusIF *)ISM330ISTaskGetSensorIF((ISM330ISTask *) sISM330ISObj));
   I2CBusTaskConnectDevice((I2CBusTask *) sI2CBusObj,
@@ -203,7 +204,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   /************ Connect the Sensor events to the DatalogAppTask ************/
   IEventListener *DatalogAppListener = DatalogAppTask_GetEventListenerIF((DatalogAppTask *) sDatalogAppObj);
   IEventSrcAddEventListener(IIS2DULPXTaskGetEventSrcIF((IIS2DULPXTask *) sIIS2DULPXObj), DatalogAppListener);
-//  IEventSrcAddEventListener(IIS2DULPXTaskGetMlcEventSrcIF((IIS2DULPXTask *) sIIS2DULPXObj), DatalogAppListener);
+  /*  IEventSrcAddEventListener(IIS2DULPXTaskGetMlcEventSrcIF((IIS2DULPXTask *) sIIS2DULPXObj), DatalogAppListener);*/
   IEventSrcAddEventListener(IIS2MDCTaskGetMagEventSrcIF((IIS2MDCTask *) sIIS2MDCObj), DatalogAppListener);
   IEventSrcAddEventListener(ILPS22QSTaskGetPressEventSrcIF((ILPS22QSTask *) sILPS22QSObj), DatalogAppListener);
   IEventSrcAddEventListener(ISM330ISTaskGetAccEventSrcIF((ISM330ISTask *) sISM330ISObj), DatalogAppListener);
@@ -219,10 +220,10 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     DatalogAppTask_Set_ISM6HG256XMLC_IF((AManagedTask *) sISM6HG256XObj);
   }
-//  if (sIIS2DULPXObj)
-//  {
-//    DatalogAppTask_Set_IIS2DULPXMLC_IF((AManagedTask *) sIIS2DULPXObj);
-//  }
+  /*  if (sIIS2DULPXObj)*/
+  /*  {*/
+  /*    DatalogAppTask_Set_IIS2DULPXMLC_IF((AManagedTask *) sIIS2DULPXObj);*/
+  /*  }*/
   if (sISM330ISObj)
   {
     DatalogAppTask_Set_ISM330ISMLC_IF((AManagedTask *) sISM330ISObj);
@@ -238,7 +239,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
 
   /************ Sensor PnPL Components ************/
   Iis2dulpx_Acc_PnPLInit(pIis2dulpx_Acc_PnPLObj);
-//  IIS2DULPX_Mlc_PnPLInit(pIIS2DULPX_Mlc_PnPLObj);
+  /*  IIS2DULPX_Mlc_PnPLInit(pIIS2DULPX_Mlc_PnPLObj);*/
   Iis2mdc_Mag_PnPLInit(pIis2mdc_Mag_PnPLObj);
   Ilps22qs_Press_PnPLInit(pIlps22qs_Press_PnPLObj);
   Ism330is_Acc_PnPLInit(pIsm330is_Acc_PnPLObj);

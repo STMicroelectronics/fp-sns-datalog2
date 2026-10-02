@@ -71,9 +71,6 @@ extern "C" {
 #include "App_model_Vd6283tx_Als.h"
 #include "App_model_Vd6283tx_2_Als.h"
 #include "App_model_Vd6283tx_3_Als.h"
-#include "App_model_Sths34pf80_Tmos.h"
-#include "App_model_Sths34pf80_2_Tmos.h"
-#include "App_model_Sths34pf80_3_Tmos.h"
 #include "App_model_Sht40_Temp.h"
 #include "App_model_Sht40_Hum.h"
 #include "App_model_Sgp40_Voc.h"
@@ -111,7 +108,7 @@ extern "C" {
 #define N_MAX_EP            5
 
 #define FW_VERSION_MAJOR    "3"
-#define FW_VERSION_MINOR    "3"
+#define FW_VERSION_MINOR    "4"
 #define FW_VERSION_PATCH    "0"
 
 

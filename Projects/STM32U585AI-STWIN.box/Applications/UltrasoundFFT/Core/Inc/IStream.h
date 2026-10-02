@@ -40,8 +40,7 @@ typedef enum _IStreamMode_t
   */
 typedef struct _IStream_t IStream_t;
 
-// Public API declaration
-//***********************
+
 /** Public interface **/
 inline sys_error_code_t IStream_init(IStream_t *_this, uint8_t comm_interface_id, void *param);
 inline sys_error_code_t IStream_enable(IStream_t *_this);

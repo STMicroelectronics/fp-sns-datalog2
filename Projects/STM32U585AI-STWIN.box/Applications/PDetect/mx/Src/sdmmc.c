@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics..
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -66,7 +66,7 @@ void HAL_SD_MspInit(SD_HandleTypeDef *sdHandle)
     /* USER CODE END SDMMC1_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_SDMMC;
     PeriphClkInit.SdmmcClockSelection = RCC_SDMMCCLKSOURCE_PLL1;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)

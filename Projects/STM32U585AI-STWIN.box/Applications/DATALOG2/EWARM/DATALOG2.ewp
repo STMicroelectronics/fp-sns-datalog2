@@ -397,6 +397,7 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330dhcx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism6hg256x</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism6hgk256x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lps22hh</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/stts22h</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/STWIN.box</state>
@@ -1572,6 +1573,7 @@
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330dhcx</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism330is</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism6hg256x</state>
+                    <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/ism6hgk256x</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/lps22hh</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/Components/stts22h</state>
                     <state>$PROJ_DIR$/../../../../../Drivers/BSP/STWIN.box</state>
@@ -2577,6 +2579,12 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\ISM6HG256XTask_vtbl.h</name>
                     </file>
                     <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\ISM6HGK256XTask.h</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\ISM6HGK256XTask_vtbl.h</name>
+                    </file>
+                    <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Inc\SensorCommands.h</name>
                     </file>
                     <file>
@@ -2649,10 +2657,10 @@
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\I2CBusIF.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\I3CBusIF.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\I2CBusTask.c</name>
                     </file>
                     <file>
-                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\I2CBusTask.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\I3CBusIF.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\IIS2DLPCTask.c</name>
@@ -2695,6 +2703,9 @@
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\ISM6HG256XTask.c</name>
+                    </file>
+                    <file>
+                        <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\ISM6HGK256XTask.c</name>
                     </file>
                     <file>
                         <name>$PROJ_DIR$\..\..\..\..\eLooM_Components\SensorManager\Src\SensorManager.c</name>
@@ -3245,6 +3256,18 @@
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism6hg256x_Mlc.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism6hgk256x_Gyro.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism6hgk256x_H_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism6hgk256x_L_Acc.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Ism6hgk256x_Mlc.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Inc\App_model_Log_Controller.h</name>
                         </file>
                         <file>
@@ -3360,6 +3383,18 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism6hg256x_Mlc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism6hgk256x_Gyro.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism6hgk256x_H_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism6hgk256x_L_Acc.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Ism6hgk256x_Mlc.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\AppModel\Src\App_model_Log_Controller.c</name>
@@ -3479,6 +3514,18 @@
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism6hg256x_Mlc_PnPL.h</name>
                         </file>
                         <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism6hgk256x_Gyro_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism6hgk256x_H_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism6hgk256x_L_Acc_PnPL.h</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Inc\Ism6hgk256x_Mlc_PnPL.h</name>
+                        </file>
+                        <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Inc\Log_Controller_PnPL.h</name>
                         </file>
                         <file>
@@ -3591,6 +3638,18 @@
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism6hg256x_Mlc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism6hgk256x_Gyro_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism6hgk256x_H_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism6hgk256x_L_Acc_PnPL.c</name>
+                        </file>
+                        <file>
+                            <name>$PROJ_DIR$\..\PnPL\Components\Src\Ism6hgk256x_Mlc_PnPL.c</name>
                         </file>
                         <file>
                             <name>$PROJ_DIR$\..\PnPL\Components\Src\Log_Controller_PnPL.c</name>
@@ -3740,6 +3799,9 @@
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ism6hg256x\ism6hg256x_reg.c</name>
+                </file>
+                <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\ism6hgk256x\ism6hgk256x_reg.c</name>
                 </file>
                 <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\Drivers\BSP\Components\lps22hh\lps22hh_reg.c</name>

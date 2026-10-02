@@ -25,7 +25,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics
+  * Copyright (c) 2022 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -172,7 +172,8 @@ sys_error_code_t BCDriverResetLine1W(BCTimerDriver_t *_this)
   assert_param(_this != NULL);
 
   _this->mx_handle.p_mx_gpio_sw_cfg->port->BRR = _this->mx_handle.p_mx_gpio_sw_cfg->pin;
-//  HAL_GPIO_WritePin(_this->mx_handle.p_mx_gpio_sw_cfg->port, _this->mx_handle.p_mx_gpio_sw_cfg->pin, GPIO_PIN_RESET);
+  /* HAL_GPIO_WritePin(_this->mx_handle.p_mx_gpio_sw_cfg->port, _this->mx_handle.p_mx_gpio_sw_cfg->pin,
+   * GPIO_PIN_RESET); */
 
   return SYS_NO_ERROR_CODE;
 }
@@ -183,7 +184,8 @@ sys_error_code_t BCDriverSetLine1W(BCTimerDriver_t *_this)
   assert_param(_this != NULL);
 
   _this->mx_handle.p_mx_gpio_sw_cfg->port->BSRR = _this->mx_handle.p_mx_gpio_sw_cfg->pin;
-//  HAL_GPIO_WritePin(_this->mx_handle.p_mx_gpio_sw_cfg->port, _this->mx_handle.p_mx_gpio_sw_cfg->pin, GPIO_PIN_RESET);
+  /* HAL_GPIO_WritePin(_this->mx_handle.p_mx_gpio_sw_cfg->port, _this->mx_handle.p_mx_gpio_sw_cfg->pin,
+   * GPIO_PIN_RESET); */
 
   return SYS_NO_ERROR_CODE;
 }

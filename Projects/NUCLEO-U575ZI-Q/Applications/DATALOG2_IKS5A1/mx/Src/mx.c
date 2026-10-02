@@ -181,6 +181,17 @@ const MX_GPIOParams_t MX_GPIO_INT1_EXTERNALInitParams =
 };
 
 /**
+  * (DIL_INT2) Initialization parameters.
+  */
+const MX_GPIOParams_t MX_GPIO_INT2_EXTERNALInitParams =
+{
+  MX_GPIO_PC1_Init,
+  DIL_INT2_EXTI_IRQn,
+  DIL_INT2_Pin,
+  DIL_INT2_GPIO_Port
+};
+
+/**
   * (SPI_CS) Initialization parameters.
   */
 const MX_GPIOParams_t MX_GPIO_CS_EXTERNALInitParams =

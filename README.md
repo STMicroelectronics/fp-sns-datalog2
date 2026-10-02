@@ -23,9 +23,11 @@ unit (MLC) for:
 
 - **IIS2DULPX**
 - **IIS2ICLX**
+- **ISM6HGK256X**
 - **ISM6HG256X**
 - **ISM330BX**
 - **ISM330DHCX**
+- **LSM6DSK320X**
 - **LSM6DSV16BX**
 - **LSM6DSV16X**
 - **LSM6DSV32X** 
@@ -47,6 +49,7 @@ The FP-SNS-DATALOG2 firmware can run on:
 - X-NUCLEO-IKS5A1 with **NUCLEO-H7A3ZI-Q**
 - X-NUCLEO-IKS4A1 with **NUCLEO-H563ZI**
 - X-NUCLEO-IKS5A1 with **NUCLEO-H563ZI**
+- X-NUCLEO-53L9A1 with **NUCLEO-H563ZI**
 
 ST High Speed Datalog also natively supports add-ons for STEVAL-STWINBX1:
 
@@ -109,14 +112,13 @@ Here is the list of references to user documents:
   
   For further details, please refer to [UM3106](https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf)
   
-- **cli_example** utility, **UltrasoundFFT** firmware example for **STWIN.box**, and **DATALOG2** firmware examples for **X-NUCLEO-IKS02A1** with **NUCLEO-U575ZI-Q** and **X-NUCLEO-IKS02A1** with **NUCLEO-H7A3ZI-Q** are deprecated and in NRND state. They are Not Recommended for New Design. This is the last update and no further updates are planned.
 - mxchip driver generates a warning at compile time in CubeIDE and in Release configuration. It is not impacting the example performance nor generating issues, so you can ignore it. 
 
 ## Development Toolchains and Compilers
 
 -   IAR Embedded Workbench for ARM (EWARM) toolchain V9.60.3
 -   RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38
--   STM32CubeIDE v2.1
+-   STM32CubeIDE v2.2
 
 ## Supported Devices and Boards
 
@@ -137,6 +139,7 @@ Here is the list of references to user documents:
 - [X-NUCLEO-IKS5A1](https://www.st.com/en/ecosystems/x-nucleo-iks5a1.html) with [NUCLEO-H7A3ZI-Q](https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html)
 - [X-NUCLEO-IKS4A1](https://www.st.com/en/ecosystems/x-nucleo-iks4a1.html) with [NUCLEO-H563ZI](https://www.st.com/en/evaluation-tools/nucleo-h563zi.html)
 - [X-NUCLEO-IKS5A1](https://www.st.com/en/ecosystems/x-nucleo-iks5a1.html) with [NUCLEO-H563ZI](https://www.st.com/en/evaluation-tools/nucleo-h563zi.html)
+- [X-NUCLEO-53L9A1](https://www.st.com/en/evaluation-tools/x-nucleo-53l9a1.html) with [NUCLEO-H563ZI](https://www.st.com/en/evaluation-tools/nucleo-h563zi.html)
 
 ## Backward Compatibility
 

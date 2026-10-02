@@ -48,7 +48,7 @@
   */
 typedef struct _TimCallbakcMapEntry_t
 {
-//  TIM_TypeDef *tim_instance;
+  /*  TIM_TypeDef *tim_instance;*/
   BCProtocol_t *p_owner;
 } TimCallbackMapEntry_t;
 
@@ -439,14 +439,16 @@ static void BCPFreq2Status(float_t freq)
   {
     for (ChgState = END_OF_CHARGE; ChgState < BATTERY_TEMPERATURE_FAULT; ChgState++)
     {
-      half_step = (sSTBC02_ChgStateInfo[ChgState].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState + 1U].freq) / (float_t) 2;
+      half_step =
+        (sSTBC02_ChgStateInfo[ChgState].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState + 1U].freq) / (float_t) 2;
       if (freq < half_step)
       {
         p_owner->chg_state = ChgState;
         break;
       }
     }
-    half_step = (sSTBC02_ChgStateInfo[ChgState - 1U].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState].freq) / (float_t) 2;
+    half_step =
+      (sSTBC02_ChgStateInfo[ChgState - 1U].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState].freq) / (float_t) 2;
     if (freq > half_step)
     {
       p_owner->chg_state = ChgState;

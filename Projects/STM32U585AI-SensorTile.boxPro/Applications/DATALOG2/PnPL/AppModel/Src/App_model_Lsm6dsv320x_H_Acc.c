@@ -68,7 +68,7 @@ uint8_t lsm6dsv320x_h_acc_comp_init(void)
   lsm6dsv320x_h_acc_set_samples_per_ts(0, NULL);
 #else
   lsm6dsv320x_h_acc_set_samples_per_ts(1000, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
 
   int32_t value = 0;
   lsm6dsv320x_h_acc_get_dim(&value);
@@ -294,7 +294,8 @@ uint8_t lsm6dsv320x_h_acc_set_odr(pnpl_lsm6dsv320x_h_acc_odr_t enum_id, char **r
   float_t value;
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -329,12 +330,13 @@ uint8_t lsm6dsv320x_h_acc_set_odr(pnpl_lsm6dsv320x_h_acc_odr_t enum_id, char **r
       }
 #if (HSD_USE_DUMMY_DATA != 1)
       lsm6dsv320x_h_acc_set_samples_per_ts((int32_t) value, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
       if (__stream_control(true) != PNPL_NO_ERROR_CODE)
       {
         if (response_message != NULL)
         {
-          *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+          *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering "
+                              "ODRs to avoid possible data corruption";
         }
         ret = PNPL_BASE_ERROR_CODE;
       }
@@ -355,7 +357,8 @@ uint8_t lsm6dsv320x_h_acc_set_fs(pnpl_lsm6dsv320x_h_acc_fs_t enum_id, char **res
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -407,7 +410,8 @@ uint8_t lsm6dsv320x_h_acc_set_enable(bool value, char **response_message)
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -431,7 +435,8 @@ uint8_t lsm6dsv320x_h_acc_set_enable(bool value, char **response_message)
       {
         if (response_message != NULL)
         {
-          *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+          *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering "
+                              "ODRs to avoid possible data corruption";
         }
         ret = PNPL_BASE_ERROR_CODE;
       }
@@ -453,7 +458,8 @@ uint8_t lsm6dsv320x_h_acc_set_samples_per_ts(int32_t value, char **response_mess
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -485,7 +491,8 @@ uint8_t lsm6dsv320x_h_acc_set_sensor_annotation(const char *value, char **respon
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -506,7 +513,8 @@ uint8_t lsm6dsv320x_h_acc_set_st_ble_stream__id(int32_t value, char **response_m
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -527,7 +535,8 @@ uint8_t lsm6dsv320x_h_acc_set_st_ble_stream__acc_enable(bool value, char **respo
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -548,7 +557,8 @@ uint8_t lsm6dsv320x_h_acc_set_st_ble_stream__acc_unit(const char *value, char **
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -569,7 +579,8 @@ uint8_t lsm6dsv320x_h_acc_set_st_ble_stream__acc_format(const char *value, char 
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -590,7 +601,8 @@ uint8_t lsm6dsv320x_h_acc_set_st_ble_stream__acc_elements(int32_t value, char **
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -611,7 +623,8 @@ uint8_t lsm6dsv320x_h_acc_set_st_ble_stream__acc_channels(int32_t value, char **
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -632,7 +645,8 @@ uint8_t lsm6dsv320x_h_acc_set_st_ble_stream__acc_multiply_factor(float_t value, 
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else
@@ -653,7 +667,8 @@ uint8_t lsm6dsv320x_h_acc_set_st_ble_stream__acc_odr(int32_t value, char **respo
 
   if (app_model.enabled_80x == true)
   {
-    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X instead";
+    *response_message = "PnPL_Error: Another external sensor already enabled - reboot the firmware or use LSM6DSV80X "
+                        "instead";
     ret = PNPL_BASE_ERROR_CODE;
   }
   else

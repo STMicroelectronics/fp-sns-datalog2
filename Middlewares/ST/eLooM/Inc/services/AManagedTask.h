@@ -45,8 +45,23 @@ extern "C" {
 #define MT_ALLOWED_ERROR_COUNT   0x2U
 #endif
 
-#define AMT_MS_TO_TICKS( xTimeInMs ) ( (uint32_t) (((uint32_t )(xTimeInMs) * (uint32_t)TX_TIMER_TICKS_PER_SECOND) / (uint32_t)1000))
+/* Convert milliseconds to ThreadX ticks, rounding down.
+ * May underestimate by less than one tick.
+ * Example:
+ * tx_thread_sleep(AMT_MS_TO_TICKS(xTimeInMs));
+ * -> sleeps for approximately [T-1, T] ticks, depending on rounding.
+ */
+#define AMT_MS_TO_TICKS(xTimeInMs) \
+  ( (uint32_t)((((uint32_t)(xTimeInMs) * (uint32_t)TX_TIMER_TICKS_PER_SECOND) / (uint32_t)1000)) )
 
+/* Convert milliseconds to ThreadX ticks, rounding up.
+ * Guarantees at least the requested delay.
+ * Example:
+ * tx_thread_sleep(AMT_MS_TO_TICKS_ROUND_UP(xTimeInMs));
+ * -> sleeps for approximately [T, T+1] ticks, depending on rounding.
+ */
+#define AMT_MS_TO_TICKS_ROUND_UP(xTimeInMs) \
+  ( (uint32_t)((((uint32_t)(xTimeInMs) * (uint32_t)TX_TIMER_TICKS_PER_SECOND) / (uint32_t)1000) + 1U) )
 
 /**
   * Create  type name for _AManagedTask.

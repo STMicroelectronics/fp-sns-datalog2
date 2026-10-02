@@ -23,8 +23,8 @@
 #include "rtc.h"
 #include "gpio.h"
 
-//Select the SystemClock_Config
-//#define SystemClock_Config_SensorTile SystemClock_Config
+/*Select the SystemClock_Config*/
+/*#define SystemClock_Config_SensorTile SystemClock_Config*/
 #define SystemClock_Config_MX SystemClock_Config
 #define Error_Handler sys_error_handler
 
@@ -203,7 +203,7 @@ void SystemClock_Config(void)
 
 void SystemPower_Config(void)
 {
-  // Init cache and RTC
+  /* Init cache and RTC*/
   MX_ICACHE_Init();
   MPU_Config();
   MX_RTC_Init();

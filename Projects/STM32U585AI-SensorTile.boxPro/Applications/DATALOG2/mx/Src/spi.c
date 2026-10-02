@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics..
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -328,12 +328,10 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle)
     }
 
     /* SPI2 interrupt Init */
-    HAL_NVIC_SetPriority(SPI2_IRQn, 0, 0);
-    HAL_NVIC_EnableIRQ(SPI2_IRQn);
-    /* USER CODE BEGIN SPI2_MspInit 1 */
-    /* SPI2 interrupt Init */
     HAL_NVIC_SetPriority(SPI2_IRQn, 4, 0);
     HAL_NVIC_EnableIRQ(SPI2_IRQn);
+    /* USER CODE BEGIN SPI2_MspInit 1 */
+
     /* USER CODE END SPI2_MspInit 1 */
   }
   else if (spiHandle->Instance == SPI3)
@@ -442,7 +440,7 @@ void HAL_SPI_MspInit(SPI_HandleTypeDef *spiHandle)
     }
 
     /* SPI3 interrupt Init */
-    HAL_NVIC_SetPriority(SPI3_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(SPI3_IRQn, 4, 0);
     HAL_NVIC_EnableIRQ(SPI3_IRQn);
     /* USER CODE BEGIN SPI3_MspInit 1 */
 
@@ -581,3 +579,4 @@ void MX_SPI3_20MHz_Init(void)
 
 }
 /* USER CODE END 1 */
+

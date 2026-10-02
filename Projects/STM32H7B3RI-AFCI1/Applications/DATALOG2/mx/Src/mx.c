@@ -85,72 +85,72 @@ const MX_GPIOParams_t MX_GPIO_LD5InitParams =
   LED_5_Pin,
   LED_5_GPIO_Port
 };
-//
-///**
-//  * LED2 (Yellow) Initialization parameters.
-//  */
-//const MX_GPIOParams_t MX_GPIO_LD2InitParams =
-//{
-//  MX_GPIO_PE1_Init,
-//  UsageFault_IRQn, /*!< NOT USED */
-//  LD2_Pin,
-//  LD2_GPIO_Port
-//};
-//
-///**
-//  * (INT1_DHCX) Initialization parameters.
-//  */
-//const MX_GPIOParams_t MX_GPIO_INT1_DHCXInitParams =
-//{
-//  MX_GPIO_PA8_Init,
-//  INT1_DHCX_EXTI_IRQn, /*!< NOT USED */
-//  INT1_DHCX_Pin,
-//  INT1_DHCX_GPIO_Port
-//};
-//
-///**
-//  * (INT2_DHCX) Initialization parameters.
-//  */
-//const MX_GPIOParams_t MX_GPIO_INT2_DHCXInitParams =
-//{
-//  MX_GPIO_PE11_Init,
-//  INT2_DHCX_EXTI_IRQn, /*!< NOT USED. Must be INT2_DHCX_EXTI_IRQn */
-//  INT2_DHCX_Pin,
-//  INT2_DHCX_GPIO_Port
-//};
-//
-///**
-//  * (INT1_DLPC) Initialization parameters.
-//  */
-//const MX_GPIOParams_t MX_GPIO_INT1_DLPCInitParams =
-//{
-//  MX_GPIO_PB1_Init,
-//  INT1_DLPC_EXTI_IRQn, /*!< NOT USED */
-//  INT1_DLPC_Pin,
-//  INT1_DLPC_GPIO_Port
-//};
-//
-///**
-//  * (INT2_DLPC) Initialization parameters.
-//  */
-//const MX_GPIOParams_t MX_GPIO_INT2_DLPCInitParams =
-//{
-//  MX_GPIO_PC2_Init,
-//  INT2_DLPC_EXTI_IRQn, /*!< NOT USED. Must be INT2_DHCX_EXTI_IRQn */
-//  INT2_DLPC_Pin,
-//  INT2_DLPC_GPIO_Port
-//};
-//
-///**
-//  * (DRDY_MDC) Initialization parameters.
-//  */
-//const MX_GPIOParams_t MX_GPIO_DRDY_MDCInitParams =
-//{
-//  MX_GPIO_PC3_Init,
-//  DRDY_MDC_EXTI_IRQn, /*!< NOT USED. Must be INT2_DHCX_EXTI_IRQn */
-//  DRDY_MDC_Pin,
-//  DRDY_MDC_GPIO_Port
-//};
+/**/
+/***/
+/*  * LED2 (Yellow) Initialization parameters.*/
+/*  */
+/*const MX_GPIOParams_t MX_GPIO_LD2InitParams =*/
+/*{*/
+/*  MX_GPIO_PE1_Init,*/
+/*  UsageFault_IRQn, !< NOT USED */
+/*  LD2_Pin,*/
+/*  LD2_GPIO_Port*/
+/*};*/
+/**/
+/***/
+/*  * (INT1_DHCX) Initialization parameters.*/
+/*  */
+/*const MX_GPIOParams_t MX_GPIO_INT1_DHCXInitParams =*/
+/*{*/
+/*  MX_GPIO_PA8_Init,*/
+/*  INT1_DHCX_EXTI_IRQn, !< NOT USED */
+/*  INT1_DHCX_Pin,*/
+/*  INT1_DHCX_GPIO_Port*/
+/*};*/
+/**/
+/***/
+/*  * (INT2_DHCX) Initialization parameters.*/
+/*  */
+/*const MX_GPIOParams_t MX_GPIO_INT2_DHCXInitParams =*/
+/*{*/
+/*  MX_GPIO_PE11_Init,*/
+/*  INT2_DHCX_EXTI_IRQn, !< NOT USED. Must be INT2_DHCX_EXTI_IRQn */
+/*  INT2_DHCX_Pin,*/
+/*  INT2_DHCX_GPIO_Port*/
+/*};*/
+/**/
+/***/
+/*  * (INT1_DLPC) Initialization parameters.*/
+/*  */
+/*const MX_GPIOParams_t MX_GPIO_INT1_DLPCInitParams =*/
+/*{*/
+/*  MX_GPIO_PB1_Init,*/
+/*  INT1_DLPC_EXTI_IRQn, !< NOT USED */
+/*  INT1_DLPC_Pin,*/
+/*  INT1_DLPC_GPIO_Port*/
+/*};*/
+/**/
+/***/
+/*  * (INT2_DLPC) Initialization parameters.*/
+/*  */
+/*const MX_GPIOParams_t MX_GPIO_INT2_DLPCInitParams =*/
+/*{*/
+/*  MX_GPIO_PC2_Init,*/
+/*  INT2_DLPC_EXTI_IRQn, !< NOT USED. Must be INT2_DHCX_EXTI_IRQn */
+/*  INT2_DLPC_Pin,*/
+/*  INT2_DLPC_GPIO_Port*/
+/*};*/
+/**/
+/***/
+/*  * (DRDY_MDC) Initialization parameters.*/
+/*  */
+/*const MX_GPIOParams_t MX_GPIO_DRDY_MDCInitParams =*/
+/*{*/
+/*  MX_GPIO_PC3_Init,*/
+/*  DRDY_MDC_EXTI_IRQn, !< NOT USED. Must be INT2_DHCX_EXTI_IRQn */
+/*  DRDY_MDC_Pin,*/
+/*  DRDY_MDC_GPIO_Port*/
+/*};*/
 
 const MX_PCDParams_t MX_PCDInitParams =
 {

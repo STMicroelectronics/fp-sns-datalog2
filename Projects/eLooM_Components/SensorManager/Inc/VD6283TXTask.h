@@ -34,6 +34,9 @@ extern "C" {
 #include "vd6283tx.h"
 
 
+#define VD6283TX_I2C_ADD                          ( 0x40U )
+
+
 /**
   * Create  type name for _VD6283TXTask.
   */

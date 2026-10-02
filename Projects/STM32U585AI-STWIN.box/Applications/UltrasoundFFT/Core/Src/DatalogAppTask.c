@@ -31,15 +31,15 @@
 
 #ifndef DT_TASK_CFG_STACK_DEPTH
 #define DT_TASK_CFG_STACK_DEPTH              (TX_MINIMUM_STACK*2)
-#endif
+#endif /* DT_TASK_CFG_STACK_DEPTH */
 
 #ifndef DT_TASK_CFG_PRIORITY
 #define DT_TASK_CFG_PRIORITY                 (TX_MAX_PRIORITIES-1)
-#endif
+#endif /* DT_TASK_CFG_PRIORITY */
 
 #ifndef DT_TASK_CFG_IN_QUEUE_LENGTH
 #define DT_TASK_CFG_IN_QUEUE_LENGTH          20
-#endif
+#endif /* DT_TASK_CFG_IN_QUEUE_LENGTH */
 
 #define DT_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(ULONG)
 
@@ -51,7 +51,7 @@
 
 #if defined(DEBUG) || defined (SYS_DEBUG)
 #define sTaskObj                                  sDatalogAppTaskObj
-#endif
+#endif /* defined(DEBUG) || defined (SYS_DEBUG) */
 
 /**
   *  DatalogAppTask internal structure.
@@ -143,8 +143,8 @@ typedef struct _DatalogAppTaskClass
   pExecuteStepFunc_t p_pm_state2func_map[];
 } DatalogAppTaskClass_t;
 
-// Private member function declaration
-// ***********************************
+/* Private member function declaration*/
+/* ************************************/
 
 /**
   * Execute one step of the task control loop while the system is in RUN mode.
@@ -177,7 +177,7 @@ sys_error_code_t sensorEvtListener_ProcessOnNewDataReady_vtbl(IEventListener *_t
 
 #if defined (__GNUC__)
 /* Inline function defined inline in the header file DatalogAppTask.h must be declared here as extern function. */
-#endif
+#endif /* defined (__GNUC__) */
 
 /* Objects instance */
 /********************/
@@ -304,7 +304,9 @@ sys_error_code_t DatalogAppTask_vtblHardwareInit(AManagedTask *_this, void *pPar
 
 sys_error_code_t DatalogAppTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName,
                                                  VOID **pvStackStart,
-                                                 ULONG *pStackDepth, UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart,
+                                                 ULONG *pStackDepth, UINT *pPriority, UINT *pPreemptThreshold,
+                                                 ULONG *pTimeSlice,
+                                                 ULONG *pAutoStart,
                                                  ULONG *pParams)
 {
   assert_param(_this);
@@ -599,7 +601,8 @@ sys_error_code_t sensorEvtListener_ProcessOnNewDataReady_vtbl(IEventListener *_t
         {
           if (IStream_is_enabled((IStream_t *) p_obj->usbx_device))
           {
-            res = IStream_post_data((IStream_t *) p_obj->usbx_device, stream_id, data_buf, samplesToSend * nBytesPerSample);
+            res = IStream_post_data((IStream_t *) p_obj->usbx_device, stream_id, data_buf,
+                                    samplesToSend * nBytesPerSample);
           }
 
           if (res != 0)
@@ -617,7 +620,8 @@ sys_error_code_t sensorEvtListener_ProcessOnNewDataReady_vtbl(IEventListener *_t
         {
           if (IStream_is_enabled((IStream_t *) p_obj->usbx_device))
           {
-            res = IStream_post_data((IStream_t *) p_obj->usbx_device, stream_id, data_buf, p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample);
+            res = IStream_post_data((IStream_t *) p_obj->usbx_device, stream_id, data_buf,
+                                    p_obj->sensorContext[sId].n_samples_to_timestamp * nBytesPerSample);
           }
           if (res != 0)
           {
@@ -808,7 +812,7 @@ uint8_t DatalogAppTask_set_time_vtbl(ILog_Controller_t *_this, const char *datet
 
   char datetimeStr[3];
 
-  //internal input format: yyyyMMdd_hh_mm_ss
+  /*internal input format: yyyyMMdd_hh_mm_ss*/
 
   RTC_DateTypeDef sdate;
   RTC_TimeTypeDef stime;
@@ -830,7 +834,7 @@ uint8_t DatalogAppTask_set_time_vtbl(ILog_Controller_t *_this, const char *datet
   sdate.Date = atoi(datetimeStr);
 
   /** Week day initialization (not used)*/
-  sdate.WeekDay = RTC_WEEKDAY_MONDAY; //Not used
+  sdate.WeekDay = RTC_WEEKDAY_MONDAY; /*Not used*/
 
   /** extract hour string */
   datetimeStr[0] = datetime[9];
@@ -848,7 +852,7 @@ uint8_t DatalogAppTask_set_time_vtbl(ILog_Controller_t *_this, const char *datet
   stime.Seconds = atoi(datetimeStr);
 
   /** not used */
-  //stime.TimeFormat = RTC_HOURFORMAT12_AM;
+  /*stime.TimeFormat = RTC_HOURFORMAT12_AM;*/
   stime.SecondFraction = 0;
   stime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   stime.StoreOperation = RTC_STOREOPERATION_RESET;

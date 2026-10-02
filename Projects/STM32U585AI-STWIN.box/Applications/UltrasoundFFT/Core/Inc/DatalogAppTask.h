@@ -53,8 +53,8 @@ typedef struct
   */
 typedef struct _DatalogAppTask DatalogAppTask;
 
-// Public API declaration
-//***********************
+/* Public API declaration*/
+/*************************/
 
 /**
   * Allocate an instance of DatalogAppTask.
@@ -72,8 +72,8 @@ ICommandParse_t *DatalogAppTask_GetICommandParseIF(DatalogAppTask *_this);
 
 ILog_Controller_t *DatalogAppTask_GetILogControllerIF(DatalogAppTask *_this);
 
-// Inline functions definition
-// ***************************
+/* Inline functions definition*/
+/* ****************************/
 
 #ifdef __cplusplus
 }

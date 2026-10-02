@@ -893,6 +893,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_rtc_ex.c</locationURI>
 		</link>
 		<link>
+			<name>Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_sai.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_sai.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_sai_ex.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_sai_ex.c</locationURI>
+		</link>
+		<link>
 			<name>Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_sd_ex.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/STM32U5xx_HAL_Driver/Src/stm32u5xx_hal_sd_ex.c</locationURI>
@@ -1583,6 +1593,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lps22df/lps22df_reg.h</locationURI>
 		</link>
 		<link>
+			<name>Drivers/BSP/Components/lsm6dsk320x/lsm6dsk320x_reg.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lsm6dsk320x/lsm6dsk320x_reg.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/Components/lsm6dsk320x/lsm6dsk320x_reg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lsm6dsk320x/lsm6dsk320x_reg.h</locationURI>
+		</link>
+		<link>
 			<name>Drivers/BSP/Components/lsm6dsv16bx/lsm6dsv16bx_reg.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lsm6dsv16bx/lsm6dsv16bx_reg.c</locationURI>
@@ -1968,6 +1988,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lps22df_Press.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsk320x_Gyro.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsk320x_Gyro.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsk320x_H_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsk320x_H_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsk320x_L_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsk320x_L_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsk320x_Mlc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsk320x_Mlc.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv16bx_Acc.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv16bx_Acc.h</locationURI>
@@ -1981,6 +2021,11 @@
 			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv16bx_Mlc.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv16bx_Mlc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv16bx_Tdm_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Lsm6dsv16bx_Tdm_Acc.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/AppModel/Inc/App_model_Lsm6dsv16x_Acc.h</name>
@@ -2148,6 +2193,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lps22df_Press.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsk320x_Gyro.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsk320x_Gyro.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsk320x_H_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsk320x_H_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsk320x_L_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsk320x_L_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsk320x_Mlc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsk320x_Mlc.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv16bx_Acc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv16bx_Acc.c</locationURI>
@@ -2161,6 +2226,11 @@
 			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv16bx_Mlc.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv16bx_Mlc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv16bx_Tdm_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Lsm6dsv16bx_Tdm_Acc.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/AppModel/Src/App_model_Lsm6dsv16x_Acc.c</name>
@@ -2323,6 +2393,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lps22df_Press_PnPL.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsk320x_Gyro_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsk320x_Gyro_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsk320x_H_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsk320x_H_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsk320x_L_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsk320x_L_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsk320x_Mlc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsk320x_Mlc_PnPL.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Components/Inc/Lsm6dsv16bx_Acc_PnPL.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv16bx_Acc_PnPL.h</locationURI>
@@ -2336,6 +2426,11 @@
 			<name>User/PnPL/Components/Inc/Lsm6dsv16bx_Mlc_PnPL.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv16bx_Mlc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Lsm6dsv16bx_Tdm_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Lsm6dsv16bx_Tdm_Acc_PnPL.h</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Components/Inc/Lsm6dsv16x_Acc_PnPL.h</name>
@@ -2498,6 +2593,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lps22df_Press_PnPL.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsk320x_Gyro_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsk320x_Gyro_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsk320x_H_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsk320x_H_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsk320x_L_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsk320x_L_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsk320x_Mlc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsk320x_Mlc_PnPL.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Components/Src/Lsm6dsv16bx_Acc_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv16bx_Acc_PnPL.c</locationURI>
@@ -2511,6 +2626,11 @@
 			<name>User/PnPL/Components/Src/Lsm6dsv16bx_Mlc_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv16bx_Mlc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Lsm6dsv16bx_Tdm_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Lsm6dsv16bx_Tdm_Acc_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Components/Src/Lsm6dsv16x_Acc_PnPL.c</name>
@@ -2738,6 +2858,16 @@
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LPS22DFTask_vtbl.h</locationURI>
 		</link>
 		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/LSM6DSK320XTask.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LSM6DSK320XTask.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/LSM6DSK320XTask_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LSM6DSK320XTask_vtbl.h</locationURI>
+		</link>
+		<link>
 			<name>User/eLooM_Components/SensorManager/Inc/LSM6DSV16BXTask.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/LSM6DSV16BXTask.h</locationURI>
@@ -2901,6 +3031,11 @@
 			<name>User/eLooM_Components/SensorManager/Src/LPS22DFTask.c</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/LPS22DFTask.c</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Src/LSM6DSK320XTask.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/LSM6DSK320XTask.c</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Src/LSM6DSV16BXTask.c</name>

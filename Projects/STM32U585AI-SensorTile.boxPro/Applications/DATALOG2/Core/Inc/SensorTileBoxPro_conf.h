@@ -68,7 +68,7 @@ extern "C" {
 
 #define BSP_NFCTAG_INSTANCE         0U
 
-//For using LSM6DSV16X and LIS2DU12 with I2C
+/*For using LSM6DSV16X and LIS2DU12 with I2C*/
 #define ALL_SENSORS_I2C
 
 /**  Definition for SD DETECT INTERRUPT PIN  **/

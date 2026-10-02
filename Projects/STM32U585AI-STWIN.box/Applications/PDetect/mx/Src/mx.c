@@ -311,17 +311,6 @@ const MX_GPIOParams_t MX_GPIO_INT_TOFInitParams =
   INT_TOF_GPIO_Port
 };
 
-/**
-  * (INT_EX) Initialization parameters.
-  */
-const MX_GPIOParams_t MX_GPIO_INT_TMOSInitParams =
-{
-  MX_GPIO_PG5_Init,
-  INT_TMOS_EXTI_IRQn,
-  INT_TMOS_Pin,
-  INT_TMOS_GPIO_Port
-};
-
 const MX_PCDParams_t MX_PCDInitParams =
 {
   .p_pcd = &hpcd_USB_OTG_FS,

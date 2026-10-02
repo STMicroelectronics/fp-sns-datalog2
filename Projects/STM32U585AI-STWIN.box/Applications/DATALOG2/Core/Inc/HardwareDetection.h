@@ -32,6 +32,7 @@ boolean_t HardwareDetection_Check_Ext_IIS3DWB10IS(void);
 boolean_t HardwareDetection_Check_Ext_ILPS28QSW(void);
 boolean_t HardwareDetection_Check_Ext_ISM330BX(void);
 boolean_t HardwareDetection_Check_Ext_ISM6HG256X(void);
+boolean_t HardwareDetection_Check_Ext_ISM6HGK256X(void);
 boolean_t HardwareDetection_Check_Ext_ISM330IS(void);
 boolean_t HardwareDetection_Check_Ext_STTS22H(uint8_t *device_address);
 boolean_t HardwareDetection_Check_Ext_TSC1641(void);

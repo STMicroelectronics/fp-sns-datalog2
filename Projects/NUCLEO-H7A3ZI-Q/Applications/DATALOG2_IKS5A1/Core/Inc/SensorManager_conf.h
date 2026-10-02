@@ -32,43 +32,43 @@
 
 #define IIS3DWB10IS_ISPU_DISABLED 1
 #define IIS2DULPX_MLC_DISABLED 1
-//#define ISM330IS_ISPU_DISABLED        1
-//#define ISM6HG256X_MLC_DISABLED          1
+/* #define ISM330IS_ISPU_DISABLED        1 */
+/* #define ISM6HG256X_MLC_DISABLED          1 */
 
-//#define HSD_USE_DUMMY_DATA               1
+/* #define HSD_USE_DUMMY_DATA               1 */
 
 
-// file IIS2DULPXTask.c
+/* file IIS2DULPXTask.c */
 #define IIS2DULPX_TASK_CFG_STACK_DEPTH  (TX_MINIMUM_STACK*7)
 #define IIS2DULPX_TASK_CFG_PRIORITY     (8)
 
-// file IIS2MDCTask.c
+/* file IIS2MDCTask.c */
 #define IIS2MDC_TASK_CFG_STACK_DEPTH     (TX_MINIMUM_STACK*7)
 #define IIS2MDC_TASK_CFG_PRIORITY        (8)
 
-// file ILPS22QSTask.c
+/* file ILPS22QSTask.c */
 #define ILPS22QS_TASK_CFG_STACK_DEPTH     (TX_MINIMUM_STACK*7)
 #define ILPS22QS_TASK_CFG_PRIORITY        (8)
 
-// file ISM330ISTask.c
+/* file ISM330ISTask.c */
 #define ISM330IS_TASK_CFG_STACK_DEPTH (TX_MINIMUM_STACK*7)
 #define ISM330IS_TASK_CFG_PRIORITY    (8)
 
-// file ISM6HG256XTask.c
+/* file ISM6HG256XTask.c */
 #define ISM6HG256X_TASK_CFG_STACK_DEPTH  (TX_MINIMUM_STACK*7)
 #define ISM6HG256X_TASK_CFG_PRIORITY     (8)
 #define ISM6HG256X_TASK_CFG_I2C_ADDRESS ISM6HG256X_I2C_ADD_L
 
-// file IIS3DWB10ISTask.c
+/* file IIS3DWB10ISTask.c */
 #define IIS3DWB10IS_TASK_CFG_STACK_DEPTH          (TX_MINIMUM_STACK*12)
 #define IIS3DWB10IS_TASK_CFG_PRIORITY             (8)
 
 
-// file I2CBusTask.c
+/* file I2CBusTask.c */
 #define I2CBUS_TASK_CFG_STACK_DEPTH      (TX_MINIMUM_STACK*6)
 #define I2CBUS_TASK_CFG_PRIORITY         (4)
 
-// file SPIBusTask.c
+/* file SPIBusTask.c */
 #define SPIBUS_TASK_CFG_STACK_DEPTH      (TX_MINIMUM_STACK*6)
 #define SPIBUS_TASK_CFG_PRIORITY         (4)
 

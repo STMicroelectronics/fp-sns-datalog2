@@ -22,8 +22,8 @@
 #include "rtc.h"
 #include "gpio.h"
 
-//Select the SystemClock_Config
-//#define SystemClock_Config_SensorTile SystemClock_Config
+/*Select the SystemClock_Config*/
+/*#define SystemClock_Config_SensorTile SystemClock_Config*/
 #define SystemClock_Config_MX SystemClock_Config
 #define Error_Handler sys_error_handler
 
@@ -44,8 +44,8 @@ typedef struct _system_clock_t
   */
 static system_clock_t sSystemClock;
 
-// Private member function declaration
-// ***********************************
+/* Private member function declaration*/
+/* ************************************/
 static void PeriphCommonClock_Config(void);
 
 /* Public functions declaration */
@@ -227,9 +227,9 @@ static void PeriphCommonClock_Config(void)
 
 void SystemPower_Config(void)
 {
-  // Enable Power Clock
+  /* Enable Power Clock*/
   __HAL_RCC_PWR_CLK_ENABLE();
-  // Init RTC
+  /* Init RTC*/
   MX_RTC_Init();
 
   MX_GPIO_Init();

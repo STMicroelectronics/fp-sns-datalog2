@@ -76,7 +76,7 @@ static IPnPLComponent_t *pIsm330dhcx_Mlc_PnPLObj = NULL;
 static IPnPLComponent_t *pLps22hh_Temp_PnPLObj = NULL;
 static IPnPLComponent_t *pLps22hh_Press_PnPLObj = NULL;
 static IPnPLComponent_t *pMp23db01hp_1_Mic_PnPLObj = NULL;
-//static IPnPLComponent_t *pMp23db01hp_2_Mic_PnPLObj = NULL;
+/*static IPnPLComponent_t *pMp23db01hp_2_Mic_PnPLObj = NULL;*/
 static IPnPLComponent_t *pAutomode_PnPLObj = NULL;
 static IPnPLComponent_t *pLog_Controller_PnPLObj = NULL;
 static IPnPLComponent_t *pTags_Info_PnPLObj = NULL;
@@ -160,7 +160,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   pLps22hh_Temp_PnPLObj = Lps22hh_Temp_PnPLAlloc();
   pLps22hh_Press_PnPLObj = Lps22hh_Press_PnPLAlloc();
   pMp23db01hp_1_Mic_PnPLObj = Mp23db01hp_1_Mic_PnPLAlloc();
-//  pMp23db01hp_2_Mic_PnPLObj = Mp23db01hp_2_Mic_PnPLAlloc();
+  /*  pMp23db01hp_2_Mic_PnPLObj = Mp23db01hp_2_Mic_PnPLAlloc();*/
   pLog_Controller_PnPLObj = Log_Controller_PnPLAlloc();
   pTags_Info_PnPLObj = Tags_Info_PnPLAlloc();
   pAcquisition_Info_PnPLObj = Acquisition_Info_PnPLAlloc();
@@ -213,7 +213,7 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   Lps22hh_Temp_PnPLInit(pLps22hh_Temp_PnPLObj);
   Lps22hh_Press_PnPLInit(pLps22hh_Press_PnPLObj);
   Mp23db01hp_1_Mic_PnPLInit(pMp23db01hp_1_Mic_PnPLObj);
-//  Mp23db01hp_2_Mic_PnPLInit(pMp23db01hp_2_Mic_PnPLObj);
+  /*  Mp23db01hp_2_Mic_PnPLInit(pMp23db01hp_2_Mic_PnPLObj);*/
 
   return SYS_NO_ERROR_CODE;
 }

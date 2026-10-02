@@ -27,13 +27,13 @@
 #define SENSORMANAGERCONF_H_
 
 
-//#define HSD_USE_DUMMY_DATA 1
+/* #define HSD_USE_DUMMY_DATA 1 */
 
-// file I2CBusTask.c
+/* file I2CBusTask.c */
 #define I2CBUS_TASK_CFG_STACK_DEPTH               (TX_MINIMUM_STACK*6)
 #define I2CBUS_TASK_CFG_PRIORITY                  (4)
 
-// file SPIBusTask.c
+/* file SPIBusTask.c */
 #define SPIBUS_TASK_CFG_STACK_DEPTH               (TX_MINIMUM_STACK*6)
 #define SPIBUS_TASK_CFG_PRIORITY                  (4)
 

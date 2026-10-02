@@ -2995,7 +2995,7 @@ static uint32_t SD_InitCard(SD_HandleTypeDef *hsd)
   HAL_SD_CardCSDTypeDef CSD;
   uint32_t errorstate;
   uint16_t sd_rca = 0U;
-  //uint32_t tickstart = HAL_GetTick();
+  /*uint32_t tickstart = HAL_GetTick();*/
 
   /* Check the power State */
   if (SDMMC_GetPowerState(hsd->Instance) == 0U)
@@ -3026,18 +3026,18 @@ static uint32_t SD_InitCard(SD_HandleTypeDef *hsd)
   {
     /* Send CMD3 SET_REL_ADDR with argument 0 */
     /* SD Card publishes its RCA. */
-    // while (sd_rca == 0U)
-    // {
+    /* while (sd_rca == 0U)*/
+    /* {*/
     errorstate = SDMMC_CmdSetRelAdd(hsd->Instance, &sd_rca);
     if (errorstate != HAL_SD_ERROR_NONE)
     {
       return errorstate;
     }
-    //   if ((HAL_GetTick() - tickstart) >=  SDMMC_CMDTIMEOUT)
-    //   {
-    //     return HAL_SD_ERROR_TIMEOUT;
-    //   }
-    // }
+    /*   if ((HAL_GetTick() - tickstart) >=  SDMMC_CMDTIMEOUT)*/
+    /*   {*/
+    /*     return HAL_SD_ERROR_TIMEOUT;*/
+    /*   }*/
+    /* }*/
   }
   if (hsd->SdCard.CardType != CARD_SECURED)
   {
@@ -3093,9 +3093,9 @@ static uint32_t SD_PowerON(SD_HandleTypeDef *hsd)
   uint32_t response = 0U;
   uint32_t validvoltage = 0U;
   uint32_t errorstate;
-// #if (USE_SD_TRANSCEIVER != 0U)
-//   uint32_t tickstart = HAL_GetTick();
-// #endif /* USE_SD_TRANSCEIVER  */
+  /* #if (USE_SD_TRANSCEIVER != 0U)*/
+  /*   uint32_t tickstart = HAL_GetTick();*/
+  /* #endif  USE_SD_TRANSCEIVER  */
 
   /* CMD0: GO_IDLE_STATE */
   errorstate = SDMMC_CmdGoIdleState(hsd->Instance);
@@ -3170,8 +3170,8 @@ static uint32_t SD_PowerON(SD_HandleTypeDef *hsd)
   if ((response & SDMMC_HIGH_CAPACITY) == SDMMC_HIGH_CAPACITY)
   {
     hsd->SdCard.CardType = CARD_SDHC_SDXC;
-#ifdef NOT_DEFINED      /// patch
-//#if (USE_SD_TRANSCEIVER != 0U)
+#ifdef NOT_DEFINED      /*/ patch*/
+    /*#if (USE_SD_TRANSCEIVER != 0U)*/
     if (hsd->Init.TranceiverPresent == SDMMC_TRANSCEIVER_PRESENT)
     {
       if ((response & SD_SWITCH_1_8V_CAPACITY) == SD_SWITCH_1_8V_CAPACITY)

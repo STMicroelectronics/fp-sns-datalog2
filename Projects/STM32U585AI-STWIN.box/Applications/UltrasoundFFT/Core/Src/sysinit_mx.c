@@ -23,8 +23,8 @@
 #include "gpio.h"
 #include "rtc.h"
 
-//Select the SystemClock_Config
-//#define SystemClock_Config_SensorTile SystemClock_Config
+/*Select the SystemClock_Config*/
+/*#define SystemClock_Config_SensorTile SystemClock_Config*/
 #define SystemClock_Config_MX SystemClock_Config
 #define Error_Handler sys_error_handler
 
@@ -45,12 +45,12 @@ typedef struct _system_clock_t
   */
 static system_clock_t system_clock;
 
-// Private member function declaration
-// ***********************************
+/* Private member function declaration*/
+/* ************************************/
 static void PeriphCommonClock_Config(void);
 
-// Public API definition
-// *********************
+/* Public API definition*/
+/* **********************/
 
 /**
   * @brief System Clock Configuration
@@ -76,7 +76,8 @@ void SystemClock_Config(void)
 
   /** Initializes the CPU, AHB and APB buses clocks
    */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48 | RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSI | RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48 | RCC_OSCILLATORTYPE_HSI |
+                                     RCC_OSCILLATORTYPE_LSI | RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
@@ -100,7 +101,8 @@ void SystemClock_Config(void)
 
   /** Initializes the CPU, AHB and APB buses clocks
    */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2 | RCC_CLOCKTYPE_PCLK3;
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 |
+                                RCC_CLOCKTYPE_PCLK2 | RCC_CLOCKTYPE_PCLK3;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -179,13 +181,13 @@ void SystemClock_Restore(void)
    *   Do not change or update the base-clock source (e.g. MSI and LSE)
    */
 
-//  if(HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1_BOOST) != HAL_OK)
+  /*  if(HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1_BOOST) != HAL_OK)*/
   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
   {
     sys_error_handler();
   }
 
-//  if (__HAL_RCC_GET_SYSCLK_SOURCE() != RCC_CFGR_SWS_PLL) {
+  /*  if (__HAL_RCC_GET_SYSCLK_SOURCE() != RCC_CFGR_SWS_PLL) {*/
   if (__HAL_RCC_GET_SYSCLK_SOURCE() != RCC_SYSCLKSOURCE_STATUS_PLLCLK)
   {
     if (HAL_RCC_OscConfig(&(system_clock.osc)) != HAL_OK)
@@ -202,20 +204,20 @@ void SystemClock_Restore(void)
 
 void SystemPower_Config()
 {
-//  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  /*  GPIO_InitTypeDef GPIO_InitStruct = {0};*/
 
-// Enable Power Clock
+  /* Enable Power Clock*/
   __HAL_RCC_PWR_CLK_ENABLE();
 
-  // Select MSI as system clock source after Wake Up from Stop mode
+  /* Select MSI as system clock source after Wake Up from Stop mode*/
   __HAL_RCC_WAKEUPSTOP_CLK_CONFIG(RCC_STOP_WAKEUPCLOCK_MSI);
 
-  // Init cache and RTC
+  /* Init cache and RTC*/
   MX_ICACHE_Init();
   MX_RTC_Init();
 
-  // This function is called in the early step of the system initialization.
-  // All the PINs used by the application are reconfigured later by the application tasks.
+  /* This function is called in the early step of the system initialization.*/
+  /* All the PINs used by the application are reconfigured later by the application tasks.*/
 
   HAL_PWREx_EnableIO2VM();
   while (!(PWR->SVMCR & PWR_SVMCR_IO2VMEN));
@@ -246,25 +248,25 @@ void HAL_MspInit(void)
 
   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
-  // Disable the internal Pull-Up in Dead Battery pins of UCPD peripheral
+  /* Disable the internal Pull-Up in Dead Battery pins of UCPD peripheral*/
   HAL_PWREx_DisableUCPDDeadBattery();
 
-  // System interrupt init
-  // MemoryManagement_IRQn interrupt configuration
+  /* System interrupt init*/
+  /* MemoryManagement_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(MemoryManagement_IRQn, 0, 0);
-  // BusFault_IRQn interrupt configuration
+  /* BusFault_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(BusFault_IRQn, 0, 0);
-  // UsageFault_IRQn interrupt configuration
+  /* UsageFault_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(UsageFault_IRQn, 0, 0);
-  // SVCall_IRQn interrupt configuration
+  /* SVCall_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(SVCall_IRQn, 0, 0);
-  // DebugMonitor_IRQn interrupt configuration
+  /* DebugMonitor_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(DebugMonitor_IRQn, 0, 0);
-  // PendSV_IRQn interrupt configuration
+  /* PendSV_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
-  // SysTick_IRQn interrupt configuration
+  /* SysTick_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
 }
 
-// Private function definition
-// ***************************
+/* Private function definition*/
+/* ****************************/

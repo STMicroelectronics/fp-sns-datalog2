@@ -24,7 +24,7 @@
 #include "gpio.h"
 #include "services/systypes.h"
 #include "HardwareDetection.h"
-#include "sths34pf80_reg.h"
+#include "VD6283TXTask.h"
 #include "lps22df_reg.h"
 
 #define HW_DETECTION_I2C_TIMEOUT  500U
@@ -58,7 +58,7 @@ boolean_t HardwareDetection_Check_Ext_PDETECT(uint8_t *device_address)
 {
   uint8_t whoami_val = 0U;
   boolean_t found = FALSE;
-  uint8_t addr = STHS34PF80_I2C_ADD;
+  uint8_t addr = VD6283TX_I2C_ADD;
   stmdev_ctx_t ctx;
 
   ctx.read_reg = ext_sensor_i2c_read;
@@ -73,8 +73,8 @@ boolean_t HardwareDetection_Check_Ext_PDETECT(uint8_t *device_address)
   MX_I2C3_Init();
 
   HAL_Delay(100);
-  sths34pf80_device_id_get(&ctx, (uint8_t *) &whoami_val);
-  if (whoami_val == STHS34PF80_ID)
+  ext_sensor_i2c_read(ctx.handle, VD6283TX_DEVICE_ID_REG, (uint8_t *) &whoami_val, 1);
+  if (whoami_val == VD6283TX_DEVICE_ID)
   {
     found = TRUE;
   }
@@ -90,7 +90,7 @@ boolean_t HardwareDetection_Check_Ext_PDETECT2(uint8_t *device_address)
 {
   uint8_t whoami_val = 0U;
   boolean_t found = FALSE;
-  uint8_t addr = STHS34PF80_I2C_ADD;
+  uint8_t addr = VD6283TX_I2C_ADD;
   stmdev_ctx_t ctx;
 
   ctx.read_reg = ext_sensor_i2c_read;
@@ -105,8 +105,8 @@ boolean_t HardwareDetection_Check_Ext_PDETECT2(uint8_t *device_address)
   MX_I2C3_Init();
 
   HAL_Delay(100);
-  sths34pf80_device_id_get(&ctx, (uint8_t *) &whoami_val);
-  if (whoami_val == STHS34PF80_ID)
+  ext_sensor_i2c_read(ctx.handle, VD6283TX_DEVICE_ID_REG, (uint8_t *) &whoami_val, 1);
+  if (whoami_val == VD6283TX_DEVICE_ID)
   {
     found = TRUE;
   }
@@ -122,7 +122,7 @@ boolean_t HardwareDetection_Check_Ext_PDETECT3(uint8_t *device_address)
 {
   uint8_t whoami_val = 0U;
   boolean_t found = FALSE;
-  uint8_t addr = STHS34PF80_I2C_ADD;
+  uint8_t addr = VD6283TX_I2C_ADD;
   stmdev_ctx_t ctx;
 
   ctx.read_reg = ext_sensor_i2c_read;
@@ -137,8 +137,8 @@ boolean_t HardwareDetection_Check_Ext_PDETECT3(uint8_t *device_address)
   MX_I2C3_Init();
 
   HAL_Delay(100);
-  sths34pf80_device_id_get(&ctx, (uint8_t *) &whoami_val);
-  if (whoami_val == STHS34PF80_ID)
+  ext_sensor_i2c_read(ctx.handle, VD6283TX_DEVICE_ID_REG, (uint8_t *) &whoami_val, 1);
+  if (whoami_val == VD6283TX_DEVICE_ID)
   {
     found = TRUE;
   }

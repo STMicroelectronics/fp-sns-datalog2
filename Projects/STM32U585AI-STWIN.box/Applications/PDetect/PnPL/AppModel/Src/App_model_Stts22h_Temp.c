@@ -62,7 +62,7 @@ uint8_t stts22h_temp_comp_init(void)
   stts22h_temp_set_samples_per_ts(0, NULL);
 #else
   stts22h_temp_set_samples_per_ts(1, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
   __stream_control(true);
   /* USER Component initialization code */
   return PNPL_NO_ERROR_CODE;
@@ -240,7 +240,7 @@ uint8_t stts22h_temp_set_odr(pnpl_stts22h_temp_odr_t enum_id, char **response_me
   {
 #if (HSD_USE_DUMMY_DATA != 1)
     stts22h_temp_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
     __stream_control(true);
   }
   return ret;

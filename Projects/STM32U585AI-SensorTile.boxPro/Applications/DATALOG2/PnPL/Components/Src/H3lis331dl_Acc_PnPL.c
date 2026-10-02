@@ -312,7 +312,8 @@ uint8_t H3lis331dl_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "h3lis331dl_acc.st_ble_stream.acc.enable"))
     {
-      bool st_ble_stream__acc_enable = json_object_dotget_boolean(tempJSONObject, "h3lis331dl_acc.st_ble_stream.acc.enable");
+      bool st_ble_stream__acc_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                  "h3lis331dl_acc.st_ble_stream.acc.enable");
       valid_property = true;
       ret = h3lis331dl_acc_set_st_ble_stream__acc_enable(st_ble_stream__acc_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

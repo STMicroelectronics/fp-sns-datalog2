@@ -102,7 +102,9 @@ sys_error_code_t PCDDrvSetExtDCD(PCDDriver_t *_this, DeviceControlDriver_t fun);
 /********************************/
 
 //SYS_DEFINE_INLINE
-//sys_error_code_t DFSDMDriverFilterRegisterCallback(DFSDMDriver_t *_this, HAL_DFSDM_Filter_CallbackIDTypeDef CallbackID, pDFSDM_Filter_CallbackTypeDef pCallback)
+//sys_error_code_t DFSDMDriverFilterRegisterCallback(DFSDMDriver_t *_this,
+//                                                    HAL_DFSDM_Filter_CallbackIDTypeDef CallbackID,
+//                                                    pDFSDM_Filter_CallbackTypeDef pCallback)
 //{
 //  assert_param(_this != NULL);
 //

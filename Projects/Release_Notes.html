@@ -32,9 +32,11 @@
 <ul>
 <li><strong>IIS2DULPX</strong></li>
 <li><strong>IIS2ICLX</strong></li>
+<li><strong>ISM6HGK256X</strong></li>
 <li><strong>ISM6HG256X</strong></li>
 <li><strong>ISM330BX</strong></li>
 <li><strong>ISM330DHCX</strong></li>
+<li><strong>LSM6DSK320X</strong></li>
 <li><strong>LSM6DSV16BX</strong></li>
 <li><strong>LSM6DSV16X</strong></li>
 <li><strong>LSM6DSV32X</strong></li>
@@ -56,6 +58,7 @@
 <li>X-NUCLEO-IKS5A1 with <strong>NUCLEO-H7A3ZI-Q</strong></li>
 <li>X-NUCLEO-IKS4A1 with <strong>NUCLEO-H563ZI</strong></li>
 <li>X-NUCLEO-IKS5A1 with <strong>NUCLEO-H563ZI</strong></li>
+<li>X-NUCLEO-53L9A1 with <strong>NUCLEO-H563ZI</strong></li>
 </ul>
 <p>ST High Speed Datalog also natively supports add-ons for STEVAL-STWINBX1:</p>
 <ul>
@@ -93,18 +96,19 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section14" checked aria-hidden="true"> <label for="collapse-section14" aria-hidden="true">v3.3.0 / 15-May-26</label>
+<input type="checkbox" id="collapse-section15" checked aria-hidden="true"> <label for="collapse-section15" aria-hidden="true">v3.4.0 / 18-Sep-26</label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update">Maintenance release and product update</h3>
 <ul>
-<li>Added new examples, adding support to X-NUCLEO-IKS4A1 and X-NUCLEO-IKS5A1 with NUCLEO-H563ZI using I3C</li>
-<li>Added support to IIS3DWB10IS in DATALOG2 examples for STWIN.box, SensorTile.box PRO and X-NUCLEO-IKS5A1 with NUCLEO-U575ZI-Q</li>
-<li>Added missing lis2duxs12 mlc component in DATALOG2_IKS4A1 and DATALOG2_IKS5A1 examples for NUCLEO-U575ZI-Q</li>
-<li>Added missing iis2dulpx mlc component in DATALOG2 example for STWIN.box</li>
-<li>Fixed ODR/FS sync mechanism with MLC for IIS2ICLX, IIS2DULPX, ISM6HG256X sensors in DATALOG2 example for STWIN.box</li>
-<li>SD card handling bugfix: close the SD disk driver only if already opened and valid - thus avoiding media_close long timeout</li>
-<li>Regenerated mx files with the latest STM32CubeMX</li>
+<li>Added new example, adding support to X-NUCLEO-53L9A1 with NUCLEO-H563ZI using I3C</li>
+<li>Added support to ISM6HGK256X in DATALOG2 examples for STWIN.box and LSM6DSK320X for SensorTile.box PRO</li>
+<li>Removed support for STHS34PF80/TMOS in PDetect demo for STWIN.box: NRND, Not Recommended for New Design</li>
+<li>Bug fixed in NUCLEO-H563ZI examples:
+<ul>
+<li>Fixed EP management and USB setup</li>
+<li>Improved I3C performances</li>
+</ul></li>
 <li>Code cleaning and minor bug fixes</li>
 </ul>
 <h2 id="known-limitations">Known Limitations</h2>
@@ -114,7 +118,7 @@
 <li>Change VDDIO from 1.8V to VDD level (removing SB39 and closing SB38) and select 3.3V as VDD (JP7)</li>
 <li>Select SPI on jumper JP6, JP8, JP9 and JP10 and open SB33 and SB36</li>
 <li>Select INT1 as USER_INT by selecting INT1 on USER (J2)</li>
-</ul>
+</ul></li>
 <li>To run properly DATALOG2 example on <strong>STWIN.box</strong>, before using those applications, WIFI module firwmare must be upgraded. The binary is available in Utilities/WiFi_module_upgrade folder.</li>
 <li>The application has been tested with the following SD cards, formatted FAT32 with 32 KB allocation table:
 <ul>
@@ -124,14 +128,13 @@
 <li>Kingston 8 GB HC C4 (SDC4/8 GB)</li>
 </ul>
 <p>For further details, please refer to <a href="https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf">UM3106</a></p></li>
-<li><strong>cli_example</strong> utility, <strong>UltrasoundFFT</strong> firmware example for <strong>STWIN.box</strong>, and <strong>DATALOG2</strong> firmware examples for <strong>X-NUCLEO-IKS02A1</strong> with <strong>NUCLEO-U575ZI-Q</strong> and <strong>X-NUCLEO-IKS02A1</strong> with <strong>NUCLEO-H7A3ZI-Q</strong> are deprecated and in NRND state. They are Not Recommended for New Design. This is the last update and no further updates are planned.</li>
 <li><p>mxchip driver generates a warning at compile time in CubeIDE and in Release configuration. It is not impacting the example performance nor generating issues, so you can ignore it.</p></li>
 </ul>
 <h2 id="development-toolchains-and-compilers">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.60.3</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
-<li>STM32CubeIDE v2.1</li>
+<li>STM32CubeIDE v2.2</li>
 </ul>
 <h2 id="supported-devices-and-boards">Supported Devices and Boards</h2>
 <ul>
@@ -152,6 +155,7 @@
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks5a1.html">X-NUCLEO-IKS5A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks4a1.html">X-NUCLEO-IKS4A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h563zi.html">NUCLEO-H563ZI</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks5a1.html">X-NUCLEO-IKS5A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h563zi.html">NUCLEO-H563ZI</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/x-nucleo-53l9a1.html">X-NUCLEO-53L9A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h563zi.html">NUCLEO-H563ZI</a></li>
 </ul>
 <h2 id="backward-compatibility">Backward Compatibility</h2>
 <ul>
@@ -164,24 +168,29 @@
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section13" aria-hidden="true"> <label for="collapse-section13" aria-hidden="true">v3.2.0 / 14-Nov-25</label>
+<input type="checkbox" id="collapse-section14" aria-hidden="true"> <label for="collapse-section14" aria-hidden="true">v3.3.0 / 15-May-26</label>
 <div>
 <h2 id="main-changes-1">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update-1">Maintenance release and product update</h3>
 <ul>
-<li>Added new examples, adding support to X-NUCLEO-IKS5A1 with NUCLEO-H7A3ZI-Q and NUCLEO-U575ZI-Q</li>
-<li>Added support to ISM6HG256X in STWIN.box DATALOG2 example</li>
-<li>Fixed issue at boot stage when entering DFU mode</li>
-<li>Code cleaning and minor bug fixes
-<ul>
-<li>Updated startup and system files and aligned USB priorities</li>
-<li>Reshaped PnPL_Warning and responses: bandwidth warning, no sensors enabled warning, enable/disable not available external sensor error, ucf error</li>
-</ul></li>
+<li>Added new examples, adding support to X-NUCLEO-IKS4A1 and X-NUCLEO-IKS5A1 with NUCLEO-H563ZI using I3C</li>
+<li>Added support to IIS3DWB10IS in DATALOG2 examples for STWIN.box, SensorTile.box PRO and X-NUCLEO-IKS5A1 with NUCLEO-U575ZI-Q</li>
+<li>Added missing lis2duxs12 mlc component in DATALOG2_IKS4A1 and DATALOG2_IKS5A1 examples for NUCLEO-U575ZI-Q</li>
+<li>Added missing iis2dulpx mlc component in DATALOG2 example for STWIN.box</li>
+<li>Fixed ODR/FS sync mechanism with MLC for IIS2ICLX, IIS2DULPX, ISM6HG256X sensors in DATALOG2 example for STWIN.box</li>
+<li>SD card handling bugfix: close the SD disk driver only if already opened and valid - thus avoiding media_close long timeout</li>
+<li>Regenerated mx files with the latest STM32CubeMX</li>
+<li>Code cleaning and minor bug fixes</li>
 </ul>
 <h2 id="known-limitations-1">Known Limitations</h2>
 <ul>
-<li>To run properly DATALOG2 example on STWIN.box, before using those applications, WIFI module firwmare must be upgraded. The binary is available in Utilities/WiFi_module_upgrade folder.</li>
-<li>mxchip driver generates a warning at compile time in CubeIDE and in Release configuration. It is not impacting the example performance nor generating issues, so you can ignore it.</li>
+<li>DATALOG2 example for <strong>X-NUCLEO-IKS5A1</strong> with <strong>NUCLEO-U575ZI-Q</strong> supports <strong>STEVAL-MKI253KA</strong> also, but HW modifications onto X-NUCLEO-IKS5A1 are required to route SPI onto DIL24 connector:
+<ul>
+<li>Change VDDIO from 1.8V to VDD level (removing SB39 and closing SB38) and select 3.3V as VDD (JP7)</li>
+<li>Select SPI on jumper JP6, JP8, JP9 and JP10 and open SB33 and SB36</li>
+<li>Select INT1 as USER_INT by selecting INT1 on USER (J2)</li>
+</ul></li>
+<li>To run properly DATALOG2 example on <strong>STWIN.box</strong>, before using those applications, WIFI module firwmare must be upgraded. The binary is available in Utilities/WiFi_module_upgrade folder.</li>
 <li>The application has been tested with the following SD cards, formatted FAT32 with 32 KB allocation table:
 <ul>
 <li>SanDisk 32 GB Ultra HC C10 U1 A1 (p/n SDSQUA4-032G-GN6MA)</li>
@@ -189,13 +198,15 @@
 <li>Transcend Premium 16 GB U1 C10 (TS16GUSDCU1)</li>
 <li>Kingston 8 GB HC C4 (SDC4/8 GB)</li>
 </ul>
-For further details, please refer to <a href="https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf">UM3106</a></li>
+<p>For further details, please refer to <a href="https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf">UM3106</a></p></li>
+<li><strong>cli_example</strong> utility, <strong>UltrasoundFFT</strong> firmware example for <strong>STWIN.box</strong>, and <strong>DATALOG2</strong> firmware examples for <strong>X-NUCLEO-IKS02A1</strong> with <strong>NUCLEO-U575ZI-Q</strong> and <strong>X-NUCLEO-IKS02A1</strong> with <strong>NUCLEO-H7A3ZI-Q</strong> are deprecated and in NRND state. They are Not Recommended for New Design. This is the last update and no further updates are planned.</li>
+<li><p>mxchip driver generates a warning at compile time in CubeIDE and in Release configuration. It is not impacting the example performance nor generating issues, so you can ignore it.</p></li>
 </ul>
 <h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.60.3</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
-<li>STM32CubeIDE v1.19</li>
+<li>STM32CubeIDE v2.1</li>
 </ul>
 <h2 id="supported-devices-and-boards-1">Supported Devices and Boards</h2>
 <ul>
@@ -214,6 +225,8 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks4a1.html">X-NUCLEO-IKS4A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks5a1.html">X-NUCLEO-IKS5A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks4a1.html">X-NUCLEO-IKS4A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h563zi.html">NUCLEO-H563ZI</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks5a1.html">X-NUCLEO-IKS5A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h563zi.html">NUCLEO-H563ZI</a></li>
 </ul>
 <h2 id="backward-compatibility-1">Backward Compatibility</h2>
 <ul>
@@ -226,15 +239,19 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section12" aria-hidden="true"> <label for="collapse-section12" aria-hidden="true">v3.1.0 / 20-Jun-25</label>
+<input type="checkbox" id="collapse-section13" aria-hidden="true"> <label for="collapse-section13" aria-hidden="true">v3.2.0 / 14-Nov-25</label>
 <div>
 <h2 id="main-changes-2">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update-2">Maintenance release and product update</h3>
 <ul>
-<li>Added new examples, adding support to STEVAL-AFCI1 and X-NUCLEO-IKS4A1 with NUCLEO-H7A3ZI-Q and NUCLEO-U575ZI-Q</li>
-<li>Added support to LSM6DSO16IS, LSM6DSV80X, LSM6DSV320X in SensorTile.box DATALOG2 example</li>
-<li>Added support to ILPS28QSW in STWIN.box DATALOG2 example</li>
-<li>Code cleaning and minor bug fixes</li>
+<li>Added new examples, adding support to X-NUCLEO-IKS5A1 with NUCLEO-H7A3ZI-Q and NUCLEO-U575ZI-Q</li>
+<li>Added support to ISM6HG256X in STWIN.box DATALOG2 example</li>
+<li>Fixed issue at boot stage when entering DFU mode</li>
+<li>Code cleaning and minor bug fixes
+<ul>
+<li>Updated startup and system files and aligned USB priorities</li>
+<li>Reshaped PnPL_Warning and responses: bandwidth warning, no sensors enabled warning, enable/disable not available external sensor error, ucf error</li>
+</ul></li>
 </ul>
 <h2 id="known-limitations-2">Known Limitations</h2>
 <ul>
@@ -253,9 +270,67 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.60.3</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
-<li>STM32CubeIDE v1.18.1</li>
+<li>STM32CubeIDE v1.19</li>
 </ul>
 <h2 id="supported-devices-and-boards-2">Supported Devices and Boards</h2>
+<ul>
+<li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
+<li><a href="https://www.st.com/stwin">STEVAL-STWINKT1B</a></li>
+<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-pdetect1.html">STEVAL-PDETECT1</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kat1.html">STEVAL-C34KAT1</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kat2.html">STEVAL-C34KAT2</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kpm1.html">STEVAL-C34KPM1</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-afci1.html">STEVAL-AFCI1</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html">B-U585I-IOT02A</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks4a1.html">X-NUCLEO-IKS4A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks5a1.html">X-NUCLEO-IKS5A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks4a1.html">X-NUCLEO-IKS4A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks5a1.html">X-NUCLEO-IKS5A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
+</ul>
+<h2 id="backward-compatibility-2">Backward Compatibility</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="dependencies-2">Dependencies</h2>
+<ul>
+<li>HSDPython_SDK has been moved in a separate software product: <a href="https://github.com/STMicroelectronics/stdatalog-pysdk">STDATALOG_PYSDK</a></li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section12" aria-hidden="true"> <label for="collapse-section12" aria-hidden="true">v3.1.0 / 20-Jun-25</label>
+<div>
+<h2 id="main-changes-3">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
+<ul>
+<li>Added new examples, adding support to STEVAL-AFCI1 and X-NUCLEO-IKS4A1 with NUCLEO-H7A3ZI-Q and NUCLEO-U575ZI-Q</li>
+<li>Added support to LSM6DSO16IS, LSM6DSV80X, LSM6DSV320X in SensorTile.box DATALOG2 example</li>
+<li>Added support to ILPS28QSW in STWIN.box DATALOG2 example</li>
+<li>Code cleaning and minor bug fixes</li>
+</ul>
+<h2 id="known-limitations-3">Known Limitations</h2>
+<ul>
+<li>To run properly DATALOG2 example on STWIN.box, before using those applications, WIFI module firwmare must be upgraded. The binary is available in Utilities/WiFi_module_upgrade folder.</li>
+<li>mxchip driver generates a warning at compile time in CubeIDE and in Release configuration. It is not impacting the example performance nor generating issues, so you can ignore it.</li>
+<li>The application has been tested with the following SD cards, formatted FAT32 with 32 KB allocation table:
+<ul>
+<li>SanDisk 32 GB Ultra HC C10 U1 A1 (p/n SDSQUA4-032G-GN6MA)</li>
+<li>Verbatim 16 GB Class 10 U1 (p/n 44082)</li>
+<li>Transcend Premium 16 GB U1 C10 (TS16GUSDCU1)</li>
+<li>Kingston 8 GB HC C4 (SDC4/8 GB)</li>
+</ul>
+For further details, please refer to <a href="https://www.st.com/resource/en/user_manual/um3106-getting-started-with-the-stm32cube-function-pack-for-the-stevalstwinbx1-evaluation-kit-for-high-speed-datalogging-and-ultrasound-processing-stmicroelectronics.pdf">UM3106</a></li>
+</ul>
+<h2 id="development-toolchains-and-compilers-3">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.60.3</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
+<li>STM32CubeIDE v1.18.1</li>
+</ul>
+<h2 id="supported-devices-and-boards-3">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
 <li><a href="https://www.st.com/stwin">STEVAL-STWINKT1B</a></li>
@@ -271,53 +346,6 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks4a1.html">X-NUCLEO-IKS4A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 </ul>
-<h2 id="backward-compatibility-2">Backward Compatibility</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="dependencies-2">Dependencies</h2>
-<ul>
-<li>HSDPython_SDK has been moved in a separate software product: <a href="https://github.com/STMicroelectronics/stdatalog-pysdk">STDATALOG_PYSDK</a></li>
-</ul>
-</div>
-</div>
-<div class="collapse">
-<input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true">v3.0.0 / 17-Jan-25</label>
-<div>
-<h2 id="main-changes-3">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-3">Maintenance release and product update</h3>
-<ul>
-<li><strong>Moved HSDPython SDK in a separate software product: <a href="https://github.com/STMicroelectronics/stdatalog-pysdk">STDATALOG_PYSDK</a></strong></li>
-<li>Upgraded SensorManager, adding new sensors</li>
-<li>Added support to H3LIS331DL, ILPS28QSW, LSM6DSV32X in SensorTile.box DATALOG2 example</li>
-<li>Added support to IIS2DULPX in STWIN.box DATALOG2 example</li>
-<li>Aligned all examples to the latest HAL and sensors drivers and middlewares</li>
-<li>Code cleaning and minor bug fixes</li>
-</ul>
-<h2 id="known-limitations-3">Known Limitations</h2>
-<ul>
-<li>To run properly DATALOG2 example on STWIN.box, before using those applications, WIFI module firwmare must be upgraded. The binary is available in Utilities/WiFi_module_upgrade folder.</li>
-<li>mxchip driver generates a warning at compile time in CubeIDE and in Release configuration. It is not impacting the example performance nor generating issues, so you can ignore it.</li>
-</ul>
-<h2 id="development-toolchains-and-compilers-3">Development Toolchains and Compilers</h2>
-<ul>
-<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
-<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
-<li>STM32CubeIDE v1.17.0</li>
-</ul>
-<h2 id="supported-devices-and-boards-3">Supported Devices and Boards</h2>
-<ul>
-<li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
-<li><a href="https://www.st.com/stwin">STEVAL-STWINKT1B</a></li>
-<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
-<li><a href="https://www.st.com/en/evaluation-tools/steval-pdetect1.html">STEVAL-PDETECT1</a></li>
-<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kat1.html">STEVAL-C34KAT1</a></li>
-<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kat2.html">STEVAL-C34KAT2</a></li>
-<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kpm1.html">STEVAL-C34KPM1</a></li>
-<li><a href="https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html">B-U585I-IOT02A</a></li>
-<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
-<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
-</ul>
 <h2 id="backward-compatibility-3">Backward Compatibility</h2>
 <ul>
 <li>None</li>
@@ -329,21 +357,17 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section10" aria-hidden="true"> <label for="collapse-section10" aria-hidden="true">v2.3.0 / 31-Oct-24</label>
+<input type="checkbox" id="collapse-section11" aria-hidden="true"> <label for="collapse-section11" aria-hidden="true">v3.0.0 / 17-Jan-25</label>
 <div>
 <h2 id="main-changes-4">Main Changes</h2>
-<h3 id="maintenance-release">Maintenance release</h3>
+<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
 <ul>
-<li>Reordered PnPL init function calls</li>
-<li>Updated ioffset calculation: improved timestamp estimation for the first sensor data sample</li>
-<li>Fixed missing ble_stream_params update once mlc file has been loaded</li>
-<li>Updated STWIN.box DATALOG2 example: added support to hw tags when used with STEVAL-C34KPM1 only</li>
-<li>Updated STWIN.box PDetect example: fixed depencency between inter-measurement time, exposure time and odr in ALS sensor + fixed TMOS-only use case (hard fault when selecting 1 TMOS only)</li>
-<li>Hotfix in SensorTile.box PRO example: fixed tags_info_set_sw_tag0__label and lps22df odr value</li>
-<li>Managed missing ispu wrong PnPL command and wifi/ftp command responses</li>
-<li>Added BLE Support for automode/Segmentation Mode</li>
-<li>Aligned Device Template models, FWID and board catalog</li>
-<li>Applied mcuastyle, code cleaning and typo fixed</li>
+<li><strong>Moved HSDPython SDK in a separate software product: <a href="https://github.com/STMicroelectronics/stdatalog-pysdk">STDATALOG_PYSDK</a></strong></li>
+<li>Upgraded SensorManager, adding new sensors</li>
+<li>Added support to H3LIS331DL, ILPS28QSW, LSM6DSV32X in SensorTile.box DATALOG2 example</li>
+<li>Added support to IIS2DULPX in STWIN.box DATALOG2 example</li>
+<li>Aligned all examples to the latest HAL and sensors drivers and middlewares</li>
+<li>Code cleaning and minor bug fixes</li>
 </ul>
 <h2 id="known-limitations-4">Known Limitations</h2>
 <ul>
@@ -354,7 +378,7 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
-<li>STM32CubeIDE v1.16.1</li>
+<li>STM32CubeIDE v1.17.0</li>
 </ul>
 <h2 id="supported-devices-and-boards-4">Supported Devices and Boards</h2>
 <ul>
@@ -375,26 +399,24 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </ul>
 <h2 id="dependencies-4">Dependencies</h2>
 <ul>
-<li>None</li>
+<li>HSDPython_SDK has been moved in a separate software product: <a href="https://github.com/STMicroelectronics/stdatalog-pysdk">STDATALOG_PYSDK</a></li>
 </ul>
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true">v2.2.0 / 19-Jul-24</label>
+<input type="checkbox" id="collapse-section10" aria-hidden="true"> <label for="collapse-section10" aria-hidden="true">v2.3.0 / 31-Oct-24</label>
 <div>
 <h2 id="main-changes-5">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-4">Maintenance release and product update</h3>
+<h3 id="maintenance-release">Maintenance release</h3>
 <ul>
-<li>Added support for ISM330BX and TSC1641 sensors in STWIN.box/DATALOG2</li>
-<li>Added support for up to 3 STEVAL-PDETECT1 in daisy chain, SGP40, SHT40 and LPS22 sensors in STWIN.box/PDETECT</li>
-<li>Added support for LSM6DSV16BX sensor in SensorTile.box PRO/DATALOG2</li>
-<li>Added new mechanism in PnPL messages to enable synchronous and asynchronous responses</li>
-<li>Made PnPL FW code thread safe</li>
-<li>Managed SD card error: data loss issue managed by checking SDCard queue messages and stopping log + BLE notification</li>
-<li>Implemented sensor data streaming via BLE</li>
-<li>Increased number of SW tags (from 5 to 16)</li>
-<li>Reshaped stream_params, fifo_wtm and ucf management</li>
-<li>Regenerated and reshaped PnPL and App Model files</li>
+<li>Reordered PnPL init function calls</li>
+<li>Updated ioffset calculation: improved timestamp estimation for the first sensor data sample</li>
+<li>Fixed missing ble_stream_params update once mlc file has been loaded</li>
+<li>Updated STWIN.box DATALOG2 example: added support to hw tags when used with STEVAL-C34KPM1 only</li>
+<li>Updated STWIN.box PDetect example: fixed depencency between inter-measurement time, exposure time and odr in ALS sensor + fixed TMOS-only use case (hard fault when selecting 1 TMOS only)</li>
+<li>Hotfix in SensorTile.box PRO example: fixed tags_info_set_sw_tag0__label and lps22df odr value</li>
+<li>Managed missing ispu wrong PnPL command and wifi/ftp command responses</li>
+<li>Added BLE Support for automode/Segmentation Mode</li>
 <li>Aligned Device Template models, FWID and board catalog</li>
 <li>Applied mcuastyle, code cleaning and typo fixed</li>
 </ul>
@@ -407,7 +429,7 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
-<li>STM32CubeIDE v1.15.1</li>
+<li>STM32CubeIDE v1.16.1</li>
 </ul>
 <h2 id="supported-devices-and-boards-5">Supported Devices and Boards</h2>
 <ul>
@@ -433,14 +455,22 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">v2.1.1 / 12-Apr-24</label>
+<input type="checkbox" id="collapse-section9" aria-hidden="true"> <label for="collapse-section9" aria-hidden="true">v2.2.0 / 19-Jul-24</label>
 <div>
 <h2 id="main-changes-6">Main Changes</h2>
-<h3 id="patch-release">Patch release</h3>
+<h3 id="maintenance-release-and-product-update-5">Maintenance release and product update</h3>
 <ul>
-<li>Fixed samples_per_ts management during the load_ucf in DATALOG2 examples for SensorTile.box PRO, STWIN and STWIN.box</li>
-<li>Fixed odr/TObj dependency in TMOS sensor in PDetect example</li>
-<li>Updated .ld and fixed printf warnings in CubeIDE</li>
+<li>Added support for ISM330BX and TSC1641 sensors in STWIN.box/DATALOG2</li>
+<li>Added support for up to 3 STEVAL-PDETECT1 in daisy chain, SGP40, SHT40 and LPS22 sensors in STWIN.box/PDETECT</li>
+<li>Added support for LSM6DSV16BX sensor in SensorTile.box PRO/DATALOG2</li>
+<li>Added new mechanism in PnPL messages to enable synchronous and asynchronous responses</li>
+<li>Made PnPL FW code thread safe</li>
+<li>Managed SD card error: data loss issue managed by checking SDCard queue messages and stopping log + BLE notification</li>
+<li>Implemented sensor data streaming via BLE</li>
+<li>Increased number of SW tags (from 5 to 16)</li>
+<li>Reshaped stream_params, fifo_wtm and ucf management</li>
+<li>Regenerated and reshaped PnPL and App Model files</li>
+<li>Aligned Device Template models, FWID and board catalog</li>
 <li>Applied mcuastyle, code cleaning and typo fixed</li>
 </ul>
 <h2 id="known-limitations-6">Known Limitations</h2>
@@ -452,14 +482,17 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
-<li>STM32CubeIDE v1.15.0</li>
+<li>STM32CubeIDE v1.15.1</li>
 </ul>
 <h2 id="supported-devices-and-boards-6">Supported Devices and Boards</h2>
 <ul>
-<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
-<li><a href="https://www.st.com/en/evaluation-tools/steval-pdetect1.html">STEVAL-PDETECT1</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
 <li><a href="https://www.st.com/stwin">STEVAL-STWINKT1B</a></li>
+<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-pdetect1.html">STEVAL-PDETECT1</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kat1.html">STEVAL-C34KAT1</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kat2.html">STEVAL-C34KAT2</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-c34kpm1.html">STEVAL-C34KPM1</a></li>
 <li><a href="https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html">B-U585I-IOT02A</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
 <li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
@@ -475,20 +508,14 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true">v2.1.0 / 16-Feb-24</label>
+<input type="checkbox" id="collapse-section8" aria-hidden="true"> <label for="collapse-section8" aria-hidden="true">v2.1.1 / 12-Apr-24</label>
 <div>
 <h2 id="main-changes-7">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-5">Maintenance release and product update</h3>
+<h3 id="patch-release">Patch release</h3>
 <ul>
-<li><strong>Added new PDetect example for STEVAL-STWINBX1 + STEVAL-PDETECT1 for presence and motion detection</strong></li>
-<li><strong>Updated DATALOG2 example for STEVAL-STWINBX1: enable wifi component and add the possibility to access SD card data through FTP server</strong></li>
-<li>Increased BLE packet length, enabling long packets and decreased BLE priority</li>
-<li>Fixed memory leak in BLE messages, added explicit free when response is not needed</li>
-<li>Fixed Automode management in GUI</li>
-<li>Added set_dfu_mode command in Log Controller</li>
-<li>Added missing srand and rng initialization</li>
-<li>Updated U5 HAL and MW, eLooM components and MW, drivers</li>
-<li>Aligned DTMI, FWID and regenerated PnPL files</li>
+<li>Fixed samples_per_ts management during the load_ucf in DATALOG2 examples for SensorTile.box PRO, STWIN and STWIN.box</li>
+<li>Fixed odr/TObj dependency in TMOS sensor in PDetect example</li>
+<li>Updated .ld and fixed printf warnings in CubeIDE</li>
 <li>Applied mcuastyle, code cleaning and typo fixed</li>
 </ul>
 <h2 id="known-limitations-7">Known Limitations</h2>
@@ -499,8 +526,8 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <h2 id="development-toolchains-and-compilers-7">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
-<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
-<li>STM32CubeIDE v1.14.0</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.38</li>
+<li>STM32CubeIDE v1.15.0</li>
 </ul>
 <h2 id="supported-devices-and-boards-7">Supported Devices and Boards</h2>
 <ul>
@@ -523,30 +550,37 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true">v2.0.1 / 27-Nov-23</label>
+<input type="checkbox" id="collapse-section7" aria-hidden="true"> <label for="collapse-section7" aria-hidden="true">v2.1.0 / 16-Feb-24</label>
 <div>
 <h2 id="main-changes-8">Main Changes</h2>
-<h3 id="patch-release-1">Patch release</h3>
+<h3 id="maintenance-release-and-product-update-6">Maintenance release and product update</h3>
 <ul>
-<li>Added missing Batter Charger management and fixed ADC misconfiguration in STEVAL-STWINKT1B example</li>
-<li>Fixed a bug in iis2iclx pnpl set property in STEVAL-STWINBX1 example</li>
-<li>Fixed MAC address assignement</li>
-<li>Missing first data ready</li>
-<li>Aligned on FWID and board catalog</li>
+<li><strong>Added new PDetect example for STEVAL-STWINBX1 + STEVAL-PDETECT1 for presence and motion detection</strong></li>
+<li><strong>Updated DATALOG2 example for STEVAL-STWINBX1: enable wifi component and add the possibility to access SD card data through FTP server</strong></li>
+<li>Increased BLE packet length, enabling long packets and decreased BLE priority</li>
+<li>Fixed memory leak in BLE messages, added explicit free when response is not needed</li>
+<li>Fixed Automode management in GUI</li>
+<li>Added set_dfu_mode command in Log Controller</li>
+<li>Added missing srand and rng initialization</li>
+<li>Updated U5 HAL and MW, eLooM components and MW, drivers</li>
+<li>Aligned DTMI, FWID and regenerated PnPL files</li>
+<li>Applied mcuastyle, code cleaning and typo fixed</li>
 </ul>
 <h2 id="known-limitations-8">Known Limitations</h2>
 <ul>
 <li>To run properly DATALOG2 example on STWIN.box, before using those applications, WIFI module firwmare must be upgraded. The binary is available in Utilities/WiFi_module_upgrade folder.</li>
+<li>mxchip driver generates a warning at compile time in CubeIDE and in Release configuration. It is not impacting the example performance nor generating issues, so you can ignore it.</li>
 </ul>
 <h2 id="development-toolchains-and-compilers-8">Development Toolchains and Compilers</h2>
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
-<li>STM32CubeIDE v1.13.2</li>
+<li>STM32CubeIDE v1.14.0</li>
 </ul>
 <h2 id="supported-devices-and-boards-8">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/steval-pdetect1.html">STEVAL-PDETECT1</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
 <li><a href="https://www.st.com/stwin">STEVAL-STWINKT1B</a></li>
 <li><a href="https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html">B-U585I-IOT02A</a></li>
@@ -564,22 +598,20 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true">v2.0.0 / 29-Sep-23</label>
+<input type="checkbox" id="collapse-section6" aria-hidden="true"> <label for="collapse-section6" aria-hidden="true">v2.0.1 / 27-Nov-23</label>
 <div>
 <h2 id="main-changes-9">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-6">Maintenance release and product update</h3>
+<h3 id="patch-release-1">Patch release</h3>
 <ul>
-<li><strong>Added support for STEVAL-STWINKT1B</strong></li>
-<li><strong>SensorManagerv3 porting concluded on all examples</strong></li>
-<li><strong>Moved PnPLCompManager in MW folder</strong></li>
-<li>Check battery status to close automatically files in SD</li>
-<li>Bug fixed in Sensortile.box PRO example: wrong ucf management</li>
-<li>Updated .ioc in mx folder</li>
-<li>Aligned on DTMI, FWID and board catalog</li>
+<li>Added missing Batter Charger management and fixed ADC misconfiguration in STEVAL-STWINKT1B example</li>
+<li>Fixed a bug in iis2iclx pnpl set property in STEVAL-STWINBX1 example</li>
+<li>Fixed MAC address assignement</li>
+<li>Missing first data ready</li>
+<li>Aligned on FWID and board catalog</li>
 </ul>
 <h2 id="known-limitations-9">Known Limitations</h2>
 <ul>
-<li>None</li>
+<li>To run properly DATALOG2 example on STWIN.box, before using those applications, WIFI module firwmare must be upgraded. The binary is available in Utilities/WiFi_module_upgrade folder.</li>
 </ul>
 <h2 id="development-toolchains-and-compilers-9">Development Toolchains and Compilers</h2>
 <ul>
@@ -607,10 +639,53 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true">v1.2.0 / 7-Jul-23</label>
+<input type="checkbox" id="collapse-section5" aria-hidden="true"> <label for="collapse-section5" aria-hidden="true">v2.0.0 / 29-Sep-23</label>
 <div>
 <h2 id="main-changes-10">Main Changes</h2>
 <h3 id="maintenance-release-and-product-update-7">Maintenance release and product update</h3>
+<ul>
+<li><strong>Added support for STEVAL-STWINKT1B</strong></li>
+<li><strong>SensorManagerv3 porting concluded on all examples</strong></li>
+<li><strong>Moved PnPLCompManager in MW folder</strong></li>
+<li>Check battery status to close automatically files in SD</li>
+<li>Bug fixed in Sensortile.box PRO example: wrong ucf management</li>
+<li>Updated .ioc in mx folder</li>
+<li>Aligned on DTMI, FWID and board catalog</li>
+</ul>
+<h2 id="known-limitations-10">Known Limitations</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-10">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
+<li>STM32CubeIDE v1.13.2</li>
+</ul>
+<h2 id="supported-devices-and-boards-10">Supported Devices and Boards</h2>
+<ul>
+<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
+<li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
+<li><a href="https://www.st.com/stwin">STEVAL-STWINKT1B</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html">B-U585I-IOT02A</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
+</ul>
+<h2 id="backward-compatibility-10">Backward Compatibility</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="dependencies-10">Dependencies</h2>
+<ul>
+<li>None</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section4" aria-hidden="true"> <label for="collapse-section4" aria-hidden="true">v1.2.0 / 7-Jul-23</label>
+<div>
+<h2 id="main-changes-11">Main Changes</h2>
+<h3 id="maintenance-release-and-product-update-8">Maintenance release and product update</h3>
 <ul>
 <li><strong>Added support for B-U585I-IOT02A and X-NUCLEO-IKS02A1 with NUCLEO-H7A3ZI-Q or NUCLEO-U575ZI-Q</strong></li>
 <li><strong>Redesigned IStream interface and ble, filex and usbx IStream classes, aligning to v6.2.0 middlewares</strong></li>
@@ -630,46 +705,6 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </ul></li>
 <li>Code cleaning and reformatting</li>
 </ul>
-<h2 id="known-limitations-10">Known Limitations</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="development-toolchains-and-compilers-10">Development Toolchains and Compilers</h2>
-<ul>
-<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
-<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
-<li>STM32CubeIDE v1.12.1</li>
-</ul>
-<h2 id="supported-devices-and-boards-10">Supported Devices and Boards</h2>
-<ul>
-<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
-<li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
-<li><a href="https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html">B-U585I-IOT02A</a></li>
-<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
-<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
-</ul>
-<h2 id="backward-compatibility-10">Backward Compatibility</h2>
-<ul>
-<li>None</li>
-</ul>
-<h2 id="dependencies-10">Dependencies</h2>
-<ul>
-<li>None</li>
-</ul>
-</div>
-</div>
-<div class="collapse">
-<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">v1.1.0 / 24-Mar-23</label>
-<div>
-<h2 id="main-changes-11">Main Changes</h2>
-<h3 id="maintenance-release-and-product-update-8">Maintenance release and product update</h3>
-<ul>
-<li><strong>Added support for Sensortile.box PRO (STEVAL-MKBOXPRO)</strong></li>
-<li>Updated USBX folder: updated defines names, descriptor format, productID, optimized USB FIFO size</li>
-<li>Regenerated PnPL folder and app_model</li>
-<li>Redesigned set/get MAC address, set RTC time and switch flash bank functionalities</li>
-<li>Code cleaning: removed not used files, macros and interfaces</li>
-</ul>
 <h2 id="known-limitations-11">Known Limitations</h2>
 <ul>
 <li>None</li>
@@ -678,12 +713,15 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
-<li>STM32CubeIDE v1.12.0</li>
+<li>STM32CubeIDE v1.12.1</li>
 </ul>
 <h2 id="supported-devices-and-boards-11">Supported Devices and Boards</h2>
 <ul>
 <li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
+<li><a href="https://www.st.com/en/evaluation-tools/b-u585i-iot02a.html">B-U585I-IOT02A</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-u575zi-q.html">NUCLEO-U575ZI-Q</a></li>
+<li><a href="https://www.st.com/en/ecosystems/x-nucleo-iks02a1.html">X-NUCLEO-IKS02A1</a> with <a href="https://www.st.com/en/evaluation-tools/nucleo-h7a3zi-q.html">NUCLEO-H7A3ZI-Q</a></li>
 </ul>
 <h2 id="backward-compatibility-11">Backward Compatibility</h2>
 <ul>
@@ -696,16 +734,16 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true">v1.0.1 / 14-Feb-23</label>
+<input type="checkbox" id="collapse-section3" aria-hidden="true"> <label for="collapse-section3" aria-hidden="true">v1.1.0 / 24-Mar-23</label>
 <div>
 <h2 id="main-changes-12">Main Changes</h2>
-<h3 id="patch-release-2">Patch release</h3>
+<h3 id="maintenance-release-and-product-update-9">Maintenance release and product update</h3>
 <ul>
-<li>Fixed compilation error in Linux environment</li>
-<li>Fixed external ISPU misconfiguration in DATALOG2 + external add-on use case</li>
-<li>Regenerated PnPL files</li>
-<li>Optimized usbx memory usage</li>
-<li>Fixed typos in the code and URL broken links</li>
+<li><strong>Added support for Sensortile.box PRO (STEVAL-MKBOXPRO)</strong></li>
+<li>Updated USBX folder: updated defines names, descriptor format, productID, optimized USB FIFO size</li>
+<li>Regenerated PnPL folder and app_model</li>
+<li>Redesigned set/get MAC address, set RTC time and switch flash bank functionalities</li>
+<li>Code cleaning: removed not used files, macros and interfaces</li>
 </ul>
 <h2 id="known-limitations-12">Known Limitations</h2>
 <ul>
@@ -715,10 +753,11 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
-<li>STM32CubeIDE v1.11.0</li>
+<li>STM32CubeIDE v1.12.0</li>
 </ul>
 <h2 id="supported-devices-and-boards-12">Supported Devices and Boards</h2>
 <ul>
+<li><a href="https://www.st.com/sensortileboxpro">STEVAL-MKBOXPRO</a></li>
 <li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
 </ul>
 <h2 id="backward-compatibility-12">Backward Compatibility</h2>
@@ -732,12 +771,16 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 </div>
 </div>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">v1.0.0 / 2-Dec-22</label>
+<input type="checkbox" id="collapse-section2" aria-hidden="true"> <label for="collapse-section2" aria-hidden="true">v1.0.1 / 14-Feb-23</label>
 <div>
 <h2 id="main-changes-13">Main Changes</h2>
-<h3 id="first-official-release">First official release</h3>
+<h3 id="patch-release-2">Patch release</h3>
 <ul>
-<li>First official release</li>
+<li>Fixed compilation error in Linux environment</li>
+<li>Fixed external ISPU misconfiguration in DATALOG2 + external add-on use case</li>
+<li>Regenerated PnPL files</li>
+<li>Optimized usbx memory usage</li>
+<li>Fixed typos in the code and URL broken links</li>
 </ul>
 <h2 id="known-limitations-13">Known Limitations</h2>
 <ul>
@@ -747,7 +790,7 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <ul>
 <li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
 <li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
-<li>STM32CubeIDE v1.10.1</li>
+<li>STM32CubeIDE v1.11.0</li>
 </ul>
 <h2 id="supported-devices-and-boards-13">Supported Devices and Boards</h2>
 <ul>
@@ -758,6 +801,38 @@ For further details, please refer to <a href="https://www.st.com/resource/en/use
 <li>None</li>
 </ul>
 <h2 id="dependencies-13">Dependencies</h2>
+<ul>
+<li>None</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true">v1.0.0 / 2-Dec-22</label>
+<div>
+<h2 id="main-changes-14">Main Changes</h2>
+<h3 id="first-official-release">First official release</h3>
+<ul>
+<li>First official release</li>
+</ul>
+<h2 id="known-limitations-14">Known Limitations</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-14">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.20.1</li>
+<li>RealView Microcontroller Development Kit (MDK-ARM) toolchain V5.37</li>
+<li>STM32CubeIDE v1.10.1</li>
+</ul>
+<h2 id="supported-devices-and-boards-14">Supported Devices and Boards</h2>
+<ul>
+<li><a href="https://www.st.com/stwinbox">STEVAL-STWINBX1</a></li>
+</ul>
+<h2 id="backward-compatibility-14">Backward Compatibility</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="dependencies-14">Dependencies</h2>
 <ul>
 <li>None</li>
 </ul>

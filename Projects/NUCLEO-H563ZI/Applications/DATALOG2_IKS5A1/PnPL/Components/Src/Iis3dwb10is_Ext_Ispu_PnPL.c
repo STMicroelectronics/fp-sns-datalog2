@@ -264,7 +264,8 @@ uint8_t Iis3dwb10is_Ext_Ispu_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, c
           output_data =  json_object_dotget_string(tempJSONObject, "iis3dwb10is_ext_ispu*load_file.files.output_data");
           if (json_object_dothas_value(tempJSONObject, "iis3dwb10is_ext_ispu*load_file.files.output_size"))
           {
-            output_size = (int32_t) json_object_dotget_number(tempJSONObject, "iis3dwb10is_ext_ispu*load_file.files.output_size");
+            output_size = (int32_t) json_object_dotget_number(tempJSONObject,
+                                                              "iis3dwb10is_ext_ispu*load_file.files.output_size");
             ret = iis3dwb10is_ext_ispu_load_file((char *) ucf_data, ucf_size, (char *) output_data, output_size);
           }
         }

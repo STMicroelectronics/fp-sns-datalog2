@@ -143,11 +143,6 @@ struct _EMData
     */
   uint16_t type;
 
-  /**
-    * Specifies the number of padding bytes there are between each element of the data.
-    */
-//  uint8_t padding; //TODO: do we need this? Maybe in case of custom type like struct.
-
   uint16_t element_size;
 
   /**

@@ -32,9 +32,12 @@ extern "C" {
 #include "services/AManagedTaskEx_vtbl.h"
 #include "tx_api.h"
 
-#define UTIL_CMD_ID_START_LP_TIMER                    ((uint16_t)0x0001)              ///< START Low Power timer command ID.
-#define UTIL_CMD_ID_STOP_LP_TIMER                     ((uint16_t)0x0002)              ///< STOP Low Power timer command ID.
-#define UTIL_CMD_ID_RESET_LP_TIMER                    ((uint16_t)0x0003)              ///< RESET Low Power timer command ID.
+/* START Low Power timer command ID. */
+#define UTIL_CMD_ID_START_LP_TIMER                    ((uint16_t)0x0001)
+/* STOP Low Power timer command ID. */
+#define UTIL_CMD_ID_STOP_LP_TIMER                     ((uint16_t)0x0002)
+/* RESET Low Power timer command ID. */
+#define UTIL_CMD_ID_RESET_LP_TIMER                    ((uint16_t)0x0003)
 
 /**
   * Create  type name for _UtilTask_t.

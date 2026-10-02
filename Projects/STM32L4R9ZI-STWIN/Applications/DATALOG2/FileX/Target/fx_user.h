@@ -51,7 +51,8 @@
 
 
 /* Define various build options for the FileX port.  The application should either make changes
- here by commenting or un-commenting the conditional compilation defined OR supply the defines though the compiler's equivalent of the -D option.  */
+ here by commenting or un-commenting the conditional compilation defined OR supply the defines
+ though the compiler's equivalent of the -D option.  */
 
 /* Override various options with default values already assigned in fx_api.h or fx_port.h.
  Please also refer to fx_port.h for descriptions on each of these options.  */
@@ -171,4 +172,4 @@
 
 /* #define FX_UPDATE_RATE_IN_TICKS         1000 */
 
-#endif
+#endif /* FX_USER_H */

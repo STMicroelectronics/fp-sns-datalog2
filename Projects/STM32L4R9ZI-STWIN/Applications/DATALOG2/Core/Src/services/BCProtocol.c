@@ -15,7 +15,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics
+  * Copyright (c) 2022 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -48,7 +48,7 @@
   */
 typedef struct _TimCallbakcMapEntry_t
 {
-//  TIM_TypeDef *tim_instance;
+  /*  TIM_TypeDef *tim_instance;*/
   BCProtocol_t *p_owner;
 } TimCallbackMapEntry_t;
 
@@ -246,8 +246,8 @@ sys_error_code_t BCPAcquireBatteryVoltage(BCProtocol_t *_this, uint16_t *voltage
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-//  /* start adc */
-//  IDrvStart(_this->p_bc_adc_driver);
+  /*   start adc */
+  /*  IDrvStart(_this->p_bc_adc_driver);*/
 
   /* do a measure */
   BCAdcDriver_GetValue(_this->p_bc_adc_driver, voltage);
@@ -439,14 +439,16 @@ static void BCPFreq2Status(float_t freq)
   {
     for (ChgState = END_OF_CHARGE; ChgState < BATTERY_TEMPERATURE_FAULT; ChgState++)
     {
-      half_step = (sSTBC02_ChgStateInfo[ChgState].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState + 1U].freq) / (float_t) 2;
+      half_step =
+        (sSTBC02_ChgStateInfo[ChgState].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState + 1U].freq) / (float_t) 2;
       if (freq < half_step)
       {
         p_owner->chg_state = ChgState;
         break;
       }
     }
-    half_step = (sSTBC02_ChgStateInfo[ChgState - 1U].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState].freq) / (float_t) 2;
+    half_step =
+      (sSTBC02_ChgStateInfo[ChgState - 1U].freq + sSTBC02_ChgStateInfo[(uint8_t) ChgState].freq) / (float_t) 2;
     if (freq > half_step)
     {
       p_owner->chg_state = ChgState;

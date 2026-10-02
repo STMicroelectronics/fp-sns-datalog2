@@ -123,7 +123,7 @@ uint8_t lsm6dso16is_ispu_get_sd_dps(float_t *value)
 
 uint8_t lsm6dso16is_ispu_get_data_type(char **value)
 {
-  *value = "int16";//TODO ?????????? isn't it int8_t????
+  *value = "int16";/*TODO ?????????? isn't it int8_t????*/
   return PNPL_NO_ERROR_CODE;
 }
 

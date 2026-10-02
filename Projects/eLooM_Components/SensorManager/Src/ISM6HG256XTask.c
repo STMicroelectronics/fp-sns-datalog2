@@ -275,14 +275,9 @@ static sys_error_code_t ISM6HG256X_ODR_Sync(ISM6HG256XTask *_this);
 static sys_error_code_t ISM6HG256X_FS_Sync(ISM6HG256XTask *_this);
 
 /**
-  *  Return Min of 3 non negative floats
+  * Return Max of 3 non negative floats
   */
-static float_t ISM6HG256X_FindMin(float_t Val1, float_t Val2, float_t Val3);
-
-/**
-  * Return Max of 3 floats
-  */
-static float_t __attribute__((unused)) ISM6HG256X_FindMax(float_t Val1, float_t Val2, float_t Val3);
+static float_t ISM6HG256X_FindMax(float_t Val1, float_t Val2, float_t Val3);
 
 #if ISM6HG256X_FIFO_ENABLED
 /**
@@ -2461,18 +2456,6 @@ static sys_error_code_t ISM6HG256XTaskSensorInit(ISM6HG256XTask *_this)
     ism6hg256x_fifo_gy_batch = ISM6HG256X_GY_BATCHED_AT_7680Hz;
   }
 
-  if (_this->hg_acc_sensor_status.is_active)
-  {
-    ism6hg256x_hg_xl_data_rate_set(p_sensor_drv, ism6hg256x_hg_xl_data_rate, 1);
-    ism6hg256x_fifo_hg_xl_batch_set(p_sensor_drv, 1);
-  }
-  else
-  {
-    ism6hg256x_hg_xl_data_rate_set(p_sensor_drv, ISM6HG256X_HG_XL_ODR_OFF, 0);
-    ism6hg256x_fifo_hg_xl_batch_set(p_sensor_drv, 0);
-    _this->hg_acc_sensor_status.is_active = false;
-  }
-
   if (_this->acc_sensor_status.is_active)
   {
     ism6hg256x_xl_setup(p_sensor_drv, ism6hg256x_xl_data_rate, ISM6HG256X_XL_HIGH_PERFORMANCE_MD);
@@ -2483,6 +2466,18 @@ static sys_error_code_t ISM6HG256XTaskSensorInit(ISM6HG256XTask *_this)
     ism6hg256x_xl_setup(p_sensor_drv, ISM6HG256X_ODR_OFF, ISM6HG256X_XL_HIGH_PERFORMANCE_MD);
     ism6hg256x_fifo_xl_batch_set(p_sensor_drv, ISM6HG256X_XL_NOT_BATCHED);
     _this->acc_sensor_status.is_active = false;
+  }
+
+  if (_this->hg_acc_sensor_status.is_active)
+  {
+    ism6hg256x_hg_xl_data_rate_set(p_sensor_drv, ism6hg256x_hg_xl_data_rate, 1);
+    ism6hg256x_fifo_hg_xl_batch_set(p_sensor_drv, 1);
+  }
+  else
+  {
+    ism6hg256x_hg_xl_data_rate_set(p_sensor_drv, ISM6HG256X_HG_XL_ODR_OFF, 0);
+    ism6hg256x_fifo_hg_xl_batch_set(p_sensor_drv, 0);
+    _this->hg_acc_sensor_status.is_active = false;
   }
 
   if (_this->gyro_sensor_status.is_active)
@@ -2652,10 +2647,12 @@ static sys_error_code_t ISM6HG256XTaskSensorInit(ISM6HG256XTask *_this)
   }
 #endif
 
-  float_t min_odr = 0;
-  min_odr = ISM6HG256X_FindMin(_this->hg_acc_sensor_status.type.mems.odr, _this->acc_sensor_status.type.mems.odr, _this->gyro_sensor_status.type.mems.odr);
+  float_t max_odr = 0;
+  max_odr = ISM6HG256X_FindMax(_this->hg_acc_sensor_status.is_active ? _this->hg_acc_sensor_status.type.mems.odr : 0.0f,
+                               _this->acc_sensor_status.is_active ? _this->acc_sensor_status.type.mems.odr : 0.0f,
+                               _this->gyro_sensor_status.is_active ? _this->gyro_sensor_status.type.mems.odr : 0.0f);
 
-  _this->ism6hg256x_task_cfg_timer_period_ms = (uint16_t)(min_odr);
+  _this->ism6hg256x_task_cfg_timer_period_ms = (uint16_t)(max_odr);
 #if ISM6HG256X_FIFO_ENABLED
   _this->ism6hg256x_task_cfg_timer_period_ms = (uint16_t)((1000.0f / _this->ism6hg256x_task_cfg_timer_period_ms) * (((float_t)(_this->samples_per_it)) / 2.0f));
 #else
@@ -2832,7 +2829,7 @@ static sys_error_code_t ISM6HG256XTaskSensorReadData(ISM6HG256XTask *_this)
     /* hg_xl data available? */
     if (val.xlhgda == 1U)
     {
-      ism6hg256x_read_reg(p_sensor_drv, ISM6HG256X_UI_OUTZ_L_A_OIS_HG, _this->p_hg_acc_sample, 6);
+      ism6hg256x_read_reg(p_sensor_drv, ISM6HG256X_UI_OUTX_L_A_OIS_HG, _this->p_hg_acc_sample, 6);
 #if (HSD_USE_DUMMY_DATA == 1)
       int16_t *p16 = (int16_t *)(_this->p_hg_acc_sample);
       *p16++ = dummyDataCounter_hg_acc++;
@@ -3398,20 +3395,19 @@ static sys_error_code_t ISM6HG256XTaskSensorDisable(ISM6HG256XTask *_this, SMMes
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
   uint8_t id = report.sensorMessage.nSensorId;
-
-  if (id == _this->hg_acc_id)
+  if (id == _this->acc_id)
   {
-    _this->hg_acc_sensor_status.is_active = FALSE;
-    ism6hg256x_hg_xl_data_rate_set(p_sensor_drv, ISM6HG256X_HG_XL_ODR_OFF, 0);
+    _this->acc_sensor_status.is_active = FALSE;
+    ism6hg256x_xl_setup(p_sensor_drv, ISM6HG256X_ODR_OFF, ISM6HG256X_XL_HIGH_PERFORMANCE_MD);
 
     /* Changing sensor configuration must disable MLC sensor: MLC can work properly only when setup from UCF */
     _this->mlc_enable = FALSE;
     _this->mlc_sensor_status.is_active = FALSE;
   }
-  else if (id == _this->acc_id)
+  else if (id == _this->hg_acc_id)
   {
-    _this->acc_sensor_status.is_active = FALSE;
-    ism6hg256x_xl_setup(p_sensor_drv, ISM6HG256X_ODR_OFF, ISM6HG256X_XL_HIGH_PERFORMANCE_MD);
+    _this->hg_acc_sensor_status.is_active = FALSE;
+    ism6hg256x_hg_xl_data_rate_set(p_sensor_drv, ISM6HG256X_HG_XL_ODR_OFF, 0);
 
     /* Changing sensor configuration must disable MLC sensor: MLC can work properly only when setup from UCF */
     _this->mlc_enable = FALSE;
@@ -3452,10 +3448,10 @@ static sys_error_code_t ISM6HG256XTaskEnterLowPowerMode(const ISM6HG256XTask *_t
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   stmdev_ctx_t *p_sensor_drv = (stmdev_ctx_t *) &_this->p_sensor_bus_if->m_xConnector;
 
-  ism6hg256x_hg_xl_data_rate_set(p_sensor_drv, ISM6HG256X_HG_XL_ODR_OFF, 0);
-  ism6hg256x_fifo_hg_xl_batch_set(p_sensor_drv, 0);
   ism6hg256x_xl_setup(p_sensor_drv, ISM6HG256X_ODR_OFF, ISM6HG256X_XL_HIGH_PERFORMANCE_MD);
   ism6hg256x_fifo_xl_batch_set(p_sensor_drv, ISM6HG256X_XL_NOT_BATCHED);
+  ism6hg256x_hg_xl_data_rate_set(p_sensor_drv, ISM6HG256X_HG_XL_ODR_OFF, 0);
+  ism6hg256x_fifo_hg_xl_batch_set(p_sensor_drv, 0);
   ism6hg256x_gy_setup(p_sensor_drv, ISM6HG256X_ODR_OFF, ISM6HG256X_GY_HIGH_PERFORMANCE_MD);
   ism6hg256x_fifo_gy_batch_set(p_sensor_drv, ISM6HG256X_GY_NOT_BATCHED);
 
@@ -3911,39 +3907,6 @@ static float_t ISM6HG256X_FindMax(float_t Val1,
     Max = Val3;
   }
   return Max;
-}
-
-/* Return Min of 3 non negative floats */
-static float_t ISM6HG256X_FindMin(float_t Val1,
-                                  float_t Val2,
-                                  float_t Val3)
-{
-  float_t Min = 0;
-  if (Val1 >= 0)
-  {
-    Min = Val1;
-    if (Val2 >= 0 && Min > Val2)
-    {
-      Min = Val2;
-    }
-    if (Val3 >= 0 && Min > Val3)
-    {
-      Min = Val3;
-    }
-  }
-  else if (Val2 >= 0)
-  {
-    Min = Val2;
-    if (Val3 >= 0 && Min > Val3)
-    {
-      Min = Val3;
-    }
-  }
-  else
-  {
-    Min = Val3;
-  }
-  return Min;
 }
 
 #if ISM6HG256X_FIFO_ENABLED

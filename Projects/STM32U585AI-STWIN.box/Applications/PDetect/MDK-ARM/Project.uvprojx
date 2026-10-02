@@ -16,7 +16,7 @@
         <TargetCommonOption>
           <Device>STM32U585AIIx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32U5xx_DFP.2.2.1</PackID>
+          <PackID>Keil.STM32U5xx_DFP.3.2.0</PackID>
           <PackURL>https://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000-0x81FFFFF) IRAM(0x20000000-0x200BFFFF) CLOCK(8000000) FPU3(SFPU) CPUTYPE("Cortex-M33") ELITTLE TZ DSP</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -340,7 +340,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>DEBUG, SYS_DEBUG, SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\threadx\utility\execution_profile_kit;..\..\..\..\..\Middlewares\ST\STM32_InfraredPD_Library\Inc;..\..\..\..\..\Drivers\BSP\Components\sths34pf80;..\..\..\..\..\Drivers\BSP\Components\vd6283tx;..\..\..\..\..\Drivers\BSP\Components\vd6283tx\modules;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx\modules;..\..\..\..\eLooM_Components\SensorManager\Inc\drivers;..\..\..\..\..\Drivers\BSP\Components\sgp40;..\..\..\..\..\Drivers\BSP\Components\sht40ad1b;..\..\..\..\..\Drivers\BSP\Components\lps22df</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\threadx\utility\execution_profile_kit;..\..\..\..\..\Middlewares\ST\STM32_InfraredPD_Library\Inc;..\..\..\..\..\Drivers\BSP\Components\vd6283tx;..\..\..\..\..\Drivers\BSP\Components\vd6283tx\modules;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx\modules;..\..\..\..\eLooM_Components\SensorManager\Inc\drivers;..\..\..\..\..\Drivers\BSP\Components\sgp40;..\..\..\..\..\Drivers\BSP\Components\sht40ad1b;..\..\..\..\..\Drivers\BSP\Components\lps22df</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -690,21 +690,6 @@
               <FilePath>..\PnPL\AppModel\Src\App_model_Log_Controller.c</FilePath>
             </File>
             <File>
-              <FileName>App_model_Sths34pf80_2_Tmos.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_2_Tmos.c</FilePath>
-            </File>
-            <File>
-              <FileName>App_model_Sths34pf80_3_Tmos.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_3_Tmos.c</FilePath>
-            </File>
-            <File>
-              <FileName>App_model_Sths34pf80_Tmos.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_Tmos.c</FilePath>
-            </File>
-            <File>
               <FileName>App_model_Stts22h_Temp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\AppModel\Src\App_model_Stts22h_Temp.c</FilePath>
@@ -823,21 +808,6 @@
               <FileName>Log_Controller_PnPL.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\Components\Src\Log_Controller_PnPL.c</FilePath>
-            </File>
-            <File>
-              <FileName>Sths34pf80_2_Tmos_PnPL.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\Components\Src\Sths34pf80_2_Tmos_PnPL.c</FilePath>
-            </File>
-            <File>
-              <FileName>Sths34pf80_3_Tmos_PnPL.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\Components\Src\Sths34pf80_3_Tmos_PnPL.c</FilePath>
-            </File>
-            <File>
-              <FileName>Sths34pf80_Tmos_PnPL.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\Components\Src\Sths34pf80_Tmos_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Stts22h_Temp_PnPL.c</FileName>
@@ -1070,11 +1040,6 @@
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\drivers\platform.c</FilePath>
             </File>
             <File>
-              <FileName>STHS34PF80Task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\STHS34PF80Task.c</FilePath>
-            </File>
-            <File>
               <FileName>VD6283TXTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\VD6283TXTask.c</FilePath>
@@ -1178,16 +1143,6 @@
               <FileName>ism330is_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330is\ism330is_reg.c</FilePath>
-            </File>
-            <File>
-              <FileName>sths34pf80.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sths34pf80\sths34pf80.c</FilePath>
-            </File>
-            <File>
-              <FileName>sths34pf80_reg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sths34pf80\sths34pf80_reg.c</FilePath>
             </File>
             <File>
               <FileName>vd6283tx.c</FileName>
@@ -4199,7 +4154,7 @@
         <TargetCommonOption>
           <Device>STM32U585AIIx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32U5xx_DFP.2.2.1</PackID>
+          <PackID>Keil.STM32U5xx_DFP.3.2.0</PackID>
           <PackURL>https://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000-0x81FFFFF) IRAM(0x20000000-0x200BFFFF) CLOCK(8000000) FPU3(SFPU) CPUTYPE("Cortex-M33") ELITTLE TZ DSP</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -4523,7 +4478,7 @@
               <MiscControls>--include=sysconfig.h</MiscControls>
               <Define>SYS_TP_MCU_STM32U5, USE_FULL_ASSERT, SYS_TRACE=0, SYS_DBG_ENABLE_TA4=0, TX_INCLUDE_USER_DEFINE_FILE, UX_INCLUDE_USER_DEFINE_FILE, USE_HAL_DRIVER, STM32U585xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\STM32_InfraredPD_Library\Inc;..\..\..\..\..\Drivers\BSP\Components\sths34pf80;..\..\..\..\..\Drivers\BSP\Components\vd6283tx;..\..\..\..\..\Drivers\BSP\Components\vd6283tx\modules;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx\modules;..\..\..\..\eLooM_Components\SensorManager\Inc\drivers;..\..\..\..\..\Drivers\BSP\Components\sgp40;..\..\..\..\..\Drivers\BSP\Components\sht40ad1b;..\..\..\..\..\Drivers\BSP\Components\lps22df</IncludePath>
+              <IncludePath>../Core/Inc;../FileX/Target;../FileX/App;../USBX/Target;../USBX/App;../mx/Inc;..\PnPL\AppModel\Inc;..\PnPL\Components\Inc;../../../../eLooM_Components/SensorManager/Inc;../../../../eLooM_Components/TagManager/Inc;..\..\..\..\..\Middlewares\ST\PnPLCompManager\Inc;..\..\..\..\eLooM_Components\EMData\Inc;../../../../../Middlewares/ST/STM32_BLE_Manager/Inc;../../../../../Middlewares/ST/BlueNRG-2/includes;../../../../../Middlewares/ST/BlueNRG-2/hci/hci_tl_patterns/Basic;../../../../../Middlewares/ST/BlueNRG-2/utils;../../../../../Middlewares/ST/filex/common/inc;../../../../../Middlewares/ST/filex/ports/generic/inc;../../../../../Middlewares/ST/threadx/common/inc;../../../../../Middlewares/ST/usbx/common/core/inc;../../../../../Middlewares/ST/SensorStreaming_USBX;../../../../../Middlewares/ST/usbx/common/usbx_stm32_device_controllers;../../../../../Middlewares/ST/usbx/ports/generic/inc;..\..\..\..\..\Middlewares\ST\CircularBufferDL2;../../../../../Middlewares/ST/eLooM/Inc;../../../../../Middlewares/Third_Party/parson;../../../../../Middlewares/ST/threadx/ports/cortex_m33/ac6/inc;../../../../../Drivers/CMSIS/Include;../../../../../Drivers/CMSIS/Device/ST/STM32U5xx/Include;../../../../../Drivers/STM32U5xx_HAL_Driver/Inc;../../../../../Drivers/BSP/Components/hts221;../../../../../Drivers/BSP/Components/iis2dlpc;../../../../../Drivers/BSP/Components/iis2iclx;../../../../../Drivers/BSP/Components/iis2mdc;../../../../../Drivers/BSP/Components/iis3dwb;../../../../../Drivers/BSP/Components/ilps22qs;../../../../../Drivers/BSP/Components/ism330is;../../../../../Drivers/BSP/Components/ism330dhcx;../../../../../Drivers/BSP/Components/lps22hh;../../../../../Drivers/BSP/Components/stts22h;../../../../../Drivers/BSP/STWIN.box;..\..\..\..\..\Middlewares\ST\STM32_InfraredPD_Library\Inc;..\..\..\..\..\Drivers\BSP\Components\vd6283tx;..\..\..\..\..\Drivers\BSP\Components\vd6283tx\modules;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx;..\..\..\..\..\Drivers\BSP\Components\vl53l8cx\modules;..\..\..\..\eLooM_Components\SensorManager\Inc\drivers;..\..\..\..\..\Drivers\BSP\Components\sgp40;..\..\..\..\..\Drivers\BSP\Components\sht40ad1b;..\..\..\..\..\Drivers\BSP\Components\lps22df</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -4873,21 +4828,6 @@
               <FilePath>..\PnPL\AppModel\Src\App_model_Log_Controller.c</FilePath>
             </File>
             <File>
-              <FileName>App_model_Sths34pf80_2_Tmos.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_2_Tmos.c</FilePath>
-            </File>
-            <File>
-              <FileName>App_model_Sths34pf80_3_Tmos.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_3_Tmos.c</FilePath>
-            </File>
-            <File>
-              <FileName>App_model_Sths34pf80_Tmos.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\AppModel\Src\App_model_Sths34pf80_Tmos.c</FilePath>
-            </File>
-            <File>
               <FileName>App_model_Stts22h_Temp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\AppModel\Src\App_model_Stts22h_Temp.c</FilePath>
@@ -5006,21 +4946,6 @@
               <FileName>Log_Controller_PnPL.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\PnPL\Components\Src\Log_Controller_PnPL.c</FilePath>
-            </File>
-            <File>
-              <FileName>Sths34pf80_2_Tmos_PnPL.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\Components\Src\Sths34pf80_2_Tmos_PnPL.c</FilePath>
-            </File>
-            <File>
-              <FileName>Sths34pf80_3_Tmos_PnPL.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\Components\Src\Sths34pf80_3_Tmos_PnPL.c</FilePath>
-            </File>
-            <File>
-              <FileName>Sths34pf80_Tmos_PnPL.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\PnPL\Components\Src\Sths34pf80_Tmos_PnPL.c</FilePath>
             </File>
             <File>
               <FileName>Stts22h_Temp_PnPL.c</FileName>
@@ -5253,11 +5178,6 @@
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\drivers\platform.c</FilePath>
             </File>
             <File>
-              <FileName>STHS34PF80Task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\STHS34PF80Task.c</FilePath>
-            </File>
-            <File>
               <FileName>VD6283TXTask.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\eLooM_Components\SensorManager\Src\VD6283TXTask.c</FilePath>
@@ -5361,16 +5281,6 @@
               <FileName>ism330is_reg.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\..\..\Drivers\BSP\Components\ism330is\ism330is_reg.c</FilePath>
-            </File>
-            <File>
-              <FileName>sths34pf80.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sths34pf80\sths34pf80.c</FilePath>
-            </File>
-            <File>
-              <FileName>sths34pf80_reg.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\..\..\Drivers\BSP\Components\sths34pf80\sths34pf80_reg.c</FilePath>
             </File>
             <File>
               <FileName>vd6283tx.c</FileName>

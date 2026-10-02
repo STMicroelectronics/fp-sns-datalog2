@@ -22,6 +22,10 @@
 
 /* USER CODE BEGIN 0 */
 
+#ifndef H563_USB_EXPERIMENT_A_BULK_DBLBUF
+#define H563_USB_EXPERIMENT_A_BULK_DBLBUF 0
+#endif
+
 /* USER CODE END 0 */
 
 PCD_HandleTypeDef hpcd_USB_DRD_FS;
@@ -42,12 +46,16 @@ void MX_USB_PCD_Init(void)
   hpcd_USB_DRD_FS.Init.dev_endpoints = 8;
   hpcd_USB_DRD_FS.Init.speed = USBD_FS_SPEED;
   hpcd_USB_DRD_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
-  hpcd_USB_DRD_FS.Init.Sof_enable = DISABLE;
+  hpcd_USB_DRD_FS.Init.Sof_enable = ENABLE;
   hpcd_USB_DRD_FS.Init.low_power_enable = DISABLE;
   hpcd_USB_DRD_FS.Init.lpm_enable = DISABLE;
   hpcd_USB_DRD_FS.Init.battery_charging_enable = DISABLE;
   hpcd_USB_DRD_FS.Init.vbus_sensing_enable = DISABLE;
+#if H563_USB_EXPERIMENT_A_BULK_DBLBUF
+  hpcd_USB_DRD_FS.Init.bulk_doublebuffer_enable = ENABLE;
+#else
   hpcd_USB_DRD_FS.Init.bulk_doublebuffer_enable = DISABLE;
+#endif
   hpcd_USB_DRD_FS.Init.iso_singlebuffer_enable = DISABLE;
   if (HAL_PCD_Init(&hpcd_USB_DRD_FS) != HAL_OK)
   {
@@ -70,7 +78,7 @@ void HAL_PCD_MspInit(PCD_HandleTypeDef *pcdHandle)
     /* USER CODE END USB_DRD_FS_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
     PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)

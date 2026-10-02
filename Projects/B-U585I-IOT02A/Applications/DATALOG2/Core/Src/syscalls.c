@@ -29,10 +29,10 @@
 
 /* integration with eLooM framework: */
 /* 1. we map the low level put_char to the framework function used for the log. */
-//#if defined(DEBUG) || defined(SYS_DEBUG)
-//extern int32_t SysDebugLowLevelPutchar(int32_t x);
-//#define __io_putchar SysDebugLowLevelPutchar
-//#endif
+/*#if defined(DEBUG) || defined(SYS_DEBUG)*/
+/*extern int32_t SysDebugLowLevelPutchar(int32_t x);*/
+/*#define __io_putchar SysDebugLowLevelPutchar*/
+/*#endif*/
 
 #if defined (__GNUC__) && !defined(__ARMCC_VERSION)
 
@@ -186,7 +186,7 @@ int32_t _execve(char *name, char **argv, char **env)
 }
 
 
-#elif defined (__ARMCC_VERSION) //KEIL AC6
+#elif defined (__ARMCC_VERSION) /*KEIL AC6*/
 #if defined(DEGUG) || defined(SYS_DEBUG)
 extern int32_t __io_putchar(int32_t x);
 

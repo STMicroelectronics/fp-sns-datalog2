@@ -83,4 +83,4 @@ __weak void _tx_execution_thread_exit(void)
 
 }
 
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */

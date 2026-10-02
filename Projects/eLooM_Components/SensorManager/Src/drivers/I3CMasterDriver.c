@@ -33,6 +33,9 @@
 #define I3C_CCC_DISEC_HOT_JOIN_MASK             0x08U
 #define COUNTOF(__BUFFER__)                     (sizeof(__BUFFER__) / sizeof(*(__BUFFER__)))
 #define I3C_DRV_OP_TIMEOUT_MS                   1000U
+#define I3C_MAX_DMA_FRAME_SIZE                  32U
+#define I3C_REG_ADDR_SIZE_8BIT                  1U
+#define I3C_REG_ADDR_SIZE_16BIT                 2U
 
 #define SYS_DEBUGF(level, message)              SYS_DEBUGF3(SYS_DBG_DRIVERS, level, message)
 
@@ -140,6 +143,7 @@ sys_error_code_t I3CMasterDriver_vtblInit(IDriver *_this, void *p_params)
 
   p_obj->mx_handle.p_mx_i3c_cfg->p_mx_dma_init_f();
   p_obj->mx_handle.p_mx_i3c_cfg->p_mx_init_f();
+  p_obj->reg_addr_size = I3C_REG_ADDR_SIZE_8BIT;
 
   I3CMasterDriverSyncDMAConfig(p_i3c);
 
@@ -250,6 +254,7 @@ sys_error_code_t I3CMasterDriver_vtblWrite(IIODriver *_this, uint8_t *p_data_buf
                                            uint16_t channel)
 {
   assert_param(_this != NULL);
+  assert_param(p_data_buffer != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   I3CMasterDriver_t *p_obj = (I3CMasterDriver_t *) _this;
   I3C_HandleTypeDef *p_i3c = p_obj->mx_handle.p_mx_i3c_cfg->p_i3c_handle;
@@ -260,43 +265,81 @@ sys_error_code_t I3CMasterDriver_vtblWrite(IIODriver *_this, uint8_t *p_data_buf
   uint32_t controlBuffer[0xF];
   I3C_PrivateTypeDef privateDescriptor;
   uint8_t data[32] = {0};
+  uint8_t reg_addr_size = p_obj->reg_addr_size;
+  uint16_t bytes_remaining = data_size;
+  uint16_t bytes_written = 0U;
+  uint16_t chunk_size;
+  uint16_t chunk_reg;
+  uint16_t max_chunk_payload;
 
-  if (data_size > (sizeof(data) - 1U))
+  if ((reg_addr_size != I3C_REG_ADDR_SIZE_8BIT) && (reg_addr_size != I3C_REG_ADDR_SIZE_16BIT))
+  {
+    reg_addr_size = I3C_REG_ADDR_SIZE_8BIT;
+  }
+
+  max_chunk_payload = (uint16_t)(sizeof(data) - reg_addr_size);
+  if (max_chunk_payload == 0U)
   {
     SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I3C_M_WRITE_ERROR_CODE);
     return SYS_I3C_M_WRITE_ERROR_CODE;
   }
 
-  data[0] = (uint8_t)channel;
-  memcpy(&data[1], p_data_buffer, data_size);
-
-  privateDescriptor.TargetAddr = p_obj->target_device_addr;
-  privateDescriptor.TxBuf.pBuffer = data;
-  privateDescriptor.TxBuf.Size = (1 + data_size);
-  privateDescriptor.RxBuf.pBuffer = NULL;
-  privateDescriptor.RxBuf.Size = 0;
-  privateDescriptor.Direction = HAL_I3C_DIRECTION_WRITE;
-  /* Prepare Transmit context buffer with the different parameters */
-  memset((void *)&contextBuffer, 0x0, sizeof(I3C_XferTypeDef));
-  contextBuffer.CtrlBuf.pBuffer = controlBuffer;
-  contextBuffer.CtrlBuf.Size    = 1;
-  contextBuffer.TxBuf.pBuffer   = data;
-  contextBuffer.TxBuf.Size      = (1 + data_size);
-
-  res = I3CMasterDriverTransmitRegAddr(p_obj, &contextBuffer, &privateDescriptor, 500);
-  if (!SYS_IS_ERROR_CODE(res))
+  while ((bytes_remaining > 0U) && !SYS_IS_ERROR_CODE(res))
   {
+    chunk_size = (bytes_remaining > max_chunk_payload) ? max_chunk_payload : bytes_remaining;
+    chunk_reg = (uint16_t)(channel + bytes_written);
+
+    if (reg_addr_size == I3C_REG_ADDR_SIZE_16BIT)
+    {
+      data[0] = (uint8_t)(chunk_reg >> 8);
+      data[1] = (uint8_t)chunk_reg;
+      memcpy(&data[2], &p_data_buffer[bytes_written], chunk_size);
+    }
+    else
+    {
+      data[0] = (uint8_t)chunk_reg;
+      memcpy(&data[1], &p_data_buffer[bytes_written], chunk_size);
+    }
+
+    privateDescriptor.TargetAddr = p_obj->target_device_addr;
+    privateDescriptor.TxBuf.pBuffer = data;
+    privateDescriptor.TxBuf.Size = (reg_addr_size + chunk_size);
+    privateDescriptor.RxBuf.pBuffer = NULL;
+    privateDescriptor.RxBuf.Size = 0;
+    privateDescriptor.Direction = HAL_I3C_DIRECTION_WRITE;
+
+    memset((void *)&contextBuffer, 0x0, sizeof(I3C_XferTypeDef));
+    contextBuffer.CtrlBuf.pBuffer = controlBuffer;
+    contextBuffer.CtrlBuf.Size    = 1;
+    contextBuffer.TxBuf.pBuffer   = data;
+    contextBuffer.TxBuf.Size      = (reg_addr_size + chunk_size);
+
+    res = I3CMasterDriverTransmitRegAddr(p_obj, &contextBuffer, &privateDescriptor, 500);
+    if (SYS_IS_ERROR_CODE(res))
+    {
+      break;
+    }
+
     if (HAL_I3C_Ctrl_Transmit_DMA(p_i3c, &contextBuffer) != HAL_OK)
     {
       SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I3C_M_WRITE_ERROR_CODE);
-      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Write failed.\r\n"));
+      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Write failed. size=%u offset=%u\r\n",
+                                         chunk_size,
+                                         bytes_written));
       res = SYS_I3C_M_WRITE_ERROR_CODE;
     }
     else if (TX_SUCCESS != tx_semaphore_get(&p_obj->sync_obj, TX_WAIT_FOREVER))
     {
       SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I3C_M_WRITE_ERROR_CODE);
-      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Write timeout.\r\n"));
+      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Write timeout. size=%u offset=%u\r\n",
+                                         chunk_size,
+                                         bytes_written));
       res = SYS_I3C_M_WRITE_ERROR_CODE;
+    }
+    else
+    {
+      bytes_written += chunk_size;
+      bytes_remaining -= chunk_size;
     }
   }
 
@@ -315,11 +358,30 @@ sys_error_code_t I3CMasterDriver_vtblRead(IIODriver *_this, uint8_t *p_data_buff
   I3C_XferTypeDef contextBuffer;
   uint32_t controlBuffer[0xF];
   I3C_PrivateTypeDef privateDescriptor;
-  uint8_t myReg[1] = {(uint8_t)channel};
+  uint8_t myReg[2] = {0};
+  uint16_t bytes_remaining = data_size;
+  uint16_t bytes_read = 0U;
+  uint16_t chunk_size;
+  uint8_t reg_addr_size = p_obj->reg_addr_size;
+
+  if ((reg_addr_size != I3C_REG_ADDR_SIZE_8BIT) && (reg_addr_size != I3C_REG_ADDR_SIZE_16BIT))
+  {
+    reg_addr_size = I3C_REG_ADDR_SIZE_8BIT;
+  }
+
+  if (reg_addr_size == I3C_REG_ADDR_SIZE_16BIT)
+  {
+    myReg[0] = (uint8_t)(channel >> 8);
+    myReg[1] = (uint8_t)channel;
+  }
+  else
+  {
+    myReg[0] = (uint8_t)channel;
+  }
 
   privateDescriptor.TargetAddr = p_obj->target_device_addr;
   privateDescriptor.TxBuf.pBuffer = myReg;
-  privateDescriptor.TxBuf.Size = 1;
+  privateDescriptor.TxBuf.Size = reg_addr_size;
   privateDescriptor.RxBuf.pBuffer = NULL;
   privateDescriptor.RxBuf.Size = 0;
   privateDescriptor.Direction = HAL_I3C_DIRECTION_WRITE;
@@ -328,63 +390,82 @@ sys_error_code_t I3CMasterDriver_vtblRead(IIODriver *_this, uint8_t *p_data_buff
   contextBuffer.CtrlBuf.pBuffer = controlBuffer;
   contextBuffer.CtrlBuf.Size    = 1;
   contextBuffer.TxBuf.pBuffer   = myReg;
-  contextBuffer.TxBuf.Size      = 1;
+  contextBuffer.TxBuf.Size      = reg_addr_size;
 
   res = I3CMasterDriverTransmitRegAddr(p_obj, &contextBuffer, &privateDescriptor, 500);
   if (!SYS_IS_ERROR_CODE(res))
   {
+    SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("I3CMasterDriver - About to TX reg addr: target=0x%02x, reg=0x%04x, size=%u\r\n",
+                                       privateDescriptor.TargetAddr, channel, reg_addr_size));
     if (HAL_I3C_Ctrl_Transmit(p_i3c, &contextBuffer, 500) != HAL_OK)
     {
       SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I3C_M_WRITE_ERROR_CODE);
-      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Read preamble failed.\r\n"));
+      SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Read preamble failed. err=0x%08lx state=%lu\r\n",
+                                         (unsigned long)HAL_I3C_GetError(p_i3c), (unsigned long)HAL_I3C_GetState(p_i3c)));
       res = SYS_I3C_M_WRITE_ERROR_CODE;
     }
     else
     {
-      privateDescriptor.TargetAddr = p_obj->target_device_addr;
-      privateDescriptor.TxBuf.pBuffer = NULL;
-      privateDescriptor.TxBuf.Size = 0;
-      privateDescriptor.RxBuf.pBuffer = p_data_buffer;
-      privateDescriptor.RxBuf.Size = data_size;
-      privateDescriptor.Direction = HAL_I3C_DIRECTION_READ;
-
-      memset((void *)&contextBuffer, 0x0, sizeof(I3C_XferTypeDef));
-      contextBuffer.CtrlBuf.pBuffer = controlBuffer;
-      contextBuffer.CtrlBuf.Size    = 1;
-      contextBuffer.RxBuf.pBuffer   = p_data_buffer;
-      contextBuffer.RxBuf.Size      = data_size;
-
-      if (HAL_I3C_AddDescToFrame(p_i3c,
-                                 NULL,
-                                 &privateDescriptor,
-                                 &contextBuffer,
-                                 contextBuffer.CtrlBuf.Size,
-                                 I3C_PRIVATE_WITH_ARB_STOP) != HAL_OK)
+      /* Read data with automatic chunking for transfers > 32 bytes */
+      while ((bytes_remaining > 0U) && !SYS_IS_ERROR_CODE(res))
       {
-        res = SYS_I3C_M_WRITE_ERROR_CODE;
-        SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I3C_M_WRITE_ERROR_CODE);
-        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Read frame add failed.\r\n"));
-      }
-      else if (HAL_I3C_Ctrl_Receive_DMA(p_i3c, &contextBuffer) != HAL_OK)
-      {
-#ifdef SYS_DEBUG
-        uint32_t hal_error = HAL_I3C_GetError(p_i3c);
-        uint32_t hal_state = (uint32_t)HAL_I3C_GetState(p_i3c);
-        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Read DMA start failed. err=0x%08lx state=%lu\r\n",
-                                           (unsigned long)hal_error,
-                                           (unsigned long)hal_state));
-#endif
-        SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I3C_M_READ_ERROR_CODE);
-        res = SYS_I3C_M_READ_ERROR_CODE;
-      }
+        /* Calculate chunk size (limit to max DMA frame size) */
+        chunk_size = (bytes_remaining > I3C_MAX_DMA_FRAME_SIZE) ?
+                     I3C_MAX_DMA_FRAME_SIZE : bytes_remaining;
 
-      if (!SYS_IS_ERROR_CODE(res))
-      {
-        if (TX_SUCCESS != tx_semaphore_get(&p_obj->sync_obj, TX_WAIT_FOREVER))
+        privateDescriptor.TargetAddr = p_obj->target_device_addr;
+        privateDescriptor.TxBuf.pBuffer = NULL;
+        privateDescriptor.TxBuf.Size = 0;
+        privateDescriptor.RxBuf.pBuffer = &p_data_buffer[bytes_read];
+        privateDescriptor.RxBuf.Size = chunk_size;
+        privateDescriptor.Direction = HAL_I3C_DIRECTION_READ;
+
+        memset((void *)&contextBuffer, 0x0, sizeof(I3C_XferTypeDef));
+        contextBuffer.CtrlBuf.pBuffer = controlBuffer;
+        contextBuffer.CtrlBuf.Size    = 1;
+        contextBuffer.RxBuf.pBuffer   = &p_data_buffer[bytes_read];
+        contextBuffer.RxBuf.Size      = chunk_size;
+
+        if (HAL_I3C_AddDescToFrame(p_i3c,
+                                   NULL,
+                                   &privateDescriptor,
+                                   &contextBuffer,
+                                   contextBuffer.CtrlBuf.Size,
+                                   I3C_PRIVATE_WITH_ARB_STOP) != HAL_OK)
         {
+          res = SYS_I3C_M_WRITE_ERROR_CODE;
+          SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I3C_M_WRITE_ERROR_CODE);
+          SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Read frame add failed. size=%u\r\n", chunk_size));
+        }
+        else if (HAL_I3C_Ctrl_Receive_DMA(p_i3c, &contextBuffer) != HAL_OK)
+        {
+#ifdef SYS_DEBUG
+          uint32_t hal_error = HAL_I3C_GetError(p_i3c);
+          uint32_t hal_state = (uint32_t)HAL_I3C_GetState(p_i3c);
+          SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Read DMA start failed. size=%u err=0x%08lx state=%lu\r\n",
+                                             chunk_size,
+                                             (unsigned long)hal_error,
+                                             (unsigned long)hal_state));
+#endif
           SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I3C_M_READ_ERROR_CODE);
-          SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Read timeout.\r\n"));
           res = SYS_I3C_M_READ_ERROR_CODE;
+        }
+
+        if (!SYS_IS_ERROR_CODE(res))
+        {
+          if (TX_SUCCESS != tx_semaphore_get(&p_obj->sync_obj, TX_WAIT_FOREVER))
+          {
+            SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_I3C_M_READ_ERROR_CODE);
+            SYS_DEBUGF(SYS_DBG_LEVEL_WARNING, ("I3CMasterDriver - Read timeout. size=%u offset=%u\r\n",
+                                               chunk_size, bytes_read));
+            res = SYS_I3C_M_READ_ERROR_CODE;
+          }
+          else
+          {
+            /* Chunk transferred successfully, move to next chunk */
+            bytes_read += chunk_size;
+            bytes_remaining -= chunk_size;
+          }
         }
       }
     }
@@ -422,8 +503,23 @@ sys_error_code_t I3CMasterDriverSetDeviceAddr(I3CMasterDriver_t *_this, uint16_t
   assert_param(_this);
 
   _this->target_device_addr = address;
+  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("I3CMasterDriver_SetDeviceAddr: Set to 0x%02x\r\n", address & 0xFF));
 
   return SYS_NO_ERROR_CODE ;
+}
+
+sys_error_code_t I3CMasterDriverSetRegAddrSize(I3CMasterDriver_t *_this, uint8_t reg_addr_size)
+{
+  assert_param(_this);
+
+  if ((reg_addr_size != I3C_REG_ADDR_SIZE_8BIT) && (reg_addr_size != I3C_REG_ADDR_SIZE_16BIT))
+  {
+    return SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
+
+  _this->reg_addr_size = reg_addr_size;
+
+  return SYS_NO_ERROR_CODE;
 }
 
 sys_error_code_t I3CMasterDriverConfigureTarget(I3CMasterDriver_t *_this, uint16_t static_address,
@@ -431,8 +527,8 @@ sys_error_code_t I3CMasterDriverConfigureTarget(I3CMasterDriver_t *_this, uint16
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
-  uint8_t static_addr = (uint8_t)(static_address & 0x7FU);
-  uint8_t dynamic_addr = (uint8_t)(dynamic_address & 0x7FU);
+  uint8_t static_addr = (uint8_t)(static_address); // & 0x7FU);
+  uint8_t dynamic_addr = (uint8_t)(dynamic_address); // & 0x7FU);
 
   if ((static_addr == 0U) && (dynamic_addr == 0U))
   {
@@ -468,6 +564,21 @@ sys_error_code_t I3CMasterDriverConfigureTarget(I3CMasterDriver_t *_this, uint16
     if (SYS_IS_ERROR_CODE(res))
     {
       return res;
+    }
+
+    /* Register the device in the HAL controller device table so that
+     * private read/write transfers can be addressed to the dynamic address. */
+    I3C_HandleTypeDef *p_i3c = _this->mx_handle.p_mx_i3c_cfg->p_i3c_handle;
+    I3C_DeviceConfTypeDef dev_conf = {0};
+    dev_conf.DeviceIndex       = 1U;
+    dev_conf.TargetDynamicAddr = dynamic_addr;
+    dev_conf.IBIAck            = DISABLE;
+    dev_conf.IBIPayload        = DISABLE;
+    dev_conf.CtrlRoleReqAck    = DISABLE;
+    dev_conf.CtrlStopTransfer  = DISABLE;
+    if (HAL_I3C_Ctrl_ConfigBusDevices(p_i3c, &dev_conf, 1U) != HAL_OK)
+    {
+      return SYS_I3C_M_WRITE_ERROR_CODE;
     }
 
     _this->target_device_addr = dynamic_addr;

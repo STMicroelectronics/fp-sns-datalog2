@@ -41,7 +41,7 @@
 #define OTA_FW_ID_MAGIC_NUM 0xDEADBEEF
 
 /* Uncomment the following define for enabling the PRINTF capability if it's supported */
-//#define OTA_ENABLE_PRINTF
+/*#define OTA_ENABLE_PRINTF*/
 
 #ifdef OTA_ENABLE_PRINTF
 #define OTA_PRINTF(msg)  SYS_DEBUGF2(SYS_DBG_LEVEL_VERBOSE, msg)
@@ -272,7 +272,7 @@ void ReadFlashBanksFwId(uint16_t *FwId1, uint16_t *FwId2)
   uint32_t *First;
   uint32_t *Second;
 
-  //First/Second identification
+  /*First/Second identification*/
   if (CurrentActiveBank == 1)
   {
     First  = (uint32_t *)OTA_FW_ID_BANK1;
@@ -284,7 +284,7 @@ void ReadFlashBanksFwId(uint16_t *FwId1, uint16_t *FwId2)
     Second = (uint32_t *)OTA_FW_ID_BANK1;
   }
 
-  //Read First Bank
+  /*Read First Bank*/
   if (First[0] == OTA_FW_ID_MAGIC_NUM)
   {
     *FwId1 = First[1] & 0xFFFF;
@@ -294,7 +294,7 @@ void ReadFlashBanksFwId(uint16_t *FwId1, uint16_t *FwId2)
     *FwId1 = OTA_OTA_FW_ID_NOT_VALID;
   }
 
-  //Read Second Bank
+  /*Read Second Bank*/
   if (Second[0] == OTA_FW_ID_MAGIC_NUM)
   {
     *FwId2 = Second[1] & 0xFFFF;
@@ -425,7 +425,7 @@ void UpdateCurrFlashBankFwId(uint16_t FwId)
     HAL_Delay(100);
     HAL_FLASH_Unlock();
 
-    //* Update the Firmware id on Flash */
+    /** Update the Firmware id on Flash */
     ValueToWrite32[0] = OTA_FW_ID_MAGIC_NUM;
     ValueToWrite32[1] = FwId;
     if (HAL_FLASH_Program(FLASH_TYPEPROGRAM_DOUBLEWORD, LocalWritingAddress, ValueToWrite) != HAL_OK)

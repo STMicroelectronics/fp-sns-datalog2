@@ -98,6 +98,11 @@ struct _I3CMasterDriver_t
   uint16_t target_device_addr;
 
   /**
+    * Register address size in bytes used for private transfers (1 or 2).
+    */
+  uint8_t reg_addr_size;
+
+  /**
     * Flag used to check if the driver is already initialized. It is used to avoid to initialize the same driver more than once.
     */
   boolean_t is_initialized;
@@ -137,6 +142,15 @@ sys_error_code_t I3CMasterDriverTransmitRegAddr(I3CMasterDriver_t *_this, I3C_Xf
   * @return SYS_NO_ERROR_CODE
   */
 sys_error_code_t I3CMasterDriverSetDeviceAddr(I3CMasterDriver_t *_this, uint16_t nAddress);
+
+/**
+  * Set register address size used by the next private transfers.
+  *
+  * @param _this [IN] specifies a pointer to a I3CMasterDriver object.
+  * @param reg_addr_size [IN] register address size in bytes (1 or 2).
+  * @return SYS_NO_ERROR_CODE if success, SYS_INVALID_PARAMETER_ERROR_CODE otherwise.
+  */
+sys_error_code_t I3CMasterDriverSetRegAddrSize(I3CMasterDriver_t *_this, uint8_t reg_addr_size);
 
 /**
   * Execute I3C startup CCC sequence for a target and select the address used for private transfers.

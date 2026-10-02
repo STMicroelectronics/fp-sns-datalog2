@@ -28,37 +28,37 @@
 
 #ifndef UTIL_TASK_CFG_STACK_DEPTH
 #define UTIL_TASK_CFG_STACK_DEPTH              TX_MINIMUM_STACK*4
-#endif
+#endif /* UTIL_TASK_CFG_STACK_DEPTH */
 
 #ifndef UTIL_TASK_CFG_PRIORITY
 #define UTIL_TASK_CFG_PRIORITY                 (7)
-#endif
+#endif /* UTIL_TASK_CFG_PRIORITY */
 
 #ifndef UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE
 #define UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(struct utilMessage_t)
-#endif
+#endif /* UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE */
 
 #ifndef UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT
 #define UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT      10
-#endif
+#endif /* UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT */
 
 #ifndef UTIL_TASK_CFG_UL_TIMER_PERIOD_MS
 #define UTIL_TASK_CFG_UL_TIMER_PERIOD_MS       250
-#endif
+#endif /* UTIL_TASK_CFG_UL_TIMER_PERIOD_MS */
 
 #ifndef UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS
 #define UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS       250
-#endif
+#endif /* UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS */
 
 #define UTIL_UPDATE_BATTERY_CHAR_PERIOD_MS    2000U
-#define RCG_BAT_MIN_VOLTAGE                   3000 //! Rechargeable battery minimum voltage in mV
-#define RCG_BAT_MAX_VOLTAGE                   4200 //! Rechargeable battery maximum voltage in mV
+#define RCG_BAT_MIN_VOLTAGE                   3000 /*! Rechargeable battery minimum voltage in mV*/
+#define RCG_BAT_MAX_VOLTAGE                   4200 /*! Rechargeable battery maximum voltage in mV*/
 
 #define SYS_DEBUGF(level, message)             SYS_DEBUGF3(SYS_DBG_UTIL, level, message)
 
 #if defined(DEBUG) || defined (SYS_DEBUG)
 #define sTaskObj                               sUtilTaskObj
-#endif
+#endif /* defined(DEBUG) || defined (SYS_DEBUG) */
 
 /**
   * Class object declaration. The class object encapsulates members that are shared between
@@ -159,7 +159,8 @@ static const UtilTaskClass_t sTheClass =
 
 AManagedTaskEx *UtilTaskAlloc(const void *p_mx_bc_tim_drv_cfg, const void *p_mx_bc_gpio_sw_drv_cfg,
                               const void *p_mx_bc_gpio_chg_drv_cfg,
-                              const void *p_mx_bc_gpio_cen_drv_cfg, const void *p_mx_bc_tim_chg_drv_cfg, const void *p_mx_bc_adc_drv_cfg,
+                              const void *p_mx_bc_gpio_cen_drv_cfg, const void *p_mx_bc_tim_chg_drv_cfg,
+                              const void *p_mx_bc_adc_drv_cfg,
                               const void *p_mx_ub_drv_cfg, const void *p_mx_led1_drv_cfg, const void *p_mx_led2_drv_cfg,
                               const void *p_mx_hwtag0_drv_cfg, const void *p_mx_hwtag1_drv_cfg)
 {
@@ -315,13 +316,13 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
   if (!SYS_IS_ERROR_CODE(res))
   {
     /* Initialize the LED and User Button */
-    // configure User Button 1
+    /* configure User Button 1*/
     if (p_obj->p_mx_ub_drv_cfg != NULL)
     {
       ((MX_GPIOParams_t *)p_obj->p_mx_ub_drv_cfg)->p_mx_init_f();
     }
 
-    // configure Led1
+    /* configure Led1*/
     if (p_obj->p_mx_led1_drv_cfg != NULL)
     {
       MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t *)p_obj->p_mx_led1_drv_cfg;
@@ -329,7 +330,7 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
       HAL_GPIO_WritePin(p_ld1_params->port, p_ld1_params->pin, GPIO_PIN_RESET);
     }
 
-    // configure Led2
+    /* configure Led2*/
     if (p_obj->p_mx_led2_drv_cfg != NULL)
     {
       MX_GPIOParams_t *p_ld2_params = (MX_GPIOParams_t *)p_obj->p_mx_led2_drv_cfg;
@@ -350,10 +351,10 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
 
   }
 
-  // configure the BatteryCharger
+  /* configure the BatteryCharger*/
   PB_PWR_Init();
 
-  // Configure random number generated
+  /* Configure random number generated*/
   RND_Init();
 
   return res;
@@ -361,13 +362,15 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
 
 sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName,
                                            VOID **pvStackStart, ULONG *pStackDepth,
-                                           UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart, ULONG *pParams)
+                                           UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice,
+                                           ULONG *pAutoStart,
+                                           ULONG *pParams)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   UtilTask_t *p_obj = (UtilTask_t *) _this;
 
-  // Create task specific sw resources.
+  /* Create task specific sw resources.*/
 
   uint16_t item_size = UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE;
   VOID *p_queue_items_buff = SysAlloc(UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT * item_size);
@@ -387,8 +390,10 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
   }
 
   /* Software timer for user led management */
-  if (TX_SUCCESS != tx_timer_create(&p_obj->user_led_timer, "USER_LED_T", UtilTaskSwTimerCallbackUserLed, (ULONG)TX_NULL,
-                                    AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS),
+  if (TX_SUCCESS != tx_timer_create(&p_obj->user_led_timer, "USER_LED_T", UtilTaskSwTimerCallbackUserLed,
+                                    (ULONG)TX_NULL,
+                                    AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS),
+                                    AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS),
                                     TX_AUTO_ACTIVATE))
   {
     res = SYS_APP_TASK_INIT_ERROR_CODE;
@@ -401,7 +406,8 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
   {
     if (TX_SUCCESS
         != tx_timer_create(&p_obj->hw_tags_timer, "HW_TAGS_T", UtilTaskSwTimerCallbackHwTags, (ULONG) TX_NULL,
-                           AMT_MS_TO_TICKS(UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS),
+                           AMT_MS_TO_TICKS(UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS),
+                           AMT_MS_TO_TICKS(UTIL_TASK_CFG_HW_TAGS_TIMER_PERIOD_MS),
                            TX_AUTO_ACTIVATE))
     {
       res = SYS_APP_TASK_INIT_ERROR_CODE;
@@ -459,7 +465,7 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
 
   *pTaskCode = AMTExRun;
   *pName = "UTIL";
-  *pvStackStart = NULL; // allocate the task stack in the system memory pool.
+  *pvStackStart = NULL; /* allocate the task stack in the system memory pool.*/
   *pStackDepth = UTIL_TASK_CFG_STACK_DEPTH;
   *pParams = (ULONG) _this;
   *pPriority = UTIL_TASK_CFG_PRIORITY;
@@ -534,7 +540,7 @@ sys_error_code_t UtilTask_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 
 #ifdef ENABLE_THREADX_DBG_PIN
   p_obj->super.m_xTaskHandle.pxTaskTag = UTIL_TASK_CFG_TAG;
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */
 
   return res;
 }
@@ -676,7 +682,7 @@ static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer)
 
   if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &msg, TX_NO_WAIT))
   {
-    // unable to send the report. Signal the error
+    /* unable to send the report. Signal the error*/
     sys_error_handler();
   }
 
@@ -830,7 +836,7 @@ void Util_PWR_EXTI_Callback(uint16_t nPin)
 
       if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &msg, TX_NO_WAIT))
       {
-        // unable to send the report. Signal the error
+        /* unable to send the report. Signal the error*/
         sys_error_handler();
       }
     }
@@ -878,7 +884,7 @@ void SwitchBank(void)
     User can add here some code to deal with this error.
     To know the code error, user can call function 'HAL_FLASH_GetError()'
     */
-    //    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
+    /*    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);*/
   }
 
   /* Start the Option Bytes programming process */
@@ -889,7 +895,7 @@ void SwitchBank(void)
     User can add here some code to deal with this error.
     To know the code error, user can call function 'HAL_FLASH_GetError()'
     */
-    //    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
+    /*    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);*/
   }
   HAL_FLASH_OB_Lock();
   HAL_FLASH_Lock();

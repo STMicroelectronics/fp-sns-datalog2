@@ -42,4 +42,4 @@ extern uint8_t ILog_Controller_start_log(ILog_Controller_t *_this, uint32_t inte
 extern uint8_t ILog_Controller_stop_log(ILog_Controller_t *_this);
 extern uint8_t ILog_Controller_set_time(ILog_Controller_t *_this, const char *datetime);
 extern uint8_t ILog_Controller_switch_bank(ILog_Controller_t *_this);
-#endif
+#endif /* defined (__GNUC__) || defined(__ICCARM__) */

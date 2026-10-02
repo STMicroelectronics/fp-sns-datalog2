@@ -311,7 +311,8 @@ void SystemCoreClockUpdate(void)
       pllsource = (RCC->PLL1CFGR & RCC_PLL1CFGR_PLL1SRC);
       pllm = ((RCC->PLL1CFGR & RCC_PLL1CFGR_PLL1M) >> RCC_PLL1CFGR_PLL1M_Pos) + 1U;
       pllfracen = ((RCC->PLL1CFGR & RCC_PLL1CFGR_PLL1FRACEN) >> RCC_PLL1CFGR_PLL1FRACEN_Pos);
-      fracn1 = (float_t)(uint32_t)(pllfracen * ((RCC->PLL1FRACR & RCC_PLL1FRACR_PLL1FRACN) >> RCC_PLL1FRACR_PLL1FRACN_Pos));
+      fracn1 =
+        (float_t)(uint32_t)(pllfracen * ((RCC->PLL1FRACR & RCC_PLL1FRACR_PLL1FRACN) >> RCC_PLL1FRACR_PLL1FRACN_Pos));
 
       switch (pllsource)
       {
@@ -332,7 +333,8 @@ void SystemCoreClockUpdate(void)
           break;
       }
 
-      pllvco = pllvco * ((float_t)(uint32_t)(RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1N) + (fracn1 / (float_t)0x2000) + (float_t)1U);
+      pllvco =
+        pllvco * ((float_t)(uint32_t)(RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1N) + (fracn1 / (float_t)0x2000) + (float_t)1U);
       pllr = (((RCC->PLL1DIVR & RCC_PLL1DIVR_PLL1R) >> RCC_PLL1DIVR_PLL1R_Pos) + 1U);
       SystemCoreClock = (uint32_t)((uint32_t)pllvco / pllr);
       break;

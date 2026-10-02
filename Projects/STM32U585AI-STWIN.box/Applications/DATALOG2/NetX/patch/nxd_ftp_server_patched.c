@@ -27,7 +27,7 @@
 
 #ifndef NX_DISABLE_ERROR_CHECKING
 #define NX_DISABLE_ERROR_CHECKING
-#endif
+#endif /* NX_DISABLE_ERROR_CHECKING */
 
 /* If FileX is not used in this application, define this option and define the FileX services
    declared in filex_stub.h elsewhere.
@@ -75,7 +75,8 @@ NX_CALLER_CHECKING_EXTERNS
 #define NX_FTP_CODE_UNAUTHORIZED     "530"  /* Not logged in.  */
 #define NX_FTP_CODE_NO_ACCT          "532"  /* Need account for storing files.  */
 #define NX_FTP_CODE_BAD_TYPE         "504"  /* Invalid TYPE.  */
-#define NX_FTP_CODE_BAD_FILE         "550"  /* Requested action not taken. File unavailable (e.g., file not found, no access).  */
+#define NX_FTP_CODE_BAD_FILE         "550"
+/* Requested action not taken. File unavailable (e.g., file not found, no access).  */
 #define NX_FTP_CODE_BAD_PAGE_TYPE    "551"  /* Requested action aborted: page type unknown.  */
 #define NX_FTP_CODE_NO_SPACE         "552"  /* Requested file action aborted, no space.  */
 #define NX_FTP_CODE_BAD_NAME         "553"  /* Requested action not taken, File name not allowed.  */
@@ -134,9 +135,11 @@ static VOID _nx_ftp_server_number_to_ascii(UCHAR *buffer_ptr, UINT buffer_size, 
 /**************************************************************************/
 UINT  _nxe_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_name, NX_IP *ip_ptr, FX_MEDIA *media_ptr,
                              VOID *stack_ptr, ULONG stack_size, NX_PACKET_POOL *pool_ptr,
-                             UINT(*ftp_login)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG client_ip_address, UINT client_port, CHAR *name,
+                             UINT(*ftp_login)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr,
+                                              ULONG client_ip_address, UINT client_port, CHAR *name,
                                               CHAR *password, CHAR *extra_info),
-                             UINT(*ftp_logout)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG client_ip_address, UINT client_port, CHAR *name,
+                             UINT(*ftp_logout)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr,
+                                               ULONG client_ip_address, UINT client_port, CHAR *name,
                                                CHAR *password, CHAR *extra_info))
 {
 
@@ -153,7 +156,8 @@ UINT  _nxe_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_nam
   }
 
   /* Call actual server create function.  */
-  status =  _nx_ftp_server_create(ftp_server_ptr, ftp_server_name, ip_ptr, media_ptr, stack_ptr, stack_size, pool_ptr, ftp_login, ftp_logout);
+  status =  _nx_ftp_server_create(ftp_server_ptr, ftp_server_name, ip_ptr, media_ptr, stack_ptr, stack_size,
+                                  pool_ptr, ftp_login, ftp_logout);
 
   /* Return completion status.  */
   return (status);
@@ -224,9 +228,11 @@ UINT  _nxe_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_nam
 /**************************************************************************/
 UINT  _nx_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_name, NX_IP *ip_ptr, FX_MEDIA *media_ptr,
                             VOID *stack_ptr, ULONG stack_size, NX_PACKET_POOL *pool_ptr,
-                            UINT(*ftp_login_ipv4)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG client_address, UINT client_port, CHAR *name,
+                            UINT(*ftp_login_ipv4)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr,
+                                                  ULONG client_address, UINT client_port, CHAR *name,
                                                   CHAR *password, CHAR *extra_info),
-                            UINT(*ftp_logout_ipv4)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG client_address, UINT client_port, CHAR *name,
+                            UINT(*ftp_logout_ipv4)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr,
+                                                   ULONG client_address, UINT client_port, CHAR *name,
                                                    CHAR *password, CHAR *extra_info))
 {
 
@@ -235,7 +241,8 @@ UINT  _nx_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_name
 
 
   /* Call actual server create function but set the ftp login and logout arguments to NULL.  */
-  status =  _nx_ftp_server_create_internal(ftp_server_ptr, ftp_server_name, ip_ptr, media_ptr, stack_ptr, stack_size, pool_ptr, NX_NULL, NX_NULL);
+  status =  _nx_ftp_server_create_internal(ftp_server_ptr, ftp_server_name, ip_ptr, media_ptr, stack_ptr,
+                                           stack_size, pool_ptr, NX_NULL, NX_NULL);
 
   /* Set the FTP server to accept login functions having IPv4 address arguments. */
   ftp_server_ptr -> nx_ftp_login_ipv4 = ftp_login_ipv4;
@@ -312,9 +319,11 @@ UINT  _nx_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_name
 /**************************************************************************/
 UINT  _nxde_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_name, NX_IP *ip_ptr, FX_MEDIA *media_ptr,
                               VOID *stack_ptr, ULONG stack_size, NX_PACKET_POOL *pool_ptr,
-                              UINT(*ftp_login)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, NXD_ADDRESS *client_ipduo_address, UINT client_port,
+                              UINT(*ftp_login)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr,
+                                               NXD_ADDRESS *client_ipduo_address, UINT client_port,
                                                CHAR *name, CHAR *password, CHAR *extra_info),
-                              UINT(*ftp_logout)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, NXD_ADDRESS *client_ipduo_address, UINT client_port,
+                              UINT(*ftp_logout)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr,
+                                                NXD_ADDRESS *client_ipduo_address, UINT client_port,
                                                 CHAR *name, CHAR *password, CHAR *extra_info))
 {
 
@@ -331,7 +340,8 @@ UINT  _nxde_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_na
   }
 
   /* Call actual server create function.  */
-  status =  _nxd_ftp_server_create(ftp_server_ptr, ftp_server_name, ip_ptr, media_ptr, stack_ptr, stack_size, pool_ptr, ftp_login, ftp_logout);
+  status =  _nxd_ftp_server_create(ftp_server_ptr, ftp_server_name, ip_ptr, media_ptr, stack_ptr, stack_size,
+                                   pool_ptr, ftp_login, ftp_logout);
 
   /* Return completion status.  */
   return (status);
@@ -390,9 +400,11 @@ UINT  _nxde_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_na
 /**************************************************************************/
 UINT  _nxd_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_name, NX_IP *ip_ptr, FX_MEDIA *media_ptr,
                              VOID *stack_ptr, ULONG stack_size, NX_PACKET_POOL *pool_ptr,
-                             UINT(*ftp_login)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, NXD_ADDRESS *client_ipduo_address, UINT client_port,
+                             UINT(*ftp_login)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr,
+                                              NXD_ADDRESS *client_ipduo_address, UINT client_port,
                                               CHAR *name, CHAR *password, CHAR *extra_info),
-                             UINT(*ftp_logout)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, NXD_ADDRESS *client_ipduo_address, UINT client_port,
+                             UINT(*ftp_logout)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr,
+                                               NXD_ADDRESS *client_ipduo_address, UINT client_port,
                                                CHAR *name, CHAR *password, CHAR *extra_info))
 {
 
@@ -401,7 +413,8 @@ UINT  _nxd_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_nam
 
 
   /* Call actual server create function.  */
-  status =  _nx_ftp_server_create_internal(ftp_server_ptr, ftp_server_name, ip_ptr, media_ptr, stack_ptr, stack_size, pool_ptr, ftp_login, ftp_logout);
+  status =  _nx_ftp_server_create_internal(ftp_server_ptr, ftp_server_name, ip_ptr, media_ptr, stack_ptr,
+                                           stack_size, pool_ptr, ftp_login, ftp_logout);
 
   /* Return status.  */
   return status;
@@ -469,9 +482,11 @@ UINT  _nxd_ftp_server_create(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_nam
 /**************************************************************************/
 UINT  _nx_ftp_server_create_internal(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_server_name, NX_IP *ip_ptr,
                                      FX_MEDIA *media_ptr, VOID *stack_ptr, ULONG stack_size, NX_PACKET_POOL *pool_ptr,
-                                     UINT(*ftp_login)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, NXD_ADDRESS *client_address, UINT client_port, CHAR *name,
+                                     UINT(*ftp_login)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr,
+                                                      NXD_ADDRESS *client_address, UINT client_port, CHAR *name,
                                                       CHAR *password, CHAR *extra_info),
-                                     UINT(*ftp_logout)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, NXD_ADDRESS *client_address, UINT client_port,
+                                     UINT(*ftp_logout)(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr,
+                                                       NXD_ADDRESS *client_address, UINT client_port,
                                                        CHAR *name, CHAR *password, CHAR *extra_info))
 {
 
@@ -482,8 +497,8 @@ UINT  _nx_ftp_server_create_internal(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_se
   /* Clear the FTP server structure.  */
   memset((void *) ftp_server_ptr, 0, sizeof(NX_FTP_SERVER));
 
-  /* Check the supplied packet pool for minimum required payload length (NX_FTP_SERVER_MIN_PACKET_PAYLOAD). This configurable
-     option is explained in more detail in the header file.  */
+  /* Check the supplied packet pool for minimum required payload length
+    (NX_FTP_SERVER_MIN_PACKET_PAYLOAD). This configurable option is explained in more detail in the header file.  */
   if (pool_ptr -> nx_packet_pool_payload_size < NX_FTP_SERVER_MIN_PACKET_PAYLOAD)
   {
 
@@ -494,8 +509,9 @@ UINT  _nx_ftp_server_create_internal(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_se
   ftp_server_ptr -> nx_ftp_server_packet_pool_ptr =  pool_ptr;
 
   /* Create the FTP Server thread.  */
-  status =  tx_thread_create(&(ftp_server_ptr -> nx_ftp_server_thread), "FTP Server Thread", _nx_ftp_server_thread_entry,
-                             (ULONG) ftp_server_ptr, stack_ptr, stack_size, NX_FTP_SERVER_PRIORITY, NX_FTP_SERVER_PRIORITY,
+  status =  tx_thread_create(&(ftp_server_ptr -> nx_ftp_server_thread), "FTP Server Thread",
+                             _nx_ftp_server_thread_entry, (ULONG) ftp_server_ptr, stack_ptr, stack_size,
+                             NX_FTP_SERVER_PRIORITY, NX_FTP_SERVER_PRIORITY,
                              NX_FTP_SERVER_TIME_SLICE, TX_DONT_START);
 
   /* Determine if an error occurred creating the thread.  */
@@ -547,22 +563,27 @@ UINT  _nx_ftp_server_create_internal(NX_FTP_SERVER *ftp_server_ptr, CHAR *ftp_se
   {
 
     /* Create an FTP client control socket.  */
-    status +=  nx_tcp_socket_create(ip_ptr,
-                                    &(ftp_server_ptr -> nx_ftp_server_client_list[i].nx_ftp_client_request_control_socket),
-                                    "FTP Server Control Socket", NX_FTP_CONTROL_TOS, NX_FTP_FRAGMENT_OPTION,
-                                    NX_FTP_TIME_TO_LIVE, NX_FTP_CONTROL_WINDOW_SIZE, NX_NULL, _nx_ftp_server_control_disconnect);
+    status +=  nx_tcp_socket_create(
+                 ip_ptr,
+                 &(ftp_server_ptr -> nx_ftp_server_client_list[i]
+                   .nx_ftp_client_request_control_socket),
+                 "FTP Server Control Socket", NX_FTP_CONTROL_TOS, NX_FTP_FRAGMENT_OPTION,
+                 NX_FTP_TIME_TO_LIVE, NX_FTP_CONTROL_WINDOW_SIZE, NX_NULL,
+                 _nx_ftp_server_control_disconnect);
 
     /* If no error is present, register the receive notify function.  */
     if (status == NX_SUCCESS)
     {
 
       /* Register the receive function.  */
-      nx_tcp_socket_receive_notify(&(ftp_server_ptr -> nx_ftp_server_client_list[i].nx_ftp_client_request_control_socket),
+      nx_tcp_socket_receive_notify(&(ftp_server_ptr -> nx_ftp_server_client_list[i]
+                                     .nx_ftp_client_request_control_socket),
                                    _nx_ftp_server_command_present);
     }
 
     /* Make sure each socket points to the FTP server.  */
-    ftp_server_ptr -> nx_ftp_server_client_list[i].nx_ftp_client_request_control_socket.nx_tcp_socket_reserved_ptr =  ftp_server_ptr;
+    ftp_server_ptr -> nx_ftp_server_client_list[i].nx_ftp_client_request_control_socket.nx_tcp_socket_reserved_ptr =
+      ftp_server_ptr;
   }
 
   /* Determine if an error has occurred.  */
@@ -909,7 +930,8 @@ UINT  _nx_ftp_server_start(NX_FTP_SERVER *ftp_server_ptr)
 
   /* Start listening on the FTP control socket.  */
   status =  nx_tcp_server_socket_listen(ftp_server_ptr -> nx_ftp_server_ip_ptr, NX_FTP_SERVER_CONTROL_PORT,
-                                        &(ftp_server_ptr -> nx_ftp_server_client_list[0].nx_ftp_client_request_control_socket),
+                                        &(ftp_server_ptr -> nx_ftp_server_client_list[0]
+                                          .nx_ftp_client_request_control_socket),
                                         NX_FTP_MAX_CLIENTS, _nx_ftp_server_connection_present);
 
   /* Determine if an error is present.  */
@@ -924,7 +946,8 @@ UINT  _nx_ftp_server_start(NX_FTP_SERVER *ftp_server_ptr)
   tx_timer_activate(&(ftp_server_ptr -> nx_ftp_server_timer));
 
   /* Clear stop event. */
-  tx_event_flags_get(&(ftp_server_ptr -> nx_ftp_server_event_flags), NX_FTP_STOP_EVENT, TX_OR_CLEAR, &events, TX_NO_WAIT);
+  tx_event_flags_get(&(ftp_server_ptr -> nx_ftp_server_event_flags), NX_FTP_STOP_EVENT, TX_OR_CLEAR, &events,
+                     TX_NO_WAIT);
 
   /* Start the FTP server thread.  */
   tx_thread_resume(&(ftp_server_ptr -> nx_ftp_server_thread));
@@ -1632,7 +1655,7 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
   NXD_ADDRESS             ipduo_address;
   UINT                    port_size;
   CHAR                    temp_buffer[10];
-#endif
+#endif /* FEATURE_NX_IPV6 */
 #ifndef NX_DISABLE_IPV4
   ULONG                   connect_ip4_address = 0;
   UINT                    commas;
@@ -1656,7 +1679,9 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
   UINT                    year, month, day;
   UINT                    hour, minute, second;
   CHAR                    filename[FX_MAX_LONG_NAME_LEN];
-  const char              *months[] = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+  const char              *months[] = {"JAN", "FEB", "MAR", "APR", "MAY", "JUN",
+                                       "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+                                      };
   UINT                    no_more_ftp_entries = NX_FALSE;
   ULONG                   block_size;
 
@@ -1677,9 +1702,11 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
     client_req_ptr =  &(ftp_server_ptr -> nx_ftp_server_client_list[i]);
 
 #ifndef NX_DISABLE_IPV4
-    if (client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_version == NX_IP_VERSION_V4)
+    if (client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_version ==
+        NX_IP_VERSION_V4)
     {
-      connect_ip4_address = client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_address.v4;
+      connect_ip4_address =
+        client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_address.v4;
     }
 #endif /* NX_DISABLE_IPV4 */
 
@@ -1691,7 +1718,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
       client_req_ptr -> nx_ftp_client_request_activity_timeout =  NX_FTP_ACTIVITY_TIMEOUT;
 
       /* Attempt to read a packet from this socket.  */
-      status =  nx_tcp_socket_receive(&(client_req_ptr -> nx_ftp_client_request_control_socket), &packet_ptr, NX_NO_WAIT);
+      status =  nx_tcp_socket_receive(&(client_req_ptr -> nx_ftp_client_request_control_socket), &packet_ptr,
+                                      NX_NO_WAIT);
 
       /* Check for not data present.  */
       if (status != NX_SUCCESS)
@@ -1821,7 +1849,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           {
 
             /* Now call the user's login callback routine to see if the username,password is valid.  */
-            status = (ftp_server_ptr -> nx_ftp_login)(ftp_server_ptr, &(client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip),
+            status = (ftp_server_ptr -> nx_ftp_login)(ftp_server_ptr,
+                                                      &(client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip),
                                                       client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_port,
                                                       client_req_ptr -> nx_ftp_client_request_username,
                                                       client_req_ptr -> nx_ftp_client_request_password,
@@ -1844,7 +1873,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                 /* Yes; Now call the user's login callback routine to see if the username,password is valid.  */
                 status = (ftp_server_ptr -> nx_ftp_login_ipv4)
                          (ftp_server_ptr,
-                          (client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_address.v4),
+                          (client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip
+                           .nxd_ip_address.v4),
                           client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_port,
                           client_req_ptr -> nx_ftp_client_request_username,
                           client_req_ptr -> nx_ftp_client_request_password,
@@ -2033,7 +2063,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             {
 
               /* Now wait for the data connection to connect.  */
-              status = nx_tcp_socket_state_wait(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_TCP_ESTABLISHED, NX_FTP_SERVER_TIMEOUT);
+              status = nx_tcp_socket_state_wait(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                                NX_TCP_ESTABLISHED, NX_FTP_SERVER_TIMEOUT);
 
               /* Check for connect error.  */
               if (status)
@@ -2052,8 +2083,9 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
 
               /* Create an FTP client data socket.  */
               status =  nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr,
-                                             &(client_req_ptr -> nx_ftp_client_request_data_socket), "FTP Server Data Socket",
-                                             NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION, NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE,
+                                             &(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                             "FTP Server Data Socket", NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION,
+                                             NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE,
                                              NX_NULL, NX_NULL);
 
               /* If no error is present, register the receive notify function.  */
@@ -2072,13 +2104,16 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                 {
 
                   /* FTP server data port is busy, use any data port. */
-                  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_ANY_PORT, NX_NO_WAIT);
+                  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                            NX_ANY_PORT, NX_NO_WAIT);
                 }
 
                 /* Now attempt to connect the data port to the client's data port.  */
                 status =  nxd_tcp_client_socket_connect(&(client_req_ptr -> nx_ftp_client_request_data_socket),
-                                                        &(client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip),
-                                                        client_req_ptr -> nx_ftp_client_request_data_port, NX_FTP_SERVER_TIMEOUT);
+                                                        &(client_req_ptr -> nx_ftp_client_request_control_socket
+                                                          .nx_tcp_socket_connect_ip),
+                                                        client_req_ptr -> nx_ftp_client_request_data_port,
+                                                        NX_FTP_SERVER_TIMEOUT);
 
                 /* Check for connect error.  */
                 if (status)
@@ -2113,7 +2148,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             client_req_ptr -> nx_ftp_client_request_open_type =  NX_FTP_OPEN_FOR_READ;
 
             /* Set the total bytes field to files size.  */
-            client_req_ptr -> nx_ftp_client_request_total_bytes = (ULONG)client_req_ptr -> nx_ftp_client_request_file.fx_file_current_file_size;
+            client_req_ptr -> nx_ftp_client_request_total_bytes =
+              (ULONG)client_req_ptr -> nx_ftp_client_request_file.fx_file_current_file_size;
 
             /* Now send a successful response to the client.  */
             _nx_ftp_server_response(&(client_req_ptr -> nx_ftp_client_request_control_socket), packet_ptr,
@@ -2133,11 +2169,13 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             {
 
               /* Allocate a new packet.  */
-              _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET,
+              _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr,
+                                      &packet_ptr, NX_TCP_PACKET,
                                       NX_WAIT_FOREVER);
 
               /* Calculate the maximum read size.  */
-              length = ((ULONG)(packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_prepend_ptr)) - NX_PHYSICAL_TRAILER;
+              length = ((ULONG)(packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_prepend_ptr)) -
+                       NX_PHYSICAL_TRAILER;
 
               /* Determine if the length is greater than the connected MSS.  */
               if (length > client_req_ptr -> nx_ftp_client_request_data_socket.nx_tcp_socket_connect_mss)
@@ -2148,7 +2186,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
               }
 
               /* Read a buffer's worth of the file.  */
-              status =  fx_file_read(&(client_req_ptr -> nx_ftp_client_request_file), packet_ptr -> nx_packet_prepend_ptr, length, &length);
+              status =  fx_file_read(&(client_req_ptr -> nx_ftp_client_request_file),
+                                     packet_ptr -> nx_packet_prepend_ptr, length, &length);
 
               /* Determine if the file read was successful.  */
               if (status == FX_SUCCESS)
@@ -2160,7 +2199,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                 packet_ptr -> nx_packet_length =  length;
 
                 /* Setup the packet append pointer.  */
-                packet_ptr -> nx_packet_append_ptr =  packet_ptr -> nx_packet_prepend_ptr + packet_ptr -> nx_packet_length;
+                packet_ptr -> nx_packet_append_ptr =  packet_ptr -> nx_packet_prepend_ptr +
+                                                      packet_ptr -> nx_packet_length;
 
                 /* Send the file data to the client.  */
                 status =  nx_tcp_socket_send(&(client_req_ptr -> nx_ftp_client_request_data_socket),
@@ -2176,7 +2216,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                 {
 
                   /* Update the remaining bytes in the file.  */
-                  client_req_ptr -> nx_ftp_client_request_total_bytes =  client_req_ptr -> nx_ftp_client_request_total_bytes - length;
+                  client_req_ptr -> nx_ftp_client_request_total_bytes =
+                    client_req_ptr -> nx_ftp_client_request_total_bytes - length;
 
                   /* Increment the number of bytes sent.  */
                   ftp_server_ptr -> nx_ftp_server_total_bytes_sent += length;
@@ -2205,7 +2246,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             client_req_ptr -> nx_ftp_client_request_open_type = 0;
 
             /* Allocate a new packet.  */
-            _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET,
+            _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr,
+                                    &packet_ptr, NX_TCP_PACKET,
                                     NX_WAIT_FOREVER);
 
             /* Now determine if the read was a success.  */
@@ -2292,7 +2334,9 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           buffer_ptr[j] =  NX_NULL;
 
           /* Attempt to open the file.  */
-          status =  fx_file_open(ftp_server_ptr -> nx_ftp_server_media_ptr, &(client_req_ptr -> nx_ftp_client_request_file), (CHAR *) buffer_ptr, FX_OPEN_FOR_WRITE);
+          status =  fx_file_open(ftp_server_ptr -> nx_ftp_server_media_ptr,
+                                 &(client_req_ptr -> nx_ftp_client_request_file), (CHAR *) buffer_ptr,
+                                 FX_OPEN_FOR_WRITE);
 
 
           /* Determine if there was an error.  */
@@ -2306,7 +2350,9 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             {
 
               /* Open the new file.  */
-              status =  fx_file_open(ftp_server_ptr -> nx_ftp_server_media_ptr, &(client_req_ptr -> nx_ftp_client_request_file), (CHAR *) buffer_ptr, FX_OPEN_FOR_WRITE);
+              status =  fx_file_open(ftp_server_ptr -> nx_ftp_server_media_ptr,
+                                     &(client_req_ptr -> nx_ftp_client_request_file), (CHAR *) buffer_ptr,
+                                     FX_OPEN_FOR_WRITE);
             }
           }
 
@@ -2322,8 +2368,10 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             {
 
               /* Create an FTP client data socket.  */
-              status =  nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr, &(client_req_ptr -> nx_ftp_client_request_data_socket), "FTP Server Data Socket",
-                                             NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION, NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE, NX_NULL,
+              status =  nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr,
+                                             &(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                             "FTP Server Data Socket", NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION,
+                                             NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE, NX_NULL,
                                              _nx_ftp_server_data_disconnect);
 
               /* If no error is present, register the receive notify function.  */
@@ -2338,19 +2386,23 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                                              _nx_ftp_server_data_present);
 
                 /* Bind the socket to the FTP server data port.  */
-                status =  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_FTP_SERVER_DATA_PORT, NX_NO_WAIT);
+                status =  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                                    NX_FTP_SERVER_DATA_PORT, NX_NO_WAIT);
 
                 /* Determine if the socket was bound.  */
                 if (status)
                 {
 
                   /* FTP server data port is busy, use any data port. */
-                  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_ANY_PORT, NX_NO_WAIT);
+                  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                            NX_ANY_PORT, NX_NO_WAIT);
                 }
                 /* Now attempt to connect the data port to the client's data port.  */
                 status =  nxd_tcp_client_socket_connect(&(client_req_ptr -> nx_ftp_client_request_data_socket),
-                                                        &(client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip),
-                                                        client_req_ptr -> nx_ftp_client_request_data_port, NX_FTP_SERVER_TIMEOUT);
+                                                        &(client_req_ptr -> nx_ftp_client_request_control_socket
+                                                          .nx_tcp_socket_connect_ip),
+                                                        client_req_ptr -> nx_ftp_client_request_data_port,
+                                                        NX_FTP_SERVER_TIMEOUT);
 
 
                 /* Check for connect error.  */
@@ -2365,7 +2417,7 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
 
                   /* Flush the media.  */
                   fx_media_flush(ftp_server_ptr -> nx_ftp_server_media_ptr);
-#endif
+#endif /* NX_FTP_FAULT_TOLERANT */
                 }
                 else
                 {
@@ -2473,7 +2525,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             client_req_ptr -> nx_ftp_client_request_packet =  packet_ptr;
 
             /* Allocate a new packet.  */
-            _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET,
+            _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr,
+                                    &packet_ptr, NX_TCP_PACKET,
                                     NX_WAIT_FOREVER);
 
             /* Now send a successful response to the client.  */
@@ -2539,19 +2592,24 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           buffer_ptr[j] =  NX_NULL;
 
           /* Rename the file.  */
-          status =  fx_file_rename(ftp_server_ptr -> nx_ftp_server_media_ptr, (CHAR *)(client_req_ptr -> nx_ftp_client_request_packet) -> nx_packet_prepend_ptr, (CHAR *) buffer_ptr);
+          status =  fx_file_rename(ftp_server_ptr -> nx_ftp_server_media_ptr,
+                                   (CHAR *)(client_req_ptr -> nx_ftp_client_request_packet) -> nx_packet_prepend_ptr,
+                                   (CHAR *) buffer_ptr);
 
           /* If not a file, rename the directory.  */
           if (status == FX_NOT_A_FILE)
           {
-            status =   fx_directory_rename(ftp_server_ptr -> nx_ftp_server_media_ptr, (CHAR *)(client_req_ptr -> nx_ftp_client_request_packet) -> nx_packet_prepend_ptr, (CHAR *) buffer_ptr);
+            status =   fx_directory_rename(
+                         ftp_server_ptr -> nx_ftp_server_media_ptr,
+                         (CHAR *)(client_req_ptr -> nx_ftp_client_request_packet) -> nx_packet_prepend_ptr,
+                         (CHAR *) buffer_ptr);
           }
 
 #ifdef NX_FTP_FAULT_TOLERANT
 
           /* Flush the media.  */
           fx_media_flush(ftp_server_ptr -> nx_ftp_server_media_ptr);
-#endif
+#endif /* NX_FTP_FAULT_TOLERANT */
 
           /* Release the packet in the client request structure.  */
           nx_packet_release(client_req_ptr -> nx_ftp_client_request_packet);
@@ -2626,7 +2684,7 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
 
           /* Flush the media.  */
           fx_media_flush(ftp_server_ptr -> nx_ftp_server_media_ptr);
-#endif
+#endif /* NX_FTP_FAULT_TOLERANT */
 
           /* Determine if it was successful.  */
           if (status == NX_SUCCESS)
@@ -2703,7 +2761,7 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
 
           /* Flush the media.  */
           fx_media_flush(ftp_server_ptr -> nx_ftp_server_media_ptr);
-#endif
+#endif /* NX_FTP_FAULT_TOLERANT */
 
           /* Determine if it was successful.  */
           if (status == NX_SUCCESS)
@@ -2780,7 +2838,7 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
 
           /* Flush the media.  */
           fx_media_flush(ftp_server_ptr -> nx_ftp_server_media_ptr);
-#endif
+#endif /* NX_FTP_FAULT_TOLERANT */
 
           /* Determine if it was successful.  */
           if (status == NX_SUCCESS)
@@ -2792,7 +2850,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             /* Successful create directory.  */
 
             /* Change the path to the new directory, using a temporary directory structure */
-            status =  fx_directory_local_path_set(ftp_server_ptr -> nx_ftp_server_media_ptr, &temporary_path, (CHAR *) buffer_ptr);
+            status =  fx_directory_local_path_set(ftp_server_ptr -> nx_ftp_server_media_ptr, &temporary_path,
+                                                  (CHAR *) buffer_ptr);
 
             /* Determine if it was successful.  */
             if (status == NX_SUCCESS)
@@ -2899,7 +2958,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             buffer_ptr[j] =  NX_NULL;
 
             /* Set the path to the supplied directory.  */
-            status =  fx_directory_local_path_set(ftp_server_ptr -> nx_ftp_server_media_ptr, &temp_path, (CHAR *) buffer_ptr);
+            status =  fx_directory_local_path_set(ftp_server_ptr -> nx_ftp_server_media_ptr, &temp_path,
+                                                  (CHAR *) buffer_ptr);
           }
           else
           {
@@ -2921,7 +2981,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             {
 
               /* Now wait for the data connection to connect.  */
-              status = nx_tcp_socket_state_wait(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_TCP_ESTABLISHED, NX_FTP_SERVER_TIMEOUT);
+              status = nx_tcp_socket_state_wait(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                                NX_TCP_ESTABLISHED, NX_FTP_SERVER_TIMEOUT);
 
               /* Check for connect error.  */
               if (status)
@@ -2939,8 +3000,10 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             {
 
               /* Create an FTP client data socket.  */
-              status =  nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr, &(client_req_ptr -> nx_ftp_client_request_data_socket), "FTP Server Data Socket",
-                                             NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION, NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE, NX_NULL, NX_NULL);
+              status =  nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr,
+                                             &(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                             "FTP Server Data Socket", NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION,
+                                             NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE, NX_NULL, NX_NULL);
 
               /* If no error is present, register the receive notify function.  */
               if (status == NX_SUCCESS)
@@ -2950,19 +3013,23 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                 client_req_ptr -> nx_ftp_client_request_data_socket.nx_tcp_socket_reserved_ptr =  ftp_server_ptr;
 
                 /* Bind the socket to the FTP server data port.  */
-                status =  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_FTP_SERVER_DATA_PORT, NX_NO_WAIT);
+                status =  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                                    NX_FTP_SERVER_DATA_PORT, NX_NO_WAIT);
 
                 /* Determine if the socket was bound.  */
                 if (status)
                 {
 
                   /* FTP server data port is busy, use any data port. */
-                  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_ANY_PORT, NX_NO_WAIT);
+                  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                            NX_ANY_PORT, NX_NO_WAIT);
                 }
                 /* Now attempt to connect the data port to the client's data port.  */
                 status =  nxd_tcp_client_socket_connect(&(client_req_ptr -> nx_ftp_client_request_data_socket),
-                                                        &(client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip),
-                                                        client_req_ptr -> nx_ftp_client_request_data_port, NX_FTP_SERVER_TIMEOUT);
+                                                        &(client_req_ptr -> nx_ftp_client_request_control_socket
+                                                          .nx_tcp_socket_connect_ip),
+                                                        client_req_ptr -> nx_ftp_client_request_data_port,
+                                                        NX_FTP_SERVER_TIMEOUT);
 
 
                 /* Check for connect error.  */
@@ -3008,15 +3075,18 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
               /* Send start block header for file size.  */
               if (block_size)
               {
-                _nx_ftp_server_block_header_send(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, block_size);
+                _nx_ftp_server_block_header_send(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr,
+                                                 client_req_ptr, block_size);
               }
             }
 
             /* Allocate a new packet.  */
-            status =  _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET, NX_WAIT_FOREVER);
+            status =  _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr,
+                                              &packet_ptr, NX_TCP_PACKET, NX_WAIT_FOREVER);
 
             /* Calculate the remaining length.  */
-            remaining_length = (ULONG)((packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_append_ptr) - NX_PHYSICAL_TRAILER);
+            remaining_length = (ULONG)((packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_append_ptr) -
+                                       NX_PHYSICAL_TRAILER);
 
             /* Determine if the advertised MSS is even less.  */
             if (remaining_length > client_req_ptr -> nx_ftp_client_request_data_socket.nx_tcp_socket_connect_mss)
@@ -3038,7 +3108,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
 
                 /* First directory entry.  */
                 status =  fx_directory_first_full_entry_find(ftp_server_ptr -> nx_ftp_server_media_ptr, filename,
-                                                             &attributes, &size, &year, &month, &day, &hour, &minute, &second);
+                                                             &attributes, &size, &year, &month, &day, &hour, &minute,
+                                                             &second);
 
               }
               else
@@ -3046,7 +3117,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
 
                 /* Not the first entry - pickup the next!  */
                 status =  fx_directory_next_full_entry_find(ftp_server_ptr -> nx_ftp_server_media_ptr, filename,
-                                                            &attributes, &size, &year, &month, &day, &hour, &minute, &second);
+                                                            &attributes, &size, &year, &month, &day, &hour, &minute,
+                                                            &second);
 
               }
 
@@ -3091,7 +3163,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                   }
 
                   /* Allocate a new packet.  */
-                  status =  _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET, NX_WAIT_FOREVER);
+                  status =  _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr,
+                                                    client_req_ptr, &packet_ptr, NX_TCP_PACKET, NX_WAIT_FOREVER);
 
                   /* Determine if the packet allocate was successful.  */
                   if (status)
@@ -3102,7 +3175,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                   }
 
                   /* Calculate the remaining length.  */
-                  remaining_length = (ULONG)((packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_append_ptr) - NX_PHYSICAL_TRAILER);
+                  remaining_length = (ULONG)((packet_ptr -> nx_packet_data_end -
+                                              packet_ptr -> nx_packet_append_ptr) - NX_PHYSICAL_TRAILER);
 
                   /* Determine if the advertised MSS is even less.  */
                   if (remaining_length > client_req_ptr -> nx_ftp_client_request_data_socket.nx_tcp_socket_connect_mss)
@@ -3169,7 +3243,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             _nx_ftp_server_data_socket_cleanup(ftp_server_ptr, client_req_ptr);
 
             /* Allocate a new packet.  */
-            _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET,
+            _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr,
+                                    &packet_ptr, NX_TCP_PACKET,
                                     NX_WAIT_FOREVER);
 
             /* Now determine if the directory listing was a success (e..g runs until no more entries found).  */
@@ -3232,7 +3307,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           }
 
           /* Change to the default directory of this connection.  */
-          status = fx_directory_local_path_restore(ftp_server_ptr -> nx_ftp_server_media_ptr, &(client_req_ptr -> nx_ftp_client_local_path));
+          status = fx_directory_local_path_restore(ftp_server_ptr -> nx_ftp_server_media_ptr,
+                                                   &(client_req_ptr -> nx_ftp_client_local_path));
 
           /* Setup pointer to packet buffer area.  */
           buffer_ptr =  packet_ptr -> nx_packet_prepend_ptr;
@@ -3276,7 +3352,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             buffer_ptr[j] =  NX_NULL;
 
             /* Set the path to the supplied directory.  */
-            status =  fx_directory_local_path_set(ftp_server_ptr -> nx_ftp_server_media_ptr, &temp_path, (CHAR *) buffer_ptr);
+            status =  fx_directory_local_path_set(ftp_server_ptr -> nx_ftp_server_media_ptr, &temp_path,
+                                                  (CHAR *) buffer_ptr);
 
             /* Determine if the path setup was unsuccessful.  */
             if (status)
@@ -3335,7 +3412,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             {
 
               /* Now wait for the data connection to connect.  */
-              status = nx_tcp_socket_state_wait(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_TCP_ESTABLISHED, NX_FTP_SERVER_TIMEOUT);
+              status = nx_tcp_socket_state_wait(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                                NX_TCP_ESTABLISHED, NX_FTP_SERVER_TIMEOUT);
 
               /* Check for connect error.  */
               if (status)
@@ -3353,8 +3431,10 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             {
 
               /* Create an FTP client data socket.  */
-              status =  nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr, &(client_req_ptr -> nx_ftp_client_request_data_socket), "FTP Server Data Socket",
-                                             NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION, NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE, NX_NULL, NX_NULL);
+              status =  nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr,
+                                             &(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                             "FTP Server Data Socket", NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION,
+                                             NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE, NX_NULL, NX_NULL);
 
               /* If no error is present, register the receive notify function.  */
               if (status == NX_SUCCESS)
@@ -3364,20 +3444,24 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                 client_req_ptr -> nx_ftp_client_request_data_socket.nx_tcp_socket_reserved_ptr =  ftp_server_ptr;
 
                 /* Bind the socket to the FTP server data port.  */
-                status =  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_FTP_SERVER_DATA_PORT, NX_NO_WAIT);
+                status =  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                                    NX_FTP_SERVER_DATA_PORT, NX_NO_WAIT);
 
                 /* Determine if the socket was bound.  */
                 if (status)
                 {
 
                   /* FTP server data port is busy, use any data port. */
-                  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_ANY_PORT, NX_NO_WAIT);
+                  nx_tcp_client_socket_bind(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                            NX_ANY_PORT, NX_NO_WAIT);
                 }
 
                 /* Now attempt to connect the data port to the client's data port.  */
                 status =  nxd_tcp_client_socket_connect(&(client_req_ptr -> nx_ftp_client_request_data_socket),
-                                                        &(client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip),
-                                                        client_req_ptr -> nx_ftp_client_request_data_port, NX_FTP_SERVER_TIMEOUT);
+                                                        &(client_req_ptr -> nx_ftp_client_request_control_socket
+                                                          .nx_tcp_socket_connect_ip),
+                                                        client_req_ptr -> nx_ftp_client_request_data_port,
+                                                        NX_FTP_SERVER_TIMEOUT);
 
 
                 /* Check for connect error.  */
@@ -3423,15 +3507,18 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
               /* Send start block header for file size.  */
               if (block_size)
               {
-                _nx_ftp_server_block_header_send(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, block_size);
+                _nx_ftp_server_block_header_send(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr,
+                                                 client_req_ptr, block_size);
               }
             }
 
             /* Allocate a new packet.  */
-            status =  _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET, NX_WAIT_FOREVER);
+            status =  _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr,
+                                              &packet_ptr, NX_TCP_PACKET, NX_WAIT_FOREVER);
 
             /* Calculate the remaining length.  */
-            remaining_length = (ULONG)((packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_append_ptr) - NX_PHYSICAL_TRAILER);
+            remaining_length = (ULONG)((packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_append_ptr) -
+                                       NX_PHYSICAL_TRAILER);
 
             /* Determine if the advertised MSS is even less.  */
             if (remaining_length > client_req_ptr -> nx_ftp_client_request_data_socket.nx_tcp_socket_connect_mss)
@@ -3458,7 +3545,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
 
                   /* First directory entry.  */
                   status =  fx_directory_first_full_entry_find(ftp_server_ptr -> nx_ftp_server_media_ptr, filename,
-                                                               &attributes, &size, &year, &month, &day, &hour, &minute, &second);
+                                                               &attributes, &size, &year, &month, &day, &hour, &minute,
+                                                               &second);
 
                 }
                 else
@@ -3466,7 +3554,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
 
                   /* Not the first entry - pickup the next!  */
                   status =  fx_directory_next_full_entry_find(ftp_server_ptr -> nx_ftp_server_media_ptr, filename,
-                                                              &attributes, &size, &year, &month, &day, &hour, &minute, &second);
+                                                              &attributes, &size, &year, &month, &day, &hour, &minute,
+                                                              &second);
 
                 }
               }
@@ -3522,7 +3611,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                   /* Send the current buffer out.  */
 
                   /* Send the directory data to the client.  */
-                  status =  nx_tcp_socket_send(&(client_req_ptr -> nx_ftp_client_request_data_socket), packet_ptr, NX_FTP_SERVER_TIMEOUT);
+                  status =  nx_tcp_socket_send(&(client_req_ptr -> nx_ftp_client_request_data_socket), packet_ptr,
+                                               NX_FTP_SERVER_TIMEOUT);
 
                   /* Determine if the send was unsuccessful.  */
                   if (status)
@@ -3533,7 +3623,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                   }
 
                   /* Allocate a new packet.  */
-                  status =  _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET, NX_WAIT_FOREVER);
+                  status =  _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr,
+                                                    client_req_ptr, &packet_ptr, NX_TCP_PACKET, NX_WAIT_FOREVER);
 
                   /* Determine if the packet allocate was successful.  */
                   if (status)
@@ -3544,7 +3635,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
                   }
 
                   /* Calculate the remaining length.  */
-                  remaining_length = (ULONG)((packet_ptr -> nx_packet_data_end - packet_ptr -> nx_packet_append_ptr) - NX_PHYSICAL_TRAILER);
+                  remaining_length = (ULONG)((packet_ptr -> nx_packet_data_end -
+                                              packet_ptr -> nx_packet_append_ptr) - NX_PHYSICAL_TRAILER);
 
                   /* Determine if the advertised MSS is even less.  */
                   if (remaining_length > client_req_ptr -> nx_ftp_client_request_data_socket.nx_tcp_socket_connect_mss)
@@ -3639,7 +3731,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
             _nx_ftp_server_data_socket_cleanup(ftp_server_ptr, client_req_ptr);
 
             /* Allocate a new packet.  */
-            _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET,
+            _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr,
+                                    &packet_ptr, NX_TCP_PACKET,
                                     NX_WAIT_FOREVER);
 
             /* Now determine if the directory listing was a success.  */
@@ -3679,7 +3772,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
 
 
           /* Check that only IPv4 packets can use the PORT command. */
-          if (client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_version == NX_IP_VERSION_V6)
+          if (client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_version ==
+              NX_IP_VERSION_V6)
           {
             /* Illegal PORT command.  */
 
@@ -3861,8 +3955,10 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           }
 
           /* Create an FTP client data socket.  */
-          status = nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr, &(client_req_ptr -> nx_ftp_client_request_data_socket), "FTP Server Data Socket",
-                                        NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION, NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE, NX_NULL,
+          status = nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr,
+                                        &(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                        "FTP Server Data Socket", NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION,
+                                        NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE, NX_NULL,
                                         _nx_ftp_server_data_disconnect);
 
           /* Determine if the listen is successful.  */
@@ -3880,7 +3976,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           }
 
           /* Register the receive function.  */
-          nx_tcp_socket_receive_notify(&(client_req_ptr -> nx_ftp_client_request_data_socket), _nx_ftp_server_data_present);
+          nx_tcp_socket_receive_notify(&(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                       _nx_ftp_server_data_present);
 
           /* Setup the data port with a specific packet transmit retry logic.  */
           nx_tcp_socket_transmit_configure(&(client_req_ptr -> nx_ftp_client_request_data_socket),
@@ -3893,7 +3990,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           client_req_ptr -> nx_ftp_client_request_data_socket.nx_tcp_socket_reserved_ptr =  ftp_server_ptr;
 
           /* Start listening on the data port.  */
-          status = nx_tcp_server_socket_listen(ftp_server_ptr -> nx_ftp_server_ip_ptr, port, &(client_req_ptr -> nx_ftp_client_request_data_socket), 5, 0);
+          status = nx_tcp_server_socket_listen(ftp_server_ptr -> nx_ftp_server_ip_ptr, port,
+                                               &(client_req_ptr -> nx_ftp_client_request_data_socket), 5, 0);
 
           /* Determine if the listen is successful.  */
           if (status != NX_SUCCESS)
@@ -3916,7 +4014,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           nx_tcp_server_socket_accept(&(client_req_ptr -> nx_ftp_client_request_data_socket), NX_NO_WAIT);
 
           /* Pickup the IPv4 address of this IP instance.  */
-          ip_address =  client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_interface -> nx_interface_ip_address;
+          ip_address =  client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_interface ->
+                        nx_interface_ip_address;
 
           /* Reset the packet prepend pointer for alignment.  */
           packet_ptr -> nx_packet_prepend_ptr = packet_ptr -> nx_packet_data_start + NX_TCP_PACKET;
@@ -3970,7 +4069,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           packet_ptr -> nx_packet_append_ptr = packet_ptr -> nx_packet_prepend_ptr + packet_ptr -> nx_packet_length;
 
           /* Send the PASV response message.  */
-          status =  nx_tcp_socket_send(&(client_req_ptr -> nx_ftp_client_request_control_socket), packet_ptr, NX_FTP_SERVER_TIMEOUT);
+          status =  nx_tcp_socket_send(&(client_req_ptr -> nx_ftp_client_request_control_socket), packet_ptr,
+                                       NX_FTP_SERVER_TIMEOUT);
 
           /* Determine if the send was unsuccessful.  */
           if (status != NX_SUCCESS)
@@ -4013,7 +4113,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           buffer_ptr =  packet_ptr -> nx_packet_prepend_ptr;
 
           /* First, pickup the IPv6 address.  */
-          status = _nx_ftp_utility_parse_IPv6_address((CHAR *)buffer_ptr, packet_ptr -> nx_packet_length, &ipduo_address);
+          status = _nx_ftp_utility_parse_IPv6_address((CHAR *)buffer_ptr, packet_ptr -> nx_packet_length,
+                                                      &ipduo_address);
 
           if (status != NX_SUCCESS)
           {
@@ -4084,8 +4185,10 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           }
 
           /* Create an FTP client data socket.  */
-          status = nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr, &(client_req_ptr -> nx_ftp_client_request_data_socket), "FTP Server Data Socket",
-                                        NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION, NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE, NX_NULL,
+          status = nx_tcp_socket_create(ftp_server_ptr -> nx_ftp_server_ip_ptr,
+                                        &(client_req_ptr -> nx_ftp_client_request_data_socket),
+                                        "FTP Server Data Socket", NX_FTP_DATA_TOS, NX_FTP_FRAGMENT_OPTION,
+                                        NX_FTP_TIME_TO_LIVE, NX_FTP_DATA_WINDOW_SIZE, NX_NULL,
                                         _nx_ftp_server_data_disconnect);
 
           /* Determine if the listen is successful.  */
@@ -4106,7 +4209,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           client_req_ptr -> nx_ftp_client_request_data_socket.nx_tcp_socket_reserved_ptr =  ftp_server_ptr;
 
           /* Start listening on the data port.  */
-          status = nx_tcp_server_socket_listen(ftp_server_ptr -> nx_ftp_server_ip_ptr, port, &(client_req_ptr -> nx_ftp_client_request_data_socket), 5, 0);
+          status = nx_tcp_server_socket_listen(ftp_server_ptr -> nx_ftp_server_ip_ptr, port,
+                                               &(client_req_ptr -> nx_ftp_client_request_data_socket), 5, 0);
 
           /* Determine if the listen is successful.  */
           if (status != NX_SUCCESS)
@@ -4177,7 +4281,8 @@ VOID  _nx_ftp_server_command_process(NX_FTP_SERVER *ftp_server_ptr)
           packet_ptr -> nx_packet_append_ptr = packet_ptr -> nx_packet_prepend_ptr + packet_ptr -> nx_packet_length;
 
           /* Send the EPSV response message.  */
-          status =  nx_tcp_socket_send(&(client_req_ptr -> nx_ftp_client_request_control_socket), packet_ptr, NX_FTP_SERVER_TIMEOUT);
+          status =  nx_tcp_socket_send(&(client_req_ptr -> nx_ftp_client_request_control_socket), packet_ptr,
+                                       NX_FTP_SERVER_TIMEOUT);
 
           /* Determine if the send was unsuccessful.  */
           if (status != NX_SUCCESS)
@@ -4494,7 +4599,8 @@ VOID  _nx_ftp_server_connect_process(NX_FTP_SERVER *ftp_server_ptr)
       ftp_server_ptr -> nx_ftp_server_connection_requests++;
 
       /* Attempt to accept on this socket.  */
-      status = nx_tcp_server_socket_accept(&(client_req_ptr -> nx_ftp_client_request_control_socket), NX_FTP_SERVER_TIMEOUT);
+      status = nx_tcp_server_socket_accept(&(client_req_ptr -> nx_ftp_client_request_control_socket),
+                                           NX_FTP_SERVER_TIMEOUT);
 
       /* Determine if it is successful.  */
       if (status)
@@ -4507,7 +4613,8 @@ VOID  _nx_ftp_server_connect_process(NX_FTP_SERVER *ftp_server_ptr)
       {
 
         /* Set the request type.  */
-        if (client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_version == NX_IP_VERSION_V6)
+        if (client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_version ==
+            NX_IP_VERSION_V6)
         {
 
           client_req_ptr -> nx_ftp_client_request_ip_type = NX_IP_VERSION_V6;
@@ -4524,7 +4631,8 @@ VOID  _nx_ftp_server_connect_process(NX_FTP_SERVER *ftp_server_ptr)
            has been established.  */
 
         /* Allocate a packet for sending the connection ACK.  */
-        status =  _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET, NX_FTP_SERVER_TIMEOUT);
+        status =  _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr,
+                                          &packet_ptr, NX_TCP_PACKET, NX_FTP_SERVER_TIMEOUT);
 
         /* Determine if the packet allocation was successful.  */
         if (status == NX_SUCCESS)
@@ -4535,7 +4643,8 @@ VOID  _nx_ftp_server_connect_process(NX_FTP_SERVER *ftp_server_ptr)
                                   NX_FTP_CODE_CONNECTION_OK, "Connection Ready");
 
           /* Set the local path to the root directory.  */
-          fx_directory_local_path_set(ftp_server_ptr -> nx_ftp_server_media_ptr, &(client_req_ptr -> nx_ftp_client_local_path),
+          fx_directory_local_path_set(ftp_server_ptr -> nx_ftp_server_media_ptr,
+                                      &(client_req_ptr -> nx_ftp_client_local_path),
                                       "\\");
         }
         else
@@ -4850,7 +4959,8 @@ VOID  _nx_ftp_server_data_disconnect_process(NX_FTP_SERVER *ftp_server_ptr)
         length = (ULONG)client_req_ptr -> nx_ftp_client_request_file.fx_file_current_file_size;
 
         /* Allocate a packet for sending the file write response.  */
-        _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr, &packet_ptr, NX_TCP_PACKET,
+        _nx_ftp_packet_allocate(ftp_server_ptr -> nx_ftp_server_packet_pool_ptr, client_req_ptr,
+                                &packet_ptr, NX_TCP_PACKET,
                                 NX_WAIT_FOREVER);
 
         /* Now determine if the operation was successful.  */
@@ -5053,8 +5163,10 @@ VOID  _nx_ftp_server_data_process(NX_FTP_SERVER *ftp_server_ptr)
       {
 
         /* Write to the already opened file.  */
-        status = fx_file_write(&(client_req_ptr -> nx_ftp_client_request_file), next_packet_ptr -> nx_packet_prepend_ptr,
-                               (ULONG)((next_packet_ptr -> nx_packet_append_ptr - next_packet_ptr -> nx_packet_prepend_ptr)));
+        status = fx_file_write(&(client_req_ptr -> nx_ftp_client_request_file),
+                               next_packet_ptr -> nx_packet_prepend_ptr,
+                               (ULONG)(next_packet_ptr -> nx_packet_append_ptr -
+                                       next_packet_ptr -> nx_packet_prepend_ptr));
 
         /* If unsuccessful file write, ok to receive the rest of the socket
            packets from the receive queue. */
@@ -5443,7 +5555,8 @@ VOID  _nx_ftp_server_timeout_processing(NX_FTP_SERVER *ftp_server_ptr)
       /* Decrement the activity timeout for this client request.  */
       if (client_req_ptr -> nx_ftp_client_request_activity_timeout > NX_FTP_TIMEOUT_PERIOD)
       {
-        client_req_ptr -> nx_ftp_client_request_activity_timeout =  client_req_ptr -> nx_ftp_client_request_activity_timeout - NX_FTP_TIMEOUT_PERIOD;
+        client_req_ptr -> nx_ftp_client_request_activity_timeout =
+          client_req_ptr -> nx_ftp_client_request_activity_timeout - NX_FTP_TIMEOUT_PERIOD;
       }
       else
         client_req_ptr -> nx_ftp_client_request_activity_timeout =  0;
@@ -5456,7 +5569,8 @@ VOID  _nx_ftp_server_timeout_processing(NX_FTP_SERVER *ftp_server_ptr)
            entire client request structure.  */
         /* save client IP and port for the application cb */
 #ifndef NX_DISABLE_IPV4
-        ULONG IPv4IP = client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_address.v4;
+        ULONG IPv4IP = client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip
+                       .nxd_ip_address.v4;
 #endif /* NX_DISABLE_IPV4 */
         NXD_ADDRESS  IPv6IP = client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip;
         UINT port = client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_port;
@@ -5692,8 +5806,10 @@ VOID  _nx_ftp_server_control_disconnect_processing(NX_FTP_SERVER *ftp_server_ptr
 
           /* Call the logout which takes IPv4 address input. */
           (ftp_server_ptr -> nx_ftp_logout_ipv4)(ftp_server_ptr,
-                                                 client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip.nxd_ip_address.v4,
-                                                 client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_port,
+                                                 client_req_ptr -> nx_ftp_client_request_control_socket
+                                                 .nx_tcp_socket_connect_ip.nxd_ip_address.v4,
+                                                 client_req_ptr -> nx_ftp_client_request_control_socket
+                                                 .nx_tcp_socket_connect_port,
                                                  client_req_ptr -> nx_ftp_client_request_username,
                                                  client_req_ptr -> nx_ftp_client_request_password, NX_NULL);
         }
@@ -5703,8 +5819,10 @@ VOID  _nx_ftp_server_control_disconnect_processing(NX_FTP_SERVER *ftp_server_ptr
 
           /* Call the 'duo' logout function which takes IPv6 or IPv4 IP addresses. */
           (ftp_server_ptr -> nx_ftp_logout)(ftp_server_ptr,
-                                            &(client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_ip),
-                                            client_req_ptr -> nx_ftp_client_request_control_socket.nx_tcp_socket_connect_port,
+                                            &(client_req_ptr -> nx_ftp_client_request_control_socket
+                                              .nx_tcp_socket_connect_ip),
+                                            client_req_ptr -> nx_ftp_client_request_control_socket
+                                            .nx_tcp_socket_connect_port,
                                             client_req_ptr -> nx_ftp_client_request_username,
                                             client_req_ptr -> nx_ftp_client_request_password, NX_NULL);
         }
@@ -6632,7 +6750,8 @@ UINT  _nx_ftp_server_block_header_send(NX_PACKET_POOL *pool_ptr, NX_FTP_CLIENT_R
   packet_ptr -> nx_packet_append_ptr =  packet_ptr -> nx_packet_prepend_ptr + packet_ptr -> nx_packet_length;
 
   /* Write packet payload to the file.  */
-  status =  nx_tcp_socket_send(&(client_request_ptr -> nx_ftp_client_request_data_socket), packet_ptr, NX_FTP_SERVER_TIMEOUT);
+  status =  nx_tcp_socket_send(&(client_request_ptr -> nx_ftp_client_request_data_socket), packet_ptr,
+                               NX_FTP_SERVER_TIMEOUT);
 
   /* Determine if the send was unsuccessful.  */
   if (status)
@@ -6725,7 +6844,8 @@ UINT  _nx_ftp_server_block_header_retrieve(NX_FTP_CLIENT_REQUEST *ftp_client_ptr
   }
 
   /* Check if have remaining data.  */
-  remaining_bytes = ftp_client_ptr -> nx_ftp_client_request_block_bytes - ftp_client_ptr -> nx_ftp_client_request_total_bytes;
+  remaining_bytes = ftp_client_ptr -> nx_ftp_client_request_block_bytes -
+                    ftp_client_ptr -> nx_ftp_client_request_total_bytes;
   if (remaining_bytes == 0)
   {
 
@@ -6987,7 +7107,7 @@ VOID _nx_ftp_server_data_socket_cleanup(NX_FTP_SERVER *ftp_server_ptr, NX_FTP_CL
 
   /* Flush the media.  */
   fx_media_flush(ftp_server_ptr -> nx_ftp_server_media_ptr);
-#endif
+#endif /* NX_FTP_FAULT_TOLERANT */
 
   /* Clear the passive transfer enabled flag.  */
   client_req_ptr -> nx_ftp_client_request_passive_transfer_enabled = NX_FALSE;

@@ -111,7 +111,7 @@
 #ifdef ENABLE_THREADX_DBG_PIN
 #include <stdlib.h>
 #define TX_THREAD_USER_EXTENSION          int32_t pxTaskTag;
-#endif
+#endif /* defined(ENABLE_THREADX_DBG_PIN) */
 
 
 #define TX_MAX_PRIORITIES               32
@@ -121,7 +121,7 @@
 
 #ifdef ENABLE_THREADX_DBG_PIN
 #define TX_EXECUTION_PROFILE_ENABLE
-#endif
+#endif /* defined(ENABLE_THREADX_DBG_PIN) */
 
 /* Determine if timer expirations (application timers, timeouts, and tx_thread_sleep calls
  should be processed within the a system timer thread or directly in the timer ISR.
@@ -271,7 +271,7 @@
 #ifdef __ICCARM__
 /* Define if the IAR library is supported. */
 /*#define TX_ENABLE_IAR_LIBRARY_SUPPORT*/
-#endif
+#endif /* defined(__ICCARM__) */
 
 /* Define if the safety critical configuration is enabled. */
 
@@ -281,5 +281,5 @@
 
 /* USER CODE END 2 */
 
-#endif
+#endif /* !defined(TX_USER_H) */
 

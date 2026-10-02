@@ -181,9 +181,11 @@ void MX_ADC1_CustomInit(ADC_InitUsedDef ADC_InitFor)
     /* Oversampling enabled */
     hadc1.Init.OversamplingMode = DISABLE;
 
-    hadc1.Init.Oversampling.RightBitShift         = ADC_RIGHTBITSHIFT_NONE;         /* Right shift of the oversampled summation */
-    hadc1.Init.Oversampling.TriggeredMode         = ADC_TRIGGEREDMODE_SINGLE_TRIGGER;         /* Specifies whether or not a trigger is needed for each sample */
-    hadc1.Init.Oversampling.OversamplingStopReset = ADC_REGOVERSAMPLING_CONTINUED_MODE; /* Specifies whether or not the oversampling buffer is maintained during injection sequence */
+    hadc1.Init.Oversampling.RightBitShift = ADC_RIGHTBITSHIFT_NONE; /* Right shift of the oversampled summation */
+    hadc1.Init.Oversampling.TriggeredMode = ADC_TRIGGEREDMODE_SINGLE_TRIGGER;
+    /* Specifies whether or not a trigger is needed for each sample */
+    hadc1.Init.Oversampling.OversamplingStopReset = ADC_REGOVERSAMPLING_CONTINUED_MODE;
+    /* Specifies whether or not the oversampling buffer is maintained during injection sequence */
     hadc1.Init.DFSDMConfig = ADC_DFSDM_MODE_ENABLE;
 
     if (HAL_ADC_Init(&hadc1) != HAL_OK)

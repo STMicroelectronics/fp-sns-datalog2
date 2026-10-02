@@ -151,15 +151,23 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   PnPLSetAllocationFunctions(SysAlloc, SysFree);
 
   /************ Allocate task objects ************/
-  sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams, &MX_GPIO_PF6InitParams, &MX_GPIO_PB0InitParams, &MX_GPIO_PF8InitParams, &MX_TIM3InitParams, &MX_ADC1InitParams,
-                           &MX_GPIO_UBInitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams);
+  sUtilObj = UtilTaskAlloc(&MX_TIM4InitParams,
+                           &MX_GPIO_PF6InitParams,
+                           &MX_GPIO_PB0InitParams,
+                           &MX_GPIO_PF8InitParams,
+                           &MX_TIM3InitParams,
+                           &MX_ADC1InitParams,
+                           &MX_GPIO_UBInitParams,
+                           &MX_GPIO_LED1InitParams,
+                           &MX_GPIO_LED2InitParams);
   sDatalogAppObj = DatalogAppTaskAlloc();
 
   sSPI3BusObj = SPIBusTaskAlloc(&MX_SPI3InitParams);
   sI2C2BusObj = I2CBusTaskAlloc(&MX_I2C2InitParams);
   sIIS3DWBObj = IIS3DWBTaskAlloc(&MX_GPIO_INT1_DWBInitParams, &MX_GPIO_CS_DWBInitParams);
   sIIS2MDCObj = IIS2MDCTaskAlloc(&MX_GPIO_INT_MAGInitParams, NULL);
-  sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams, &MX_GPIO_CS_DHCXInitParams);
+  sISM330DHCXObj = ISM330DHCXTaskAlloc(&MX_GPIO_INT1_DHCXInitParams, &MX_GPIO_INT2_DHCXInitParams,
+                                       &MX_GPIO_CS_DHCXInitParams);
   sLPS22HHObj = LPS22HHTaskAlloc(NULL, NULL, false);
   sIIS2DHObj = IIS2DHTaskAlloc(NULL, &MX_GPIO_CS_DHInitParams);
   sSTTS751Obj = STTS751TaskAlloc(NULL, NULL);

@@ -44,7 +44,7 @@
 
 #if defined(DEBUG) || defined (SYS_DEBUG)
 #define sObj                                  sUsbXObj
-#endif
+#endif /* defined(DEBUG) || defined (SYS_DEBUG) */
 
 static usbx_dctrl_class_t sObj;
 
@@ -304,12 +304,16 @@ sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, uint8_t comm_inter
   language_id_framework = USBD_Get_Language_Id_Framework(&language_id_framework_length);
 
 #if (USBX_MAJOR_VERSION == 6) && (USBX_MINOR_VERSION >= 2)
-  tx_status = ux_device_stack_initialize(NULL, 0, device_framework_full_speed, device_framework_fs_length, string_framework, string_framework_length,
-                                         language_id_framework, language_id_framework_length, USBD_ChangeFunction);
+  tx_status = ux_device_stack_initialize(NULL, 0, device_framework_full_speed,
+                                         device_framework_fs_length, string_framework,
+                                         string_framework_length, language_id_framework,
+                                         language_id_framework_length, USBD_ChangeFunction);
 #else
-  tx_status = ux_device_stack_initialize(NULL, 0, device_framework_full_speed, device_framework_fs_length, string_framework, string_framework_length,
-                                         language_id_framework, language_id_framework_length, UX_NULL);
-#endif
+  tx_status = ux_device_stack_initialize(NULL, 0, device_framework_full_speed,
+                                         device_framework_fs_length, string_framework,
+                                         string_framework_length, language_id_framework,
+                                         language_id_framework_length, UX_NULL);
+#endif /* (USBX_MAJOR_VERSION == 6) && (USBX_MINOR_VERSION >= 2) */
   /* Check the device stack class status */
   if (tx_status != UX_SUCCESS)
   {
@@ -322,8 +326,9 @@ sys_error_code_t usbx_dctrl_vtblStream_init(IStream_t *_this, uint8_t comm_inter
   PCDDrvSetFIFO((PCDDriver_t *) obj->m_pxDriver, PCD_FIFO_SIZE, PCD_FIFO_RX_EP, PCD_FIFO_CTRL_EP, SS_N_IN_ENDPOINTS);
   PCDDrvSetExtDCD((PCDDriver_t *) obj->m_pxDriver, _ux_dcd_stm32_initialize);
 
-  UX_SLAVE_CLASS_SENSOR_STREAMING_PARAMETER *ss_class_parameter = _ux_utility_memory_allocate(UX_NO_ALIGN, UX_REGULAR_MEMORY,
-                                                                  sizeof(UX_SLAVE_CLASS_SENSOR_STREAMING_PARAMETER));
+  UX_SLAVE_CLASS_SENSOR_STREAMING_PARAMETER *ss_class_parameter =
+    _ux_utility_memory_allocate(UX_NO_ALIGN, UX_REGULAR_MEMORY,
+                                sizeof(UX_SLAVE_CLASS_SENSOR_STREAMING_PARAMETER));
 
   /** Init Sensor Streaming Class **/
   ss_class_parameter->ux_slave_class_sensor_streaming_instance_activate = datalog_class_active;
@@ -394,7 +399,7 @@ sys_error_code_t usbx_dctrl_vtblStream_deinit(IStream_t *_this)
   ux_device_stack_uninitialize();
   ux_system_uninitialize();
 
-  // ToDo: should this be "tx_byte_release()" ??? --> allocation is done with "tx_byte_allocate()"
+  /* ToDo: should this be "tx_byte_release()" ??? --> allocation is done with "tx_byte_allocate()"*/
   _ux_utility_memory_free(obj->memory_pointer);
 
   return res;
@@ -434,7 +439,8 @@ sys_error_code_t usbx_dctrl_vtblStream_post_data(IStream_t *_this, uint8_t id_st
   sys_error_code_t res = SYS_NO_ERROR_CODE;
   usbx_dctrl_class_t *obj = (usbx_dctrl_class_t *) _this;
 
-  if (ux_device_class_sensor_streaming_FillTxDataBuffer(obj->sensor_streaming_device, id_stream, buf, size) != UX_SUCCESS)
+  if (ux_device_class_sensor_streaming_FillTxDataBuffer(obj->sensor_streaming_device,
+                                                        id_stream, buf, size) != UX_SUCCESS)
   {
     res = SYS_BASE_ERROR_CODE;
   }
@@ -452,13 +458,14 @@ sys_error_code_t usbx_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t 
   assert_param(obj->sensor_streaming_device != NULL);
 
   obj->TxBuffer[id_stream] = NULL;
-  obj->TxBuffer[id_stream] = (uint8_t *) SysAlloc((size + SS_HEADER_SIZE) * SS_CH_QUEUE_ITEMS);  /* Double buffer: data + id_stream + pkt counter */
+  obj->TxBuffer[id_stream] = (uint8_t *) SysAlloc((size + SS_HEADER_SIZE) * SS_CH_QUEUE_ITEMS);
+  /* Double buffer: data + id_stream + pkt counter */
 
   if (obj->TxBuffer[id_stream] != NULL)
   {
     ux_device_class_sensor_streaming_SetTxDataBuffer(obj->sensor_streaming_device, id_stream, obj->TxBuffer[id_stream],
                                                      size + SS_HEADER_SIZE, SS_CH_QUEUE_ITEMS);
-    //ux_device_class_sensor_streaming_CleanTxDataBuffer(obj->sensor_streaming_device, id_stream);
+    /*ux_device_class_sensor_streaming_CleanTxDataBuffer(obj->sensor_streaming_device, id_stream);*/
   }
   else
   {

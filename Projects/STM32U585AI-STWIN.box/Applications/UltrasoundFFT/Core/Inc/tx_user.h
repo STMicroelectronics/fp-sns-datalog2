@@ -52,9 +52,9 @@
 #define TX_TIMER_TICKS_PER_SECOND       (1000)
 #define TX_SYSTEM_CLOCK_HZ              (160000000)
 
-//#ifdef DEBUG
-//#define TX_ENABLE_STACK_CHECKING
-//#endif
+/*#ifdef DEBUG*/
+/*#define TX_ENABLE_STACK_CHECKING*/
+/*#endif*/
 
 /* Define various build options for the ThreadX port.  The application should either make changes
  here by commenting or un-commenting the conditional compilation defined OR supply the defines
@@ -96,10 +96,10 @@
 #define TX_TIMER_THREAD_STACK_SIZE      (2*1024)
 #define TX_TIMER_THREAD_PRIORITY        0
 
-//#ifdef ENABLE_THREADX_DBG_PIN
+/*#ifdef ENABLE_THREADX_DBG_PIN*/
 #define TX_THREAD_USER_EXTENSION          UINT pxTaskTag;
-//#define TX_EXECUTION_PROFILE_ENABLE
-//#endif
+/*#define TX_EXECUTION_PROFILE_ENABLE*/
+/*#endif*/
 
 
 /**Determine if timer expirations (application timers, timeouts, and tx_thread_sleep calls
@@ -231,4 +231,4 @@
 
 /*#define TX_SAFETY_CRITICAL*/
 
-#endif
+#endif /* TX_USER_H */

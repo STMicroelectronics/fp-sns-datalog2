@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics..
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -88,13 +88,21 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(BLE_SPI_CS_GPIO_Port, BLE_SPI_CS_Pin, GPIO_PIN_SET);
 
-  /*Configure GPIO pin : PtPin */
+  /*Configure GPIO pins : PE2 PE6 PE14 PE11
+                           LDO_EN_Pin */
+  GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_6 | GPIO_PIN_14 | GPIO_PIN_11
+                        | LDO_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : V4_GOOD_Pin */
   GPIO_InitStruct.Pin = V4_GOOD_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(V4_GOOD_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PGPin PG4 PG0 PG3
+  /*Configure GPIO pins : WIFI_FLOW_Pin PG4 PG0 PG3
                            PG5 */
   GPIO_InitStruct.Pin = WIFI_FLOW_Pin | GPIO_PIN_4 | GPIO_PIN_0 | GPIO_PIN_3
                         | GPIO_PIN_5;
@@ -118,14 +126,14 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PIPin PIPin PIPin */
+  /*Configure GPIO pins : SPI_SEN_CS_G_Pin MCU_SEL_Pin SPI_SEN_CS_A_Pin */
   GPIO_InitStruct.Pin = SPI_SEN_CS_G_Pin | MCU_SEL_Pin | SPI_SEN_CS_A_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB4 PBPin PB2 */
+  /*Configure GPIO pins : PB4 VBATT_Pin PB2 */
   GPIO_InitStruct.Pin = GPIO_PIN_4 | VBATT_Pin | GPIO_PIN_2;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -145,40 +153,40 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOI, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PHPin PHPin PHPin PHPin */
+  /*Configure GPIO pins : LED3_Pin EN_SD_Pin LED2_Pin SEL_SD_V_Pin */
   GPIO_InitStruct.Pin = LED3_Pin | EN_SD_Pin | LED2_Pin | SEL_SD_V_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PEPin PEPin PEPin */
+  /*Configure GPIO pins : MDF1_SDI3_Pin GPIO_JP4_Pin MDF1_SDI2_Pin */
   GPIO_InitStruct.Pin = MDF1_SDI3_Pin | GPIO_JP4_Pin | MDF1_SDI2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
+  /*Configure GPIO pin : V_BT_E1_Pin */
   GPIO_InitStruct.Pin = V_BT_E1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(V_BT_E1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PDPin PDPin */
+  /*Configure GPIO pins : BLE_RST_Pin BT_BOOT_Pin */
   GPIO_InitStruct.Pin = BLE_RST_Pin | BT_BOOT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PEPin PEPin PEPin PEPin */
+  /*Configure GPIO pins : WC_INTB_Pin SW2_Pin PRESS_INT_Pin NFC_GPO_Pin */
   GPIO_InitStruct.Pin = WC_INTB_Pin | SW2_Pin | PRESS_INT_Pin | NFC_GPO_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
+  /*Configure GPIO pin : MDF1_SDI0_Pin */
   GPIO_InitStruct.Pin = MDF1_SDI0_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -194,45 +202,39 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PCPin PCPin PCPin */
+  /*Configure GPIO pins : SW1_Pin BUTTON_PWR_Pin SD_DETECT_Pin */
   GPIO_InitStruct.Pin = SW1_Pin | BUTTON_PWR_Pin | SD_DETECT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PE6 PE14 PE11 PEPin */
-  GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_14 | GPIO_PIN_11 | LDO_EN_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PGPin PGPin */
+  /*Configure GPIO pins : SPI_DUT_CS2_Pin SPI_DUT_CS_Pin */
   GPIO_InitStruct.Pin = SPI_DUT_CS2_Pin | SPI_DUT_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PFPin PFPin PFPin */
+  /*Configure GPIO pins : SW_ON_Pin WC_RSTB_Pin MDF1_CCK_Pin */
   GPIO_InitStruct.Pin = SW_ON_Pin | WC_RSTB_Pin | MDF1_CCK_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PFPin PFPin */
+  /*Configure GPIO pins : USB_ENUM_LED_Pin LED1_Pin */
   GPIO_InitStruct.Pin = USB_ENUM_LED_Pin | LED1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PGPin PGPin */
+  /*Configure GPIO pins : DIL_INT2_Pin DIL_INT1_Pin */
   GPIO_InitStruct.Pin = DIL_INT2_Pin | DIL_INT1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
+  /*Configure GPIO pin : LOCK_1v8_Pin */
   GPIO_InitStruct.Pin = LOCK_1v8_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -259,7 +261,7 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF1_TIM2;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
+  /*Configure GPIO pin : PWM_OUT_T1_C3_Pin */
   GPIO_InitStruct.Pin = PWM_OUT_T1_C3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -267,32 +269,32 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF1_TIM1;
   HAL_GPIO_Init(PWM_OUT_T1_C3_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
+  /*Configure GPIO pin : BLE_INT_Pin */
   GPIO_InitStruct.Pin = BLE_INT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(BLE_INT_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin PB1 */
+  /*Configure GPIO pins : MDF1_SDI1_Pin TEMP_INT_Pin PB1 */
   GPIO_InitStruct.Pin = MDF1_SDI1_Pin | TEMP_INT_Pin | GPIO_PIN_1;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
+  /*Configure GPIO pin : BLE_SPI_CS_Pin */
   GPIO_InitStruct.Pin = BLE_SPI_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(BLE_SPI_CS_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
+  /*Configure GPIO pin : IMU_INT1_Pin */
   GPIO_InitStruct.Pin = IMU_INT1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(IMU_INT1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
+  /*Configure GPIO pin : ACC_INT2_Pin */
   GPIO_InitStruct.Pin = ACC_INT2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;

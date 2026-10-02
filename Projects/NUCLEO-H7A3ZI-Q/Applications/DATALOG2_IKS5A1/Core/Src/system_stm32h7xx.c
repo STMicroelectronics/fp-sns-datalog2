@@ -286,7 +286,8 @@ void SystemInit(void)
 #if defined(DUAL_CORE) && defined(CORE_CM4)
   /* Configure the Vector Table location add offset address for cortex-M4 ------------------*/
 #if defined(USER_VECT_TAB_ADDRESS)
-  SCB->VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal D2 AXI-RAM or in Internal FLASH */
+  SCB->VTOR =
+    VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal D2 AXI-RAM or in Internal FLASH */
 #endif /* USER_VECT_TAB_ADDRESS */
 
 #else
@@ -308,7 +309,8 @@ void SystemInit(void)
 
   /* Configure the Vector Table location -------------------------------------*/
 #if defined(USER_VECT_TAB_ADDRESS)
-  SCB->VTOR = VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal D1 AXI-RAM or in Internal FLASH */
+  SCB->VTOR =
+    VECT_TAB_BASE_ADDRESS | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal D1 AXI-RAM or in Internal FLASH */
 #endif /* USER_VECT_TAB_ADDRESS */
 
 #endif /*DUAL_CORE && CORE_CM4*/
@@ -430,7 +432,8 @@ void SystemCoreClockUpdate(void)
   common_system_clock >>= tmp;
 
   /* SystemD2Clock frequency : CM4 CPU, AXI and AHBs Clock frequency  */
-  SystemD2Clock = (common_system_clock >> ((D1CorePrescTable[(RCC->D1CFGR & RCC_D1CFGR_HPRE) >> RCC_D1CFGR_HPRE_Pos]) & 0x1FU));
+  SystemD2Clock =
+    (common_system_clock >> ((D1CorePrescTable[(RCC->D1CFGR & RCC_D1CFGR_HPRE) >> RCC_D1CFGR_HPRE_Pos]) & 0x1FU));
 
 #else
   tmp = D1CorePrescTable[(RCC->CDCFGR1 & RCC_CDCFGR1_CDCPRE) >> RCC_CDCFGR1_CDCPRE_Pos];
@@ -439,7 +442,8 @@ void SystemCoreClockUpdate(void)
   common_system_clock >>= tmp;
 
   /* SystemD2Clock frequency : AXI and AHBs Clock frequency  */
-  SystemD2Clock = (common_system_clock >> ((D1CorePrescTable[(RCC->CDCFGR1 & RCC_CDCFGR1_HPRE) >> RCC_CDCFGR1_HPRE_Pos]) & 0x1FU));
+  SystemD2Clock =
+    (common_system_clock >> ((D1CorePrescTable[(RCC->CDCFGR1 & RCC_CDCFGR1_HPRE) >> RCC_CDCFGR1_HPRE_Pos]) & 0x1FU));
 
 #endif
 

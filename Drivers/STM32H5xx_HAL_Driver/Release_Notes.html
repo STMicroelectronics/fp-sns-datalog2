@@ -69,11 +69,135 @@ drivers)</li>
 <section id="update-history" class="col-sm-12 col-lg-8">
 <h1>Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section7" checked aria-hidden="true">
-<label for="collapse-section7" checked aria-hidden="true"><strong>V1.6.0
-/ 04-February-2026</strong></label>
+<input type="checkbox" id="collapse-section8" checked aria-hidden="true">
+<label for="collapse-section8" checked aria-hidden="true"><strong>V1.7.0
+/ 03-June-2026</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
+<ul>
+<li><p><strong>Offical Release</strong> V1.7.0 of <span
+style="font-weight: bold;">STM32CubeH5</span> Firmware Package, to
+support <strong>STM32H543xx</strong> and <strong>STM32H553xx</strong>
+devices.</p></li>
+<li><p>Support added for H5 1M devices in all HAL/LL drivers.</p></li>
+<li><p>General updates to fix known defects and implementation
+enhancements</p></li>
+<li><p><strong>HAL Drivers</strong> updates:</p>
+<ul>
+<li><strong>HAL CCB</strong> driver
+<ul>
+<li>Fixed Coverity issues.</li>
+<li>Updated support for recovery from seed error sequence after RNG
+v4.4.</li>
+<li>Aligned STM32H5 code with the common code structure.</li>
+<li>Fixed transient variable handling in sanity check support.</li>
+<li>Fixed preprocessor handling for sanity check compilation.</li>
+<li>Added RNG handle support for resilient seed error recovery.</li>
+<li>Updated support for wrap keys from secure domain to non-secure
+domain.</li>
+<li>Fixed MISRA Rule 12.2 issues in HAL CCB.</li>
+<li>Fixed MISRA-C and Coverity warnings.</li>
+<li>Updated support to CCB v2.1.</li>
+</ul></li>
+<li><strong>HAL CRYP</strong> driver
+<ul>
+<li>Fixed MISRA-C Rule 7.1 in hal_cryp.c.</li>
+<li>Fixed MISRA-C Rule 2.2_c warning in stm32h5xx_hal_cryp.c.</li>
+<li>Fixed CCM partial output handling for non-32-bit aligned
+payloads.</li>
+<li>Fixed missing second CRYP handle usage in SAES shared-key mode.</li>
+<li>Fixed a typo in the CR-&gt;SR register call.</li>
+<li>Updated seed recovery handling after the RNG v4.4.</li>
+<li>Fixed tickstart handling in SAES.</li>
+<li>Fixed Coverity issue INTEGER_OVERFLOW.</li>
+<li>Updated implementation related to AES GCM decryption tag
+handling.</li>
+</ul></li>
+<li><strong>HAL DMA2D</strong> driver
+<ul>
+<li>DMA2D3 downscaling implementation added to expose the full 4K-step
+scaling range with equidistant increments.</li>
+</ul></li>
+<li><strong>HAL FLASH</strong> driver
+<ul>
+<li>Removed smart prefetch APIs from the FLASH driver.</li>
+<li>Added dedicated HAL functions to independently lock and unlock
+secure and non-secure FLASH control registers.</li>
+</ul></li>
+<li><strong>HAL FMC</strong> driver
+<ul>
+<li>Fixed MISRA warning Rule 11.3 on the NOR driver.</li>
+<li>Removed 8-bit configuration support from the FMC NOR driver.</li>
+<li>Fixed NAND status handling when HAL_NAND_Read_Status returns
+NAND_ERROR.</li>
+</ul></li>
+<li><strong>HAL RNG</strong> driver
+<ul>
+<li>Updated comment for <code>NistCompliance</code> field in
+<code>RNG_ConfigTypeDef</code>.</li>
+<li>Updated seed recovery handling after the RNG v4.4.</li>
+<li>Fixed the clear logic for the clock error flag during interrupt
+handling.</li>
+<li>Added error-state check at the start of seed recovery.</li>
+<li>Added resilient <code>__HAL_UNLOCK</code>.</li>
+<li>Added warning handling related to resilient seed recovery.</li>
+<li>Fixed missing NSCR register.</li>
+<li>Improved recovery from seed error handling related to RNG v4.4.</li>
+<li>Fixed resilient recovery warning handling.</li>
+</ul></li>
+<li><strong>HAL SDMMC</strong> driver
+<ul>
+<li>Fixed MISRA-C warning Rule 10.3 in
+<code>stm32h5xx_hal_sdio.c</code>.</li>
+<li>Fixed Coverity warnings.</li>
+<li>Fixed MISRA-C Rule 8.13 violation.</li>
+<li>Fixed SD card initialization at frequencies below 3 MHz.</li>
+<li>Fixed MISRA-C Rule 12.2 violations.</li>
+<li>Improved support for SD card V1.</li>
+<li>Fixed command argument handling for block and byte modes.</li>
+</ul></li>
+<li><strong>HAL SMARTCARD</strong> driver
+<ul>
+<li>Fixed improper initialization of the smartcard clock.</li>
+</ul></li>
+<li><strong>HAL USB</strong> driver
+<ul>
+<li>Added support for get frame number.</li>
+<li>Updated RX count register handling.</li>
+<li>Avoided out-of-band reads.</li>
+<li>Fixed MISRA-C Rule 8.13 issues.</li>
+</ul></li>
+</ul></li>
+<li><p><strong>HAL Drivers</strong> updates:</p>
+<ul>
+<li><strong>LL RNG</strong> driver
+<ul>
+<li>Updated recovery from seed error handling after RNG v4.4.</li>
+<li>Updated interrupt clear handling and resilient recovery logic.</li>
+<li>Added support for resilient unlock behavior.</li>
+<li>Fixed warnings related to resilient seed recovery.</li>
+<li>Fixed missing NSCR register.</li>
+<li>Updated NIST compliance parameter handling.</li>
+</ul></li>
+</ul></li>
+</ul>
+<p>Note: HAL/LL Backward compatibility ensured by legacy defines.</p>
+<h2 id="known-limitations">Known Limitations</h2>
+<ul>
+<li>None</li>
+</ul>
+<h2 id="backward-compatibility">Backward compatibility</h2>
+<ul>
+<li>No compatibility break</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section7" aria-hidden="true">
+<label for="collapse-section7" aria-hidden="true"><strong>V1.6.0 /
+04-February-2026</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
 <ul>
 <li><p>Maintenance Release V1.6.0 of <span
 style="font-weight: bold;">STM32CubeH5</span> Firmware Package, to
@@ -455,11 +579,11 @@ H5.</li>
 </ul></li>
 </ul>
 <p>Note: HAL/LL Backward compatibility ensured by legacy defines.</p>
-<h2 id="known-limitations">Known Limitations</h2>
+<h2 id="known-limitations-1">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="backward-compatibility">Backward compatibility</h2>
+<h2 id="backward-compatibility-1">Backward compatibility</h2>
 <ul>
 <li>No compatibility break</li>
 </ul>
@@ -470,7 +594,7 @@ H5.</li>
 <label for="collapse-section6" aria-hidden="true"><strong>V1.5.0 /
 05-February-2025</strong></label>
 <div>
-<h2 id="main-changes-1">Main Changes</h2>
+<h2 id="main-changes-2">Main Changes</h2>
 <ul>
 <li><p>Maintenance Release V1.5.0 of <strong>HAL and LL drivers</strong>
 for <strong>STM32H573xx / STM32H563xx / STM32H562xx / STM32H503xx /
@@ -595,11 +719,11 @@ enabled</li>
 </ul></li>
 </ul>
 <p>Note: HAL/LL Backward compatibility ensured by legacy defines.</p>
-<h2 id="known-limitations-1">Known Limitations</h2>
+<h2 id="known-limitations-2">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="backward-compatibility-1">Backward compatibility</h2>
+<h2 id="backward-compatibility-2">Backward compatibility</h2>
 <ul>
 <li>No compatibility break</li>
 </ul>
@@ -610,7 +734,7 @@ enabled</li>
 <label for="collapse-section5" checked aria-hidden="true"><strong>V1.4.0
 / 30-October-2024</strong></label>
 <div>
-<h2 id="main-changes-2">Main Changes</h2>
+<h2 id="main-changes-3">Main Changes</h2>
 <ul>
 <li><p>Maintenance Release V1.4.0 of <strong>HAL and LL drivers</strong>
 for <strong>STM32H573xx / STM32H563xx / STM32H562xx / STM32H503xx /
@@ -729,11 +853,11 @@ LL_RCC_USB_CLKSOURCE_PLL2Q</li>
 </ul></li>
 </ul>
 <p>Note: HAL/LL Backward compatibility ensured by legacy defines.</p>
-<h2 id="known-limitations-2">Known Limitations</h2>
+<h2 id="known-limitations-3">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="backward-compatibility-2">Backward compatibility</h2>
+<h2 id="backward-compatibility-3">Backward compatibility</h2>
 <ul>
 <li>No compatibility break</li>
 </ul>
@@ -744,7 +868,7 @@ LL_RCC_USB_CLKSOURCE_PLL2Q</li>
 <label for="collapse-section4" checked aria-hidden="true"><strong>V1.3.0
 / 05-June-2024</strong></label>
 <div>
-<h2 id="main-changes-3">Main Changes</h2>
+<h2 id="main-changes-4">Main Changes</h2>
 <ul>
 <li><p>Maintenance release V1.3.0 of <strong>HAL and LL drivers</strong>
 for <strong>STM32H573xx / STM32H563xx / STM32H562xx / STM32H503xx /
@@ -787,11 +911,11 @@ TIM_CLEARINPUTSOURCE_OCREFCLR constants</li>
 </ul></li>
 </ul>
 <p>Note: HAL/LL Backward compatibility ensured by legacy defines.</p>
-<h2 id="known-limitations-3">Known Limitations</h2>
+<h2 id="known-limitations-4">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="backward-compatibility-3">Backward compatibility</h2>
+<h2 id="backward-compatibility-4">Backward compatibility</h2>
 <ul>
 <li>No compatibility break</li>
 </ul>
@@ -802,7 +926,7 @@ TIM_CLEARINPUTSOURCE_OCREFCLR constants</li>
 <label for="collapse-section3" checked aria-hidden="true"><strong>V1.2.0
 / 07-February-2024</strong></label>
 <div>
-<h2 id="main-changes-4">Main Changes</h2>
+<h2 id="main-changes-5">Main Changes</h2>
 <ul>
 <li><p>First offiicial release of HAL and LL drivers to support
 <strong>STM32H533xx and STM32H523xx</strong> devices</p>
@@ -1011,11 +1135,11 @@ reserved bits (Ticket 160951)</li>
 </ul></li>
 </ul>
 <p>Note: HAL/LL Backward compatibility ensured by legacy defines.</p>
-<h2 id="known-limitations-4">Known Limitations</h2>
+<h2 id="known-limitations-5">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="backward-compatibility-4">Backward compatibility</h2>
+<h2 id="backward-compatibility-5">Backward compatibility</h2>
 <ul>
 <li>No compatibility break</li>
 </ul>
@@ -1026,7 +1150,7 @@ reserved bits (Ticket 160951)</li>
 <label for="collapse-section2" checked aria-hidden="true"><strong>V1.1.0
 / 07-June-2023</strong></label>
 <div>
-<h2 id="main-changes-5">Main Changes</h2>
+<h2 id="main-changes-6">Main Changes</h2>
 <ul>
 <li><p>Maintenance Release of <strong>HAL and LL drivers</strong> for
 <strong>STM32H573xx / STM32H563xx / STM32H562xx / STM32H503xx</strong>
@@ -1110,11 +1234,11 @@ clock selection field.</li>
 </ul></li>
 </ul></li>
 </ul>
-<h2 id="known-limitations-5">Known Limitations</h2>
+<h2 id="known-limitations-6">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="backward-compatibility-5">Backward compatibility</h2>
+<h2 id="backward-compatibility-6">Backward compatibility</h2>
 <ul>
 <li>No compatibility break</li>
 </ul>
@@ -1125,17 +1249,17 @@ clock selection field.</li>
 <label for="collapse-section1" checked aria-hidden="true"><strong>V1.0.0
 / 10-February-2023</strong></label>
 <div>
-<h2 id="main-changes-6">Main Changes</h2>
+<h2 id="main-changes-7">Main Changes</h2>
 <ul>
 <li>First official release of <strong>HAL and LL drivers</strong> for
 <strong>STM32H573xx / STM32H563xx / STM32H562xx / STM32H503xx</strong>
 devices</li>
 </ul>
-<h2 id="known-limitations-6">Known Limitations</h2>
+<h2 id="known-limitations-7">Known Limitations</h2>
 <ul>
 <li>None</li>
 </ul>
-<h2 id="backward-compatibility-6">Backward compatibility</h2>
+<h2 id="backward-compatibility-7">Backward compatibility</h2>
 <ul>
 <li>Not Applicable</li>
 </ul>

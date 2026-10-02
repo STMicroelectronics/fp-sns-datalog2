@@ -67,13 +67,13 @@ static ULONG ip_address;
 static ULONG net_mask;
 
 __ALIGN_BEGIN UINT NetxAppQueue_Mem[APP_NETX_QUEUE_MSG_NUM * sizeof(NetxAppQueueMsgType)];
-__ALIGN_END  // 4 bytes aligned
+__ALIGN_END  /* 4 bytes aligned*/
 
-static UCHAR *pFtpSrvPackets; // not reentrant: only single FTP srv instance is allowed
-static UCHAR *pFtpSrvMem;     // not reentrant: only single FTP srv instance is allowed
-static UCHAR *pArpMem;        // not reentrant: only single instance is allowed
-static UCHAR *pIpMem;         // not reentrant: only single instance is allowed
-static UCHAR *pIpPktMem;      // not reentrant: only single instance is allowed
+static UCHAR *pFtpSrvPackets; /* not reentrant: only single FTP srv instance is allowed*/
+static UCHAR *pFtpSrvMem;     /* not reentrant: only single FTP srv instance is allowed*/
+static UCHAR *pArpMem;        /* not reentrant: only single instance is allowed*/
+static UCHAR *pIpMem;         /* not reentrant: only single instance is allowed*/
+static UCHAR *pIpPktMem;      /* not reentrant: only single instance is allowed*/
 
 char wifi_ssid[SSID_MAX_LENGTH];
 char wifi_password[PASSW_MAX_LENGTH];
@@ -97,7 +97,7 @@ struct tm timeInfos;
 
 /* set the SNTP network interface to the primary interface. */
 UINT iface_index = 0;
-#endif
+#endif /* SNTP_ENABLED */
 
 IWifi_Config_t wifi_config;
 
@@ -113,11 +113,11 @@ uint8_t wifi_config_set_ftp_credentials_func(IWifi_Config_t *_this, const char *
 void WIFI_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi);
 void WIFI_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi);
 void WIFI_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi);
-#endif
+#endif /* (USE_HAL_SPI_REGISTER_CALLBACKS == 1) */
 
 #if (USE_HAL_LPTIM_REGISTER_CALLBACKS == 1)
 void WIFI_LPTIM_IC_CaptureCallback(LPTIM_HandleTypeDef *hlptim);
-#endif
+#endif /* (USE_HAL_LPTIM_REGISTER_CALLBACKS == 1) */
 
 static VOID NetX_Thread_Entry(ULONG thread_input);
 
@@ -127,7 +127,7 @@ static VOID display_rtc_time(RTC_HandleTypeDef *hrtc);
 static VOID rtc_time_update(NX_SNTP_CLIENT *client_ptr);
 static UINT kiss_of_death_handler(NX_SNTP_CLIENT *client_ptr, UINT KOD_code);
 static VOID time_update_callback(NX_SNTP_TIME_MESSAGE *time_update_ptr, NX_SNTP_TIME *local_time);
-#endif
+#endif /* SNTP_ENABLED */
 static VOID ip_address_change_notify_callback(NX_IP *ip_instance, VOID *ptr);
 
 static UINT server_login(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG client_ip_address, UINT client_port,
@@ -158,18 +158,18 @@ void netx_app_set_connect_callback(NetX_App_Connect_Callback callback)
 UCHAR my_trace_buffer[TRACE_BUFFER_SIZE];
 VOID full_buffer_callback(VOID *par)
 {
-//  printf ("T buff full");
+  /*  printf ("T buff full");*/
   static n = 0;
   tx_trace_disable();
   tx_trace_enable(&my_trace_buffer, TRACE_BUFFER_SIZE, TRACE_EVENT_NUM);
-//  tx_trace_event_filter(UX_TRACE_ALL_EVENTS);
+  /*  tx_trace_event_filter(UX_TRACE_ALL_EVENTS);*/
   n++;
   if (n >= 10)
   {
     n = 0;
   }
 }
-#endif
+#endif /* TX_ENABLE_EVENT_TRACE */
 
 static const IWifi_Config_vtbl wifi_config_functions =
 {
@@ -206,7 +206,8 @@ UINT MX_NetXDuo_Init(VOID *memory_ptr)
   }
 
   /* create the SNTP client thread */
-  ret = tx_thread_create(&AppSNTPThread, "SNTP App Thread", App_SNTP_Thread_Entry, 0, pointer, SNTP_CLIENT_THREAD_MEMORY,
+  ret = tx_thread_create(&AppSNTPThread, "SNTP App Thread", App_SNTP_Thread_Entry, 0, pointer,
+                         SNTP_CLIENT_THREAD_MEMORY,
                          DEFAULT_PRIORITY, DEFAULT_PRIORITY, TX_NO_TIME_SLICE, TX_DONT_START);
 
   if (ret != TX_SUCCESS)
@@ -224,7 +225,7 @@ UINT MX_NetXDuo_Init(VOID *memory_ptr)
   }
 
   tx_semaphore_create(&Semaphore_SNTP_ready, "SNTP ready Sem", 0);
-#endif
+#endif /* SNTP_ENABLED */
 
   /* create App NetX cmd queue*/
   ret = tx_queue_create(&netx_app_queue, "App Netx Queue", sizeof(NetxAppQueueMsgType) / sizeof(UINT), NetxAppQueue_Mem,
@@ -254,7 +255,8 @@ UINT MX_NetXDuo_Init(VOID *memory_ptr)
   }
 
   /* Create the NetX app thread */
-  ret = tx_thread_create(&nx_app_thread, "NetX App thread", NetX_Thread_Entry, 0, nx_thread_memory_pointer, NETX_THREAD_MEMORY, DEFAULT_NETX_PRIORITY, DEFAULT_NETX_PRIORITY,
+  ret = tx_thread_create(&nx_app_thread, "NetX App thread", NetX_Thread_Entry, 0, nx_thread_memory_pointer,
+                         NETX_THREAD_MEMORY, DEFAULT_NETX_PRIORITY, DEFAULT_NETX_PRIORITY,
                          TX_NO_TIME_SLICE, TX_AUTO_START);
 
   if (ret != TX_SUCCESS)
@@ -263,7 +265,7 @@ UINT MX_NetXDuo_Init(VOID *memory_ptr)
   }
 #ifdef TX_ENABLE_EVENT_TRACE
   tx_trace_buffer_full_notify(full_buffer_callback);
-#endif
+#endif /* TX_ENABLE_EVENT_TRACE */
   /* USER CODE END MX_NetXDuo_Init */
   return NX_SUCCESS;
 }
@@ -325,15 +327,19 @@ static VOID NetX_Thread_Entry(ULONG thread_input)
     else
     {
       /* if wifi is connected 5s periodic check for the IP status to detect passive disconnection
-       * (FIXME needs to check periodically as the nx_ip_link_status_change_notify_set() do not trigger cb on wifi status change) */
+       * (FIXME needs to check periodically as the nx_ip_link_status_change_notify_set() do not trigger cb on wifi
+       * status change) */
       ret = tx_queue_receive(&netx_app_queue, &RxMsg, TX_TIMER_TICKS_PER_SECOND * 5);
       if (ret == TX_WAIT_ABORTED || ret == TX_QUEUE_EMPTY)
       {
         ULONG actual_status;
-        ret = nx_ip_status_check(&ip_instance, NX_IP_INITIALIZE_DONE | NX_IP_LINK_ENABLED | NX_IP_INTERFACE_LINK_ENABLED, &actual_status, NX_NO_WAIT);
+        ret = nx_ip_status_check(&ip_instance,
+                                 NX_IP_INITIALIZE_DONE | NX_IP_LINK_ENABLED | NX_IP_INTERFACE_LINK_ENABLED,
+                                 &actual_status, NX_NO_WAIT);
         if (ret != NX_SUCCESS)
         {
-          printf("WIFI IP connection (nx_ip_status_check) lost, status: 0x%x, ret: 0x%x, line: %d\n\r", (UINT) actual_status, ret,
+          printf("WIFI IP connection (nx_ip_status_check) lost, status: 0x%x, ret: 0x%x, line: %d\n\r",
+                 (UINT) actual_status, ret,
                  __LINE__);
           printf("WIFI IP connection roll back   ...\n\r");
 
@@ -394,7 +400,7 @@ static VOID NetX_Thread_Entry(ULONG thread_input)
         if (ret == 0)
         {
           wifi_is_connected = false;
-          ftp_srv_is_on = false;   // ftp srv must be already stopped by FTP_SERVER_STOP
+          ftp_srv_is_on = false;   /* ftp srv must be already stopped by FTP_SERVER_STOP*/
 
           ip_address = 0;
           strcpy(ip_str, "0.0.0.0");
@@ -454,8 +460,10 @@ static VOID NetX_Thread_Entry(ULONG thread_input)
         /* this check if everything is ok with IP stack and WiFi connection */
         /* FIXME drv to be fixed according to tkt 155760, for the moment ip link and others checks are commented  */
         ret = nx_ip_status_check(&ip_instance,
-                                 NX_IP_INITIALIZE_DONE /* | NX_IP_LINK_ENABLED | NX_IP_ADDRESS_RESOLVED | NX_IP_UDP_ENABLED | NX_IP_IGMP_ENABLED */,
-                                 &actual_status, NX_IP_PERIODIC_RATE * 10);  // give 10 Sec to wifi drv connection init
+                                 NX_IP_INITIALIZE_DONE /* | NX_IP_LINK_ENABLED | NX_IP_ADDRESS_RESOLVED
+                  | NX_IP_UDP_ENABLED | NX_IP_IGMP_ENABLED */,
+                                 &actual_status,
+                                 NX_IP_PERIODIC_RATE * 10);  /* give 10 Sec to wifi drv connection init*/
         if (ret != NX_SUCCESS)
         {
           message = "nx_ip_status_check failed status";
@@ -470,9 +478,9 @@ static VOID NetX_Thread_Entry(ULONG thread_input)
 
 #ifdef TX_ENABLE_EVENT_TRACE
         /* to start tracing at FTP srv start */
-//          tx_trace_enable(&my_trace_buffer, TRACE_BUFFER_SIZE, TRACE_EVENT_NUM);
-//          tx_trace_event_filter(UX_TRACE_ALL_EVENTS);
-#endif
+        /*          tx_trace_enable(&my_trace_buffer, TRACE_BUFFER_SIZE, TRACE_EVENT_NUM);*/
+        /*          tx_trace_event_filter(UX_TRACE_ALL_EVENTS);*/
+#endif /* TX_ENABLE_EVENT_TRACE */
         break;
       }
       case FTP_SERVER_START :
@@ -645,7 +653,7 @@ static void App_SNTP_Thread_Entry(ULONG info)
 
       /* Set Current time from SNTP TO RTC */
       rtc_time_update(&SntpClient);
-//      display_rtc_time(&hrtc);
+      /*      display_rtc_time(&hrtc);*/
 
       ret = nx_sntp_client_utility_display_date_time(&SntpClient, buffer, 64);
 
@@ -829,7 +837,7 @@ void get_rtc_date_time(RTC_HandleTypeDef *hrtc, RTC_DateTypeDef *RTC_Date, RTC_T
   HAL_RTC_GetTime(hrtc, RTC_Time, RTC_FORMAT_BCD);
   HAL_RTC_GetDate(hrtc, RTC_Date, RTC_FORMAT_BCD);
 }
-#endif
+#endif /* SNTP_ENABLED */
 
 
 static UINT server_login(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG client_ip_address, UINT client_port,
@@ -864,7 +872,8 @@ static UINT server_logout(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG cli
 
   printf("FTP User: %s IP: %s logged out!\n", name, ipaddr_string);
 
-  /* FIXME if ftp client disconnect (passive or active) does it need to roll back the FTP srv and inform phone app somehow ? */
+  /* FIXME if ftp client disconnect (passive or active) does it need to roll back the FTP srv and inform phone app
+   * somehow ? */
 
   /* Always return success.  */
   return (NX_SUCCESS);
@@ -872,7 +881,8 @@ static UINT server_logout(struct NX_FTP_SERVER_STRUCT *ftp_server_ptr, ULONG cli
 
 VOID link_status_change_notify_callback(NX_IP *ip_ptr, UINT interface_index, UINT link_up)
 {
-  /* FIXME if wifi link disconnect (passive or active) does it need to roll back the resources and inform phone app somehow ? */
+  /* FIXME if wifi link disconnect (passive or active) does it need to roll back the resources and inform phone app
+   * somehow ? */
   /* because of https://intbugzilla.st.com/show_bug.cgi?id=155760 this API is not triggered */
   printf("link_status_change_notify_callback link status: %d\n\r", link_up);
   if (link_up)
@@ -881,7 +891,7 @@ VOID link_status_change_notify_callback(NX_IP *ip_ptr, UINT interface_index, UIN
   }
   else
   {
-    // link down
+    /* link down*/
 
   }
 }
@@ -892,11 +902,11 @@ static int16_t WIFI_Connect(void)
 
   printf("WiFi connecting to: %s, passw:%s...\n\r", wifi_ssid, wifi_password);
 
-  // Wi-Fi module reset via DCDC2 power OFF/ON
+  /* Wi-Fi module reset via DCDC2 power OFF/ON*/
   BSP_Disable_DCDC2();
-  tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND / 3); // 300ms
+  tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND / 3); /* 300ms*/
   BSP_Enable_DCDC2();
-  tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND / 3); // 300ms
+  tx_thread_sleep(TX_TIMER_TICKS_PER_SECOND / 3); /* 300ms*/
 
   WIFI_MX_HW_Init();
 
@@ -929,13 +939,15 @@ static int16_t WIFI_Connect(void)
   /** FIXME the wifi SSID and passw should be acquired before call to ip_create. (tiket 150063)
     * NB possibility to use UINT nx_ip_driver_direct_command(NX_IP *ip_ptr, UINT command, ULONG *return_value_ptr);
     * to  direct interface the drv for SSDID discovery
-    * wifi Drv need to be fixed (tkt 155760) also to notify passive disconnections generating _nx_ip_driver_link_status_event()
+    * wifi Drv need to be fixed (tkt 155760) also to notify passive disconnections generating
+    * _nx_ip_driver_link_status_event()
     * and allowing the correct response from nx_ip_status_check()
     * This fix allow also a correct behavior of nx_ip_link_status_change_notify_set(,,cb)
     * that currently do not trigger the cb in case of passive disconnection
     */
   /* Create the main NX_IP instance */
-  ret = nx_ip_create(&ip_instance, "Main Ip instance", NULL_ADDRESS, NULL_ADDRESS, &ip_pool, nx_driver_emw3080_entry, pIpMem, IP_MEMORY_SIZE,
+  ret = nx_ip_create(&ip_instance, "Main Ip instance", NULL_ADDRESS, NULL_ADDRESS, &ip_pool,
+                     nx_driver_emw3080_entry, pIpMem, IP_MEMORY_SIZE,
                      DEFAULT_NETX_PRIORITY);
   if (ret != NX_SUCCESS)
   {
@@ -945,12 +957,15 @@ static int16_t WIFI_Connect(void)
 
   /* wait for wifi drv to start */
   ULONG actual_status;
-  ret = nx_ip_status_check(&ip_instance, NX_IP_INITIALIZE_DONE | NX_IP_LINK_ENABLED | NX_IP_INTERFACE_LINK_ENABLED, &actual_status, NX_IP_PERIODIC_RATE * 5); // give 5 Sec to wifi drv connection init
+  ret = nx_ip_status_check(&ip_instance,
+                           NX_IP_INITIALIZE_DONE | NX_IP_LINK_ENABLED | NX_IP_INTERFACE_LINK_ENABLED,
+                           &actual_status,
+                           NX_IP_PERIODIC_RATE * 5); /* give 5 Sec to wifi drv connection init*/
   if (ret != NX_SUCCESS)
   {
     printf("WIFI_Connect nx_ip_status_check failed status: 0x%x, ret: 0x%x\n\r", (UINT) actual_status, ret);
     /* FIXME roll back resources ? or go ahead ?*/
-//      return ret;
+    /*      return ret;*/
   }
 
   /* create the DHCP client */
@@ -1025,7 +1040,7 @@ static int16_t WIFI_Connect(void)
   }
 
   /* Start (just for debugging) WiFi SSID scan */
-  //scan_cmd(0, NULL);
+  /*scan_cmd(0, NULL);*/
 
   printf("Waiting for IP address ...\n");
 
@@ -1080,7 +1095,7 @@ static int16_t WIFI_Connect(void)
 #ifdef SNTP_ENABLED
   /* the network is correctly initialized, start the SNTP client thread */
   tx_thread_resume(&AppSNTPThread);
-#endif
+#endif /* SNTP_ENABLED */
   return ret;
 }
 
@@ -1094,15 +1109,16 @@ static int16_t WIFI_Disconnect(void)
 #ifdef SNTP_ENABLED
   /* first stop the SNTP client thread */
   tx_thread_terminate(
-    &AppSNTPThread);   // FIXME this is unsafe: thread should not be terminated asynchronously, better to send a msg to th */
-  tx_thread_reset(&AppSNTPThread);       // FIXME to release th stack the th should be deleted instead of reset
-#endif
+    &AppSNTPThread); /* FIXME this is unsafe: thread should not be terminated asynchronously,
+                       better to send a msg to th */
+  tx_thread_reset(&AppSNTPThread);       /* FIXME to release th stack the th should be deleted instead of reset*/
+#endif /* SNTP_ENABLED */
 
   /* release the acquired IP */
   ret = nx_dhcp_release(&dhcp_client);
   if (ret != NX_SUCCESS)
   {
-//      Error_Handler();
+    /*      Error_Handler();*/
     printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
   }
 
@@ -1110,7 +1126,7 @@ static int16_t WIFI_Disconnect(void)
   ret = nx_dhcp_stop(&dhcp_client);
   if (ret != NX_SUCCESS)
   {
-//      Error_Handler();
+    /*      Error_Handler();*/
     printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
   }
 
@@ -1118,7 +1134,7 @@ static int16_t WIFI_Disconnect(void)
   ret = nx_dhcp_delete(&dhcp_client);
   if (ret != NX_SUCCESS)
   {
-//      Error_Handler();
+    /*      Error_Handler();*/
     printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
   }
 
@@ -1126,7 +1142,7 @@ static int16_t WIFI_Disconnect(void)
   ret = nx_arp_static_entries_delete(&ip_instance);
   if (ret != NX_SUCCESS)
   {
-//      Error_Handler();
+    /*      Error_Handler();*/
     printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
   }
 
@@ -1134,7 +1150,7 @@ static int16_t WIFI_Disconnect(void)
   ret = nx_arp_dynamic_entries_invalidate(&ip_instance);
   if (ret != NX_SUCCESS)
   {
-//      Error_Handler();
+    /*      Error_Handler();*/
     printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
   }
 
@@ -1142,7 +1158,7 @@ static int16_t WIFI_Disconnect(void)
   ret = nx_ip_delete(&ip_instance);
   if (ret != NX_SUCCESS)
   {
-//      Error_Handler();
+    /*      Error_Handler();*/
     printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
   }
   /* give drv thread time to delete */
@@ -1152,7 +1168,7 @@ static int16_t WIFI_Disconnect(void)
   ret = tx_byte_release(pArpMem);
   if (ret != TX_SUCCESS)
   {
-//      Error_Handler();
+    /*      Error_Handler();*/
     printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
   }
 
@@ -1160,7 +1176,7 @@ static int16_t WIFI_Disconnect(void)
   ret = tx_byte_release(pIpMem);
   if (ret != TX_SUCCESS)
   {
-//      Error_Handler();
+    /*      Error_Handler();*/
     printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
   }
 
@@ -1168,7 +1184,7 @@ static int16_t WIFI_Disconnect(void)
   ret = nx_packet_pool_delete(&ip_pool);
   if (ret != NX_SUCCESS)
   {
-//      Error_Handler();
+    /*      Error_Handler();*/
     printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
   }
 
@@ -1176,16 +1192,16 @@ static int16_t WIFI_Disconnect(void)
   ret = tx_byte_release(pIpPktMem);
   if (ret != TX_SUCCESS)
   {
-//      Error_Handler();
+    /*      Error_Handler();*/
     printf("ERROR: file: %s, line: %d\n\r", __FILE__, __LINE__);
   }
 
-//      BSP_WIFI_MX_GPIO_DeInit();  // FIXME to be implemented ?
+  /*      BSP_WIFI_MX_GPIO_DeInit();  // FIXME to be implemented ?*/
 #if 0
 #include "mx_wifi.h"
-  MX_WIFIObject_t *pMxWifiObj = wifi_obj_get();   // FIXME to be called from nx_ip_delete() tkt 154401
+  MX_WIFIObject_t *pMxWifiObj = wifi_obj_get();   /* FIXME to be called from nx_ip_delete() tkt 154401*/
   MX_WIFI_DeInit(pMxWifiObj);
-#endif
+#endif /* 0 */
   return ret;
 }
 
@@ -1226,7 +1242,8 @@ static int16_t FTP_Srv_Init(void)
   }
 
   /* Create/start an FTP srv using IP NetXPool pkt */
-  ret = nx_ftp_server_create(&ftp_server, "FTP Server Instance", &ip_instance, pSdioDisk, pFtpSrvMem, FTP_SERVER_STACK_SIZE, &ftp_server_pool, server_login, server_logout);
+  ret = nx_ftp_server_create(&ftp_server, "FTP Server Instance", &ip_instance, pSdioDisk, pFtpSrvMem,
+                             FTP_SERVER_STACK_SIZE, &ftp_server_pool, server_login, server_logout);
   if (ret != NX_SUCCESS)
   {
     nx_packet_pool_delete(&ftp_server_pool);
@@ -1428,7 +1445,7 @@ static sys_error_code_t WIFI_MX_HW_Init(void)
 void WIFI_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
 #else
 void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
-#endif
+#endif /* (USE_HAL_SPI_REGISTER_CALLBACKS == 1) */
 {
   if (hspi->Instance == SPI1)
   {
@@ -1446,7 +1463,7 @@ void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
 void WIFI_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 #else
 void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
-#endif
+#endif /* (USE_HAL_SPI_REGISTER_CALLBACKS == 1) */
 {
   if (hspi->Instance == SPI1)
   {
@@ -1464,7 +1481,7 @@ void HAL_SPI_RxCpltCallback(SPI_HandleTypeDef *hspi)
 void WIFI_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 #else
 void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
-#endif
+#endif /* (USE_HAL_SPI_REGISTER_CALLBACKS == 1) */
 {
   if (hspi->Instance == SPI1)
   {
@@ -1482,7 +1499,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 void WIFI_LPTIM_IC_CaptureCallback(LPTIM_HandleTypeDef *hlptim)
 #else
 void HAL_LPTIM_IC_CaptureCallback(LPTIM_HandleTypeDef *hlptim)
-#endif
+#endif /* (USE_HAL_LPTIM_REGISTER_CALLBACKS == 1) */
 {
   /* Prevent unused argument(s) compilation warning */
   UNUSED(hlptim);

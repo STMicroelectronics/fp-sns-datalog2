@@ -42,7 +42,7 @@ int32_t mxwifi_probe(void **ll_drv_context);
 #define MXCHIP_SPI                                                        hspi1
 #ifndef MXCHIP_SPI
 #error "Please define your board MXCHIP SPI interface"
-#endif
+#endif /* MXCHIP_SPI */
 #endif /* MX_WIFI_USE_SPI */
 
 #define MX_WIFI_RESET_PIN        WIFI_EN_Pin
@@ -101,20 +101,23 @@ extern  char wifi_password[];
 #define MX_WIFI_MTU_SIZE                            (1500)
 #endif /* MX_WIFI_MTU_SIZE */
 
-#define MX_WIFI_BYPASS_HEADER_SIZE                  (28)  /* MX_IPC_header(6) + sizeof(bypass_in_t)(22), set with PBUF_LINK_ENCAPSULATION_HLEN */
+#define MX_WIFI_BYPASS_HEADER_SIZE (28) /* MX_IPC_header(6) + sizeof(bypass_in_t)(22), set with
+                                           PBUF_LINK_ENCAPSULATION_HLEN */
 #define MX_WIFI_PBUF_LINK_HLEN                      (14)  /* link header (PBUF_LINK_HLEN) set in lwip */
 #if (MX_WIFI_NETWORK_BYPASS_MODE==1)
-#define MX_WIFI_BUFFER_SIZE                         (MX_WIFI_MTU_SIZE + MX_WIFI_BYPASS_HEADER_SIZE + MX_WIFI_PBUF_LINK_HLEN)  /* use lwip PBUF_POOL_BUFSIZE = TCP_MSS+40+PBUF_LINK_ENCAPSULATION_HLEN+PBUF_LINK_HLEN */
+/* use lwip PBUF_POOL_BUFSIZE = TCP_MSS+40+PBUF_LINK_ENCAPSULATION_HLEN+PBUF_LINK_HLEN */
+#define MX_WIFI_BUFFER_SIZE (MX_WIFI_MTU_SIZE + MX_WIFI_BYPASS_HEADER_SIZE + MX_WIFI_PBUF_LINK_HLEN)
 #else
 #define MX_WIFI_BUFFER_SIZE                         (2500)  /* bigger buffer size */
-#endif
+#endif /* (MX_WIFI_NETWORK_BYPASS_MODE==1) */
 
-#define MX_WIFI_IPC_PAYLOAD_SIZE                    ((MX_WIFI_BUFFER_SIZE) - 6)  /* MX_WIFI_BUFFER_SIZE - MX_IPC_header */
-#define MX_WIFI_SOCKET_DATA_SIZE                    ((MX_WIFI_IPC_PAYLOAD_SIZE)-12) /* MX_WIFI_IPC_PAYLOAD_SIZE - socket_api_params_header */
+#define MX_WIFI_IPC_PAYLOAD_SIZE ((MX_WIFI_BUFFER_SIZE) - 6) /* MX_WIFI_BUFFER_SIZE - MX_IPC_header */
+#define MX_WIFI_SOCKET_DATA_SIZE ((MX_WIFI_IPC_PAYLOAD_SIZE)-12) /* MX_WIFI_IPC_PAYLOAD_SIZE -
+                                                                    socket_api_params_header */
 
 #ifndef MX_WIFI_CMD_TIMEOUT
 #define MX_WIFI_CMD_TIMEOUT                         (10000)
-#endif
+#endif /* MX_WIFI_CMD_TIMEOUT */
 #define MX_WIFI_MAX_SOCKET_NBR                      (8)
 #define MX_WIFI_MAX_DETECTED_AP                     (10)
 
@@ -167,9 +170,12 @@ extern  char wifi_password[];
 #endif /* MX_WIFI_MAX_TX_BUFFER_COUNT */
 
 
-/* For the TX buffer , by default no-copy feature is enabled , meaning that IP buffer are used in the whole process and should come with */
-/* available room in front of payload to accommodate transport header buffer. This is managed in interface between driver and IP stack   */
-/* for LwIP  "PBUF_LINK_ENCAPSULATION_HLEN" must be defined as > MX_WIFI_MIN_TX_HEADER_SIZE , see net_mx_wifi/c file for implementation */
+/* For the TX buffer , by default no-copy feature is enabled , meaning that IP buffer are used in the whole process
+ * and should come with */
+/* available room in front of payload to accommodate transport header buffer. This is managed in interface between
+ * driver and IP stack   */
+/* for LwIP  "PBUF_LINK_ENCAPSULATION_HLEN" must be defined as > MX_WIFI_MIN_TX_HEADER_SIZE , see net_mx_wifi/c file
+ * for implementation */
 #define MX_WIFI_MIN_TX_HEADER_SIZE                      (28)
 
 #ifndef MX_WIFI_TX_BUFFER_NO_COPY
@@ -200,10 +206,14 @@ typedef struct
 mx_stat_t;
 extern mx_stat_t mx_stat;
 
-#define MX_STAT_LOG()   (void) printf("Number of allocated buffer for Rx and command answer %lu\n",(ULONG)mx_stat.alloc);\
+#define MX_STAT_LOG() \
+  (void) printf("Number of allocated buffer for Rx and command answer %lu\n",(ULONG)mx_stat.alloc);\
   (void) printf("Number of free buffer %lu\n",(ULONG)mx_stat.free);\
-  (void) printf("Number of command answer %lu , callback %lu , sum of both %lu (should match alloc && free)\n", (ULONG)mx_stat.cmd_get_answer,(ULONG)mx_stat.callback,(ULONG)(mx_stat.cmd_get_answer+mx_stat.callback));\
-  (void) printf("Number of posted answer (callback + cmd answer) %lu , processed answer %lu\n",(ULONG)mx_stat.in_fifo,(ULONG)mx_stat.out_fifo);\
+  (void) printf("Number of command answer %lu , callback %lu , sum of both %lu " \
+                "(should match alloc && free)\n", (ULONG)mx_stat.cmd_get_answer, \
+                (ULONG)mx_stat.callback,(ULONG)(mx_stat.cmd_get_answer+mx_stat.callback));\
+  (void) printf("Number of posted answer (callback + cmd answer) %lu , processed answer %lu\n", \
+                (ULONG)mx_stat.in_fifo,(ULONG)mx_stat.out_fifo);\
 
 #define           MX_STAT_INIT()        (void) memset((void*)&mx_stat,0,sizeof(mx_stat))
 #define           MX_STAT(A)            mx_stat.A++

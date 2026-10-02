@@ -63,7 +63,7 @@ uint8_t iis3dwb10is_acc_comp_init(void)
   iis3dwb10is_acc_set_samples_per_ts(0, NULL);
 #else
   iis3dwb10is_acc_set_samples_per_ts(1000, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
 
   __stream_control(true);
   /* USER Component initialization code */
@@ -259,7 +259,7 @@ uint8_t iis3dwb10is_acc_set_odr(pnpl_iis3dwb10is_acc_odr_t enum_id, char **respo
   {
 #if (HSD_USE_DUMMY_DATA != 1)
     iis3dwb10is_acc_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
     __stream_control(true);
   }
   return ret;

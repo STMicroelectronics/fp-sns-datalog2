@@ -66,7 +66,7 @@ uint8_t ism330dhcx_mlc_comp_init(void)
   ism330dhcx_mlc_model.stream_params.spts = 0;
 #else
   ism330dhcx_mlc_model.stream_params.spts = 1;
-#endif
+#endif /* HSD_USE_DUMMY_DATA == 1 */
 
   int32_t value = 0;
   ism330dhcx_mlc_get_dim(&value);

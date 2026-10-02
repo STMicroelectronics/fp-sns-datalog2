@@ -47,7 +47,8 @@
 
 /* files syslowpower.h, SysDefPowerModeHelper.c*/
 #define SYS_CFG_USE_DEFAULT_PM_HELPER             0
-#define SYS_CFG_DEF_PM_HELPER_STANDBY             0  /* if defined to 1 then the MCU goes in STANDBY mode when the system enters in SLEEP_1. */
+/* If set to 1, the MCU enters STANDBY mode when the system enters SLEEP_1. */
+#define SYS_CFG_DEF_PM_HELPER_STANDBY             0
 
 /* file SysTimestamp.c */
 #define SYS_TS_CFG_ENABLE_SERVICE 1
@@ -59,16 +60,17 @@
   * - The configuration structure for an hardware timer. It must be compatible with SysTimestamp_t type.
   */
 #define SYS_TS_CFG_TSDRIVER_PARAMS &MX_TIM3InitParams
-//#define SYS_TS_CFG_TSDRIVER_PARAMS SYS_TS_USE_SW_TSDRIVER
+/* #define SYS_TS_CFG_TSDRIVER_PARAMS SYS_TS_USE_SW_TSDRIVER */
 
-#define SYS_TS_CFG_TSDRIVER_FREQ_HZ SystemCoreClock ///< hardware timer clock frequency in Hz
-//#define SYS_TS_CFG_TSDRIVER_FREQ_HZ TX_TIMER_TICKS_PER_SECOND ///< ThreadX clock frequency in Hz
+#define SYS_TS_CFG_TSDRIVER_FREQ_HZ SystemCoreClock /* hardware timer clock frequency in Hz */
+/* ThreadX clock frequency in Hz */
+/* #define SYS_TS_CFG_TSDRIVER_FREQ_HZ             TX_TIMER_TICKS_PER_SECOND */
 
 /* Tasks configuration */
 /***********************/
 #ifdef ENABLE_THREADX_DBG_PIN
 #include "STWIN.box_debug_pins.h"
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */
 
 /* SensorManager configuration */
 #define SM_MAX_SENSORS                            3U
@@ -103,7 +105,7 @@
 #define ACO_TASK_CFG_STACK_DEPTH                  (TX_MINIMUM_STACK*8)
 #define ACO_TASK_CFG_PRIORITY                     (12)
 
-// USBX Tasks
+/* USBX Tasks */
 #define USB_EP_BULKIN_CFG_STACK_DEPTH             (1 * 1024)
 #define USB_EP_BULKIN_CFG_PRIORITY                (3)
 #define USB_EP_BULKIN_CFG_PREEMPTION_THRESHOLD    USB_EP_BULKIN_CFG_PRIORITY

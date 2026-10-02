@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics..
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -60,6 +60,8 @@ void MX_GPDMA1_Init(void)
   HAL_NVIC_EnableIRQ(GPDMA1_Channel7_IRQn);
   HAL_NVIC_SetPriority(GPDMA1_Channel8_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(GPDMA1_Channel8_IRQn);
+  HAL_NVIC_SetPriority(GPDMA1_Channel9_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(GPDMA1_Channel9_IRQn);
 
   /* USER CODE BEGIN GPDMA1_Init 1 */
 
@@ -83,5 +85,9 @@ void MX_GPDMA1_InitCustom(void)
   HAL_NVIC_SetPriority(GPDMA1_Channel3_IRQn, 3, 0);
   HAL_NVIC_SetPriority(GPDMA1_Channel4_IRQn, 3, 0);
   HAL_NVIC_SetPriority(GPDMA1_Channel5_IRQn, 3, 0);
+  HAL_NVIC_SetPriority(GPDMA1_Channel6_IRQn, 3, 0);
+  HAL_NVIC_SetPriority(GPDMA1_Channel7_IRQn, 3, 0);
+  HAL_NVIC_SetPriority(GPDMA1_Channel8_IRQn, 3, 0);
+  HAL_NVIC_SetPriority(GPDMA1_Channel9_IRQn, 3, 0);
 }
 /* USER CODE END 1 */

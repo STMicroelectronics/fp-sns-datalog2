@@ -54,6 +54,8 @@
 #define SS_N_IN_ENDPOINTS                5U
 #define SS_N_OUT_ENDPOINTS               1U
 
+#define SS_CH_QUEUE_ITEMS                10U
+
 /* Override various options with default values already assigned in ux_api.h or ux_port.h. Please
  also refer to ux_port.h for descriptions on each of these options.  */
 
@@ -113,7 +115,10 @@
  is 4096 bytes but can be reduced in memory constraint environments. For cd-rom support in the storage
  class, this value cannot be less than 2048.  */
 
-/* #define UX_SLAVE_REQUEST_DATA_MAX_LENGTH        4096 */
+#define UX_SLAVE_REQUEST_DATA_MAX_LENGTH        2048
+
+/* Required for STM32H5 USB DRD FS: separate IN/OUT endpoint descriptors per EP number */
+#define UX_DEVICE_BIDIRECTIONAL_ENDPOINT_SUPPORT
 
 /* Defined, this value includes code to handle storage Multi-Media Commands (MMC). E.g., DVD-ROM. */
 
@@ -197,8 +202,8 @@
  of memory with the UX_SAFE_ALIGN field.
  */
 
-// #define UX_ENFORCE_SAFE_ALIGNMENT
-//#define UX_ENABLE_MEMORY_STATISTICS 1
+/* #define UX_ENFORCE_SAFE_ALIGNMENT*/
+/*#define UX_ENABLE_MEMORY_STATISTICS 1*/
 /* Defined, this value represents the number of packets in the CDC_ECM device class.
  The default is 16.
  */
@@ -252,16 +257,16 @@
  bwPollTimeout supported.
  */
 
-//#define UX_DEVICE_CLASS_DFU_STATUS_MODE                  1
+/*#define UX_DEVICE_CLASS_DFU_STATUS_MODE                  1*/
 /* Defined, this value represents the default DFU status bwPollTimeout.
  The value is 3 bytes long (max 0xFFFFFFu).
  By default the bwPollTimeout is 1 (means 1ms).
  */
 
-//#define UX_DEVICE_CLASS_DFU_STATUS_POLLTIMEOUT             0
+/*#define UX_DEVICE_CLASS_DFU_STATUS_POLLTIMEOUT             0*/
 /* Defined, this macro will enable custom request process callback.  */
 
-//#define UX_DEVICE_CLASS_DFU_CUSTOM_REQUEST_ENABLE
+/*#define UX_DEVICE_CLASS_DFU_CUSTOM_REQUEST_ENABLE*/
 /* Defined, this value will only enable the host side of usbx.  */
 
 /* #define UX_HOST_SIDE_ONLY */

@@ -66,7 +66,7 @@ extern I2C_HandleTypeDef hi2c2;
 extern SD_HandleTypeDef hsd1;
 extern DMA_HandleTypeDef hdma_spi3_rx;
 extern DMA_HandleTypeDef hdma_spi3_tx;
-//extern TIM_HandleTypeDef htim16;
+/*extern TIM_HandleTypeDef htim16;*/
 extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 extern TIM_HandleTypeDef htim3;
 extern TIM_HandleTypeDef htim4;

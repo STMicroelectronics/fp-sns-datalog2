@@ -400,6 +400,24 @@ void MX_GPIO_PE9_Init(void)
   HAL_NVIC_EnableIRQ(DIL_INT1_EXTI_IRQn);
 }
 
+void MX_GPIO_PC1_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+
+  /*Configure GPIO pins : PEPin PEPin */
+  GPIO_InitStruct.Pin = DIL_INT2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(DIL_INT2_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(DIL_INT2_EXTI_IRQn, 10, 0);
+  HAL_NVIC_EnableIRQ(DIL_INT2_EXTI_IRQn);
+}
+
 void MX_GPIO_PD14_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};

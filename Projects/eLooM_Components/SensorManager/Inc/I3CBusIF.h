@@ -26,6 +26,9 @@ extern "C" {
 #include "ABusIF.h"
 #include "tx_api.h"
 
+#define I3C_BUS_REG_ADDR_SIZE_8BIT   (1U)
+#define I3C_BUS_REG_ADDR_SIZE_16BIT  (2U)
+
 /**
   * Create a type name for _I3CBusIF.
   */
@@ -58,6 +61,11 @@ struct _I3CBusIF
   uint16_t auto_inc;
 
   /**
+    * Register address size in bytes (1 or 2).
+    */
+  uint8_t reg_addr_size;
+
+  /**
     * Synchronization object used to synchronize the sensor with the bus.
     */
   TX_SEMAPHORE sync_obj;
@@ -87,6 +95,8 @@ struct _I3CBusIF
   * @return SYS_NO_EROR_CODE if success, an error code otherwise.
   */
 ABusIF *I3CBusIFAlloc(uint16_t who_am_i, uint8_t static_address, uint8_t dynamic_address, uint8_t auto_inc);
+
+sys_error_code_t I3CBusIFSetRegAddrSize(I3CBusIF *_this, uint8_t reg_addr_size);
 
 sys_error_code_t I3CBusIFWaitIOComplete(I3CBusIF *_this);
 sys_error_code_t I3CBusIFNotifyIOComplete(I3CBusIF *_this);

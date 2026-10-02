@@ -64,7 +64,7 @@ uint8_t vl53l8cx_tof_comp_init(void)
   vl53l8cx_tof_set_samples_per_ts(0, NULL);
 #else
   vl53l8cx_tof_set_samples_per_ts(10, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
   __stream_control(true);
   /* USER Component initialization code */
   return PNPL_NO_ERROR_CODE;
@@ -85,11 +85,11 @@ uint8_t vl53l8cx_tof_get_enable(bool *value)
 
 uint8_t vl53l8cx_tof_get_resolution(pnpl_vl53l8cx_tof_resolution_t *enum_id)
 {
-//  /* vl53l8cx ranging profiles */
-//  #define VL53L8CX_PROFILE_4x4_CONTINUOUS        (1U)
-//  #define VL53L8CX_PROFILE_4x4_AUTONOMOUS        (2U)
-//  #define VL53L8CX_PROFILE_8x8_CONTINUOUS        (3U)
-//  #define VL53L8CX_PROFILE_8x8_AUTONOMOUS        (4U)
+  /*   vl53l8cx ranging profiles */
+  /*  #define VL53L8CX_PROFILE_4x4_CONTINUOUS        (1U)*/
+  /*  #define VL53L8CX_PROFILE_4x4_AUTONOMOUS        (2U)*/
+  /*  #define VL53L8CX_PROFILE_8x8_CONTINUOUS        (3U)*/
+  /*  #define VL53L8CX_PROFILE_8x8_AUTONOMOUS        (4U)*/
   uint8_t resolution = vl53l8cx_tof_model.sensor_status->type.ranging.profile_config.ranging_profile;
   switch (resolution)
   {
@@ -116,11 +116,11 @@ uint8_t vl53l8cx_tof_get_odr(int32_t *value)
 
 uint8_t vl53l8cx_tof_get_ranging_mode(pnpl_vl53l8cx_tof_ranging_mode_t *enum_id)
 {
-//  /* vl53l8cx ranging profiles */
-//  #define VL53L8CX_PROFILE_4x4_CONTINUOUS        (1U)
-//  #define VL53L8CX_PROFILE_4x4_AUTONOMOUS        (2U)
-//  #define VL53L8CX_PROFILE_8x8_CONTINUOUS        (3U)
-//  #define VL53L8CX_PROFILE_8x8_AUTONOMOUS        (4U)
+  /*   vl53l8cx ranging profiles */
+  /*  #define VL53L8CX_PROFILE_4x4_CONTINUOUS        (1U)*/
+  /*  #define VL53L8CX_PROFILE_4x4_AUTONOMOUS        (2U)*/
+  /*  #define VL53L8CX_PROFILE_8x8_CONTINUOUS        (3U)*/
+  /*  #define VL53L8CX_PROFILE_8x8_AUTONOMOUS        (4U)*/
   uint8_t ranging_mode = vl53l8cx_tof_model.sensor_status->type.ranging.profile_config.ranging_profile;
   switch (ranging_mode)
   {
@@ -204,11 +204,11 @@ uint8_t vl53l8cx_tof_get_dim(int32_t *value)
 {
   uint8_t profile = vl53l8cx_tof_model.sensor_status->type.ranging.profile_config.ranging_profile;
 
-//  /* vl53l8cx ranging profiles */
-//  #define VL53L8CX_PROFILE_4x4_CONTINUOUS        (1U)
-//  #define VL53L8CX_PROFILE_4x4_AUTONOMOUS        (2U)
-//  #define VL53L8CX_PROFILE_8x8_CONTINUOUS        (3U)
-//  #define VL53L8CX_PROFILE_8x8_AUTONOMOUS        (4U)
+  /*   vl53l8cx ranging profiles */
+  /*  #define VL53L8CX_PROFILE_4x4_CONTINUOUS        (1U)*/
+  /*  #define VL53L8CX_PROFILE_4x4_AUTONOMOUS        (2U)*/
+  /*  #define VL53L8CX_PROFILE_8x8_CONTINUOUS        (3U)*/
+  /*  #define VL53L8CX_PROFILE_8x8_AUTONOMOUS        (4U)*/
 
   switch (profile)
   {
@@ -218,7 +218,7 @@ uint8_t vl53l8cx_tof_get_dim(int32_t *value)
       *value = 128; /*8 output value x each zone -> 8x(4x4)*/
 #else
       *value = 32; /*2 output value x each zone -> 8x(4x4)*/
-#endif
+#endif /* defined(TOF_EXTENDED) */
       break;
     case 3:
     case 4:
@@ -226,7 +226,7 @@ uint8_t vl53l8cx_tof_get_dim(int32_t *value)
       *value = 512; /*8 output value x each zone -> 8x(8x8)*/
 #else
       *value = 128; /*2 output value x each zone -> 8x(8x8)*/
-#endif
+#endif /* defined(TOF_EXTENDED) */
       break;
     default:
       return 1;
@@ -313,8 +313,9 @@ uint8_t vl53l8cx_tof_set_resolution(pnpl_vl53l8cx_tof_resolution_t enum_id, char
   if (ret == SYS_NO_ERROR_CODE)
   {
 #if (HSD_USE_DUMMY_DATA != 1)
-    vl53l8cx_tof_set_samples_per_ts((int32_t)vl53l8cx_tof_model.sensor_status->type.ranging.profile_config.frequency, NULL);
-#endif
+    vl53l8cx_tof_set_samples_per_ts((int32_t)vl53l8cx_tof_model.sensor_status->type.ranging.profile_config.frequency,
+                                    NULL);
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
     __stream_control(true);
   }
   return ret;
@@ -332,7 +333,7 @@ uint8_t vl53l8cx_tof_set_odr(int32_t value, char **response_message)
   {
 #if (HSD_USE_DUMMY_DATA != 1)
     vl53l8cx_tof_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
     __stream_control(true);
   }
   return ret;
@@ -346,16 +347,16 @@ uint8_t vl53l8cx_tof_set_ranging_mode(pnpl_vl53l8cx_tof_ranging_mode_t enum_id, 
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
 
-  ///* vl53l8cx ranging profiles */
-  //#define VL53L8CX_PROFILE_4x4_CONTINUOUS        (1U)
-  //#define VL53L8CX_PROFILE_4x4_AUTONOMOUS        (2U)
-  //#define VL53L8CX_PROFILE_8x8_CONTINUOUS        (3U)
-  //#define VL53L8CX_PROFILE_8x8_AUTONOMOUS        (4U)
-  ///* vl53l8cx valid modes*/
-  //#define VL53L8CX_MODE_BLOCKING_CONTINUOUS   (1U)
-  //#define VL53L8CX_MODE_BLOCKING_ONESHOT      (2U)
-  //#define VL53L8CX_MODE_ASYNC_CONTINUOUS      (3U)
-  //#define VL53L8CX_MODE_ASYNC_ONESHOT         (4U)
+  /* vl53l8cx ranging profiles */
+  /*#define VL53L8CX_PROFILE_4x4_CONTINUOUS        (1U)*/
+  /*#define VL53L8CX_PROFILE_4x4_AUTONOMOUS        (2U)*/
+  /*#define VL53L8CX_PROFILE_8x8_CONTINUOUS        (3U)*/
+  /*#define VL53L8CX_PROFILE_8x8_AUTONOMOUS        (4U)*/
+  /* vl53l8cx valid modes*/
+  /*#define VL53L8CX_MODE_BLOCKING_CONTINUOUS   (1U)*/
+  /*#define VL53L8CX_MODE_BLOCKING_ONESHOT      (2U)*/
+  /*#define VL53L8CX_MODE_ASYNC_CONTINUOUS      (3U)*/
+  /*#define VL53L8CX_MODE_ASYNC_ONESHOT         (4U)*/
 
   uint32_t value;
   uint8_t mode = vl53l8cx_tof_model.sensor_status->type.ranging.profile_config.mode;
@@ -442,6 +443,4 @@ uint8_t vl53l8cx_tof_set_sensor_annotation(const char *value, char **response_me
   strcpy(vl53l8cx_tof_model.annotation, value);
   return ret;
 }
-
-
 

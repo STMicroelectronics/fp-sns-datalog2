@@ -290,7 +290,8 @@ uint8_t Stts751_Temp_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seriali
   {
     if (json_object_dothas_value(tempJSONObject, "stts751_temp.st_ble_stream.temp.enable"))
     {
-      bool st_ble_stream__temp_enable = json_object_dotget_boolean(tempJSONObject, "stts751_temp.st_ble_stream.temp.enable");
+      bool st_ble_stream__temp_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                   "stts751_temp.st_ble_stream.temp.enable");
       valid_property = true;
       ret = stts751_temp_set_st_ble_stream__temp_enable(st_ble_stream__temp_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

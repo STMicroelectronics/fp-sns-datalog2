@@ -7,7 +7,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics..
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -136,8 +136,10 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOH, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PG10 PG12 SD_DETECT_Pin PG0 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10 | GPIO_PIN_12 | SD_DETECT_Pin | GPIO_PIN_0;
+  /*Configure GPIO pins : PG10 PG12 SD_DETECT_Pin PG0
+                           PG5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10 | GPIO_PIN_12 | SD_DETECT_Pin | GPIO_PIN_0
+                        | GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
@@ -193,11 +195,11 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : INT_EX_Pin INT_TMOS_Pin */
-  GPIO_InitStruct.Pin = INT_EX_Pin | INT_TMOS_Pin;
+  /*Configure GPIO pin : INT_EX_Pin */
+  GPIO_InitStruct.Pin = INT_EX_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
+  HAL_GPIO_Init(INT_EX_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : INT_TOF_Pin */
   GPIO_InitStruct.Pin = INT_TOF_Pin;
@@ -232,7 +234,6 @@ void MX_GPIO_Init(void)
   HAL_NVIC_SetPriority(EXTI2_IRQn, 7, 0);
   HAL_NVIC_SetPriority(EXTI3_IRQn, 7, 0);
   HAL_NVIC_SetPriority(EXTI4_IRQn, 7, 0);
-  HAL_NVIC_SetPriority(EXTI5_IRQn, 7, 0);
   HAL_NVIC_SetPriority(EXTI6_IRQn, 7, 0);
   HAL_NVIC_SetPriority(EXTI7_IRQn, 7, 0);
   HAL_NVIC_SetPriority(EXTI8_IRQn, 7, 0);
@@ -672,27 +673,6 @@ void MX_GPIO_PF10_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIO3_EX_GPIO_Port, &GPIO_InitStruct);
-}
-
-void MX_GPIO_PG5_Init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-  /* Enable VddIO2 - Needed for GPIOG */
-  HAL_PWREx_EnableVddIO2();
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOG_CLK_ENABLE();
-
-  /*Configure GPIO pin : PG5Pin */
-  GPIO_InitStruct.Pin = INT_TMOS_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(INT_TMOS_GPIO_Port, &GPIO_InitStruct);
-
-  /* EXTI interrupt init*/
-  HAL_NVIC_SetPriority(INT_TMOS_EXTI_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(INT_TMOS_EXTI_IRQn);
 }
 
 void MX_GPIO_PC3_Init(void)

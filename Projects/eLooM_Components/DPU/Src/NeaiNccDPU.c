@@ -166,7 +166,7 @@ sys_error_code_t NeaiNccDPU_Init(NeaiNccDPU_t *_this, INeaiNcc_Model_t *p_aneain
   }
 
   /* initialize NanoEdge nCC AI library */
-  res =  INeaiNcc_Init((INeaiNcc_Model_t *)p_neaiNccModel, p_neaiNccModel->p_knowledge);
+  res =  INeaiNcc_Init((INeaiNcc_Model_t *)p_neaiNccModel);
   if (SYS_IS_ERROR_CODE(res))
   {
     sys_error_handler();

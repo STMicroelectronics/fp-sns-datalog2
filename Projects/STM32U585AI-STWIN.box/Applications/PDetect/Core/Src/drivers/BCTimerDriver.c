@@ -12,12 +12,14 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics
+  * Copyright (c) 2022 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
   * the root directory of this software component.
   * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  *
   ******************************************************************************
   */
 
@@ -70,7 +72,8 @@ sys_error_code_t BCTimerDriverRegisterElapsedCallback(BCTimerDriver_t *_this, pT
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  if (HAL_OK != HAL_TIM_RegisterCallback(_this->mx_handle.p_mx_tim_cfg->p_tim, HAL_TIM_PERIOD_ELAPSED_CB_ID, callback_f))
+  if (HAL_OK != HAL_TIM_RegisterCallback(_this->mx_handle.p_mx_tim_cfg->p_tim, HAL_TIM_PERIOD_ELAPSED_CB_ID,
+                                         callback_f))
   {
     res = SYS_INVALID_FUNC_CALL_ERROR_CODE;
     SYS_SET_LOW_LEVEL_ERROR_CODE(SYS_INVALID_FUNC_CALL_ERROR_CODE);

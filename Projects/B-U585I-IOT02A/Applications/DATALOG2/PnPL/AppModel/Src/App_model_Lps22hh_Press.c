@@ -302,11 +302,11 @@ uint8_t lps22hh_press_set_samples_per_ts(int32_t value, char **response_message)
   {
     lps22hh_press_model.stream_params.spts = min_v;
   }
-//  lps22hh_temp_get_samples_per_ts(&temp_spts);
-//  if (temp_spts != lps22hh_press_model.stream_params.spts)
-//  {
-//    lps22hh_temp_set_samples_per_ts(temp_spts);
-//  }
+  /*  lps22hh_temp_get_samples_per_ts(&temp_spts);*/
+  /*  if (temp_spts != lps22hh_press_model.stream_params.spts)*/
+  /*  {*/
+  /*    lps22hh_temp_set_samples_per_ts(temp_spts);*/
+  /*  }*/
   return ret;
 }
 
@@ -320,6 +320,4 @@ uint8_t lps22hh_press_set_sensor_annotation(const char *value, char **response_m
   strcpy(lps22hh_press_model.annotation, value);
   return ret;
 }
-
-
 

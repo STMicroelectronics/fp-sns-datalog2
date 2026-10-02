@@ -26,22 +26,19 @@ extern "C" {
 
 #include "services/syserror.h"
 
-#define APP_REPORT_ID_INERTIAL_CMD                      0x01
-#define APP_REPORT_ID_CLOUD_CMD                         0x02
-#define APP_REPORT_ID_ACOUSTIC_CMD                      0x03
-#define APP_REPORT_ID_BLE_CMD                           0x04
-#define APP_MESSAGE_ID_NEAI                             0x10  /* Special ID used for the messages class of NanoEdgeAI task. */
-#define APP_MESSAGE_ID_UTIL                             0x0B  /* Message ID used for the messages class of Utility task. */
-#define APP_REPORT_ID_FORCE_STEP                        0xFE  /* Special ID used by the INIT task to force the execution of ManagedTaskEx step. */
+#define APP_REPORT_ID_INERTIAL_CMD 0x01
+#define APP_REPORT_ID_CLOUD_CMD    0x02
+#define APP_REPORT_ID_ACOUSTIC_CMD 0x03
+#define APP_REPORT_ID_BLE_CMD      0x04
+#define APP_MESSAGE_ID_NEAI        0x10  /* Special ID used for the messages class of NanoEdgeAI task. */
+#define APP_MESSAGE_ID_UTIL        0x0B  /* Message ID used for the messages class of Utility task. */
+#define APP_REPORT_ID_FORCE_STEP   0xFE  /* Special ID used by INIT task to force execution of ManagedTaskEx step */
 
 typedef union _APPReport
 {
   uint8_t msgId;
 
-  //--------------------------------------------------------------------------------
-  //  internalReport 11 (MCU) - Util task command
-  //--------------------------------------------------------------------------------
-
+  /* internalReport 11 (MCU) - Util task command */
   struct utilMessage_t
   {
     uint8_t msgId; /* Meport ID = 0x0B (11) */
@@ -56,10 +53,7 @@ typedef union _APPReport
     uint16_t nCmdID;
   } acousticDomainReport;
 
-  //--------------------------------------------------------------------------------
-  //  internalReport (MCU)
-  //--------------------------------------------------------------------------------
-
+  /* internalReport (MCU) */
   struct internalReportFE_t
   {
     uint8_t msgId; /* Report ID = 0xFE */

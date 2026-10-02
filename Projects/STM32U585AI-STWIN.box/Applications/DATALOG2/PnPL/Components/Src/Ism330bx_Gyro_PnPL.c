@@ -311,7 +311,8 @@ uint8_t Ism330bx_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "ism330bx_gyro.st_ble_stream.gyro.enable"))
     {
-      bool st_ble_stream__gyro_enable = json_object_dotget_boolean(tempJSONObject, "ism330bx_gyro.st_ble_stream.gyro.enable");
+      bool st_ble_stream__gyro_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                   "ism330bx_gyro.st_ble_stream.gyro.enable");
       valid_property = true;
       ret = ism330bx_gyro_set_st_ble_stream__gyro_enable(st_ble_stream__gyro_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

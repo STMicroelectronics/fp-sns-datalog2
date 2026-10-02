@@ -96,11 +96,13 @@ uint8_t __stream_control(bool status)
           /* Get sensor's bandwidth */
           if (app_model.s_models[i]->sensor_status->isensor_class == ISENSOR_CLASS_MEMS)
           {
-            app_model.s_models[i]->stream_params.bandwidth = app_model.s_models[i]->sensor_status->type.mems.odr * SMGetnBytesPerSample(i);
+            app_model.s_models[i]->stream_params.bandwidth =
+              app_model.s_models[i]->sensor_status->type.mems.odr * SMGetnBytesPerSample(i);
           }
           else if (app_model.s_models[i]->sensor_status->isensor_class == ISENSOR_CLASS_AUDIO)
           {
-            app_model.s_models[i]->stream_params.bandwidth = app_model.s_models[i]->sensor_status->type.audio.frequency * SMGetnBytesPerSample(i);
+            app_model.s_models[i]->stream_params.bandwidth =
+              app_model.s_models[i]->sensor_status->type.audio.frequency * SMGetnBytesPerSample(i);
           }
           else
           {
@@ -172,7 +174,8 @@ static sys_error_code_t __sc_set_sd_stream_params(uint32_t id)
   /* SD write every SC_SDCARD_WRITE_PERIOD ms of sensor data. */
   p_s_models[id]->stream_params.sd_dps = (uint32_t)(p_s_models[id]->stream_params.bandwidth * SC_SDCARD_WRITE_PERIOD);
   /* Access to SD is optimized when buffer dimension is multiple of 512 */
-  p_s_models[id]->stream_params.sd_dps = p_s_models[id]->stream_params.sd_dps - (p_s_models[id]->stream_params.sd_dps % 512) + 512;
+  p_s_models[id]->stream_params.sd_dps =
+    p_s_models[id]->stream_params.sd_dps - (p_s_models[id]->stream_params.sd_dps % 512) + 512;
 
   /* If the sensor is very slow, we force a write every 1 second --> sd_dps = bandwidth
    * It's no longer multiple of 512 */
@@ -198,7 +201,8 @@ sys_error_code_t __sc_set_ble_stream_params(uint32_t id)
   }
   else if (p_s_models[id]->sensor_status->isensor_class == ISENSOR_CLASS_AUDIO)
   {
-    p_s_models[id]->stream_params.bandwidth = p_s_models[id]->sensor_status->type.audio.frequency * SMGetnBytesPerSample(id);
+    p_s_models[id]->stream_params.bandwidth =
+      p_s_models[id]->sensor_status->type.audio.frequency * SMGetnBytesPerSample(id);
   }
 
   /* set BLE data buffer size based on max ble bandwidth chosen and period of ble data streaming */
@@ -206,15 +210,18 @@ sys_error_code_t __sc_set_ble_stream_params(uint32_t id)
   {
     p_s_models[id]->stream_params.ble_dps = (MAX_BLE_BANDWIDTH * BLE_SEND_PERIOD) / 1000;
     /* BLE dps must be multiple of Byte per samples */
-    p_s_models[id]->stream_params.ble_dps = p_s_models[id]->stream_params.ble_dps - (p_s_models[id]->stream_params.ble_dps % SMGetnBytesPerSample(id));
+    p_s_models[id]->stream_params.ble_dps =
+      p_s_models[id]->stream_params.ble_dps - (p_s_models[id]->stream_params.ble_dps % SMGetnBytesPerSample(id));
     /* set the real ODR streamed */
     p_s_models[id]->st_ble_stream.st_ble_stream_objects.odr = (int32_t)(MAX_BLE_BANDWIDTH / SMGetnBytesPerSample(id));
   }
   else
   {
-    p_s_models[id]->stream_params.ble_dps = (uint32_t)((p_s_models[id]->stream_params.bandwidth * BLE_SEND_PERIOD) / 1000);
+    p_s_models[id]->stream_params.ble_dps =
+      (uint32_t)((p_s_models[id]->stream_params.bandwidth * BLE_SEND_PERIOD) / 1000);
     /* BLE dps must be multiple of Byte per samples */
-    p_s_models[id]->stream_params.ble_dps = p_s_models[id]->stream_params.ble_dps - (p_s_models[id]->stream_params.ble_dps % SMGetnBytesPerSample(id));
+    p_s_models[id]->stream_params.ble_dps =
+      p_s_models[id]->stream_params.ble_dps - (p_s_models[id]->stream_params.ble_dps % SMGetnBytesPerSample(id));
     /* set the real ODR streamed */
     p_s_models[id]->st_ble_stream.st_ble_stream_objects.odr = (int32_t)(p_s_models[id]->sensor_status->type.mems.odr);
   }
@@ -238,15 +245,19 @@ sys_error_code_t __sc_set_ble_stream_params(uint32_t id)
   if (p_s_models[id]->stream_params.ble_dps > DEFAULT_MAX_RAW_NOTIFICATION_CHAR_LEN)
   {
     /* need to leave 1 Byte for stream ID */
-    p_s_models[id]->st_ble_stream.st_ble_stream_objects.elements = (uint32_t)(floor((DEFAULT_MAX_RAW_NOTIFICATION_CHAR_LEN - 1) / SMGetnBytesPerSample(id)));
+    p_s_models[id]->st_ble_stream.st_ble_stream_objects.elements =
+      (uint32_t)(floor((DEFAULT_MAX_RAW_NOTIFICATION_CHAR_LEN - 1) / SMGetnBytesPerSample(id)));
     /* BLE ds must be multiple of ble packet size (element * bytePerSamples)*/
     elements_in_byte = p_s_models[id]->st_ble_stream.st_ble_stream_objects.elements * SMGetnBytesPerSample(id);
 
-    p_s_models[id]->stream_params.ble_dps = p_s_models[id]->stream_params.ble_dps - (p_s_models[id]->stream_params.ble_dps % elements_in_byte) + elements_in_byte;
+    p_s_models[id]->stream_params.ble_dps = p_s_models[id]->stream_params.ble_dps
+                                            - (p_s_models[id]->stream_params.ble_dps % elements_in_byte)
+                                            + elements_in_byte;
   }
   else
   {
-    p_s_models[id]->st_ble_stream.st_ble_stream_objects.elements = (uint32_t)(floor(p_s_models[id]->stream_params.ble_dps / SMGetnBytesPerSample(id)));
+    p_s_models[id]->st_ble_stream.st_ble_stream_objects.elements =
+      (uint32_t)(floor(p_s_models[id]->stream_params.ble_dps / SMGetnBytesPerSample(id)));
   }
 
   return res;
@@ -270,10 +281,11 @@ static sys_error_code_t __sc_set_usb_stream_params(uint32_t id)
   else
   {
     /* 50ms of sensor data; when there's a timestamp packets will be sent fastly */
-    p_s_models[id]->stream_params.usb_dps = (uint32_t)(p_s_models[id]->stream_params.bandwidth * SC_USB_MAX_PACKETS_PERIOD);
+    p_s_models[id]->stream_params.usb_dps =
+      (uint32_t)(p_s_models[id]->stream_params.bandwidth * SC_USB_MAX_PACKETS_PERIOD);
     if (p_s_models[id]->stream_params.usb_dps > SC_USB_DPS_MAX)
     {
-      p_s_models[id]->stream_params.usb_dps = SC_USB_DPS_MAX; // set a limit to avoid buffer to big
+      p_s_models[id]->stream_params.usb_dps = SC_USB_DPS_MAX; /* set a limit to avoid buffer to big*/
     }
     else if (p_s_models[id]->stream_params.usb_dps < SMGetnBytesPerSample(id) + 8)
     {
@@ -338,7 +350,7 @@ static sys_error_code_t __sc_set_fifo_wtm(uint32_t id)
                                        descriptor.p_name, p_s_models[id]->sensor_status->type.audio.frequency,
                                        p_s_models[id]->stream_params.usb_dps, ms, fifo_watermark));
   }
-#endif
+#endif /* SYS_DEBUG */
 
   return res;
 }

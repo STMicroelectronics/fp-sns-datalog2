@@ -63,7 +63,7 @@ uint8_t ism330dhcx_gyro_comp_init(void)
   ism330dhcx_gyro_set_samples_per_ts(0, NULL);
 #else
   ism330dhcx_gyro_set_samples_per_ts(104, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
   __stream_control(true);
   /* USER Component initialization code */
   return PNPL_NO_ERROR_CODE;
@@ -296,7 +296,7 @@ uint8_t ism330dhcx_gyro_set_odr(pnpl_ism330dhcx_gyro_odr_t enum_id, char **respo
   {
 #if (HSD_USE_DUMMY_DATA != 1)
     ism330dhcx_gyro_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
     __stream_control(true);
   }
   return ret;

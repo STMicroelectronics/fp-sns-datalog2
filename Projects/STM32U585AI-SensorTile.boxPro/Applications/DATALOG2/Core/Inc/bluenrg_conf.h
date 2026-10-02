@@ -48,9 +48,11 @@ extern "C" {
 #define HCI_MAX_PAYLOAD_SIZE           260
 /*---------- Number of incoming packets added to the list of packets to read -----------*/
 #define HCI_READ_PACKET_NUM_MAX         20
-/*---------- Scan Interval: time interval from when the Controller started its last scan until it begins the subsequent scan (for a number N, Time = N x 0.625 msec) -----------*/
+/* ---------- Scan Interval: time interval from when the Controller started its last scan until it begins the
+ * subsequent scan (for a number N, Time = N x 0.625 msec) ----------- */
 #define SCAN_P                       16384
-/*---------- Scan Window: amount of time for the duration of the LE scan (for a number N, Time = N x 0.625 msec) -----------*/
+/* ---------- Scan Window: amount of time for the duration of the LE scan (for a number N, Time = N x 0.625 msec)
+ * ----------- */
 #define SCAN_L                       16384
 /*---------- Supervision Timeout for the LE Link (for a number N, Time = N x 10 msec) -----------*/
 #define SUPERV_TIMEOUT                  60
@@ -86,7 +88,7 @@ extern "C" {
 #define PRINT_DBG(...)        printf(__VA_ARGS__)
 #else
 #define PRINT_DBG(...)
-#endif
+#endif /* BLE2_DEBUG == 1 */
 
 #if PRINT_CSV_FORMAT
 #include <stdio.h>
@@ -94,7 +96,7 @@ extern "C" {
 void print_csv_time(void);
 #else
 #define PRINT_CSV(...)
-#endif
+#endif /* PRINT_CSV_FORMAT */
 
 #if BLUENRGLP_DEBUG
 /**
@@ -106,7 +108,7 @@ void print_csv_time(void);
 #define BLUENRG_PRINTF(...)   printf(__VA_ARGS__)
 #else
 #define BLUENRG_PRINTF(...)
-#endif
+#endif /* BLUENRGLP_DEBUG */
 
 #ifdef __cplusplus
 }

@@ -64,6 +64,7 @@
 #include "LSM6DSV32XTask.h"
 #include "LSM6DSV80XTask.h"
 #include "LSM6DSV320XTask.h"
+#include "LSM6DSK320XTask.h"
 
 #include "DatalogAppTask.h"
 #include "App_model.h"
@@ -84,6 +85,7 @@
 #include "Ism330is_Acc_PnPL.h"
 #include "Ism330is_Gyro_PnPL.h"
 #include "Ism330is_Ispu_PnPL.h"
+#include "Lsm6dsv16bx_Tdm_Acc_PnPL.h"
 #include "Lsm6dsv16bx_Acc_PnPL.h"
 #include "Lsm6dsv16bx_Gyro_PnPL.h"
 #include "Lsm6dsv16bx_Mlc_PnPL.h"
@@ -98,6 +100,10 @@
 #include "Lsm6dsv320x_H_Acc_PnPL.h"
 #include "Lsm6dsv320x_Gyro_PnPL.h"
 #include "Lsm6dsv320x_Mlc_PnPL.h"
+#include "Lsm6dsk320x_L_Acc_PnPL.h"
+#include "Lsm6dsk320x_H_Acc_PnPL.h"
+#include "Lsm6dsk320x_Gyro_PnPL.h"
+#include "Lsm6dsk320x_Mlc_PnPL.h"
 
 #include "Automode_PnPL.h"
 #include "Log_Controller_PnPL.h"
@@ -114,6 +120,7 @@ static IPnPLComponent_t *pDeviceInfoPnPLObj = NULL;
 static IPnPLComponent_t *pFirmwareInfoPnPLObj = NULL;
 static IPnPLComponent_t *pAcquisitionInfoPnPLObj = NULL;
 static IPnPLComponent_t *pTagsInfoPnPLObj = NULL;
+static IPnPLComponent_t *pLsm6dsv16bxTdmAccPnPLObj = NULL;
 static IPnPLComponent_t *pLSM6DSV16BX_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pLSM6DSV16BX_GYRO_PnPLObj = NULL;
 static IPnPLComponent_t *pLSM6DSV16BX_MLC_PnPLObj = NULL;
@@ -145,6 +152,10 @@ static IPnPLComponent_t *pLSM6DSV320X_L_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pLSM6DSV320X_H_ACC_PnPLObj = NULL;
 static IPnPLComponent_t *pLSM6DSV320X_GYRO_PnPLObj = NULL;
 static IPnPLComponent_t *pLSM6DSV320X_MLC_PnPLObj = NULL;
+static IPnPLComponent_t *pLSM6DSK320X_L_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pLSM6DSK320X_H_ACC_PnPLObj = NULL;
+static IPnPLComponent_t *pLSM6DSK320X_GYRO_PnPLObj = NULL;
+static IPnPLComponent_t *pLSM6DSK320X_MLC_PnPLObj = NULL;
 
 /**
   * Utility task object.
@@ -177,6 +188,7 @@ static AManagedTaskEx *sILPS28QSWObj = NULL;
 static AManagedTaskEx *sLSM6DSV32XObj = NULL;
 static AManagedTaskEx *sLSM6DSV80XObj = NULL;
 static AManagedTaskEx *sLSM6DSV320XObj = NULL;
+static AManagedTaskEx *sLSM6DSK320XObj = NULL;
 
 
 /**
@@ -211,6 +223,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   boolean_t ext_lsm6dsv16bx = FALSE;
   boolean_t ext_lsm6dsv32x = FALSE;
   boolean_t ext_lsm6dsv80x = FALSE;
+  boolean_t ext_lsm6dsk320x = FALSE;
   hwd_st25dv_version st25dv_version;
 
   /* PnPL thread safe mutex creation */
@@ -229,6 +242,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   ext_lsm6dsv16bx = HardwareDetection_Check_Ext_LSM6DSV16BX();
   ext_lsm6dsv32x = HardwareDetection_Check_Ext_LSM6DSV32X();
   ext_lsm6dsv80x = HardwareDetection_Check_Ext_LSM6DSV80X();
+  ext_lsm6dsk320x = HardwareDetection_Check_Ext_LSM6DSK320X();
 
   /* Check NFC chip version */
   st25dv_version = HardwareDetection_Check_ST25DV();
@@ -239,7 +253,8 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   }
 
   /************ Allocate task objects ************/
-  sUtilObj = UtilTaskAlloc(&MX_GPIO_SW1InitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams, &MX_GPIO_LED3InitParams);
+  sUtilObj = UtilTaskAlloc(&MX_GPIO_SW1InitParams, &MX_GPIO_LED1InitParams, &MX_GPIO_LED2InitParams,
+                           &MX_GPIO_LED3InitParams);
   sDatalogAppObj = DatalogAppTaskAlloc();
   sI2C1BusObj = I2CBusTaskAlloc(&MX_I2C1InitParams);
   sSPI2BusObj = SPIBusTaskAlloc(&MX_SPI2InitParams);
@@ -272,7 +287,11 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   }
   if (ext_lsm6dsv16bx)
   {
-    sLSM6DSV16BXObj = LSM6DSV16BXTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams, false);
+    sLSM6DSV16BXObj = LSM6DSV16BXTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams,
+#if LSM6DSV16BX_TDM_ENABLED
+                                           &MX_SAI1InitParams,
+#endif
+                                           false);
   }
   if (ext_lsm6dsv32x)
   {
@@ -281,11 +300,21 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   if (ext_lsm6dsv80x)
   {
     sLSM6DSV80XObj = LSM6DSV80XTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams, false);
-    sLSM6DSV320XObj = LSM6DSV320XTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams, false);
+    sLSM6DSV320XObj = LSM6DSV320XTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams,
+                                           false);
+  }
+  if (ext_lsm6dsk320x)
+  {
+    sLSM6DSK320XObj = LSM6DSK320XTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams,
+                                           false);
   }
   if (ext_iis3dwb10is)
   {
+#ifdef USE_ISPU_INT
+    sIIS3DWB10ISExtObj = IIS3DWB10ISTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, &MX_GPIO_INT2_EXTERNALInitParams, &MX_GPIO_CS_EXTERNALInitParams);
+#else
     sIIS3DWB10ISExtObj = IIS3DWB10ISTaskAlloc(&MX_GPIO_INT1_EXTERNALInitParams, NULL, &MX_GPIO_CS_EXTERNALInitParams);
+#endif /* USE_ISPU_INT */
   }
 
   if (ext_h3lis331dl)
@@ -335,6 +364,10 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
     res = ACAddTask(pAppContext, (AManagedTask *) sLSM6DSV80XObj);
     res = ACAddTask(pAppContext, (AManagedTask *) sLSM6DSV320XObj);
   }
+  if (ext_lsm6dsk320x)
+  {
+    res = ACAddTask(pAppContext, (AManagedTask *) sLSM6DSK320XObj);
+  }
   if (ext_iis3dwb10is)
   {
     res = ACAddTask(pAppContext, (AManagedTask *) sIIS3DWB10ISExtObj);
@@ -363,6 +396,7 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
   }
   if (sLSM6DSV16BXObj)
   {
+    pLsm6dsv16bxTdmAccPnPLObj = Lsm6dsv16bx_Tdm_Acc_PnPLAlloc();
     pLSM6DSV16BX_ACC_PnPLObj = Lsm6dsv16bx_Acc_PnPLAlloc();
     pLSM6DSV16BX_GYRO_PnPLObj = Lsm6dsv16bx_Gyro_PnPLAlloc();
     pLSM6DSV16BX_MLC_PnPLObj = Lsm6dsv16bx_Mlc_PnPLAlloc();
@@ -383,6 +417,13 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
     pLSM6DSV320X_H_ACC_PnPLObj = Lsm6dsv320x_H_Acc_PnPLAlloc();
     pLSM6DSV320X_GYRO_PnPLObj = Lsm6dsv320x_Gyro_PnPLAlloc();
     pLSM6DSV320X_MLC_PnPLObj = Lsm6dsv320x_Mlc_PnPLAlloc();
+  }
+  if (sLSM6DSK320XObj)
+  {
+    pLSM6DSK320X_L_ACC_PnPLObj = Lsm6dsk320x_L_Acc_PnPLAlloc();
+    pLSM6DSK320X_H_ACC_PnPLObj = Lsm6dsk320x_H_Acc_PnPLAlloc();
+    pLSM6DSK320X_GYRO_PnPLObj = Lsm6dsk320x_Gyro_PnPLAlloc();
+    pLSM6DSK320X_MLC_PnPLObj = Lsm6dsk320x_Mlc_PnPLAlloc();
   }
   if (sLSM6DSV16XObj)
   {
@@ -425,7 +466,8 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   I2CBusTaskConnectDevice((I2CBusTask *) sI2C1BusObj, (I2CBusIF *)LIS2MDLTaskGetSensorIF((LIS2MDLTask *) sLIS2MDLObj));
   I2CBusTaskConnectDevice((I2CBusTask *) sI2C1BusObj, (I2CBusIF *)LPS22DFTaskGetSensorIF((LPS22DFTask *) sLPS22DFObj));
   I2CBusTaskConnectDevice((I2CBusTask *) sI2C1BusObj, (I2CBusIF *)STTS22HTaskGetSensorIF((STTS22HTask *) sSTTS22HObj));
-  SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj, (SPIBusIF *)LIS2DU12TaskGetSensorIF((LIS2DU12Task *) sLIS2DU12Obj));
+  SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj,
+                          (SPIBusIF *)LIS2DU12TaskGetSensorIF((LIS2DU12Task *) sLIS2DU12Obj));
 
   if (sISM330ISObj)
   {
@@ -464,6 +506,11 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     SPIBusTaskConnectDevice((SPIBusTask *) sSPI3BusObj,
                             (SPIBusIF *)LSM6DSV320XTaskGetSensorIF((LSM6DSV320XTask *) sLSM6DSV320XObj));
   }
+  if (sLSM6DSK320XObj)
+  {
+    SPIBusTaskConnectDevice((SPIBusTask *) sSPI3BusObj,
+                            (SPIBusIF *)LSM6DSK320XTaskGetSensorIF((LSM6DSK320XTask *) sLSM6DSK320XObj));
+  }
   if (sLSM6DSV16XObj)
   {
     SPIBusTaskConnectDevice((SPIBusTask *) sSPI2BusObj,
@@ -487,8 +534,12 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   }
   if (sLSM6DSV16BXObj)
   {
+#if LSM6DSV16BX_TDM_ENABLED
+    IEventSrcAddEventListener(LSM6DSV16BXTaskGetTdmAccEventSrcIF((LSM6DSV16BXTask *) sLSM6DSV16BXObj), DatalogAppListener);
+#endif
     IEventSrcAddEventListener(LSM6DSV16BXTaskGetAccEventSrcIF((LSM6DSV16BXTask *) sLSM6DSV16BXObj), DatalogAppListener);
-    IEventSrcAddEventListener(LSM6DSV16BXTaskGetGyroEventSrcIF((LSM6DSV16BXTask *) sLSM6DSV16BXObj), DatalogAppListener);
+    IEventSrcAddEventListener(LSM6DSV16BXTaskGetGyroEventSrcIF((LSM6DSV16BXTask *) sLSM6DSV16BXObj),
+                              DatalogAppListener);
     IEventSrcAddEventListener(LSM6DSV16BXTaskGetMlcEventSrcIF((LSM6DSV16BXTask *) sLSM6DSV16BXObj), DatalogAppListener);
   }
   if (sH3LIS331DLObj)
@@ -497,8 +548,10 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   }
   if (sIIS3DWB10ISExtObj)
   {
-    IEventSrcAddEventListener(IIS3DWB10ISTaskGetAccEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj), DatalogAppListener);
-    IEventSrcAddEventListener(IIS3DWB10ISTaskGetIspuEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj), DatalogAppListener);
+    IEventSrcAddEventListener(IIS3DWB10ISTaskGetAccEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj),
+                              DatalogAppListener);
+    IEventSrcAddEventListener(IIS3DWB10ISTaskGetIspuEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj),
+                              DatalogAppListener);
   }
   if (sILPS28QSWObj)
   {
@@ -517,9 +570,20 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     IEventSrcAddEventListener(LSM6DSV80XTaskGetGyroEventSrcIF((LSM6DSV80XTask *) sLSM6DSV80XObj), DatalogAppListener);
     IEventSrcAddEventListener(LSM6DSV80XTaskGetMlcEventSrcIF((LSM6DSV80XTask *) sLSM6DSV80XObj), DatalogAppListener);
     IEventSrcAddEventListener(LSM6DSV320XTaskGetAccEventSrcIF((LSM6DSV320XTask *) sLSM6DSV320XObj), DatalogAppListener);
-    IEventSrcAddEventListener(LSM6DSV320XTaskGetHgAccEventSrcIF((LSM6DSV320XTask *) sLSM6DSV320XObj), DatalogAppListener);
-    IEventSrcAddEventListener(LSM6DSV320XTaskGetGyroEventSrcIF((LSM6DSV320XTask *) sLSM6DSV320XObj), DatalogAppListener);
+    IEventSrcAddEventListener(LSM6DSV320XTaskGetHgAccEventSrcIF((LSM6DSV320XTask *) sLSM6DSV320XObj),
+                              DatalogAppListener);
+    IEventSrcAddEventListener(LSM6DSV320XTaskGetGyroEventSrcIF((LSM6DSV320XTask *) sLSM6DSV320XObj),
+                              DatalogAppListener);
     IEventSrcAddEventListener(LSM6DSV320XTaskGetMlcEventSrcIF((LSM6DSV320XTask *) sLSM6DSV320XObj), DatalogAppListener);
+  }
+  if (sLSM6DSK320XObj)
+  {
+    IEventSrcAddEventListener(LSM6DSK320XTaskGetAccEventSrcIF((LSM6DSK320XTask *) sLSM6DSK320XObj), DatalogAppListener);
+    IEventSrcAddEventListener(LSM6DSK320XTaskGetHgAccEventSrcIF((LSM6DSK320XTask *) sLSM6DSK320XObj),
+                              DatalogAppListener);
+    IEventSrcAddEventListener(LSM6DSK320XTaskGetGyroEventSrcIF((LSM6DSK320XTask *) sLSM6DSK320XObj),
+                              DatalogAppListener);
+    IEventSrcAddEventListener(LSM6DSK320XTaskGetMlcEventSrcIF((LSM6DSK320XTask *) sLSM6DSK320XObj), DatalogAppListener);
   }
   if (sLSM6DSV16XObj)
   {
@@ -541,6 +605,10 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   {
     DatalogAppTask_SetExtMLCIF((AManagedTask *) sLSM6DSV80XObj);
     DatalogAppTask_SetExtMLC320XIF((AManagedTask *) sLSM6DSV320XObj);
+  }
+  else if (sLSM6DSK320XObj)
+  {
+    DatalogAppTask_SetExtMLCIF((AManagedTask *) sLSM6DSK320XObj);
   }
   else if (sISM330ISObj)
   {
@@ -581,8 +649,12 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   }
   if (sLSM6DSV16BXObj)
   {
+#if LSM6DSV16BX_TDM_ENABLED
+    Lsm6dsv16bx_Tdm_Acc_PnPLInit(pLsm6dsv16bxTdmAccPnPLObj);
+    lsm6dsv16bx_tdm_acc_set_enable(true, NULL);
+#endif
     Lsm6dsv16bx_Acc_PnPLInit(pLSM6DSV16BX_ACC_PnPLObj);
-    lsm6dsv16bx_acc_set_enable(false, NULL);
+    lsm6dsv16bx_acc_set_enable(true, NULL);
     Lsm6dsv16bx_Gyro_PnPLInit(pLSM6DSV16BX_GYRO_PnPLObj);
     lsm6dsv16bx_gyro_set_enable(false, NULL);
     Lsm6dsv16bx_Mlc_PnPLInit(pLSM6DSV16BX_MLC_PnPLObj);
@@ -615,6 +687,13 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
     Lsm6dsv320x_H_Acc_PnPLInit(pLSM6DSV320X_H_ACC_PnPLObj);
     Lsm6dsv320x_Gyro_PnPLInit(pLSM6DSV320X_GYRO_PnPLObj);
     Lsm6dsv320x_Mlc_PnPLInit(pLSM6DSV320X_MLC_PnPLObj);
+  }
+  if (sLSM6DSK320XObj)
+  {
+    Lsm6dsk320x_L_Acc_PnPLInit(pLSM6DSK320X_L_ACC_PnPLObj);
+    Lsm6dsk320x_H_Acc_PnPLInit(pLSM6DSK320X_H_ACC_PnPLObj);
+    Lsm6dsk320x_Gyro_PnPLInit(pLSM6DSK320X_GYRO_PnPLObj);
+    Lsm6dsk320x_Mlc_PnPLInit(pLSM6DSK320X_MLC_PnPLObj);
   }
   if (sLSM6DSV16XObj)
   {
@@ -681,6 +760,10 @@ void EXT_INT1_EXTI_Callback(uint16_t nPin)
     {
       LSM6DSV320XTask_EXTI_Callback(nPin);
     }
+  }
+  else if (sLSM6DSK320XObj)
+  {
+    LSM6DSK320XTask_EXTI_Callback(nPin);
   }
   else
   {

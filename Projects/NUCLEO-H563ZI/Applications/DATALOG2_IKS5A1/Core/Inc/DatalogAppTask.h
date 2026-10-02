@@ -52,8 +52,8 @@ typedef struct
 typedef struct _DatalogAppTask DatalogAppTask;
 
 
-// Public API declaration
-//***********************
+/* Public API declaration*/
+/*************************/
 
 /**
   * Allocate an instance of DatalogAppTask.
@@ -91,8 +91,8 @@ sys_error_code_t DatalogAppTask_msg(ULONG msg);
 
 uint8_t DatalogAppTask_load_ucf(const char *ucf_data, uint32_t ucf_size, const char *output_data, int32_t output_size);
 
-// Inline functions definition
-// ***************************
+/* Inline functions definition*/
+/* ****************************/
 
 #ifdef __cplusplus
 }

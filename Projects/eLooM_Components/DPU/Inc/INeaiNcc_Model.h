@@ -53,7 +53,7 @@ typedef struct _INeaiNcc_Model INeaiNcc_Model_t;
   */
 struct _INeaiNcc_Model_vtbl
 {
-  uint8_t (*Init)(INeaiNcc_Model_t *_this, const float_t knowledge_buffer[]);
+  uint8_t (*Init)(INeaiNcc_Model_t *_this);
   uint8_t (*Classification)(INeaiNcc_Model_t *_this, float_t data_input[], float_t output_buffer[], uint16_t *id_class);
 };
 
@@ -78,7 +78,7 @@ struct _INeaiNcc_Model
   * @param p_network_config
   * @return
   */
-static inline uint8_t INeaiNcc_Init(INeaiNcc_Model_t *_this, const float_t knowledge_buffer[]);
+static inline uint8_t INeaiNcc_Init(INeaiNcc_Model_t *_this);
 
 /**
   *
@@ -95,9 +95,9 @@ static inline uint8_t INeaiNcc_Classification(INeaiNcc_Model_t *_this, float_t d
 /* Inline functions definition */
 /*******************************/
 
-static inline uint8_t INeaiNcc_Init(INeaiNcc_Model_t *_this, const float_t knowledge_buffer[])
+static inline uint8_t INeaiNcc_Init(INeaiNcc_Model_t *_this)
 {
-  return _this->vptr->Init(_this, knowledge_buffer);
+  return _this->vptr->Init(_this);
 }
 
 static inline uint8_t INeaiNcc_Classification(INeaiNcc_Model_t *_this, float_t data_input[], float_t output_buffer[],

@@ -98,6 +98,32 @@ typedef struct
 #ifndef MEMS_SHARED_TYPES
 #define MEMS_SHARED_TYPES
 
+typedef struct
+{
+#if DRV_BYTE_ORDER == DRV_LITTLE_ENDIAN
+  uint8_t bit0       : 1;
+  uint8_t bit1       : 1;
+  uint8_t bit2       : 1;
+  uint8_t bit3       : 1;
+  uint8_t bit4       : 1;
+  uint8_t bit5       : 1;
+  uint8_t bit6       : 1;
+  uint8_t bit7       : 1;
+#elif DRV_BYTE_ORDER == DRV_BIG_ENDIAN
+  uint8_t bit7       : 1;
+  uint8_t bit6       : 1;
+  uint8_t bit5       : 1;
+  uint8_t bit4       : 1;
+  uint8_t bit3       : 1;
+  uint8_t bit2       : 1;
+  uint8_t bit1       : 1;
+  uint8_t bit0       : 1;
+#endif /* DRV_BYTE_ORDER */
+} bitwise_t;
+
+#define PROPERTY_DISABLE                (0U)
+#define PROPERTY_ENABLE                 (1U)
+
 typedef int32_t (*stmdev_write_ptr)(void *, uint8_t, uint8_t *, uint16_t);
 typedef int32_t (*stmdev_read_ptr)(void *, uint8_t, uint8_t *, uint16_t);
 typedef void (*stmdev_mdelay_ptr)(uint32_t millisec);
@@ -111,6 +137,9 @@ typedef struct
   stmdev_mdelay_ptr   mdelay;
   /** Customizable optional pointer **/
   void *handle;
+
+  /** private data **/
+  void *priv_data;
 } stmdev_ctx_t;
 
 #endif /* MEMS_SHARED_TYPES */

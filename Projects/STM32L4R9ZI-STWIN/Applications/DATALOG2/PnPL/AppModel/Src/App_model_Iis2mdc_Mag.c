@@ -66,7 +66,7 @@ uint8_t iis2mdc_mag_comp_init(void)
   iis2mdc_mag_set_samples_per_ts(0, NULL);
 #else
   iis2mdc_mag_set_samples_per_ts(100, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA == 1 */
 
   int32_t value = 0;
   iis2mdc_mag_get_dim(&value);
@@ -302,7 +302,7 @@ uint8_t iis2mdc_mag_set_odr(pnpl_iis2mdc_mag_odr_t enum_id, char **response_mess
   {
 #if (HSD_USE_DUMMY_DATA != 1)
     iis2mdc_mag_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA != 1 */
     __stream_control(true);
     __sc_set_ble_stream_params(iis2mdc_mag_model.id);
   }

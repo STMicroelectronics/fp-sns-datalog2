@@ -37,8 +37,8 @@ extern "C" {
   */
 typedef struct _AppPowerModeHelper AppPowerModeHelper;
 
-// Public API declaration
-//***********************
+/* Public API declaration*/
+/*************************/
 
 /**
   * Allocate an instance of AppPowerModeHelper. It is allocated in the FreeRTOS heap.
@@ -48,8 +48,8 @@ typedef struct _AppPowerModeHelper AppPowerModeHelper;
   */
 IAppPowerModeHelper *AppPowerModeHelperAlloc();
 
-// Inline functions definition
-// ***************************
+/* Inline functions definition*/
+/* ****************************/
 
 #ifdef __cplusplus
 }

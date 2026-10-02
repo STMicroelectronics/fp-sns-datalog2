@@ -61,7 +61,7 @@ uint8_t iis3dwb10is_ispu_comp_init(void)
   iis3dwb10is_ispu_model.stream_params.spts = 0;
 #else
   iis3dwb10is_ispu_model.stream_params.spts = 1;
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
   __stream_control(true);
   /* USER Component initialization code */
   app_model.ispu_ucf_valid = false;

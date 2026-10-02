@@ -64,7 +64,7 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
-  // System initialization
+  /* System initialization*/
 
   SysInit(FALSE);
 

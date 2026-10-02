@@ -659,7 +659,7 @@
    This is needed for backward compatibility. */
 #if (defined(NX_TCP_IMMEDIATE_ACK) && !defined(NX_TCP_ACK_EVERY_N_PACKETS))
 #define NX_TCP_ACK_EVERY_N_PACKETS 1
-#endif
+#endif /* (defined(NX_TCP_IMMEDIATE_ACK) && !defined(NX_TCP_ACK_EVERY_N_PACKETS)) */
 
 /* Specifies how many data transmit retries are allowed before the connection
    is deemed broken. The default value is 10, which represents 10 retries, and
@@ -2318,8 +2318,8 @@ define NX_SNTP_UPDATE_TIMEOUT_INTERVAL         1
 /* The starting poll interval (seconds) on which the Client sends a unicast
    request to its SNTP server. The NetX Duo SNTP Client default is 3600. */
 
-//#define NX_SNTP_CLIENT_UNICAST_POLL_INTERVAL    3600
-#define NX_SNTP_CLIENT_UNICAST_POLL_INTERVAL    180    // not too fast to prevent srv ban for DoS attack
+/*#define NX_SNTP_CLIENT_UNICAST_POLL_INTERVAL    3600*/
+#define NX_SNTP_CLIENT_UNICAST_POLL_INTERVAL    180    /* not too fast to prevent srv ban for DoS attack*/
 
 
 /* The factor by which the current Client unicast poll interval is increased.

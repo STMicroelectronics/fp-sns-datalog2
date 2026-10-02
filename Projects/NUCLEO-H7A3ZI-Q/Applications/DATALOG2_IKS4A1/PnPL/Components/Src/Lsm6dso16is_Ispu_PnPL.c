@@ -262,7 +262,8 @@ uint8_t Lsm6dso16is_Ispu_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char 
           output_data =  json_object_dotget_string(tempJSONObject, "lsm6dso16is_ispu*load_file.files.output_data");
           if (json_object_dothas_value(tempJSONObject, "lsm6dso16is_ispu*load_file.files.output_size"))
           {
-            output_size = (int32_t) json_object_dotget_number(tempJSONObject, "lsm6dso16is_ispu*load_file.files.output_size");
+            output_size = (int32_t) json_object_dotget_number(tempJSONObject,
+                                                              "lsm6dso16is_ispu*load_file.files.output_size");
             ret = lsm6dso16is_ispu_load_file((char *) ucf_data, ucf_size, (char *) output_data, output_size);
           }
         }

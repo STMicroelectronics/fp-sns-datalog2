@@ -68,8 +68,8 @@ void FDM_ACOTaskAddDPUListener(FDM_ACOTask *_this, IDataEventListener_t *p_liste
   */
 void FDM_ACOTaskSetSourceIF(FDM_ACOTask *_this, ISourceObservable *source);
 
-// Inline functions definition
-// ***************************
+/* Inline functions definition*/
+/* ****************************/
 #ifdef __cplusplus
 }
 #endif

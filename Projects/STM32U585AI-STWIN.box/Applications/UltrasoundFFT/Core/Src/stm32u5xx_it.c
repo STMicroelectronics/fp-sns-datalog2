@@ -56,13 +56,13 @@ extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 EXTI_DECLARE_PIN2F_MAP()
 
-// Forward function declarations
-// ****************************
+/* Forward function declarations*/
+/* *****************************/
 
 extern void xPortSysTickHandler(void);
 
-// Private function definition
-// ***************************
+/* Private function definition*/
+/* ****************************/
 
 void ExtiDefISR()
 {

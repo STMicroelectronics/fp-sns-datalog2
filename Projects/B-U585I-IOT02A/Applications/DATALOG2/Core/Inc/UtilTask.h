@@ -78,7 +78,8 @@ struct _UtilTask_t
   * Allocate an instance of UtilTask.
   *
   * @param pLEDConfigMX [IN] specifies the configuration parameters for a LED. NULL if the LED is not used.
-  * @param pUBConfigMX [IN] specifies the configuration parameters for an user button. NULL if the user button is not used.
+  * @param pUBConfigMX [IN] specifies the configuration parameters for an user button. NULL if the user button is not
+  * used.
   * @return a pointer to the generic object ::AManagedTask if success,
   * or NULL if out of memory error occurs.
   */

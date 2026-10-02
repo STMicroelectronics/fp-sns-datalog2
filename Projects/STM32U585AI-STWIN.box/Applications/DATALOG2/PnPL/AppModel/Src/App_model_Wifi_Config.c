@@ -89,7 +89,7 @@ uint8_t wifi_config_set_ssid(const char *value, char **response_message)
   {
     if (response_message != NULL)
     {
-      char response_buffer[60]; // Make sure this buffer is large enough to hold the entire message
+      char response_buffer[60]; /* Make sure this buffer is large enough to hold the entire message*/
       snprintf(response_buffer, sizeof(response_buffer), "Max number of characters (%d) exceeded for the SSID",
                SSID_MAX_LENGTH);
       *response_message = response_buffer;
@@ -112,7 +112,7 @@ uint8_t wifi_config_set_ftp_username(const char *value, char **response_message)
   {
     if (response_message != NULL)
     {
-      char response_buffer[60]; // Make sure this buffer is large enough to hold the entire message
+      char response_buffer[60]; /* Make sure this buffer is large enough to hold the entire message*/
       snprintf(response_buffer, sizeof(response_buffer), "Max number of character (%d) exceeded for the FTP username",
                NX_FTP_USERNAME_SIZE);
       *response_message = response_buffer;

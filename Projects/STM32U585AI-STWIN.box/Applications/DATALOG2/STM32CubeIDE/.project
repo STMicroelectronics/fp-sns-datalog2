@@ -1763,6 +1763,16 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/ism6hg256x/ism6hg256x_reg.h</locationURI>
 		</link>
 		<link>
+			<name>Drivers/BSP/Components/ism6hgk256x/ism6hgk256x_reg.c</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/ism6hgk256x/ism6hgk256x_reg.c</locationURI>
+		</link>
+		<link>
+			<name>Drivers/BSP/Components/ism6hgk256x/ism6hgk256x_reg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/ism6hgk256x/ism6hgk256x_reg.h</locationURI>
+		</link>
+		<link>
 			<name>Drivers/BSP/Components/lps22hh/lps22hh_reg.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/lps22hh/lps22hh_reg.c</locationURI>
@@ -2303,6 +2313,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Ism6hg256x_Mlc.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Ism6hgk256x_Gyro.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Ism6hgk256x_Gyro.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Ism6hgk256x_H_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Ism6hgk256x_H_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Ism6hgk256x_L_Acc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Ism6hgk256x_L_Acc.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Inc/App_model_Ism6hgk256x_Mlc.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Ism6hgk256x_Mlc.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Inc/App_model_Log_Controller.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Log_Controller.h</locationURI>
@@ -2493,6 +2523,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Ism6hg256x_Mlc.c</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Ism6hgk256x_Gyro.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Ism6hgk256x_Gyro.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Ism6hgk256x_H_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Ism6hgk256x_H_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Ism6hgk256x_L_Acc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Ism6hgk256x_L_Acc.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/AppModel/Src/App_model_Ism6hgk256x_Mlc.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Ism6hgk256x_Mlc.c</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/AppModel/Src/App_model_Log_Controller.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Log_Controller.c</locationURI>
@@ -2678,6 +2728,26 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Ism6hg256x_Mlc_PnPL.h</locationURI>
 		</link>
 		<link>
+			<name>User/PnPL/Components/Inc/Ism6hgk256x_Gyro_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Ism6hgk256x_Gyro_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Ism6hgk256x_H_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Ism6hgk256x_H_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Ism6hgk256x_L_Acc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Ism6hgk256x_L_Acc_PnPL.h</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Inc/Ism6hgk256x_Mlc_PnPL.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Ism6hgk256x_Mlc_PnPL.h</locationURI>
+		</link>
+		<link>
 			<name>User/PnPL/Components/Inc/Log_Controller_PnPL.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Log_Controller_PnPL.h</locationURI>
@@ -2861,6 +2931,26 @@
 			<name>User/PnPL/Components/Src/Ism6hg256x_Mlc_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Ism6hg256x_Mlc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Ism6hgk256x_Gyro_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Ism6hgk256x_Gyro_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Ism6hgk256x_H_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Ism6hgk256x_H_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Ism6hgk256x_L_Acc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Ism6hgk256x_L_Acc_PnPL.c</locationURI>
+		</link>
+		<link>
+			<name>User/PnPL/Components/Src/Ism6hgk256x_Mlc_PnPL.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Ism6hgk256x_Mlc_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Components/Src/Log_Controller_PnPL.c</name>
@@ -3061,6 +3151,16 @@
 			<name>User/eLooM_Components/SensorManager/Inc/ISM6HG256XTask_vtbl.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ISM6HG256XTask_vtbl.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/ISM6HGK256XTask.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ISM6HGK256XTask.h</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Inc/ISM6HGK256XTask_vtbl.h</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/ISM6HGK256XTask_vtbl.h</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Inc/ISensor.h</name>
@@ -3266,6 +3366,11 @@
 			<name>User/eLooM_Components/SensorManager/Src/ISM6HG256XTask.c</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/ISM6HG256XTask.c</locationURI>
+		</link>
+		<link>
+			<name>User/eLooM_Components/SensorManager/Src/ISM6HGK256XTask.c</name>
+			<type>1</type>
+			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/ISM6HGK256XTask.c</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Src/SMMessageParser.c</name>

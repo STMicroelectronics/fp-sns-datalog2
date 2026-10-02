@@ -19,15 +19,20 @@
 
 #include "PCDDriver.h"
 #include "PCDDriver_vtbl.h"
+#include "ux_device_class_sensor_streaming.h"
 #include "services/sysdebug.h"
 
 #define SYS_DEBUGF(level, message)      SYS_DEBUGF3(SYS_DBG_DRIVERS, level, message)
 
-#define PCD_EP_START_MEMORY_ADR (0x14)
+/* 0x40 = after the 8-endpoint BTable (8×8 bytes), safe from BTable overlap */
+#define PCD_EP_START_MEMORY_ADR (0x40)
 #define PCD_EP_MEMORY_DIM       (0x40)
-#define PCD_EP_OUT_ADR          (0x00)
-#define PCD_EP_CTRL_ADR         (0x01)
-#define PCD_EP_IN_ADR           (0x80)
+#define PCD_EP_CTRL_OUT_ADR     (0x00)
+#define PCD_EP_CTRL_IN_ADR      (0x80)
+
+#ifndef H563_USB_EXPERIMENT_B_FORCE_SINGLE_PMA
+#define H563_USB_EXPERIMENT_B_FORCE_SINGLE_PMA 1
+#endif
 
 /**
   * PCDDriver Driver virtual table.
@@ -52,28 +57,41 @@ sys_error_code_t PCDDrvSetFIFO(PCDDriver_t *_this, uint16_t total_fifo_size, uin
 {
   assert_param(_this != NULL);
 
+  (void) total_fifo_size;
+  (void) rx_fifo_size;
+  (void) ctrl_fifo_size;
+
   if (!_this->is_initialized)
   {
     return SYS_BASE_ERROR_CODE;
   }
 
-  uint16_t remaining_size = total_fifo_size;
-
   uint16_t pmaadress = PCD_EP_START_MEMORY_ADR;
 
-  /* OUT EP: not used for this class */
-  HAL_PCDEx_PMAConfig(_this->handle.p_mx_pcd_cfg->p_pcd, PCD_EP_OUT_ADR, PCD_SNG_BUF, pmaadress);
+  /* Control EP0 OUT */
+  HAL_PCDEx_PMAConfig(_this->handle.p_mx_pcd_cfg->p_pcd, PCD_EP_CTRL_OUT_ADR, PCD_SNG_BUF, pmaadress);
   pmaadress += PCD_EP_MEMORY_DIM;
 
-  /* Control EP: used for PnPL commands */
-  HAL_PCDEx_PMAConfig(_this->handle.p_mx_pcd_cfg->p_pcd, PCD_EP_CTRL_ADR, PCD_SNG_BUF, pmaadress);
-  remaining_size -= ctrl_fifo_size;
+  /* Control EP0 IN */
+  HAL_PCDEx_PMAConfig(_this->handle.p_mx_pcd_cfg->p_pcd, PCD_EP_CTRL_IN_ADR, PCD_SNG_BUF, pmaadress);
+  pmaadress += PCD_EP_MEMORY_DIM;
 
-  /* IN EP: used for raw data transmission */
+  /* SensorStreaming OUT endpoint */
+  HAL_PCDEx_PMAConfig(_this->handle.p_mx_pcd_cfg->p_pcd, DATA_OUT_EP1, PCD_SNG_BUF, pmaadress);
+  pmaadress += PCD_EP_MEMORY_DIM;
+
+  /* SensorStreaming IN endpoints */
   for (int i = 0; i < n_in_ep; i++)
   {
+#if H563_USB_EXPERIMENT_B_FORCE_SINGLE_PMA
+    HAL_PCDEx_PMAConfig(_this->handle.p_mx_pcd_cfg->p_pcd, DATA_IN_EP1 + i, PCD_SNG_BUF, pmaadress);
     pmaadress += PCD_EP_MEMORY_DIM;
-    HAL_PCDEx_PMAConfig(_this->handle.p_mx_pcd_cfg->p_pcd, i + PCD_EP_IN_ADR, PCD_SNG_BUF, pmaadress);
+#else
+    uint32_t pma_double_buffer_address = (uint32_t)pmaadress | ((uint32_t)(pmaadress + PCD_EP_MEMORY_DIM) << 16);
+    HAL_PCDEx_PMAConfig(_this->handle.p_mx_pcd_cfg->p_pcd, DATA_IN_EP1 + i, PCD_DBL_BUF, pma_double_buffer_address);
+    pmaadress += PCD_EP_MEMORY_DIM;
+    pmaadress += PCD_EP_MEMORY_DIM;
+#endif
   }
 
   return SYS_NO_ERROR_CODE;

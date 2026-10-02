@@ -81,7 +81,7 @@
 #include "Deviceinformation_PnPL.h"
 
 static IPnPLComponent_t *pIis2dulpx_Acc_PnPLObj = NULL;
-//static IPnPLComponent_t *pIIS2DULPX_Mlc_PnPLObj = NULL;
+/*static IPnPLComponent_t *pIIS2DULPX_Mlc_PnPLObj = NULL;*/
 static IPnPLComponent_t *pIlps22qs_Press_PnPLObj = NULL;
 static IPnPLComponent_t *pIsm6hg256x_L_Acc_PnPLObj = NULL;
 static IPnPLComponent_t *pIsm6hg256x_H_Acc_PnPLObj = NULL;
@@ -160,7 +160,8 @@ sys_error_code_t SysLoadApplicationContext(ApplicationContext *pAppContext)
 
   if (ext_iis3dwb10is)
   {
-    sIIS3DWB10ISExtObj = IIS3DWB10ISTaskAlloc(NULL/*&MX_GPIO_INT1_EXTERNAL_InitParams*/, NULL, &MX_GPIO_CS_EXTERNALInitParams);
+    sIIS3DWB10ISExtObj = IIS3DWB10ISTaskAlloc(NULL/*&MX_GPIO_INT1_EXTERNAL_InitParams*/, NULL,
+                                              &MX_GPIO_CS_EXTERNALInitParams);
   }
 
   /************ Add the task object to the context ************/
@@ -206,7 +207,8 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   /************ Connect the sensor task to the bus ************/
   I3CBusTaskConnectDevice((I3CBusTask *) sI3CBusObj,
                           (I3CBusIF *)IIS2DULPXTaskGetSensorIF((IIS2DULPXTask *) sIIS2DULPXObj));
-  I3CBusTaskConnectDevice((I3CBusTask *) sI3CBusObj, (I3CBusIF *)ILPS22QSTaskGetSensorIF((ILPS22QSTask *) sILPS22QSObj));
+  I3CBusTaskConnectDevice((I3CBusTask *) sI3CBusObj,
+                          (I3CBusIF *)ILPS22QSTaskGetSensorIF((ILPS22QSTask *) sILPS22QSObj));
   I3CBusTaskConnectDevice((I3CBusTask *) sI3CBusObj,
                           (I3CBusIF *)ISM6HG256XTaskGetSensorIF((ISM6HG256XTask *) sISM6HG256XObj));
 
@@ -221,8 +223,10 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
 
   if (sIIS3DWB10ISExtObj)
   {
-    IEventSrcAddEventListener(IIS3DWB10ISTaskGetAccEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj), DatalogAppListener);
-    IEventSrcAddEventListener(IIS3DWB10ISTaskGetIspuEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj), DatalogAppListener);
+    IEventSrcAddEventListener(IIS3DWB10ISTaskGetAccEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj),
+                              DatalogAppListener);
+    IEventSrcAddEventListener(IIS3DWB10ISTaskGetIspuEventSrcIF((IIS3DWB10ISTask *) sIIS3DWB10ISExtObj),
+                              DatalogAppListener);
   }
 
   /************ Connect Sensor LL to be used for ucf management to the DatalogAppTask ************/

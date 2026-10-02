@@ -24,33 +24,34 @@ extern "C" {
 #endif
 
 /* AManagedTask virtual functions */
-sys_error_code_t DatalogAppTask_vtblHardwareInit(AManagedTask *_this, void *pParams); ///< @sa AMTHardwareInit
+sys_error_code_t DatalogAppTask_vtblHardwareInit(AManagedTask *_this, void *pParams); /* @sa AMTHardwareInit*/
 sys_error_code_t DatalogAppTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pvTaskCode, CHAR **pcName,
                                                  VOID **pvStackStart, ULONG *pnStackSize,
-                                                 UINT *pnPriority, UINT *pnPreemptThreshold, ULONG *pnTimeSlice, ULONG *pnAutoStart,
-                                                 ULONG *pnParams); ///< @sa AMTOnCreateTask
+                                                 UINT *pnPriority, UINT *pnPreemptThreshold, ULONG *pnTimeSlice,
+                                                 ULONG *pnAutoStart,
+                                                 ULONG *pnParams); /* @sa AMTOnCreateTask*/
 sys_error_code_t DatalogAppTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPowerMode ActivePowerMode,
-                                                     const EPowerMode NewPowerMode); ///< @sa AMTDoEnterPowerMode
-sys_error_code_t DatalogAppTask_vtblHandleError(AManagedTask *_this, SysEvent Error); ///< @sa AMTHandleError
-sys_error_code_t DatalogAppTask_vtblOnEnterTaskControlLoop(AManagedTask *this); ///< @sa AMTOnEnterTaskControlLoop
+                                                     const EPowerMode NewPowerMode); /* @sa AMTDoEnterPowerMode*/
+sys_error_code_t DatalogAppTask_vtblHandleError(AManagedTask *_this, SysEvent Error); /* @sa AMTHandleError*/
+sys_error_code_t DatalogAppTask_vtblOnEnterTaskControlLoop(AManagedTask *this); /* @sa AMTOnEnterTaskControlLoop*/
 
 /* AManagedTaskEx virtual functions */
 sys_error_code_t DatalogAppTask_vtblForceExecuteStep(AManagedTaskEx *_this,
-                                                     EPowerMode ActivePowerMode); ///< @sa AMTExForceExecuteStep
+                                                     EPowerMode ActivePowerMode); /* @sa AMTExForceExecuteStep*/
 sys_error_code_t DatalogAppTask_vtblOnEnterPowerMode(AManagedTaskEx *_this, const EPowerMode ActivePowerMode,
-                                                     const EPowerMode NewPowerMode); ///< @sa AMTExOnEnterPowerMode
+                                                     const EPowerMode NewPowerMode); /* @sa AMTExOnEnterPowerMode*/
 
-// IIListener virtual functions
+/* IIListener virtual functions*/
 sys_error_code_t DatalogAppTask_OnStatusChange_vtbl(IListener *_this);
 
-// IEventListener virtual functions
+/* IEventListener virtual functions*/
 void *DatalogAppTask_GetOwner_vtbl(IEventListener *_this);
 void DatalogAppTask_SetOwner_vtbl(IEventListener *_this, void *pxOwner);
 
-// IDataEventListener virtual functions
+/* IDataEventListener virtual functions*/
 sys_error_code_t DatalogAppTask_OnNewDataReady_vtbl(IEventListener *_this, const DataEvent_t *pxEvt);
 
-// ICommandParse_t virtual functions
+/* ICommandParse_t virtual functions*/
 sys_error_code_t DatalogAppTask_vtblICommandParse_t_parse_cmd(ICommandParse_t *_this, char *commandString,
                                                               uint8_t mode);
 sys_error_code_t DatalogAppTask_vtblICommandParse_t_serialize_response(ICommandParse_t *_this, char **response_name,

@@ -66,7 +66,7 @@ uint8_t lsm6dsv16bx_mlc_comp_init(void)
   lsm6dsv16bx_mlc_model.stream_params.spts = 0;
 #else
   lsm6dsv16bx_mlc_model.stream_params.spts = 1;
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
 
   int32_t value = 0;
   lsm6dsv16bx_mlc_get_dim(&value);

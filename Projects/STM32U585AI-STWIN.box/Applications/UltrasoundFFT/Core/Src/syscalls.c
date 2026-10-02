@@ -29,10 +29,10 @@
 
 /* integration with eLooM framework: */
 /* 1. we map the low level put_char to the framework function used for the log. */
-//#if defined(DEBUG) || defined(SYS_DEBUG)
-//extern int32_t SysDebugLowLevelPutchar(int32_t x);
-//#define __io_putchar SysDebugLowLevelPutchar
-//#endif
+/*#if defined(DEBUG) || defined(SYS_DEBUG)*/
+/*extern int32_t SysDebugLowLevelPutchar(int32_t x);*/
+/*#define __io_putchar SysDebugLowLevelPutchar*/
+/*#endif*/
 
 #if defined (__GNUC__) && !defined(__ARMCC_VERSION)
 
@@ -165,7 +165,7 @@ int32_t _execve(char *name, char **argv, char **env)
 }
 
 
-#elif defined (__ARMCC_VERSION) //KEIL AC6
+#elif defined (__ARMCC_VERSION) /*KEIL AC6*/
 #if defined(DEGUG) || defined(SYS_DEBUG)
 extern int __io_putchar(int x);
 
@@ -180,7 +180,7 @@ int stdout_putchar(int ch)
   __io_putchar(ch);
   return ch;
 }
-#endif
+#endif /* defined(DEGUG) || defined(SYS_DEBUG) */
 #elif defined (__IAR_SYSTEMS_ICC__)
 
 /* Forward function declaration. */
@@ -236,4 +236,4 @@ size_t __write(int32_t Handle, const unsigned char *Buf, size_t Bufsize)
 
 #else
 #error "Toolchain not supported"
-#endif
+#endif /* defined (__GNUC__) && !defined(__ARMCC_VERSION) */

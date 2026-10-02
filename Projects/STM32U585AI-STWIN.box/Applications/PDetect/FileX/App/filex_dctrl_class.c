@@ -42,7 +42,7 @@
 
 #if defined(DEBUG) || defined (SYS_DEBUG)
 #define sObj                                sFileXObj
-#endif
+#endif /* defined(DEBUG) || defined (SYS_DEBUG) */
 
 /* The other files are located in fx_file[] from SENSOR_DAT_FILES position */
 #define OTHER_FILES_ID                    (FILEX_DCTRL_DAT_FILES_COUNT - 1)
@@ -122,7 +122,7 @@ sys_error_code_t filex_dctrl_vtblStream_init(IStream_t *_this, uint8_t comm_inte
 
 #ifdef ENABLE_THREADX_DBG_PIN
   obj->fx_app_thread.pxTaskTag = FILEX_TASK_CFG_TAG;
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */
 
   /* Allocate the message queue. */
   obj->queue_memory_pointer = (UCHAR *) SysAlloc(FILEX_DCTRL_DEFAULT_QUEUE_SIZE * sizeof(uint32_t));
@@ -160,7 +160,12 @@ sys_error_code_t filex_dctrl_vtblStream_enable(IStream_t *_this)
   if (SD_IsDetected() && TX_SUCCESS != obj->fx_opened)
   {
     /* Open the SD disk driver */
-    obj->fx_opened = fx_media_open(&obj->sdio_disk, "STM32_SDIO_DISK", fx_stm32_sd_driver, 0, &obj->media_memory, sizeof(obj->media_memory));
+    obj->fx_opened = fx_media_open(&obj->sdio_disk,
+                                   "STM32_SDIO_DISK",
+                                   fx_stm32_sd_driver,
+                                   0,
+                                   &obj->media_memory,
+                                   sizeof(obj->media_memory));
   }
 
   if (TX_SUCCESS == obj->fx_opened)
@@ -319,7 +324,8 @@ sys_error_code_t filex_dctrl_vtblStream_stop(IStream_t *_this)
         fx_media_flush(&obj->sdio_disk);
         /*close the file*/
         fx_file_close(&obj->file_dat[ii]);
-        fx_file_date_time_set(&obj->sdio_disk, obj->file_dat_name[ii], ((uint32_t) sDate.Year + 2000), (uint32_t) sDate.Month,
+        fx_file_date_time_set(&obj->sdio_disk, obj->file_dat_name[ii], ((uint32_t) sDate.Year + 2000),
+                              (uint32_t) sDate.Month,
                               (uint32_t) sDate.Date, (uint32_t) sTime.Hours,
                               (uint32_t) sTime.Minutes, (uint32_t) sTime.Seconds);
       }
@@ -568,7 +574,7 @@ sys_error_code_t filex_dctrl_write_ucf(filex_dctrl_class_t *_this, uint32_t comp
   HAL_RTC_GetTime(&hrtc, &sTime, RTC_FORMAT_BIN);
   HAL_RTC_GetDate(&hrtc, &sDate, RTC_FORMAT_BIN);
 
-//  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, (ucf_data));
+  /*  SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, (ucf_data));*/
 
   ucf_file_size = UCFP_UcfSize(compressed_ucf_size);
   p_ucf = SysAlloc(ucf_file_size);
@@ -604,7 +610,8 @@ sys_error_code_t filex_dctrl_write_ucf(filex_dctrl_class_t *_this, uint32_t comp
     fx_file_close(&_this->file_tmp);
 
     fx_file_date_time_set(&_this->sdio_disk, FILEX_DCTRL_TMP_UCF_FILE_NAME, ((uint32_t) sDate.Year + 2000),
-                          (uint32_t) sDate.Month, (uint32_t) sDate.Date, (uint32_t) sTime.Hours, (uint32_t) sTime.Minutes,
+                          (uint32_t) sDate.Month, (uint32_t) sDate.Date,
+                          (uint32_t) sTime.Hours, (uint32_t) sTime.Minutes,
                           (uint32_t) sTime.Seconds);
   }
 
@@ -615,8 +622,8 @@ sys_error_code_t filex_dctrl_write_ucf(filex_dctrl_class_t *_this, uint32_t comp
   return res;
 }
 
-///* Private function definition */
-///*******************************/
+/* Private function definition */
+/*******************************/
 sys_error_code_t filex_write_config_file(filex_dctrl_class_t *_this, char *file, uint32_t size)
 {
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -837,7 +844,7 @@ void filex_data_ready(filex_dctrl_class_t *_this, uint32_t data_ready_mask)
   {
 #ifdef ENABLE_THREADX_DBG_PIN
     BSP_DEBUG_PIN_On(CON34_PIN_22);
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */
     if (FX_SUCCESS != fx_file_write(&_this->file_dat[stream_id], (uint8_t *) CB_GetItemData(p_item),
                                     CB_GetItemSize((CircularBuffer *) cbdl2)))
     {
@@ -845,7 +852,7 @@ void filex_data_ready(filex_dctrl_class_t *_this, uint32_t data_ready_mask)
     }
 #ifdef ENABLE_THREADX_DBG_PIN
     BSP_DEBUG_PIN_Off(CON34_PIN_22);
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */
     /* Release the buffer item and reset tx_state */
     CB_ReleaseItem((CircularBuffer *) cbdl2, p_item);
   }
@@ -917,7 +924,7 @@ static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
           {
             /* Get file size to allocate the buffer */
             uint32_t size = (uint32_t)_this->file_tmp.fx_file_current_file_size;
-            p_json = (char *) SysAlloc(size + 1); // +1 used for terminator char
+            p_json = (char *) SysAlloc(size + 1); /* +1 used for terminator char*/
             if (p_json == NULL)
             {
               SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
@@ -930,10 +937,11 @@ static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
               fx_file_close(&_this->file_tmp);
 
               /* Ensure that the file ends with a terminator char to avoid parsing exceptions */
-              p_json[size] = '\0'; //terminator
+              p_json[size] = '\0'; /*terminator*/
 
               /* allocate buffer for PnPL Command*/
-              p_cmd_json = (char *) SysAlloc(sizeof(FILEX_DCTRL_SET_STATUS_CMD) + size + sizeof(FILEX_DCTRL_TERMINATOR));
+              p_cmd_json = (char *) SysAlloc(sizeof(FILEX_DCTRL_SET_STATUS_CMD) + size
+                                             + sizeof(FILEX_DCTRL_TERMINATOR));
               if (p_cmd_json == NULL)
               {
                 SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
@@ -994,7 +1002,7 @@ static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
 
 #ifdef UCF_SUPPORT
     DatalogAppTask_load_ucf(p_compressed_ucf, actual_ucf_size, "", 0);
-#endif
+#endif /* UCF_SUPPORT */
 
     SysFree(p_compressed_ucf);
     ucf_found = false;
@@ -1002,7 +1010,7 @@ static sys_error_code_t filex_check_root_folder(filex_dctrl_class_t *_this)
 
 #ifdef AUTOMODE_SUPPORT
   automode_setup();
-#endif
+#endif /* AUTOMODE_SUPPORT */
 
   /* Unmount SD card when the reading from SD root procedure is terminated */
   unsigned long msg = FILEX_DCTRL_CMD_CLOSE;

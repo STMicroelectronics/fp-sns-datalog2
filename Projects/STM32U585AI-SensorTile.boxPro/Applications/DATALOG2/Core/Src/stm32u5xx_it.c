@@ -54,6 +54,7 @@ extern DMA_HandleTypeDef handle_GPDMA1_Channel7;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel6;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel8;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel4;
+extern DMA_HandleTypeDef handle_GPDMA1_Channel9;
 extern SPI_HandleTypeDef hspi2;
 extern SPI_HandleTypeDef hspi3;
 extern I2C_HandleTypeDef hi2c1;
@@ -61,13 +62,13 @@ extern PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 EXTI_DECLARE_PIN2F_MAP()
 
-// Forward function declarations
-// ****************************
+/* Forward function declarations*/
+/* *****************************/
 
 extern void xPortSysTickHandler(void);
 
-// Private function definition
-// ***************************
+/* Private function definition*/
+/* ****************************/
 
 void ExtiDefISR(uint16_t exti_pin)
 {
@@ -444,6 +445,17 @@ void GPDMA1_Channel8_IRQHandler(void)
   /* USER CODE BEGIN GPDMA1_Channel8_IRQn 1 */
 
   /* USER CODE END GPDMA1_Channel8_IRQn 1 */
+}
+
+void GPDMA1_Channel9_IRQHandler(void)
+{
+  /* USER CODE BEGIN GPDMA1_Channel9_IRQn 0 */
+
+  /* USER CODE END GPDMA1_Channel9_IRQn 0 */
+  HAL_DMA_IRQHandler(&handle_GPDMA1_Channel9);
+  /* USER CODE BEGIN GPDMA1_Channel9_IRQn 1 */
+
+  /* USER CODE END GPDMA1_Channel9_IRQn 1 */
 }
 
 void SPI2_IRQHandler(void)

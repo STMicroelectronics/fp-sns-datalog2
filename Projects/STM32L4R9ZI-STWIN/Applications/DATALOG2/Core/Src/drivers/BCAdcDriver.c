@@ -12,7 +12,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics
+  * Copyright (c) 2022 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -28,15 +28,15 @@
 
 #define SYS_DEBUGF(level, message)      SYS_DEBUGF3(SYS_DBG_DRIVERS, level, message)
 
-#define ADC_VREF                        2750                    // ADC reference voltage
-#define ADC_CONV_TIMEOUT                1000                    // Timeout value in millisecond for injected conversion
+#define ADC_VREF                        2750                    /* ADC reference voltage*/
+#define ADC_CONV_TIMEOUT                1000 /* Timeout value in millisecond for injected conversion*/
 
 /** We use a divider to scale the battery voltage according TO ADC reference voltage.
   *  For example, if battery voltage is equal to 4.2V, the ADC see 2.5V
   */
 
-#define ADC_BATMS_RUP                   56000.0                 // divider upper resistor
-#define ADC_BATMS_RDOWN                 100000.0                // divider lower resistor
+#define ADC_BATMS_RUP                   56000.0                 /* divider upper resistor*/
+#define ADC_BATMS_RDOWN                 100000.0                /* divider lower resistor*/
 #define ADC_BATMS_RATIO                 (float_t)((ADC_BATMS_RUP+ADC_BATMS_RDOWN)/ADC_BATMS_RDOWN)
 
 
@@ -166,8 +166,8 @@ sys_error_code_t BCAdcDriver_GetValue(IDriver *_this, uint16_t *p_value)
     uhADCxConvertedValue = HAL_ADCEx_InjectedGetValue(p_adc, ADC_INJECTED_RANK_1);
   }
 
-  measured_voltage = (2700U * (uint32_t)uhADCxConvertedValue) / (4095U);  // [0-2.7V]
-  *p_value = ((56U + 100U) * measured_voltage) / 100U; // [0-4.2V]
+  measured_voltage = (2700U * (uint32_t)uhADCxConvertedValue) / (4095U);  /* [0-2.7V]*/
+  *p_value = ((56U + 100U) * measured_voltage) / 100U; /* [0-4.2V]*/
 
   return res;
 }

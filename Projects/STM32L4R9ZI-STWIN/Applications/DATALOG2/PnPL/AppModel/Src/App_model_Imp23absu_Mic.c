@@ -62,7 +62,7 @@ uint8_t imp23absu_mic_comp_init(void)
   imp23absu_mic_set_samples_per_ts(0, NULL);
 #else
   imp23absu_mic_set_samples_per_ts(1000, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA == 1 */
   __stream_control(true);
   /* USER Component initialization code */
   return PNPL_NO_ERROR_CODE;
@@ -169,7 +169,7 @@ uint8_t imp23absu_mic_get_sd_dps(int32_t *value)
 
 uint8_t imp23absu_mic_get_sensitivity(float_t *value)
 {
-  *value = 0.000030517578125; // 2/(2^imp23absu_mic_model.sensor_status.type.audio.resolution);
+  *value = 0.000030517578125; /* 2/(2^imp23absu_mic_model.sensor_status.type.audio.resolution);*/
   return PNPL_NO_ERROR_CODE;
 }
 
@@ -240,7 +240,7 @@ uint8_t imp23absu_mic_set_odr(pnpl_imp23absu_mic_odr_t enum_id, char **response_
   {
 #if (HSD_USE_DUMMY_DATA != 1)
     imp23absu_mic_set_samples_per_ts(value, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA != 1 */
     __stream_control(true);
   }
   return ret;
@@ -276,10 +276,34 @@ uint8_t imp23absu_mic_set_volume(int32_t value, char **response_message)
     *response_message = "";
   }
   uint8_t ret = PNPL_NO_ERROR_CODE;
-  ret = SMSensorSetVolume(imp23absu_mic_model.id, value);
-  if (ret == SYS_NO_ERROR_CODE)
+  int32_t min_v = 0;
+  int32_t max_v = 100;
+  if (value >= min_v && value <= max_v)
   {
-    /* USER Code */
+    ret = SMSensorSetVolume(imp23absu_mic_model.id, (uint8_t)value);
+  }
+  else if (value > max_v)
+  {
+    ret = SMSensorSetVolume(imp23absu_mic_model.id, (uint8_t)max_v);
+    if (response_message != NULL)
+    {
+      *response_message = "Error: Value setting above maximum threshold (1000)";
+    }
+  }
+  else
+  {
+    ret = SMSensorSetVolume(imp23absu_mic_model.id, (uint8_t)min_v);
+    if (response_message != NULL)
+    {
+      *response_message = "Error: Value setting below minimum threshold (0)";
+    }
+  }
+  if (ret != SYS_NO_ERROR_CODE)
+  {
+    if (response_message != NULL)
+    {
+      *response_message = "Error: Failed to set Volume";
+    }
   }
   return ret;
 }

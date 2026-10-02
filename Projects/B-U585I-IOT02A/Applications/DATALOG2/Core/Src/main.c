@@ -63,7 +63,8 @@ void SystemClock_Config(void);
   * - SysOnStartApplication()
   * - SysGetPowerModeHelper()
   *
-  * For more information look at the section **eLooM framework > System initialization** of the development documentation.
+  * For more information look at the section **eLooM framework > System initialization** of the development
+  * documentation.
   *
   * @retval the application never returns.
   */

@@ -40,4 +40,4 @@
 extern uint8_t IWifi_Config_wifi_connect(IWifi_Config_t *_this, const char *password);
 extern uint8_t IWifi_Config_wifi_disconnect(IWifi_Config_t *_this);
 extern uint8_t IWifi_Config_set_ftp_credentials(IWifi_Config_t *_this, const char *password);
-#endif
+#endif /* defined (__GNUC__) || defined(__ICCARM__) */

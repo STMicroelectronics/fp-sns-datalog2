@@ -31,6 +31,7 @@
 #include "lsm6dsv16bx_reg.h"
 #include "lsm6dsv32x_reg.h"
 #include "lsm6dsv80x_reg.h"
+#include "lsm6dsk320x_reg.h"
 
 #define HW_DETECTION_I2C_TIMEOUT  500U
 
@@ -246,6 +247,35 @@ boolean_t HardwareDetection_Check_Ext_LSM6DSV80X(void)
   }
   return found;
 }
+
+
+/**
+  * Detect an external LSM6DSK320X sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_LSM6DSK320X(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+
+  MX_SPI3_Init();
+
+  lsm6dsk320x_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi3);
+
+  if (whoami_val == LSM6DSK320X_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
+
 
 /**
   * Detect the version of ST25DV chip

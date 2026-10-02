@@ -40,18 +40,19 @@ extern "C" {
 #include "services/BCProtocol.h"
 #include "tx_api.h"
 
-#define UTIL_CMD_ID_BUTTON_EVT                        ((uint16_t)0x0004)              ///< Button event. It can be BUTTON_DOWN or BUTTON_UP
-#define UTIL_CMD_ID_PB_TIMER_ELAPSED                  ((uint16_t)0x0005)              ///< PB timer is elapsed.
-#define UTIL_CMD_ID_DATALOG_LED                       ((uint16_t)0x0006)              ///< Button event. Toggle led
+#define UTIL_CMD_ID_BUTTON_EVT                        ((uint16_t)0x0004) /* Button event. It can be BUTTON_DOWN
+                                                                         or BUTTON_UP*/
+#define UTIL_CMD_ID_PB_TIMER_ELAPSED                  ((uint16_t)0x0005)              /* PB timer is elapsed.*/
+#define UTIL_CMD_ID_DATALOG_LED                       ((uint16_t)0x0006)              /* Button event. Toggle led*/
 
-#define UTIL_PARAM_BUTTON_EVT_DOWN                    ((uint16_t)0x0001)              ///< Button event parameter: BUTTON_DOWN
-#define UTIL_PARAM_BUTTON_EVT_UP                      ((uint16_t)0x0002)              ///< Button event parameter: BUTTON_UP
+#define UTIL_PARAM_BUTTON_EVT_DOWN                    ((uint16_t)0x0001) /* Button event parameter: BUTTON_DOWN*/
+#define UTIL_PARAM_BUTTON_EVT_UP                      ((uint16_t)0x0002) /* Button event parameter: BUTTON_UP*/
 
-#define UTIL_BATTERY_STATUS_DISCHARGING         ((uint8_t)0x01)         ///< Battery Status: discharging
-#define UTIL_BATTERY_STATUS_CHARGING          ((uint8_t)0x02)         ///< Battery Status: charging
-#define UTIL_BATTERY_STATUS_NOT_CONNECTED       ((uint8_t)0x03)         ///< Battery Status: battery not connected
-#define UTIL_BATTERY_STATUS_FULL            ((uint8_t)0x04)         ///< Battery Status: battery fully charged
-#define UTIL_BATTERY_STATUS_UNKNOWN           ((uint8_t)0xff)         ///< Battery Status: UNKNOWN
+#define UTIL_BATTERY_STATUS_DISCHARGING         ((uint8_t)0x01)         /* Battery Status: discharging*/
+#define UTIL_BATTERY_STATUS_CHARGING          ((uint8_t)0x02)         /* Battery Status: charging*/
+#define UTIL_BATTERY_STATUS_NOT_CONNECTED       ((uint8_t)0x03)         /* Battery Status: battery not connected*/
+#define UTIL_BATTERY_STATUS_FULL            ((uint8_t)0x04)         /* Battery Status: battery fully charged*/
+#define UTIL_BATTERY_STATUS_UNKNOWN           ((uint8_t)0xff)         /* Battery Status: UNKNOWN*/
 
 
 /**
@@ -181,8 +182,10 @@ struct _UtilTask_t
   */
 AManagedTaskEx *UtilTaskAlloc(const void *p_mx_bc_tim_drv_cfg, const void *p_mx_bc_gpio_sw_drv_cfg,
                               const void *p_mx_bc_gpio_chg_drv_cfg,
-                              const void *p_mx_bc_gpio_cen_drv_cfg, const void *p_mx_bc_tim_chg_drv_cfg, const void *p_mx_bc_adc_drv_cfg,
-                              const void *p_mx_ub_drv_cfg, const void *p_mx_led1_drv_cfg, const void *p_mx_led2_drv_cfg);
+                              const void *p_mx_bc_gpio_cen_drv_cfg, const void *p_mx_bc_tim_chg_drv_cfg,
+                              const void *p_mx_bc_adc_drv_cfg,
+                              const void *p_mx_ub_drv_cfg, const void *p_mx_led1_drv_cfg,
+                              const void *p_mx_led2_drv_cfg);
 
 /**
   * Get the battery level value in percentage

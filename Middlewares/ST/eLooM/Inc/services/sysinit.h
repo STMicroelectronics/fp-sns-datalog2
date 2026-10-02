@@ -54,7 +54,7 @@ extern "C" {
 
 #define ELOOM_MAGIC_NUMBER                     (12974U)
 #define ELOOM_API_VERSION_MAJOR                (0x03U)
-#define ELOOM_API_VERSION_MINOR                (0x06U)
+#define ELOOM_API_VERSION_MINOR                (0x07U)
 #define ELOOM_API_VERSION_PATCH                (0x00U)
 #define ELOOM_API_VERSION                      (0x00FFFFFFU &\
                                                 ((ELOOM_API_VERSION_MAJOR<<16) | (ELOOM_API_VERSION_MINOR<<8) | (ELOOM_API_VERSION_PATCH)))

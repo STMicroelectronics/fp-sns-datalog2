@@ -158,7 +158,7 @@ void bluetooth_init(void)
   HAL_FLASH_OB_Lock();
   HAL_FLASH_Lock();
 
-  //Update the Current Fw ID saved in flash if it's neceessary
+  /*Update the Current Fw ID saved in flash if it's neceessary*/
   UpdateCurrFlashBankFwId(BLE_GetFWID());
 
   char mac_string[18];
@@ -490,7 +490,7 @@ void ext_config_info_command_callback(uint8_t *Answer)
           " (KEIL)\n"
 #elif defined (__GNUC__)
           " (STM32CubeIDE)\n"
-#endif
+#endif /* defined (__IAR_SYSTEMS_ICC__) */
           "\tCurrent Bank =%ld\n",
           BLE_FW_PACKAGENAME,
           FW_VERSION_MAJOR, FW_VERSION_MINOR, FW_VERSION_PATCH,
@@ -635,7 +635,8 @@ static uint32_t debug_console_command_parsing(uint8_t *att_data, uint8_t data_le
     /* Check the Maximum Possible OTA size */
     if (SizeOfUpdateBlueFW > OTA_MAX_PROG_SIZE)
     {
-      BLE_MANAGER_PRINTF("OTA %s SIZE=%ld > %d Max Allowed\r\n", BLE_FW_PACKAGENAME, SizeOfUpdateBlueFW, OTA_MAX_PROG_SIZE);
+      BLE_MANAGER_PRINTF("OTA %s SIZE=%ld > %d Max Allowed\r\n", BLE_FW_PACKAGENAME, SizeOfUpdateBlueFW,
+                         OTA_MAX_PROG_SIZE);
       /* Answer with a wrong CRC value for signaling the problem to BlueMS application */
       buffer_to_write[0] = att_data[13];
       buffer_to_write[1] = (att_data[14] != 0) ? 0 : 1; /* In order to be sure to have a wrong CRC */
@@ -727,7 +728,8 @@ static sys_error_code_t BLE_PostCustomData(uint8_t sId, uint8_t *buf, uint32_t s
     {
       if (app_model.s_models[sId]->stream_params.bandwidth > MAX_BLE_BANDWIDTH)
       {
-        down_samplied_size = (uint16_t)(floorf((size * MAX_BLE_BANDWIDTH) / app_model.s_models[sId]->stream_params.bandwidth));
+        down_samplied_size =
+          (uint16_t)(floorf((size * MAX_BLE_BANDWIDTH) / app_model.s_models[sId]->stream_params.bandwidth));
         down_samplied_size = down_samplied_size - (down_samplied_size % SMGetnBytesPerSample(sId));
 
         if (CBDL2_FillCurrentItem(cbdl2, sId, buf, down_samplied_size, &item_ready) != SYS_NO_ERROR_CODE)
@@ -796,7 +798,8 @@ static void BLE_SendCustomData(uint8_t sId)
       /* -4 to remove header */
       data_size = CB_GetItemSize((CircularBuffer *)cbdl2) - 4;
       /* BLE sensor data packet size + 1Byte for stream ID */
-      ble_packet_size = app_model.s_models[sId]->st_ble_stream.st_ble_stream_objects.elements * SMGetnBytesPerSample(sId) + 1;
+      ble_packet_size =
+        app_model.s_models[sId]->st_ble_stream.st_ble_stream_objects.elements * SMGetnBytesPerSample(sId) + 1;
       /* size of data includeded in a BLE packet (without 1Byte for stream ID) */
       data_chuck_size = ble_packet_size - 1;
 

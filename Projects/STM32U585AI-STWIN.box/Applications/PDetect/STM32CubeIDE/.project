@@ -1703,26 +1703,6 @@
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/sht40ad1b/sht40ad1b_reg.h</locationURI>
 		</link>
 		<link>
-			<name>Drivers/BSP/Components/sths34pf80/sths34pf80.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/sths34pf80/sths34pf80.c</locationURI>
-		</link>
-		<link>
-			<name>Drivers/BSP/Components/sths34pf80/sths34pf80.h</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/sths34pf80/sths34pf80.h</locationURI>
-		</link>
-		<link>
-			<name>Drivers/BSP/Components/sths34pf80/sths34pf80_reg.c</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/sths34pf80/sths34pf80_reg.c</locationURI>
-		</link>
-		<link>
-			<name>Drivers/BSP/Components/sths34pf80/sths34pf80_reg.h</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/sths34pf80/sths34pf80_reg.h</locationURI>
-		</link>
-		<link>
 			<name>Drivers/BSP/Components/stts22h/stts22h_reg.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/Drivers/BSP/Components/stts22h/stts22h_reg.c</locationURI>
@@ -2128,21 +2108,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Sht40_Temp.h</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/AppModel/Inc/App_model_Sths34pf80_2_Tmos.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Sths34pf80_2_Tmos.h</locationURI>
-		</link>
-		<link>
-			<name>User/PnPL/AppModel/Inc/App_model_Sths34pf80_3_Tmos.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Sths34pf80_3_Tmos.h</locationURI>
-		</link>
-		<link>
-			<name>User/PnPL/AppModel/Inc/App_model_Sths34pf80_Tmos.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Sths34pf80_Tmos.h</locationURI>
-		</link>
-		<link>
 			<name>User/PnPL/AppModel/Inc/App_model_Stts22h_Temp.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Inc/App_model_Stts22h_Temp.h</locationURI>
@@ -2263,21 +2228,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Sht40_Temp.c</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/AppModel/Src/App_model_Sths34pf80_2_Tmos.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Sths34pf80_2_Tmos.c</locationURI>
-		</link>
-		<link>
-			<name>User/PnPL/AppModel/Src/App_model_Sths34pf80_3_Tmos.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Sths34pf80_3_Tmos.c</locationURI>
-		</link>
-		<link>
-			<name>User/PnPL/AppModel/Src/App_model_Sths34pf80_Tmos.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Sths34pf80_Tmos.c</locationURI>
-		</link>
-		<link>
 			<name>User/PnPL/AppModel/Src/App_model_Stts22h_Temp.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/AppModel/Src/App_model_Stts22h_Temp.c</locationURI>
@@ -2393,21 +2343,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Sht40_Temp_PnPL.h</locationURI>
 		</link>
 		<link>
-			<name>User/PnPL/Components/Inc/Sths34pf80_2_Tmos_PnPL.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Sths34pf80_2_Tmos_PnPL.h</locationURI>
-		</link>
-		<link>
-			<name>User/PnPL/Components/Inc/Sths34pf80_3_Tmos_PnPL.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Sths34pf80_3_Tmos_PnPL.h</locationURI>
-		</link>
-		<link>
-			<name>User/PnPL/Components/Inc/Sths34pf80_Tmos_PnPL.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Sths34pf80_Tmos_PnPL.h</locationURI>
-		</link>
-		<link>
 			<name>User/PnPL/Components/Inc/Stts22h_Temp_PnPL.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Inc/Stts22h_Temp_PnPL.h</locationURI>
@@ -2521,21 +2456,6 @@
 			<name>User/PnPL/Components/Src/Sht40_Temp_PnPL.c</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Sht40_Temp_PnPL.c</locationURI>
-		</link>
-		<link>
-			<name>User/PnPL/Components/Src/Sths34pf80_2_Tmos_PnPL.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Sths34pf80_2_Tmos_PnPL.c</locationURI>
-		</link>
-		<link>
-			<name>User/PnPL/Components/Src/Sths34pf80_3_Tmos_PnPL.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Sths34pf80_3_Tmos_PnPL.c</locationURI>
-		</link>
-		<link>
-			<name>User/PnPL/Components/Src/Sths34pf80_Tmos_PnPL.c</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/PnPL/Components/Src/Sths34pf80_Tmos_PnPL.c</locationURI>
 		</link>
 		<link>
 			<name>User/PnPL/Components/Src/Stts22h_Temp_PnPL.c</name>
@@ -2823,16 +2743,6 @@
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/SPIBusTask_vtbl.h</locationURI>
 		</link>
 		<link>
-			<name>User/eLooM_Components/SensorManager/Inc/STHS34PF80Task.h</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/STHS34PF80Task.h</locationURI>
-		</link>
-		<link>
-			<name>User/eLooM_Components/SensorManager/Inc/STHS34PF80Task_vtbl.h</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/STHS34PF80Task_vtbl.h</locationURI>
-		</link>
-		<link>
 			<name>User/eLooM_Components/SensorManager/Inc/STTS22HTask.h</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Inc/STTS22HTask.h</locationURI>
@@ -2986,11 +2896,6 @@
 			<name>User/eLooM_Components/SensorManager/Src/SPIBusTask.c</name>
 			<type>1</type>
 			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/SPIBusTask.c</locationURI>
-		</link>
-		<link>
-			<name>User/eLooM_Components/SensorManager/Src/STHS34PF80Task.c</name>
-			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/eLooM_Components/SensorManager/Src/STHS34PF80Task.c</locationURI>
 		</link>
 		<link>
 			<name>User/eLooM_Components/SensorManager/Src/STTS22HTask.c</name>

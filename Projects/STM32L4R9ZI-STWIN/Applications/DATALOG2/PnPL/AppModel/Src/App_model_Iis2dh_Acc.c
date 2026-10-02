@@ -67,7 +67,7 @@ uint8_t iis2dh_acc_comp_init(void)
   iis2dh_acc_set_samples_per_ts(0, NULL);
 #else
   iis2dh_acc_set_samples_per_ts(1000, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA == 1 */
 
   int32_t value = 0;
   iis2dh_acc_get_dim(&value);
@@ -336,7 +336,7 @@ uint8_t iis2dh_acc_set_odr(pnpl_iis2dh_acc_odr_t enum_id, char **response_messag
     /* USER Code */
 #if (HSD_USE_DUMMY_DATA != 1)
     iis2dh_acc_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA != 1 */
     __stream_control(true);
     __sc_set_ble_stream_params(iis2dh_acc_model.id);
   }

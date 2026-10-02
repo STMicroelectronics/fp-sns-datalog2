@@ -124,9 +124,6 @@ void Error_Handler(void);
 #define INT_EX_EXTI_IRQn EXTI6_IRQn
 #define uC_ADC_BATT_Pin GPIO_PIN_2
 #define uC_ADC_BATT_GPIO_Port GPIOC
-#define INT_TMOS_Pin GPIO_PIN_5
-#define INT_TMOS_GPIO_Port GPIOG
-#define INT_TMOS_EXTI_IRQn EXTI5_IRQn
 #define INT_EXD15_Pin GPIO_PIN_15
 #define INT_EXD15_GPIO_Port GPIOD
 #define INT_TOF_Pin GPIO_PIN_3

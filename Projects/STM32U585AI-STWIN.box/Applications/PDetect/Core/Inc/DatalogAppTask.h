@@ -55,8 +55,8 @@ typedef struct
 typedef struct _DatalogAppTask DatalogAppTask;
 
 
-// Public API declaration
-//***********************
+/* Public API declaration*/
+/*************************/
 
 /**
   * Allocate an instance of DatalogAppTask.
@@ -84,8 +84,8 @@ void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
 
 sys_error_code_t DatalogAppTask_msg(ULONG msg);
 
-// Inline functions definition
-// ***************************
+/* Inline functions definition*/
+/* ****************************/
 
 #ifdef __cplusplus
 }

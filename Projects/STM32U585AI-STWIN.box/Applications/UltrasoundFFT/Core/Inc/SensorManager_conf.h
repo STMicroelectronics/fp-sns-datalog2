@@ -36,6 +36,6 @@
 #define IMP23ABSU_TASK_CFG_PRIORITY               (8)
 #ifdef ENABLE_THREADX_DBG_PIN
 #define IMP23ABSU_TASK_CFG_TAG                   (CON34_PIN_16)
-#endif
+#endif /* ENABLE_THREADX_DBG_PIN */
 
 #endif /* SENSORMANAGERCONF_H_ */

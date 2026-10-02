@@ -25,7 +25,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2023 STMicroelectronics..
+  * Copyright (c) 2023 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
@@ -152,7 +152,6 @@ extern const MX_GPIOParams_t MX_GPIO_MXCHIP_NOTIFYInitParams;
 extern const MX_GPIOParams_t MX_GPIO_MXCHIP_NSSInitParams;
 extern const MX_GPIOParams_t MX_GPIO_MXCHIP_RESETInitParams;
 extern const MX_GPIOParams_t MX_GPIO_INT_TOFInitParams;
-extern const MX_GPIOParams_t MX_GPIO_INT_TMOSInitParams;
 
 extern const MX_GPIOParams_t MX_GPIO1_EXInitParams;
 extern const MX_GPIOParams_t MX_GPIO2_EXInitParams;

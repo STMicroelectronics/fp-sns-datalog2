@@ -199,8 +199,8 @@
  of memory with the UX_SAFE_ALIGN field.
  */
 
-// #define UX_ENFORCE_SAFE_ALIGNMENT
-//#define UX_ENABLE_MEMORY_STATISTICS 1
+/* #define UX_ENFORCE_SAFE_ALIGNMENT*/
+/*#define UX_ENABLE_MEMORY_STATISTICS 1*/
 /* Defined, this value represents the number of packets in the CDC_ECM device class.
  The default is 16.
  */
@@ -254,16 +254,16 @@
  bwPollTimeout supported.
  */
 
-//#define UX_DEVICE_CLASS_DFU_STATUS_MODE                  1
+/*#define UX_DEVICE_CLASS_DFU_STATUS_MODE                  1*/
 /* Defined, this value represents the default DFU status bwPollTimeout.
  The value is 3 bytes long (max 0xFFFFFFu).
  By default the bwPollTimeout is 1 (means 1ms).
  */
 
-//#define UX_DEVICE_CLASS_DFU_STATUS_POLLTIMEOUT             0
+/*#define UX_DEVICE_CLASS_DFU_STATUS_POLLTIMEOUT             0*/
 /* Defined, this macro will enable custom request process callback.  */
 
-//#define UX_DEVICE_CLASS_DFU_CUSTOM_REQUEST_ENABLE
+/*#define UX_DEVICE_CLASS_DFU_CUSTOM_REQUEST_ENABLE*/
 /* Defined, this value will only enable the host side of usbx.  */
 
 /* #define UX_HOST_SIDE_ONLY */

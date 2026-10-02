@@ -38,8 +38,8 @@ extern "C" {
 #define BLE_ISTREAM_MSG_CONNECTED               (0x0001)
 #define BLE_ISTREAM_MSG_DISCONNECTED            (0x0002)
 #define BLE_ISTREAM_MSG_UPDATE_ADV              (0x0003)
-#define BLE_ISTREAM_MSG_START_ADV_OB            (0x0004)  // start timer for option bytes advertise updated
-#define BLE_ISTREAM_MSG_STOP_ADV_OB             (0x0005)  // stop timer for option bytes advertise updated
+#define BLE_ISTREAM_MSG_START_ADV_OB            (0x0004)  /* start timer for option bytes advertise updated*/
+#define BLE_ISTREAM_MSG_STOP_ADV_OB             (0x0005)  /* stop timer for option bytes advertise updated*/
 #define BLE_ISTREAM_MSG_SEND_CMD                (0x0010)
 #define BLE_ISTREAM_MSG_SEND_CUSTOM_DATA        (0x0020)
 

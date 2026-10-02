@@ -310,7 +310,8 @@ uint8_t Ism330dhcx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "ism330dhcx_acc.st_ble_stream.acc.enable"))
     {
-      bool st_ble_stream__acc_enable = json_object_dotget_boolean(tempJSONObject, "ism330dhcx_acc.st_ble_stream.acc.enable");
+      bool st_ble_stream__acc_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                  "ism330dhcx_acc.st_ble_stream.acc.enable");
       valid_property = true;
       ret = ism330dhcx_acc_set_st_ble_stream__acc_enable(st_ble_stream__acc_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

@@ -68,7 +68,7 @@ uint8_t vd6283tx_2_als_comp_init(void)
   vd6283tx_2_als_set_samples_per_ts(0, NULL);
 #else
   vd6283tx_2_als_set_samples_per_ts(1, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
   __stream_control(true);
   /* USER Component initialization code */
   return PNPL_NO_ERROR_CODE;
@@ -628,7 +628,7 @@ uint8_t vd6283tx_2_als_set_exposure_time(int32_t value, char **response_message)
         spts = (1000.0f / (float_t)(vd6283tx_2_als_model.sensor_status->type.light.exposure_time / 1000 + 6));
       }
       vd6283tx_2_als_set_samples_per_ts((uint32_t)spts, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
       __stream_control(true);
     }
   }
@@ -665,7 +665,7 @@ uint8_t vd6283tx_2_als_set_intermeasurement_time(int32_t value, char **response_
         spts = (1000.0f / (float_t)(vd6283tx_2_als_model.sensor_status->type.light.exposure_time / 1000 + 6));
       }
       vd6283tx_2_als_set_samples_per_ts((uint32_t)spts, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
       __stream_control(true);
     }
   }

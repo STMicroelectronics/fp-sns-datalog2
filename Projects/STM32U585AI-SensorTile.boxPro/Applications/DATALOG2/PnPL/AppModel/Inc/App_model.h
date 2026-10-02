@@ -80,6 +80,7 @@ extern "C" {
 #include "App_model_Ism330is_Acc.h"
 #include "App_model_Ism330is_Gyro.h"
 #include "App_model_Ism330is_Ispu.h"
+#include "App_model_Lsm6dsv16bx_Tdm_Acc.h"
 #include "App_model_Lsm6dsv16bx_Acc.h"
 #include "App_model_Lsm6dsv16bx_Gyro.h"
 #include "App_model_Lsm6dsv16bx_Mlc.h"
@@ -94,6 +95,10 @@ extern "C" {
 #include "App_model_Lsm6dsv320x_H_Acc.h"
 #include "App_model_Lsm6dsv320x_Gyro.h"
 #include "App_model_Lsm6dsv320x_Mlc.h"
+#include "App_model_Lsm6dsk320x_L_Acc.h"
+#include "App_model_Lsm6dsk320x_H_Acc.h"
+#include "App_model_Lsm6dsk320x_Gyro.h"
+#include "App_model_Lsm6dsk320x_Mlc.h"
 #include "App_model_Deviceinformation.h"
 #include "App_model_Automode.h"
 #include "App_model_Log_Controller.h"
@@ -122,7 +127,7 @@ extern "C" {
 #define FORMAT_LEN 10U
 
 #define FW_VERSION_MAJOR    "3"
-#define FW_VERSION_MINOR    "3"
+#define FW_VERSION_MINOR    "4"
 #define FW_VERSION_PATCH    "0"
 
 /* Max BLE bandwidth for each sensor (in Byte) */
@@ -194,6 +199,7 @@ typedef struct _AppModel_t
   bool lsm6dsv32x_mlc_ucf_valid;
   bool lsm6dsv80x_mlc_ucf_valid;
   bool lsm6dsv320x_mlc_ucf_valid;
+  bool lsm6dsk320x_mlc_ucf_valid;
   bool ispu_ucf_valid;
   bool enabled_80x;
   bool enabled_320x;

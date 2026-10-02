@@ -101,5 +101,12 @@
 #define SPIBUS_TASK_CFG_STACK_DEPTH               (TX_MINIMUM_STACK*6)
 #define SPIBUS_TASK_CFG_PRIORITY                  (4)
 
+// file VL53L9Task.c
+#define VL53L9_TASK_CFG_STACK_DEPTH               (TX_MINIMUM_STACK*12)
+#define VL53L9_TASK_CFG_PRIORITY                  (4)
+#define VL53L9_TASK_CFG_TIMER_PERIOD_MS           (100)
+#define VL53L9_TASK_CFG_DEFAULT_BINNING           (12)
+#define VL53L9_TASK_CFG_DEFAULT_RESOLUTION        (64)
+
 
 #endif /* SENSORMANAGERCONF_H_ */

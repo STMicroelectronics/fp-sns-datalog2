@@ -66,7 +66,7 @@ uint8_t lps22hh_press_comp_init(void)
   lps22hh_press_set_samples_per_ts(0, NULL);
 #else
   lps22hh_press_set_samples_per_ts(200, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA == 1 */
 
   int32_t value = 0;
   lps22hh_press_get_dim(&value);
@@ -320,7 +320,7 @@ uint8_t lps22hh_press_set_odr(pnpl_lps22hh_press_odr_t enum_id, char **response_
 #if (HSD_USE_DUMMY_DATA != 1)
     lps22hh_press_set_samples_per_ts((int32_t)value, NULL);
     lps22hh_temp_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA != 1 */
     __stream_control(true);
     __sc_set_ble_stream_params(lps22hh_press_model.id);
   }
@@ -372,11 +372,11 @@ uint8_t lps22hh_press_set_samples_per_ts(int32_t value, char **response_message)
   {
     lps22hh_press_model.stream_params.spts = min_v;
   }
-//  lps22hh_temp_get_samples_per_ts(&temp_spts);
-//  if (temp_spts != lps22hh_press_model.stream_params.spts)
-//  {
-//    lps22hh_temp_set_samples_per_ts(temp_spts);
-//  }
+  /*  lps22hh_temp_get_samples_per_ts(&temp_spts);*/
+  /*  if (temp_spts != lps22hh_press_model.stream_params.spts)*/
+  /*  {*/
+  /*    lps22hh_temp_set_samples_per_ts(temp_spts);*/
+  /*  }*/
   return ret;
 }
 
@@ -478,6 +478,4 @@ uint8_t lps22hh_press_set_st_ble_stream__press_odr(int32_t value, char **respons
   lps22hh_press_model.st_ble_stream.st_ble_stream_objects.odr = value;
   return ret;
 }
-
-
 

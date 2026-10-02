@@ -23,8 +23,8 @@
 #include "rtc.h"
 #include "gpio.h"
 
-//Select the SystemClock_Config
-//#define SystemClock_Config_SensorTile SystemClock_Config
+/*Select the SystemClock_Config*/
+/*#define SystemClock_Config_SensorTile SystemClock_Config*/
 #define SystemClock_Config_MX SystemClock_Config
 #define Error_Handler sys_error_handler
 
@@ -45,8 +45,8 @@ typedef struct _system_clock_t
   */
 static system_clock_t sSystemClock;
 
-// Private member function declaration
-// ***********************************
+/* Private member function declaration*/
+/* ************************************/
 static void PeriphCommonClock_Config(void);
 
 /* Public functions declaration */
@@ -243,20 +243,20 @@ static void PeriphCommonClock_Config(void)
 
 void SystemPower_Config(void)
 {
-//  GPIO_InitTypeDef GPIO_InitStruct = {0};
+  /*  GPIO_InitTypeDef GPIO_InitStruct = {0};*/
 
-  // Enable Power Clock
+  /* Enable Power Clock*/
   __HAL_RCC_PWR_CLK_ENABLE();
 
-  // Select MSI as system clock source after Wake Up from Stop mode
+  /* Select MSI as system clock source after Wake Up from Stop mode*/
   __HAL_RCC_WAKEUPSTOP_CLK_CONFIG(RCC_STOP_WAKEUPCLOCK_MSI);
 
-  // Init cache and RTC
+  /* Init cache and RTC*/
   MX_ICACHE_Init();
   MX_RTC_Init();
 
-  // This function is called in the early step of the system initialization.
-  // All the PINs used by the application are reconfigured later by the application tasks.
+  /* This function is called in the early step of the system initialization.*/
+  /* All the PINs used by the application are reconfigured later by the application tasks.*/
 
   HAL_PWREx_EnableIO2VM();
   while (!(PWR->SVMCR & PWR_SVMCR_IO2VMEN));
@@ -287,23 +287,23 @@ void HAL_MspInit(void)
 
   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
-  // Disable the internal Pull-Up in Dead Battery pins of UCPD peripheral
+  /* Disable the internal Pull-Up in Dead Battery pins of UCPD peripheral*/
   HAL_PWREx_DisableUCPDDeadBattery();
 
-  // System interrupt init
-  // MemoryManagement_IRQn interrupt configuration
+  /* System interrupt init*/
+  /* MemoryManagement_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(MemoryManagement_IRQn, 0, 0);
-  // BusFault_IRQn interrupt configuration
+  /* BusFault_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(BusFault_IRQn, 0, 0);
-  // UsageFault_IRQn interrupt configuration
+  /* UsageFault_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(UsageFault_IRQn, 0, 0);
-  // SVCall_IRQn interrupt configuration
+  /* SVCall_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(SVCall_IRQn, 0, 0);
-  // DebugMonitor_IRQn interrupt configuration
+  /* DebugMonitor_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(DebugMonitor_IRQn, 0, 0);
-  // PendSV_IRQn interrupt configuration
+  /* PendSV_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(PendSV_IRQn, 15, 0);
-  // SysTick_IRQn interrupt configuration
+  /* SysTick_IRQn interrupt configuration*/
   HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
 }
 

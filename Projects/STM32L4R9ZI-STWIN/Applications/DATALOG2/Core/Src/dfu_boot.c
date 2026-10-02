@@ -10,7 +10,7 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics
+  * Copyright (c) 2022 STMicroelectronics.
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file in
@@ -123,8 +123,8 @@ sys_error_code_t DfuBoot_OnJump(IBoot *_this, uint32_t nAppDress)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  // Perform any necessary operations before jumping to the application.
-  // This could include stopping peripherals, saving state, etc.
+  /* Perform any necessary operations before jumping to the application.*/
+  /* This could include stopping peripherals, saving state, etc.*/
 
   HAL_NVIC_DisableIRQ(EXTI15_10_IRQn);
   __enable_irq();

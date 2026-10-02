@@ -394,7 +394,7 @@ sys_error_code_t usbx_dctrl_vtblStream_deinit(IStream_t *_this)
   ux_device_stack_uninitialize();
   ux_system_uninitialize();
 
-  // ToDo: should this be "tx_byte_release()" ??? --> allocation is done with "tx_byte_allocate()"
+  /* ToDo: should this be "tx_byte_release()" ??? --> allocation is done with "tx_byte_allocate()"*/
   _ux_utility_memory_free(obj->memory_pointer);
 
   return res;
@@ -458,7 +458,7 @@ sys_error_code_t usbx_dctrl_vtblStream_alloc_resource(IStream_t *_this, uint8_t 
   {
     ux_device_class_sensor_streaming_SetTxDataBuffer(obj->sensor_streaming_device, id_stream, obj->TxBuffer[id_stream],
                                                      size + SS_HEADER_SIZE, SS_CH_QUEUE_ITEMS);
-    //ux_device_class_sensor_streaming_CleanTxDataBuffer(obj->sensor_streaming_device, id_stream);
+    /*ux_device_class_sensor_streaming_CleanTxDataBuffer(obj->sensor_streaming_device, id_stream);*/
   }
   else
   {

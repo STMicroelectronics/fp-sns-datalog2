@@ -68,7 +68,7 @@ uint8_t iis2iclx_acc_comp_init(void)
   iis2iclx_acc_set_samples_per_ts(0, NULL);
 #else
   iis2iclx_acc_set_samples_per_ts(800, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA == 1) */
 
   int32_t value = 0;
   iis2iclx_acc_get_dim(&value);
@@ -338,12 +338,13 @@ uint8_t iis2iclx_acc_set_odr(pnpl_iis2iclx_acc_odr_t enum_id, char **response_me
     }
 #if (HSD_USE_DUMMY_DATA != 1)
     iis2iclx_acc_set_samples_per_ts((int32_t)value, NULL);
-#endif
+#endif /* (HSD_USE_DUMMY_DATA != 1) */
     if (__stream_control(true) != PNPL_NO_ERROR_CODE)
     {
       if (response_message != NULL)
       {
-        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs "
+                            "to avoid possible data corruption";
       }
       ret = PNPL_BASE_ERROR_CODE;
     }
@@ -422,7 +423,8 @@ uint8_t iis2iclx_acc_set_enable(bool value, char **response_message)
     {
       if (response_message != NULL)
       {
-        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs to avoid possible data corruption";
+        *response_message = "PnPL_Warning: Safe bandwidth limit exceeded. Consider disabling sensors or lowering ODRs "
+                            "to avoid possible data corruption";
       }
       ret = PNPL_BASE_ERROR_CODE;
     }
@@ -566,6 +568,4 @@ uint8_t iis2iclx_acc_set_st_ble_stream__acc_odr(int32_t value, char **response_m
   iis2iclx_acc_model.st_ble_stream.st_ble_stream_objects.odr = value;
   return ret;
 }
-
-
 

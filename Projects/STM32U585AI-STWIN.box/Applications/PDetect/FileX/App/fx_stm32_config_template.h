@@ -31,11 +31,11 @@ extern "C" {
 /* Private defines -----------------------------------------------------------*/
 
 /* define the number of .dat file */
-//#define FILEX_DCTRL_DAT_FILES_COUNT     xx
+/*#define FILEX_DCTRL_DAT_FILES_COUNT     xx*/
 
 /* uncomment define if the functionality is supported */
-//#define UCF_SUPPORT
-//#define AUTOMODE_SUPPORT
+/*#define UCF_SUPPORT*/
+/*#define AUTOMODE_SUPPORT*/
 
 
 #ifdef __cplusplus

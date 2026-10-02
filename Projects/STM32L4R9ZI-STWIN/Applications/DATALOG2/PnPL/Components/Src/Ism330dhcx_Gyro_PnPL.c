@@ -288,7 +288,8 @@ uint8_t Ism330dhcx_Gyro_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "ism330dhcx_gyro.st_ble_stream.id"))
     {
-      int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject, "ism330dhcx_gyro.st_ble_stream.id");
+      int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                     "ism330dhcx_gyro.st_ble_stream.id");
       valid_property = true;
       ret = ism330dhcx_gyro_set_st_ble_stream__id(st_ble_stream__id, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

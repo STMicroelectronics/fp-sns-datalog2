@@ -147,13 +147,14 @@ EPowerMode AppPowerModeHelper_vtblComputeNewPowerMode(IAppPowerModeHelper *_this
 
 #ifdef SYS_DEBUG
   SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("PMH: new PM:%u-%u.\r\n", p_obj->status.active_power_mode, power_mode));
-#endif
+#endif /* defined(SYS_DEBUG) */
 
   return power_mode;
 }
 
 boolean_t AppPowerModeHelper_vtblCheckPowerModeTransaction(IAppPowerModeHelper *_this,
-                                                           const EPowerMode active_power_mode, const EPowerMode new_power_mode)
+                                                           const EPowerMode active_power_mode,
+                                                           const EPowerMode new_power_mode)
 {
   UNUSED(_this);
   boolean_t res = FALSE;
@@ -254,7 +255,7 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
 
 #if defined(SYS_DEBUG)
       SysDebugLogFreeHeapSize();
-#endif
+#endif /* defined(SYS_DEBUG) */
       break;
 
     case E_POWER_MODE_SENSORS_ACTIVE:
@@ -263,7 +264,7 @@ sys_error_code_t AppPowerModeHelper_vtblDidEnterPowerMode(IAppPowerModeHelper *_
 
 #if defined(SYS_DEBUG)
       SysDebugLogFreeHeapSize();
-#endif
+#endif /* defined(SYS_DEBUG) */
       break;
 
     default:

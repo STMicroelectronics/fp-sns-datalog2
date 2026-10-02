@@ -263,7 +263,8 @@ uint8_t Ism330is_Ispu_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *se
           output_data =  json_object_dotget_string(tempJSONObject, "ism330is_ispu*load_file.files.output_data");
           if (json_object_dothas_value(tempJSONObject, "ism330is_ispu*load_file.files.output_size"))
           {
-            output_size = (int32_t) json_object_dotget_number(tempJSONObject, "ism330is_ispu*load_file.files.output_size");
+            output_size = (int32_t) json_object_dotget_number(tempJSONObject,
+                                                              "ism330is_ispu*load_file.files.output_size");
             ret = ism330is_ispu_load_file((char *) ucf_data, ucf_size, (char *) output_data, output_size);
           }
         }

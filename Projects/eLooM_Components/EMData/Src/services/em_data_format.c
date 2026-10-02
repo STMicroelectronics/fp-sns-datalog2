@@ -260,7 +260,7 @@ uint8_t *EMD_DataAt(EMData_t *p_data, uint32_t dimensions, ...)
       }
     }
 
-    //TODO: STF.Debug - on STM32 this must be uint32_t = sizeof(uint8_t*) because a pointer is 4 bytes.
+    /* on STM32 this must be uint32_t = sizeof(uint8_t*) because a pointer is 4 bytes. */
     val_addr = ((uintptr_t)p_data->p_payload) + (val_pos * EMD_GetElementSize(p_data));
   }
 

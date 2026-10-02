@@ -70,7 +70,7 @@ void HAL_PCD_MspInit(PCD_HandleTypeDef *pcdHandle)
     /* USER CODE END USB_DRD_FS_MspInit 0 */
 
     /** Initializes the peripherals clock
-    */
+      */
     PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_USB;
     PeriphClkInitStruct.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)

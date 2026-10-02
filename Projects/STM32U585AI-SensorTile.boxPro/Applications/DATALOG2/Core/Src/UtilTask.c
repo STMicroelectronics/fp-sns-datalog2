@@ -28,29 +28,29 @@
 
 #ifndef UTIL_TASK_CFG_STACK_DEPTH
 #define UTIL_TASK_CFG_STACK_DEPTH              TX_MINIMUM_STACK*4
-#endif
+#endif /* UTIL_TASK_CFG_STACK_DEPTH */
 
 #ifndef UTIL_TASK_CFG_PRIORITY
 #define UTIL_TASK_CFG_PRIORITY                 (7)
-#endif
+#endif /* UTIL_TASK_CFG_PRIORITY */
 
 #ifndef UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE
 #define UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE       sizeof(struct utilMessage_t)
-#endif
+#endif /* UTIL_TASK_CFG_IN_QUEUE_ITEM_SIZE */
 
 #ifndef UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT
 #define UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT      10
-#endif
+#endif /* UTIL_TASK_CFG_IN_QUEUE_ITEM_COUNT */
 
 #ifndef UTIL_TASK_CFG_UL_TIMER_PERIOD_MS
 #define UTIL_TASK_CFG_UL_TIMER_PERIOD_MS       250
-#endif
+#endif /* UTIL_TASK_CFG_UL_TIMER_PERIOD_MS */
 
 #define SYS_DEBUGF(level, message)             SYS_DEBUGF3(SYS_DBG_UTIL, level, message)
 
 #if defined(DEBUG) || defined (SYS_DEBUG)
 #define sTaskObj                               sUtilTaskObj
-#endif
+#endif /* defined(DEBUG) || defined (SYS_DEBUG) */
 
 /**
   * Class object declaration. The class object encapsulates members that are shared between
@@ -174,13 +174,13 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
   if (!SYS_IS_ERROR_CODE(res))
   {
     /* Initialize the LED and User Button */
-    // configure User Button 1
+    /* configure User Button 1*/
     if (p_obj->p_mx_sw1_drv_cfg != NULL)
     {
       ((MX_GPIOParams_t *)p_obj->p_mx_sw1_drv_cfg)->p_mx_init_f();
     }
 
-    // configure Led 1
+    /* configure Led 1*/
     if (p_obj->p_mx_led1_drv_cfg != NULL)
     {
       MX_GPIOParams_t *p_ld1_params = (MX_GPIOParams_t *)p_obj->p_mx_led1_drv_cfg;
@@ -188,7 +188,7 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
       HAL_GPIO_WritePin(p_ld1_params->port, p_ld1_params->pin, GPIO_PIN_RESET);
     }
 
-    // configure Led 2
+    /* configure Led 2*/
     if (p_obj->p_mx_led2_drv_cfg != NULL)
     {
       MX_GPIOParams_t *p_ld2_params = (MX_GPIOParams_t *)p_obj->p_mx_led2_drv_cfg;
@@ -196,7 +196,7 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
       HAL_GPIO_WritePin(p_ld2_params->port, p_ld2_params->pin, GPIO_PIN_RESET);
     }
 
-    // configure Led 3
+    /* configure Led 3*/
     if (p_obj->p_mx_led3_drv_cfg != NULL)
     {
       MX_GPIOParams_t *p_ld3_params = (MX_GPIOParams_t *)p_obj->p_mx_led3_drv_cfg;
@@ -207,7 +207,7 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
   }
 
 
-  // Configure random number generated
+  /* Configure random number generated*/
   RND_Init();
 
   return res;
@@ -215,7 +215,9 @@ sys_error_code_t UtilTask_vtblHardwareInit(AManagedTask *_this, void *p_params)
 
 sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_function_t *pTaskCode, CHAR **pName,
                                            VOID **pvStackStart, ULONG *pStackDepth,
-                                           UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice, ULONG *pAutoStart, ULONG *pParams)
+                                           UINT *pPriority, UINT *pPreemptThreshold, ULONG *pTimeSlice,
+                                           ULONG *pAutoStart,
+                                           ULONG *pParams)
 {
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
@@ -241,8 +243,10 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
   }
 
   /* Software timer for user led management */
-  if (TX_SUCCESS != tx_timer_create(&p_obj->user_led_timer, "USER_LED_T", UtilTaskSwTimerCallbackUserLed, (ULONG)TX_NULL,
-                                    AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS), AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS),
+  if (TX_SUCCESS != tx_timer_create(&p_obj->user_led_timer, "USER_LED_T", UtilTaskSwTimerCallbackUserLed,
+                                    (ULONG)TX_NULL,
+                                    AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS),
+                                    AMT_MS_TO_TICKS(UTIL_TASK_CFG_UL_TIMER_PERIOD_MS),
                                     TX_AUTO_ACTIVATE))
   {
     res = SYS_APP_TASK_INIT_ERROR_CODE;
@@ -255,7 +259,7 @@ sys_error_code_t UtilTask_vtblOnCreateTask(AManagedTask *_this, tx_entry_functio
 
   *pTaskCode = AMTExRun;
   *pName = "UTIL";
-  *pvStackStart = NULL; // allocate the task stack in the system memory pool.
+  *pvStackStart = NULL; /* allocate the task stack in the system memory pool.*/
   *pStackDepth = UTIL_TASK_CFG_STACK_DEPTH;
   *pParams = (ULONG) _this;
   *pPriority = UTIL_TASK_CFG_PRIORITY;
@@ -469,7 +473,7 @@ static VOID UtilTaskSwTimerCallbackUserLed(ULONG timer)
 
   if (TX_SUCCESS != tx_queue_send(&sTaskObj.in_queue, &msg, TX_NO_WAIT))
   {
-    // unable to send the report. Signal the error
+    /* unable to send the report. Signal the error*/
     sys_error_handler();
   }
 
@@ -578,7 +582,7 @@ void SwitchBank(void)
     User can add here some code to deal with this error.
     To know the code error, user can call function 'HAL_FLASH_GetError()'
     */
-    //    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
+    /*    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);*/
   }
 
   /* Start the Option Bytes programming process */
@@ -589,7 +593,7 @@ void SwitchBank(void)
     User can add here some code to deal with this error.
     To know the code error, user can call function 'HAL_FLASH_GetError()'
     */
-    //    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);
+    /*    Error_Handler(STBOX1_ERROR_FLASH,__FILE__,__LINE__);*/
   }
   HAL_FLASH_OB_Lock();
   HAL_FLASH_Lock();

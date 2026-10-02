@@ -231,7 +231,8 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.id"))
     {
-      int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.id");
+      int32_t st_ble_stream__id = (int32_t)json_object_dotget_number(tempJSONObject,
+                                                                     "lsm6dsv16bx_mlc.st_ble_stream.id");
       valid_property = true;
       ret = lsm6dsv16bx_mlc_set_st_ble_stream__id(st_ble_stream__id, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -253,7 +254,8 @@ uint8_t Lsm6dsv16bx_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seri
   {
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.enable"))
     {
-      bool st_ble_stream__mlc_enable = json_object_dotget_boolean(tempJSONObject, "lsm6dsv16bx_mlc.st_ble_stream.mlc.enable");
+      bool st_ble_stream__mlc_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                  "lsm6dsv16bx_mlc.st_ble_stream.mlc.enable");
       valid_property = true;
       ret = lsm6dsv16bx_mlc_set_st_ble_stream__mlc_enable(st_ble_stream__mlc_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

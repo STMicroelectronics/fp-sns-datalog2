@@ -50,13 +50,13 @@ extern TIM_HandleTypeDef htim6;
 
 EXTI_DECLARE_PIN2F_MAP()
 
-// Forward function declarations
-// ****************************
+/* Forward function declarations*/
+/* *****************************/
 
 extern void xPortSysTickHandler(void);
 
-// Private function definition
-// ***************************
+/* Private function definition*/
+/* ****************************/
 
 void ExtiDefISR(uint16_t exti_pin)
 {

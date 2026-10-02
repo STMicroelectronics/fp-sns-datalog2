@@ -35,7 +35,8 @@ extern "C" {
 
 /* Exported functions --------------------------------------------------------*/
 
-/* API for preparing the Flash for receiving the Update. It defines also the Size of the Update and the CRC value expected */
+/* API for preparing the Flash for receiving the Update. It defines also the Size of the Update and the CRC value
+ * expected */
 extern void StartUpdateFWBlueMS(uint32_t SizeOfUpdate, uint32_t uwCRCValue);
 /* API for storing chuck of data to Flash.
  * When it has received the total number of byte defined by StartUpdateFWBlueMS,

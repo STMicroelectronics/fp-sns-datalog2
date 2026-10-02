@@ -50,13 +50,13 @@ extern TIM_HandleTypeDef htim6;
 
 EXTI_DECLARE_PIN2F_MAP()
 
-// Forward function declarations
-// ****************************
+/* Forward function declarations*/
+/* *****************************/
 
 extern void xPortSysTickHandler(void);
 
-// Private function definition
-// ***************************
+/* Private function definition*/
+/* ****************************/
 
 void ExtiDefISR(uint16_t exti_pin)
 {
@@ -337,7 +337,7 @@ void UCPD1_IRQHandler(void)
   /* USER CODE BEGIN UCPD1_IRQn 0 */
 
   /* USER CODE END UCPD1_IRQn 0 */
-//  USBPD_PORT0_IRQHandler();
+  /*  USBPD_PORT0_IRQHandler();*/
 
   /* USER CODE BEGIN UCPD1_IRQn 1 */
 

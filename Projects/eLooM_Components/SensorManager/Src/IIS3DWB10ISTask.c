@@ -1704,6 +1704,9 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
   iis3dwb10is_data_rate_t iis3dwb10is_xl_data_rate;
   iis3dwb10is_xl_data_rate.odr = IIS3DWB10IS_ODR_IDLE;
   iis3dwb10is_pin_int_route_t int_route = {0};
+  iis3dwb10is_pin_int_route_t int2_route = {0};
+  uint16_t int1_ctrl = 0;
+  uint16_t int2_ctrl = 0;
 
   /* Check device ID */
   ret_val = iis3dwb10is_device_id_get(p_sensor_drv, (uint8_t *) &reg0);
@@ -1785,6 +1788,7 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
   /* Setup ispu */
   if (_this->ispu_enable)
   {
+    /* Enable ISPU interrupt on INT2 */
     iis3dwb10is_int_ctrl4_t ispu_int;
     iis3dwb10is_read_reg(p_sensor_drv, IIS3DWB10IS_INT_CTRL4, (uint8_t *)&ispu_int, 1);
 
@@ -1798,6 +1802,22 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
     }
     iis3dwb10is_write_reg(p_sensor_drv, IIS3DWB10IS_INT_CTRL4, (uint8_t *)&ispu_int, 1);
 
+    if (_this->p_ispu_config != NULL)
+    {
+      /* Disable ISPU sleep interrupt */
+      iis3dwb10is_pin_int2_route_get(p_sensor_drv, &int2_route);
+      int2_route.sleep_ispu = PROPERTY_DISABLE;
+      iis3dwb10is_pin_int2_route_set(p_sensor_drv, int2_route);
+      /* Move the ISPU interrupt from INT1 to INT2 if needed */
+      iis3dwb10is_ispu_int1_ctrl_get(p_sensor_drv, &int1_ctrl);
+      iis3dwb10is_ispu_int2_ctrl_get(p_sensor_drv, &int2_ctrl);
+      if (int1_ctrl != 0 && int2_ctrl == 0)
+      {
+        iis3dwb10is_ispu_int1_ctrl_set(p_sensor_drv, 0);
+        iis3dwb10is_ispu_int2_ctrl_set(p_sensor_drv, int1_ctrl);
+      }
+    }
+    /* Notify the ISPU task that the sensor is ready - unblock the ISPU read */
     SMMessage report;
     report.sensorDataReadyMessage.messageId = SM_MESSAGE_ID_DATA_READY_ISPU;
     report.sensorDataReadyMessage.fTimestamp = SysTsGetTimestampF(SysGetTimestampSrv());
@@ -1888,6 +1908,7 @@ static sys_error_code_t IIS3DWB10ISTaskSensorInit(IIS3DWB10ISTask *_this)
   _this->odr_count = 0;
   _this->delta_timestamp_sum = 0.0f;
   _this->samples_sum = 0;
+
   return res;
 }
 

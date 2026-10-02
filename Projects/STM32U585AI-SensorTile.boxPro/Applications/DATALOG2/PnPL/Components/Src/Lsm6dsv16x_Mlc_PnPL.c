@@ -270,7 +270,8 @@ uint8_t Lsm6dsv16x_Mlc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *seria
   {
     if (json_object_dothas_value(tempJSONObject, "lsm6dsv16x_mlc.st_ble_stream.mlc.enable"))
     {
-      bool st_ble_stream__mlc_enable = json_object_dotget_boolean(tempJSONObject, "lsm6dsv16x_mlc.st_ble_stream.mlc.enable");
+      bool st_ble_stream__mlc_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                  "lsm6dsv16x_mlc.st_ble_stream.mlc.enable");
       valid_property = true;
       ret = lsm6dsv16x_mlc_set_st_ble_stream__mlc_enable(st_ble_stream__mlc_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

@@ -97,7 +97,7 @@ UCHAR USBD_language_id_framework[LANGUAGE_ID_MAX_LENGTH] =
 __ALIGN_BEGIN static uint8_t USBD_OSStringDesc[] __ALIGN_END =
 {
   0x09, /* Length */
-  //USB_DESC_TYPE_STRING,       /* bDescriptorType added automatically by the MW (in this case) */
+  /*USB_DESC_TYPE_STRING,        bDescriptorType added automatically by the MW (in this case) */
   0x4D,
   0x53,
   /*Signature MSFT100*/
@@ -161,12 +161,12 @@ __ALIGN_BEGIN static uint8_t OS_IDFeatureDescriptor[] __ALIGN_END =
 /* Microsoft Extended Properties Feature Descriptor Typedef*/
 typedef struct
 {
-  // Header
+  /* Header*/
   uint32_t dwLength;
   uint16_t bcdVersion;
   uint16_t wIndex;
   uint16_t wCount;
-  // Custom Property Section 1
+  /* Custom Property Section 1*/
   uint32_t dwSize;
   uint32_t dwPropertyDataType;
   uint16_t wPropertyNameLength;
@@ -324,8 +324,8 @@ uint8_t *USBD_Get_StringDescription_Framework(ULONG *length)
 
   /*Microsoft OS String Descriptor*/
   count += len + 1;
-  USBD_string_framework[count++] = 0; //USBD_LANGID_STRING & 0xFF;
-  USBD_string_framework[count++] = 0; //USBD_LANGID_STRING >> 8;
+  USBD_string_framework[count++] = 0; /*USBD_LANGID_STRING & 0xFF;*/
+  USBD_string_framework[count++] = 0; /*USBD_LANGID_STRING >> 8;*/
   USBD_string_framework[count++] = USBD_IDX_MSFOS_STR;
 
   uint16_t size = sizeof(USBD_OSStringDesc);
@@ -338,7 +338,7 @@ uint8_t *USBD_Get_StringDescription_Framework(ULONG *length)
 
   /** register vendor request_function **/
   UINT ret = UX_SUCCESS;
-  ret = _ux_device_stack_microsoft_extension_register(0x07, vendor_request_function); //0x07 defined in the MS OS descriptor
+  ret = _ux_device_stack_microsoft_extension_register(0x07, vendor_request_function); /*0x07 defined in the MS OS descriptor*/
   if (ret != UX_SUCCESS)
   {
     *length = 0;
@@ -594,7 +594,7 @@ static uint8_t USBD_FrameWork_SS_WCID_ConfigurationDesc(USBD_DevClassHandleTypeD
 
     ptr->bLength = (uint8_t) sizeof(USBD_ConfigDescTypedef);
     ptr->bDescriptorType = USB_DESC_TYPE_CONFIGURATION;
-    ptr->wDescriptorLength = 0U; //USB_SS_WCID_CONFIG_DESC_SIZ;
+    ptr->wDescriptorLength = 0U; /*USB_SS_WCID_CONFIG_DESC_SIZ;*/
     ptr->bNumInterfaces = 0U;
     ptr->bConfigurationValue = 1U;
     ptr->iConfiguration = USBD_CONFIG_STR_DESC_IDX;
@@ -617,7 +617,7 @@ static uint8_t USBD_FrameWork_SS_WCID_ConfigurationDesc(USBD_DevClassHandleTypeD
       /* Assign endpoint numbers */
       pdev->tclasslist[pdev->classId].NumEps = SS_N_IN_ENDPOINTS;
 
-      //FULL SPEED
+      /*FULL SPEED*/
       /* Assign IN Endpoints */
       USBD_FrameWork_AssignEp(pdev, DATA_IN_EP1, USBD_EP_TYPE_BULK, SS_WCID_DATA_FS_MAX_PACKET_SIZE);
 

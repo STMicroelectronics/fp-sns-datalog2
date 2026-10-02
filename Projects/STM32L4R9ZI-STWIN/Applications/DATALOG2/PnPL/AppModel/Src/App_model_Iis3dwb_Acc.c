@@ -66,7 +66,7 @@ uint8_t iis3dwb_acc_comp_init(void)
   iis3dwb_acc_set_samples_per_ts(0, NULL);
 #else
   iis3dwb_acc_set_samples_per_ts(1000, NULL);
-#endif
+#endif /* HSD_USE_DUMMY_DATA == 1 */
 
   int32_t value = 0;
   iis3dwb_acc_get_dim(&value);

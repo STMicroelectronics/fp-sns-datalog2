@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    dfu_iboot.c
+  * @file    dfu_boot.c
   * @author  STMicroelectronics
   * @version 2.0.0
   * @date    July 9, 2025
@@ -123,8 +123,8 @@ sys_error_code_t DfuBoot_OnJump(IBoot *_this, uint32_t nAppDress)
   assert_param(_this != NULL);
   sys_error_code_t res = SYS_NO_ERROR_CODE;
 
-  // Perform any necessary operations before jumping to the application.
-  // This could include stopping peripherals, saving state, etc.
+  /* Perform any necessary operations before jumping to the application.*/
+  /* This could include stopping peripherals, saving state, etc.*/
 
   return res;
 }

@@ -126,6 +126,18 @@ typedef struct _MX_TIMParams_t
   void (*p_mx_init_f)(void); /*!< MX TIM initialization function */
 } MX_TIMParams_t;
 
+/**
+  * SAI configuration parameters.
+  */
+typedef struct _MX_SAIParams_t
+{
+  SAI_HandleTypeDef *p_sai_handle; /*!< HAL SAI handle */
+  IRQn_Type sai_irq_n; /*!< SAI global interrupt number. */
+  IRQn_Type sai_dma_rx_irq_n; /*!< SAI DMA RX interrupt number. */
+  void (*p_mx_init_f)(void); /*!< MX SAI initialization function */
+  void (*p_mx_dma_init_f)(void); /*!< MX DMA initialization function */
+} MX_SAIParams_t;
+
 extern const MX_GPIOParams_t MX_GPIO_UBInitParams;
 extern const MX_GPIOParams_t MX_GPIO_ACC_INT2InitParams;
 extern const MX_GPIOParams_t MX_GPIO_SPI_SEN_CS_AInitParams;
@@ -196,6 +208,11 @@ extern const MX_PCDParams_t MX_PCDInitParams;
   * TIM3 configuration parameters.
   */
 extern const MX_TIMParams_t MX_TIM3InitParams;
+
+/**
+  * SAI1 configuration parameters.
+  */
+extern const MX_SAIParams_t MX_SAI1InitParams;
 
 
 #ifdef __cplusplus

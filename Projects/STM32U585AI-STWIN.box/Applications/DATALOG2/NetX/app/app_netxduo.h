@@ -58,7 +58,7 @@ extern "C" {
 
 #define APP_NETX_QUEUE_MSG_NUM       (3)
 
-#define PASSIVE_MODE                    // set FTP passive mode connection
+#define PASSIVE_MODE                    /* set FTP passive mode connection*/
 #define SNTP_SERVER_NAME             "time1.google.com"
 
 #define SNTP_UPDATE_EVENT            (1)
@@ -78,7 +78,7 @@ extern "C" {
 #define SNTP_CLIENT_THREAD_MEMORY    (3 * DEFAULT_MEMORY_SIZE)
 #else
 #define SNTP_CLIENT_THREAD_MEMORY    (0)
-#endif
+#endif /* SNTP_ENABLED */
 #define NETX_THREAD_MEMORY           (3 * DEFAULT_MEMORY_SIZE)
 
 #define FTP_SERVER_POOL_SIZE         (12 * DEFAULT_MEMORY_SIZE)
@@ -87,7 +87,8 @@ extern "C" {
 
 #define IP_MEMORY_SIZE               (3 * DEFAULT_MEMORY_SIZE)
 #define NX_APP_MEM_POOL_SIZE         (NX_PACKET_POOL_SIZE\
-                                      + ARP_MEMORY_SIZE + IP_MEMORY_SIZE + NETX_THREAD_MEMORY + SNTP_CLIENT_THREAD_MEMORY + FTP_SERVER_MEMORY + 5*DEFAULT_MEMORY_SIZE )
+                                      + ARP_MEMORY_SIZE + IP_MEMORY_SIZE + NETX_THREAD_MEMORY\
+                                      + SNTP_CLIENT_THREAD_MEMORY + FTP_SERVER_MEMORY + 5*DEFAULT_MEMORY_SIZE )
 
 /*+ 10*DEFAULT_MEMORY_SIZE*/
 
@@ -156,7 +157,7 @@ void netx_app_set_connect_callback(NetX_App_Connect_Callback callback);
 
 typedef struct
 {
-  UINT MsgCode;    // minimum size of msg for threadx queue must be 4 byte
+  UINT MsgCode;    /* minimum size of msg for threadx queue must be 4 byte*/
 } NetxAppQueueMsgType;
 
 #define   SSID_MAX_LENGTH   (32)

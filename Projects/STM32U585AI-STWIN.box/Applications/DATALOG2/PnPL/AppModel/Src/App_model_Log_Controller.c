@@ -98,7 +98,7 @@ uint8_t log_controller_start_log(int32_t interface)
 
   if (app_model.total_bandwidth != 0)
   {
-    //Reset Tag counter
+    /*Reset Tag counter*/
     TMResetTagListCounter();
 
     RTC_DateTypeDef sdate;
@@ -109,20 +109,24 @@ uint8_t log_controller_start_log(int32_t interface)
     HAL_RTC_GetDate(&hrtc, &sdate, RTC_FORMAT_BIN);
 
     _tm t =
-    { .tm_year = sdate.Year + 2000, .tm_mon = sdate.Month - 1, .tm_mday = sdate.Date, .tm_hour = stime.Hours, .tm_min = stime.Minutes, .tm_sec = stime.Seconds };
+    {
+      .tm_year = sdate.Year + 2000, .tm_mon = sdate.Month - 1, .tm_mday = sdate.Date,
+      .tm_hour = stime.Hours, .tm_min = stime.Minutes,
+      .tm_sec = stime.Seconds
+    };
 
-// WHY THIS -1 (in months) ???
-//  struct tm {
-//     int32_t tm_sec;         /* seconds,  range 0 to 59          */
-//     int32_t tm_min;         /* minutes, range 0 to 59           */
-//     int32_t tm_hour;        /* hours, range 0 to 23             */
-//     int32_t tm_mday;        /* day of the month, range 1 to 31  */
-//     int32_t tm_mon;         /* month, range 0 to 11             */ <------ (-1) months here (0..11), months from RTC (1..12)
-//     int32_t tm_year;        /* The number of years since 1900   */
-//     int32_t tm_wday;        /* day of the week, range 0 to 6    */
-//     int32_t tm_yday;        /* day in the year, range 0 to 365  */
-//     int32_t tm_isdst;       /* daylight saving time             */
-//  };
+    /* WHY THIS -1 (in months) ???*/
+    /*  struct tm {*/
+    /*     int32_t tm_sec;          seconds,  range 0 to 59          */
+    /*     int32_t tm_min;          minutes, range 0 to 59           */
+    /*     int32_t tm_hour;         hours, range 0 to 23             */
+    /*     int32_t tm_mday;         day of the month, range 1 to 31  */
+    /* int32_t tm_mon; month, range 0 to 11 <------ (-1) months here (0..11), months from RTC (1..12) */
+    /*     int32_t tm_year;         The number of years since 1900   */
+    /*     int32_t tm_wday;         day of the week, range 0 to 6    */
+    /*     int32_t tm_yday;         day in the year, range 0 to 365  */
+    /*     int32_t tm_isdst;        daylight saving time             */
+    /*  };*/
 
     TMSetStartTime(t);
     char local_timestamp[86];

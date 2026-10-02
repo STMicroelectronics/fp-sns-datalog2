@@ -14,6 +14,7 @@
 | Components/iis3dwb10is   			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ilps22qs				| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ilps28qsw				| STMicroelectronics				| BSD-3-Clause	        |
+| Components/ism6hgk256x   			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ism6hg256x    			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ism330bx      			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/ism330dhcx    			| STMicroelectronics				| BSD-3-Clause	        |
@@ -23,12 +24,13 @@
 | Components/lis2mdl	    		| STMicroelectronics				| BSD-3-Clause	        |
 | Components/lps22df	    		| STMicroelectronics				| BSD-3-Clause	        |
 | Components/lps22hh	    		| STMicroelectronics				| BSD-3-Clause	        |
+| Components/lsm6dsk320x   			| STMicroelectronics				| BSD-3-Clause        	|
 | Components/lsm6dso16is   			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/lsm6dsv16bx   			| STMicroelectronics				| BSD-3-Clause	        |
 | Components/lsm6dsv16x    			| STMicroelectronics				| BSD-3-Clause        	|
 | Components/lsm6dsv32x    			| STMicroelectronics				| BSD-3-Clause        	|
 | Components/lsm6dsv80x    			| STMicroelectronics				| BSD-3-Clause        	|
-| Components/lsm6dsv320    			| STMicroelectronics				| BSD-3-Clause        	|
+| Components/lsm6dsv320x   			| STMicroelectronics				| BSD-3-Clause        	|
 | Components/mx_wifi				| STMicroelectronics				| SLA0044	        	|
 | Components/sgp40					| STMicroelectronics				| BSD-3-Clause	        |
 | Components/sht40ad1b				| STMicroelectronics				| BSD-3-Clause	        |
@@ -37,6 +39,7 @@
 | Components/stts751				| STMicroelectronics				| BSD-3-Clause	        |
 | Components/vd6283tx				| STMicroelectronics				| BSD-3-Clause	        |
 | Components/vl53l8cx				| STMicroelectronics				| BSD-3-Clause	        |
+| Components/vl53l9					| STMicroelectronics				| BSD-3-Clause	        |
 | CMSIS	Core						| ARM Limited						| Apache-2.0	        |
 | STM32H5xx CMSIS Device			| ARM Limited - STMicroelectronics	| Apache-2.0	        |
 | STM32H7xx CMSIS Device			| ARM Limited - STMicroelectronics	| Apache-2.0	        |
@@ -48,8 +51,8 @@
 | STM32U5xx HAL				  		| STMicroelectronics				| BSD-3-Clause	        |
 | BlueNRG-2					  		| STMicroelectronics				| SLA0055	            |
 | BlueNRG-LP				  		| STMicroelectronics				| SLA0055	            |
-| CircularBufferDL2					| STMicroelectronics				| SLA0044	            |
-| eLooM_threadx						| STMicroelectronics				| SLA0044	            |
+| CircularBufferDL2					| STMicroelectronics				| SLA0094	            |
+| eLooM_threadx						| STMicroelectronics				| SLA0094	            |
 | PnPLCompManager		      		| STMicroelectronics				| SLA0094	            |
 | SensorStreaming_USBX				| STMicroelectronics				| SLA0094	            |
 | STM32_BLE_Manager					| STMicroelectronics				| SLA0094	            |
@@ -60,14 +63,15 @@
 | threadx 							| Microsoft Corporation				| MICROSOFT AZURE RTOS	|
 | usbx								| Microsoft Corporation				| MICROSOFT AZURE RTOS	|
 | parson	                 		| Krzysztof Gabis		   			| MIT	                |
-| DPU								| STMicroelectronics				| SLA0044	            |
-| EMData				      		| STMicroelectronics				| SLA0044	            |
+| DPU								| STMicroelectronics				| SLA0094	            |
+| EMData				      		| STMicroelectronics				| SLA0094	            |
 | SensorManager_threadx  			| STMicroelectronics				| SLA0094	            |
 | TagManager			      		| STMicroelectronics				| SLA0094	            |
 | AFCI1/DATALOG2	  				| STMicroelectronics				| SLA0094	            |
 | B-U585I-IOT02A/DATALOG2	  		| STMicroelectronics				| SLA0094	            |
 | NUCLEO-H563ZI/DATALOG2_IKS4A1  	| STMicroelectronics				| SLA0094	            |
 | NUCLEO-H563ZI/DATALOG2_IKS5A1  	| STMicroelectronics				| SLA0094	            |
+| NUCLEO-H563ZI/DATALOG2_VL53L9  	| STMicroelectronics				| SLA0094	            |
 | NUCLEO-H7A3ZI-Q/DATALOG2	  		| STMicroelectronics				| SLA0094	            |
 | NUCLEO-H7A3ZI-Q/DATALOG2_IKS4A1  	| STMicroelectronics				| SLA0094	            |
 | NUCLEO-H7A3ZI-Q/DATALOG2_IKS5A1  	| STMicroelectronics				| SLA0094	            |

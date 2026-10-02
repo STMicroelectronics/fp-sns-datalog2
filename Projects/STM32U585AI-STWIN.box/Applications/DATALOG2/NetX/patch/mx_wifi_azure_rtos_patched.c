@@ -23,7 +23,8 @@ UINT mx_wifi_alloc_init(void)
                                  MX_WIFI_BYTE_POOL_SIZE);
   if (ret == TX_POOL_ERROR)
   {
-    /* FIXME if pool was already created (or not deleted! because of miss mx_wifi_alloc_deinit) ignore error. see tkt 154401 */
+    /* FIXME if pool was already created (or not deleted! because of miss mx_wifi_alloc_deinit) ignore error.
+     * see tkt 154401 */
     return NX_SUCCESS;
   }
   else if (ret != TX_SUCCESS) { return NX_DRIVER_ERROR; }

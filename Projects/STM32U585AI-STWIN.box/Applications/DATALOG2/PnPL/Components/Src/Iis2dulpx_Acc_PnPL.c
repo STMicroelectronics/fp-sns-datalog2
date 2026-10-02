@@ -311,7 +311,8 @@ uint8_t Iis2dulpx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "iis2dulpx_acc.st_ble_stream.acc.enable"))
     {
-      bool st_ble_stream__acc_enable = json_object_dotget_boolean(tempJSONObject, "iis2dulpx_acc.st_ble_stream.acc.enable");
+      bool st_ble_stream__acc_enable = json_object_dotget_boolean(tempJSONObject,
+                                                                  "iis2dulpx_acc.st_ble_stream.acc.enable");
       valid_property = true;
       ret = iis2dulpx_acc_set_st_ble_stream__acc_enable(st_ble_stream__acc_enable, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);
@@ -333,7 +334,8 @@ uint8_t Iis2dulpx_Acc_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serial
   {
     if (json_object_dothas_value(tempJSONObject, "iis2dulpx_acc.st_ble_stream.acc.unit"))
     {
-      const char *st_ble_stream__acc_unit = json_object_dotget_string(tempJSONObject, "iis2dulpx_acc.st_ble_stream.acc.unit");
+      const char *st_ble_stream__acc_unit = json_object_dotget_string(tempJSONObject,
+                                                                      "iis2dulpx_acc.st_ble_stream.acc.unit");
       valid_property = true;
       ret = iis2dulpx_acc_set_st_ble_stream__acc_unit(st_ble_stream__acc_unit, &resp_msg);
       json_object_dotset_string(respJSONObject, "PnPL_Response.message", resp_msg);

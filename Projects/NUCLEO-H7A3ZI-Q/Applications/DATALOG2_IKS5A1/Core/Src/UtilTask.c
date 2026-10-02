@@ -66,7 +66,7 @@ typedef struct _UtilTaskClass_t
 /*********************************/
 
 sys_error_code_t UsbCdcTask_Write(UCHAR *buffer, ULONG requested_length,
-                                  ULONG *actual_length); //TODO: STF - must I import UsbCdcTask.h ??
+                                  ULONG *actual_length); /*TODO: STF - must I import UsbCdcTask.h ??*/
 
 
 /* Private member function declaration */
@@ -203,11 +203,11 @@ sys_error_code_t UtilTask_vtblDoEnterPowerMode(AManagedTask *_this, const EPower
 
   if (new_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
   {
-//    SysTsStart(SysGetTimestampSrv(), true);
+    /*    SysTsStart(SysGetTimestampSrv(), true);*/
   }
   else if (new_power_mode == E_POWER_MODE_STATE1)
   {
-//    SysTsStop(SysGetTimestampSrv());
+    /*    SysTsStop(SysGetTimestampSrv());*/
     if (p_led_params != NULL)
     {
       HAL_GPIO_WritePin(p_led_params->port, p_led_params->pin, GPIO_PIN_SET);
@@ -285,7 +285,7 @@ static sys_error_code_t UtilTaskExecuteStep(AManagedTask *_this)
     EPowerMode active_power_mode = SysGetPowerStatus().active_power_mode;
     if (active_power_mode == E_POWER_MODE_STATE1)
     {
-//      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("Hello NUCLEO-U575ZI-Q %d!!\r\n", p_obj->counter));
+      /*      SYS_DEBUGF(SYS_DBG_LEVEL_VERBOSE, ("Hello NUCLEO-U575ZI-Q %d!!\r\n", p_obj->counter));*/
     }
     else if (active_power_mode == E_POWER_MODE_SENSORS_ACTIVE)
     {

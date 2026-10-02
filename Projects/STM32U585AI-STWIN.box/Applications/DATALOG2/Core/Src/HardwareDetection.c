@@ -30,6 +30,7 @@
 #include "ism330bx_reg.h"
 #include "ism330is_reg.h"
 #include "ism6hg256x_reg.h"
+#include "ism6hgk256x_reg.h"
 #include "stts22h_reg.h"
 #include "TSC1641.h"
 #include "iis2dulpx_reg.h"
@@ -262,6 +263,35 @@ boolean_t HardwareDetection_Check_Ext_ISM6HG256X(void)
   HardwareDetection_SPI2_CS_DeInit();
 
   if (whoami_val == ISM6HG256X_ID)
+  {
+    found = TRUE;
+  }
+  return found;
+}
+
+/**
+  * Detect an external ISM6HGK256X sensor
+  *
+  * @return TRUE if the sensor was found, FALSE otherwise
+  */
+boolean_t HardwareDetection_Check_Ext_ISM6HGK256X(void)
+{
+  uint8_t whoami_val = 0U;
+  boolean_t found = FALSE;
+  stmdev_ctx_t ctx;
+
+  ctx.read_reg = ext_sensor_spi_read;
+  ctx.write_reg = ext_sensor_spi_write;
+
+  HardwareDetection_SPI2_CS_Init();
+  MX_SPI2_Init();
+
+  ism6hgk256x_device_id_get(&ctx, (uint8_t *) &whoami_val);
+
+  HAL_SPI_DeInit(&hspi2);
+  HardwareDetection_SPI2_CS_DeInit();
+
+  if (whoami_val == ISM6HGK256X_ID)
   {
     found = TRUE;
   }

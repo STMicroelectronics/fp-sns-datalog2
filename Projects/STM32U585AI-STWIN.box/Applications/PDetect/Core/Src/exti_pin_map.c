@@ -26,7 +26,6 @@
 void Def_EXTI_Callback(uint16_t nPin) {};
 void Util_USR_EXTI_Callback(uint16_t nPin);
 void VL53L8CXTask_EXTI_Callback(uint16_t nPin);
-void STHS34PF80Task_EXTI_Callback(uint16_t nPin);
 void ISM330DHCXTask_EXTI_Callback(uint16_t nPin);
 void IIS2MDCTask_EXTI_Callback(uint16_t nPin);
 void Util_PWR_EXTI_Callback(uint16_t nPin);
@@ -41,7 +40,6 @@ void hci_tl_lowlevel_isr(uint16_t nPin);
 EXTI_BEGIN_P2F_MAP()
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_0, Util_USR_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_3, VL53L8CXTask_EXTI_Callback)
-EXTI_P2F_MAP_ENTRY(GPIO_PIN_5, STHS34PF80Task_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_8, ISM330DHCXTask_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_9, IIS2MDCTask_EXTI_Callback)
 EXTI_P2F_MAP_ENTRY(GPIO_PIN_10, Util_PWR_EXTI_Callback)

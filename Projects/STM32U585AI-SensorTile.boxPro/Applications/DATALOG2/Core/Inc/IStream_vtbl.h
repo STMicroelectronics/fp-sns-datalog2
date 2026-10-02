@@ -39,7 +39,8 @@ struct _IStream_vtbl
   sys_error_code_t (*start_stream)(IStream_t *_this, void *param);
   sys_error_code_t (*stop_stream)(IStream_t *_this);
   sys_error_code_t (*post_data_stream)(IStream_t *_this, uint8_t id_stream, uint8_t *buf, uint32_t size);
-  sys_error_code_t (*alloc_resource_stream)(IStream_t *_this, uint8_t id_stream, uint32_t size, const char *stream_name);
+  sys_error_code_t (*alloc_resource_stream)(IStream_t *_this, uint8_t id_stream, uint32_t size,
+                                            const char *stream_name);
   sys_error_code_t (*set_mode_stream)(IStream_t *_this, IStreamMode_t mode);
   sys_error_code_t (*dealloc)(IStream_t *_this, uint8_t id_stream);
   sys_error_code_t (*set_parse_IF)(IStream_t *_this, ICommandParse_t *ifn);
@@ -54,8 +55,8 @@ struct _IStream_t
   const IStream_vtbl *vptr;
 };
 
-// Inline functions definition
-// ***************************
+/* Inline functions definition*/
+/* ****************************/
 
 inline sys_error_code_t IStream_init(IStream_t *_this, uint8_t comm_interface_id, void *param)
 {
