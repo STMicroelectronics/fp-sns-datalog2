@@ -1695,17 +1695,6 @@ static uint16_t VL53L9TaskBinningToResolution(uint8_t binning)
   }
 }
 
-/**
-  * Helper function to read a 16-bit value in little-endian format from raw frame.
-  * @param p_buffer pointer to byte buffer
-  * @param offset offset into the buffer
-  * @return 16-bit value interpreted as little-endian (LSB at lower address)
-  */
-static inline uint16_t VL53L9TaskReadLE16(const uint8_t *p_buffer, uint16_t offset)
-{
-  return (uint16_t)p_buffer[offset] | ((uint16_t)p_buffer[offset + 1U] << 8U);
-}
-
 
 /* device power management */
 
