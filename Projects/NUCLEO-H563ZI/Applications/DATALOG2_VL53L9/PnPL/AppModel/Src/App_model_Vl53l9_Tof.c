@@ -30,6 +30,7 @@
 
 #include "App_model.h"
 #include "services/SQuery.h"
+#include "DatalogAppTask.h"
 
 /* USER includes -------------------------------------------------------------*/
 
@@ -514,4 +515,9 @@ uint8_t vl53l9cx_tof_set_sensor_annotation(const char *value, char **response_me
   uint8_t ret = PNPL_NO_ERROR_CODE;
   strcpy(vl53l9cx_tof_model.annotation, value);
   return ret;
+}
+
+uint8_t vl53l9cx_tof_get_calib(void)
+{
+  return DatalogAppTask_get_calib();
 }

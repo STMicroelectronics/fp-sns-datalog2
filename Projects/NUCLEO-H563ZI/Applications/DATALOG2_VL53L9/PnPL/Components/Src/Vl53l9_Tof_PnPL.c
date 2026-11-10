@@ -87,11 +87,17 @@ char *Vl53l9_Tof_PnPL_vtblGetKey(IPnPLComponent_t *_this)
 
 uint8_t Vl53l9_Tof_PnPL_vtblGetNCommands(IPnPLComponent_t *_this)
 {
-  return 0;
+  return 1;
 }
 
 char *Vl53l9_Tof_PnPL_vtblGetCommandKey(IPnPLComponent_t *_this, uint8_t id)
 {
+  switch (id)
+  {
+    case 0:
+      return "vl53l9cx_tof*get_calib";
+      break;
+  }
   return "";
 }
 
@@ -357,6 +363,25 @@ uint8_t Vl53l9_Tof_PnPL_vtblSetProperty(IPnPLComponent_t *_this, char *serialize
 uint8_t Vl53l9_Tof_PnPL_vtblExecuteFunction(IPnPLComponent_t *_this, char *serializedJSON, char **response,
                                             uint32_t *size, uint8_t pretty)
 {
-  return PNPL_NO_COMMANDS_ERROR_CODE;
+  JSON_Value *tempJSON = json_parse_string(serializedJSON);
+  JSON_Object *tempJSONObject = json_value_get_object(tempJSON);
+
+  uint8_t ret = PNPL_NO_ERROR_CODE;
+  bool valid_function = false;
+  if (json_object_dothas_value(tempJSONObject, "vl53l9cx_tof*get_calib"))
+  {
+    valid_function = true;
+    ret = vl53l9cx_tof_get_calib();
+  }
+  /* Check if received a valid function to modify an existing property */
+  if (valid_function == false)
+  {
+    char log_message[100];
+    (void) sprintf(log_message, "%s Invalid command", serializedJSON);
+    PnPLCreateLogMessage(response, size, log_message, PNPL_LOG_ERROR);
+    ret = PNPL_BASE_ERROR_CODE;
+  }
+  json_value_free(tempJSON);
+  return ret;
 }
 

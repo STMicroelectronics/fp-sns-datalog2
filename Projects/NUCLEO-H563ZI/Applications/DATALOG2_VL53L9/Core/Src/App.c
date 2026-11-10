@@ -152,7 +152,12 @@ sys_error_code_t SysOnStartApplication(ApplicationContext *pAppContext)
   IEventListener *DatalogAppListener = DatalogAppTask_GetEventListenerIF((DatalogAppTask *) sDatalogAppObj);
   IEventSrcAddEventListener(VL53L9TaskGetEventSrcIF((VL53L9Task *) sVL53L9Obj), DatalogAppListener);
 
-  /************ Connect Sensor LL to be used for ucf management to the DatalogAppTask ************/
+  /************ Connect the VL53L9 task for calibration data requests ************/
+  if (DatalogAppTask_SetVL53L9Task((AManagedTask *)sVL53L9Obj) != PNPL_NO_ERROR_CODE)
+  {
+    return SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
+
   /************ Other PnPL Components ************/
   Automode_PnPLInit(pAutomode_PnPLObj);
   Vl53l9_Tof_PnPLInit(pVl53l9_Tof_PnPLObj);

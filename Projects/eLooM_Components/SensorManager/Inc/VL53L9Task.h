@@ -107,6 +107,18 @@ AManagedTaskEx *VL53L9TaskStaticAllocSetName(void *p_mem_block, const void *pIRQ
                                              const MX_TIMParams_t *pTIMConfig, const char *p_name);
 ABusIF *VL53L9TaskGetSensorIF(VL53L9Task *_this);
 IEventSrc *VL53L9TaskGetEventSrcIF(VL53L9Task *_this);
+/**
+  * Read the calibration blob in the VL53L9 task's execution context.
+  *
+  * The call blocks until the task completes the request. It is only supported
+  * while ranging is stopped.
+  *
+  * @param _this [IN] VL53L9 task instance.
+  * @param p_buffer [OUT] caller-owned buffer for calibration bytes.
+  * @param buffer_size [IN] available bytes in p_buffer.
+  * @return SYS_NO_ERROR_CODE on success, a system error code otherwise.
+  */
+sys_error_code_t VL53L9TaskGetCalibData(VL53L9Task *_this, uint8_t *p_buffer, uint32_t buffer_size);
 void VL53L9Task_EXTI_Callback(uint16_t nPin);
 
 #ifdef __cplusplus

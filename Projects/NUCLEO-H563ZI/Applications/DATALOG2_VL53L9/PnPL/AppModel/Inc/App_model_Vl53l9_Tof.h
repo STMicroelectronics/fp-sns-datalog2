@@ -92,6 +92,7 @@ uint8_t vl53l9cx_tof_set_integration_time(int32_t value, char **response_message
 uint8_t vl53l9cx_tof_set_power_mode(pnpl_vl53l9cx_tof_power_mode_t enum_id, char **response_message);
 uint8_t vl53l9cx_tof_set_samples_per_ts(int32_t value, char **response_message);
 uint8_t vl53l9cx_tof_set_sensor_annotation(const char *value, char **response_message);
+uint8_t vl53l9cx_tof_get_calib(void);
 
 
 #ifdef __cplusplus

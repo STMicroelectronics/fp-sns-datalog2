@@ -59,6 +59,10 @@ uint16_t SMMessageGetSize(uint8_t message_id)
       nSize = sizeof(struct i3cIOMessage_t);
       break;
 
+    case SM_MESSAGE_ID_TASK_REQUEST:
+      nSize = sizeof(struct taskRequestMessage_t);
+      break;
+
     default:
       nSize = sizeof(struct internalMessageFE_t);
   }

@@ -30,7 +30,7 @@
 /* Board ID and FW_ID */
 
 #define BOARD_ID                                  0x32
-#define FW_ID                                     0x03
+#define FW_ID                                     0x06
 
 /* Other hardware configuration */
 

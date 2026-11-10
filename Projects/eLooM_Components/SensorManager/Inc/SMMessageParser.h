@@ -50,6 +50,7 @@ extern "C" {
 #define SM_MESSAGE_ID_I2C_BUS_WRITE             0x09  ///< Command to write in the I2C bus.
 #define SM_MESSAGE_ID_I3C_BUS_READ              0x0A  ///< Command to read from the I3C bus
 #define SM_MESSAGE_ID_I3C_BUS_WRITE             0x0B  ///< Command to write in the I3C bus.
+#define SM_MESSAGE_ID_TASK_REQUEST              0x0D  ///< Internal request passed between managed tasks.
 #define SM_MESSAGE_ID_FORCE_STEP                0xFE  ///< Special ID used by the INIT task to force the execution of ManagedTaskEx step.
 
 
@@ -133,6 +134,17 @@ typedef union _SMMessage
     uint8_t *pnData;
     I3CBusIF *pxSensor;
   } i3cIOMessage;
+
+  //--------------------------------------------------------------------------------
+  //  Internal task request
+  //--------------------------------------------------------------------------------
+
+  struct taskRequestMessage_t
+  {
+    uint8_t messageId;
+    uint8_t requestId;
+    void *pRequest;
+  } taskRequestMessage;
 
   //--------------------------------------------------------------------------------
   //  internalReport (MCU)

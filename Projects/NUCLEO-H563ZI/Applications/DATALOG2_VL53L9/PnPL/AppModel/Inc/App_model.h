@@ -95,7 +95,7 @@ extern "C" {
 
 #define FW_VERSION_MAJOR    "3"
 #define FW_VERSION_MINOR    "4"
-#define FW_VERSION_PATCH    "0"
+#define FW_VERSION_PATCH    "1"
 typedef struct _StreamParams_t
 {
   int8_t stream_id;

@@ -26,6 +26,7 @@
 #include "usbx_dctrl_class.h"
 #include "PnPLCompManager.h"
 #include "App_model.h"
+#include "VL53L9Task.h"
 
 #include "UtilTask.h"
 #include "services/SQuery.h"
@@ -89,6 +90,7 @@ struct _DatalogAppTask
   PnPLCommand_t outPnPLCommand;
 
   AppModel_t *datalog_model;
+  VL53L9Task *p_vl53l9_task;
 
   SensorContext_t sensorContext[SM_MAX_SENSORS];
 
@@ -819,16 +821,33 @@ uint8_t DatalogAppTask_set_time_vtbl(const char *datetime)
 }
 
 
-void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size)
+uint8_t DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size)
 {
   DatalogAppTask *p_obj = getDatalogAppTask();
   uint8_t comm_interface_id = p_obj->outPnPLCommand.comm_interface_id;
+  uint8_t ret = PNPL_NO_ERROR_CODE;
   if (IStream_is_enabled((IStream_t *) p_obj->usbx_device) && (comm_interface_id == COMM_ID_USB))
   {
-    p_obj->outPnPLCommand.comm_type = PNPL_CMD_COMMAND;
-    p_obj->outPnPLCommand.response = (char *)pnpl_malloc(size + 1);
-    strncpy(p_obj->outPnPLCommand.response, response_msg, size + 1);
-    IStream_set_mode((IStream_t *) p_obj->usbx_device, TRANSMIT);
+    if (response_msg != NULL)
+    {
+      p_obj->outPnPLCommand.response = (char *)pnpl_malloc(size + 1U);
+      if (p_obj->outPnPLCommand.response != NULL)
+      {
+        p_obj->outPnPLCommand.comm_type = PNPL_CMD_COMMAND;
+        memcpy(p_obj->outPnPLCommand.response, response_msg, size + 1U);
+        IStream_set_mode((IStream_t *) p_obj->usbx_device, TRANSMIT);
+      }
+      else
+      {
+        SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+        ret = PNPL_BASE_ERROR_CODE;
+      }
+    }
+    else
+    {
+      SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_INVALID_PARAMETER_ERROR_CODE);
+      ret = PNPL_BASE_ERROR_CODE;
+    }
   }
   else
   {
@@ -836,12 +855,146 @@ void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size)
   }
 
   /* Clear response_msg after sending */
-  pnpl_free(response_msg);
+  if (response_msg != NULL)
+  {
+    pnpl_free(response_msg);
+  }
+  return ret;
 }
 
 uint8_t DatalogAppTask_save_config_vtbl(void)
 {
   return 0;
+}
+
+uint8_t DatalogAppTask_SetVL53L9Task(AManagedTask *task_obj)
+{
+  if (task_obj == NULL)
+  {
+    return PNPL_BASE_ERROR_CODE;
+  }
+
+  DatalogAppTask *p_obj = getDatalogAppTask();
+  p_obj->p_vl53l9_task = (VL53L9Task *)task_obj;
+  return PNPL_NO_ERROR_CODE;
+}
+
+static bool DatalogAppTask_EncodeCalibrationBase64(const uint8_t *p_input, uint32_t input_size,
+                                                   uint8_t *p_output, uint32_t output_capacity)
+{
+  static const char base64_digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  uint32_t output_size = 4U * ((input_size + 2U) / 3U);
+
+  if ((p_input == NULL) || (p_output == NULL) || (output_capacity < (output_size + 1U)))
+  {
+    return false;
+  }
+
+  for (uint32_t input_index = 0U, output_index = 0U; input_index < input_size;)
+  {
+    uint32_t bytes_remaining = input_size - input_index;
+    uint32_t octet_a = p_input[input_index++];
+    uint32_t octet_b = (bytes_remaining > 1U) ? p_input[input_index++] : 0U;
+    uint32_t octet_c = (bytes_remaining > 2U) ? p_input[input_index++] : 0U;
+    uint32_t triple = (octet_a << 16U) | (octet_b << 8U) | octet_c;
+
+    p_output[output_index++] = (uint8_t)base64_digits[(triple >> 18U) & 0x3FU];
+    p_output[output_index++] = (uint8_t)base64_digits[(triple >> 12U) & 0x3FU];
+    p_output[output_index++] = (bytes_remaining > 1U) ? (uint8_t)base64_digits[(triple >> 6U) & 0x3FU] : (uint8_t)'=';
+    p_output[output_index++] = (bytes_remaining > 2U) ? (uint8_t)base64_digits[triple & 0x3FU] : (uint8_t)'=';
+  }
+
+  p_output[output_size] = '\0';
+  return true;
+}
+
+uint8_t DatalogAppTask_get_calib(void)
+{
+  DatalogAppTask *p_obj = getDatalogAppTask();
+  char *responseJSON = NULL;
+  uint32_t size = 0U;
+  char *message = "";
+  bool status = false;
+  uint8_t ret = PNPL_NO_ERROR_CODE;
+  uint32_t calibration_size = VL53L9_CALIB_DATA_SIZE;
+  uint32_t response_capacity = (4U * ((calibration_size + 2U) / 3U)) + 1U;
+  uint8_t *calibration_data = (uint8_t *)pnpl_malloc(calibration_size);
+  uint8_t *calibration_base64 = (uint8_t *)pnpl_malloc(response_capacity);
+
+  if (p_obj->p_vl53l9_task == NULL)
+  {
+    message = "Error: VL53L9 task is not available";
+    ret = PNPL_BASE_ERROR_CODE;
+  }
+  else if (calibration_data == NULL)
+  {
+    message = "Error: Failed to allocate calibration response buffer";
+    ret = PNPL_BASE_ERROR_CODE;
+  }
+  else if (calibration_base64 == NULL)
+  {
+    message = "Error: Failed to allocate calibration encoding buffer";
+    ret = PNPL_BASE_ERROR_CODE;
+  }
+  else
+  {
+    sys_error_code_t calib_res = VL53L9TaskGetCalibData(p_obj->p_vl53l9_task, calibration_data,
+                                                        calibration_size);
+    if (calib_res == SYS_NO_ERROR_CODE)
+    {
+      if (DatalogAppTask_EncodeCalibrationBase64(calibration_data, calibration_size, calibration_base64,
+                                                 response_capacity))
+      {
+        message = (char *)calibration_base64;
+        status = true;
+      }
+      else
+      {
+        message = "Error: Failed to encode calibration data";
+        ret = PNPL_BASE_ERROR_CODE;
+      }
+    }
+    else
+    {
+      message = (calib_res == SYS_INVALID_FUNC_CALL_ERROR_CODE)
+                ? "Error: Stop ranging before requesting calibration data"
+                : "Error: Failed to get calibration data";
+      ret = PNPL_BASE_ERROR_CODE;
+    }
+  }
+
+  uint8_t serialize_res = PnPLSerializeCommandResponse(&responseJSON, &size, 0, message, status);
+  if ((serialize_res != PNPL_NO_ERROR_CODE) || (responseJSON == NULL))
+  {
+    if (responseJSON != NULL)
+    {
+      pnpl_free(responseJSON);
+    }
+    if (calibration_data != NULL)
+    {
+      pnpl_free(calibration_data);
+    }
+    if (calibration_base64 != NULL)
+    {
+      pnpl_free(calibration_base64);
+    }
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_OUT_OF_MEMORY_ERROR_CODE);
+    return PNPL_BASE_ERROR_CODE;
+  }
+
+  if (DatalogApp_Task_command_response_cb(responseJSON, size) != PNPL_NO_ERROR_CODE)
+  {
+    ret = PNPL_BASE_ERROR_CODE;
+  }
+  if (calibration_data != NULL)
+  {
+    pnpl_free(calibration_data);
+  }
+  if (calibration_base64 != NULL)
+  {
+    pnpl_free(calibration_base64);
+  }
+  return ret;
 }
 
 /* Private function definition*/
@@ -970,4 +1123,3 @@ static sys_error_code_t DatalogAppTask_UpdateStreamingStatus(DatalogAppTask *p_o
 
   return res;
 }
-

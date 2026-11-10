@@ -73,8 +73,10 @@ uint8_t DatalogAppTask_start_vtbl(int32_t interface);
 uint8_t DatalogAppTask_stop_vtbl(void);
 uint8_t DatalogAppTask_save_config_vtbl(void);
 uint8_t DatalogAppTask_set_time_vtbl(const char *datetime);
+uint8_t DatalogAppTask_SetVL53L9Task(AManagedTask *task_obj);
+uint8_t DatalogAppTask_get_calib(void);
 
-void DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
+uint8_t DatalogApp_Task_command_response_cb(char *response_msg, uint32_t size);
 
 sys_error_code_t DatalogAppTask_msg(ULONG msg);
 

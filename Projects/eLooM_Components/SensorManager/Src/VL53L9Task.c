@@ -76,6 +76,16 @@
 #define HSD_USE_DUMMY_DATA 0
 #endif
 
+#define VL53L9_TASK_REQUEST_ID_GET_CALIB_DATA       (1U)
+
+typedef struct _VL53L9TaskCalibDataRequest
+{
+  uint8_t *p_buffer;
+  uint32_t buffer_size;
+  sys_error_code_t result;
+  TX_SEMAPHORE completion;
+} VL53L9TaskCalibDataRequest;
+
 #if (HSD_USE_DUMMY_DATA == 1)
 static int16_t dummyDataCounter = 0;
 #endif
@@ -178,6 +188,10 @@ static sys_error_code_t VL53L9TaskSensorSetAddress(VL53L9Task *_this, SMMessage 
 static sys_error_code_t VL53L9TaskSensorSetPowerMode(VL53L9Task *_this, SMMessage report);
 static sys_error_code_t VL53L9TaskSensorEnableCmd(VL53L9Task *_this, SMMessage report);
 static sys_error_code_t VL53L9TaskSensorDisableCmd(VL53L9Task *_this, SMMessage report);
+static sys_error_code_t VL53L9TaskProcessCalibDataRequest(VL53L9Task *_this, SMMessage *p_report,
+                                                           boolean_t sensor_active);
+static void VL53L9TaskSignalCalibDataRequest(VL53L9TaskCalibDataRequest *p_request, sys_error_code_t result);
+static void VL53L9TaskDrainPendingRequests(VL53L9Task *_this);
 
 /* Inline function forward declaration */
 /* *********************************** */
@@ -552,7 +566,7 @@ sys_error_code_t VL53L9Task_vtblDoEnterPowerMode(AManagedTask *_this, const EPow
     {
       (void)vl53l9_stop(&p_obj->tof_driver_if);
     }
-    tx_queue_flush(&p_obj->in_queue);
+    VL53L9TaskDrainPendingRequests(p_obj);
     p_obj->frame_ready = FALSE;
     p_obj->frame_pending = FALSE;
     if (p_obj->p_raw_frame != NULL)
@@ -591,7 +605,76 @@ sys_error_code_t VL53L9Task_vtblOnEnterTaskControlLoop(AManagedTask *_this)
 {
   assert_param(_this != NULL);
 
-  (void)_this;
+  VL53L9Task *p_obj = (VL53L9Task *)_this;
+  sys_error_code_t res = SYS_NO_ERROR_CODE;
+
+  res = VL53L9TaskBindDriverIF(p_obj);
+  if (SYS_IS_ERROR_CODE(res))
+  {
+    return res;
+  }
+
+  /* Bring up external clock before sensor reset/boot.
+   * VL53L9 firmware boot over I3C requires CLK_IN running. */
+  if (p_obj->pTIMConfig != NULL)
+  {
+    HAL_StatusTypeDef tim_res;
+    TIM_HandleTypeDef *p_tim = p_obj->pTIMConfig->p_tim;
+
+    if (p_obj->pTIMConfig->p_mx_init_f != NULL)
+    {
+      p_obj->pTIMConfig->p_mx_init_f();
+    }
+
+    if (p_tim != NULL)
+    {
+      tim_res = HAL_TIM_PWM_Start(p_tim, TIM_CHANNEL_2);
+      if ((tim_res != HAL_OK) && (TIM_CHANNEL_STATE_GET(p_tim, TIM_CHANNEL_2) != HAL_TIM_CHANNEL_STATE_BUSY))
+      {
+        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING,
+                   ("VL53L9: TIM3 PWM start failed. hal=%d inst=0x%08lx state=%u\r\n",
+                    (int)tim_res,
+                    (unsigned long)p_tim->Instance,
+                    (unsigned int)TIM_CHANNEL_STATE_GET(p_tim, TIM_CHANNEL_2)));
+      }
+    }
+  }
+
+  res = VL53L9TaskMapDriverError(platform_power_reset(p_obj));
+  if (SYS_IS_ERROR_CODE(res))
+  {
+    return res;
+  }
+
+  res = VL53L9TaskMapDriverError(platform_assign_dynamic_address(p_obj));
+  if (SYS_IS_ERROR_CODE(res))
+  {
+    return res;
+  }
+
+  /* ENTDAA is complete and the HAL device table is populated. Propagate the
+   * assigned dynamic address to the bus interface and mark CCC as done so
+   * the SensorManager bus task does not issue another RSTDAA that would undo
+   * the assignment above. */
+  {
+    I3CBusIF *p_i3c_bus_if = (I3CBusIF *)p_obj->p_sensor_bus_if;
+    p_i3c_bus_if->dynamic_address = VL53L9_TASK_CFG_STATIC_ADDRESS;
+    p_i3c_bus_if->ccc_config_done = 1U;
+  }
+
+  /* Give the sensor time to stabilize with CLK_IN running after address assignment.
+   * This is critical for proper I3C communication startup. */
+  if (p_obj->tof_driver_if.delay_ms != NULL)
+  {
+    p_obj->tof_driver_if.delay_ms(AMT_MS_TO_TICKS_ROUND_UP(50U));
+  }
+
+  res = VL53L9TaskMapDriverError(vl53l9_init(&p_obj->tof_driver_if));
+  if (SYS_IS_ERROR_CODE(res))
+  {
+    return res;
+  }
+
   return SYS_NO_ERROR_CODE;
 }
 
@@ -1000,6 +1083,11 @@ static sys_error_code_t VL53L9TaskExecuteStepState1(AManagedTask *_this)
         }
         break;
       }
+      case SM_MESSAGE_ID_TASK_REQUEST:
+      {
+        res = VL53L9TaskProcessCalibDataRequest(p_obj, &report, FALSE);
+        break;
+      }
       default:
       {
         /* unwanted report */
@@ -1107,6 +1195,10 @@ static sys_error_code_t VL53L9TaskExecuteStepDatalog(AManagedTask *_this)
         }
         break;
 
+      case SM_MESSAGE_ID_TASK_REQUEST:
+        res = VL53L9TaskProcessCalibDataRequest(p_obj, &report, TRUE);
+        break;
+
       default:
         res = SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
         break;
@@ -1157,12 +1249,6 @@ static sys_error_code_t VL53L9TaskSensorInit(VL53L9Task *_this)
     return SYS_NO_ERROR_CODE;
   }
 
-  res = VL53L9TaskBindDriverIF(_this);
-  if (SYS_IS_ERROR_CODE(res))
-  {
-    return res;
-  }
-
   res = VL53L9TaskMapDriverError(vl53l9_get_raw_buffer_size(binning, &raw_frame_size));
   if (SYS_IS_ERROR_CODE(res))
   {
@@ -1186,32 +1272,6 @@ static sys_error_code_t VL53L9TaskSensorInit(VL53L9Task *_this)
   _this->sensor_data_capacity = resolution;
   _this->current_resolution = resolution;
   _this->sensor_status.type.ranging.profile_config.ranging_profile = resolution;
-
-  /* Bring up external clock before sensor reset/boot.
-   * VL53L9 firmware boot over I3C requires CLK_IN running. */
-  if (_this->pTIMConfig != NULL)
-  {
-    HAL_StatusTypeDef tim_res;
-    TIM_HandleTypeDef *p_tim = _this->pTIMConfig->p_tim;
-
-    if (_this->pTIMConfig->p_mx_init_f != NULL)
-    {
-      _this->pTIMConfig->p_mx_init_f();
-    }
-
-    if (p_tim != NULL)
-    {
-      tim_res = HAL_TIM_PWM_Start(p_tim, TIM_CHANNEL_2);
-      if ((tim_res != HAL_OK) && (TIM_CHANNEL_STATE_GET(p_tim, TIM_CHANNEL_2) != HAL_TIM_CHANNEL_STATE_BUSY))
-      {
-        SYS_DEBUGF(SYS_DBG_LEVEL_WARNING,
-                   ("VL53L9: TIM3 PWM start failed. hal=%d inst=0x%08lx state=%u\r\n",
-                    (int)tim_res,
-                    (unsigned long)p_tim->Instance,
-                    (unsigned int)TIM_CHANNEL_STATE_GET(p_tim, TIM_CHANNEL_2)));
-      }
-    }
-  }
 
   res = VL53L9TaskMapDriverError(platform_power_reset(_this));
   if (SYS_IS_ERROR_CODE(res))
@@ -1316,6 +1376,113 @@ static sys_error_code_t VL53L9TaskSensorInit(VL53L9Task *_this)
   }
 
   return res;
+}
+
+sys_error_code_t VL53L9TaskGetCalibData(VL53L9Task *_this, uint8_t *p_buffer, uint32_t buffer_size)
+{
+  if ((_this == NULL) || (p_buffer == NULL) || (buffer_size < VL53L9_CALIB_DATA_SIZE))
+  {
+    return SYS_INVALID_PARAMETER_ERROR_CODE;
+  }
+
+  if (SYS_IS_CALLED_FROM_ISR())
+  {
+    return SYS_INVALID_FUNC_CALL_ERROR_CODE;
+  }
+
+  VL53L9TaskCalibDataRequest request =
+  {
+    .p_buffer = p_buffer,
+    .buffer_size = buffer_size,
+    .result = SYS_UNDEFINED_ERROR_CODE
+  };
+
+  if (TX_SUCCESS != tx_semaphore_create(&request.completion, "VL53L9Calib", 0U))
+  {
+    return SYS_UNDEFINED_ERROR_CODE;
+  }
+
+  SMMessage report =
+  {
+    .taskRequestMessage.messageId = SM_MESSAGE_ID_TASK_REQUEST,
+    .taskRequestMessage.requestId = VL53L9_TASK_REQUEST_ID_GET_CALIB_DATA,
+    .taskRequestMessage.pRequest = &request
+  };
+
+  if (TX_SUCCESS != tx_queue_send(&_this->in_queue, &report, AMT_MS_TO_TICKS(100U)))
+  {
+    (void)tx_semaphore_delete(&request.completion);
+    return SYS_SENSOR_TASK_MSG_LOST_ERROR_CODE;
+  }
+
+  if (TX_SUCCESS != tx_semaphore_get(&request.completion, TX_WAIT_FOREVER))
+  {
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
+    return SYS_UNDEFINED_ERROR_CODE;
+  }
+
+  sys_error_code_t res = request.result;
+  if ((TX_SUCCESS != tx_semaphore_delete(&request.completion)) && !SYS_IS_ERROR_CODE(res))
+  {
+    res = SYS_UNDEFINED_ERROR_CODE;
+  }
+
+  return res;
+}
+
+static sys_error_code_t VL53L9TaskProcessCalibDataRequest(VL53L9Task *_this, SMMessage *p_report,
+                                                          boolean_t sensor_active)
+{
+  if ((p_report == NULL) || (p_report->taskRequestMessage.requestId != VL53L9_TASK_REQUEST_ID_GET_CALIB_DATA)
+      || (p_report->taskRequestMessage.pRequest == NULL))
+  {
+    return SYS_SENSOR_TASK_UNKNOWN_MSG_ERROR_CODE;
+  }
+
+  VL53L9TaskCalibDataRequest *p_request =
+    (VL53L9TaskCalibDataRequest *)p_report->taskRequestMessage.pRequest;
+
+  if (sensor_active == TRUE)
+  {
+    VL53L9TaskSignalCalibDataRequest(p_request, SYS_INVALID_FUNC_CALL_ERROR_CODE);
+    return SYS_NO_ERROR_CODE;
+  }
+
+  if ((p_request->p_buffer == NULL) || (p_request->buffer_size < VL53L9_CALIB_DATA_SIZE))
+  {
+    VL53L9TaskSignalCalibDataRequest(p_request, SYS_INVALID_PARAMETER_ERROR_CODE);
+    return SYS_NO_ERROR_CODE;
+  }
+
+  sys_error_code_t result = VL53L9TaskMapDriverError(vl53l9_get_calib_data(&_this->tof_driver_if,
+                                                                            p_request->p_buffer));
+  VL53L9TaskSignalCalibDataRequest(p_request, result);
+  return SYS_NO_ERROR_CODE;
+}
+
+static void VL53L9TaskSignalCalibDataRequest(VL53L9TaskCalibDataRequest *p_request, sys_error_code_t result)
+{
+  p_request->result = result;
+  if (TX_SUCCESS != tx_semaphore_put(&p_request->completion))
+  {
+    SYS_SET_SERVICE_LEVEL_ERROR_CODE(SYS_UNDEFINED_ERROR_CODE);
+  }
+}
+
+static void VL53L9TaskDrainPendingRequests(VL53L9Task *_this)
+{
+  SMMessage report;
+  while (TX_SUCCESS == tx_queue_receive(&_this->in_queue, &report, TX_NO_WAIT))
+  {
+    if ((report.messageID == SM_MESSAGE_ID_TASK_REQUEST)
+        && (report.taskRequestMessage.requestId == VL53L9_TASK_REQUEST_ID_GET_CALIB_DATA)
+        && (report.taskRequestMessage.pRequest != NULL))
+    {
+      VL53L9TaskCalibDataRequest *p_request =
+        (VL53L9TaskCalibDataRequest *)report.taskRequestMessage.pRequest;
+      VL53L9TaskSignalCalibDataRequest(p_request, SYS_INVALID_FUNC_CALL_ERROR_CODE);
+    }
+  }
 }
 
 static sys_error_code_t VL53L9TaskSensorReadData(VL53L9Task *_this)
